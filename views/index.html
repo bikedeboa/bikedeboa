@@ -217,8 +217,8 @@
                 margin-bottom: 10px;
             }
             .modal-body .typeIcon {
-                width: 19%;
-                /*height: 60px;*/
+                width: 55px;
+                height: auto;
                 background-color: #fff;
                 text-align: center;
                 display: inline-block;
@@ -325,7 +325,10 @@
                 display: none !important; 
             }
             .small {
-                font-size: 0.8em;
+                font-size: 0.8em !important;
+            }
+            .light {
+                font-weight: lighter;
             }
            
         </style>
@@ -401,11 +404,13 @@
                         <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_isPublic"></span>
                         <br>
                         <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_structureType"></span>
+                        <br>
+                        <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_checkins"></span>
                     </p>
                  </div>
               </div>
               <div class="modal-footer">
-                <button class="btn border btn-footer half">CHECK-IN</button>
+                <button id="checkinBtn" class="btn border btn-footer half">CHECK-IN</button>
                 <span class="divider"></span>
                 <button class="btn btn-footer half">TRAÇAR ROTA</button>
               </div>
@@ -424,7 +429,7 @@
                     <input id="textInput" type="text" class="form-control" placeholder="Qual o nome do local?">
 
                     <div class="modal-body text-center">
-                        <span>Tipo de bicicletário</span>
+                        <span class="light">Tipo de bicicletário</span>
                         <br>
 
                         <div class="typeIcon active"> <img id="1" src="img/bicicletario/icon_deRoda.png"></img> </div>
@@ -443,12 +448,11 @@
                         <hr>
                         
                         <div class="box-tags">
-                            <button class="btn tag">Iluminado</button> 
-                            <button class="btn tag">Iluminado</button>
-                            <button class="btn tag">Iluminado</button>
-                            <button class="btn tag">Iluminado</button> 
-                            <button class="btn tag">Iluminado</button>
-                            <button class="btn tag">Iluminado</button>
+                            <button class="btn tag">iluminado</button> 
+                            <button class="btn tag">movimentado</button>
+                            <button class="btn tag">monitorado</button>
+                            <button class="btn tag">fácil acesso</button>
+                            <button class="btn tag">espaçoso</button>
                         </div>
                     </div>
                 
