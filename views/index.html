@@ -234,7 +234,7 @@
                 height: auto;
             }
             .modal-body{
-                text-align: center;
+                /*text-align: center;*/
             }
             .review img {
                 width: 22px;
@@ -349,16 +349,14 @@
                 <img src="http://placehold.it/400x200">
               </div>
               <div class="modal-body">
-                <img src="img/icon-pin-green@3x.png">
-                <span id="placeDetails_title" class="title">Isobar IWS Brasil</span>
+                <img id="placeDetails_titleIcon" src="img/icon-pin-green@3x.png">
+                <span id="placeDetails_title" class="title"></span>
 
                 <p id="placeDetails_address">
-                    Rua Borges de Medeiros, 2233 </br>
-                    Praia de Belas, Porto Alegre/RS
                 </p>
 
                  <div class="review">
-                    <span id="placeDetails_average" class="average">4.1</span>
+                    <span id="placeDetails_average" class="average"></span>
                     <a href="" id="star1_gold"><img src="img/icon_star@3x.png"></a>
                     <a href="" id="star2_gold"><img src="img/icon_star@3x.png"></a>
                     <a href="" id="star3_gold"><img src="img/icon_star@3x.png"></a>
@@ -372,9 +370,9 @@
                     <button class="ghost">AVALIAR</button>
                  </div>   
                  <div class="info">
-                    <img src="img/icon_star@3x.png"><span>Público</span>
+                    <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_isPublic"></span>
                     <br>
-                    <img src="img/icon_star@3x.png"><span>Bicicletário U-invertido</span>
+                    <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_structureType"></span>
                  </div>
               </div>
               <div class="modal-footer">
