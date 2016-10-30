@@ -34,6 +34,7 @@
                 height: 48px;
                 background-color: #ffffff;
                 box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
+                max-width: 600px;
             }
             #locationSearch form {
                 display: table;
@@ -85,6 +86,8 @@
                 transform: translateX(-50%);
                 width: 70%;
                 height: 50px;
+
+                max-width: 300px;
 
                 transition: background-color 0.5s ease, width 0.5s ease;
             }
@@ -257,6 +260,7 @@
             }
             .modal-content {
                 border-radius: 0px;
+                max-width: 500px;
             }
             .modal-footer{
                 text-align: left;
@@ -301,7 +305,14 @@
             #star5_gold {
                 display: none;
             }
-            #textInput{
+            #review_star1_gold,
+            #review_star2_gold,
+            #review_star3_gold,
+            #review_star4_gold,
+            #review_star5_gold {
+                display: none;
+            }
+            #textInput {
                 padding: 25px;
             }
             .box-tags{
@@ -309,6 +320,12 @@
                 overflow-x: scroll;
                 overflow-y: hidden;
                 white-space: nowrap;
+            }
+            .disabled {
+                display: none !important; 
+            }
+            .small {
+                font-size: 0.8em;
             }
            
         </style>
@@ -355,7 +372,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <img src="http://placehold.it/400x200">
+                <img id="placeDetails_photo" src="http://placehold.it/400x200">
               </div>
               <div class="modal-body">
                 <img id="placeDetails_titleIcon" src="img/icon-pin-green@3x.png">
@@ -366,22 +383,25 @@
 
                  <div class="review">
                     <span id="placeDetails_average" class="average"></span>
-                    <a href="" id="star1_gold"><img src="img/icon_star@3x.png"></a>
-                    <a href="" id="star2_gold"><img src="img/icon_star@3x.png"></a>
-                    <a href="" id="star3_gold"><img src="img/icon_star@3x.png"></a>
-                    <a href="" id="star4_gold"><img src="img/icon_star@3x.png"></a>
-                    <a href="" id="star5_gold"><img src="img/icon_star@3x.png"></a>
-                    <a href="" id="star1_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a href="" id="star2_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a href="" id="star3_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a href="" id="star4_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a href="" id="star5_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <button class="ghost">AVALIAR</button>
+                    <a id="star1_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="star2_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="star3_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="star4_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="star5_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="star1_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="star2_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="star3_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="star4_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="star5_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <button id="reviewBtn" class="ghost">AVALIAR</button>
+                    <p class="small" id="placeDetails_reviews"> </p>
                  </div>   
                  <div class="info">
-                    <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_isPublic"></span>
-                    <br>
-                    <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_structureType"></span>
+                    <p>
+                        <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_isPublic"></span>
+                        <br>
+                        <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_structureType"></span>
+                    </p>
                  </div>
               </div>
               <div class="modal-footer">
@@ -437,6 +457,43 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Review Modal -->
+        <div class="modal fade" id="reviewModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <img id="review_photo" src="http://placehold.it/400x200">
+              </div>
+              <div class="modal-body">
+                <img id="review_titleIcon" src="img/icon-pin-green@3x.png">
+                <span id="review_title" class="title"></span>
+
+                <br>
+                <br>
+
+                 <div class="review">
+                    <span id="review_average" class="average"></span>
+                    <a id="review_star1_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="review_star2_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="review_star3_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="review_star4_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="review_star5_gold"><img src="img/icon_star@3x.png"></a>
+                    <a id="review_star1_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="review_star2_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="review_star3_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="review_star4_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a id="review_star5_gray"><img src="img/icon_star_gray@3x.png"></a>
+                 </div>   
+                 
+
+              </div>
+              <div class="modal-footer">
+                <button id="sendReviewBtn" class="btn border btn-footer">ENVIAR</button>
+            </div>
+            </div>
+          </div>
         </div>
 
         <button id="addPlace" class="bigRoundedButton">ADICIONAR BICICLETÁRIO</button>
