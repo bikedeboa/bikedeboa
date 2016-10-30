@@ -30,16 +30,19 @@
                 z-index: 1;
                 left: 50%;
                 transform: translateX(-50%);
-                display: table;
                 width: 95%;
                 height: 48px;
                 background-color: #ffffff;
                 box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
             }
+            #locationSearch form {
+                display: table;
+                width: 100%;
+            }
             #locationSearch input {
                 width: 100%;
                 font-size: 14px;
-                padding-left: 20px;
+                padding: 0 0 0 20px;
                 font-weight: lighter;
             }
             #locationSearch button img {
@@ -49,15 +52,16 @@
             #locationSearch span {
                 display: table-cell;
                 width: 48px;
-                background-color: #eeeeee;
             }
             #locationSearch button {
                 width: 48px;
+                background-color: #eeeeee;
             }
             #locationSearch input,
             #locationSearch button {
                 height: 48px;
                 display: table-cell;
+                border: none;
             }
             .navbar {
                 background-color: #30bb6a;
@@ -82,12 +86,14 @@
                 width: 70%;
                 height: 50px;
 
-                transition: all 0.5s ease;
+                transition: background-color 0.5s ease, width 0.5s ease;
             }
             #addPlace.active {
                 font-size: 0;
                 width: 50px;
                 background-color: black;
+
+                transition: background-color 0.5s ease, width 0.5s ease, font-size 0s ease;
             }
             #addPlace.active:after {
                 content: '✕';
@@ -96,13 +102,82 @@
             }
             #newPlaceholder {
                 position: absolute;
-                top: calc(50% - 45px);
+                top: 20%;
+                left: 50%;
+                transform: translate(-50%,-100%);
+                z-index: 1;
+                opacity: 0;
+                background: transparent;
+                border: none;
+                pointer-events: none;
+
+                transition: top 0.5s ease;
+            }
+
+            @keyframes bounce {
+              from { opacity: 0.7; transform: translate(-50%,-110%);}
+              to { opacity: 1; transform: translate(-50%,-100%);}
+            }
+
+            @keyframes pulse {
+              from { opacity: 0.7;}
+              to { opacity: 1;} 
+            }
+            @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+            #newPlaceholderShadow {
+                position: absolute;
+                top: 50%;
                 left: 50%;
                 transform: translate(-50%,-50%);
                 z-index: 1;
+                width: 10px;
+                height: 5px;
+                border-radius: 50%;
+                background-color: black;
+                opacity: 0.5; 
                 display: none;
-                background: transparent;
-                border: none;
+
+                /*animation: pulse 0.5s infinite alternate;*/
+            }
+            #newPlaceholder.active {
+                pointer-events: initial;
+                top: 50%;
+                opacity: 1;
+
+                animation: bounce 0.5s infinite alternate;
+            }
+
+            #spinnerOverlay {
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0,0,0,0.3);
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 1031;
+                display: none;
+            }
+            #spinnerOverlay > img,
+            #spinnerOverlay .spinnerContainer {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+            }
+            #spinnerOverlay .spinnerContainer img {
+                animation: spin 1s linear infinite;
+            }
+            #spinnerOverlay #wheel1,
+            #spinnerOverlay #wheel2 {
+                top: calc(50% + 10px); 
+                opacity: 0.8;
+            }
+            #spinnerOverlay #wheel1 {
+                left: calc(50% - 36px);
+            }
+            #spinnerOverlay #wheel2 {
+                left: calc(50% + 36px);
             }
             .modal-dialog{
                 margin: 5%;
@@ -188,8 +263,16 @@
                 color: #fff;
                 padding: 15px;
             }
+            #star1_gold,
+            #star2_gold,
+            #star3_gold,
+            #star4_gold, 
+            #star5_gold {
+                display: none;
+            }
         </style>
-        <script src="http://maps.google.com/maps/api/js"></script>
+        
+        <script src="http://maps.google.com/maps/api/js?libraries=places"></script>
 
         <script src="markers.js"></script>
         <script src="app.js"></script>
@@ -205,36 +288,55 @@
           </div>
         </nav>
 
+        <div id="spinnerOverlay">
+            <img src="img/spinner_bike.png"></img>
+            <div id="wheel1" class="spinnerContainer">
+                <img src="img/spinner_wheel.png"></img>
+            </div>
+            <div id="wheel2" class="spinnerContainer">
+                <img src="img/spinner_wheel.png"></img>
+            </div>
+        </div>
+
         <div id="locationSearch">
-            <input id="locationQueryInput" type="text" placeholder="Onde tu procura um bicicletário?">
-            <span>
-                <button id="locationQueryBtn" type="button" data-toggle="modal" data-target="#myModal">
-                    <img src="img/icon-filter@2x.png" class="icon"></i>
-                </button>
-            </span>
+            <form>
+                <input id="locationQueryInput" type="text" placeholder="Onde tu procura um bicicletário?">
+                <span>
+                    <button id="locationQueryBtn" type="submit">
+                        <img src="img/icon-filter@2x.png" class="icon"></i>
+                    </button>
+                </span>
+            </form>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="placeDetailsModal">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <img src="http://placehold.it/400x200">
               </div>
               <div class="modal-body">
-                <img src="img/pin-mapa-movimento.png">
-                <span class="title">Isobar IWS Brasil</span>
+                <img src="img/icon-pin-green@3x.png">
+                <span id="placeDetails_title" class="title">Isobar IWS Brasil</span>
 
-                <p>Rua Borges de Medeiros, 2233 </br>
-                    Praia de Belas, Porto Alegre/RS</p>
+                <p id="placeDetails_address">
+                    Rua Borges de Medeiros, 2233 </br>
+                    Praia de Belas, Porto Alegre/RS
+                </p>
 
                  <div class="review">
-                    <span class="average">4.1</span>
-                    <a href=""><img src="img/icon_star@3x.png"></a>
-                    <a href=""><img src="img/icon_star@3x.png"></a>
-                    <a href=""><img src="img/icon_star@3x.png"></a>
-                    <a href=""><img src="img/icon_star@3x.png"></a>
-                    <a href=""><img src="img/icon_star@3x.png"></a>
+                    <span id="placeDetails_average" class="average">4.1</span>
+                    <a href="" id="star1_gold"><img src="img/icon_star@3x.png"></a>
+                    <a href="" id="star2_gold"><img src="img/icon_star@3x.png"></a>
+                    <a href="" id="star3_gold"><img src="img/icon_star@3x.png"></a>
+                    <a href="" id="star4_gold"><img src="img/icon_star@3x.png"></a>
+                    <a href="" id="star5_gold"><img src="img/icon_star@3x.png"></a>
+                    <a href="" id="star1_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a href="" id="star2_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a href="" id="star3_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a href="" id="star4_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <a href="" id="star5_gray"><img src="img/icon_star_gray@3x.png"></a>
                     <button class="ghost">AVALIAR</button>
                  </div>   
                  <div class="info">
@@ -254,15 +356,10 @@
 
         <button id="addPlace" class="bigRoundedButton">ADICIONAR BICICLETÁRIO</button>
         
+        <span id="newPlaceholderShadow"></span>
         <button id="newPlaceholder"> <img src="img/pin-mapa-movimento.png"></img> </button>
 
         <div id="map"/>
     </body>
 
-    <script type="text/javascript">
-
-        $('#myModal').modal('toggle');
-
-
-    </script>
 </html>
