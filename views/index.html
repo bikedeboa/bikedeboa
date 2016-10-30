@@ -282,6 +282,9 @@
                 color: white;
                 border-radius: 0;
             }
+            .tag {
+                background: #30bb6a;
+            }
             .btn-footer.half {
                 border-right: 1px solid #2db063;
                 width: 49%;
@@ -300,6 +303,12 @@
             }
             #textInput{
                 padding: 25px;
+            }
+            .box-tags{
+                width: auto;
+                overflow-x: scroll;
+                overflow-y: hidden;
+                white-space: nowrap;
             }
            
         </style>
@@ -394,7 +403,7 @@
 
                     <input id="textInput" type="text" class="form-control" placeholder="Qual o nome do local?">
 
-                    <div class="modal-body">
+                    <div class="modal-body text-center">
                         <span>Tipo de bicicletário</span>
                         <br>
 
@@ -412,8 +421,15 @@
                         
                         
                         <hr>
-
-                        <button class="tag">Tag</button>
+                        
+                        <div class="box-tags">
+                            <button class="btn tag">Iluminado</button> 
+                            <button class="btn tag">Iluminado</button>
+                            <button class="btn tag">Iluminado</button>
+                            <button class="btn tag">Iluminado</button> 
+                            <button class="btn tag">Iluminado</button>
+                            <button class="btn tag">Iluminado</button>
+                        </div>
                     </div>
                 
                     <div class="modal-footer">
