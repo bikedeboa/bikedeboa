@@ -188,10 +188,13 @@
             .modal-header{
                 padding: 0px;
             }
-            .modal-body img{
+            .modal-body img {
                 width: 18px;
                 /*margin-right: 10px;*/
                 height: auto;
+            }
+            .modal-body label {
+                font-weight: initial;
             }
             .modal-body p{
                 font-size: 16px;
@@ -207,13 +210,28 @@
                 text-align: center;
             }
             .modal-body hr {
-
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
-            .review img{
+            .modal-body .typeIcon {
+                width: 19%;
+                height: 60px;
+                background-color: #d8d8d8;
+                text-align: center;
+                display: inline-block;
+                /* margin: 5px; */
+                overflow: hidden;
+            }
+            .modal-body .typeIcon img {
+                padding: 14px 0px;
+                width: auto;
+                height: auto;
+            }
+            .review img {
                 width: 22px;
                 height: auto;
             }
-            .average{
+            .average {
                 font-size: 26px;
                 vertical-align: middle;
                 padding-right: 10px;
@@ -242,9 +260,6 @@
             .info{
                 padding-top: 10px;
             }
-            .btn-footer {
-                width: 50%;
-            }
             .info img {
                 margin-right: 10px;
                 margin-bottom: 10px;
@@ -258,11 +273,12 @@
                 color: white;
                 border-radius: 0;
             }
-            .btn.border {
+            .btn-footer.half {
                 border-right: 1px solid #2db063;
+                width: 49%;
             }
             .btn-footer {
-                width: 49%;
+                width: 100%;
                 color: #fff;
                 padding: 15px;
             }
@@ -349,9 +365,9 @@
                  </div>
               </div>
               <div class="modal-footer">
-                <button class="btn border btn-footer">CHECK-IN</button>
+                <button class="btn border btn-footer half">CHECK-IN</button>
                 <span class="divider"></span>
-                <button class="btn btn-footer">TRAÇAR ROTA</button>
+                <button class="btn btn-footer half">TRAÇAR ROTA</button>
               </div>
             </div>
           </div>
@@ -359,27 +375,44 @@
 
         <!-- New Place Modal -->
         <div class="modal fade" id="newPlaceModal">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <img src="http://placehold.it/400x200">
-              </div>
-              <div class="modal-body">
-                <p id="placeDetails_address">
-                    Rua Borges de Medeiros, 2233 </br>
-                    Praia de Belas, Porto Alegre/RS
-                </p>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <img src="http://placehold.it/400x200">
+                    </div>
 
-                <hr/>
+                    <div class="modal-body">
+                        <span>Tipo de bicicletário</span>
+                        <br>
 
-                <div class="modal-footer">
-                    <button class="btn border btn-footer">CHECK-IN</button>
-                    <span class="divider"></span>
-                    <button class="btn btn-footer">TRAÇAR ROTA</button>
-                  </div>
-              </div>
+                        <div class="typeIcon"> <img src="img/tipo_deroda.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/tipo_grade.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/tipo_parede.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/tipo_trave.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/tipo_uinvertido.png"></img> </div>
+
+                        <hr>
+
+                        <label>
+                            <input id="isPublicCheckbox" type="checkbox" name="checkbox"> Acesso restrito?
+                        </label>
+
+                        <hr>
+
+                        <input id="textInput" type="text" class="form-control" placeholder="Nome ou ponto de referência">
+                        
+                        <hr>
+
+                        TAGS TAGS TAGS TAGS <BR>
+                        TAGS TAGS TAGS TAGS <BR>
+                        TAGS TAGS TAGS TAGS <BR>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button id="saveNewPlaceBtn" class="btn border btn-footer">SALVAR</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
 
         <button id="addPlace" class="bigRoundedButton">ADICIONAR BICICLETÁRIO</button>
