@@ -1,0 +1,495 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"carous",
+				"carouselTemplate"
+			],
+			[
+				"style",
+				"stylesheet"
+			],
+			[
+				"carou",
+				"carouselTemplate"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "server.js",
+			"settings":
+			{
+				"buffer_size": 678,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/index.html",
+			"settings":
+			{
+				"buffer_size": 3564,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/app.js",
+			"settings":
+			{
+				"buffer_size": 4210,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 167.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"eanbl",
+				"SublimeLinter: Enable Linting"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"enab",
+				"SublimeLinter: Enable Linter"
+			],
+			[
+				"disable",
+				"SublimeLinter: Disable Linting"
+			],
+			[
+				"disa",
+				"SublimeLinter: Disable Linter"
+			],
+			[
+				"enalbe",
+				"SublimeLinter: Enable Linting"
+			],
+			[
+				"disabl",
+				"SublimeLinter: Disable Linter"
+			],
+			[
+				"javas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"css",
+				"Set Syntax: CSS"
+			],
+			[
+				"serial",
+				"Set Syntax: SQL (Rails)"
+			],
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"javasc",
+				"Set Syntax: JavaScript"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 120.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa",
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/lib",
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/views"
+	],
+	"file_history":
+	[
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/lib/app_gmaps.js",
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/app.js",
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/views/404.html",
+		"/Users/hackathon/Documents/projects/hackathon2016/__bikedeboa/server.js",
+		"/Users/hackathon/Documents/projects/hackathon2016/__bikedeboa/index.html",
+		"/Users/hackathon/Documents/projects/hackathon2016/__bikedeboa/abouthtml",
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/lib/hello/hello.js",
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/server.js",
+		"/Users/hackathon/Documents/projects/hackathon2016/bikedeboa/lib/homedoc/index.js",
+		"/Users/hackathon/Documents/projects/bikedeboa/app.js",
+		"/Users/hackathon/hackathon_phone/views/script.ejs",
+		"/Users/hackathon/hackathon_phone/public/phone.js",
+		"/Users/hackathon/hackathon_phone/app.js",
+		"/Users/hackathon/hackathon_phone/public/repository.js",
+		"/Users/hackathon/hackathon_phone/audio/syscall.js",
+		"/Users/hackathon/Library/Application Support/Sublime Text 3/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/hackathon/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/hackathon/hackathon_phone/css/stylesheet.css",
+		"/Users/hackathon/hackathon_phone/views/stylesheet.ejs",
+		"/Users/hackathon/hackathon_phone/main.js",
+		"/Users/hackathon/hackathon_phone/repository.js",
+		"/Users/hackathon/hackathon_phone/views/index.html",
+		"/Users/hackathon/hackathon_phone/js/main.js",
+		"/Users/hackathon/hackathon_phone/views/header.ejs",
+		"/Users/hackathon/hackathon_phone/package.json",
+		"/Users/hackathon/hackathon_phone/index.html"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"contentString",
+			"https",
+			"lat",
+			"alert",
+			"env",
+			"function(",
+			":",
+			"key",
+			"lib",
+			"public",
+			"){\n",
+			"3000",
+			"exists",
+			"listen",
+			"0.1",
+			"imgPath",
+			"ajax",
+			"quotes",
+			"repository.js",
+			"include footer",
+			"footer",
+			"bootstrap code",
+			"zen_sen",
+			"handlebars",
+			"handle",
+			"p",
+			"-",
+			"h1",
+			"tab",
+			"command",
+			"include",
+			"header",
+			"imgPath: \"\", ",
+			"text",
+			"num",
+			"p",
+			"P",
+			"p",
+			"i",
+			"I",
+			"i",
+			"I",
+			"i",
+			"mespeak",
+			"data[i]",
+			"data",
+			"send",
+			"serialPort",
+			"SerialPort",
+			"serialPort",
+			"SerialPort",
+			"serialPort",
+			"\"open\"",
+			"serial",
+			"button",
+			"txt",
+			",",
+			"alt",
+			"*",
+			"email",
+			"<%",
+			"ejs",
+			"header"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "server.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 678,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								272,
+								272
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "views/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3564,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								868,
+								868
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "lib/app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4210,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								445,
+								445
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "bikedeboa.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"pack",
+				"package.json"
+			],
+			[
+				"index",
+				"views/index.html"
+			],
+			[
+				"serve",
+				"server.js"
+			],
+			[
+				"app.js",
+				"app.js"
+			],
+			[
+				"scrip",
+				"views/script.ejs"
+			],
+			[
+				"sysca",
+				"audio/syscall.js"
+			],
+			[
+				"phone",
+				"public/phone.js"
+			],
+			[
+				"footer",
+				"views/footer.ejs"
+			],
+			[
+				"sys",
+				"audio/syscall.js"
+			],
+			[
+				"style",
+				"views/stylesheet.ejs"
+			],
+			[
+				"styl",
+				"views/stylesheet.ejs"
+			],
+			[
+				"script",
+				"views/script.ejs"
+			],
+			[
+				"main.j",
+				"js/main.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 242.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
