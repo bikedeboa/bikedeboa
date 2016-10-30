@@ -1,0 +1,132 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Bike De Boa</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <!-- ¯\_(ツ)_/¯ -->
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+        <!-- Libs -->
+        <style type="text/css">
+            * {
+                font-family: "Roboto";
+            }
+            #map {
+                width: 100vw;
+                height: calc(100vh);
+                /*margin-top: 50px;*/
+            } 
+            #locationSearch {
+                position: absolute;
+                top: 65px;
+                z-index: 1;
+                left: 50%;
+                transform: translateX(-50%);
+                display: table;
+                width: 95%;
+                height: 48px;
+                background-color: #ffffff;
+                box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
+            }
+            #locationSearch input {
+                width: 100%;
+                font-size: 14px;
+                padding-left: 20px;
+                font-weight: lighter;
+            }
+            #locationSearch button img {
+                width: 20px;
+                height: 20px;
+            }
+            #locationSearch span {
+                display: table-cell;
+                width: 48px;
+                background-color: #eeeeee;
+            }
+            #locationSearch button {
+                width: 48px;
+            }
+            #locationSearch input,
+            #locationSearch button {
+                height: 48px;
+                display: table-cell;
+            }
+            .navbar {
+                background-color: #30bb6a;
+                border: none;
+            }
+            .navbar-header {
+                text-align: center;
+                padding-top: 12px;
+                font-size: 18px;
+                color: white;
+            }
+            .bigRoundedButton {
+                position: absolute;
+                bottom: 30px;
+                left: 50%;
+                z-index: 1;
+                background: #30bb6a;
+                border: none;
+                color: white;
+                border-radius: 25px;
+                transform: translateX(-50%);
+                width: 70%;
+                height: 50px;
+
+                transition: all 0.5s ease;
+            }
+            #addPlace.active {
+                font-size: 0;
+                width: 50px;
+                background-color: black;
+            }
+            #addPlace.active:after {
+                content: '✕';
+                color: #30bb6a;
+                font-size: 24px;
+            }
+            #newPlaceholder {
+
+            }
+        </style>
+        <script src="http://maps.google.com/maps/api/js"></script>
+
+        <script src="markers.js"></script>
+        <script src="app.js"></script>
+
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              Bike De Boa
+            </div>
+          </div>
+        </nav>
+
+        <div id="locationSearch">
+            <input id="locationQueryInput" type="text" placeholder="Onde tu procura um bicicletário?">
+            <span>
+                <button id="locationQueryBtn" type="button">
+                    <img src="img/icon-filter@2x.png" class="icon"></i>
+                </button>
+            </span>
+        </div>
+
+        <button id="addPlace" class="bigRoundedButton">ADICIONAR BICICLETÁRIO</button>
+        
+        <button id="newPlaceholder"> <img src="img/pin-mapa-movimento.png"></img> </button>
+
+        <div id="map"/>
+    </body>
+</html>
