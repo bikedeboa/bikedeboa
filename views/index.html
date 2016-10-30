@@ -148,6 +148,10 @@
                 font-size: 14px;
                 width: 30%;
                 border-radius: 20px;
+                vertical-align: middle;
+            }
+            .modal-content {
+                border-radius: 0px;
             }
             .modal-footer{
                 text-align: left;
@@ -162,6 +166,27 @@
             }
             .btn-footer {
                 width: 50%;
+            }
+            .info img {
+                margin-right: 10px;
+                margin-bottom: 10px;
+            }
+            .modal-footer {
+                background: #30bb6a;
+                padding: 0;
+            }
+            .btn {
+                background: transparent;
+                color: white;
+                border-radius: 0;
+            }
+            .btn.border {
+                border-right: 1px solid #2db063;
+            }
+            .btn-footer {
+                width: 49%;
+                color: #fff;
+                padding: 15px;
             }
         </style>
         <script src="http://maps.google.com/maps/api/js"></script>
@@ -213,22 +238,16 @@
                     <button class="ghost">AVALIAR</button>
                  </div>   
                  <div class="info">
-                    <img src="img/icon_star@3x.png"><p>Público</p>
-                    <img src="img/icon_star@3x.png"><p>Bicicletário U-invertido</p>
+                    <img src="img/icon_star@3x.png"><span>Público</span>
+                    <br>
+                    <img src="img/icon_star@3x.png"><span>Bicicletário U-invertido</span>
                  </div>
-
-                 <div class="row">
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                    <div class="col-sm-6">
-                        <button type="button" class="btn btn-default">Save changes</button>
-                    </div>
-                </div>
               </div>
-              <!-- <div class="modal-footer">
-                
-              </div> -->
+              <div class="modal-footer">
+                <button class="btn border btn-footer">CHECK-IN</button>
+                <span class="divider"></span>
+                <button class="btn btn-footer">TRAÇAR ROTA</button>
+              </div>
             </div>
           </div>
         </div>
