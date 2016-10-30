@@ -215,17 +215,26 @@
             }
             .modal-body .typeIcon {
                 width: 19%;
-                height: 60px;
-                background-color: #d8d8d8;
+                /*height: 60px;*/
+                background-color: #fff;
                 text-align: center;
                 display: inline-block;
                 /* margin: 5px; */
                 overflow: hidden;
+                margin-top: 10px;
             }
+           .typeIcon.active {
+                background-color: #eee;
+                border-radius: 50%;
+            }
+
             .modal-body .typeIcon img {
                 padding: 14px 0px;
                 width: auto;
                 height: auto;
+            }
+            .modal-body{
+                text-align: center;
             }
             .review img {
                 width: 22px;
@@ -289,6 +298,10 @@
             #star5_gold {
                 display: none;
             }
+            #textInput{
+                padding: 25px;
+            }
+           
         </style>
         
         <script src="http://maps.google.com/maps/api/js?libraries=places"></script>
@@ -378,34 +391,31 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <img src="http://placehold.it/400x200">
+                        <img src="img/bicicletario/bg_header.png">
                     </div>
+
+                    <input id="textInput" type="text" class="form-control" placeholder="Qual o nome do local?">
 
                     <div class="modal-body">
                         <span>Tipo de bicicletário</span>
                         <br>
 
-                        <div class="typeIcon"> <img src="img/tipo_deroda.png"></img> </div>
-                        <div class="typeIcon"> <img src="img/tipo_grade.png"></img> </div>
-                        <div class="typeIcon"> <img src="img/tipo_parede.png"></img> </div>
-                        <div class="typeIcon"> <img src="img/tipo_trave.png"></img> </div>
-                        <div class="typeIcon"> <img src="img/tipo_uinvertido.png"></img> </div>
+                        <div class="typeIcon active"> <img src="img/bicicletario/icon_deRoda.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/bicicletario/icon_Uinvertido.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/bicicletario/icon_trave.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/bicicletario/icon_parede.png"></img> </div>
+                        <div class="typeIcon"> <img src="img/bicicletario/icon_grade.png"></img> </div>
 
                         <hr>
 
                         <label>
-                            <input id="isPublicCheckbox" type="checkbox" name="checkbox"> Acesso restrito?
+                            <input id="isPublicCheckbox" type="checkbox" name="checkbox"> Acesso restrito? Só para clientes
                         </label>
-
-                        <hr>
-
-                        <input id="textInput" type="text" class="form-control" placeholder="Nome ou ponto de referência">
+                        
                         
                         <hr>
 
-                        TAGS TAGS TAGS TAGS <BR>
-                        TAGS TAGS TAGS TAGS <BR>
-                        TAGS TAGS TAGS TAGS <BR>
+                        <button class="tag">Tag</button>
                     </div>
                 
                     <div class="modal-footer">
