@@ -104,6 +104,65 @@
                 background: transparent;
                 border: none;
             }
+            .modal-dialog{
+                margin: 5%;
+            }
+            .modal-dialog img{
+                width: 100%;
+            }
+            .modal-header{
+                padding: 0px;
+            }
+            .modal-body img{
+                width: 18px;
+                /*margin-right: 10px;*/
+                height: auto;
+            }
+            .modal-body p{
+                font-size: 16px;
+                color: #828b90;
+            }
+            .title{
+                font-size: 20px;
+                margin-left: 10px;
+            }
+            .review{
+                border-top: 1px solid #e5e5e5;
+                border-bottom: 1px solid #e5e5e5;
+                text-align: center;
+            }
+            .review img{
+                width: 22px;
+                height: auto;
+            }
+            .average{
+                font-size: 26px;
+                vertical-align: middle;
+                padding-right: 10px;
+            }
+            .ghost {
+                border: 1px solid #828b90;
+                background-color: #fff;
+                color: #828b90;
+                margin-left: 10px;
+                font-size: 14px;
+                width: 30%;
+                border-radius: 20px;
+            }
+            .modal-footer{
+                text-align: left;
+                border: none;
+            }
+            .modal-footer img{
+                width: 25px;
+                height: 28px;
+            }
+            .info{
+                padding-top: 10px;
+            }
+            .btn-footer {
+                width: 50%;
+            }
         </style>
         <script src="http://maps.google.com/maps/api/js"></script>
 
@@ -124,10 +183,54 @@
         <div id="locationSearch">
             <input id="locationQueryInput" type="text" placeholder="Onde tu procura um bicicletário?">
             <span>
-                <button id="locationQueryBtn" type="button">
+                <button id="locationQueryBtn" type="button" data-toggle="modal" data-target="#myModal">
                     <img src="img/icon-filter@2x.png" class="icon"></i>
                 </button>
             </span>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <img src="http://placehold.it/400x200">
+              </div>
+              <div class="modal-body">
+                <img src="img/pin-mapa-movimento.png">
+                <span class="title">Isobar IWS Brasil</span>
+
+                <p>Rua Borges de Medeiros, 2233 </br>
+                    Praia de Belas, Porto Alegre/RS</p>
+
+                 <div class="review">
+                    <span class="average">4.1</span>
+                    <a href=""><img src="img/icon_star@3x.png"></a>
+                    <a href=""><img src="img/icon_star@3x.png"></a>
+                    <a href=""><img src="img/icon_star@3x.png"></a>
+                    <a href=""><img src="img/icon_star@3x.png"></a>
+                    <a href=""><img src="img/icon_star@3x.png"></a>
+                    <button class="ghost">AVALIAR</button>
+                 </div>   
+                 <div class="info">
+                    <img src="img/icon_star@3x.png"><p>Público</p>
+                    <img src="img/icon_star@3x.png"><p>Bicicletário U-invertido</p>
+                 </div>
+
+                 <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-default">Save changes</button>
+                    </div>
+                </div>
+              </div>
+              <!-- <div class="modal-footer">
+                
+              </div> -->
+            </div>
+          </div>
         </div>
 
         <button id="addPlace" class="bigRoundedButton">ADICIONAR BICICLETÁRIO</button>
@@ -136,4 +239,11 @@
 
         <div id="map"/>
     </body>
+
+    <script type="text/javascript">
+
+        $('#myModal').modal('toggle');
+
+
+    </script>
 </html>
