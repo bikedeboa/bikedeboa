@@ -6,7 +6,7 @@
         <title>Bike De Boa</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <!-- ¯\_(ツ)_/¯ -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -14,7 +14,7 @@
 
         <!-- Libs -->
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places"type="text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="style.css"/> 
+        <link rel="stylesheet" type="text/css" href="style.css"/>
         <script src="markers.js"></script>
         <script src="gmapsCustomStyle.js"></script>
         <script src="app.js"></script>
@@ -78,7 +78,7 @@
                     <a id="star5_gray"><img src="img/icon_star_gray@3x.png"></a>
                     <button id="reviewBtn" class="ghost">AVALIAR</button>
                     <p class="small" id="placeDetails_reviews"> </p>
-                 </div>   
+                 </div>
                  <div class="info">
                     <p>
                         <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_isPublic"></span>
@@ -106,7 +106,9 @@
                         <img src="img/bg_header.png">
                     </div>
 
-                    <input id="textInput" type="text" class="form-control" placeholder="Qual o nome do local?">
+                    <div class="text-input-wrapper">
+                      <input id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
+                    </div>
 
                     <div class="modal-body text-center">
                         <span class="light">Tipo de bicicletário</span>
@@ -121,21 +123,21 @@
                         <hr>
 
                         <label>
-                            <input id="isPublicCheckbox" type="checkbox" name="checkbox"> Acesso restrito? Só para clientes
+                            <input id="isPublicCheckbox" type="checkbox" name="checkbox"> Acesso restrito? (Só para clientes?)
                         </label>
-                        
-                        
+
+
                         <hr>
-                        
+
                         <div class="box-tags">
-                            <button class="btn tag">iluminado</button> 
+                            <button class="btn tag">iluminado</button>
                             <button class="btn tag">movimentado</button>
                             <button class="btn tag">monitorado</button>
                             <button class="btn tag">fácil acesso</button>
                             <button class="btn tag">espaçoso</button>
                         </div>
                     </div>
-                
+
                     <div class="modal-footer">
                         <button id="saveNewPlaceBtn" class="btn border btn-footer">SALVAR</button>
                     </div>
@@ -169,8 +171,8 @@
                     <a id="review_star3_gray"><img src="img/icon_star_gray@3x.png"></a>
                     <a id="review_star4_gray"><img src="img/icon_star_gray@3x.png"></a>
                     <a id="review_star5_gray"><img src="img/icon_star_gray@3x.png"></a>
-                 </div>   
-                 
+                 </div>
+
 
               </div>
               <div class="modal-footer">
@@ -181,7 +183,7 @@
         </div>
 
         <button id="addPlace" class="bigRoundedButton">ADICIONAR BICICLETÁRIO</button>
-        
+
         <span id="newPlaceholderShadow"></span>
         <button id="newPlaceholder"> <img src="img/pin-mapa-movimento.png"></img> </button>
 

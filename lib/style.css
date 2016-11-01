@@ -5,10 +5,10 @@
     width: 100vw;
     height: calc(100vh);
     /*margin-top: 50px;*/
-} 
+}
 #locationSearch {
     top: 65px;
-    
+
     position: absolute;
     z-index: 1;
     left: 50%;
@@ -107,7 +107,7 @@
 
 @keyframes pulse {
   from { opacity: 0.7;}
-  to { opacity: 1;} 
+  to { opacity: 1;}
 }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
@@ -121,7 +121,7 @@
     height: 5px;
     border-radius: 50%;
     background-color: black;
-    opacity: 0.5; 
+    opacity: 0.5;
     display: none;
 
     /*animation: pulse 0.5s infinite alternate;*/
@@ -156,7 +156,7 @@
 }
 #spinnerOverlay #wheel1,
 #spinnerOverlay #wheel2 {
-    top: calc(50% + 10px); 
+    top: calc(50% + 10px);
     opacity: 0.8;
 }
 #spinnerOverlay #wheel1 {
@@ -164,9 +164,6 @@
 }
 #spinnerOverlay #wheel2 {
     left: calc(50% + 36px);
-}
-.modal-dialog{
-    margin: 5%;
 }
 .modal-dialog img{
     width: 100%;
@@ -284,7 +281,7 @@
 #star1_gold,
 #star2_gold,
 #star3_gold,
-#star4_gold, 
+#star4_gold,
 #star5_gold {
     display: none;
 }
@@ -295,8 +292,15 @@
 #review_star5_gold {
     display: none;
 }
-#textInput {
-    padding: 25px;
+.text-input-wrapper {
+    padding: 15px 15px 0;
+}
+.text-input {
+    padding: 10px;
+    width: 100%;
+}
+#titleInput {
+    text-indent: 20px;
 }
 .box-tags{
     width: auto;
@@ -305,7 +309,7 @@
     white-space: nowrap;
 }
 .disabled {
-    display: none !important; 
+    display: none !important;
 }
 .small {
     font-size: 0.8em !important;
