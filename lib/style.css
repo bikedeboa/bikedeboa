@@ -54,6 +54,7 @@
     height: 48px;
     display: table-cell;
     border: none;
+    vertical-align: top;
 }
 
 .navbar {
@@ -63,9 +64,10 @@
 
 .navbar-header {
     text-align: center;
-    padding-top: 12px;
+    padding-top: 14px;
     font-size: 18px;
     color: white;
+    font-weight: bold;
 }
 
 .bigRoundedButton {
@@ -80,18 +82,19 @@
     transform: translateX(-50%);
     width: 70%;
     height: 50px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
 
     max-width: 300px;
 
-    transition: background-color 0.5s ease, width 0.5s ease;
+    transition: background-color 0.5s ease;
 }
 
 #addPlace.active {
     font-size: 0;
     width: 50px;
-    background-color: black;
+    background-color: rgb(20,20,20);
 
-    transition: background-color 0.5s ease, width 0.5s ease, font-size 0s ease;
+    transition: background-color 0.5s ease, font-size 0s ease;
 }
 
 #addPlace.active:after {
@@ -142,7 +145,7 @@
     width: 10px;
     height: 5px;
     border-radius: 50%;
-    background-color: black;
+    background-color: rgb(20,20,20);
     opacity: 0.5;
     display: none;
 
@@ -240,8 +243,6 @@
 }
 
 .review{
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #e5e5e5;
     text-align: center;
 }
 
@@ -285,7 +286,6 @@
 .average {
     font-size: 26px;
     vertical-align: middle;
-    padding-right: 10px;
 }
 
 .ghost {
@@ -297,6 +297,16 @@
     width: 30%;
     border-radius: 20px;
     vertical-align: middle;
+    min-width: 80px;
+
+    transition: all 0.5s ease;
+}
+.ghost:hover,
+.ghost:focus,
+.ghost:active {
+    color: white;
+    border: 1px solid white;
+    background-color: #30bb6a;
 }
 
 .modal-footer{
@@ -344,22 +354,6 @@
     padding: 15px;
 }
 
-#star1_gold,
-#star2_gold,
-#star3_gold,
-#star4_gold,
-#star5_gold {
-    display: none;
-}
-
-#review_star1_gold,
-#review_star2_gold,
-#review_star3_gold,
-#review_star4_gold,
-#review_star5_gold {
-    display: none;
-}
-
 .text-input-wrapper {
     padding: 15px 15px 0;
 }
@@ -392,3 +386,59 @@
     font-weight: lighter;
 }
 
+/*#locationSearch, .bigRoundedButton {
+    opacity: 0.9;
+    transition: opacity 0.5s ease;
+}
+#locationSearch:hover, .bigRoundedButton:hover,
+#locationSearch:active, .bigRoundedButton:active {
+    opacity: 1;
+}
+*/
+
+/****** Style Star Rating Widget *****/
+/* https://codepen.io/jamesbarnett/pen/vlpkh */
+.rating { 
+    display: inline-block;
+    vertical-align: bottom;
+}
+.rating > input { display: none; } 
+.rating > label:before { 
+    margin: 2px;
+    /* font-size: 1.25em; */
+    /* font-size: 30px; */
+    /* font-family: FontAwesome; */
+    display: inline-block;
+    content: '';
+    background-image: url(img/icon_star_gray@3x.png);
+    background-size: 100%;
+    background-repeat: none;
+    width: 22px;
+    height: 20px;
+}
+.rating > .half:before { 
+    content: "\f089";
+    position: absolute;
+}
+.rating > label { 
+    /*color: #ddd; */
+    float: right; 
+}
+.rating:not(:disabled) > label { 
+    cursor: pointer;
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+.rating > input:checked ~ label:before, /* show gold star when clicked */
+.rating:not(:checked):not(:disabled) > label:hover:before, /* hover current star */
+.rating:not(:checked):not(:disabled) > label:hover ~ label:before { /* hover previous stars in list */
+    /*color: #eabb2f;*/
+    background-image: url(img/icon_star@3x.png);
+} 
+
+.rating > input:checked + label:hover:before, /* hover current star when changing rating */
+.rating > input:checked ~ label:hover:before,
+.rating > label:hover ~ input:checked ~ label:before, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label:before {
+    /*color: #f1d274;*/
+} 

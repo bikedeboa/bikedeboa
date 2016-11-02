@@ -24,7 +24,8 @@
         <nav class="navbar navbar-default navbar-fixed-top">
           <div class="container-fluid">
             <div class="navbar-header">
-              Bike De Boa
+              <!-- <img src="img/bici@2x.png" style="width: 25px; vertical-align: text-top;"/> -->
+              bike de boa
             </div>
           </div>
         </nav>
@@ -64,21 +65,32 @@
                 <p id="placeDetails_address">
                 </p>
 
+                <hr>
+
                  <div class="review">
                     <span id="placeDetails_average" class="average"></span>
-                    <a id="star1_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="star2_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="star3_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="star4_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="star5_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="star1_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="star2_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="star3_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="star4_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="star5_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <fieldset disabled class="rating">
+                        <input type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                        <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
+                        
+                        <input type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                        <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
+                        
+                        <input type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                        <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
+                        
+                        <input type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                        <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
+                        
+                        <input type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                        <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
+                    </fieldset>
                     <button id="reviewBtn" class="ghost">AVALIAR</button>
                     <p class="small" id="placeDetails_reviews"> </p>
                  </div>
+
+                 <hr> 
+
                  <div class="info">
                     <p>
                         <!-- <img src="img/icon_star@3x.png"> --><span id="placeDetails_isPublic"></span>
@@ -159,24 +171,31 @@
                 <br>
                 <br>
 
+                <hr>
+
                  <div class="review">
                     <span id="review_average" class="average"></span>
-                    <a id="review_star1_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="review_star2_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="review_star3_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="review_star4_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="review_star5_gold"><img src="img/icon_star@3x.png"></a>
-                    <a id="review_star1_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="review_star2_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="review_star3_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="review_star4_gray"><img src="img/icon_star_gray@3x.png"></a>
-                    <a id="review_star5_gray"><img src="img/icon_star_gray@3x.png"></a>
+                    <fieldset class="rating">
+                        <input type="radio" id="star5" name="rating" value="5" />
+                        <label class="full-star" for="star5" title="Excelente!"></label>
+                        
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label class="full-star" for="star4" title="Bacana"></label>
+                        
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label class="full-star" for="star3" title="Hum..."></label>
+                        
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label class="full-star" for="star2" title="Ruinzinho"></label>
+                        
+                        <input type="radio" id="star1" name="rating" value="1" />
+                        <label class="full-star" for="star1" title="Muito ruim"></label>
+                    </fieldset>
                  </div>
-
 
               </div>
               <div class="modal-footer">
-                <button id="sendReviewBtn" class="btn border btn-footer">ENVIAR</button>
+                <button id="sendReviewBtn" class="btn border btn-footer">DEIXAR AVALIAÇÃO</button>
             </div>
             </div>
           </div>
