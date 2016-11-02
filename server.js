@@ -24,6 +24,7 @@ app.use("*",function(req,res){
   res.sendFile(path + "404.html");
 });
 
-app.listen((process.env.PORT || 5000), function(){
-  console.log("Live at Port " + (process.env.PORT || 5000));
+var port = process.env.PORT || 5000;
+app.listen(port, function(){
+  console.log("Live at http://localhost:" + port);
 });
