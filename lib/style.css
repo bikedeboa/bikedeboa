@@ -221,6 +221,10 @@
 
 .modal-header {
     padding: 0px;
+    position: relative;
+    background-image: url(img/bg_header.png);
+    height: 170px;
+    overflow: hidden;
 }
 
 .modal-body img {
@@ -253,7 +257,7 @@
 }
 
 .modal-body .typeIcon {
-    width: 55px;
+    width: 50px;
     height: auto;
     background-color: #fff;
     text-align: center;
@@ -340,8 +344,12 @@
     border-radius: 0;
 }
 
-.tag {
+.btn-tag {
     background: #30bb6a;
+}
+
+.btn-tag.active {
+    background: #289a57;
 }
 
 .btn-footer.half {
@@ -357,6 +365,19 @@
 
 .text-input-wrapper {
     padding: 15px 15px 0;
+    position: relative;
+}
+
+.text-input-wrapper:before {
+    content: '';
+    position: absolute;
+    top: 29px;
+    left: 27px;
+    width: 18px;
+    height: 18px;
+    background-image: url(img/icon-pin-green.png);
+    background-size: 70%;
+    background-repeat: no-repeat;
 }
 
 .text-input {
@@ -365,7 +386,7 @@
 }
 
 #titleInput {
-    text-indent: 20px;
+    padding-left: 30px;
 }
 
 .box-tags{
@@ -396,6 +417,25 @@
     opacity: 1;
 }
 */
+
+#photoInput {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+#photoInput + label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: url(img/icon-photo.png);
+    width: 67px;
+    height: 67px;
+    transform: translate(-50%,-50%);
+    cursor: pointer;
+}
 
 /****** Style Star Rating Widget *****/
 /* https://codepen.io/jamesbarnett/pen/vlpkh */

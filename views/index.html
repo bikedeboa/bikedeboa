@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- ¯\_(ツ)_/¯ -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="jquery.min.js"></script>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
@@ -56,7 +56,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <img id="placeDetails_photo" src="http://placehold.it/400x200">
+                <img id="placeDetails_photo" src="img/bg_header.png">
               </div>
               <div class="modal-body">
                 <img id="placeDetails_titleIcon" src="img/icon-pin-green@3x.png">
@@ -115,7 +115,10 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <img src="img/bg_header.png">
+                        <img id="photoInputBg" src="img/bg_header.png"/>
+
+                        <input type="file" name="photoInput" id="photoInput" />
+                        <label for="photoInput"/>
                     </div>
 
                     <div class="text-input-wrapper">
@@ -139,14 +142,14 @@
                         </label>
 
 
-                        <hr>
+                        <span class="light">Tags</span>
 
                         <div class="box-tags">
-                            <button class="btn tag">iluminado</button>
-                            <button class="btn tag">movimentado</button>
-                            <button class="btn tag">monitorado</button>
-                            <button class="btn tag">fácil acesso</button>
-                            <button class="btn tag">espaçoso</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">iluminado</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">movimentado</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">monitorado</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">fácil acesso</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">espaçoso</button>
                         </div>
                     </div>
 
@@ -162,7 +165,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <img id="review_photo" src="http://placehold.it/400x200">
+                <img id="review_photo" src="img/bg_header.png">
               </div>
               <div class="modal-body">
                 <img id="review_titleIcon" src="img/icon-pin-green@3x.png">
