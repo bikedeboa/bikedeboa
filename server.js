@@ -1,4 +1,4 @@
-var express = require("express");
+var express = require('express');
 var app = express();
 var router = express.Router();
 var path = __dirname + '/views/';
@@ -8,23 +8,23 @@ app.use(express.static('public'));
 app.use(express.static('lib'));
 
 router.use(function (req,res,next) {
-  console.log("/" + req.method);
+  console.log('/' + req.method);
   next();
 });
 
 // Home
-router.get("/",function(req,res){
-  res.sendFile(path + "index.html");
+router.get('/',function(req,res){
+  res.sendFile(path + 'index.html');
 });
 
-app.use("/",router);
+app.use('/',router);
 
 // 404
-app.use("*",function(req,res){
-  res.sendFile(path + "404.html");
+app.use('*',function(req,res){
+  res.sendFile(path + '404.html');
 });
 
 var port = process.env.PORT || 5000;
 app.listen(port, function(){
-  console.log("Live at http://localhost:" + port);
+  console.log('Live at http://localhost:' + port);
 });

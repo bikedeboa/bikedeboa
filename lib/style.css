@@ -206,6 +206,7 @@
     right: 0;
     font-size: 30px;
     font-weight: lighter;
+    font-family: "Arial";
     /*cursor: pointer;*/
     pointer-events: none;
 }
@@ -398,12 +399,12 @@
 
 /****** Style Star Rating Widget *****/
 /* https://codepen.io/jamesbarnett/pen/vlpkh */
-.rating { 
+.rating {
     display: inline-block;
     vertical-align: bottom;
 }
-.rating > input { display: none; } 
-.rating > label:before { 
+.rating > input { display: none; }
+.rating > label:before {
     margin: 2px;
     /* font-size: 1.25em; */
     /* font-size: 30px; */
@@ -416,15 +417,15 @@
     width: 22px;
     height: 20px;
 }
-.rating > .half:before { 
+.rating > .half:before {
     content: "\f089";
     position: absolute;
 }
-.rating > label { 
+.rating > label {
     /*color: #ddd; */
-    float: right; 
+    float: right;
 }
-.rating:not(:disabled) > label { 
+.rating:not(:disabled) > label {
     cursor: pointer;
 }
 
@@ -434,11 +435,11 @@
 .rating:not(:checked):not(:disabled) > label:hover ~ label:before { /* hover previous stars in list */
     /*color: #eabb2f;*/
     background-image: url(img/icon_star@3x.png);
-} 
+}
 
 .rating > input:checked + label:hover:before, /* hover current star when changing rating */
 .rating > input:checked ~ label:hover:before,
 .rating > label:hover ~ input:checked ~ label:before, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label:before {
     /*color: #f1d274;*/
-} 
+}
