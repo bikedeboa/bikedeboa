@@ -237,7 +237,13 @@
     font-weight: initial;
 }
 
-.modal-body p{
+.modal-body h2 {
+    font-weight: lighter;
+    font-size: 14px;
+    color: #999999;
+}
+
+.modal-body p {
     font-size: 16px;
     color: #828b90;
 }
@@ -256,18 +262,20 @@
     margin-bottom: 10px;
 }
 
-.modal-body .typeIcon {
-    width: 50px;
-    height: auto;
-    background-color: #fff;
-    text-align: center;
-    display: inline-block;
-    /* margin: 5px; */
-    overflow: hidden;
-    margin-top: 10px;
+.modal-body .typeIconsGroup {
+    width: 100%;
+    white-space: nowrap;
+    overflow: auto;
 }
 
-.typeIcon.active {
+.modal-body .typeIcon {
+    width: 55px;
+    height: 55px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.modal-body .typeIcon.active {
     background-color: #eee;
     border-radius: 50%;
 }
@@ -341,15 +349,18 @@
 .btn {
     background: transparent;
     color: white;
-    border-radius: 0;
 }
 
 .btn-tag {
-    background: #30bb6a;
+    background: #eeeeee;
+    color: #939a9d;
+    border-radius: 10px;
+    margin: 5px 2px;
 }
 
 .btn-tag.active {
-    background: #289a57;
+    background: #2cd978;
+    color: white;
 }
 
 .btn-footer.half {
@@ -364,15 +375,15 @@
 }
 
 .text-input-wrapper {
-    padding: 15px 15px 0;
+    /*padding: 15px 15px 0;*/
     position: relative;
 }
 
 .text-input-wrapper:before {
     content: '';
     position: absolute;
-    top: 29px;
-    left: 27px;
+    top: 15px;
+    left: 12px;
     width: 18px;
     height: 18px;
     background-image: url(img/icon-pin-green.png);
@@ -389,12 +400,12 @@
     padding-left: 30px;
 }
 
-.box-tags{
+/*.box-tags{
     width: auto;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-}
+}*/
 
 .disabled {
     display: none !important;
@@ -482,4 +493,31 @@
 .rating > label:hover ~ input:checked ~ label:before, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label:before {
     /*color: #f1d274;*/
+}
+
+/* Custom Radio Buttons */
+.radio-group label {
+    cursor: pointer;
+    color: #999999;
+    margin-bottom: 0;
+}
+.radio-group label + label {
+    margin-left: 10px;
+}
+label > input { /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+label > input + .radio-image{ /* IMAGE STYLES */
+    background-image: url('img/radio@2x.png');
+    width: 22px;
+    height: 22px;
+    background-size: 100%;
+    display: inline-block;
+    vertical-align: bottom;
+
+    transition: background-image 0.2s ease-in-out;
+}
+label > input:checked + .radio-image{ /* (RADIO CHECKED) IMAGE STYLES */
+    background-image: url(img/radio_checked@2x.png);
 }

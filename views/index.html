@@ -115,41 +115,53 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <img id="photoInputBg" src="img/bg_header.png"/>
+                        <img id="photoInputBg"/>
 
                         <input type="file" name="photoInput" id="photoInput" />
                         <label for="photoInput"/>
                     </div>
 
-                    <div class="text-input-wrapper">
-                      <input id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
-                    </div>
-
                     <div class="modal-body text-center">
-                        <span class="light">Tipo de bicicletário</span>
-                        <br>
+                        <div class="text-input-wrapper">
+                          <input id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
+                        </div>
 
-                        <div class="typeIcon active"> <img id="1" src="img/tipo_deroda.png"></img> </div>
-                        <div class="typeIcon"> <img id="2" src="img/tipo_uinvertido.png"></img> </div>
-                        <div class="typeIcon"> <img id="3" src="img/tipo_trave.png"></img> </div>
-                        <div class="typeIcon"> <img  id="4" src="img/tipo_parede.png"></img> </div>
-                        <div class="typeIcon"> <img  id="5" src="img/tipo_grade.png"></img> </div>
+                        <h2>Tipo de bicicletário</h2>
+
+                        <div class="typeIconsGroup">
+                          <div class="typeIcon active"> <img id="1" src="img/tipo_deroda.png"></img> </div>
+                          <div class="typeIcon"> <img id="2" src="img/tipo_uinvertido.png"></img> </div>
+                          <div class="typeIcon"> <img id="3" src="img/tipo_trave.png"></img> </div>
+                          <div class="typeIcon"> <img  id="4" src="img/tipo_parede.png"></img> </div>
+                          <div class="typeIcon"> <img  id="5" src="img/tipo_grade.png"></img> </div>
+                        </div>
 
                         <hr>
 
-                        <label>
-                            <input id="isPublicCheckbox" type="checkbox" name="checkbox"> Acesso restrito? (Só para clientes?)
-                        </label>
+                        <div class="radio-group">
+                          <label>
+                            <input type="radio" name="isPublicRadioGrp"  />
+                            <span class="radio-image"></span>
+                            Público
+                          </label>
 
+                          <label>
+                            <input type="radio" name="isPublicRadioGrp"  />
+                            <span class="radio-image"></span>
+                            Acesso restrito
+                          </label>
+                        </div>
 
-                        <span class="light">Tags</span>
+                        <hr>
+
+                        <h2>Características</h2>
 
                         <div class="box-tags">
-                            <button class="btn btn-sm btn-tag" data-toggle="button">iluminado</button>
-                            <button class="btn btn-sm btn-tag" data-toggle="button">movimentado</button>
-                            <button class="btn btn-sm btn-tag" data-toggle="button">monitorado</button>
-                            <button class="btn btn-sm btn-tag" data-toggle="button">fácil acesso</button>
-                            <button class="btn btn-sm btn-tag" data-toggle="button">espaçoso</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">Iluminado</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">Movimentado</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">Monitorado</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">Fácil acesso</button>
+                            <button class="btn btn-sm btn-tag" data-toggle="button">Espaçoso</button>
                         </div>
                     </div>
 
