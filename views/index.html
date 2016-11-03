@@ -21,15 +21,6 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <!-- <img src="img/bici@2x.png" style="width: 25px; vertical-align: text-top;"/> -->
-              bike de boa
-            </div>
-          </div>
-        </nav>
-
         <div id="spinnerOverlay">
             <img src="img/spinner_bike.png"></img>
             <div id="wheel1" class="spinnerContainer">
@@ -40,15 +31,18 @@
             </div>
         </div>
 
-        <div id="locationSearch" class="hiddenInitialy">
-            <form>
-                <input id="locationQueryInput" type="text" placeholder="Onde tu procura um bicicletário?">
-                <span>
-                    <button id="locationQueryBtn" type="button">
-                        <img src="img/icon-filter@2x.png" class="icon"></i>
-                    </button>
-                </span>
-            </form>
+        <div id="locationSearch" class="coolHide">
+            <span class="balaca"><img src="img/bici@2x.png" style="
+                width: 38px;
+                height: auto;
+                padding-left: 8px;
+            "></span>
+            <input id="locationQueryInput" type="text" placeholder="Onde tu procura um bicicletário?">
+            <span>
+                <button id="filterBtn" type="button">
+                    <img src="img/icon-filter@2x.png" class="icon"></i>
+                </button>
+            </span>
         </div>
 
         <!-- View Details Modal -->
@@ -230,7 +224,7 @@
           </div>
         </div>
 
-        <button id="addPlace" class="bigRoundedButton hiddenInitialy">
+        <button id="addPlace" class="bigRoundedButton coolHide">
             ADICIONAR BICICLETÁRIO
         </button>
 
