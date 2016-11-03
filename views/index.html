@@ -15,7 +15,11 @@
         <!-- Libs -->
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places"type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="style.css"/>
-        <script src="markers.js"></script>
+        <script src="globals.js"></script>
+
+        <!-- <script src="Database.js"></script> -->
+        <script src="MockedDatabase.js"></script>
+
         <script src="gmapsCustomStyle.js"></script>
         <script src="app.js"></script>
     </head>
@@ -96,7 +100,7 @@
                  </div>
               </div>
               <div class="modal-footer">
-                <div class="col-half"> 
+                <div class="col-half">
                 <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button>
                     </div>
                 <div class="col-half">
@@ -126,26 +130,26 @@
                         <h2>Tipo de bicicletário</h2>
 
                         <div class="typeIconsGroup">
-                          <div class="typeIcon"> <img id="typeIcon1" src="img/tipo_deroda.png"></img> </div>
-                          <div class="typeIcon"> <img id="typeIcon2" src="img/tipo_uinvertido.png"></img> </div>
-                          <div class="typeIcon"> <img id="typeIcon3" src="img/tipo_trave.png"></img> </div>
-                          <div class="typeIcon"> <img id="typeIcon4" src="img/tipo_suspenso.png"></img> </div>
-                          <div class="typeIcon"> <img id="typeIcon5" src="img/tipo_grade.png"></img> </div>
+                          <div data-type="deroda" class="typeIcon"> <img src="img/tipo_deroda.png"></img> </div>
+                          <div data-type="uinvertido" class="typeIcon"> <img src="img/tipo_uinvertido.png"></img> </div>
+                          <div data-type="trave" class="typeIcon"> <img src="img/tipo_trave.png"></img> </div>
+                          <div data-type="suspenso" class="typeIcon"> <img src="img/tipo_suspenso.png"></img> </div>
+                          <div data-type="grade" class="typeIcon"> <img src="img/tipo_grade.png"></img> </div>
                         </div>
 
                         <hr>
 
                         <div class="radio-group">
                           <label>
-                            <input type="radio" name="isPublicRadioGrp"  />
+                            <input type="radio" name="isPublicRadioGrp" value="true" />
                             <span class="radio-image"></span>
                             Público
                           </label>
 
                           <label>
-                            <input type="radio" name="isPublicRadioGrp"  />
+                            <input type="radio" name="isPublicRadioGrp" value="false" />
                             <span class="radio-image"></span>
-                            Acesso restrito
+                            Apenas clientes
                           </label>
                         </div>
 
@@ -204,7 +208,7 @@
                 </fieldset>
                 </div>
 
-                <hr>   
+                <hr>
 
                 <h2>Características</h2>
 
