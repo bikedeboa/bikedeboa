@@ -221,7 +221,7 @@
 }
 
 #spinnerOverlay .spinnerContainer img {
-    animation: spin 1s linear infinite;
+    /* animation: spin 1s linear infinite; */
 }
 
 #spinnerOverlay #wheel1,
@@ -292,6 +292,7 @@
 .title{
     font-size: 20px;
     margin-left: 10px;
+    vertical-align: middle;
 }
 
 .review{
@@ -368,7 +369,7 @@
 .modal-footer{
     text-align: left;
     border: none;
-}
+} 
 
 .modal-footer img{
     width: 25px;
@@ -380,8 +381,11 @@
 }
 
 .info img {
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin: 0 5px;
+}
+
+#placeDetails_isPublic img {
+    opacity: 0.6;
 }
 
 .modal-footer {
