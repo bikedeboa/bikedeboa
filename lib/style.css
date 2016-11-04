@@ -221,7 +221,7 @@
 }
 
 #spinnerOverlay .spinnerContainer img {
-    /* animation: spin 1s linear infinite; */
+    animation: spin 1s linear infinite; 
 }
 
 #spinnerOverlay #wheel1,
