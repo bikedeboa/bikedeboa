@@ -9,11 +9,14 @@ const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const babel = require('gulp-babel');
 const child = require('child_process');
-const fs = require('fs');
 const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
+const size = require('gulp-size');
+const sourcemaps = require('gulp-sourcemaps');
+const del = require('del');
+// const fs = require('fs');
 
 
 // // Lint Task
@@ -27,10 +30,12 @@ const runSequence = require('run-sequence');
 gulp.task('sass', () => {
     return gulp.src('app/scss/*.scss') 
         .pipe(sass())
+        .pipe(sourcemaps.init())
         .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
-            cascade: false
+            browsers: ['> 1%']
         }))
+        .pipe(concat('main.css'))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/css'));
 });
 
@@ -109,10 +114,14 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['sass', 'scripts'], () => {
-  // return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
+gulp.task('clean', del.bind(null, ['dist']));
+
+gulp.task('build', () => {
+  runSequence(['clean', 'wiredep'], ['sass', 'scripts'], () => {
+    return gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
+  });
 });
 
 gulp.task('default', () => {
-  runSequence('wiredep', 'build', 'server', 'watch');
+  runSequence('build', 'server', 'watch');
 });

@@ -1,6 +1,6 @@
 var BIKE = BIKE || {};
 
-BIKE.Database = {
+BIKE.MockedDatabase = {
     ///////////////////
     // G L O B A L S //
     ///////////////////

@@ -9,6 +9,7 @@ const N_MOCK_PICS = 15;
 const STRUCTURE_TYPES = ['U Invertido', 'De roda', 'Trave', 'Suspenso', 'Grade'];
 const GMAPS_DIRECTIONS_URL = 'http://maps.google.com/maps?saddr="#{origin}"&daddr="#{destination}"';
 
+let Database = BIKE.MockedDatabase;
 let map;
 let geocoder;
 let markers = 'sdf';

@@ -252,7 +252,7 @@ $(function () {
     $('#newPlaceModal').modal('toggle');
 
     var mapCenter = map.getCenter();
-    BIKE.Database.sendPlace({
+    Database.sendPlace({
       lat: '' + mapCenter.lat(),
       lng: '' + mapCenter.lng(),
       text: $('#newPlaceModal #titleInput').val(),
@@ -262,16 +262,16 @@ $(function () {
     }, function() {
             // Addition finished
       showSpinner();
-      BIKE.Database.getPlaces(updateMarkers);
+      Database.getPlaces(updateMarkers);
     });
   }
 
   function sendCheckinBtn() {
-    BIKE.Database.sendCheckin(openedMarker.id, function() {
+    Database.sendCheckin(openedMarker.id, function() {
       $('#placeDetailsModal').modal('toggle');
 
       showSpinner();
-      BIKE.Database.getPlaces(updateMarkers);
+      Database.getPlaces(updateMarkers);
     });
   }
 
@@ -408,13 +408,13 @@ $(function () {
     });
 
     $('#sendReviewBtn').on('click', function() {
-      BIKE.Database.sendReview(openedMarker.id, currentPendingRating, function() {
+      Database.sendReview(openedMarker.id, currentPendingRating, function() {
         $('#reviewModal').modal('toggle');
         $('#placeDetailsModal').modal('toggle');
                 // @todo retrieve tags
 
         showSpinner();
-        BIKE.Database.getPlaces(updateMarkers);
+        Database.getPlaces(updateMarkers);
       });
     });
 
@@ -455,7 +455,7 @@ $(function () {
     _initTriggers();
 
     showSpinner();
-    BIKE.Database.getPlaces(updateMarkers);
+    Database.getPlaces(updateMarkers);
 
   }
 
