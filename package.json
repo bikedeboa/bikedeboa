@@ -5,7 +5,11 @@
     "node": ">=5.4.0"
   },
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "bower": ">=1.7.x"
+  },
+  "scripts": {
+      "postinstall": "./node_modules/bower/bin/bower install"
   },
   "devDependencies": {
     "babel-core": "^6.4.0",
