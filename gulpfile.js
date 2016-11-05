@@ -109,11 +109,10 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['server', 'sass', 'scripts', 'watch'], () => {
+gulp.task('build', ['sass', 'scripts'], () => {
   // return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-
 });
 
 gulp.task('default', () => {
-  runSequence(['wiredep'], 'build');
+  runSequence('wiredep', 'build', 'server', 'watch');
 });
