@@ -14,27 +14,29 @@
 
 #locationSearch {
     transition: top 0.5s ease-in-out;
-}
-#locationSearch.coolHide {
-    top: -50px;
-}
+    
+    .coolHide {
+        top: -50px;
+    }
 
-#locationSearch .balaca {
-    background-color: #30bb6a;
-    width: 48px;
+    .balaca {
+        background-color: #30bb6a;
+        width: 48px;
+    }
 }
 
 #addPlace {
     transition: bottom 0.5s ease-in-out;
     opacity: 0.9;
-}
-#addPlace.coolHide {
-    bottom: -50px;
-}
-.addPlace:hover,
-.addPlace:active,
-.addPlace:focus {
-    opacity: 1;
+    
+    &.coolHide {
+        bottom: -50px;
+    }
+    &:hover,
+    &:active,
+    &:focus {
+        opacity: 1;
+    }
 }
 
 #locationSearch {
@@ -48,9 +50,7 @@
     background-color: #ffffff;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
     max-width: 600px;
-}
-
-#locationSearch {
+    
     display: table;
     width: 90%;
 }
@@ -262,7 +262,7 @@
 .modal-header {
     padding: 0px;
     position: relative;
-    background-image: url(img/bg_header.png);
+    background-image: url(/img/bg_header.png);
     height: 170px;
     overflow: hidden;
 }
@@ -446,7 +446,7 @@
     left: 12px;
     width: 18px;
     height: 18px;
-    background-image: url(img/icon-pin-green.png);
+    background-image: url(/img/icon-pin-green.png);
     background-size: 70%;
     background-repeat: no-repeat;
 }
@@ -498,7 +498,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    background: url(img/icon-photo.png);
+    background: url(/img/icon-photo.png);
     width: 67px;
     height: 67px;
     transform: translate(-50%,-50%);
@@ -519,7 +519,7 @@
     /* font-family: FontAwesome; */
     display: inline-block;
     content: '';
-    background-image: url(img/icon_star_gray@3x.png);
+    background-image: url(/img/icon_star_gray@3x.png);
     background-size: 100%;
     background-repeat: none;
     width: 22px;
@@ -542,7 +542,7 @@
 .rating:not(:checked):not(:disabled) > label:hover:before, /* hover current star */
 .rating:not(:checked):not(:disabled) > label:hover ~ label:before { /* hover previous stars in list */
     /*color: #eabb2f;*/
-    background-image: url(img/icon_star@3x.png);
+    background-image: url(/img/icon_star@3x.png);
 }
 
 .rating > input:checked + label:hover:before, /* hover current star when changing rating */
@@ -573,7 +573,7 @@
     position: absolute; /* Remove input from document flow */
 }
 .radio-group label > input + .radio-image{ /* IMAGE STYLES */
-    background-image: url('img/radio@2x.png');
+    background-image: url(/img/radio@2x.png);
     width: 22px;
     height: 22px;
     background-size: 100%;
@@ -583,5 +583,5 @@
     transition: background-image 0.2s ease-in-out;
 }
 .radio-group label > input:checked + .radio-image{ /* (RADIO CHECKED) IMAGE STYLES */
-    background-image: url(img/radio_checked@2x.png);
+    background-image: url(/img/radio_checked@2x.png);
 }
