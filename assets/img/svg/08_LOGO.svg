@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="269.316px" height="269.323px" viewBox="0 0 269.316 269.323" enable-background="new 0 0 269.316 269.323"
+	 xml:space="preserve">
+<text transform="matrix(1 0 0 1 53.6211 227.2334)" fill="#A6D0B2" font-family="'OpenSans-Semibold'" font-size="51.0236">de boa</text>
+<path fill="#47B970" d="M269.316,134.662c0,74.37-60.285,134.661-134.656,134.661c-55.594,0-103.324-33.693-123.881-81.787
+	C3.84,171.308,0,153.433,0,134.662C0,60.289,60.287,0,134.66,0C209.031,0,269.316,60.289,269.316,134.662z"/>
+<g>
+	<g>
+		<path fill="#FFFFFF" d="M137.615,146.236c0-4.588-3.721-8.307-8.311-8.307c-4.588,0-8.311,3.719-8.311,8.307
+			c0,4.591,3.723,8.312,8.311,8.312C133.895,154.548,137.615,150.827,137.615,146.236z"/>
+		
+			<path fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="56.6929,7.0866" d="
+			M65.703,171.718c-18.66-5.91-29.004-25.819-23.092-44.479c5.898-18.662,25.816-28.994,44.473-23.094
+			c18.658,5.906,29,25.818,23.092,44.481C104.27,167.284,84.361,177.624,65.703,171.718z"/>
+		
+			<path fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="56.6929,7.0866" d="
+			M211.793,166.628c-15.555,11.875-37.793,8.893-49.67-6.666c-11.875-15.558-8.889-37.794,6.668-49.669s37.791-8.893,49.666,6.664
+			C230.334,132.518,227.348,154.753,211.793,166.628z"/>
+		
+			<line fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="165.035" y1="92.756" x2="105.58" y2="92.756"/>
+		
+			<line fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="105.58" y1="92.756" x2="101.428" y2="81.852"/>
+		
+			<line fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="159.598" y1="80.257" x2="188.506" y2="138.607"/>
+		
+			<line fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="159.598" y1="80.257" x2="175.082" y2="80.257"/>
+		
+			<polyline fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+			166.984,95.16 129.305,147.193 105.58,92.756 76.389,138.461 129.305,147.193 		"/>
+		
+			<polygon fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+			94.912,81.302 116.248,81.302 103.104,86.205 		"/>
+	</g>
+</g>
+<g>
+	<defs>
+		<line id="SVGID_1_" x1="6.914" y1="175.774" x2="261.838" y2="175.774"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  overflow="visible"/>
+	</clipPath>
+	
+		<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M263.014,135.537c0,74.366-57.705,134.657-128.889,134.657c-53.213,0-98.9-33.693-118.574-81.787
+		c-6.643-16.229-10.318-34.104-10.318-52.87c0-74.375,57.705-134.662,128.893-134.662C205.309,0.875,263.014,61.162,263.014,135.537
+		z"/>
+	
+		<use xlink:href="#SVGID_1_"  overflow="visible" fill="none" stroke="#FFFFFF" stroke-width="4.8189" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+</g>
+<g>
+	<text transform="matrix(1 0 0 1 61.2266 227.2334)"><tspan x="0" y="0" fill="#B7D8BF" font-family="'Raleway-Thin'" font-size="51.0236">de</tspan><tspan x="60.207" y="0" fill="#B7D8BF" font-family="'Raleway-Medium'" font-size="51.0236">boa</tspan></text>
+</g>
+<g>
+	<text transform="matrix(1 0 0 1 90.2266 59.4307)" fill="#B7D8BF" font-family="'Raleway-Thin'" font-size="51.0236">bike</text>
+</g>
+</svg>

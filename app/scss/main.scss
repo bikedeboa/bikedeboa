@@ -151,6 +151,10 @@
     pointer-events: none;
 
     transition: top 0.5s ease;
+
+    img {
+        width: 70px;
+    }
 }
 
 
@@ -226,16 +230,16 @@
 
 #spinnerOverlay #wheel1,
 #spinnerOverlay #wheel2 {
-    top: calc(50% + 10px);
-    opacity: 0.8;
+    top: calc(50% + 2px);
+    // opacity: 0.8;
 }
 
 #spinnerOverlay #wheel1 {
-    left: calc(50% - 36px);
+    left: calc(50% - 60px);
 }
 
 #spinnerOverlay #wheel2 {
-    left: calc(50% + 36px);
+    left: calc(50% + 60px);
 }
 
 .modal-dialog:before {
@@ -299,42 +303,40 @@
     text-align: center;
 }
 
-.modal-body hr {
-    margin-top: 10px;
-    margin-bottom: 10px;
+.modal-body {
+    hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .typeIconsGroup {
+        width: 100%;
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .typeIcon {
+        width: 18%;
+        height: auto;
+        display: inline-block;
+        cursor: pointer;
+        vertical-align: middle;
+        
+        &.active {
+            background-color: #eee;
+            border-radius: 50%;
+            background-color: hsla(146,45%,90%,1);
+        }
+
+        img {
+            padding: 14px 0px;
+            width: 100%;
+            height: 70px;
+        }
+    }
 }
 
-.modal-body .typeIconsGroup {
-    width: 100%;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-.modal-body .typeIcon {
-    width: 55px;
-    height: 55px;
-    display: inline-block;
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-.modal-body .typeIcon.active {
-    background-color: #eee;
-    border-radius: 50%;
-    background-color: hsla(146,45%,90%,1);
-}
-
-
-.modal-body .typeIcon img {
-    padding: 14px 0px;
-    width: auto;
-    height: auto;
-}
-
-.modal-body{
-    /*text-align: center;*/
-}
 
 .review img {
     width: 22px;
@@ -378,11 +380,20 @@
 
 .info{
     padding-top: 10px;
+    text-align: center;
+
+    img {
+        margin: 0 5px;
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+    }
+
+    div {
+        margin-top: 5px;
+    }
 }
 
-.info img {
-    margin: 0 5px;
-}
 
 #placeDetails_isPublic img {
     opacity: 0.6;
@@ -474,6 +485,13 @@
 
 .light {
     font-weight: lighter;
+}
+
+.balaca {
+    img {
+        width: 100%;
+        padding: 2px;
+    }
 }
 
 /*#locationSearch, .bigRoundedButton {

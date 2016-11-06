@@ -19,14 +19,14 @@ $(function () {
     var isPublicIcon = m.isPublic === 'true' ? 'img/icon_public.svg' : 'img/icon_private.svg';
     var structureTypeIcon = '';
     switch (m.structureType) {
-    case 'U Invertido': structureTypeIcon = 'img/tipo_uinvertido.png'; break;
-    case 'De roda': structureTypeIcon = 'img/tipo_deroda.png'; break;
-    case 'Trave': structureTypeIcon = 'img/tipo_trave.png'; break;
-    case 'Suspenso': structureTypeIcon = 'img/tipo_suspenso.png'; break;
-    case 'Grade': structureTypeIcon = 'img/tipo_grade.png'; break;
+    case 'U Invertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
+    case 'De roda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
+    case 'Trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
+    case 'Suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
+    case 'Grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
     }
 
-    if (m.text) {
+    if (m.text) { 
       $('#placeDetails_title').show();
       $('#placeDetails_titleIcon').show();
       $('#placeDetails_title').text(m.text);
