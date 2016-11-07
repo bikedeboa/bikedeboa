@@ -603,3 +603,45 @@
 .radio-group label > input:checked + .radio-image{ /* (RADIO CHECKED) IMAGE STYLES */
     background-image: url(/img/radio_checked@2x.png);
 }
+
+
+// Thanks to https://davidwalsh.name/css-flip
+/* entire container, keeps perspective */
+.flip-container {
+    perspective: 1000px;
+}
+
+/* flip the pane when hovered */
+.flipper.flipped {
+    transform: rotateY(180deg);
+}
+
+/* flip speed goes here */
+.flipper {
+    transition: 0.8s ease-out;
+    transform-style: preserve-3d;
+
+    position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+    backface-visibility: hidden;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+    z-index: 2;
+    /* for firefox 31 */
+    transform: rotateY(0deg);
+    position: relative;
+}
+
+/* back, initially hidden pane */
+.back {
+    transform: rotateY(180deg);
+}

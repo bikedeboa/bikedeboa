@@ -42,7 +42,7 @@ $(function () {
     $('#placeDetails_isPublic_icon').attr('src', isPublicIcon);
     $('#placeDetails_isPublic').text(m.isPublic === 'true' ? 'Público' : 'Privado');
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
-    $('#placeDetails_structureType').text(m.structureType ? 'Tipo ' + m.structureType : '');
+    $('#placeDetails_structureType').text(m.structureType ? 'Bicicletario ' + m.structureType : '');
     $('#placeDetails_reviews').text(m.reviews && (m.reviews + ' avaliações') || '');
     $('#placeDetails_checkins').text(m.checkin && (m.checkin + ' check-ins') || '');
 
@@ -53,7 +53,10 @@ $(function () {
       $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
     }
 
-        // Finally, open modal
+    // Make sure the right side of the card is visible
+    $('#placeDetailsModal .flipper').removeClass('flipped');
+
+    // Finally, open modal
     $('#placeDetailsModal').modal('toggle');
   }
 
@@ -397,10 +400,11 @@ $(function () {
       }
 
             // Reset fields
-      $('#reviewModal .box-tags button').removeClass('active');
-      $('#reviewModal input:radio[name=rating]:checked').prop('checked', false);
+      $('#reviewPanel .box-tags button').removeClass('active');
+      $('#reviewPanel input:radio[name=rating]:checked').prop('checked', false);
 
-      $('#reviewModal').modal('toggle');
+      // $('#reviewPanel').modal('toggle');
+      $('#placeDetailsModal .flipper').toggleClass('flipped');
     });
 
     $('.rating').on('change', function(e) {
