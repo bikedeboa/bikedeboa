@@ -7,14 +7,10 @@ $(function () {
   function openDetailsModal(i) {
     if (addLocationMode) {
       return false;
-    } 
+    }
 
     openedMarker = markers[i];
-    var m = openedMarker;
-
-        // console.log(m.text);
-        // console.log(m.structureType);
-        // console.log(m.isPublic);
+    const m = openedMarker;
 
     let templateData = {};
 
@@ -35,7 +31,7 @@ $(function () {
     // Address (@todo)
     templateData.address = '';
 
-    // Average 
+    // Average
     if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
       m.average = m.average.toFixed(1);
     }
@@ -68,7 +64,7 @@ $(function () {
     // Is public?
     $('#placeDetails_isPublic_icon').attr('src', isPublicIcon);
     $('#placeDetails_isPublic').text(m.isPublic === 'true' ? 'Público' : 'Privado (só clientes)');
-    
+
     // Structure type
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
     $('#placeDetails_structureType').text(m.structureType ? 'Bicicletario ' + m.structureType : '');

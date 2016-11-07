@@ -14,8 +14,8 @@
 
 #locationSearch {
     transition: top 0.5s ease-in-out;
-    
-    .coolHide {
+
+    &.coolHide {
         top: -50px;
     }
 
@@ -28,7 +28,7 @@
 #addPlace {
     transition: bottom 0.5s ease-in-out;
     opacity: 0.9;
-    
+
     &.coolHide {
         bottom: -50px;
     }
@@ -50,7 +50,7 @@
     background-color: #ffffff;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
     max-width: 600px;
-    
+
     display: table;
     width: 90%;
 }
@@ -225,7 +225,7 @@
 }
 
 #spinnerOverlay .spinnerContainer img {
-    animation: spin 1s linear infinite; 
+    animation: spin 3s linear infinite;
 }
 
 #spinnerOverlay #wheel1,
@@ -285,7 +285,7 @@
     font-weight: lighter;
     font-size: 14px;
     color: #999999;
-    text-align: center; 
+    text-align: center;
 }
 
 .modal-body p {
@@ -322,7 +322,7 @@
         display: inline-block;
         cursor: pointer;
         vertical-align: middle;
-        
+
         &.active {
             background-color: #eee;
             border-radius: 50%;
@@ -371,7 +371,7 @@
 .modal-footer{
     text-align: left;
     border: none;
-} 
+}
 
 .modal-footer img{
     width: 25px;
@@ -491,7 +491,7 @@
 }
 
 .tagsContainer {
-    text-align: center; 
+    text-align: center;
 }
 
 .small {
