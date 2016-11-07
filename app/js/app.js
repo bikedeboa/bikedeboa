@@ -29,7 +29,7 @@ $(function () {
     }
 
     // Title
-    $('#placeDetails_heading').toggle(m.text);
+    $('#placeDetails_heading').toggle(m.text && m.text.length > 0);
     templateData.title = m.text;
 
     // Address (@todo)
@@ -83,27 +83,28 @@ $(function () {
   function _geolocateAndCenterMap(callback) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-                function(position) {
-                  var pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  };
+          function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
 
-                  map.panTo(pos);
+            map.panTo(pos);
+            map.setZoom(17);
 
-                  if (callback && typeof callback === 'function') {
-                    callback();
-                  }
-                },
-                function() {
-                    // @todo show something more informative to the user
-                  console.error('Geolocation failed.');
+            if (callback && typeof callback === 'function') {
+              callback();
+            }
+          },
+          function() {
+              // @todo show something more informative to the user
+            console.error('Geolocation failed.');
 
-                  if (callback && typeof callback === 'function') {
-                    callback();
-                  }
-                }
-            );
+            if (callback && typeof callback === 'function') {
+              callback();
+            }
+          }
+      );
     }
   }
 
@@ -149,13 +150,13 @@ $(function () {
 
     deleteMarkers();
 
-        // Markers from Database
+    // Markers from Database
     if (markers && markers.length > 0) {
-            // markers.forEach(function(m) {
+      // markers.forEach(function(m) {
       for(var i=0; i<markers.length; i++) {
         var m = markers[i];
 
-                // Icon
+        // Icon
         var iconUrl;
         if (!m.reviews) {
           iconUrl = MARKER_ICON_GRAY;
@@ -191,7 +192,8 @@ $(function () {
           },
           map: map,
           icon: icon,
-                    // opacity: 0.1 + (m.average/5).
+          title: m.text,
+          // opacity: 0.1 + (m.average/5).
         });
 
         (function (markerIndex) {
@@ -236,13 +238,19 @@ $(function () {
     // Removes the markers from the map, but keeps them in the array.
   function hideMarkers () {
     areMarkersHidden = true;
-    setMapOnAll(null);
+    // setMapOnAll(null);
+    _gmarkers.forEach(i => {
+      i.setOptions({clickable: false, opacity: 0.3});
+    });
   }
 
     // Shows any markers currently in the array.
   function showMarkers () {
     areMarkersHidden = false;
-    setMapOnAll(map);
+    // setMapOnAll(map);
+    _gmarkers.forEach(i => {
+      i.setOptions({clickable: true, opacity: 1});
+    });
   }
 
     // Deletes all markers in the array by removing references to them.
@@ -261,6 +269,12 @@ $(function () {
 
   function addLocationModeToggle() {
     addLocationMode = !addLocationMode;
+
+    // if (addLocationMode) {
+    //   if (map.getZoom() < 18) {
+    //     map.setZoom(18);
+    //   }
+    // }
 
     $('#addPlace').toggleClass('active');
     $('#newPlaceholder').toggleClass('active');
@@ -281,9 +295,9 @@ $(function () {
       text: $('#newPlaceModal #titleInput').val(),
       isPublic: $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val(),
       structureType: $('#newPlaceModal .typeIcon.active').data('type'),
-            // @todo retrieve tags, ...
+      // @todo retrieve tags
     }, function() {
-            // Addition finished
+      // Addition finished
       showSpinner();
       Database.getPlaces(updateMarkers);
     });
@@ -439,7 +453,7 @@ $(function () {
       Database.sendReview(openedMarker.id, currentPendingRating, function() {
         $('#reviewModal').modal('toggle');
         $('#placeDetailsModal').modal('toggle');
-                // @todo retrieve tags
+        // @todo retrieve tags
 
         showSpinner();
         Database.getPlaces(updateMarkers);
@@ -447,7 +461,7 @@ $(function () {
     });
 
 
-        // Details panel
+    // Details panel
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
   }
 
@@ -460,7 +474,7 @@ $(function () {
       zoom: 15,
       disableDefaultUI: true,
       scaleControl: false,
-            // zoomControl: true,
+      // zoomControl: true,
       styles: _gmapsCustomStyle,
     });
 
@@ -468,9 +482,9 @@ $(function () {
 
     setupAutocomplete();
 
-    // Add bike Layer
-    var bikeLayer = new google.maps.BicyclingLayer();
-    bikeLayer.setMap(map);
+    // Add cyclabe path bike Layer
+    // var bikeLayer = new google.maps.BicyclingLayer();
+    // bikeLayer.setMap(map);
 
     // Geolocalization button
     if (navigator.geolocation) {
