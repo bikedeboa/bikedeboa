@@ -1067,24 +1067,33 @@ BIKE.MockedDatabase = {
 
       m.isPublic = Math.round(Math.random()) === 0 ? 'true' : 'false';
 
-            // Number of reviews and checkins
+      // Number of reviews and checkins
       m.reviews = Math.floor(Math.random() * 20);
       m.checkin = Math.floor(Math.random() * 100);
 
-            // Average rating
+      // Average rating
       if (m.reviews > 0) {
         m.average = (Math.floor(Math.random() * 40) + 10)/10;
       }
 
-            // Structure types
+      // Tags
+      m.tags = [];
+      tags.forEach(tname => {
+        m.tags.push({
+          name: tname,
+          count: Math.floor(Math.random() * 10)
+        });
+      });
+
+      // Structure types
       var randomStructure = Math.floor(Math.random() * 4) + 0;
-      switch(randomStructure) {
-      case 0: m.structureType = STRUCTURE_TYPES[0]; break;
-      case 1: m.structureType = STRUCTURE_TYPES[1]; break;
-      case 2: m.structureType = STRUCTURE_TYPES[2]; break;
-      case 3: m.structureType = STRUCTURE_TYPES[3]; break;
-      case 4: m.structureType = STRUCTURE_TYPES[4]; break;
-      }
+        switch(randomStructure) {
+          case 0: m.structureType = STRUCTURE_TYPES[0]; break;
+          case 1: m.structureType = STRUCTURE_TYPES[1]; break;
+          case 2: m.structureType = STRUCTURE_TYPES[2]; break;
+          case 3: m.structureType = STRUCTURE_TYPES[3]; break;
+          case 4: m.structureType = STRUCTURE_TYPES[4]; break;
+        }
     });
   },
 

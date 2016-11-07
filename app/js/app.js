@@ -44,14 +44,16 @@ $(function () {
     }
 
     // Tags
-    // <button class="btn btn-sm btn-tag" data-toggle="button">Iluminado</button>
-    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Movimentado</button>
-    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Monitorado</button>
-    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Fácil acesso</button>
-    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Espaçoso</button>
     templateData.tagsButtons = tags.map(t => {
-      return `<button class="btn btn-sm btn-tag" data-toggle="button">${t}</button>`;
+      return `<button class="btn btn-tag" data-toggle="button">${t}</button>`;
     }).join('');
+
+    templateData.tags = m.tags
+      .sort((a, b) => {return b.count - a.count; })
+      .map(t => {
+        return t.count > 0 ? `<span class="tagDisplay"><span class="badge">${t.count}</span> ${t.name}</span>` : '';
+      })
+      .join('');
 
     // Reviews, checkins
     templateData.numReviews = m.reviews && (m.reviews + ' avaliações') || '';
