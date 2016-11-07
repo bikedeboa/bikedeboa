@@ -46,6 +46,10 @@ gulp.task('scripts', () => {
         .pipe(babel({
             presets: ['es2015']
         }))
+        .on('error', function(e) {
+          console.log(e);
+          this.emit('end');
+        })
         .pipe(gulp.dest('dist/js'))
         .pipe(rename('app.min.js'))
         .pipe(uglify())

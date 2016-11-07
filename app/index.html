@@ -16,6 +16,7 @@
         <script src="/bower_components/modernizr/modernizr.js"></script>
         <script src="/bower_components/jquery/dist/jquery.js"></script>
         <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="/bower_components/handlebars/handlebars.js"></script>
         <!-- endbower -->
 
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places"type="text/javascript"></script>
@@ -47,121 +48,124 @@
             </span>
         </div>
 
+        <div id="placeDetailsModalTemplatePlaceholder"></div>
+
         <!-- View Details Modal -->
-        <div class="modal fade" id="placeDetailsModal">
-            <div class="modal-dialog flip-container" role="document">
-                <div class="modal-content flipper">
-                    <div class="front">
-                        <div class="modal-header">
-                            <img id="placeDetails_photo" src="img/bg_header.png">
-                        </div>
-                        <div class="modal-body">
-                            <img id="placeDetails_titleIcon" src="img/icon-pin-green@3x.png">
-                            <span id="placeDetails_title" class="title"></span>
-
-                            <p id="placeDetails_address">
-                            </p>
-
-                            <hr>
-
-                            <div class="review">
-                            <span id="placeDetails_average" class="average"></span>
-                            <fieldset disabled class="rating">
-                            <input type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                            <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
-
-                            <input type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                            <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
-
-                            <input type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                            <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
-
-                            <input type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                            <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
-
-                            <input type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                            <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
-                            </fieldset>
-                            <button id="openReviewPanelBtn" class="ghost">AVALIAR</button>
-                            <p class="small" id="placeDetails_reviews"> </p>
+        <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
+            <div class="modal fade" id="placeDetailsModal">
+                <div class="modal-dialog flip-container" role="document">
+                    <div class="modal-content flipper">
+                        <div class="front">
+                            <div class="modal-header">
+                                <img id="placeDetails_photo" src="img/bg_header.png">
                             </div>
-
-                            <hr>
-
-                            <div class="info row">
-                                <div class="col-half">
-                                    <img id="placeDetails_isPublic_icon"/>
-                                    <div id="placeDetails_isPublic"></div>
+                            <div class="modal-body">
+                                <div id="placeDetails_heading">
+                                    <img src="img/icon-pin-green@3x.png">
+                                    <span class="title">{{title}}</span>
                                 </div>
-                                <div class="col-half">
-                                    <img id="placeDetails_structureType_icon">
-                                    <div id="placeDetails_structureType"></div>
+
+                                <p>
+                                    {{address}}
+                                </p>
+
+                                <hr>
+
+                                <div class="review">
+                                    <span class="average">{{average}}</span>
+                                    <fieldset disabled class="rating">
+                                        <input type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                                        <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
+
+                                        <input type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                                        <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
+
+                                        <input type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                                        <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
+
+                                        <input type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                                        <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
+
+                                        <input type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                                        <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
+                                    </fieldset>
+                                    <button id="openReviewPanelBtn" class="ghost">AVALIAR</button>
+                                    <p class="small">{{numReviews}}</p>
                                 </div>
-                                <!-- <div id="placeDetails_checkins"></div> -->
+
+                                <hr>
+
+                                <div class="info row">
+                                    <div class="col-half">
+                                        <img id="placeDetails_isPublic_icon"/>
+                                        <div id="placeDetails_isPublic"></div>
+                                    </div>
+                                    <div class="col-half">
+                                        <img id="placeDetails_structureType_icon">
+                                        <div id="placeDetails_structureType"></div>
+                                    </div>
+                                    <!-- <div>{{numCheckins}}</div> -->
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <!-- <div class="col-half">
+                                <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button>
+                                </div> -->
+                                <div class="col">
+                                    <button class="btn green btn-footer">TRAÇAR ROTA</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <!-- <div class="col-half">
-                            <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button>
-                            </div> -->
-                            <div class="col">
-                                <button class="btn green btn-footer">TRAÇAR ROTA</button>
+                        
+                        <div id="reviewPanel" class="back">
+                            <div class="modal-header">
+                                <img id="review_photo" src="img/bg_header.png">
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div id="reviewPanel" class="back">
-                        <div class="modal-header">
-                            <img id="review_photo" src="img/bg_header.png">
-                        </div>
-                        <div class="modal-body">
-                            <div>
-                                <img id="review_titleIcon" src="img/icon-pin-green@3x.png">
-                                <span id="review_title" class="title"></span>
+                            <div class="modal-body">
+                                <div>
+                                    <img id="review_titleIcon" src="img/icon-pin-green@3x.png">
+                                    <span id="review_title" class="title">{{title}}</span>
+                                </div>
+
+                                <hr>
+
+                                <div class="review">
+                                    <span id="review_average" class="average"></span>
+                                    <fieldset class="rating">
+                                        <input type="radio" id="star5" name="rating" value="5" />
+                                        <label class="full-star" for="star5" title="Excelente!"></label>
+
+                                        <input type="radio" id="star4" name="rating" value="4" />
+                                        <label class="full-star" for="star4" title="Bacana"></label>
+
+                                        <input type="radio" id="star3" name="rating" value="3" />
+                                        <label class="full-star" for="star3" title="Hum..."></label>
+
+                                        <input type="radio" id="star2" name="rating" value="2" />
+                                        <label class="full-star" for="star2" title="Ruinzinho"></label>
+
+                                        <input type="radio" id="star1" name="rating" value="1" />
+                                        <label class="full-star" for="star1" title="Muito ruim"></label>
+                                    </fieldset>
+                                </div>
+
+                                <hr>
+
+                                <h2>Características</h2>
+
+                                <div class="tagsContainer">
+                                    {{{tagsButtons}}}
+                                </div>
                             </div>
 
-                            <hr>
-
-                            <div class="review">
-                                <span id="review_average" class="average"></span>
-                                <fieldset class="rating">
-                                    <input type="radio" id="star5" name="rating" value="5" />
-                                    <label class="full-star" for="star5" title="Excelente!"></label>
-
-                                    <input type="radio" id="star4" name="rating" value="4" />
-                                    <label class="full-star" for="star4" title="Bacana"></label>
-
-                                    <input type="radio" id="star3" name="rating" value="3" />
-                                    <label class="full-star" for="star3" title="Hum..."></label>
-
-                                    <input type="radio" id="star2" name="rating" value="2" />
-                                    <label class="full-star" for="star2" title="Ruinzinho"></label>
-
-                                    <input type="radio" id="star1" name="rating" value="1" />
-                                    <label class="full-star" for="star1" title="Muito ruim"></label>
-                                </fieldset>
+                            <div class="modal-footer">
+                                <button id="sendReviewBtn" class="btn border btn-footer green">DEIXAR AVALIAÇÃO</button>
                             </div>
-
-                            <hr>
-
-                            <h2>Características</h2>
-
-                            <div class="box-tags">
-                                <button class="btn btn-sm btn-tag" data-toggle="button">Iluminado</button>
-                                <button class="btn btn-sm btn-tag" data-toggle="button">Movimentado</button>
-                                <button class="btn btn-sm btn-tag" data-toggle="button">Monitorado</button>
-                                <button class="btn btn-sm btn-tag" data-toggle="button">Fácil acesso</button>
-                                <button class="btn btn-sm btn-tag" data-toggle="button">Espaçoso</button>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button id="sendReviewBtn" class="btn border btn-footer green">DEIXAR AVALIAÇÃO</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </script>
 
         <!-- New Place Modal -->
         <div class="modal fade" id="newPlaceModal">
@@ -179,19 +183,7 @@
                           <input id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
                         </div>
 
-                        <h2>Tipo de bicicletário</h2>
-
-                        <div class="typeIconsGroup">
-                          <div data-type="deroda" class="typeIcon"> <img src="img/tipo_deroda.svg"></img> </div>
-                          <div data-type="uinvertido" class="typeIcon"> <img src="img/tipo_uinvertido.svg"></img> </div>
-                          <div data-type="trave" class="typeIcon"> <img src="img/tipo_trave.svg"></img> </div>
-                          <div data-type="suspenso" class="typeIcon"> <img src="img/tipo_suspenso.svg"></img> </div> 
-                          <div data-type="grade" class="typeIcon"> <img src="img/tipo_grade.svg"></img> </div>
-                        </div>
-
-                        <hr>
-
-                        <div class="radio-group">
+                        <div class="radio-group" style="margin: 20px 0;">
                           <label>
                             <input type="radio" name="isPublicRadioGrp" value="true" />
                             <span class="radio-image"></span>
@@ -206,10 +198,22 @@
                         </div>
 
                         <hr>
+                        
+                        <h2>Tipo de bicicletário</h2>
+
+                        <div class="typeIconsGroup">
+                          <div data-type="deroda" class="typeIcon"> <img src="img/tipo_deroda.svg"></img> </div>
+                          <div data-type="uinvertido" class="typeIcon"> <img src="img/tipo_uinvertido.svg"></img> </div>
+                          <div data-type="suspenso" class="typeIcon"> <img src="img/tipo_suspenso.svg"></img> </div> 
+                          <!-- <div data-type="trave" class="typeIcon"> <img src="img/tipo_trave.svg"></img> </div> -->
+                          <!-- <div data-type="grade" class="typeIcon"> <img src="img/tipo_grade.svg"></img> </div> -->
+                        </div>
+
+                        <hr>
 
                         <h2>Características</h2>
 
-                        <div class="box-tags">
+                        <div class="tagsContainer">
                             <button class="btn btn-sm btn-tag" data-toggle="button">Iluminado</button>
                             <button class="btn btn-sm btn-tag" data-toggle="button">Movimentado</button>
                             <button class="btn btn-sm btn-tag" data-toggle="button">Monitorado</button>
@@ -224,61 +228,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Review Modal -->
-       <!--  <div class="modal fade" id="reviewModal">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <img id="review_photo" src="img/bg_header.png">
-              </div>
-              <div class="modal-body">
-                <div>
-                    <img id="review_titleIcon" src="img/icon-pin-green@3x.png">
-                    <span id="review_title" class="title"></span>
-                </div>
-
-                <hr>
-
-                <div class="review">
-                <span id="review_average" class="average"></span>
-                <fieldset class="rating">
-                    <input type="radio" id="star5" name="rating" value="5" />
-                    <label class="full-star" for="star5" title="Excelente!"></label>
-
-                    <input type="radio" id="star4" name="rating" value="4" />
-                    <label class="full-star" for="star4" title="Bacana"></label>
-
-                    <input type="radio" id="star3" name="rating" value="3" />
-                    <label class="full-star" for="star3" title="Hum..."></label>
-
-                    <input type="radio" id="star2" name="rating" value="2" />
-                    <label class="full-star" for="star2" title="Ruinzinho"></label>
-
-                    <input type="radio" id="star1" name="rating" value="1" />
-                    <label class="full-star" for="star1" title="Muito ruim"></label>
-                </fieldset>
-                </div>
-
-                <hr>
-
-                <h2>Características</h2>
-
-                <div class="box-tags">
-                    <button class="btn btn-sm btn-tag" data-toggle="button">Iluminado</button>
-                    <button class="btn btn-sm btn-tag" data-toggle="button">Movimentado</button>
-                    <button class="btn btn-sm btn-tag" data-toggle="button">Monitorado</button>
-                    <button class="btn btn-sm btn-tag" data-toggle="button">Fácil acesso</button>
-                    <button class="btn btn-sm btn-tag" data-toggle="button">Espaçoso</button>
-                </div>
-
-              </div>
-              <div class="modal-footer">
-                <button id="sendReviewBtn" class="btn border btn-footer green">DEIXAR AVALIAÇÃO</button>
-            </div>
-            </div>
-          </div>
-        </div> -->
 
         <button id="addPlace" class="bigRoundedButton coolHide">
             ADICIONAR BICICLETÁRIO

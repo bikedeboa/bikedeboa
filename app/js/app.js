@@ -14,49 +14,69 @@ $(function () {
 
         // console.log(m.text);
         // console.log(m.structureType);
-        // console.log(m.isPublic); 
+        // console.log(m.isPublic);
+
+    let templateData = {};
 
     var isPublicIcon = m.isPublic === 'true' ? 'img/icon_public.svg' : 'img/icon_private.svg';
     var structureTypeIcon = '';
     switch (m.structureType) {
-    case 'U Invertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
-    case 'De roda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
-    case 'Trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
-    case 'Suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
-    case 'Grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
+      case 'U Invertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
+      case 'De roda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
+      case 'Trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
+      case 'Suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
+      case 'Grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
     }
 
-    if (m.text) { 
-      $('#placeDetails_title').show();
-      $('#placeDetails_titleIcon').show();
-      $('#placeDetails_title').text(m.text);
-    } else {
-      $('#placeDetails_title').hide();
-      $('#placeDetails_titleIcon').hide();
-    }
-    $('#placeDetails_address').text('') ;
+    // Title
+    $('#placeDetails_heading').toggle(m.text);
+    templateData.title = m.text;
+
+    // Address (@todo)
+    templateData.address = '';
+
+    // Average 
     if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
       m.average = m.average.toFixed(1);
     }
-    $('#placeDetails_average').text(m.average || '');
+    if (m.average) {
+      templateData.average = m.average;
+    }
+
+    // Tags
+    // <button class="btn btn-sm btn-tag" data-toggle="button">Iluminado</button>
+    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Movimentado</button>
+    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Monitorado</button>
+    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Fácil acesso</button>
+    //                                 <button class="btn btn-sm btn-tag" data-toggle="button">Espaçoso</button>
+    templateData.tagsButtons = tags.map(t => {
+      return `<button class="btn btn-sm btn-tag" data-toggle="button">${t}</button>`;
+    }).join('');
+
+    // Reviews, checkins
+    templateData.numReviews = m.reviews && (m.reviews + ' avaliações') || '';
+    templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
+
+    // Render handlebars template
+    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
+
+    // Average - stars
+    $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
+
+    // Is public?
     $('#placeDetails_isPublic_icon').attr('src', isPublicIcon);
-    $('#placeDetails_isPublic').text(m.isPublic === 'true' ? 'Público' : 'Privado');
+    $('#placeDetails_isPublic').text(m.isPublic === 'true' ? 'Público' : 'Privado (só clientes)');
+    
+    // Structure type
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
     $('#placeDetails_structureType').text(m.structureType ? 'Bicicletario ' + m.structureType : '');
-    $('#placeDetails_reviews').text(m.reviews && (m.reviews + ' avaliações') || '');
-    $('#placeDetails_checkins').text(m.checkin && (m.checkin + ' check-ins') || '');
 
+    // Pic
     var randomPic = Math.floor(Math.random() * N_MOCK_PICS) + 1;
     $('#placeDetails_photo').attr('src','img/photos/'+randomPic+'.jpg');
 
-    if (m.average) {
-      $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
-    }
 
-    // Make sure the right side of the card is visible
     $('#placeDetailsModal .flipper').removeClass('flipped');
-
-    // Finally, open modal
     $('#placeDetailsModal').modal('toggle');
   }
 
@@ -351,33 +371,37 @@ $(function () {
     }
   }
 
+  function _initTemplates() {
+    templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
+  }
+
   function _initTriggers() {
         // Home
-    $('#locationQueryBtn').on('click', searchLocation);
+    $('body').on('click', '#locationQueryBtn', searchLocation);
 
-    $('#addPlace').on('click', addLocationModeToggle);
+    $('body').on('click', '#addPlace', addLocationModeToggle);
 
-    $('#newPlaceholder').on('click', function() {
+    $('body').on('click', '#newPlaceholder', function() {
       console.log('add location');
 
       addLocationModeToggle();
 
-            // Reset fields
+      // Reset fields
       $('#newPlaceModal #titleInput').val('');
       $('#newPlaceModal .typeIcon').removeClass('active');
       $('#newPlaceModal input[name=isPublicRadioGrp]').attr('checked',false);
-      $('#newPlaceModal .box-tags button').removeClass('active');
+      $('#newPlaceModal .tagsContainer button').removeClass('active');
       $('#newPlaceModal').modal('toggle');
     });
 
 
-        // New place panel
-    $('.typeIcon').on('click', function(e){
+    // New place panel
+    $('body').on('click', '.typeIcon', function(e){
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
     });
 
-    $('#saveNewPlaceBtn').on('click', saveNewPlaceCB);
+    $('body').on('click', '#saveNewPlaceBtn', saveNewPlaceCB);
 
     $(':file').change(function () {
       if (this.files && this.files[0]) {
@@ -387,8 +411,8 @@ $(function () {
       }
     });
 
-        // Review panel
-    $('#openReviewPanelBtn').on('click', function() {
+    // Review panel
+    $('body').on('click', '#openReviewPanelBtn', function() {
       var m = openedMarker;
       if (m.text) {
         $('#review_title').show();
@@ -399,19 +423,19 @@ $(function () {
         $('#review_titleIcon').hide();
       }
 
-            // Reset fields
-      $('#reviewPanel .box-tags button').removeClass('active');
+      // Reset fields
+      $('#reviewPanel .tagsContainer button').removeClass('active');
       $('#reviewPanel input:radio[name=rating]:checked').prop('checked', false);
 
       // $('#reviewPanel').modal('toggle');
       $('#placeDetailsModal .flipper').toggleClass('flipped');
     });
 
-    $('.rating').on('change', function(e) {
+    $('body').on('change', '.rating', function(e) {
       currentPendingRating = $(e.target).val();
     });
 
-    $('#sendReviewBtn').on('click', function() {
+    $('body').on('click', '#sendReviewBtn', function() {
       Database.sendReview(openedMarker.id, currentPendingRating, function() {
         $('#reviewModal').modal('toggle');
         $('#placeDetailsModal').modal('toggle');
@@ -424,7 +448,7 @@ $(function () {
 
 
         // Details panel
-    $('#checkinBtn').on('click', sendCheckinBtn);
+    $('body').on('click', '#checkinBtn', sendCheckinBtn);
   }
 
   function init() {
@@ -444,11 +468,11 @@ $(function () {
 
     setupAutocomplete();
 
-        // Add bike Layer
+    // Add bike Layer
     var bikeLayer = new google.maps.BicyclingLayer();
     bikeLayer.setMap(map);
 
-        // Geolocalization button
+    // Geolocalization button
     if (navigator.geolocation) {
       var centerControlDiv = document.createElement('div');
       new centerControl(centerControlDiv, map);
@@ -457,6 +481,8 @@ $(function () {
     }
 
     _initTriggers();
+
+    _initTemplates();
 
     showSpinner();
     Database.getPlaces(updateMarkers);

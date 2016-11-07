@@ -13,10 +13,12 @@ let Database = BIKE.MockedDatabase;
 let map;
 let geocoder;
 let markers = 'sdf';
-let tags;
+let tags = ['Iluminado', 'Movimentado', 'Monitorado', 'Fácil acesso', 'Espaçoso'];
 let _gmarkers;
 let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker;
 let currentPendingRating;
 let uploadingPhotoBlob;
+
+let templates = {};

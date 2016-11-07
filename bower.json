@@ -4,13 +4,15 @@
   "dependencies": {
     "modernizr": "~2.8.1",
     "jquery": "^3.1.1",
-    "bootstrap": "boostrap#^3.3.7"
+    "bootstrap": "boostrap#^3.3.7",
+    "handlebars": "^4.0.5"
   },
-  "overrides":{
-    "bootstrap":{
-      "main":[
-      "dist/js/bootstrap.js",
-      "dist/css/bootstrap.min.css"
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.min.css"
       ]
-    }}
+    }
+  }
 }
