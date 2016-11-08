@@ -5,7 +5,7 @@ const MARKER_ICON_RED = 'img/icon-yellow-copy-2.png';
 const MARKER_ICON_GRAY = 'img/icon-pin-gray.png';
 const MARKER_W = 20;
 const MARKER_H = 24;
-const N_MOCK_PICS = 15;
+const N_MOCK_PICS = 14;
 const STRUCTURE_TYPES = ['U Invertido', 'De roda', 'Trave', 'Suspenso', 'Grade'];
 const GMAPS_DIRECTIONS_URL = 'http://maps.google.com/maps?saddr="#{origin}"&daddr="#{destination}"';
 

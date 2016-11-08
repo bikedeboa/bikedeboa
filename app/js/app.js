@@ -63,7 +63,7 @@ $(function () {
 
     // Is public?
     $('#placeDetails_isPublic_icon').attr('src', isPublicIcon);
-    $('#placeDetails_isPublic').text(m.isPublic === 'true' ? 'Público' : 'Privado (só clientes)');
+    $('#placeDetails_isPublic').text(m.isPublic === 'true' ? 'Público' : 'Restrito (só clientes)');
 
     // Structure type
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);

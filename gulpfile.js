@@ -121,7 +121,7 @@ gulp.task('wiredep', () => {
 gulp.task('clean', del.bind(null, ['dist']));
 
 gulp.task('build', () => {
-  runSequence(['clean', 'wiredep'], ['sass', 'scripts'], () => {
+  runSequence(['clean', 'wiredep'], ['sass', 'scripts', 'images'], () => {
     return gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
   });
 });
