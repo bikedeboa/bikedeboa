@@ -437,7 +437,6 @@
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    cursor: pointer;
     user-select: none;
     border: 1px solid transparent;
 
@@ -496,6 +495,7 @@
 
 .small {
     font-size: 0.8em !important;
+    color: #828b90;
 }
 
 .light {
@@ -531,7 +531,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    background: url(/img/icon-photo.png);
+    background: url(/img/icon-photo.svg);
     width: 67px;
     height: 67px;
     transform: translate(-50%,-50%);
