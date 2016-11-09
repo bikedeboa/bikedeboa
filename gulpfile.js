@@ -30,6 +30,10 @@ const del = require('del');
 gulp.task('sass', () => {
     return gulp.src('app/scss/*.scss') 
         .pipe(sass())
+        .on('error', function(e) {
+          console.log(e);
+          this.emit('end');
+        })
         .pipe(sourcemaps.init())
         .pipe(autoprefixer({
             browsers: ['> 1%']
@@ -59,6 +63,7 @@ gulp.task('scripts', () => {
 // Watch Files For Changes
 gulp.task('watch', () => {
     // gulp.watch('js/*.js', ['lint', 'scripts']);
+    // gulp.watch('assets/*', ['images']);
     gulp.watch('app/js/*.js', ['scripts']);
     gulp.watch('app/scss/*.scss', ['sass']);
     gulp.watch('bower.json', ['wiredep']);
@@ -121,7 +126,7 @@ gulp.task('wiredep', () => {
 gulp.task('clean', del.bind(null, ['dist']));
 
 gulp.task('build', () => {
-  runSequence(['clean', 'wiredep'], ['sass', 'scripts', 'images'], () => {
+  runSequence(['clean', 'wiredep'], ['sass', 'scripts'], () => {
     return gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
   });
 });

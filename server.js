@@ -6,6 +6,7 @@ var path = __dirname + '/app/';
 // Static libs
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(express.static('public'));
+app.use(express.static('assets'));
 app.use(express.static('dist'));
 
 router.use(function (req,res,next) {

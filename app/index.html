@@ -54,7 +54,7 @@
             <input id="locationQueryInput" type="text" placeholder="Onde tu procuras um bicicletário?">
             <span>
                 <button id="filterBtn" type="button">
-                    <img src="img/icon-filter@2x.png" class="icon"></i>
+                    <img src="img/icon_filter.svg" class="icon"></i>
                 </button>
             </span>
         </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="modal-body">
                                 <div id="placeDetails_heading">
-                                    <img src="img/icon-pin-green@3x.png">
+                                    <img src="img/pin_green.svg">
                                     <span class="title">{{title}}</span>
                                 </div>
 
@@ -141,7 +141,7 @@
                             </div>
                             <div class="modal-body">
                                 <div>
-                                    <img id="review_titleIcon" src="img/icon-pin-green@3x.png">
+                                    <img id="review_titleIcon" src="img/pin_green.svg">
                                     <span id="review_title" class="title">{{title}}</span>
                                 </div>
 
@@ -198,18 +198,19 @@
 
                     <div class="modal-body text-center">
                         <div class="text-input-wrapper">
-                          <input id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
+                            <span class="little-pin gray"></span>
+                            <input required id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
                         </div>
 
                         <div class="radio-group" style="margin: 20px 0;">
                           <label>
-                            <input type="radio" name="isPublicRadioGrp" value="true" />
+                            <input required type="radio" name="isPublicRadioGrp" value="true" />
                             <span class="radio-image"></span>
                             Público
                           </label>
 
                           <label>
-                            <input type="radio" name="isPublicRadioGrp" value="false" />
+                            <input required type="radio" name="isPublicRadioGrp" value="false" />
                             <span class="radio-image"></span>
                             Restrito (apenas clientes)
                           </label>
@@ -223,6 +224,7 @@
                           <div data-type="deroda" class="typeIcon"> <img src="img/tipo_deroda.svg"></img> </div>
                           <div data-type="uinvertido" class="typeIcon"> <img src="img/tipo_uinvertido.svg"></img> </div>
                           <div data-type="suspenso" class="typeIcon"> <img src="img/tipo_suspenso.svg"></img> </div>
+                          <div data-type="unknown" class="typeIcon"> <img src="img/tipo_unknown.svg"></img> </div> 
                           <!-- <div data-type="trave" class="typeIcon"> <img src="img/tipo_trave.svg"></img> </div> -->
                           <!-- <div data-type="grade" class="typeIcon"> <img src="img/tipo_grade.svg"></img> </div> -->
                         </div>
@@ -252,7 +254,7 @@
         </button>
 
         <span id="newPlaceholderShadow"></span>
-        <button id="newPlaceholder"> <img src="img/pin-mapa-movimento.svg"></img> </button>
+        <button id="newPlaceholder"> <img src="img/pin_bike.svg"></img> </button>
 
         <div id="map"/>
     </body>

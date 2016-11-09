@@ -8,26 +8,31 @@
 	<g>
 		
 			<path fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M83.325,124.93v-20.164c0,0-53.166-4.715,0-70.979"/>
+			M68.979,54.255c3.541-6.068,8.242-12.863,14.346-20.469"/>
 		
 			<path fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M83.325,104.766c0,0,53.164-4.715,0-70.979"/>
+			M83.325,124.929v-20.164c0,0-17.85-1.582-22.521-15.805"/>
 		
 			<path fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M83.325,124.93"/>
+			M83.325,104.765c0,0,53.163-4.715,0-70.979"/>
+		
+			<path fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
+			M83.325,124.929"/>
 	</g>
 	
-		<line fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="87.874,11.3386" x1="116.064" y1="124.93" x2="2.563" y2="124.93"/>
+		<line fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="87.874,11.3386" x1="116.063" y1="124.929" x2="2.563" y2="124.929"/>
 	<g>
 		
-			<path fill="#FFFFFF" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M39.043,124.93V97.848c0,0-71.406-6.333,0-95.334"/>
+			<path fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
+			M39.042,124.929V97.847c0,0-71.407-6.332,0-95.334"/>
 		
-			<path fill="#FFFFFF" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M39.043,97.848c0,0,71.406-6.333,0-95.334"/>
+			<path fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
+			M39.042,97.847c0,0,71.405-6.332,0-95.334"/>
 		
-			<path fill="#FFFFFF" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,7.0866" d="
-			M39.043,124.93"/>
+			<path fill="none" stroke="#47B970" stroke-width="4.252" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,7.0866" d="
+			M39.042,124.929"/>
 	</g>
+</g>
+<g id="Star_-_Orange">
 </g>
 </svg>

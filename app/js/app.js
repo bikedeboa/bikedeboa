@@ -12,7 +12,6 @@ $(function () {
     openedMarker = markers[i];
     const m = openedMarker;
 
-    let templateData = {};
 
     var isPublicIcon = m.isPublic === 'true' ? 'img/icon_public.svg' : 'img/icon_private.svg';
     var structureTypeIcon = '';
@@ -24,11 +23,8 @@ $(function () {
       case 'Grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
     }
 
-    // Title
-    $('#placeDetails_heading').toggle(m.text && m.text.length > 0);
+    let templateData = {};
     templateData.title = m.text;
-
-    // Address (@todo)
     templateData.address = '';
 
     // Average
@@ -58,12 +54,17 @@ $(function () {
     // Render handlebars template
     $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
 
+    
+    // Template is rendered, start jquerying
+
+    $('#placeDetails_heading').toggle(m.text && m.text.length > 0);
+
     // Average - stars
     $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
 
     // Is public?
     $('#placeDetails_isPublic_icon').attr('src', isPublicIcon);
-    $('#placeDetails_isPublic').html(m.isPublic === 'true' ? 'Público' : 'Restrito<br><span class="small">(apenas clientes, moradores, ...)</span>');
+    $('#placeDetails_isPublic').html(m.isPublic === 'true' ? 'Público' : 'Restrito<br><span class="small">(apenas clientes)</span>');
 
     // Structure type
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
@@ -379,7 +380,7 @@ $(function () {
     if (e.target.result) {
       uploadingPhotoBlob = e.target.result;
       $('#photoInputBg').attr('src', uploadingPhotoBlob);
-            // $('#photoInput + label').fadeOut();
+      // $('#photoInput + label').fadeOut();
     }
   }
 
@@ -387,8 +388,22 @@ $(function () {
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
   }
 
+  function validateNewPlaceForm() {
+    const textOk = $('#newPlaceModal #titleInput').val().length > MIN_TITLE_CHARACTERS;
+    const isOk =
+      textOk &&
+      $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val() &&
+      $('#newPlaceModal .typeIcon.active').data('type');
+
+    $('#newPlaceModal .little-pin').toggleClass('gray', !textOk);
+
+    console.log('validating');
+
+    $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', !isOk);
+  }
+
   function _initTriggers() {
-        // Home
+    // Home
     $('body').on('click', '#locationQueryBtn', searchLocation);
 
     $('body').on('click', '#addPlace', addLocationModeToggle);
@@ -399,9 +414,11 @@ $(function () {
       addLocationModeToggle();
 
       // Reset fields
+      $('#newPlaceModal .little-pin').toggleClass('gray', true);
+      $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
       $('#newPlaceModal #titleInput').val('');
       $('#newPlaceModal .typeIcon').removeClass('active');
-      $('#newPlaceModal input[name=isPublicRadioGrp]').attr('checked',false);
+      $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
       $('#newPlaceModal .tagsContainer button').removeClass('active');
       $('#newPlaceModal').modal('toggle');
     });
@@ -412,6 +429,12 @@ $(function () {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
     });
+
+    $('body').on('change input click','#newPlaceModal input, #newPlaceModal .typeIcon', function() {
+      // this has to be AFTER the typeIcon click trigger
+      validateNewPlaceForm();
+    }); 
+
 
     $('body').on('click', '#saveNewPlaceBtn', saveNewPlaceCB);
 
@@ -507,5 +530,5 @@ $(function () {
 
   showSpinner();
   init();
-  _geolocateAndCenterMap();
+  // _geolocateAndCenterMap();
 });
