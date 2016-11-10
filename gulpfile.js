@@ -16,6 +16,7 @@ const runSequence = require('run-sequence');
 const size = require('gulp-size');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
+const plumber = require('gulp-plumber');
 // const fs = require('fs');
 
 
@@ -29,12 +30,13 @@ const del = require('del');
 // Compile Our Sass
 gulp.task('sass', () => {
     return gulp.src('app/scss/*.scss') 
+        .pipe(sourcemaps.init())
+        .pipe(plumber())
         .pipe(sass())
         .on('error', function(e) {
           console.log(e);
           this.emit('end');
         })
-        .pipe(sourcemaps.init())
         .pipe(autoprefixer({
             browsers: ['> 1%']
         }))
@@ -45,19 +47,22 @@ gulp.task('sass', () => {
 
 // Concatenate & Minify JS 
 gulp.task('scripts', () => {
-    return gulp.src('app/js/*.js')
-        .pipe(concat('app.js'))
-        .pipe(babel({
-            presets: ['es2015']
-        }))
-        .on('error', function(e) {
-          console.log(e);
-          this.emit('end');
-        })
-        .pipe(gulp.dest('dist/js'))
-        .pipe(rename('app.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('dist/js'));
+  return gulp.src('app/js/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(plumber())
+    .pipe(concat('app.js'))
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+    .on('error', function(e) {
+      console.log(e);
+      this.emit('end');
+    })
+    .pipe(sourcemaps.write('maps'))
+    .pipe(gulp.dest('dist/js'))
+    // .pipe(rename('app.min.js'))
+    // .pipe(uglify())
+    // .pipe(gulp.dest('dist/js'));
 });
 
 // Watch Files For Changes

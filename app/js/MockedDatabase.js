@@ -1077,10 +1077,11 @@ BIKE.MockedDatabase = {
       }
 
       // Tags
+      // @todo update this to match Backend tags model
       m.tags = [];
-      tags.forEach(tname => {
+      tags.forEach(tagObj => {
         m.tags.push({
-          name: tname,
+          tag: tagObj,
           count: Math.floor(Math.random() * 10)
         });
       });
@@ -1088,11 +1089,11 @@ BIKE.MockedDatabase = {
       // Structure types
       var randomStructure = Math.floor(Math.random() * 4) + 0;
         switch(randomStructure) {
-          case 0: m.structureType = STRUCTURE_TYPES[0]; break;
-          case 1: m.structureType = STRUCTURE_TYPES[1]; break;
-          case 2: m.structureType = STRUCTURE_TYPES[2]; break;
-          case 3: m.structureType = STRUCTURE_TYPES[3]; break;
-          case 4: m.structureType = STRUCTURE_TYPES[4]; break;
+          case 0: m.structureType = STRUCTURE_CODES[0]; break;
+          case 1: m.structureType = STRUCTURE_CODES[1]; break;
+          case 2: m.structureType = STRUCTURE_CODES[2]; break;
+          case 3: m.structureType = STRUCTURE_CODES[3]; break;
+          case 4: m.structureType = STRUCTURE_CODES[4]; break;
         }
     });
   },
@@ -1152,29 +1153,38 @@ BIKE.MockedDatabase = {
     }
   },
 
-  getAllTags: function(successCB, failCB, alwaysCB) {
-        // console.log('Getting tags...');
-
-        // $.ajax({
-        //     url: API_URL + '/tag'
-        // }).done(function(data) {
-        //     console.log('Successfully retrieved ' + data.length + ' tags.');
-
-        //     tags = data;
-
-        //     if (successCB && typeof successCB === 'function') {
-        //         successCB();
-        //     }
-        // })
-        // .fail(function() {
-        //     if (failCB && typeof failCB === 'function') {
-        //         failCB();
-        //     }
-        // })
-        // .always(function() {
-        //     if (alwaysCB && typeof alwaysCB === 'function') {
-        //         alwaysCB();
-        //     }
-        // });
+  authenticate: function(callback) {
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
   },
+
+  getAllTags: function(successCB, failCB, alwaysCB) {
+    let i = 0;
+    idToTag = {};
+    tagToId = {};
+
+    tags = ALL_TAGS.map(val => {
+      let id = i++;
+
+      idToTag[id] = val;
+      tagToId[val] = id;
+
+      return {
+        id: id,
+        name: val
+      };
+    });
+
+
+    if (successCB && typeof successCB === 'function') {
+      successCB();
+    }
+    if (failCB && typeof failCB === 'function') {
+      failCB();
+    }
+    if (alwaysCB && typeof alwaysCB === 'function') {
+      alwaysCB();
+    }
+  }
 };

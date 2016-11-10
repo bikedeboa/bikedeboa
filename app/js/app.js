@@ -1,4 +1,3 @@
-/* global BIKE, google */
 /* eslint no-console: ["warn", { allow: ["log", "warn", "error"] }] */
 /* eslint-env node, jquery */
 
@@ -16,11 +15,11 @@ $(function () {
     var isPublicIcon = m.isPublic === 'true' ? 'img/icon_public.svg' : 'img/icon_private.svg';
     var structureTypeIcon = '';
     switch (m.structureType) {
-      case 'U Invertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
-      case 'De roda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
-      case 'Trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
-      case 'Suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
-      case 'Grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
+      case 'uinvertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
+      case 'deroda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
+      case 'trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
+      case 'suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
+      case 'grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
     }
 
     let templateData = {};
@@ -28,24 +27,30 @@ $(function () {
     templateData.address = '';
 
     // Average
-    if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
-      m.average = m.average.toFixed(1);
-    }
     if (m.average) {
+      if (typeof m.average === 'string') {
+        m.average = parseFloat(m.average);
+      }
+      if (m.average.toFixed && m.average !== Math.round(m.average)) {
+        m.average = m.average.toFixed(1);
+      }
       templateData.average = m.average;
     }
 
     // Tags
     templateData.tagsButtons = tags.map(t => {
-      return `<button class="btn btn-tag" data-toggle="button">${t}</button>`;
+      return `<button class="btn btn-tag" data-toggle="button">${t.name}</button>`;
     }).join('');
 
-    templateData.tags = m.tags
-      .sort((a, b) => {return b.count - a.count; })
-      .map(t => {
-        return t.count > 0 ? `<span class="tagDisplay"><span class="badge">${t.count}</span> ${t.name}</span>` : '';
-      })
-      .join('');
+    // @todo Update this to match Database tags model
+    if (m.tags) {
+      templateData.tags = m.tags
+        .sort((a, b) => {return b.count - a.count;})
+        .map(t => {
+          return t.count > 0 ? `<span class="tagDisplay"><span class="badge">${t.count}</span> ${t.tag.name}</span>` : '';
+        })
+        .join('');
+    }
 
     // Reviews, checkins
     templateData.numReviews = m.reviews && (m.reviews + ' avaliações') || '';
@@ -68,11 +73,13 @@ $(function () {
 
     // Structure type
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
-    $('#placeDetails_structureType').text(m.structureType ? 'Bicicletario ' + m.structureType : '');
+    $('#placeDetails_structureType').text(m.structureType ? 'Bicicletario ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '');
 
-    // Pic
-    var randomPic = Math.floor(Math.random() * N_MOCK_PICS) + 1;
-    $('#placeDetails_photo').attr('src','img/photos/'+randomPic+'.jpg');
+    // Pic 
+    if (m.photo) {
+      // var randomPic = Math.floor(Math.random() * N_MOCK_PICS) + 1;
+      $('#placeDetails_photo').attr('src', Database.API_URL + '/' + m.photo);
+    }
 
 
     $('#placeDetailsModal .flipper').removeClass('flipped');
@@ -169,7 +176,7 @@ $(function () {
           iconUrl = MARKER_ICON_GRAY;
         }
 
-                // Scaling
+        // Scaling
         var scale;
         if (!m.reviews) {
           scale = 0.8;
@@ -214,11 +221,11 @@ $(function () {
       if (status === google.maps.GeocoderStatus.OK) {
         map.panTo(results[0].geometry.location);
 
-                // Set marker on located place
-                // new google.maps.Marker({
-                //     map: map,
-                //     position: results[0].geometry.location
-                // });
+        // Set marker on located place
+        // new google.maps.Marker({
+        //     map: map,
+        //     position: results[0].geometry.location
+        // });
       } else {
         console.error('Geocode was not successful for the following reason: ' + status);
       }
@@ -266,7 +273,7 @@ $(function () {
     }
   }
 
-  function addLocationModeToggle() {
+  function toggleLocationInputMode() {
     addLocationMode = !addLocationMode;
 
     // if (addLocationMode) {
@@ -294,7 +301,7 @@ $(function () {
       text: $('#newPlaceModal #titleInput').val(),
       isPublic: $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val(),
       structureType: $('#newPlaceModal .typeIcon.active').data('type'),
-      // @todo retrieve tags
+      photo: _uploadingPhotoBlob,
     }, function() {
       // Addition finished
       showSpinner();
@@ -378,8 +385,8 @@ $(function () {
 
   function photoUploadCB(e) {
     if (e.target.result) {
-      uploadingPhotoBlob = e.target.result;
-      $('#photoInputBg').attr('src', uploadingPhotoBlob);
+      _uploadingPhotoBlob = e.target.result;
+      $('#photoInputBg').attr('src', _uploadingPhotoBlob);
       // $('#photoInput + label').fadeOut();
     }
   }
@@ -402,25 +409,29 @@ $(function () {
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', !isOk);
   }
 
+  function _resetNewPlacePanel() {
+    _uploadingPhotoBlob = '';
+    $('#newPlaceModal .little-pin').toggleClass('gray', true);
+    $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
+    $('#newPlaceModal #titleInput').val('');
+    $('#newPlaceModal .typeIcon').removeClass('active');
+    $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
+    $('#newPlaceModal .tagsContainer button').removeClass('active');
+    $('#newPlaceModal').modal('toggle');
+  }
+
   function _initTriggers() {
     // Home
     $('body').on('click', '#locationQueryBtn', searchLocation);
 
-    $('body').on('click', '#addPlace', addLocationModeToggle);
+    $('body').on('click', '#addPlace', toggleLocationInputMode);
 
     $('body').on('click', '#newPlaceholder', function() {
       console.log('add location');
 
-      addLocationModeToggle();
+      toggleLocationInputMode();
 
-      // Reset fields
-      $('#newPlaceModal .little-pin').toggleClass('gray', true);
-      $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
-      $('#newPlaceModal #titleInput').val('');
-      $('#newPlaceModal .typeIcon').removeClass('active');
-      $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
-      $('#newPlaceModal .tagsContainer button').removeClass('active');
-      $('#newPlaceModal').modal('toggle');
+      _resetNewPlacePanel();
     });
 
 
@@ -504,12 +515,12 @@ $(function () {
     setupAutocomplete();
 
     // Add cyclabe path bike Layer
-    // var bikeLayer = new google.maps.BicyclingLayer();
+    // var bikeLayer = new google.maps.BicyclingLayer(); 
     // bikeLayer.setMap(map);
 
     // Geolocalization button
     if (navigator.geolocation) {
-      var centerControlDiv = document.createElement('div');
+      let centerControlDiv = document.createElement('div');
       new centerControl(centerControlDiv, map);
       centerControlDiv.index = 1;
       map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(centerControlDiv);
@@ -520,8 +531,10 @@ $(function () {
     _initTemplates();
 
     showSpinner();
-    Database.getPlaces(updateMarkers);
-
+    Database.authenticate(() => { 
+      Database.getAllTags();
+      Database.getPlaces(updateMarkers);
+    });
   }
 
     //////////////////////////
