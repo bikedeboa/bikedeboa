@@ -1,3 +1,8 @@
+$green: #30bb6a;
+$white: #ffffff;
+$paleWhite: #eeeeee;
+
+
 * {
     font-family: "Roboto";
 }
@@ -20,7 +25,7 @@
     }
 
     .balaca {
-        background-color: #30bb6a;
+        background-color: $green;
         width: 48px;
     }
 }
@@ -47,7 +52,7 @@
     transform: translateX(-50%);
     width: 95%;
     height: 48px;
-    background-color: #ffffff;
+    background-color: $white;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
     max-width: 600px;
 
@@ -82,12 +87,12 @@
 
 #filterBtn {
     width: 48px;
-    background-color: #eeeeee;
+    background-color: $paleWhite;
     border: 5px solid white;
 }
 
 .navbar {
-    background-color: #30bb6a;
+    background-color: $green;
     border: none;
 }
 
@@ -104,7 +109,7 @@
     bottom: 30px;
     left: 50%;
     z-index: 1;
-    background: #30bb6a;
+    background: $green;
     border: none;
     color: white;
     border-radius: 25px;
@@ -135,7 +140,7 @@
 
 #addPlace.active:after {
     content: '✕';
-    color: #30bb6a;
+    color: $green;
     font-size: 24px;
 }
 
@@ -360,7 +365,7 @@
 }
 
 .average {
-    font-size: 26px;
+    font-size: 35px;
     vertical-align: middle;
 }
 
@@ -381,7 +386,7 @@
 .ghost:active {
     color: white;
     border: 1px solid white;
-    background-color: #30bb6a;
+    background-color: $green;
 }
 
 .modal-footer {
@@ -416,6 +421,10 @@
     opacity: 0.6;
 }
 
+#ratingDisplay {
+    cursor: pointer;
+}
+
 .modal-footer {
     padding: 0;
 }
@@ -433,7 +442,7 @@
 }
 
 .btn-tag {
-    background: #eeeeee;
+    background: $paleWhite;
     color: #939a9d;
     border-radius: 10px;
     margin: 5px 2px;
@@ -456,7 +465,7 @@
     user-select: none;
     border: 1px solid transparent;
 
-    background: #eeeeee;
+    background: $paleWhite;
     border-radius: 5px;
     margin: 5px 2px;
     color: #333;
@@ -469,7 +478,7 @@
 }
 
 .modal-footer .col-half + .col-half {
-    border-left: 1px solid rgba(0,0,0,0.1);
+    border-left: 1px solid #82d6a5;
 }
 
 .btn-footer {
@@ -478,7 +487,7 @@
     padding: 20px;
     transition: all 0.2s ease;
     border-radius: 0;
-    background-color: #30bb6a;
+    background-color: $green;
 
     transition: background-color 0.5s ease;
 
@@ -584,9 +593,11 @@
 /* https://codepen.io/jamesbarnett/pen/vlpkh */
 .rating {
     display: inline-block;
-    vertical-align: bottom;
+    vertical-align: middle;
 }
-.rating > input { display: none; }
+.rating > input {
+    display: none;
+}
 .rating > label:before {
     margin: 0 2px;
     /* font-size: 1.25em; */
@@ -596,9 +607,9 @@
     content: '';
     background-image: url(/img/icon_star_gray.svg);
     background-size: 100%;
-    background-repeat: none;
-    width: 22px;
-    height: 22px;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
 }
 .rating > .half:before {
     content: "\f089";
@@ -607,15 +618,13 @@
 .rating > label {
     /*color: #ddd; */
     float: right;
-}
-.rating:not(:disabled) > label {
     cursor: pointer;
 }
 
 /***** CSS Magic to Highlight Stars on Hover *****/
 .rating > input:checked ~ label:before, /* show gold star when clicked */
-.rating:not(:checked):not(:disabled) > label:hover:before, /* hover current star */
-.rating:not(:checked):not(:disabled) > label:hover ~ label:before { /* hover previous stars in list */
+.rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
+.rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
     /*color: #eabb2f;*/
     background-image: url(/img/icon_star.svg);
 }
@@ -625,6 +634,12 @@
 .rating > label:hover ~ input:checked ~ label:before, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label:before {
     /*color: #f1d274;*/
+}
+
+#reviewPanel .rating > label:before {
+    margin: 5px 8px;
+    width: 35px;
+    height: 35px
 }
 
 /* Custom Radio Buttons */

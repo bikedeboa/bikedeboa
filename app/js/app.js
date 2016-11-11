@@ -458,7 +458,7 @@ $(function () {
     });
 
     // Review panel
-    $('body').on('click', '#openReviewPanelBtn', function() {
+    $('body').on('click', '#ratingDisplay, #openReviewPanelBtn', function() {
       var m = openedMarker;
       if (m.text) {
         $('#review_title').show();
