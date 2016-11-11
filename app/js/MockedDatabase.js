@@ -1,9 +1,11 @@
 var BIKE = BIKE || {};
 
 BIKE.MockedDatabase = {
-    ///////////////////
-    // G L O B A L S //
-    ///////////////////
+  ///////////////////
+  // G L O B A L S //
+  ///////////////////
+
+  API_URL: '',
 
   allMarkers: [
     {
@@ -21,12 +23,12 @@ BIKE.MockedDatabase = {
       text: 'Panvel Moinhos',
       description: 'Na frente da Panvel tem bicicletário e não precisa ser cliente para estacionar ali.<br><br>http://www.ctsbrasil.org/node/106',
       lng: '-51.200999',
-      lat: '-30.0246',  
+      lat: '-30.0246',
     },
     {
       text: 'Shopping Moinhos de Vento',
       description: 'Bonitos, mas poderia ter sinalização que é um bicicletário.<br><br>http://www.ctsbrasil.org/node/236',
-      lng: '-51.201428', 
+      lng: '-51.201428',
       lat: '-30.023906000000004',
     },
     {
@@ -562,7 +564,7 @@ BIKE.MockedDatabase = {
     {
       text: 'UFRGS - Campus do Vale -  Bloco IV',
       description: '<img src="https://lh3.googleusercontent.com/proxy/5aAe7TUBe4SXTvOldCw6uer8W7EDXV3GOFGGPNJ08v29zwoks3slEBAZwCk39HY8CN5GJYpNFLt0bzHy2YWgtNBinxtxpydAHbUz49tbs88" height="200" width="auto" /><br><br>Bicicletário do tipo suspenso. 4 lugares. Próximo ao novo RU e da parada de ônibus do bloco IV.',
-      lng: '-51.12012', 
+      lng: '-51.12012',
       lat: '-30.067519999999995',
     },
     {
@@ -1058,14 +1060,16 @@ BIKE.MockedDatabase = {
     // M E T H O D S //
     ///////////////////
 
-  mockData: function() {
+  mockData: function(markersToMock) {
     console.warn('Mocking data...');
 
+    let newMarkers = markersToMock;
+
     var i=0;
-    markers.forEach(function(m) {
+    newMarkers.forEach(function(m) {
       m.id = '' + i++;
 
-      m.isPublic = Math.round(Math.random()) === 0 ? 'true' : 'false';
+      m.isPublic = Math.round(Math.random() * 10 ) > 2 ? true : false;
 
       // Number of reviews and checkins
       m.reviews = Math.floor(Math.random() * 20);
@@ -1075,6 +1079,10 @@ BIKE.MockedDatabase = {
       if (m.reviews > 0) {
         m.average = (Math.floor(Math.random() * 40) + 10)/10;
       }
+
+      // Photo
+      const randomPic = Math.floor(Math.random() * N_MOCK_PICS) + 1;
+      m.photo = 'img/photos/' + randomPic + '.jpg';
 
       // Tags
       // @todo update this to match Backend tags model
@@ -1087,26 +1095,21 @@ BIKE.MockedDatabase = {
       });
 
       // Structure types
-      var randomStructure = Math.floor(Math.random() * 4) + 0;
-        switch(randomStructure) {
-          case 0: m.structureType = STRUCTURE_CODES[0]; break;
-          case 1: m.structureType = STRUCTURE_CODES[1]; break;
-          case 2: m.structureType = STRUCTURE_CODES[2]; break;
-          case 3: m.structureType = STRUCTURE_CODES[3]; break;
-          case 4: m.structureType = STRUCTURE_CODES[4]; break;
-        }
+      var randomStructure = Math.floor(Math.random() * STRUCTURE_CODES.length) + 0;
+      m.structureType = STRUCTURE_CODES[randomStructure];
     });
+
+    return newMarkers;
   },
 
   getPlaces: function(successCB, failCB, alwaysCB) {
     var self = this;
 
-    setTimeout(function() {
-      markers = self.allMarkers;
+    setTimeout(function() {;
+      markers = self.mockData(self.allMarkers);
 
       console.log('Retrieved ' + markers.length + ' places from hardcoded DB.');
 
-      self.mockData();
 
       if (successCB && typeof successCB === 'function') {
         successCB();

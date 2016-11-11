@@ -8,7 +8,7 @@ BIKE.Database = {
   // API path, without the final slash ('/')
   API_URL: 'https://bikedeboa-api.herokuapp.com',
   _authToken: '',
-  _headers: {}, 
+  _headers: {},
 
 
   ///////////////////
@@ -19,16 +19,40 @@ BIKE.Database = {
     var self = this;
 
     console.log('Removing all entries in 5 seconds...');
- 
+
     setTimeout(function() {
       $.ajax({
+        url: self.API_URL + '/local',
         type: 'DELETE',
         headers: self._headers,
-        url: self.API_URL + '/local',
       }).done(function(data) {
         console.log(data);
       });
     }, 5000);
+  },
+
+  _sendAllMarkersToBackend: function(isToMock) {
+    const self = this;
+    let allMarkers = BIKE.MockedDatabase.allMarkers;
+
+    if (isToMock === true) {
+      allMarkers = BIKE.MockedDatabase.mockData(allMarkers);
+    } else if (isToMock !== false) {
+      console.error('Please specify if you want to mock content or not.');
+      return false;
+    }
+
+
+    console.log('Sending ALL ' + allMarkers.length + ' places.');
+
+    allMarkers.forEach(function(m){
+      $.ajax({
+        type: 'post',
+        headers: self._headers,
+        url: self.API_URL + '/local',
+        data: m
+      });
+    });
   },
 
   sendCheckin: function(placeId, callback) {
@@ -78,16 +102,17 @@ BIKE.Database = {
     });
   },
 
-  sendReview: function(placeId, rating, callback) {
+  sendReview: function(placeId, rating, tags, callback) {
     var self = this;
 
     $.ajax({
       type: 'post',
       headers: self._headers,
       url: self.API_URL + '/review',
-      data: { 
+      data: {
         idLocal: placeId,
-        rating: rating
+        rating: rating,
+        tags: tags
       },
       success: function(data) {
         console.log('Review success.');

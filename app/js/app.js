@@ -12,7 +12,6 @@ $(function () {
     const m = openedMarker;
 
 
-    var isPublicIcon = m.isPublic === 'true' ? 'img/icon_public.svg' : 'img/icon_private.svg';
     var structureTypeIcon = '';
     switch (m.structureType) {
       case 'uinvertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
@@ -20,6 +19,7 @@ $(function () {
       case 'trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
       case 'suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
       case 'grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
+      case 'other': structureTypeIcon = 'img/tipo_other.svg'; break;
     }
 
     let templateData = {};
@@ -39,7 +39,7 @@ $(function () {
 
     // Tags
     templateData.tagsButtons = tags.map(t => {
-      return `<button class="btn btn-tag" data-toggle="button">${t.name}</button>`;
+      return `<button class="btn btn-tag" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
     }).join('');
 
     // @todo Update this to match Database tags model
@@ -59,7 +59,7 @@ $(function () {
     // Render handlebars template
     $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
 
-    
+
     // Template is rendered, start jquerying
 
     $('#placeDetails_heading').toggle(m.text && m.text.length > 0);
@@ -68,16 +68,15 @@ $(function () {
     $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
 
     // Is public?
-    $('#placeDetails_isPublic_icon').attr('src', isPublicIcon);
-    $('#placeDetails_isPublic').html(m.isPublic === 'true' ? 'Público' : 'Restrito<br><span class="small">(apenas clientes)</span>');
+    $('#placeDetails_isPublic_icon').attr('src', m.isPublic ? 'img/icon_public.svg' : 'img/icon_private.svg');
+    $('#placeDetails_isPublic').html(m.isPublic ? 'Público' : 'Restrito<br><span class="small">(apenas clientes)</span>');
 
     // Structure type
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
     $('#placeDetails_structureType').text(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '');
 
-    // Pic 
+    // Pic
     if (m.photo) {
-      // var randomPic = Math.floor(Math.random() * N_MOCK_PICS) + 1;
       $('#placeDetails_photo').attr('src', Database.API_URL + '/' + m.photo);
     }
 
@@ -301,7 +300,7 @@ $(function () {
       text: $('#newPlaceModal #titleInput').val(),
       isPublic: $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val(),
       structureType: $('#newPlaceModal .typeIcon.active').data('type'),
-      photo: _uploadingPhotoBlob,
+      photo: _uploadingPhotoBlob
     }, function() {
       // Addition finished
       showSpinner();
@@ -444,7 +443,7 @@ $(function () {
     $('body').on('change input click','#newPlaceModal input, #newPlaceModal .typeIcon', function() {
       // this has to be AFTER the typeIcon click trigger
       validateNewPlaceForm();
-    }); 
+    });
 
 
     $('body').on('click', '#saveNewPlaceBtn', saveNewPlaceCB);
@@ -482,10 +481,15 @@ $(function () {
     });
 
     $('body').on('click', '#sendReviewBtn', function() {
-      Database.sendReview(openedMarker.id, currentPendingRating, function() {
+      const activeTagBtns = $('#reviewPanel .tagsContainer .btn.active');
+      let reviewTags = [];
+      for(let i=0; i<activeTagBtns.length; i++) {
+        reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
+      }
+
+      Database.sendReview(openedMarker.id, currentPendingRating, reviewTags, function() {
         $('#reviewModal').modal('toggle');
         $('#placeDetailsModal').modal('toggle');
-        // @todo retrieve tags
 
         showSpinner();
         Database.getPlaces(updateMarkers);
@@ -515,7 +519,7 @@ $(function () {
     setupAutocomplete();
 
     // Add cyclable path bike Layer
-    // var bikeLayer = new google.maps.BicyclingLayer(); 
+    // var bikeLayer = new google.maps.BicyclingLayer();
     // bikeLayer.setMap(map);
 
     // Geolocalization button
@@ -531,7 +535,7 @@ $(function () {
     _initTemplates();
 
     showSpinner();
-    Database.authenticate(() => { 
+    Database.authenticate(() => {
       Database.getAllTags();
       Database.getPlaces(updateMarkers);
     });
