@@ -73,7 +73,7 @@ $(function () {
 
     // Structure type
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
-    $('#placeDetails_structureType').text(m.structureType ? 'Bicicletario ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '');
+    $('#placeDetails_structureType').text(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '');
 
     // Pic 
     if (m.photo) {
@@ -514,7 +514,7 @@ $(function () {
 
     setupAutocomplete();
 
-    // Add cyclabe path bike Layer
+    // Add cyclable path bike Layer
     // var bikeLayer = new google.maps.BicyclingLayer(); 
     // bikeLayer.setMap(map);
 
