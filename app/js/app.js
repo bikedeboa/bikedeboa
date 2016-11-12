@@ -503,6 +503,10 @@ $(function () {
 
 
     // Details panel
+    $('body').on('click', '#openDirectionsBtn', () => {
+      window.location.href = `https://www.google.com/maps/dir//${openedMarker.lat},${openedMarker.lng}`; 
+    });
+
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
     
     $('body').on('click', '.modal-header img', e => {
