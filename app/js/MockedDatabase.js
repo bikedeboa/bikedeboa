@@ -7,6 +7,8 @@ BIKE.MockedDatabase = {
 
   API_URL: '',
 
+  ALL_TAGS: ['Iluminado', 'Movimentado', 'Monitorado', 'Fácil acesso', 'Espaçoso', 'Coberto'],
+
   allMarkers: [
     {
       text: 'Zaffari Supermercados',
@@ -1167,7 +1169,7 @@ BIKE.MockedDatabase = {
     idToTag = {};
     tagToId = {};
 
-    tags = ALL_TAGS.map(val => {
+    tags = this.ALL_TAGS.map(val => {
       let id = i++;
 
       idToTag[id] = val;

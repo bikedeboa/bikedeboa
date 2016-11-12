@@ -25,11 +25,16 @@ const STRUCTURE_CODES = ['uinvertido', 'deroda', 'other', 'suspenso'];
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
-const ALL_TAGS = ['Iluminado', 'Movimentado', 'Monitorado', 'Fácil acesso', 'Espaçoso', 'Coberto'];
 
+/////////////////////////
+//                     //
+//                     //
+let isDemoMode = true; //
+//                     //
+//                     //
+/////////////////////////
 
-let Database = BIKE.MockedDatabase;
-// let Database = BIKE.Database;
+let Database;
 let map;
 let geocoder;
 let markers = [];

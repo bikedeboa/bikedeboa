@@ -501,7 +501,7 @@ $(function () {
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
   }
 
-  function init() {
+  function setup() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {
         lat: -30.0346,
@@ -533,19 +533,34 @@ $(function () {
     _initTriggers();
 
     _initTemplates();
-
-    showSpinner();
-    // Database.authenticate(() => {
-    //   Database.getAllTags();
-    //   Database.getPlaces(updateMarkers);
-    // });
   }
 
-    //////////////////////////
-    // Start initialization //
-    //////////////////////////
+  function init() {
+    showSpinner();
+
+    if (isDemoMode) {
+      Database = BIKE.MockedDatabase;
+    } else {
+      Database = BIKE.Database;
+    }
+    
+    Database.authenticate(() => {
+      Database.getAllTags();
+      Database.getPlaces(updateMarkers);
+    });
+  }
+
+  window.toggleDemoMode = function() {
+    isDemoMode = !isDemoMode;
+    init();
+  };
+
+  //////////////////////////
+  // Start initialization //
+  //////////////////////////
 
   showSpinner();
+  setup();
   init();
   // _geolocateAndCenterMap();
 });
