@@ -535,10 +535,10 @@ $(function () {
     _initTemplates();
 
     showSpinner();
-    Database.authenticate(() => {
-      Database.getAllTags();
-      Database.getPlaces(updateMarkers);
-    });
+    // Database.authenticate(() => {
+    //   Database.getAllTags();
+    //   Database.getPlaces(updateMarkers);
+    // });
   }
 
     //////////////////////////

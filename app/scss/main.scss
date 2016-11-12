@@ -232,12 +232,13 @@ $paleWhite: #eeeeee;
 
 #spinnerOverlay .spinnerContainer img {
     animation: spin 3s linear infinite;
+    width: 75px;
+    height: 75px;
 }
 
 #spinnerOverlay #wheel1,
 #spinnerOverlay #wheel2 {
-    top: calc(50% + 2px);
-    // opacity: 0.8;
+    top: calc(50% - 2px);
 }
 
 #spinnerOverlay #wheel1 {
@@ -245,7 +246,7 @@ $paleWhite: #eeeeee;
 }
 
 #spinnerOverlay #wheel2 {
-    left: calc(50% + 60px);
+    left: calc(50% + 65px);
 }
 
 .modal-dialog {
