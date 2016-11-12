@@ -157,7 +157,11 @@ $(function () {
 
     // Markers from Database
     if (markers && markers.length > 0) {
-      // markers.forEach(function(m) {
+      // Order by average
+      markers = markers.sort((a, b) => {
+        return a.average - b.average;
+      });
+
       for(var i=0; i<markers.length; i++) {
         var m = markers[i];
 
@@ -198,6 +202,7 @@ $(function () {
           map: map,
           icon: icon,
           title: m.text,
+          zIndex: i, //markers should be ordered by average
           // opacity: 0.1 + (m.average/5).
         });
 
@@ -499,6 +504,10 @@ $(function () {
 
     // Details panel
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
+    
+    $('body').on('click', '.modal-header img', e => {
+      $(e.target).parent().toggleClass('expanded');
+    });
   }
 
   function setup() {
@@ -536,13 +545,13 @@ $(function () {
   }
 
   function init() {
-    showSpinner();
-
     if (isDemoMode) {
       Database = BIKE.MockedDatabase;
     } else {
       Database = BIKE.Database;
     }
+
+    showSpinner();
     
     Database.authenticate(() => {
       Database.getAllTags();

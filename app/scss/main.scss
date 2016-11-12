@@ -1,10 +1,14 @@
 $green: #30bb6a;
 $white: #ffffff;
-$paleWhite: #eeeeee;
+$paleWhite: #F3F3F3;
+
+$bodyFont: "Roboto", Arial, sans-serif;
+$headingFont: 'Raleway', sans-serif;
 
 
-* {
-    font-family: "Roboto";
+body {
+    overflow: hidden;
+    font-family: $bodyFont;
 }
 
 #map {
@@ -117,6 +121,7 @@ $paleWhite: #eeeeee;
     width: 70%;
     height: 50px;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
+    font-family: $headingFont;
 
     max-width: 300px;
 
@@ -281,8 +286,16 @@ $paleWhite: #eeeeee;
     padding: 0px;
     position: relative;
     background-image: url(/img/bg_header.png);
-    height: 170px;
+    max-height: 170px;
     overflow: hidden;
+    cursor: zoom-in;
+
+    transition: max-height 0.5s ease;
+
+    &.expanded {
+        max-height: 800px;
+        cursor: zoom-out;
+    }
 }
 
 .modal-body img {
@@ -308,13 +321,30 @@ $paleWhite: #eeeeee;
 }
 
 .title{
-    font-size: 20px;
-    margin-left: 10px;
+    font-size: 26px;
+    padding-left: 10px;
     vertical-align: middle;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    font-family: $headingFont;
+    font-weight: 700;
+
+    &:before {
+        content: '';
+        display: inline-block;
+        width: 22px;
+        height: 28px;
+        background-image: url(/img/pin_green.svg);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        margin-right: 10px;
+        vertical-align: text-top;
+    }
 }
 
 .review{
     text-align: center;
+    margin-top: 10px;
 }
 
 .modal-body {
@@ -366,8 +396,10 @@ $paleWhite: #eeeeee;
 }
 
 .average {
-    font-size: 35px;
-    vertical-align: middle;
+    font-size: 30px;
+    // vertical-align: bottom;
+    font-family: $headingFont;
+    font-weight: 700;
 }
 
 .ghost {
@@ -449,6 +481,12 @@ $paleWhite: #eeeeee;
     margin: 5px 2px;
 }
 
+#reviewPanel .btn-tag {
+    margin: 8px;
+    padding: 8px 18px;
+    font-size: 16px;
+}
+
 .btn-tag.active {
     background: #2cd978;
     color: white;
@@ -457,12 +495,11 @@ $paleWhite: #eeeeee;
 .tagDisplay {
     display: inline-block;
     padding: 6px 12px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 1.42857143;
     text-align: center;
     white-space: nowrap;
-    vertical-align: middle;
     user-select: none;
     border: 1px solid transparent;
 
@@ -470,6 +507,10 @@ $paleWhite: #eeeeee;
     border-radius: 5px;
     margin: 5px 2px;
     color: #333;
+
+    .badge {
+        margin-right: 2px;
+    }
 }
 
 .col-half {
@@ -489,6 +530,10 @@ $paleWhite: #eeeeee;
     transition: all 0.2s ease;
     border-radius: 0;
     background-color: $green;
+    font-size: 16px;
+    font-family: $headingFont;
+    text-transform: uppercase;
+    font-weight: 700;
 
     transition: background-color 0.5s ease;
 

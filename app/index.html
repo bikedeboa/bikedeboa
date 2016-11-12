@@ -34,6 +34,11 @@
           ga('create', 'UA-19085664-3', 'auto');
           ga('send', 'pageview');
         </script>
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
     </head>
 
     <body>
@@ -71,16 +76,13 @@
                                 <img id="placeDetails_photo" src="img/bg_header.png">
                             </div>
                             <div class="modal-body">
-                                <div id="placeDetails_heading">
-                                    <img src="img/pin_green.svg">
-                                    <span class="title">{{title}}</span>
+                                <div id="placeDetails_heading" class="title">
+                                    {{title}}
+                                    
+                                    <p>
+                                        {{address}}
+                                    </p>
                                 </div>
-
-                                <p>
-                                    {{address}}
-                                </p>
-
-                                <hr>
 
                                 <div class="review">
                                     <span class="average">{{average}}</span>
@@ -128,10 +130,16 @@
                             <div class="modal-footer">
                                 <div class="col-half">
                                     <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
-                                    <button id="openReviewPanelBtn" class="btn green btn-footer">AVALIAR</button>
+                                    <button class="btn green btn-footer">
+                                        <!-- <span class="glyphicon glyphicon-play"></span> -->
+                                        Traçar Rota
+                                    </button>
                                 </div>
                                 <div class="col-half">
-                                    <button class="btn green btn-footer">TRAÇAR ROTA</button>
+                                    <button id="openReviewPanelBtn" class="btn green btn-footer">
+                                        <!-- <span class="glyphicon glyphicon-pencil"></span> -->
+                                        Avaliar
+                                        </button>
                                 </div>
                             </div>
                         </div>
@@ -141,12 +149,9 @@
                                 <img id="review_photo" src="img/bg_header.png">
                             </div>
                             <div class="modal-body">
-                                <div>
-                                    <img id="review_titleIcon" src="img/pin_green.svg">
-                                    <span id="review_title" class="title">{{title}}</span>
+                                <div id="review_title" class="title">
+                                    {{title}}
                                 </div>
-
-                                <hr>
 
                                 <div class="review">
                                     <span id="review_average" class="average"></span>
