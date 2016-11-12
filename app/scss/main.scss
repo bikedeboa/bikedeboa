@@ -255,14 +255,14 @@ body {
 }
 
 .modal-dialog {
-    margin-top: 60px;
+    margin-top: 50px;
 
     &:before {
         content: '✕';
         color: white;
         position: absolute;
-        top: -58px;
-        right: 0;
+        top: -50px;
+        right: 8px;
         font-size: 40px;
         font-weight: lighter;
         font-family: "Arial";
@@ -276,7 +276,8 @@ body {
 
     @media screen and (max-width: 414px) {
       & {
-        margin: 60px 0 0;
+        margin-left: 0;
+        margin-right: 0;
       }
     }
 }
@@ -286,6 +287,7 @@ body {
     padding: 0px;
     position: relative;
     background-image: url(/img/bg_header.png);
+    min-height: 170px;
     max-height: 170px;
     overflow: hidden;
     cursor: zoom-in;
