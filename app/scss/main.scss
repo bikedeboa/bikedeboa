@@ -2,6 +2,11 @@ $green: #30bb6a;
 $white: #ffffff;
 $paleWhite: #F3F3F3;
 
+$bootstrapBackdropColor: white;
+$bootstrapBackdropOpacity: 0.7;
+$backdropColor: rgba(255,255,255,$bootstrapBackdropOpacity);
+
+
 $bodyFont: "Roboto", Arial, sans-serif;
 $headingFont: 'Raleway', sans-serif;
 
@@ -219,15 +224,25 @@ body {
 }
 
 
+.modal-backdrop {
+    background-color: $bootstrapBackdropColor;
+}
+
+#spinnerOverlay {
+    background-color: $backdropColor;   
+}
+
+.modal-backdrop.in {
+    opacity: $bootstrapBackdropOpacity;
+}
+
 #spinnerOverlay {
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0,0,0,0.3);
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1031;
-    display: none;
 }
 
 #spinnerOverlay > img,
@@ -240,8 +255,8 @@ body {
 
 #spinnerOverlay .spinnerContainer img {
     animation: spin 3s linear infinite;
-    width: 75px;
-    height: 75px;
+    width: 70px;
+    height: 70px;
 }
 
 #spinnerOverlay #wheel1,
