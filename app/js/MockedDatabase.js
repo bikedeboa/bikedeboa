@@ -1087,11 +1087,10 @@ BIKE.MockedDatabase = {
       m.photo = 'img/photos/' + randomPic + '.jpg';
 
       // Tags
-      // @todo update this to match Backend tags model
       m.tags = [];
       tags.forEach(tagObj => {
         m.tags.push({
-          tag: tagObj,
+          name: tagObj.name,
           count: Math.floor(Math.random() * 10)
         });
       });

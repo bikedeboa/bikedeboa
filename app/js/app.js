@@ -10,6 +10,7 @@ $(function () {
 
     openedMarker = markers[i];
     const m = openedMarker;
+    let templateData = {};
 
 
     var structureTypeIcon = '';
@@ -22,7 +23,6 @@ $(function () {
       case 'other': structureTypeIcon = 'img/tipo_other.svg'; break;
     }
 
-    let templateData = {};
     templateData.title = m.text;
     templateData.address = '';
 
@@ -42,12 +42,11 @@ $(function () {
       return `<button class="btn btn-tag" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
     }).join('');
 
-    // @todo Update this to match Database tags model
     if (m.tags) {
       templateData.tags = m.tags
         .sort((a, b) => {return b.count - a.count;})
         .map(t => {
-          return t.count > 0 ? `<span class="tagDisplay"><span class="badge">${t.count}</span> ${t.tag.name}</span>` : '';
+          return t.count > 0 ? `<span class="tagDisplay"><span class="badge">${t.count}</span> ${t.name}</span>` : '';
         })
         .join('');
     }
