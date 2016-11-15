@@ -1091,7 +1091,7 @@ BIKE.MockedDatabase = {
       tags.forEach(tagObj => {
         m.tags.push({
           name: tagObj.name,
-          count: Math.floor(Math.random() * 10)
+          count: Math.floor(Math.random() * Math.random() * 20)
         });
       });
 

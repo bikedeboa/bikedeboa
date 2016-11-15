@@ -38,15 +38,14 @@ $(function () {
     }
 
     // Tags
-    templateData.tagsButtons = tags.map(t => {
-      return `<button class="btn btn-tag" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
-    }).join('');
-
+    const MAX_TAG_COUNT = 20;
+    const MIN_TAG_OPACITY = 0.2;
     if (m.tags) {
       templateData.tags = m.tags
         .sort((a, b) => {return b.count - a.count;})
         .map(t => {
-          return t.count > 0 ? `<span class="tagDisplay"><span class="badge">${t.count}</span> ${t.name}</span>` : '';
+          const opacity = t.count/MAX_TAG_COUNT + MIN_TAG_OPACITY;
+          return t.count > 0 ? `<span class="tagDisplay" style="opacity: ${opacity}"><span class="badge">${t.count}</span> ${t.name}</span>` : '';
         })
         .join('');
     }
@@ -418,7 +417,7 @@ $(function () {
 
     $('#newPlaceModal .little-pin').toggleClass('gray', !textOk);
 
-    console.log('validating');
+    // console.log('validating');
 
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', !isOk);
   }
@@ -427,7 +426,7 @@ $(function () {
   function validateReviewForm() {
     const isOk = currentPendingRating;
 
-    console.log('validating review form');
+    // console.log('validating review form');
 
     $('#sendReviewBtn').prop('disabled', !isOk);
   }
