@@ -51,7 +51,7 @@ $(function () {
     }
 
     // Reviews, checkins
-    templateData.numReviews = m.reviews && (m.reviews + ' avaliações') || '';
+    templateData.numReviews = m.reviews && m.reviews || '';
     templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
     // Render handlebars template

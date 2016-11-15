@@ -373,6 +373,23 @@ body {
 .review {
     text-align: center;
     margin-top: 10px;
+
+    .numreviews {
+        color: #828b90;
+        font-size: 1.2em;
+        font-weight: 100;
+
+        &:before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url(/img/icon_user.svg);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            margin-right: 5px;
+        }
+    }
 }
 
 .modal-body {
@@ -494,6 +511,7 @@ body {
 
 #ratingDisplay {
     cursor: pointer;
+    margin: 0 5px;
 }
 
 .modal-footer {
@@ -617,11 +635,6 @@ body {
 
 .tagsContainer {
     text-align: center;
-}
-
-.small {
-    font-size: 0.8em !important;
-    color: $gray;
 }
 
 .light {
