@@ -35,11 +35,11 @@ BIKE.Database = {
     const self = this;
     let allMarkers = BIKE.MockedDatabase.allMarkers;
 
-    if (isToMock === true) {
+    if (isToMock) {
       allMarkers = BIKE.MockedDatabase.mockData(allMarkers);
     } else if (isToMock !== false) {
       console.error('Please specify if you want to mock content or not.');
-      return false;
+      return;
     }
 
 
@@ -52,6 +52,32 @@ BIKE.Database = {
         url: self.API_URL + '/local',
         data: m
       });
+    });
+  },
+
+  customAPICall: function(type, endpoint, data, callback) {
+    var self = this;
+
+    if (!type) {
+      console.error('no type');
+    }
+    if (!endpoint) {
+      console.error('no endpoint');
+    }
+  
+    $.ajax({
+      type: type,
+      headers: self._headers,
+      url: self.API_URL + '/' + endpoint,
+      data: data,
+      success: function(data) {
+        console.log('_customCall success.');
+        console.log(data);
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
     });
   },
 

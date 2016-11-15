@@ -54,10 +54,10 @@ gulp.task('scripts', () => {
     .pipe(babel({
       presets: ['es2015']
     }))
-    .on('error', function(e) {
-      console.log(e);
-      this.emit('end');
-    })
+    // .on('error', function(e) {
+    //   console.log(e);
+    //   this.emit('end');
+    // })
     .pipe(sourcemaps.write('maps'))
     .pipe(gulp.dest('dist/js'))
     // .pipe(rename('app.min.js'))

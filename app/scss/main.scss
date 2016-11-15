@@ -1,6 +1,7 @@
 $green: #30bb6a;
 $white: #ffffff;
 $paleWhite: #F3F3F3;
+$gray: #828b90;
 
 $bootstrapBackdropColor: white;
 $bootstrapBackdropOpacity: 0.7;
@@ -273,20 +274,7 @@ body {
 }
 
 .modal-dialog {
-    margin-top: 50px;
-
-    &:before {
-        content: '✕';
-        color: white;
-        position: absolute;
-        top: -50px;
-        right: 8px;
-        font-size: 40px;
-        font-weight: lighter;
-        font-family: "Arial";
-        cursor: pointer;
-        pointer-events: none;
-    }
+    margin-top: 60px;
 
     & img {
         width: 100%;
@@ -300,6 +288,21 @@ body {
     }
 }
 
+.modal-content {
+    &:before {
+        content: '✕';
+        color: $gray;
+        position: absolute;
+        top: -60px;
+        right: 0px;
+        font-size: 40px;
+        font-weight: lighter;
+        font-family: "Arial";
+        cursor: pointer;
+        pointer-events: none;
+    }
+}
+
 
 .modal-header {
     padding: 0px;
@@ -308,9 +311,12 @@ body {
     min-height: 170px;
     max-height: 170px;
     overflow: hidden;
-    cursor: zoom-in;
 
     transition: max-height 0.5s ease;
+
+    img {
+        cursor: zoom-in;
+    }
 
     &.expanded {
         max-height: 800px;
@@ -338,7 +344,7 @@ body {
 
     & p {
         font-size: 16px;
-        color: #828b90;
+        color: $gray;
     }
 
     & .title{
@@ -425,9 +431,9 @@ body {
 }
 
 .ghost {
-    border: 1px solid #828b90;
+    border: 1px solid $gray;
     background-color: #fff;
-    color: #828b90;
+    color: $gray;
     margin-left: 10px;
     font-size: 14px;
     width: 30%;
@@ -471,6 +477,16 @@ body {
     }
 }
 
+#placeDetailsModal {
+    .modal-body {
+        padding-top: 25px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
+    }
+
+    .modal-header {
+        overflow: visible;
+    }
+}
 
 #placeDetails_isPublic img {
     opacity: 0.6;
@@ -605,7 +621,7 @@ body {
 
 .small {
     font-size: 0.8em !important;
-    color: #828b90;
+    color: $gray;
 }
 
 .light {
