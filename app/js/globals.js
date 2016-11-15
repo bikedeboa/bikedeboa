@@ -7,7 +7,14 @@ function createMapFromArrays(a, b) {
   return ret;
 }
 
-const SIMULATED_DELAY_MS = 2300;
+function isDesktop() {
+  return window.matchMedia && window.matchMedia('(min-width: 1024px)').matches;
+}
+
+function getSimulatedDelay () {
+  return Math.floor(Math.random() * 2000) + 500;
+}
+
 const MARKER_W = 20;
 const MARKER_H = 24;
 const N_MOCK_PICS = 14;

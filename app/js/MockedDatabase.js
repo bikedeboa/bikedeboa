@@ -1107,7 +1107,7 @@ BIKE.MockedDatabase = {
   getPlaces: function(successCB, failCB, alwaysCB) {
     var self = this;
 
-    setTimeout(function() {;
+    setTimeout(function() {
       markers = self.mockData(self.allMarkers);
 
       console.log('Retrieved ' + markers.length + ' places from hardcoded DB.');
@@ -1122,7 +1122,7 @@ BIKE.MockedDatabase = {
       if (alwaysCB && typeof alwaysCB === 'function') {
         alwaysCB();
       }
-    }, SIMULATED_DELAY_MS);
+    }, getSimulatedDelay());
   },
 
   sendCheckin: function(placeId, callback) {
@@ -1131,20 +1131,24 @@ BIKE.MockedDatabase = {
       thisPlace.checkin++;
     }
 
-    if (callback) {
-      callback();
-    }
+    setTimeout(function() {
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
+    }, getSimulatedDelay());
   },
 
-  sendReview: function(placeId, rating, callback) {
+  sendReview: function(placeId, rating, tags, callback) {
     var thisPlace = markers.find(function(m) { return m.id===placeId; });
     if (thisPlace) {
       thisPlace.reviews++;
     }
 
-    if (callback) {
-      callback();
-    }
+    setTimeout(function() {
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
+    }, getSimulatedDelay());
   },
 
   sendPlace: function(place, callback) {
@@ -1153,9 +1157,11 @@ BIKE.MockedDatabase = {
 
     markers.push(place);
 
-    if (callback) {
-      callback();
-    }
+    setTimeout(function() {
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
+    }, getSimulatedDelay());
   },
 
   authenticate: function(callback) {

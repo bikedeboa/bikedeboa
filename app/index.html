@@ -65,16 +65,19 @@
         </div>
 
         <div id="placeDetailsModalTemplatePlaceholder"></div>
+        
+        <div id="reviewPanelTemplatePlaceholder"></div>
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-            <div class="modal fade" id="placeDetailsModal">
-                <div class="modal-dialog flip-container" role="document">
-                    <div class="modal-content flipper">
-                        <div class="front">
+            <div id="placeDetailsModal" class="modal fade" tabindex="-1">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
                             <div class="modal-header">
                                 <img id="placeDetails_photo" src="img/bg_header.png">
                             </div>
+                            
                             <div class="modal-body">
                                 <div id="placeDetails_heading" class="title">
                                     {{title}}
@@ -125,8 +128,8 @@
                                 <div class="tagsContainer" style="margin: 20px 0;">
                                     {{{tags}}}
                                 </div>
-
                             </div>
+                            
                             <div class="modal-footer">
                                 <div class="col-half">
                                     <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
@@ -139,15 +142,25 @@
                                     <button id="openReviewPanelBtn" class="btn green btn-footer">
                                         <!-- <span class="glyphicon glyphicon-pencil"></span> -->
                                         Avaliar
-                                        </button>
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </script>
 
-                        <div id="reviewPanel" class="back">
-                            <div class="modal-header">
+        <!-- Review Modal -->
+        <script id="reviewPanelTemplate" type="text/x-handlebars-template">
+           <div id="reviewPanel" class="modal fade" tabindex="-1">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <!-- <div class="modal-header">
                                 <img id="review_photo" src="img/bg_header.png">
-                            </div>
+                            </div> -->
+                            
                             <div class="modal-body">
                                 <div id="review_title" class="title">
                                     {{title}}
@@ -183,73 +196,74 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button id="sendReviewBtn" class="btn border btn-footer green">DEIXAR AVALIAÇÃO</button>
+                                <button id="sendReviewBtn" class="btn border btn-footer green">SALVAR AVALIAÇÃO</button>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </script>
 
         <!-- New Place Modal -->
-        <div class="modal fade" id="newPlaceModal">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <img id="photoInputBg"/>
+        <div class="modal fade" id="newPlaceModal" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <img id="photoInputBg"/>
 
-                        <input type="file" name="photoInput" id="photoInput" />
-                        <label for="photoInput"></label>
-                    </div>
-
-                    <div class="modal-body text-center">
-                        <div class="text-input-wrapper">
-                            <span class="little-pin gray"></span>
-                            <input required id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
+                            <input type="file" name="photoInput" id="photoInput" />
+                            <label for="photoInput"></label>
                         </div>
 
-                        <div class="radio-group" style="margin: 20px 0;">
-                          <label>
-                            <input required type="radio" name="isPublicRadioGrp" value="true" />
-                            <span class="radio-image"></span>
-                            Público
-                          </label>
+                        <div class="modal-body text-center">
+                            <div class="text-input-wrapper">
+                                <span class="little-pin gray"></span>
+                                <input required id="titleInput" type="text" class="text-input" placeholder="Qual é o nome do local?">
+                            </div>
 
-                          <label>
-                            <input required type="radio" name="isPublicRadioGrp" value="false" />
-                            <span class="radio-image"></span>
-                            Restrito (apenas clientes)
-                          </label>
+                            <div class="radio-group" style="margin: 20px 0;">
+                              <label>
+                                <input required type="radio" name="isPublicRadioGrp" value="true" />
+                                <span class="radio-image"></span>
+                                Público
+                              </label>
+
+                              <label>
+                                <input required type="radio" name="isPublicRadioGrp" value="false" />
+                                <span class="radio-image"></span>
+                                Restrito (apenas clientes)
+                              </label>
+                            </div>
+
+                            <hr>
+
+                            <h2>Tipo de bicicletário</h2>
+
+                            <div class="typeIconsGroup">
+                              <div data-type="deroda" class="typeIcon"> <img src="img/tipo_deroda.svg"/> </div>
+                              <div data-type="uinvertido" class="typeIcon"> <img src="img/tipo_uinvertido.svg"/> </div>
+                              <div data-type="suspenso" class="typeIcon"> <img src="img/tipo_suspenso.svg"/> </div>
+                              <div data-type="other" class="typeIcon"> <img src="img/tipo_other.svg"/> </div>
+                              <!-- <div data-type="trave" class="typeIcon"> <img src="img/tipo_trave.svg"/> </div> -->
+                              <!-- <div data-type="grade" class="typeIcon"> <img src="img/tipo_grade.svg"/> </div> -->
+                            </div>
+
+                           <!--  <hr>
+
+                            <h2>Características</h2>
+
+                            <div class="tagsContainer">
+                                <button class="btn btn-tag" data-toggle="button">Iluminado</button>
+                                <button class="btn btn-tag" data-toggle="button">Movimentado</button>
+                                <button class="btn btn-tag" data-toggle="button">Monitorado</button>
+                                <button class="btn btn-tag" data-toggle="button">Fácil acesso</button>
+                                <button class="btn btn-tag" data-toggle="button">Espaçoso</button>
+                            </div> -->
                         </div>
 
-                        <hr>
-
-                        <h2>Tipo de bicicletário</h2>
-
-                        <div class="typeIconsGroup">
-                          <div data-type="deroda" class="typeIcon"> <img src="img/tipo_deroda.svg"/> </div>
-                          <div data-type="uinvertido" class="typeIcon"> <img src="img/tipo_uinvertido.svg"/> </div>
-                          <div data-type="suspenso" class="typeIcon"> <img src="img/tipo_suspenso.svg"/> </div>
-                          <div data-type="other" class="typeIcon"> <img src="img/tipo_other.svg"/> </div>
-                          <!-- <div data-type="trave" class="typeIcon"> <img src="img/tipo_trave.svg"/> </div> -->
-                          <!-- <div data-type="grade" class="typeIcon"> <img src="img/tipo_grade.svg"/> </div> -->
+                        <div class="modal-footer">
+                            <button id="saveNewPlaceBtn" class="btn border btn-footer green">SALVAR</button>
                         </div>
-
-                       <!--  <hr>
-
-                        <h2>Características</h2>
-
-                        <div class="tagsContainer">
-                            <button class="btn btn-tag" data-toggle="button">Iluminado</button>
-                            <button class="btn btn-tag" data-toggle="button">Movimentado</button>
-                            <button class="btn btn-tag" data-toggle="button">Monitorado</button>
-                            <button class="btn btn-tag" data-toggle="button">Fácil acesso</button>
-                            <button class="btn btn-tag" data-toggle="button">Espaçoso</button>
-                        </div> -->
-                    </div>
-
-                    <div class="modal-footer">
-                        <button id="saveNewPlaceBtn" class="btn border btn-footer green">SALVAR</button>
                     </div>
                 </div>
             </div>

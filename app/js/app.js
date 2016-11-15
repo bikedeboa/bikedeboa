@@ -82,7 +82,7 @@ $(function () {
 
 
     $('#placeDetailsModal .flipper').removeClass('flipped');
-    $('#placeDetailsModal').modal('toggle');
+    $('#placeDetailsModal').modal('show');
   }
 
   function _geolocateAndCenterMap(callback) {
@@ -101,7 +101,7 @@ $(function () {
               callback();
             }
           },
-          function() {
+          () => {
               // @todo show something more informative to the user
             console.error('Geolocation failed.');
 
@@ -141,9 +141,9 @@ $(function () {
     controlUI.appendChild(controlText);
 
         // Setup the click event listeners: simply set the map to Chicago.
-    controlUI.addEventListener('click', function() {
+    controlUI.addEventListener('click', () => {
       showSpinner();
-      _geolocateAndCenterMap(function() {
+      _geolocateAndCenterMap(() => {
         hideSpinner();
       });
     });
@@ -207,12 +207,12 @@ $(function () {
         });
 
         (function (markerIndex) {
-          _gmarkers[markerIndex].addListener('click', function() {
+          _gmarkers[markerIndex].addListener('click', () => {
             openDetailsModal(markerIndex);
           });
         }(i));
       }
-            // });
+      // });
     }
   }
 
@@ -236,7 +236,7 @@ $(function () {
     });
   }
 
-    // Sets the map on all markers in the array.
+  // Sets the map on all markers in the array.
   function setMapOnAll (map) {
     if (_gmarkers && Array.isArray(_gmarkers)) {
       _gmarkers.forEach(function(m) {
@@ -245,7 +245,7 @@ $(function () {
     }
   }
 
-    // Removes the markers from the map, but keeps them in the array.
+  // Removes the markers from the map, but keeps them in the array.
   function hideMarkers () {
     areMarkersHidden = true;
     // setMapOnAll(null);
@@ -254,7 +254,7 @@ $(function () {
     });
   }
 
-    // Shows any markers currently in the array.
+  // Shows any markers currently in the array.
   function showMarkers () {
     areMarkersHidden = false;
     // setMapOnAll(map);
@@ -263,7 +263,7 @@ $(function () {
     });
   }
 
-    // Deletes all markers in the array by removing references to them.
+  // Deletes all markers in the array by removing references to them.
   function deleteMarkers () {
     setMapOnAll(null);
     _gmarkers = [];
@@ -280,11 +280,19 @@ $(function () {
   function toggleLocationInputMode() {
     addLocationMode = !addLocationMode;
 
-    // if (addLocationMode) {
-    //   if (map.getZoom() < 18) {
-    //     map.setZoom(18);
-    //   }
-    // }
+    if (addLocationMode) {
+      $(document).on('keyup.disableInput', e => {
+        if (e.keyCode === 27) {
+          toggleLocationInputMode();
+        }
+      });
+      // Adjust for a minimum zoom for improved recommended precision
+      // if (map.getZoom() < 18) {
+      //   map.setZoom(18);
+      // }
+    } else {
+      $(document).off('keyup.disableInput');
+    }
 
     $('#addPlace').toggleClass('active');
     $('#newPlaceholder').toggleClass('active');
@@ -296,9 +304,12 @@ $(function () {
   }
 
   function saveNewPlaceCB() {
-    $('#newPlaceModal').modal('toggle');
+    toggleLocationInputMode();
+    $('#newPlaceModal').modal('hide');
+    showSpinner();
 
-    var mapCenter = map.getCenter();
+    const mapCenter = map.getCenter();
+
     Database.sendPlace({
       lat: '' + mapCenter.lat(),
       lng: '' + mapCenter.lng(),
@@ -306,16 +317,15 @@ $(function () {
       isPublic: $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val(),
       structureType: $('#newPlaceModal .typeIcon.active').data('type'),
       photo: _uploadingPhotoBlob
-    }, function() {
+    }, () => {
       // Addition finished
-      showSpinner();
       Database.getPlaces(updateMarkers);
     });
   }
 
   function sendCheckinBtn() {
-    Database.sendCheckin(openedMarker.id, function() {
-      $('#placeDetailsModal').modal('toggle');
+    Database.sendCheckin(openedMarker.id, () => {
+      $('#placeDetailsModal').modal('show');
 
       showSpinner();
       Database.getPlaces(updateMarkers);
@@ -334,7 +344,7 @@ $(function () {
     });
 
 
-    autocomplete.addListener('place_changed', function() {
+    autocomplete.addListener('place_changed', () => {
       infowindow.close();
       marker.setVisible(false);
       var place = autocomplete.getPlace();
@@ -397,6 +407,7 @@ $(function () {
 
   function _initTemplates() {
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
+    templates.reviewPanelTemplate = Handlebars.compile($('#reviewPanelTemplate').html());
   }
 
   function validateNewPlaceForm() {
@@ -413,7 +424,17 @@ $(function () {
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', !isOk);
   }
 
-  function _resetNewPlacePanel() {
+
+  function validateReviewForm() {
+    const isOk = currentPendingRating;
+
+    console.log('validating review form');
+
+    $('#sendReviewBtn').prop('disabled', !isOk);
+  }
+
+  function openNewPlaceModal() {
+    // Reset fields
     _uploadingPhotoBlob = '';
     $('#newPlaceModal .little-pin').toggleClass('gray', true);
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
@@ -421,7 +442,46 @@ $(function () {
     $('#newPlaceModal .typeIcon').removeClass('active');
     $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
     $('#newPlaceModal .tagsContainer button').removeClass('active');
-    $('#newPlaceModal').modal('toggle');
+    
+    $('#newPlaceModal').modal('show');
+  }
+
+  function openReviewPanel() {
+    var m = openedMarker;
+
+    let templateData = {};
+    templateData.title = m.text;
+    templateData.address = '';
+    
+    // Tags
+    templateData.tagsButtons = tags.map(t => {
+      return `<button class="btn btn-tag" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
+    }).join('');
+
+    // Compile template
+    $('#reviewPanelTemplatePlaceholder').html(templates.reviewPanelTemplate(templateData));
+
+    
+    // Template is rendered, start jquerying 
+
+    // Reset fields
+    if (m.text) {
+      $('#review_title').show();
+      $('#review_titleIcon').show();
+      $('#review_title').text(m.text);
+    } else {
+      $('#review_title').hide();
+      $('#review_titleIcon').hide();
+    }
+
+    $('#sendReviewBtn').prop('disabled', true);
+
+    $('#reviewPanel .tagsContainer button').removeClass('active');
+    $('#reviewPanel input:radio[name=rating]:checked').prop('checked', false);
+
+    $('#reviewPanel').modal('show');
+    $('#placeDetailsModal').modal('hide');
+    // $('#placeDetailsModal .flipper').toggleClass('flipped');
   }
 
   function _initTriggers() {
@@ -430,12 +490,8 @@ $(function () {
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
-    $('body').on('click', '#newPlaceholder', function() {
-      console.log('add location');
-
-      toggleLocationInputMode();
-
-      _resetNewPlacePanel();
+    $('body').on('click', '#newPlaceholder', () => {
+      openNewPlaceModal();
     });
 
 
@@ -445,7 +501,7 @@ $(function () {
       $(e.currentTarget).addClass('active');
     });
 
-    $('body').on('change input click','#newPlaceModal input, #newPlaceModal .typeIcon', function() {
+    $('body').on('change input click','#newPlaceModal input, #newPlaceModal .typeIcon', () => {
       // this has to be AFTER the typeIcon click trigger
       validateNewPlaceForm();
     });
@@ -462,41 +518,26 @@ $(function () {
     });
 
     // Review panel
-    $('body').on('click', '#ratingDisplay, #openReviewPanelBtn', function() {
-      var m = openedMarker;
-      if (m.text) {
-        $('#review_title').show();
-        $('#review_titleIcon').show();
-        $('#review_title').text(m.text);
-      } else {
-        $('#review_title').hide();
-        $('#review_titleIcon').hide();
-      }
-
-      // Reset fields
-      $('#reviewPanel .tagsContainer button').removeClass('active');
-      $('#reviewPanel input:radio[name=rating]:checked').prop('checked', false);
-
-      // $('#reviewPanel').modal('toggle');
-      $('#placeDetailsModal .flipper').toggleClass('flipped');
+    $('body').on('click', '#ratingDisplay, #openReviewPanelBtn', () => {
+      openReviewPanel();
     });
 
-    $('body').on('change', '.rating', function(e) {
+    $('body').on('change', '#reviewPanel .rating', function(e) {
       currentPendingRating = $(e.target).val();
+      validateReviewForm();
     });
 
-    $('body').on('click', '#sendReviewBtn', function() {
+    $('body').on('click', '#sendReviewBtn', () => {
       const activeTagBtns = $('#reviewPanel .tagsContainer .btn.active');
       let reviewTags = [];
       for(let i=0; i<activeTagBtns.length; i++) {
         reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
       }
 
-      Database.sendReview(openedMarker.id, currentPendingRating, reviewTags, function() {
-        $('#reviewModal').modal('toggle');
-        $('#placeDetailsModal').modal('toggle');
-
-        showSpinner();
+      $('#reviewPanel').modal('hide');
+      $('#placeDetailsModal').modal('hide');
+      showSpinner();
+      Database.sendReview(openedMarker.id, currentPendingRating, reviewTags, () => {
         Database.getPlaces(updateMarkers);
       });
     });
@@ -523,7 +564,8 @@ $(function () {
       zoom: 15,
       disableDefaultUI: true,
       scaleControl: false,
-      // zoomControl: true,
+      clickableIcons: false,
+      zoomControl: isDesktop(),
       styles: _gmapsCustomStyle,
     });
 
@@ -563,7 +605,7 @@ $(function () {
     });
   }
 
-  window.toggleDemoMode = function() {
+  window.toggleDemoMode = () => {
     isDemoMode = !isDemoMode;
     init();
   };

@@ -22,10 +22,12 @@ body {
 }
 
 #locationSearch {
-    transition: top 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    opacity: 1;
 
     &.coolHide {
-        top: -50px;
+        top: -10px;
+        opacity: 0;
     }
 
     .balaca {
@@ -35,14 +37,15 @@ body {
 }
 
 #addPlace {
-    transition: bottom 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
     opacity: 0.9;
 
     &.coolHide {
-        bottom: -50px;
+        bottom: -10px;
+        opacity: 0;
     }
     &:hover,
-    &:active,
+    &:active, 
     &:focus {
         opacity: 1;
     }
@@ -300,51 +303,53 @@ body {
     }
 }
 
-.modal-body img {
-    width: 18px;
-    /*margin-right: 10px;*/
-    height: auto;
-}
+.modal-body {
+    & img {
+        width: 18px;
+        /*margin-right: 10px;*/
+        height: auto;
+    }
 
-.modal-body label {
-    font-weight: initial;
-}
+    & label {
+        font-weight: initial;
+    }
 
-.modal-body h2 {
-    font-weight: lighter;
-    font-size: 14px;
-    color: #999999;
-    text-align: center;
-}
+    & h2 {
+        font-weight: lighter;
+        font-size: 14px;
+        color: #999999;
+        text-align: center;
+    }
 
-.modal-body p {
-    font-size: 16px;
-    color: #828b90;
-}
+    & p {
+        font-size: 16px;
+        color: #828b90;
+    }
 
-.title{
-    font-size: 26px;
-    padding-left: 10px;
-    vertical-align: middle;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    font-family: $headingFont;
-    font-weight: 700;
+    & .title{
+        font-size: 26px;
+        padding-left: 10px;
+        vertical-align: middle;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        font-family: $headingFont;
+        font-weight: 700;
 
-    &:before {
-        content: '';
-        display: inline-block;
-        width: 22px;
-        height: 28px;
-        background-image: url(/img/pin_green.svg);
-        background-size: 100%;
-        background-repeat: no-repeat;
-        margin-right: 10px;
-        vertical-align: text-top;
+        &:before {
+            content: '';
+            display: inline-block;
+            width: 22px;
+            height: 28px;
+            background-image: url(/img/pin_green.svg);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            margin-right: 10px;
+            vertical-align: text-top;
+        }
     }
 }
 
-.review{
+.review {
     text-align: center;
     margin-top: 10px;
 }
@@ -507,7 +512,7 @@ body {
 
     background: $paleWhite;
     border-radius: 5px;
-    margin: 5px 2px;
+    margin: 5px;
     color: #333;
 
     .badge {
@@ -765,4 +770,30 @@ body {
 /* back, initially hidden pane */
 .back {
     transform: rotateY(180deg);
+}
+
+
+// Bootstrap modal vertical centralizer
+// Thanks to https://stackoverflow.com/questions/18053408/vertically-centering-bootstrap-modal-window
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+.vertical-align-center {
+    @media screen and (min-height: 768px) {
+        /* To center vertically */
+        display: table-cell;
+        vertical-align: middle;
+        pointer-events:none;
+    }
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
 }
