@@ -230,9 +230,14 @@ BIKE.Database = {
 
       markers = data;
 
-      // Mark that no markers have retrieved their details
       markers.forEach(m => {
+        // Mark that no markers have retrieved their details
         m._hasDetails = false;
+
+        // Massage average format
+        if (typeof m.average === 'string') {
+          m.average = parseFloat(m.average);
+        }
       });
 
       if (successCB && typeof successCB === 'function') {

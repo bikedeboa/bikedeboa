@@ -17,9 +17,6 @@ $(function () {
 
     // Average
     if (m.average) {
-      if (typeof m.average === 'string') {
-        m.average = parseFloat(m.average);
-      }
       if (m.average.toFixed && m.average !== Math.round(m.average)) {
         m.average = m.average.toFixed(1);
       }
