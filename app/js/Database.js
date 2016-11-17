@@ -7,6 +7,7 @@ BIKE.Database = {
 
   // API path, without the final slash ('/')
   API_URL: 'https://bikedeboa-api.herokuapp.com',
+  // API_URL: 'http://localhost:3000',
   _authToken: '',
   _headers: {},
 
@@ -223,14 +224,56 @@ BIKE.Database = {
     $.ajax({
       type: 'get',
       headers: self._headers,
-      url: self.API_URL + '/local'
+      url: self.API_URL + '/local/light'
     }).done(function(data) {
       console.log('Successfully retrieved ' + data.length + ' places!');
 
       markers = data;
 
+      // Mark that no markers have retrieved their details
+      markers.forEach(m => {
+        m._hasDetails = false;
+      });
+
       if (successCB && typeof successCB === 'function') {
         successCB();
+      }
+    })
+    .fail(function() {
+      if (failCB && typeof failCB === 'function') {
+        failCB();
+      }
+    })
+    .always(function() {
+      if (alwaysCB && typeof alwaysCB === 'function') {
+        alwaysCB();
+      }
+    });
+  },
+
+  getPlaceDetails: function(placeId, successCB, failCB, alwaysCB) {
+    var self = this;
+
+    console.log('Getting place detail...');
+
+    $.ajax({
+      type: 'get',
+      headers: self._headers,
+      url: self.API_URL + '/local/' + placeId
+    }).done(function(data) {
+      if (data) {
+        console.log('Got place detail:');
+        console.log(data);
+
+        let updatedMarker = markers.find(m => {return m.id === placeId; });
+        
+        Object.assign(updatedMarker, data);
+
+        updatedMarker._hasDetails = true;
+
+        if (successCB && typeof successCB === 'function') {
+          successCB();
+        }
       }
     })
     .fail(function() {

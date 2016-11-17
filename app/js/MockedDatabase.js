@@ -1072,7 +1072,7 @@ BIKE.MockedDatabase = {
       m.id = '' + i++;
 
       m.isPublic = Math.round(Math.random() * 10 ) > 2 ? true : false;
-
+      
       // Number of reviews and checkins
       m.reviews = Math.floor(Math.random() * 20);
       m.checkin = Math.floor(Math.random() * 100);
@@ -1092,12 +1092,15 @@ BIKE.MockedDatabase = {
         m.tags.push({
           name: tagObj.name,
           count: Math.floor(Math.random() * Math.random() * 20)
-        });
+        });  
       });
 
       // Structure types
       var randomStructure = Math.floor(Math.random() * STRUCTURE_CODES.length) + 0;
       m.structureType = STRUCTURE_CODES[randomStructure];
+
+      // Will never need to call getPlaceDetails()
+      m._hasDetails = true;
     });
 
     return newMarkers;

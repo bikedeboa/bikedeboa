@@ -360,6 +360,7 @@ body.beta #map {
     }
 
     & h2 {
+        font-family: $headingFont;
         font-weight: lighter;
         font-size: 14px;
         color: #999999;
@@ -402,6 +403,7 @@ body.beta #map {
         color: #828b90;
         font-size: 1.2em;
         font-weight: 100;
+        vertical-align: text-top;
 
         &:before {
             content: '';
@@ -515,6 +517,10 @@ body.beta #map {
 
     div {
         margin-top: 5px;
+    }
+
+    small {
+        color: $gray;
     }
 }
 
@@ -659,6 +665,14 @@ body.beta #map {
 
 .tagsContainer {
     text-align: center;
+    border-top: 1px solid #eee;
+    padding: 20px 0;
+    margin-top: 10px;
+
+    h2 {
+        font-family: $headingFont;
+        margin: 10px 0;
+    }
 }
 
 .light {

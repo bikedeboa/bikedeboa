@@ -127,11 +127,11 @@
                                     <!-- <div>{{numCheckins}}</div> -->
                                 </div>
 
-                                <hr>
-
-                                <div class="tagsContainer" style="margin: 20px 0;">
-                                    {{{tags}}}
-                                </div>
+                                {{#if tags}}
+                                    <div class="tagsContainer">
+                                        {{{tags}}}
+                                    </div>
+                                {{/if}}
                             </div>
                             
                             <div class="modal-footer">
@@ -190,11 +190,8 @@
                                     </fieldset>
                                 </div>
 
-                                <hr>
-
-                                <h2>Características</h2>
-
                                 <div class="tagsContainer">
+                                    <h2>Vantagens</h2>
                                     {{{tagsButtons}}}
                                 </div>
                             </div>

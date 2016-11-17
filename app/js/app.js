@@ -12,17 +12,6 @@ $(function () {
     const m = openedMarker;
     let templateData = {};
 
-
-    var structureTypeIcon = '';
-    switch (m.structureType) {
-      case 'uinvertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
-      case 'deroda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
-      case 'trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
-      case 'suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
-      case 'grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
-      case 'other': structureTypeIcon = 'img/tipo_other.svg'; break;
-    }
-
     templateData.title = m.text;
     templateData.address = '';
 
@@ -40,7 +29,7 @@ $(function () {
     // Tags
     const MAX_TAG_COUNT = 20;
     const MIN_TAG_OPACITY = 0.2;
-    if (m.tags) {
+    if (m.tags && m.tags.length > 0) {
       templateData.tags = m.tags
         .sort((a, b) => {return b.count - a.count;})
         .map(t => {
@@ -51,8 +40,9 @@ $(function () {
     }
 
     // Reviews, checkins
-    templateData.numReviews = m.reviews && m.reviews || '';
+    templateData.numReviews = m.reviews || '';
     templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
+
 
     // Render handlebars template
     $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
@@ -62,16 +52,32 @@ $(function () {
 
     $('#placeDetails_heading').toggle(m.text && m.text.length > 0);
 
+    $('.numreviews').toggle(m.reviews && m.reviews > 0);
+
     // Average - stars
     $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
 
     // Is public?
-    $('#placeDetails_isPublic_icon').attr('src', m.isPublic ? 'img/icon_public.svg' : 'img/icon_private.svg');
-    $('#placeDetails_isPublic').html(m.isPublic ? 'Público' : 'Restrito<br><span class="small">(apenas clientes)</span>');
+    if (m.isPublic != null) {
+      $('#placeDetails_isPublic_icon').attr('src', m.isPublic === true ? 'img/icon_public.svg' : 'img/icon_private.svg');
+      $('#placeDetails_isPublic').html(m.isPublic === true ? 'Público' : 'Restrito<br><small>(apenas clientes)</small>');
+    } else {
+      // $('#placeDetails_isPublic_icon').attr('src', '');
+      $('#placeDetails_isPublic').html('<small>Sem dados.</small>');
+    }
 
     // Structure type
+    let structureTypeIcon;
+    switch (m.structureType) {
+      case 'uinvertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
+      case 'deroda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
+      case 'trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
+      case 'suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
+      case 'grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
+      case 'other': structureTypeIcon = 'img/tipo_other.svg'; break;
+    }
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
-    $('#placeDetails_structureType').text(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '');
+    $('#placeDetails_structureType').html(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '<small>Sem dados.</small>');
 
     // Pic
     if (m.photo) {
@@ -148,6 +154,20 @@ $(function () {
 
   }
 
+  function onMarkerClick(markerIndex) {
+    const marker = markers[markerIndex];
+    
+    if (marker._hasDetails) {
+      openDetailsModal(markerIndex);
+    } else {
+      showSpinner();
+      Database.getPlaceDetails(marker.id, () => {
+        hideSpinner();
+        openDetailsModal(markerIndex);
+      });
+    }
+  }
+
   function updateMarkers() {
     hideSpinner();
 
@@ -160,13 +180,15 @@ $(function () {
         return a.average - b.average;
       });
 
-      for(var i=0; i<markers.length; i++) {
-        var m = markers[i];
+      for(let i=0; i<markers.length; i++) {
+        const m = markers[i];
 
-        // Icon
-        var iconUrl;
-        if (!m.reviews) {
+        // Icon and Scaling
+        let iconUrl;
+        let scale;
+        if (!m.average || m.average === 0) {
           iconUrl = MARKER_ICON_GRAY;
+          scale = 0.8;
         } else if (m.average > 0 && m.average < 2) {
           iconUrl = MARKER_ICON_RED;
         } else if (m.average >= 2 && m.average < 3.5) {
@@ -177,15 +199,11 @@ $(function () {
           iconUrl = MARKER_ICON_GRAY;
         }
 
-        // Scaling
-        var scale;
-        if (!m.reviews) {
-          scale = 0.8;
-        } else {
+        if (!scale) {
           scale = 0.5 + (m.average/10);
         }
 
-        var icon = {
+        const icon = {
           url: iconUrl, // url
           scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
           origin: new google.maps.Point(0, 0), // origin
@@ -206,7 +224,7 @@ $(function () {
 
         (function (markerIndex) {
           _gmarkers[markerIndex].addListener('click', () => {
-            openDetailsModal(markerIndex);
+            onMarkerClick(markerIndex);
           });
         }(i));
       }
