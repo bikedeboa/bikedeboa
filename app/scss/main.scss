@@ -1,5 +1,10 @@
+// Color Pallette
 $green: #30bb6a;
-$white: #ffffff;
+$yellow: #eedc12;
+$red: #f15f74;
+
+// Other colors
+$white: #fafafa;
 $paleWhite: #F3F3F3;
 $gray: #828b90;
 
@@ -7,7 +12,7 @@ $bootstrapBackdropColor: white;
 $bootstrapBackdropOpacity: 0.7;
 $backdropColor: rgba(255,255,255,$bootstrapBackdropOpacity);
 
-
+// Typography
 $bodyFont: "Roboto", Arial, sans-serif;
 $headingFont: 'Raleway', sans-serif;
 
@@ -17,11 +22,30 @@ body {
     font-family: $bodyFont;
 }
 
+body.beta #map {
+    border: 5px solid $red;
+
+    &:before {
+        content: 'beta';
+        position: absolute;
+        bottom: -8px;
+        right: 0;
+        font-size: 20px;
+        z-index: 2;
+        color: $red;
+        font-family: $headingFont;
+        font-weight: 700;
+        background-color: rgba(255,255,255,0.8);
+        padding: 0 5px 0;
+    }
+}
+
 #map {
     width: 100vw;
     height: 100vh;
     /*margin-top: 50px;*/
 }
+
 
 #locationQueryBtn {
     display: none;
