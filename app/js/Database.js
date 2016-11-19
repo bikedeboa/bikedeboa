@@ -105,13 +105,20 @@ BIKE.Database = {
   authenticate: function(callback) {
     var self = this;
 
+    // Custom login
+    const isLogin = window.location.pathname === '/login';
+    let user, pw;
+    if (isLogin) {
+      user = prompt('Bem-vindo colaborador(a)! Qual teu usuario?','');
+    }
+
     $.ajax({
       type: 'post',
       headers: self._headers,
       url: self.API_URL + '/token',
       data: {
-        username: 'cristiano',
-        password: 'abcd123'
+        username: user || 'cristiano',
+        password: pw || 'abcd123'
       },
       success: function(data) {
         if (data.token && data.token.length > 0) {
@@ -119,7 +126,7 @@ BIKE.Database = {
           self._authToken = data.token;
           self._headers = {
             'x-access-token': data.token
-          }
+          };
 
           if (callback && typeof callback === 'function') {
             callback();
@@ -167,6 +174,27 @@ BIKE.Database = {
       },
       success: function(data) {
         console.log('Addition success!');
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
+    });
+  },
+
+  updatePlace: function(placeId, data, callback) {
+    var self = this;
+
+    $.ajax({
+      type: 'put',
+      headers: self._headers,
+      url: self.API_URL + '/local' + placeId,
+      data: data,
+      error: function(e) {
+        console.error(e);
+      },
+      success: function(data) {
+        console.log('Update successful!');
 
         if (callback && typeof callback === 'function') {
           callback();

@@ -140,8 +140,8 @@ $(function () {
     controlText.style.padding = '7px';
     controlText.innerHTML = '<span class="glyphicon glyphicon-record"></span>';
     controlUI.appendChild(controlText);
-
-        // Setup the click event listeners: simply set the map to Chicago.
+  
+    // Setup the click event listeners
     controlUI.addEventListener('click', () => {
       showSpinner();
       _geolocateAndCenterMap(() => {
@@ -402,6 +402,7 @@ $(function () {
   }
 
   function showSpinner () {
+    console.log('showspinner'); 
     $('#spinnerOverlay').fadeIn();
   }
 
@@ -610,8 +611,8 @@ $(function () {
       Database = BIKE.Database;
     }
 
-    showSpinner();
-    
+    // showSpinner(); 
+     
     Database.authenticate(() => {
       Database.getAllTags();
       Database.getPlaces(updateMarkers);
@@ -627,7 +628,6 @@ $(function () {
   // Start initialization //
   //////////////////////////
 
-  showSpinner();
   setup();
   init();
   // _geolocateAndCenterMap();

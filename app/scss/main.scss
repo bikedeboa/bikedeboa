@@ -253,21 +253,19 @@ body.beta #map {
     background-color: $bootstrapBackdropColor;
 }
 
-#spinnerOverlay {
-    background-color: $backdropColor;   
-}
-
 .modal-backdrop.in {
     opacity: $bootstrapBackdropOpacity;
 }
 
 #spinnerOverlay {
+    background-color: $backdropColor;   
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1031;
+    display: none;
 }
 
 #spinnerOverlay > img,
@@ -317,8 +315,8 @@ body.beta #map {
         content: '✕';
         color: $gray;
         position: absolute;
-        top: -60px;
-        right: 0px;
+        top: -50px;
+        right: 4px;
         font-size: 40px;
         font-weight: lighter;
         font-family: "Arial";
