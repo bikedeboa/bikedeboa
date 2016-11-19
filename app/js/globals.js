@@ -36,7 +36,7 @@ const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NA
 /////////////////////////
 //                     //
 //                     //
-let isDemoMode = true; //
+let isDemoMode = false; //
 //                     //
 //                     //
 /////////////////////////
@@ -54,5 +54,6 @@ let addLocationMode = false;
 let openedMarker;
 let currentPendingRating;
 let _uploadingPhotoBlob;
+let loggedUser;
 
 let templates = {};

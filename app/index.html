@@ -80,12 +80,15 @@
                             <div class="modal-header">
                                 <!-- <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="position: absolute; color: white; font-size: 20px; background: rgba(0,0,0,0.5); padding: 5px; right: 10px; top: 10px; pointer-events: none; "></span> -->
                                 <img id="placeDetails_photo">
+                                
+                                {{#if admin}}
+                                    <button id="editPlaceBtn" type="button" class="btn btn-lg btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
+                                {{/if}}
                             </div>
                             
                             <div class="modal-body">
                                 <div id="placeDetails_heading" class="title">
                                     {{title}}
-                                    
                                     <p>
                                         {{address}}
                                     </p>

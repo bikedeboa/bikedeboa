@@ -40,6 +40,9 @@ $(function () {
     templateData.numReviews = m.reviews || '';
     templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
+    if (loggedUser) {
+      templateData.admin = true;
+    }
 
     // Render handlebars template
     $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
@@ -316,24 +319,38 @@ $(function () {
     toggleMarkers();
   }
 
-  function saveNewPlaceCB() {
-    toggleLocationInputMode();
+  // @todo refactor this, it's confusing
+  function sendNewPlace() { 
     $('#newPlaceModal').modal('hide');
     showSpinner();
 
-    const mapCenter = map.getCenter();
+    const isUpdate = openedMarker && loggedUser;
+    let place = {};
 
-    Database.sendPlace({
-      lat: '' + mapCenter.lat(),
-      lng: '' + mapCenter.lng(),
-      text: $('#newPlaceModal #titleInput').val(),
-      isPublic: $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val(),
-      structureType: $('#newPlaceModal .typeIcon.active').data('type'),
-      photo: _uploadingPhotoBlob
-    }, () => {
-      // Addition finished
+    // Update case
+    if (isUpdate) {
+      place.lat = openedMarker.lat;
+      place.lng = openedMarker.lng;
+    } else {
+      const mapCenter = map.getCenter();
+      place.lat = mapCenter.lat();
+      place.lng = mapCenter.lng();
+    }
+
+    place.text = $('#newPlaceModal #titleInput').val();
+    place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
+    place.structureType = $('#newPlaceModal .typeIcon.active').data('type');
+    place.photo = _uploadingPhotoBlob;
+
+    const callback = () => {
       Database.getPlaces(updateMarkers);
-    });
+    };
+
+    if (isUpdate) {
+      Database.updatePlace(openedMarker.id, place, callback);
+    } else {
+      Database.sendPlace(place, callback);
+    }
   }
 
   function sendCheckinBtn() {
@@ -373,13 +390,16 @@ $(function () {
         map.panTo(place.geometry.location);
         map.setZoom(17);  // Why 17? Because it looks good.
       }
-      marker.setIcon(/** @type {google.maps.Icon} */({
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(35, 35)
-      }));
+
+      // Custom icon depending on place type
+      // marker.setIcon(/** @type {google.maps.Icon} */({
+      //   url: place.icon,
+      //   size: new google.maps.Size(71, 71),
+      //   origin: new google.maps.Point(0, 0),
+      //   anchor: new google.maps.Point(17, 34),
+      //   scaledSize: new google.maps.Size(35, 35)
+      // }));
+      
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
 
@@ -455,7 +475,21 @@ $(function () {
     $('#newPlaceModal #titleInput').val('');
     $('#newPlaceModal .typeIcon').removeClass('active');
     $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
-    $('#newPlaceModal .tagsContainer button').removeClass('active');
+    // $('#newPlaceModal .tagsContainer button').removeClass('active');
+
+    if (openedMarker && loggedUser) {
+      // @todo refactor this, probably separate into different functions
+
+      const m = openedMarker;
+      $('#newPlaceModal #titleInput').val(m.text);
+      $(`#newPlaceModal .typeIcon[data-type="${m.structureType}"]`).addClass('active');
+      $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
+      $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
+
+      $('#placeDetailsModal').modal('hide');
+    } else {
+      toggleLocationInputMode();
+    }
     
     $('#newPlaceModal').modal('show');
   }
@@ -504,12 +538,13 @@ $(function () {
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
+
+    // New place panel
     $('body').on('click', '#newPlaceholder', () => {
+      openedMarker = null;
       openNewPlaceModal();
     });
 
-
-    // New place panel
     $('body').on('click', '.typeIcon', function(e){
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
@@ -521,7 +556,9 @@ $(function () {
     });
 
 
-    $('body').on('click', '#saveNewPlaceBtn', saveNewPlaceCB);
+    $('body').on('click', '#saveNewPlaceBtn', sendNewPlace);
+
+    $('body').on('click', '#editPlaceBtn', openNewPlaceModal);
 
     $(':file').change(function () {
       if (this.files && this.files[0]) {
@@ -620,6 +657,7 @@ $(function () {
   }
 
   window.toggleDemoMode = () => {
+    showSpinner();
     isDemoMode = !isDemoMode;
     init();
   };

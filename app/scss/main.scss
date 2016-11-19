@@ -1,5 +1,6 @@
 // Color Pallette
-$green: #30bb6a;
+$darkGreen: #30bb6a;
+$lightGreen: #2cd978;
 $yellow: #eedc12;
 $red: #f15f74;
 
@@ -61,8 +62,28 @@ body.beta #map {
     }
 
     .balaca {
-        background-color: $green;
+        background-color: $darkGreen;
         width: 48px;
+        display: table-cell;
+    }
+
+    .logged-user {
+        display: none;
+
+        background-color: #eedc12;
+        color: white;
+        padding: 5px;
+        font-family: $headingFont;
+        font-weight: 700;
+        position: absolute;
+        display: block;
+        top: 50px;
+        right: 0;
+        width: auto;
+
+        .glyphicon {
+            margin-right: 5px;
+        }
     }
 }
 
@@ -82,7 +103,7 @@ body.beta #map {
 }
 
 #locationSearch {
-    top: 10px;
+    top: 15px;
     position: absolute;
     z-index: 1;
     left: 50%;
@@ -90,11 +111,11 @@ body.beta #map {
     width: 95%;
     height: 48px;
     background-color: $white;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     max-width: 600px;
+    width: calc(100% - 30px);
 
     display: table;
-    width: 90%;
 }
 
 #locationSearch input {
@@ -107,11 +128,6 @@ body.beta #map {
 #filterBtn img {
     width: 20px;
     height: 20px;
-}
-
-#locationSearch span {
-    display: table-cell;
-    width: 48px;
 }
 
 #locationSearch input,
@@ -129,7 +145,7 @@ body.beta #map {
 }
 
 .navbar {
-    background-color: $green;
+    background-color: $darkGreen;
     border: none;
 }
 
@@ -146,7 +162,7 @@ body.beta #map {
     bottom: 30px;
     left: 50%;
     z-index: 1;
-    background: $green;
+    background: $darkGreen;
     border: none;
     color: white;
     border-radius: 25px;
@@ -165,7 +181,7 @@ body.beta #map {
 .bigRoundedButton:active,
 .bigRoundedButton:focus {
     color: white;
-    background-color: #2cd978;
+    background-color: $lightGreen;
 }
 
 #addPlace.active {
@@ -178,7 +194,7 @@ body.beta #map {
 
 #addPlace.active:after {
     content: '✕';
-    color: $green;
+    color: $darkGreen;
     font-size: 24px;
 }
 
@@ -488,7 +504,7 @@ body.beta #map {
 .ghost:active {
     color: white;
     border: 1px solid white;
-    background-color: $green;
+    background-color: $darkGreen;
 }
 
 .modal-footer {
@@ -547,15 +563,38 @@ body.beta #map {
 }
 
 .btn {
-    background: transparent;
-    color: white;
+    // background: transparent;
+    // color: white;
 }
 
 .btn.green:hover:not([disabled]),
 .btn.green:focus:not([disabled]),
-.btn.green.focus:not([disabled]) {
+.btn.green.active:not([disabled]) {
     color: white; 
-    background-color: #2cd978;
+    background-color: $darkGreen;
+}
+
+.btn-admin {
+    background: repeating-linear-gradient( 45deg, $yellow, $yellow 10px, #E9D812 10px, #E9D812 20px );
+    border: 3px solid $yellow;
+    color: white;
+    position: absolute;
+    bottom: -29px;
+    right: 20px;
+    border-radius: 50%;
+    width: 58px;
+    height: 58px;
+    z-index: 3;
+    box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.2);
+
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:focus,
+    &:active,
+    &:hover {
+        background: white;
+        color: $yellow;
+    }
 }
 
 .btn-tag {
@@ -572,7 +611,7 @@ body.beta #map {
 }
 
 .btn-tag.active {
-    background: #2cd978;
+    background: $darkGreen;
     color: white;
 }
 
@@ -604,7 +643,7 @@ body.beta #map {
 }
 
 .modal-footer .col-half + .col-half {
-    border-left: 1px solid #82d6a5;
+    border-left: 1px solid rgba(44,217,120,0.5);
 }
 
 .btn-footer {
@@ -613,7 +652,7 @@ body.beta #map {
     padding: 20px;
     transition: all 0.2s ease;
     border-radius: 0;
-    background-color: $green;
+    background-color: $lightGreen;
     font-size: 18px;
     font-family: $headingFont;
     text-transform: uppercase;
@@ -771,8 +810,8 @@ body.beta #map {
 
 #reviewPanel .rating > label:before {
     margin: 5px 8px;
-    width: 35px;
-    height: 35px
+    width: 40px;
+    height: 40px
 }
 
 /* Custom Radio Buttons */

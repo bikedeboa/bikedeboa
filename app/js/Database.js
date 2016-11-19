@@ -17,7 +17,7 @@ BIKE.Database = {
   ///////////////////
 
   _removeAll: function() {
-    var self = this;
+    const self = this;
 
     console.log('Removing all entries in 5 seconds...');
 
@@ -57,7 +57,7 @@ BIKE.Database = {
   },
 
   customAPICall: function(type, endpoint, data, callback) {
-    var self = this;
+    const self = this;
 
     if (!type) {
       console.error('no type');
@@ -83,7 +83,7 @@ BIKE.Database = {
   },
 
   sendCheckin: function(placeId, callback) {
-    var self = this;
+    const self = this;
 
     $.ajax({
       type: 'post',
@@ -103,13 +103,13 @@ BIKE.Database = {
   },
 
   authenticate: function(callback) {
-    var self = this;
+    const self = this;
 
     // Custom login
     const isLogin = window.location.pathname === '/login';
     let user, pw;
     if (isLogin) {
-      user = prompt('Bem-vindo colaborador(a)! Qual teu usuario?','');
+      user = prompt('Usuário:','');
     }
 
     $.ajax({
@@ -123,6 +123,17 @@ BIKE.Database = {
       success: function(data) {
         if (data.token && data.token.length > 0) {
           console.log('Authentication successful.');
+
+          if (isLogin) {
+            // Only place that can set this
+            loggedUser = user;
+          }
+
+          if (loggedUser) {
+            $('#locationSearch').append('<span class="logged-user"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'</span>');
+          }
+
+          // Set headers for future calls
           self._authToken = data.token;
           self._headers = {
             'x-access-token': data.token
@@ -132,12 +143,15 @@ BIKE.Database = {
             callback();
           }
         }
+      },
+      error: function(data) {
+        self.authenticate(callback);
       }
     });
   },
 
   sendReview: function(placeId, rating, tags, callback) {
-    var self = this;
+    const self = this;
 
     $.ajax({
       type: 'post',
@@ -159,7 +173,7 @@ BIKE.Database = {
   },
 
   sendPlace: function(place, callback) {
-    var self = this;
+    const self = this;
 
     console.log('Sending new place:');
     console.log(place);
@@ -183,12 +197,12 @@ BIKE.Database = {
   },
 
   updatePlace: function(placeId, data, callback) {
-    var self = this;
+    const self = this;
 
     $.ajax({
       type: 'put',
       headers: self._headers,
-      url: self.API_URL + '/local' + placeId,
+      url: self.API_URL + '/local/' + placeId,
       data: data,
       error: function(e) {
         console.error(e);
@@ -204,7 +218,7 @@ BIKE.Database = {
   },
 
   getAllTags: function(successCB, failCB, alwaysCB) {
-    var self = this;
+    const self = this;
 
     console.log('Getting tags...');
 
@@ -245,7 +259,7 @@ BIKE.Database = {
   },
 
   getPlaces: function(successCB, failCB, alwaysCB) {
-    var self = this;
+    const self = this;
 
     console.log('Getting all places...');
 
@@ -285,7 +299,7 @@ BIKE.Database = {
   },
 
   getPlaceDetails: function(placeId, successCB, failCB, alwaysCB) {
-    var self = this;
+    const self = this;
 
     console.log('Getting place detail...');
 
