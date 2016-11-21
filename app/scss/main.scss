@@ -604,11 +604,17 @@ body.beta #map {
     margin: 5px 2px;
 }
 
-#reviewPanel .btn-tag {
-    margin: 8px;
-    padding: 8px 18px;
-    font-size: 16px;
+#reviewPanel {
+    overflow-x: hidden;
+    overflow-y: auto;
+    
+    #reviewPanel .btn-tag {
+        margin: 8px;
+        padding: 8px 18px;
+        font-size: 16px;
+    }
 }
+
 
 .btn-tag.active {
     background: $darkGreen;

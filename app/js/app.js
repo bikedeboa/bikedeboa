@@ -495,7 +495,9 @@ $(function () {
   }
 
   function openReviewPanel() {
-    var m = openedMarker;
+    $('#placeDetailsModal').modal('hide'); 
+
+    const m = openedMarker;
 
     let templateData = {};
     templateData.title = m.text;
@@ -528,7 +530,6 @@ $(function () {
     $('#reviewPanel input:radio[name=rating]:checked').prop('checked', false);
 
     $('#reviewPanel').modal('show');
-    $('#placeDetailsModal').modal('hide');
     // $('#placeDetailsModal .flipper').toggleClass('flipped');
   }
 
@@ -648,7 +649,7 @@ $(function () {
       Database = BIKE.Database;
     }
 
-    // showSpinner(); 
+    showSpinner(); 
      
     Database.authenticate(() => {
       Database.getAllTags();
