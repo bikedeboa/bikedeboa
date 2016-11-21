@@ -49,6 +49,7 @@ let tags = [];
 let idToTag = {};
 let tagToId = {};
 let _gmarkers;
+let _geolocationMarker;
 let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker;

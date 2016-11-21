@@ -89,7 +89,7 @@ $(function () {
     $('#placeDetailsModal').modal('show');
   }
 
-  function _geolocateAndCenterMap(callback) {
+  function _geolocate(toCenter, callback) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
           function(position) {
@@ -98,8 +98,13 @@ $(function () {
               lng: position.coords.longitude
             };
 
-            map.panTo(pos);
-            map.setZoom(17);
+            if (toCenter) {
+              map.panTo(pos);
+              map.setZoom(17);
+            }
+
+            _geolocationMarker.setPosition(pos);
+            _geolocationMarker.setVisible(true);
 
             if (callback && typeof callback === 'function') {
               callback();
@@ -112,6 +117,9 @@ $(function () {
             if (callback && typeof callback === 'function') {
               callback();
             }
+          }, {
+            enableHighAccuracy: true,
+            timeout: 5000
           }
       );
     }
@@ -127,8 +135,8 @@ $(function () {
         // controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
     controlUI.style.cursor = 'pointer';
     controlUI.style.margin = '0 20px 90px';
-    controlUI.style.width = '35px';
-    controlUI.style.height = '35px';
+    controlUI.style.width = '50px';
+    controlUI.style.height = '50px';
     controlUI.style.textAlign = 'center';
     controlUI.style.boxShadow = '0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06';
 
@@ -139,15 +147,15 @@ $(function () {
         // Set CSS for the control interior.
     var controlText = document.createElement('div');
     controlText.style.color = '#30bb6a';
-    controlText.style.fontSize = '16px';
-    controlText.style.padding = '7px';
-    controlText.innerHTML = '<span class="glyphicon glyphicon-record"></span>';
+    controlText.style.width = '100%';
+    controlText.style.paddingTop = '13px';
+    controlText.innerHTML = '<img src="img/geolocation.svg" style="width: 20px;"/>';
     controlUI.appendChild(controlText);
   
     // Setup the click event listeners
     controlUI.addEventListener('click', () => {
       showSpinner();
-      _geolocateAndCenterMap(() => {
+      _geolocate(true, () => {
         hideSpinner();
       });
     });
@@ -374,12 +382,12 @@ $(function () {
   }
 
   function setupAutocomplete() {
-    var inputElem = document.getElementById('locationQueryInput');
-    var autocomplete = new google.maps.places.Autocomplete(inputElem);
+    const inputElem = document.getElementById('locationQueryInput');
+    let autocomplete = new google.maps.places.Autocomplete(inputElem);
     autocomplete.bindTo('bounds', map);
 
-    var infowindow = new google.maps.InfoWindow();
-    var marker = new google.maps.Marker({
+    // var infowindow = new google.maps.InfoWindow();
+    let marker = new google.maps.Marker({
       map: map,
       anchorPoint: new google.maps.Point(0, -29)
     });
@@ -388,13 +396,13 @@ $(function () {
     autocomplete.addListener('place_changed', () => {
       infowindow.close();
       marker.setVisible(false);
-      var place = autocomplete.getPlace();
+      const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
         return;
       }
 
-            // If the place has a geometry, then present it on a map.
+      // If the place has a geometry, then present it on a map.
       if (place.geometry.viewport) {
         map.fitBounds(place.geometry.viewport);
       } else {
@@ -414,17 +422,16 @@ $(function () {
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
 
-      var address = '';
-      if (place.address_components) {
-        address = [
-                    (place.address_components[0] && place.address_components[0].short_name || ''),
-                    (place.address_components[1] && place.address_components[1].short_name || ''),
-                    (place.address_components[2] && place.address_components[2].short_name || '')
-        ].join(' ');
-      }
-
-      infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-      infowindow.open(map, marker);
+      // var address = '';
+      // if (place.address_components) {
+      //   address = [
+      //               (place.address_components[0] && place.address_components[0].short_name || ''),
+      //               (place.address_components[1] && place.address_components[1].short_name || ''),
+      //               (place.address_components[2] && place.address_components[2].short_name || '')
+      //   ].join(' ');
+      // }
+      // infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+      // infowindow.open(map, marker);
     });
   }
 
@@ -623,7 +630,7 @@ $(function () {
         lat: -30.0346,
         lng: -51.2177
       },
-      zoom: 15,
+      zoom: 14,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -646,6 +653,16 @@ $(function () {
       centerControlDiv.index = 1;
       map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(centerControlDiv);
     }
+
+    _geolocationMarker = new google.maps.Marker({
+      map: map,
+      icon: {
+        url: 'img/current_position.svg', // url
+        scaledSize: new google.maps.Size(10, 10), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(5, 5), // anchor
+      }
+    });
 
     _initTriggers();
 
@@ -679,5 +696,5 @@ $(function () {
 
   setup();
   init();
-  // _geolocateAndCenterMap();
+  _geolocate();
 });
