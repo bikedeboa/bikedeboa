@@ -210,10 +210,10 @@ $(function () {
           anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
         };
 
-        let labelStr;
-        if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
-          labelStr = '?';
-        }
+        // let labelStr;
+        // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
+        //   labelStr = '?';
+        // }
 
         _gmarkers[i] = new google.maps.Marker({
           position: {
