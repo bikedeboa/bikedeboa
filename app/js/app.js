@@ -210,6 +210,11 @@ $(function () {
           anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
         };
 
+        let labelStr;
+        if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
+          labelStr = '?';
+        }
+
         _gmarkers[i] = new google.maps.Marker({
           position: {
             lat: Number.parseFloat(m.lat),
@@ -218,6 +223,11 @@ $(function () {
           map: map,
           icon: icon,
           title: m.text,
+          label: labelStr && {
+            text: labelStr,
+            color: 'white',
+            fontFamily: 'Roboto'
+          },
           zIndex: i, //markers should be ordered by average
           // opacity: 0.1 + (m.average/5).
         });
@@ -495,8 +505,6 @@ $(function () {
   }
 
   function openReviewPanel() {
-    $('#placeDetailsModal').modal('hide'); 
-
     const m = openedMarker;
 
     let templateData = {};
@@ -529,6 +537,7 @@ $(function () {
     $('#reviewPanel .tagsContainer button').removeClass('active');
     $('#reviewPanel input:radio[name=rating]:checked').prop('checked', false);
 
+    $('#placeDetailsModal').modal('hide'); 
     $('#reviewPanel').modal('show');
     // $('#placeDetailsModal .flipper').toggleClass('flipped');
   }
