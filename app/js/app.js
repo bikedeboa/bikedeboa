@@ -210,6 +210,7 @@ $(function () {
           anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
         };
 
+        // @todo temporarily disabled this because backend still doesnt support flags for these
         // let labelStr;
         // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
         //   labelStr = '?';
@@ -223,11 +224,11 @@ $(function () {
           map: map,
           icon: icon,
           title: m.text,
-          label: labelStr && {
-            text: labelStr,
-            color: 'white',
-            fontFamily: 'Roboto'
-          },
+          // label: labelStr && {
+          //   text: labelStr,
+          //   color: 'white',
+          //   fontFamily: 'Roboto'
+          // },
           zIndex: i, //markers should be ordered by average
           // opacity: 0.1 + (m.average/5).
         });
