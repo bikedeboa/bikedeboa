@@ -362,7 +362,10 @@ body.beta #map {
 
     &.expanded {
         max-height: 800px;
-        cursor: zoom-out;
+
+        img {
+            cursor: zoom-out;
+        }
     }
 }
 
