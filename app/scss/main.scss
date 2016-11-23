@@ -321,13 +321,17 @@ body.beta #map {
     & img {
         width: 100%;
     }
+}
 
-    @media screen and (max-width: 414px) {
-      & {
-        margin-left: 0;
-        margin-right: 0;
-      }
-    }
+@media screen and (max-width: 414px) {
+  .modal-dialog {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .modal-content:before {
+    right: 4px;
+  }
 }
 
 .modal-content {
@@ -336,7 +340,7 @@ body.beta #map {
         color: $gray;
         position: absolute;
         top: -50px;
-        right: 4px;
+        right: -4px;
         font-size: 40px;
         font-weight: lighter;
         font-family: "Arial";

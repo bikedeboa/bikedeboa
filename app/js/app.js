@@ -63,7 +63,7 @@ $(function () {
       $('#placeDetails_isPublic').html(m.isPublic === true ? 'Público' : 'Restrito<br><small>(apenas clientes)</small>');
     } else {
       // $('#placeDetails_isPublic_icon').attr('src', '');
-      $('#placeDetails_isPublic').html('<small>Sem dados.</small>');
+      $('#placeDetails_isPublic').html('<small>Sem informação sobre restrição :(</small>');
     }
 
     // Structure type
@@ -77,7 +77,7 @@ $(function () {
       case 'other': structureTypeIcon = 'img/tipo_other.svg'; break;
     }
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
-    $('#placeDetails_structureType').html(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '<small>Sem dados.</small>');
+    $('#placeDetails_structureType').html(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '<small>Sem informação sobre tipo de bicicletário :(</small>');
 
     // Pic
     if (m.photo) {
