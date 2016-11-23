@@ -217,6 +217,26 @@ BIKE.Database = {
     });
   },
 
+  deletePlace: function(placeId, callback) {
+    const self = this;
+
+    $.ajax({
+      type: 'delete',
+      headers: self._headers,
+      url: self.API_URL + '/local/' + placeId,
+      error: function(e) {
+        console.error(e);
+      },
+      success: function(data) {
+        console.log('Delete successful!');
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
+    });
+  },
+
   getAllTags: function(successCB, failCB, alwaysCB) {
     const self = this;
 

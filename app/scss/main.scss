@@ -581,6 +581,10 @@ body.beta #map {
     background-color: $darkGreen;
 }
 
+#editPlaceBtn {
+    right: 95px;
+}
+
 .btn-admin {
     background: repeating-linear-gradient( 45deg, $yellow, $yellow 10px, #E9D812 10px, #E9D812 20px );
     border: 3px solid $yellow;

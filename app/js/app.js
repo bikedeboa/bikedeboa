@@ -509,7 +509,21 @@ $(function () {
       toggleLocationInputMode();
     }
     
+    
     $('#newPlaceModal').modal('show');
+
+    validateNewPlaceForm();
+  }
+
+  function deletePlace() {
+    if (openedMarker && loggedUser) {
+      if (confirm('Tem certeza que quer deletar este bicicletário?')) {
+        Database.deletePlace(openedMarker.id, () => {
+          $('#newPlaceModal').modal('hide');
+          Database.getPlaces(updateMarkers);
+        });
+      }
+    }
   }
 
   function openReviewPanel() {
@@ -577,6 +591,8 @@ $(function () {
     $('body').on('click', '#saveNewPlaceBtn', sendNewPlace);
 
     $('body').on('click', '#editPlaceBtn', openNewPlaceModal);
+    
+    $('body').on('click', '#deletePlaceBtn', deletePlace);
 
     $(':file').change(function () {
       if (this.files && this.files[0]) {
@@ -658,9 +674,9 @@ $(function () {
       map: map,
       icon: {
         url: 'img/current_position.svg', // url
-        scaledSize: new google.maps.Size(10, 10), // scaled size
+        scaledSize: new google.maps.Size(15, 15), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(5, 5), // anchor
+        anchor: new google.maps.Point(7, 7), // anchor
       }
     });
 
@@ -696,5 +712,5 @@ $(function () {
 
   setup();
   init();
-  _geolocate();
+  // _geolocate();
 });
