@@ -106,9 +106,10 @@ BIKE.Database = {
     const self = this;
 
     // Custom login
-    const isLogin = window.location.pathname === '/login';
-    let user, pw;
-    if (isLogin) {
+    const isLogin = window.location.pathname === '/admin';
+    let user = Cookies.get('user');
+    let pw;
+    if (isLogin && !user) {
       user = prompt('Usuário:','');
     }
 
@@ -124,13 +125,12 @@ BIKE.Database = {
         if (data.token && data.token.length > 0) {
           console.log('Authentication successful.');
 
-          if (isLogin) {
-            // Only place that can set this
+          if (isLogin && user) {
+            // This is the only place that should set 'loggedUser'
             loggedUser = user;
-          }
 
-          if (loggedUser) {
-            $('#locationSearch').append('<span class="logged-user"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'</span>');
+            // Save
+            Cookies.set('user', loggedUser, { expires: 1 });
           }
 
           // Set headers for future calls

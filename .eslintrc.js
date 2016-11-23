@@ -26,6 +26,7 @@ module.exports = {
     "globals": {
         "$": false,
         "google": false,
+        "Cookies": false,
 
         "SIMULATED_DELAY_MS": false,
         "MARKER_W": false,
@@ -51,5 +52,6 @@ module.exports = {
         "currentPendingRating": true,
         "uploadingPhotoBlob": true,
         "templates": true,
+        "loggedUser": true,
     }
 };

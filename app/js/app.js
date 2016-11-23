@@ -695,6 +695,14 @@ $(function () {
     showSpinner(); 
      
     Database.authenticate(() => {
+      if (loggedUser) {
+        $('#locationSearch').append('<span class="logged-user"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
+        $('.logged-user button').on('click', () => {
+          Cookies.remove('user');
+          window.location.reload();
+        });
+      }
+
       Database.getAllTags();
       Database.getPlaces(updateMarkers);
     });

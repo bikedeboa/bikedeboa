@@ -17,7 +17,8 @@ const size = require('gulp-size');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const plumber = require('gulp-plumber');
-// const fs = require('fs');
+const bowerFiles = require('main-bower-files')
+// const fs = require('fs');w
 
 
 // // Lint Task
@@ -65,13 +66,22 @@ gulp.task('scripts', () => {
     // .pipe(gulp.dest('dist/js'));
 });
 
+// @todo Rule to minify and concatenate bower libs (both JS and CSS)
+// gulp.task('bower', function(){
+//     return gulp.src('./bower.json')
+//       .pipe(bowerFiles())
+//       .pipe(plumber())
+//       .pipe(uglify())
+//       .pipe(gulp.dest('dist'));
+// });
+
 // Watch Files For Changes
 gulp.task('watch', () => {
-    // gulp.watch('js/*.js', ['lint', 'scripts']);
-    // gulp.watch('assets/*', ['images']);
-    gulp.watch('app/js/*.js', ['scripts']);
-    gulp.watch('app/scss/*.scss', ['sass']);
-    gulp.watch('bower.json', ['wiredep']);
+  // gulp.watch('js/*.js', ['lint', 'scripts']);
+  // gulp.watch('assets/*', ['images']);
+  gulp.watch('app/js/*.js', ['scripts']);
+  gulp.watch('app/scss/*.scss', ['sass']);
+  gulp.watch('bower.json', ['wiredep']);
 });
 
 gulp.task('images', () => {
