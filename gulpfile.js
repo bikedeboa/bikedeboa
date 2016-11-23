@@ -11,13 +11,15 @@ const babel = require('gulp-babel');
 const child = require('child_process');
 const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
-const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
 const size = require('gulp-size');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const plumber = require('gulp-plumber');
-const bowerFiles = require('main-bower-files')
+const mainBowerFiles = require('main-bower-files');
+const filter = require('gulp-filter');
+const flatten = require('gulp-flatten');
+const minifycss = require('gulp-clean-css');
 // const fs = require('fs');w
 
 
@@ -59,21 +61,52 @@ gulp.task('scripts', () => {
     //   console.log(e);
     //   this.emit('end');
     // })
+    // .pipe(sourcemaps.write('maps'))
+    // .pipe(gulp.dest('dist/js'))
+    .pipe(rename('app.min.js'))
+    .pipe(uglify())
     .pipe(sourcemaps.write('maps'))
-    .pipe(gulp.dest('dist/js'))
-    // .pipe(rename('app.min.js'))
-    // .pipe(uglify())
-    // .pipe(gulp.dest('dist/js'));
+    .pipe(gulp.dest('dist/js'));
 });
 
-// @todo Rule to minify and concatenate bower libs (both JS and CSS)
-// gulp.task('bower', function(){
-//     return gulp.src('./bower.json')
-//       .pipe(bowerFiles())
-//       .pipe(plumber())
-//       .pipe(uglify())
-//       .pipe(gulp.dest('dist'));
-// });
+
+// Define paths variables
+var dest_path =  'dist';
+// grab libraries files from bower_components, minify and push in /public
+gulp.task('bower', function() {
+  var jsFilter = filter('**/*.js', {restore: true}),
+      cssFilter = filter('**/*.css', {restore: true}),
+      fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
+
+  return gulp.src(mainBowerFiles(), { base: './bower_components' })
+
+  // grab vendor js files from bower_components, minify and push in /public
+  .pipe(jsFilter)
+  // .pipe(gulp.dest(dest_path + '/js/'))
+  .pipe(concat('vendors.min.js'))
+  .pipe(uglify())
+  // .pipe(rename({
+  //   suffix: ".min"
+  // }))
+  .pipe(gulp.dest(dest_path + '/js/'))
+  .pipe(jsFilter.restore)
+
+  // grab vendor css files from bower_components, minify and push in /public
+  .pipe(cssFilter)
+  .pipe(concat('vendors.min.css'))
+  // .pipe(gulp.dest(dest_path + '/css'))
+  .pipe(minifycss())
+  // .pipe(rename({
+  //     suffix: ".min"
+  // }))
+  .pipe(gulp.dest(dest_path + '/css'))
+  .pipe(cssFilter.restore)
+
+  // grab vendor font files from bower_components and push in /public
+  .pipe(fontFilter)
+  .pipe(flatten())
+  .pipe(gulp.dest(dest_path + '/fonts'));
+});
 
 // Watch Files For Changes
 gulp.task('watch', () => {
@@ -81,7 +114,7 @@ gulp.task('watch', () => {
   // gulp.watch('assets/*', ['images']);
   gulp.watch('app/js/*.js', ['scripts']);
   gulp.watch('app/scss/*.scss', ['sass']);
-  gulp.watch('bower.json', ['wiredep']);
+  gulp.watch('bower.json', ['bower']);
 });
 
 gulp.task('images', () => {
@@ -97,51 +130,10 @@ gulp.task('server', () => {
   // server.stderr.pipe(log);
 });
 
-// gulp.task('serve', () => {
-//   runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts'], () => {
-//     browserSync({
-//       notify: false,
-//       port: 9000,
-//       server: {
-//         baseDir: ['.tmp', 'app'],
-//         routes: {
-//           '/bower_components': 'bower_components'
-//         }
-//       }
-//     });
-
-//     gulp.watch([
-//       'app/*.html',
-//         'app/images/**/*',
-//       '.tmp/fonts/**/*'
-//     ]).on('change', reload);
-
-//     gulp.watch('app/styles/**/*.scss', ['styles']);
-//       gulp.watch('app/scripts/**/*.js', ['scripts']);
-//       gulp.watch('app/fonts/**/*', ['fonts']);
-//     gulp.watch('bower.json', ['wiredep', 'fonts']);
-//   });
-// });
-
-// inject bower components
-gulp.task('wiredep', () => {
-  gulp.src('app/scss/*.scss')
-    .pipe(wiredep({
-      ignorePath: /^(\.\.\/)+/
-    }))
-    .pipe(gulp.dest('app/scss'));
-
-  gulp.src('app/*.html')
-    .pipe(wiredep({
-      ignorePath: /^(\.\.\/)*\.\./ 
-    }))
-    .pipe(gulp.dest('app'));
-});
-
 gulp.task('clean', del.bind(null, ['dist']));
 
 gulp.task('build', () => {
-  runSequence(['clean', 'wiredep'], ['sass', 'scripts'], () => {
+  runSequence(['clean'], ['bower', 'sass', 'scripts'], () => {
     return gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
   });
 });
