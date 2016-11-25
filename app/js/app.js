@@ -81,7 +81,7 @@ $(function () {
 
     // Pic
     if (m.photo) {
-      $('#placeDetails_photo').attr('src', Database.API_URL + '/' + m.photo);
+      $('#placeDetails_photo').attr('src', m.photo);
     }
 
 
