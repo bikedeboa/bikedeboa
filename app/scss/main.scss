@@ -113,7 +113,7 @@ body.beta #map {
         opacity: 0;
     }
     &:hover,
-    &:active, 
+    &:active,
     &:focus {
         opacity: 1;
     }
@@ -284,7 +284,7 @@ body.beta #map {
 }
 
 #spinnerOverlay {
-    background-color: $backdropColor;   
+    background-color: $backdropColor;
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -346,7 +346,7 @@ body.beta #map {
         color: $gray;
         position: absolute;
         top: -50px;
-        right: -4px;
+        right: 4px;
         font-size: 40px;
         font-weight: lighter;
         font-family: "Arial";
@@ -587,7 +587,7 @@ body.beta #map {
 .btn.green:hover:not([disabled]),
 .btn.green:focus:not([disabled]),
 .btn.green.active:not([disabled]) {
-    color: white; 
+    color: white;
     background-color: $darkGreen;
 }
 
@@ -688,7 +688,7 @@ body.beta #map {
     &.focus:disabled,
     &:focus:disabled,
     &:hover:disabled {
-        // Override stupid bootstrap rule 
+        // Override stupid bootstrap rule
         color: rgb(250,250,250);
     }
 }
@@ -761,7 +761,7 @@ body.beta #map {
     overflow: hidden;
     position: absolute;
     z-index: -1;
-    
+
     & + label {
         position: absolute;
         top: 50%;

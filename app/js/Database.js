@@ -6,8 +6,8 @@ BIKE.Database = {
   ///////////////////
 
   // API path, without the final slash ('/')
-  API_URL: 'https://bikedeboa-api.herokuapp.com',
-  // API_URL: 'http://localhost:3000',
+  // API_URL: 'https://bikedeboa-api.herokuapp.com',
+  API_URL: 'http://localhost:3000',
   _authToken: '',
   _headers: {},
 
@@ -129,8 +129,11 @@ BIKE.Database = {
             // This is the only place that should set 'loggedUser'
             loggedUser = user;
 
-            // Save
+            // Save username in session
             Cookies.set('bikedeboa_user', loggedUser, { expires: 7 });
+
+            // Clean URL
+            History.replaceState({}, 'bike de boa', '/');
           }
 
           // Set headers for future calls

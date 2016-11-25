@@ -10,6 +10,9 @@ $(function () {
 
     openedMarker = markers[i];
     const m = openedMarker;
+
+    History.pushState({}, 'Detalhes do bicicletário', 'detalhes');
+
     let templateData = {};
 
     templateData.title = m.text;
@@ -61,7 +64,7 @@ $(function () {
 
     // Is public?
     if (m.isPublic != null) {
-      $('#placeDetails_isPublic_icon').attr('src', m.isPublic === true ? 'img/icon_public.svg' : 'img/icon_private.svg');
+      $('#placeDetails_isPublic_icon').attr('src', m.isPublic === true ? '/img/icon_public.svg' : '/img/icon_private.svg');
       $('#placeDetails_isPublic').html(m.isPublic === true ? 'Público' : 'Restrito<br><small>(apenas clientes)</small>');
     } else {
       // $('#placeDetails_isPublic_icon').attr('src', '');
@@ -71,12 +74,12 @@ $(function () {
     // Structure type
     let structureTypeIcon;
     switch (m.structureType) {
-      case 'uinvertido': structureTypeIcon = 'img/tipo_uinvertido.svg'; break;
-      case 'deroda': structureTypeIcon = 'img/tipo_deroda.svg'; break;
-      case 'trave': structureTypeIcon = 'img/tipo_trave.svg'; break;
-      case 'suspenso': structureTypeIcon = 'img/tipo_suspenso.svg'; break;
-      case 'grade': structureTypeIcon = 'img/tipo_grade.svg'; break;
-      case 'other': structureTypeIcon = 'img/tipo_other.svg'; break;
+      case 'uinvertido': structureTypeIcon = '/img/tipo_uinvertido.svg'; break;
+      case 'deroda': structureTypeIcon = '/img/tipo_deroda.svg'; break;
+      case 'trave': structureTypeIcon = '/img/tipo_trave.svg'; break;
+      case 'suspenso': structureTypeIcon = '/img/tipo_suspenso.svg'; break;
+      case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break;
+      case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
     }
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
     $('#placeDetails_structureType').html(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '<small>Sem informação sobre tipo de bicicletário :(</small>');
@@ -158,7 +161,7 @@ $(function () {
     controlText.style.color = '#30bb6a';
     controlText.style.width = '100%';
     controlText.style.paddingTop = '13px';
-    controlText.innerHTML = '<img src="img/geolocation.svg" style="width: 20px;"/>';
+    controlText.innerHTML = '<img src="/img/geolocation.svg" style="width: 20px;"/>';
     controlUI.appendChild(controlText);
 
     // Setup the click event listeners
@@ -350,6 +353,7 @@ $(function () {
   // @todo refactor this, it's confusing
   function sendNewPlace() {
     $('#newPlaceModal').modal('hide');
+    History.back();
     showSpinner();
 
     const isUpdate = openedMarker && loggedUser;
@@ -514,12 +518,15 @@ $(function () {
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
 
       $('#placeDetailsModal').modal('hide');
+      History.back();
     } else {
       toggleLocationInputMode();
     }
 
 
     $('#newPlaceModal').modal('show');
+
+    History.pushState({}, 'Novo bicicletário', 'novo');
 
     validateNewPlaceForm();
   }
@@ -529,6 +536,7 @@ $(function () {
       if (confirm('Tem certeza que quer deletar este bicicletário?')) {
         Database.deletePlace(openedMarker.id, () => {
           $('#newPlaceModal').modal('hide');
+          History.back();
           Database.getPlaces(updateMarkers);
         });
       }
@@ -567,6 +575,7 @@ $(function () {
     validateReviewForm();
 
     $('#placeDetailsModal').modal('hide');
+    History.replaceState({}, 'Nova avaliação', 'avaliar');
     $('#reviewPanel').modal('show');
     // $('#placeDetailsModal .flipper').toggleClass('flipped');
   }
@@ -607,6 +616,13 @@ $(function () {
     $('body').on('click', '#locationQueryBtn', searchLocation);
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
+
+    // @todo FIX ME! This is getting triggered when changing between modals...
+    // $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
+    //   if (History.getState().title !== 'bike de boa') {
+    //     History.back();
+    //   }
+    // });
 
 
     // New place panel
@@ -659,6 +675,7 @@ $(function () {
 
       $('#reviewPanel').modal('hide');
       $('#placeDetailsModal').modal('hide');
+      History.back();
 
       showSpinner();
 
@@ -732,7 +749,7 @@ $(function () {
     _geolocationMarker = new google.maps.Marker({
       map: map,
       icon: {
-        url: 'img/current_position.svg', // url
+        url: '/img/current_position.svg', // url
         scaledSize: new google.maps.Size(15, 15), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(7, 7), // anchor
@@ -742,6 +759,17 @@ $(function () {
     _initTriggers();
 
     _initTemplates();
+
+    // Bind trigger for history changes
+    History.Adapter.bind(window,'statechange',function(){
+      const state = History.getState();
+
+      if (state.title === 'bike de boa') {
+        $('#reviewPanel').modal('hide');
+        $('#placeDetailsModal').modal('hide');
+        $('#newPlaceModal').modal('hide');
+      }
+    });
   }
 
   function init() {
