@@ -60,6 +60,14 @@ body.beta #map {
     transition: all 0.5s ease-in-out;
     opacity: 1;
 
+
+    input {
+        width: 100%;
+        font-size: 14px;
+        padding: 0 15px;
+        font-weight: lighter;
+    }
+
     &.coolHide {
         top: -10px;
         opacity: 0;
@@ -125,13 +133,6 @@ body.beta #map {
     width: calc(100% - 30px);
 
     display: table;
-}
-
-#locationSearch input {
-    width: 100%;
-    font-size: 14px;
-    padding: 0 0 0 15px;
-    font-weight: lighter;
 }
 
 #filterBtn img {

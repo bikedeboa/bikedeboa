@@ -110,9 +110,16 @@ $(function () {
               callback();
             }
           },
-          () => {
+          (error) => {
               // @todo show something more informative to the user
-            console.error('Geolocation failed.');
+            console.error('Geolocation failed!');
+            console.error(error);
+
+            // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
+            if(error.message.indexOf('Only secure origins are allowed') == 0) {
+              // Disable button since it won't work anyway in the current domain.
+              $('#geolocationBtn').hide();
+            }
 
             if (callback && typeof callback === 'function') {
               callback();
@@ -125,10 +132,10 @@ $(function () {
     }
   }
 
-  function centerControl(controlDiv) {
+  function geolocationBtn(controlDiv) {
         // Set CSS for the control border.
     var controlUI = document.createElement('div');
-    controlUI.id = 'centerControlBtn';
+    controlUI.id = 'geolocationBtn';
     controlUI.style.backgroundColor = '#fff';
     controlUI.style.border = '2px solid #fff';
     controlUI.style.borderRadius = '50%';
@@ -332,7 +339,7 @@ $(function () {
     $('#addPlace').toggleClass('active');
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
-    $('#centerControlBtn').toggle();
+    $('#geolocationBtnBtn').toggle();
     $('#locationSearch').toggleClass('coolHide');
 
     toggleMarkers();
@@ -664,10 +671,10 @@ $(function () {
 
     // Geolocalization button
     if (navigator.geolocation) {
-      let centerControlDiv = document.createElement('div');
-      new centerControl(centerControlDiv, map);
-      centerControlDiv.index = 1;
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(centerControlDiv);
+      let geolocationBtnDiv = document.createElement('div');
+      new geolocationBtn(geolocationBtnDiv, map);
+      geolocationBtnDiv.index = 1;
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationBtnDiv);
     }
 
     _geolocationMarker = new google.maps.Marker({
