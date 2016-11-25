@@ -22,6 +22,9 @@ const flatten = require('gulp-flatten');
 const minifycss = require('gulp-clean-css');
 // const fs = require('fs');w
 
+const BOWER_PATH = './bower_components';
+const DEST_PATH =  'dist';
+
 
 // // Lint Task
 // gulp.task('lint', () => {
@@ -69,43 +72,48 @@ gulp.task('scripts', () => {
     .pipe(gulp.dest('dist/js'));
 });
 
-
-// Define paths variables
-var dest_path =  'dist';
-// grab libraries files from bower_components, minify and push in /public
+// grab libraries files from bower_components, minify and push in DEST_PATH
 gulp.task('bower', function() {
   var jsFilter = filter('**/*.js', {restore: true}),
       cssFilter = filter('**/*.css', {restore: true}),
       fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
 
-  return gulp.src(mainBowerFiles(), { base: './bower_components' })
+  console.log(mainBowerFiles());
 
-  // grab vendor js files from bower_components, minify and push in /public
+  return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
+
+  // grab vendor js files from bower_components, minify and push in DEST_PATH
   .pipe(jsFilter)
-  // .pipe(gulp.dest(dest_path + '/js/'))
+  // .pipe(gulp.dest(DEST_PATH + '/js/'))
   .pipe(concat('vendors.min.js'))
   .pipe(uglify())
   // .pipe(rename({
   //   suffix: ".min"
   // }))
-  .pipe(gulp.dest(dest_path + '/js/'))
+  .pipe(gulp.dest(DEST_PATH + '/js/'))
   .pipe(jsFilter.restore)
 
-  // grab vendor css files from bower_components, minify and push in /public
+  // grab vendor css files from bower_components, minify and push in DEST_PATH
   .pipe(cssFilter)
   .pipe(concat('vendors.min.css'))
-  // .pipe(gulp.dest(dest_path + '/css'))
+  // .pipe(gulp.dest(DEST_PATH + '/css'))
   .pipe(minifycss())
   // .pipe(rename({
   //     suffix: ".min"
   // }))
-  .pipe(gulp.dest(dest_path + '/css'))
-  .pipe(cssFilter.restore)
+  .pipe(gulp.dest(DEST_PATH + '/css'))
+  .pipe(cssFilter.restore);
 
-  // grab vendor font files from bower_components and push in /public
-  .pipe(fontFilter)
-  .pipe(flatten())
-  .pipe(gulp.dest(dest_path + '/fonts'));
+  // grab vendor font files from bower_components and push in DEST_PATH
+  // .pipe(fontFilter)
+  // .pipe(flatten())
+  // .pipe(gulp.dest(DEST_PATH + '/fonts'));
+});
+
+gulp.task('bower-fonts', function() {
+  return gulp.src('./bower_components/**/*.{eot,svg,ttf,woff,woff2}')
+    .pipe(flatten())
+    .pipe(gulp.dest(DEST_PATH + '/fonts'));
 });
 
 // Watch Files For Changes
@@ -114,7 +122,7 @@ gulp.task('watch', () => {
   // gulp.watch('assets/*', ['images']);
   gulp.watch('app/js/*.js', ['scripts']);
   gulp.watch('app/scss/*.scss', ['sass']);
-  gulp.watch('bower.json', ['bower']);
+  gulp.watch('bower.json', ['bower', 'bower-fonts']);
 });
 
 gulp.task('images', () => {
@@ -133,7 +141,7 @@ gulp.task('server', () => {
 gulp.task('clean', del.bind(null, ['dist']));
 
 gulp.task('build', () => {
-  runSequence(['clean'], ['bower', 'sass', 'scripts'], () => {
+  runSequence(['clean'], ['bower', 'bower-fonts', 'sass', 'scripts'], () => {
     return gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
   });
 });
