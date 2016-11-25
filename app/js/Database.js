@@ -65,7 +65,7 @@ BIKE.Database = {
     if (!endpoint) {
       console.error('no endpoint');
     }
-  
+
     $.ajax({
       type: type,
       headers: self._headers,
@@ -107,7 +107,7 @@ BIKE.Database = {
 
     // Custom login
     const isLogin = window.location.pathname === '/admin';
-    let user = Cookies.get('user');
+    let user = Cookies.get('bikedeboa_user');
     let pw;
     if (isLogin && !user) {
       user = prompt('Usuário:','');
@@ -130,7 +130,7 @@ BIKE.Database = {
             loggedUser = user;
 
             // Save
-            Cookies.set('user', loggedUser, { expires: 1 });
+            Cookies.set('bikedeboa_user', loggedUser, { expires: 7 });
           }
 
           // Set headers for future calls
@@ -150,7 +150,45 @@ BIKE.Database = {
     });
   },
 
-  sendReview: function(placeId, rating, tags, callback) {
+  deleteReview: function(reviewId, callback) {
+    const self = this;
+
+    $.ajax({
+      type: 'delete',
+      headers: self._headers,
+      url: self.API_URL + '/review/' + reviewId,
+      error: function(e) {
+        console.error(e);
+      },
+      success: function(data) {
+        console.log('Review deletion successful.');
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
+    });
+  },
+
+  updateReview: function(reviewObj, callback) {
+    const self = this;
+
+    $.ajax({
+      type: 'put',
+      headers: self._headers,
+      url: self.API_URL + '/review/' + reviewObj.databaseId,
+      data: reviewObj,
+      success: function(data) {
+        console.log('Review update successful.');
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
+    });
+  },
+
+  sendReview: function(reviewObj, callback) {
     const self = this;
 
     $.ajax({
@@ -158,15 +196,16 @@ BIKE.Database = {
       headers: self._headers,
       url: self.API_URL + '/review',
       data: {
-        idLocal: placeId,
-        rating: rating,
-        tags: tags
+        idLocal: reviewObj.placeId,
+        rating: reviewObj.rating,
+        tags: reviewObj.tags
       },
       success: function(data) {
-        console.log('Review success.');
+        console.log('Review creation successful.');
+        console.log(data);
 
         if (callback && typeof callback === 'function') {
-          callback();
+          callback(data.id);
         }
       }
     });
@@ -333,7 +372,7 @@ BIKE.Database = {
         console.log(data);
 
         let updatedMarker = markers.find(m => {return m.id === placeId; });
-        
+
         Object.assign(updatedMarker, data);
 
         updatedMarker._hasDetails = true;

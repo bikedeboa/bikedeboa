@@ -5,6 +5,8 @@ BIKE.MockedDatabase = {
   // G L O B A L S //
   ///////////////////
 
+  hasDoneInitialMock: false,
+
   API_URL: '',
 
   ALL_TAGS: ['Iluminado', 'Movimentado', 'Monitorado', 'Fácil acesso', 'Espaçoso', 'Coberto'],
@@ -1072,7 +1074,7 @@ BIKE.MockedDatabase = {
       m.id = '' + i++;
 
       m.isPublic = Math.round(Math.random() * 10 ) > 2 ? true : false;
-      
+
       // Number of reviews and checkins
       m.reviews = Math.floor(Math.random() * 20);
       m.checkin = Math.floor(Math.random() * 100);
@@ -1092,7 +1094,7 @@ BIKE.MockedDatabase = {
         m.tags.push({
           name: tagObj.name,
           count: Math.floor(Math.random() * Math.random() * 20)
-        });  
+        });
       });
 
       // Structure types
@@ -1110,7 +1112,10 @@ BIKE.MockedDatabase = {
     var self = this;
 
     setTimeout(function() {
-      markers = self.mockData(self.allMarkers);
+      if (!self.hasDoneInitialMock) {
+        markers = self.mockData(self.allMarkers);
+        self.hasDoneInitialMock = true;
+      }
 
       console.log('Retrieved ' + markers.length + ' places from hardcoded DB.');
 
@@ -1140,8 +1145,24 @@ BIKE.MockedDatabase = {
     }, getSimulatedDelay());
   },
 
-  sendReview: function(placeId, rating, tags, callback) {
-    var thisPlace = markers.find(function(m) { return m.id===placeId; });
+  deleteReview: function(reviewId, callback) {
+    setTimeout(function() {
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
+    }, getSimulatedDelay());
+  },
+
+  updateReview: function(reviewObj, callback) {
+    setTimeout(function() {
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
+    }, getSimulatedDelay());
+  },
+
+  sendReview: function(reviewObj, callback) {
+    var thisPlace = markers.find(function(m) { return m.id===reviewObj.placeId; });
     if (thisPlace) {
       thisPlace.reviews++;
     }

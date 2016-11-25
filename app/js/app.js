@@ -30,6 +30,8 @@ $(function () {
       templateData.tags = m.tags
         .sort((a, b) => {return b.count - a.count;})
         .map(t => {
+          // Tag opacity is proportional to count
+          // @todo refactor this to take into account Handlebars native support for arrays
           const opacity = t.count/MAX_TAG_COUNT + MIN_TAG_OPACITY;
           return t.count > 0 ? `<span class="tagDisplay" style="opacity: ${opacity}"><span class="badge">${t.count}</span> ${t.name}</span>` : '';
         })
@@ -133,13 +135,13 @@ $(function () {
   }
 
   function geolocationBtn(controlDiv) {
-        // Set CSS for the control border.
+    // Set CSS for the control border.
     var controlUI = document.createElement('div');
     controlUI.id = 'geolocationBtn';
     controlUI.style.backgroundColor = '#fff';
     controlUI.style.border = '2px solid #fff';
     controlUI.style.borderRadius = '50%';
-        // controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+    // controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
     controlUI.style.cursor = 'pointer';
     controlUI.style.margin = '0 20px 90px';
     controlUI.style.width = '50px';
@@ -151,14 +153,14 @@ $(function () {
 
     controlDiv.appendChild(controlUI);
 
-        // Set CSS for the control interior.
+    // Set CSS for the control interior.
     var controlText = document.createElement('div');
     controlText.style.color = '#30bb6a';
     controlText.style.width = '100%';
     controlText.style.paddingTop = '13px';
     controlText.innerHTML = '<img src="img/geolocation.svg" style="width: 20px;"/>';
     controlUI.appendChild(controlText);
-  
+
     // Setup the click event listeners
     controlUI.addEventListener('click', () => {
       showSpinner();
@@ -171,7 +173,7 @@ $(function () {
 
   function onMarkerClick(markerIndex) {
     const marker = markers[markerIndex];
-    
+
     if (marker._hasDetails) {
       openDetailsModal(markerIndex);
     } else {
@@ -267,7 +269,7 @@ $(function () {
       if (status === google.maps.GeocoderStatus.OK) {
         map.panTo(results[0].geometry.location);
 
-        // Set marker on located place
+        // Create marker on located place
         // new google.maps.Marker({
         //     map: map,
         //     position: results[0].geometry.location
@@ -346,7 +348,7 @@ $(function () {
   }
 
   // @todo refactor this, it's confusing
-  function sendNewPlace() { 
+  function sendNewPlace() {
     $('#newPlaceModal').modal('hide');
     showSpinner();
 
@@ -425,7 +427,7 @@ $(function () {
       //   anchor: new google.maps.Point(17, 34),
       //   scaledSize: new google.maps.Size(35, 35)
       // }));
-      
+
       marker.setPosition(place.geometry.location);
       marker.setVisible(true);
 
@@ -447,7 +449,7 @@ $(function () {
   }
 
   function showSpinner () {
-    console.log('showspinner'); 
+    console.log('showspinner');
     $('#spinnerOverlay').fadeIn();
   }
 
@@ -515,8 +517,8 @@ $(function () {
     } else {
       toggleLocationInputMode();
     }
-    
-    
+
+
     $('#newPlaceModal').modal('show');
 
     validateNewPlaceForm();
@@ -538,37 +540,66 @@ $(function () {
 
     let templateData = {};
     templateData.title = m.text;
-    templateData.address = '';
-    
+    templateData.address = ''; //@todo
+
+    const previousReview = getReviewFromSession(m.id);
+    console.log(previousReview);
+
     // Tags
     templateData.tagsButtons = tags.map(t => {
-      return `<button class="btn btn-tag" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
+      const isPrepoped = previousReview && previousReview.tags.find( (i) => {return parseInt(i.id) === t.id;} );
+      // @todo refactor this to use Handlebars' native support for arrays
+      return `<button class="btn btn-tag ${isPrepoped && 'active'}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
     }).join('');
 
     // Compile template
     $('#reviewPanelTemplatePlaceholder').html(templates.reviewPanelTemplate(templateData));
 
-    
-    // Template is rendered, start jquerying 
 
-    // Reset fields
-    if (m.text) {
-      $('#review_title').show();
-      $('#review_titleIcon').show();
-      $('#review_title').text(m.text);
-    } else {
-      $('#review_title').hide();
-      $('#review_titleIcon').hide();
+    // Template is rendered, start jquerying
+    //
+
+    // Prepopulate rating
+    if (previousReview) {
+      $('input[name=rating]').val([previousReview.rating]);
     }
 
-    $('#sendReviewBtn').prop('disabled', true);
+    validateReviewForm();
 
-    $('#reviewPanel .tagsContainer button').removeClass('active');
-    $('#reviewPanel input:radio[name=rating]:checked').prop('checked', false);
-
-    $('#placeDetailsModal').modal('hide'); 
+    $('#placeDetailsModal').modal('hide');
     $('#reviewPanel').modal('show');
     // $('#placeDetailsModal .flipper').toggleClass('flipped');
+  }
+
+  function getReviewFromSession(placeId) {
+    const reviewsArray = Cookies.getJSON('bikedeboa_reviews') || [];
+    return reviewsArray.find((i) => {return i.placeId === placeId;});
+  }
+
+  function saveOrUpdateReviewCookie(reviewObj) {
+    const reviewsArray = Cookies.getJSON('bikedeboa_reviews') || [];
+
+    // Search for previous entered review
+    let review;
+    if (reviewsArray && reviewsArray.length > 0) {
+      review = reviewsArray.find((i) => {return i.placeId === reviewObj.placeId;});
+    }
+
+    if (review) {
+      // Update current review
+      review.placeId = reviewObj.placeId;
+      review.rating = reviewObj.rating;
+      review.tags = reviewObj.tags;
+    } else {
+      // Push a new one
+      reviewsArray.push({
+        placeId: reviewObj.placeId,
+        rating: reviewObj.rating,
+        tags: reviewObj.tags
+      });
+    }
+
+    Cookies.set('bikedeboa_reviews', reviewsArray, { expires: 365 });
   }
 
   function _initTriggers() {
@@ -598,7 +629,7 @@ $(function () {
     $('body').on('click', '#saveNewPlaceBtn', sendNewPlace);
 
     $('body').on('click', '#editPlaceBtn', openNewPlaceModal);
-    
+
     $('body').on('click', '#deletePlaceBtn', deletePlace);
 
     $(':file').change(function () {
@@ -628,20 +659,41 @@ $(function () {
 
       $('#reviewPanel').modal('hide');
       $('#placeDetailsModal').modal('hide');
+
       showSpinner();
-      Database.sendReview(openedMarker.id, currentPendingRating, reviewTags, () => {
-        Database.getPlaces(updateMarkers);
-      });
+
+      const reviewObj = {
+        placeId: openedMarker.id,
+        rating: currentPendingRating,
+        tags: reviewTags
+      };
+
+      const callback = () => {
+        Database.sendReview(reviewObj, (reviewId) => {
+          reviewObj.databaseId = reviewId;
+          saveOrUpdateReviewCookie(reviewObj);
+
+          Database.getPlaces(updateMarkers);
+        });
+      };
+
+      const previousReview = getReviewFromSession(openedMarker.id);
+      if (previousReview) {
+        // Delete previous
+        Database.deleteReview(previousReview.databaseId, callback);
+      } else {
+        callback();
+      }
     });
 
 
     // Details panel
     $('body').on('click', '#openDirectionsBtn', () => {
-      window.location.href = `https://www.google.com/maps/dir//${openedMarker.lat},${openedMarker.lng}`; 
+      window.location.href = `https://www.google.com/maps/dir//${openedMarker.lat},${openedMarker.lng}`;
     });
 
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
-    
+
     $('body').on('click', '.modal-header img', e => {
       $(e.target).parent().toggleClass('expanded');
     });
@@ -699,8 +751,8 @@ $(function () {
       Database = BIKE.Database;
     }
 
-    showSpinner(); 
-     
+    showSpinner();
+
     Database.authenticate(() => {
       if (loggedUser) {
         $('#locationSearch').append('<span class="logged-user"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');

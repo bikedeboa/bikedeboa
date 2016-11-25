@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" type="text/css" href="css/vendors.min.css"/>
-        
+
         <link rel="stylesheet" type="text/css" href="css/main.css"/>
 
 
@@ -62,7 +62,7 @@
         </div>
 
         <div id="placeDetailsModalTemplatePlaceholder"></div>
-        
+
         <div id="reviewPanelTemplatePlaceholder"></div>
 
         <!-- View Details Modal -->
@@ -74,13 +74,13 @@
                             <div class="modal-header">
                                 <!-- <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="position: absolute; color: white; font-size: 20px; background: rgba(0,0,0,0.5); padding: 5px; right: 10px; top: 10px; pointer-events: none; "></span> -->
                                 <img id="placeDetails_photo">
-                                
+
                                 {{#if admin}}
                                     <button id="editPlaceBtn" type="button" class="btn btn-lg btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
                                     <button id="deletePlaceBtn" type="button" class="btn btn-lg btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
                                 {{/if}}
                             </div>
-                            
+
                             <div class="modal-body">
                                 <div id="placeDetails_heading" class="title">
                                     {{title}}
@@ -131,7 +131,7 @@
                                     </div>
                                 {{/if}}
                             </div>
-                            
+
                             <div class="modal-footer">
                                 <div class="col-half">
                                     <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
@@ -162,13 +162,16 @@
                             <!-- <div class="modal-header">
                                 <img id="review_photo" src="img/bg_header.png">
                             </div> -->
-                            
+
                             <div class="modal-body">
-                                <div id="review_title" class="title">
-                                    {{title}}
-                                </div>
+                                {{#if title}}
+                                    <div id="review_title" class="title">
+                                        {{title}}
+                                    </div>
+                                {{/if}}
 
                                 <div class="review">
+                                    <h2>Vantagens</h2>
                                     <span id="review_average" class="average"></span>
                                     <fieldset class="rating">
                                         <input type="radio" id="star5" name="rating" value="5" />
