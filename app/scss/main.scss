@@ -334,8 +334,8 @@ body.beta #map {
 
 @media screen and (max-width: 414px) {
   .modal-dialog {
-    margin-left: 0;
-    margin-right: 0;
+    // margin-left: 0;
+    // margin-right: 0;
   }
 
   .modal-content:before {
@@ -384,7 +384,7 @@ body.beta #map {
         }
     }
 
-    &:before {
+    &.hasImage:before {
         position: absolute;
         top: 10px;
         right: 10px;
@@ -583,8 +583,10 @@ body.beta #map {
         height: auto;
     }
 
-    div {
-        margin-top: 5px;
+    .icon-label {
+        margin-top: 10px;
+        color: #828b90;
+        font-weight: 100;
     }
 
     small {
@@ -628,22 +630,23 @@ body.beta #map {
     background-color: $darkGreen;
 }
 
-#editPlaceBtn {
-    right: 95px;
+#deletePlaceBtn {
+    left: 70px;
 }
 
 .btn-admin {
+    position: absolute;
+    top: 10px;
+    left: 10px;
     background: repeating-linear-gradient( 45deg, $yellow, $yellow 10px, #E9D812 10px, #E9D812 20px );
     border: 3px solid $yellow;
     color: white;
-    position: absolute;
-    bottom: -29px;
-    right: 20px;
-    border-radius: 50%;
-    width: 58px;
-    height: 58px;
+    border-radius: 10px;
+    width: 50px;
+    height: 50px;
     z-index: 3;
-    box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .3);
+    font-size: 18px;
 
     // transition: background-color 0.2s ease, color 0.2s ease;
 
@@ -652,6 +655,10 @@ body.beta #map {
     &:hover {
         background: white;
         color: $yellow;
+    }
+
+    .glyphicon {
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
     }
 }
 
@@ -711,10 +718,10 @@ body.beta #map {
     transition: all 0.2s ease;
     border-radius: 0;
     background-color: $lightGreen;
-    font-size: 18px;
+    font-size: 15px;
     font-family: $headingFont;
     text-transform: uppercase;
-    // font-weight: 700;
+    font-weight: 700;
 
     transition: background-color 0.5s ease;
 

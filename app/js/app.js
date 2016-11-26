@@ -55,27 +55,11 @@ $(function () {
     // Photo
     templateData.photoUrl = m.photo;
 
-
-    // Render handlebars template
-    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
-
-
-    // Template is rendered, start jquerying
-
-    $('#placeDetails_heading').toggle(m.text && m.text.length > 0);
-
-    $('.numreviews').toggle(m.reviews && m.reviews > 0);
-
-    // Average - stars
-    $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
-
     // Is public?
     if (m.isPublic != null) {
-      $('#placeDetails_isPublic_icon').attr('src', m.isPublic === true ? '/img/icon_public.svg' : '/img/icon_private.svg');
-      $('#placeDetails_isPublic').html(m.isPublic === true ? 'Público' : 'Restrito<br><small>(apenas clientes)</small>');
+      templateData.isPublic = m.isPublic === true;
     } else {
-      // $('#placeDetails_isPublic_icon').attr('src', '');
-      $('#placeDetails_isPublic').html('<small>Sem informação sobre restrição :(</small>');
+      templateData.noIsPublicData = true;
     }
 
     // Structure type
@@ -88,11 +72,25 @@ $(function () {
       case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break;
       case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
     }
-    $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
-    $('#placeDetails_structureType').html(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '<small>Sem informação sobre tipo de bicicletário :(</small>');
+    if (m.structureType) {
+      templateData.structureTypeLabel = 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType];
+    } else {
+      templateData.structureTypeLabel = '<small>Sem informação sobre tipo de bicicletário :(</small>';
+    }
+    templateData.structureTypeIcon = structureTypeIcon;
 
 
-    $('#placeDetailsModal .flipper').removeClass('flipped');
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
+    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
+
+    // Template is rendered, start jquerying
+    $('.numreviews').toggle(m.reviews && m.reviews > 0);
+    $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
+
+
+    // $('#placeDetailsModal .flipper').removeClass('flipped');
     $('#placeDetailsModal').modal('show');
   }
 
@@ -354,8 +352,8 @@ $(function () {
 
   // @todo refactor this, it's confusing
   function sendNewPlace() {
-    $('#newPlaceModal').modal('hide');
-    History.back();
+    // $('#newPlaceModal').modal('hide');
+    History.pushState({}, 'bike de boa', '/');
     showSpinner();
 
     const isUpdate = openedMarker && loggedUser;
@@ -508,6 +506,7 @@ $(function () {
     $('#newPlaceModal #titleInput').val('');
     $('#newPlaceModal .typeIcon').removeClass('active');
     $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
+    $('#newPlaceModal #photoInputBg').attr('src', '');
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
     if (openedMarker && loggedUser) {
@@ -520,8 +519,8 @@ $(function () {
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
 
-      $('#placeDetailsModal').modal('hide');
-      History.back();
+      // $('#placeDetailsModal').modal('hide');
+      History.pushState({}, 'bike de boa', '/');
     } else {
       toggleLocationInputMode();
     }
@@ -538,8 +537,8 @@ $(function () {
     if (openedMarker && loggedUser) {
       if (confirm('Tem certeza que quer deletar este bicicletário?')) {
         Database.deletePlace(openedMarker.id, () => {
-          $('#newPlaceModal').modal('hide');
-          History.back();
+          // $('#newPlaceModal').modal('hide');
+          History.pushState({}, 'bike de boa', '/');
           Database.getPlaces(updateMarkers);
         });
       }
@@ -563,7 +562,10 @@ $(function () {
       return `<button class="btn btn-tag ${isPrepoped && 'active'}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
     }).join('');
 
-    // Compile template
+    
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
     $('#reviewPanelTemplatePlaceholder').html(templates.reviewPanelTemplate(templateData));
 
 
@@ -626,7 +628,7 @@ $(function () {
     // @todo FIX ME! This is getting triggered when changing between modals...
     // $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
     //   if (History.getState().title !== 'bike de boa') {
-    //     History.back();
+    // pushtory.replaceState({}, 'bike de boa', '/');
     //   }
     // });
 
@@ -694,9 +696,9 @@ $(function () {
           saveOrUpdateReviewCookie(reviewObj);
 
           // Update screen state
-          $('#reviewPanel').modal('hide');
-          $('#placeDetailsModal').modal('hide');
-          History.back();
+          // $('#reviewPanel').modal('hide');
+          // $('#placeDetailsModal').modal('hide');
+          History.pushState({}, 'bike de boa', '/');
 
           // Update markers data
           Database.getPlaces(updateMarkers);
@@ -793,6 +795,9 @@ $(function () {
           Cookies.remove('user');
           window.location.reload();
         });
+      } else {
+        // Reset URL
+        History.replaceState({}, 'bike de boa', '/');
       }
 
       Database.getAllTags();

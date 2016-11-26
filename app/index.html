@@ -71,25 +71,27 @@
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
-                            <div class="modal-header">
+                            <div class="modal-header {{#if photoUrl}}hasImage{{/if}}">
                                 <!-- <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="position: absolute; color: white; font-size: 20px; background: rgba(0,0,0,0.5); padding: 5px; right: 10px; top: 10px; pointer-events: none; "></span> -->
                                 {{#if photoUrl}}
                                     <img src="{{photoUrl}}"/>
                                 {{/if}}
 
                                 {{#if admin}}
-                                    <button id="editPlaceBtn" type="button" class="btn btn-lg btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
-                                    <button id="deletePlaceBtn" type="button" class="btn btn-lg btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
+                                    <button id="editPlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
+                                    <button id="deletePlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
                                 {{/if}}
                             </div>
 
                             <div class="modal-body">
-                                <div id="placeDetails_heading" class="title">
-                                    {{title}}
-                                    <p>
-                                        {{address}}
-                                    </p>
-                                </div>
+                                {{#if title}}
+                                    <div id="placeDetails_heading" class="title">
+                                        {{title}}
+                                        <p>
+                                            {{address}}
+                                        </p>
+                                    </div>
+                                {{/if}}
 
                                 <div class="review">
                                     <span class="average">{{average}}</span>
@@ -117,13 +119,32 @@
 
                                 <div class="info row">
                                     <div class="col-half">
-                                        <img id="placeDetails_isPublic_icon"/>
-                                        <div id="placeDetails_isPublic"></div>
+                                        {{#if noIsPublicData}}
+                                            <div class="icon-label">
+                                                <small>Sem informação sobre restrição :(</small>
+                                            </div>
+                                        {{else}}
+                                            {{#if isPublic}}
+                                                <img src="/img/icon_public.svg"/>
+                                                <div class="icon-label"> Público </div>
+                                            {{else}}
+                                                <img src="/img/icon_private.svg"/>
+                                                <div class="icon-label">
+                                                    Restrito<br>
+                                                    <small>(apenas clientes)</small>
+                                                </div>
+                                            {{/if}}
+                                        {{/if}}
                                     </div>
                                     <div class="col-half">
-                                        <img id="placeDetails_structureType_icon">
-                                        <div id="placeDetails_structureType"></div>
+                                        {{#if structureTypeIcon}}
+                                            <img id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
+                                        {{/if}}
+                                        <div class="icon-label" id="placeDetails_structureType">
+                                            {{{structureTypeLabel}}}
+                                        </div>
                                     </div>
+
                                     <!-- <div>{{numCheckins}}</div> -->
                                 </div>
 
