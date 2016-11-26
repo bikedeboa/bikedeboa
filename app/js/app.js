@@ -569,14 +569,15 @@ $(function () {
 
     // Prepopulate rating
     if (previousReview) {
+      currentPendingRating = previousReview.rating;
       $('input[name=rating]').val([previousReview.rating]);
     }
 
     validateReviewForm();
 
     $('#placeDetailsModal').modal('hide');
-    History.replaceState({}, 'Nova avaliação', 'avaliar');
     $('#reviewPanel').modal('show');
+    History.replaceState({}, 'Nova avaliação', 'avaliar');
     // $('#placeDetailsModal .flipper').toggleClass('flipped');
   }
 
@@ -599,12 +600,14 @@ $(function () {
       review.placeId = reviewObj.placeId;
       review.rating = reviewObj.rating;
       review.tags = reviewObj.tags;
+      review.databaseId = reviewObj.databaseId;
     } else {
       // Push a new one
       reviewsArray.push({
         placeId: reviewObj.placeId,
         rating: reviewObj.rating,
-        tags: reviewObj.tags
+        tags: reviewObj.tags,
+        databaseId: reviewObj.databaseId
       });
     }
 
@@ -673,10 +676,6 @@ $(function () {
         reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
       }
 
-      $('#reviewPanel').modal('hide');
-      $('#placeDetailsModal').modal('hide');
-      History.back();
-
       showSpinner();
 
       const reviewObj = {
@@ -687,9 +686,16 @@ $(function () {
 
       const callback = () => {
         Database.sendReview(reviewObj, (reviewId) => {
+          // Update internal state
           reviewObj.databaseId = reviewId;
           saveOrUpdateReviewCookie(reviewObj);
 
+          // Update screen state
+          $('#reviewPanel').modal('hide');
+          $('#placeDetailsModal').modal('hide');
+          History.back();
+
+          // Update markers data
           Database.getPlaces(updateMarkers);
         });
       };

@@ -290,7 +290,9 @@ body.beta #map {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1031;
+    z-index: 9999;
+    
+    // Leave it visible by default so it's the first thing rendered in the screen
     // display: none;
 }
 

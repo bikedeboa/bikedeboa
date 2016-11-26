@@ -133,7 +133,7 @@ BIKE.Database = {
             Cookies.set('bikedeboa_user', loggedUser, { expires: 7 });
 
             // Clean URL
-            History.replaceState({}, 'bike de boa', '/');
+            // History.replaceState({}, 'bike de boa', '/');
           }
 
           // Set headers for future calls
@@ -155,6 +155,11 @@ BIKE.Database = {
 
   deleteReview: function(reviewId, callback) {
     const self = this;
+
+    if (!reviewId) {
+      console.error('ERROR no review ID to delete.')
+      return;
+    }
 
     $.ajax({
       type: 'delete',
