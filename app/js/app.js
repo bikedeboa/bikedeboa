@@ -795,8 +795,10 @@ $(function () {
           Cookies.remove('user');
           window.location.reload();
         });
-      } else {
-        // Reset URL
+      }
+
+      // Reset URL
+      if (window.location.pathname !== '/admin') {
         History.replaceState({}, 'bike de boa', '/');
       }
 
