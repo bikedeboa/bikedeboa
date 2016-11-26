@@ -36,8 +36,8 @@ const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NA
 /////////////////////////
 //                     //
 //                     //
-// const isDemoMode = window.location.pathname !== '/admin'; //@todo temp
-const isDemoMode = false;
+// let isDemoMode = window.location.pathname !== '/admin'; //@todo temp
+let isDemoMode = false;
 //                     //
 //                     //
 /////////////////////////

@@ -27,7 +27,7 @@ $(function () {
     }
 
     // Tags
-    const MAX_TAG_COUNT = 20;
+    const MAX_TAG_COUNT = m.reviews;
     const MIN_TAG_OPACITY = 0.2;
     if (m.tags && m.tags.length > 0) {
       templateData.tags = m.tags
