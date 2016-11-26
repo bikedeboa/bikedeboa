@@ -328,6 +328,7 @@ body.beta #map {
 
     & img {
         width: 100%;
+        height: 100%;
     }
 }
 
@@ -363,21 +364,55 @@ body.beta #map {
     position: relative;
     background-image: url(/img/bg_header.png);
     min-height: 170px;
+    height: 170px;
     max-height: 170px;
-    overflow: hidden;
+    overflow: visible;
 
-    transition: max-height 0.5s ease;
+    // transition: max-height 0.5s ease;
 
     img {
         cursor: zoom-in;
+        object-fit: cover;
     }
 
     &.expanded {
         max-height: 800px;
+        height: auto;
 
         img {
             cursor: zoom-out;
         }
+    }
+
+    &:before {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: rgba(0,0,0,0.7);
+        background: rgba(255,255,255,0.8);
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 20px;
+        content: "\e096";
+        font-family: 'Glyphicons Halflings';
+        font-weight: 400;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        pointer-events: none;
+    }
+
+    &.expanded:before {
+        content: "\e097";
+    }
+}
+
+#newPlaceModal {
+    .modal-header:before {
+        display: none;
+    }
+
+    .modal-header img {
+        opacity: 0.5;
     }
 }
 
@@ -563,9 +598,9 @@ body.beta #map {
         background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
     }
 
-    .modal-header {
-        overflow: visible;
-    }
+    // .modal-header {
+    //     overflow: visible;
+    // }
 }
 
 #placeDetails_isPublic img {

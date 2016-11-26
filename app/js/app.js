@@ -49,6 +49,13 @@ $(function () {
       templateData.admin = true;
     }
 
+    // Route button
+    templateData.gmapsRedirectUrl = `https://www.google.com/maps/dir//${m.lat},${m.lng}`;
+
+    // Photo
+    templateData.photoUrl = m.photo;
+
+
     // Render handlebars template
     $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
 
@@ -83,11 +90,6 @@ $(function () {
     }
     $('#placeDetails_structureType_icon').attr('src', structureTypeIcon);
     $('#placeDetails_structureType').html(m.structureType ? 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType] : '<small>Sem informação sobre tipo de bicicletário :(</small>');
-
-    // Pic
-    if (m.photo) {
-      $('#placeDetails_photo').attr('src', m.photo);
-    }
 
 
     $('#placeDetailsModal .flipper').removeClass('flipped');
@@ -516,6 +518,7 @@ $(function () {
       $(`#newPlaceModal .typeIcon[data-type="${m.structureType}"]`).addClass('active');
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
+      $('#newPlaceModal #photoInputBg').attr('src', m.photo);
 
       $('#placeDetailsModal').modal('hide');
       History.back();
@@ -711,10 +714,6 @@ $(function () {
 
 
     // Details panel
-    $('body').on('click', '#openDirectionsBtn', () => {
-      window.location.href = `https://www.google.com/maps/dir//${openedMarker.lat},${openedMarker.lng}`;
-    });
-
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
 
     $('body').on('click', '.modal-header img', e => {

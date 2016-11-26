@@ -125,7 +125,7 @@ BIKE.Database = {
         if (data.token && data.token.length > 0) {
           console.log('Authentication successful.');
 
-          if (isLogin && user) {
+          if (user) {
             // This is the only place that should set 'loggedUser'
             loggedUser = user;
 

@@ -73,7 +73,9 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <!-- <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="position: absolute; color: white; font-size: 20px; background: rgba(0,0,0,0.5); padding: 5px; right: 10px; top: 10px; pointer-events: none; "></span> -->
-                                <img id="placeDetails_photo">
+                                {{#if photoUrl}}
+                                    <img src="{{photoUrl}}"/>
+                                {{/if}}
 
                                 {{#if admin}}
                                     <button id="editPlaceBtn" type="button" class="btn btn-lg btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
@@ -135,10 +137,9 @@
                             <div class="modal-footer">
                                 <div class="col-half">
                                     <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
-                                    <button id="openDirectionsBtn" class="btn green btn-footer">
+                                    <a href="{{{gmapsRedirectUrl}}}" target="_blank" class="btn green btn-footer">
                                         <!-- <span class="glyphicon glyphicon-play"></span> -->
-                                        Traçar Rota
-                                    </button>
+                                        Traçar Rota <span class="glyphicon glyphicon-new-window" style="font-size: 0.8em; margin-left: 5px;"></span> </a>
                                 </div>
                                 <div class="col-half">
                                     <button id="openReviewPanelBtn" class="btn green btn-footer">
