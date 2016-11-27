@@ -16,7 +16,7 @@ $(function () {
     let templateData = {};
 
     templateData.title = m.text;
-    templateData.address = '';
+    templateData.address = m.address;
 
     // Average
     if (m.average) {
@@ -93,6 +93,27 @@ $(function () {
     // $('#placeDetailsModal .flipper').removeClass('flipped');
     $('#placeDetailsModal').modal('show');
   }
+
+  window.geocodeLatLng = function(lat, lng, successCB, failCB) {
+    const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+
+    geocoder.geocode({'location': latlng}, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        if (results[0]) {
+          if (successCB && typeof successCB === 'function') {
+            successCB(results[0].formatted_address);
+          }
+        } else {
+          console.error('No results found');
+        }
+      } else {
+        console.error('Geocoder failed due to: ' + status);
+        if (failCB && typeof failCB === 'function') {
+          failCB();
+        }
+      }
+    });
+  };
 
   function _geolocate(toCenter, callback) {
     if (navigator.geolocation) {
@@ -550,7 +571,7 @@ $(function () {
 
     let templateData = {};
     templateData.title = m.text;
-    templateData.address = ''; //@todo
+    templateData.address = m.address;
 
     const previousReview = getReviewFromSession(m.id);
     console.log(previousReview);

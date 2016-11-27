@@ -449,6 +449,13 @@ body.beta #map {
         font-family: $headingFont;
         font-weight: 700;
 
+        .address {
+            font-size: 14px;
+            color: $gray;
+            margin-top: 0px;
+            margin-left: 40px;
+        }
+
         &:before {
             content: '';
             display: inline-block;
@@ -468,7 +475,7 @@ body.beta #map {
     margin-top: 10px;
 
     .numreviews {
-        color: #828b90;
+        color: $gray;
         font-size: 1.2em;
         font-weight: 100;
         vertical-align: text-top;
@@ -585,7 +592,7 @@ body.beta #map {
 
     .icon-label {
         margin-top: 10px;
-        color: #828b90;
+        color: $gray;
         font-weight: 100;
     }
 
