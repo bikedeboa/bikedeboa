@@ -16,6 +16,50 @@ BIKE.Database = {
   // M E T H O D S //
   ///////////////////
 
+  // @todo
+  _getDatabaseBackupJSON: function() {
+    let json = '';
+    let fullMarkers = [];
+    
+    // fullMarkers = getAll ...
+
+    fullMarkers.forEach( m => {
+      json += JSON.stringify({
+        text: m.text,
+        description: m.description,
+        lat: m.lat,
+        lng: m.lng,
+        address: m.address
+      });
+    });
+  },
+
+  _fillAllMarkersAddresses: function(i = 0) {
+    const max = markers.length;
+
+    if (i!=markers.length) {
+      let m = markers[i];
+
+      console.warn(`${i} of ${max}`);
+
+      geocodeLatLng(
+        m.lat, m.lng,
+        (address) => {
+          console.log(m.lat, m.lng, m.id);
+          console.log('address');
+          BIKE.Database.customAPICall('PUT','local/'+m.id, {address: address}, () => {
+            _fillAllMarkersAddresses(i+1);
+          });
+        }, () => {
+          // Failed, probably due to quota limites. Try again after 2s
+          setTimeout(() => {
+            _fillAllMarkersAddresses(i);
+          }, 2000)
+        }
+      );  
+    }
+  },
+
   _removeAll: function() {
     const self = this;
 

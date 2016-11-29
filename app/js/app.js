@@ -428,7 +428,7 @@ $(function () {
 
 
     autocomplete.addListener('place_changed', () => {
-      infowindow.close();
+      // infowindow.close();
       marker.setVisible(false);
       const place = autocomplete.getPlace();
       if (!place.geometry) {
