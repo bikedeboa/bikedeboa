@@ -16,22 +16,30 @@ BIKE.Database = {
   // M E T H O D S //
   ///////////////////
 
-  // @todo
+  // @todo Improve this to automatically save to a file.
   _getDatabaseBackupJSON: function() {
-    let json = '';
-    let fullMarkers = [];
-    
-    // fullMarkers = getAll ...
+    BIKE.Database.customAPICall('get','local', {}, (data) => {
+      let json = '';
+      let fullMarkers = [];
 
-    fullMarkers.forEach( m => {
-      json += JSON.stringify({
-        text: m.text,
-        description: m.description,
-        address: m.address,
-        lat: m.lat,
-        lng: m.lng,
-        photo: m.photo,
-      });
+      if (data && data.length > 0) {
+        fullMarkers = data;
+        
+        fullMarkers.forEach( m => {
+          // json += JSON.stringify({
+          //   text: m.text,
+          //   description: m.description,
+          //   address: m.address,
+          //   lat: m.lat,
+          //   lng: m.lng,
+          //   photo: m.photo,
+          // });
+          json += JSON.stringify(m);
+        });
+
+        console.log('Database backup DONE');
+        console.log(json);
+      }
     });
   },
 
@@ -91,7 +99,7 @@ BIKE.Database = {
 
       console.warn(`${i} of ${max}`);
 
-      geocodeLatLng(
+      BIKE.geocodeLatLng(
         m.lat, m.lng,
         (address) => {
           console.log(m.lat, m.lng, m.id);
@@ -105,7 +113,7 @@ BIKE.Database = {
             _fillAllMarkersAddresses(i);
           }, 2000)
         }
-      );  
+      );
     }
   },
 
@@ -169,7 +177,7 @@ BIKE.Database = {
         console.log(data);
 
         if (callback && typeof callback === 'function') {
-          callback();
+          callback(data);
         }
       }
     });

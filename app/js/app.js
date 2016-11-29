@@ -47,7 +47,7 @@ $(function () {
     templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
     if (loggedUser) {
-      templateData.admin = true;
+      templateData.isAdmin = true;
     }
 
     // Route button
@@ -92,27 +92,6 @@ $(function () {
     // $('#placeDetailsModal .flipper').removeClass('flipped');
     $('#placeDetailsModal').modal('show');
   }
-
-  window.geocodeLatLng = function(lat, lng, successCB, failCB) {
-    const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
-
-    geocoder.geocode({'location': latlng}, function(results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
-        if (results[0]) {
-          if (successCB && typeof successCB === 'function') {
-            successCB(results[0].formatted_address);
-          }
-        } else {
-          console.error('No results found');
-        }
-      } else {
-        console.error('Geocoder failed due to: ' + status);
-        if (failCB && typeof failCB === 'function') {
-          failCB();
-        }
-      }
-    });
-  };
 
   function _geolocate(toCenter, callback) {
     if (navigator.geolocation) {
@@ -379,15 +358,9 @@ $(function () {
     const isUpdate = openedMarker && loggedUser;
     let place = {};
 
-    // Update case
-    if (isUpdate) {
-      place.lat = openedMarker.lat;
-      place.lng = openedMarker.lng;
-    } else {
-      const mapCenter = map.getCenter();
-      place.lat = mapCenter.lat();
-      place.lng = mapCenter.lng();
-    }
+    place.lat = isUpdate ? openedMarker.lat : newMarkerTemp.lat;
+    place.lng = isUpdate ? openedMarker.lng : newMarkerTemp.lng;
+    place.address = !isUpdate && newMarkerTemp.address;
 
     place.text = $('#newPlaceModal #titleInput').val();
     place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
@@ -519,7 +492,16 @@ $(function () {
   }
 
   function openNewPlaceModal() {
+    function activateModal() {
+      $('#newPlaceModal').modal('show');
+
+      History.pushState({}, 'Novo bicicletário', 'novo');
+
+      validateNewPlaceForm();
+    }
+
     // Reset fields
+    newMarkerTemp = {};
     _uploadingPhotoBlob = '';
     $('#newPlaceModal .little-pin').toggleClass('gray', true);
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
@@ -529,6 +511,7 @@ $(function () {
     $('#newPlaceModal #photoInputBg').attr('src', '');
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
+    // Not creating a new one, but editing
     if (openedMarker && loggedUser) {
       // @todo refactor this, probably separate into different functions
 
@@ -541,16 +524,29 @@ $(function () {
 
       // $('#placeDetailsModal').modal('hide');
       History.pushState({}, 'bike de boa', '/');
+
     } else {
       toggleLocationInputMode();
+
+      // Automatically get the address
+      const mapCenter = map.getCenter();
+      newMarkerTemp.lat = mapCenter.lat();
+      newMarkerTemp.lng = mapCenter.lng();
+      BIKE.geocodeLatLng(
+        newMarkerTemp.lat, newMarkerTemp.lng,
+        (address) => {
+          console.log('Resolved location address:');
+          console.log(address);
+          newMarkerTemp.address = address;
+          // activateModal();
+        }, () => {
+          // Failed
+          // activateModal();
+        }
+      );
     }
 
-
-    $('#newPlaceModal').modal('show');
-
-    History.pushState({}, 'Novo bicicletário', 'novo');
-
-    validateNewPlaceForm();
+    activateModal();
   }
 
   function deletePlace() {

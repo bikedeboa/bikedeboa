@@ -49,8 +49,9 @@ module.exports = {
         "areMarkersHidden": true,
         "addLocationMode": true,
         "openedMarker": true,
+        "newMarkerTemp": true,
         "currentPendingRating": true,
-        "uploadingPhotoBlob": true,
+        "_uploadingPhotoBlob": true,
         "templates": true,
         "loggedUser": true,
     }

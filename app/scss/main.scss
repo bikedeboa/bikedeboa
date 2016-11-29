@@ -359,13 +359,16 @@ body.beta #map {
 
     .text-input-wrapper {
         position: relative;
+        font-family: "Raleway", sans-serif;
+        font-weight: 700;
+        font-size: 20px;
 
         & > .little-pin {
             position: absolute;
             top: 15px;
             left: 12px;
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
             background-image: url(/img/pin_green.svg);
             background-size: 70%;
             background-repeat: no-repeat;
@@ -382,7 +385,7 @@ body.beta #map {
     }
 
     #titleInput {
-        padding-left: 30px;
+        padding-left: 35px;
     }
 
     .tagsContainer {
@@ -494,7 +497,14 @@ body.beta #map {
         color: $gray;
     }
 
-    & .title{
+    .address {
+        font-size: 14px;
+        color: $gray;
+        margin-top: 0px;
+        margin-left: 40px;
+    }
+
+    & .title {
         font-size: 26px;
         padding-left: 10px;
         vertical-align: middle;
@@ -502,25 +512,18 @@ body.beta #map {
         padding-bottom: 10px;
         font-family: $headingFont;
         font-weight: 700;
+    }
 
-        .address {
-            font-size: 14px;
-            color: $gray;
-            margin-top: 0px;
-            margin-left: 40px;
-        }
-
-        &:before {
-            content: '';
-            display: inline-block;
-            width: 22px;
-            height: 28px;
-            background-image: url(/img/pin_green.svg);
-            background-size: 100%;
-            background-repeat: no-repeat;
-            margin-right: 10px;
-            vertical-align: text-top;
-        }
+    & .title-icon:before {
+        content: '';
+        display: inline-block;
+        width: 22px;
+        height: 28px;
+        background-image: url(/img/pin_green.svg);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        margin-right: 10px;
+        vertical-align: text-top;
     }
 }
 
