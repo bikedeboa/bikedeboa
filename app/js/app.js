@@ -840,5 +840,5 @@ $(function () {
 
   setup();
   init();
-  // _geolocate();
+  _geolocate();
 });
