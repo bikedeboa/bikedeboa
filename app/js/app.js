@@ -17,6 +17,7 @@ $(function () {
 
     templateData.title = m.text;
     templateData.address = m.address;
+    templateData.description = m.description;
 
     // Average
     if (m.average) {
@@ -74,8 +75,6 @@ $(function () {
     }
     if (m.structureType) {
       templateData.structureTypeLabel = 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType];
-    } else {
-      templateData.structureTypeLabel = '<small>Sem informação sobre tipo de bicicletário :(</small>';
     }
     templateData.structureTypeIcon = structureTypeIcon;
 

@@ -14,7 +14,7 @@ BIKE.MockedDatabase = {
   allMarkers: [
     {
       text: 'Zaffari Supermercados',
-      description: '<img src="https://lh6.googleusercontent.com/proxy/JZQtdNG4_NMZF3sKjhDlYJX-3lPsY1gXdfp0GBvg3gjN8YXcyaBwpT50ZfhvyJSzdju42i6RpjQXH0ZS9U33qe9tdZpA7scwzXKPg__SDUf5heefUV1m3FWUpt90RhspmS3glGoVsi-FCRl41n6zzTRyfGc0t4c" height="200" width="auto" /><br><br>Detalhe: coberto',
+      description: 'Detalhe: coberto',
       lng: '-51.2226847',
       lat: '-30.051518600000005',
     },
@@ -25,19 +25,19 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Panvel Moinhos',
-      description: 'Na frente da Panvel tem bicicletário e não precisa ser cliente para estacionar ali.<br><br>http://www.ctsbrasil.org/node/106',
+      description: 'Na frente da Panvel tem bicicletário e não precisa ser cliente para estacionar ali.',
       lng: '-51.200999',
       lat: '-30.0246',
     },
     {
       text: 'Shopping Moinhos de Vento',
-      description: 'Bonitos, mas poderia ter sinalização que é um bicicletário.<br><br>http://www.ctsbrasil.org/node/236',
+      description: 'Bonitos, mas poderia ter sinalização que é um bicicletário.',
       lng: '-51.201428',
       lat: '-30.023906000000004',
     },
     {
       text: 'Shopping Total',
-      description: '<img src="https://lh3.googleusercontent.com/proxy/egBNou1e3teLqEltPIW4t3npyiQXhJz5iN903KHQMzDDBl1lQ_ABJbQoh-gqfOYas0_uVtITlrzaq2zOtr5BqHVMhc_jQHxJxg" height="200" width="auto" /><br><br>Não parece um bicicletário, mas sim uma decoração: uma grande mola de ferro deitada no chão, não tem sinalização mas é realmente pro ciclista!<br><br>Em frente à loja da Reebok.',
+      description: 'Não parece um bicicletário, mas sim uma decoração: uma grande mola de ferro deitada no chão, não tem sinalização mas é realmente pro ciclista!<br><br>Em frente à loja da Reebok.',
       lng: '-51.21231800000001',
       lat: '-30.025956000000004',
     },
@@ -89,13 +89,11 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'SUBWAY Goethe',
-      description: 'http://www.biketech-rs.com.br/novidades_item.asp?novidade_id=75',
       lng: '-51.192169',
       lat: '-30.028677999999996',
     },
     {
       text: 'Todo Saúde',
-      description: 'http://www.biketech-rs.com.br/novidades_item.asp?novidade_id=75',
       lng: '-51.204082',
       lat: '-30.025526000000003',
     },
@@ -143,7 +141,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Mercado do Bom Fim',
-      description: 'Suporte no chão para dez bicicletas.<br>FOTO (http://portoimagem.files.wordpress.com/2011/01/imagem64229.jpg?w=600&h=400)',
+      description: 'Suporte no chão para dez bicicletas.',
       lng: '-51.211052',
       lat: '-30.036517',
     },
@@ -248,13 +246,13 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Maxxi Atacado - Sarandi',
-      description: '<img src="https://lh5.googleusercontent.com/proxy/CJB3Ows7GnGSy4H_YtCr8xdiOieJjUxT_K7MIwwlPAXg3bvLbog9XQ1cP_Co8VNkWEbL68Jm0scA3PPUtxn2vGSXwmuv6XYg88BKYlNNX542NOxcXRZgzLQ5c0cKBl_1Iye78E_hP29gBHLFZhXV_RNL843B1nk" height="200" width="auto" /><br><br>Possui 10 vagas',
+      description: 'Possui 10 vagas',
       lng: '-51.115682',
       lat: '-29.982553',
     },
     {
       text: 'Mercado Público - Largo Glênio Peres',
-      description: '<img src="https://lh3.googleusercontent.com/proxy/f_7h8zfW0ZoUDqt2CXAZjPjBdPVnrpHYN3andQw0C7efFzQYv4rJG8lNdMidXiwccXvHNiX054F7iPXTz-dGhue7sKA9yn_6aMLEsBoIyfuR3-U7J_i1JOtLAcsRf_c70_FrV9NJ_q2d-etY4X_92qog96K3gVQ" height="200" width="auto" /><br><br>Bicicletários ficam sob as escadas, nas entradas do Mercado. Use sempre tranca u-lock, pois o furto de bikes é alto.<br><br>http://vadebici.wordpress.com/2011/04/16/bicletario-do-mercado-em-uso/<br><br>Também tem os bicicletários dentro do Mercado, embaixo das escadas de ferro, mas tem que erguê-la para encaixar: <br><br>http://valternagelstein.blogspot.com/2011/01/bicicletarios-ja-estao-disponiveis-no.html',
+      description: 'Bicicletários ficam sob as escadas, nas entradas do Mercado.<br>Também tem os bicicletários dentro do Mercado, embaixo das escadas de ferro, mas tem que erguê-la para encaixar.',
       lng: '-51.227767',
       lat: '-30.027693000000003',
     },
@@ -271,7 +269,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Paseo Zona Sul',
-      description: '<img src="https://lh5.googleusercontent.com/proxy/S-lpCqjTHGCNbGYK25TfJlV1Ns344SOsmZ_smSStF0aXlsumORUGx4YXE0ewXgipWqKNHMv8t9DjBvA13_WEpUaUCkUrRellgo95fiI83oo" height="200" width="auto" /><br><br>Bicicletário do Paseo Zona Sul. Próximo a entrada do shopping.<br><br>Além do bicicletário o Paseo oferece empréstimo de bicicletas sem custo, que pode ser encontrado no estacionamento do shopping.',
+      description: 'Bicicletário do Paseo Zona Sul. Próximo a entrada do shopping.<br><br>Além do bicicletário o Paseo oferece empréstimo de bicicletas sem custo, que pode ser encontrado no estacionamento do shopping.',
       lng: '-51.253892',
       lat: '-30.104798',
     },
@@ -330,7 +328,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Estádio Beira-Rio',
-      description: 'Bicicletário dentro do Gigantinho, acesso pelo portão 1<br><br>http://www.internacional.com.br/pagina.php?modulo=2&setor=18&codigo=23627',
+      description: 'Bicicletário dentro do Gigantinho, acesso pelo portão 1',
       lng: '-51.234269',
       lat: '-30.064971',
     },
@@ -383,7 +381,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Conjunto Comercial Canoas',
-      description: 'O bicicletário fica no estacionamento, além do espaço para amarrar a bicicleta há um segurança que entrega um papel identificando o dono e a bicicleta (ele pergunta o teu nome e descreve a bici, tipo "cinza com preto") e o horário, só é possível retirar a bicicleta apresentando esse papel.',
+      description: 'O bicicletário fica no estacionamento, além do espaço para amarrar a bicicleta há um segurança que entrega um papel identificando o dono e a bicicleta e o horário. Só é possível retirar a bicicleta apresentando esse papel.',
       lng: '-51.178898',
       lat: '-29.916164',
     },
@@ -442,7 +440,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Mascavo Sucos e Lanches',
-      description: 'Joao Alfredo 638, esq. Lopo Gonçalves.<br><br>O bar oferece um pátio interno transformado em estacionamento para as bicis. <br><br> DESCONTO NO ALMOÇO PARA QUEM FOR PEDALANDO <br><br>O "Mascavo" é união da clássica lancheria de bairro, com as preocupaçoes conteporaneas- saude,bem estar e sustentabilidade. Bicicletario, cisterna, produtos organicos e de agricultura familiar. 3225 2952',
+      description: 'O bar oferece um pátio interno transformado em estacionamento para as bicis.',
       lng: '-51.2245918',
       lat: '-30.0425354',
     },
@@ -466,7 +464,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Anexo da Assembleia Legislativa do RS',
-      description: 'Em frente ao Anexo da Assembleia Legislativa,  Rua Duque de Caxias 968, há aquelas estruturas de concreto para contenção de veículos na calçada. É ali onde ficam presas as motocicletas. Como há ganchos de ferro nas estruturas de concreto, é possível prender as bicicletas ali.',
+      description: 'Em frente ao Anexo da Assembleia Legislativa, há aquelas estruturas de concreto para contenção de veículos na calçada, onde ficam presas as motocicletas. Como há ganchos de ferro nas estruturas de concreto é possível prender as bicicletas ali.',
       lng: '-51.2314367',
       lat: '-30.0332462',
     },
@@ -495,13 +493,13 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Restaurante Prato Verde ',
-      description: '<img src="https://lh6.googleusercontent.com/proxy/usvsJaKicoSLCpbQzxtTU3XXLBZ1fHlH3kbwlRh-echx-gBleTP6gH1po3GHVliyrYMPxmkhwSd64EEqrI8HywgrUcxSq4YrHjod3IxbQM4" height="200" width="auto" /><br><br>2 Paraciclos de 5 lugares',
+      description: '2 Paraciclos de 5 lugares',
       lng: '-51.211226',
       lat: '-30.037479',
     },
     {
       text: 'Estação Bicicletas - Chalé da Praça XV',
-      description: '<img src="https://lh3.googleusercontent.com/proxy/y4xcyXUzoeWAp4egk6zKHTcjVEfIBeQV7XQnpWEVFH8bSlFJmEZ4lmi47tjwCHmXWQcIVTwpweUK2H5GuoJMtcoJwW_-0Rd1Ee2lpb-2L2Cc" height="200" width="auto" /><br><br>Era no Mercado, mudou para o Chalé.',
+      description: 'Era no Mercado, mudou para o Chalé.',
       lng: '-51.227371',
       lat: '-30.028315',
     },
@@ -519,7 +517,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Bicicletário no estacionamento',
-      description: '<img src="https://lh4.googleusercontent.com/proxy/3FqaF7bY3aUtZSQjb_03T_11Yfs5i78b7OsEBBDZPUmuaWmgr8biGpH5_G2gEe-HUFZTim92TLLT0IFyta22F8vAMKyxwg2mnEoPV4anYyM" height="200" width="auto" /><br><br>O bicicletário não é mais no subsolo.Agora está junto a primeira cancela, logo na entrada. Tem espaço para 4 ou 5 bicicletas.<br><br> <br>Local coberto e sempre com guardas por perto.',
+      description: 'O bicicletário não é mais no subsolo.Agora está junto a primeira cancela, logo na entrada. Tem espaço para 4 ou 5 bicicletas.<br><br> <br>Local coberto e sempre com guardas por perto.',
       lng: '-51.196804',
       lat: '-30.025482',
     },
@@ -567,13 +565,13 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'UFRGS - Campus do Vale -  Bloco IV',
-      description: '<img src="https://lh3.googleusercontent.com/proxy/5aAe7TUBe4SXTvOldCw6uer8W7EDXV3GOFGGPNJ08v29zwoks3slEBAZwCk39HY8CN5GJYpNFLt0bzHy2YWgtNBinxtxpydAHbUz49tbs88" height="200" width="auto" /><br><br>Bicicletário do tipo suspenso. 4 lugares. Próximo ao novo RU e da parada de ônibus do bloco IV.',
+      description: 'Bicicletário do tipo suspenso. 4 lugares. Próximo ao novo RU e da parada de ônibus do bloco IV.',
       lng: '-51.12012',
       lat: '-30.067519999999995',
     },
     {
       text: 'UFRGS - Biblioteca Física',
-      description: '<img src="https://lh3.googleusercontent.com/proxy/Y-oQ_2uZOkAHZzZgizxjhhwdRAERokCBWi6N0RDPvgsOc8_SLz2CYa5gI5yClwdS9wiaomICWUIUECReTDBGzJ4ki9MhTk_Y-7Yhky6yqpY" height="200" width="auto" /><br><br>5 lugares, bem na frente da porta da biblioteca.',
+      description: '5 lugares, bem na frente da porta da biblioteca.',
       lng: '-51.12012500000001',
       lat: '-30.073495',
     },
@@ -615,7 +613,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'UFRGS - Informática',
-      description: '<img src="https://lh6.googleusercontent.com/proxy/I0PnUieoPr1UO-xNZctSRkkGRezjYuULzSl76o8QFMudld99a58GFYV2cbjxo3tgZFIAA1rIMmoTgNmzg5-mCqFZ2Gwc_T6dzReV4c4kt60" height="200" width="auto" /><br><br>5 vagas junto ao instituto de Informática e ao Departamento de Engenharia de Minas.',
+      description: '5 vagas junto ao instituto de Informática e ao Departamento de Engenharia de Minas.',
       lng: '-51.121386',
       lat: '-30.068402',
     },
@@ -715,7 +713,6 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Gatolândia Cat Shop',
-      description: 'Rua Olavo Bilac, 219',
       lng: '-51.217541',
       lat: '-30.04328',
     },
@@ -835,7 +832,7 @@ BIKE.MockedDatabase = {
     },
     {
       text: 'Mercado BIG',
-      description: '<img src="https://lh4.googleusercontent.com/proxy/zPnt99kUwLIZmbq8zuc20JwnXTbfsq4MJS9u1JjZVDRJH7rYkvMqtZJm0Ocn7c-tddla7Es-FuDJuk6w4F08MBIzNcIwN69VmrGnOTwvbYPR" height="200" width="auto" /><br><br>Há bicicletário no estacionamento coberto, junto com as motos. As vagas são do modelo "U invertido" e costuma haver segurança em uma guarita próxima. Indicação de entrada pela Av. Chuí.',
+      description: 'Há bicicletário no estacionamento coberto, junto com as motos. As vagas são do modelo "U invertido" e costuma haver segurança em uma guarita próxima. Indicação de entrada pela Av. Chuí.',
       lng: '-51.2446438',
       lat: '-30.0832289',
     },
@@ -882,20 +879,10 @@ BIKE.MockedDatabase = {
       lat: '-30.03735',
     },
     {
-      title: 'Ponto 186',
-      lng: '-51.236801',
-      lat: '-29.898252',
-    },
-    {
       text: 'Estacionamento FAPA',
       description: 'Logo passando as cancelas dos carros, em frente ao espaço das motos. Descoberto, para aproximadamente 5 bicicletas.',
       lng: '-51.122244',
       lat: '-30.0319936',
-    },
-    {
-      title: 'Ponto 188',
-      lng: '-51.21238230000001',
-      lat: '-30.0493707',
     },
     {
       text: 'Colégio Estadual Piratini',
@@ -998,11 +985,6 @@ BIKE.MockedDatabase = {
       description: 'bicicletário ao ar livre com razoável segurança, uma vez que há um portão de acesso com guarita.',
       lng: '-51.1632228',
       lat: '-29.8856206',
-    },
-    {
-      title: 'Point 199',
-      lng: '-51.226138',
-      lat: '-30.034691000000002',
     },
     {
       text: 'Bicicletário na Escola Parobé',

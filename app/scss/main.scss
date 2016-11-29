@@ -356,6 +356,59 @@ body.beta #map {
         cursor: pointer;
         pointer-events: none;
     }
+
+    .text-input-wrapper {
+        position: relative;
+
+        & > .little-pin {
+            position: absolute;
+            top: 15px;
+            left: 12px;
+            width: 18px;
+            height: 18px;
+            background-image: url(/img/pin_green.svg);
+            background-size: 70%;
+            background-repeat: no-repeat;
+
+            &.gray {
+                background-image: url(/img/pin_gray.svg);
+            }
+        }
+    }
+
+    .text-input {
+        padding: 10px;
+        width: 100%;
+    }
+
+    #titleInput {
+        padding-left: 30px;
+    }
+
+    .tagsContainer {
+        text-align: center;
+        border-top: 1px solid #eee;
+        padding: 20px 0;
+        margin-top: 10px;
+
+        h2 {
+            font-family: $headingFont;
+            margin: 10px 0;
+        }
+    }
+
+    .description {
+        margin: 10px;
+        padding: 10px 30px 20px;
+        /* color: #828b90; */
+        /* border-top: 1px solid #eee; */
+        background: rgb(250,250,250);
+
+        h2 {
+            margin-top: 0;
+            font-size: 12px;
+        }
+    }
 }
 
 
@@ -433,6 +486,7 @@ body.beta #map {
         font-size: 14px;
         color: #999999;
         text-align: center;
+        text-transform: uppercase;
     }
 
     & p {
@@ -581,6 +635,8 @@ body.beta #map {
 .info {
     padding: 10px 5%;
     text-align: center;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
 
     img {
         margin: 0 5px;
@@ -741,46 +797,6 @@ body.beta #map {
     &:hover:disabled {
         // Override stupid bootstrap rule
         color: rgb(250,250,250);
-    }
-}
-
-.text-input-wrapper {
-    position: relative;
-
-    & > .little-pin {
-        position: absolute;
-        top: 15px;
-        left: 12px;
-        width: 18px;
-        height: 18px;
-        background-image: url(/img/pin_green.svg);
-        background-size: 70%;
-        background-repeat: no-repeat;
-
-        &.gray {
-            background-image: url(/img/pin_gray.svg);
-        }
-    }
-}
-
-.text-input {
-    padding: 10px;
-    width: 100%;
-}
-
-#titleInput {
-    padding-left: 30px;
-}
-
-.tagsContainer {
-    text-align: center;
-    border-top: 1px solid #eee;
-    padding: 20px 0;
-    margin-top: 10px;
-
-    h2 {
-        font-family: $headingFont;
-        margin: 10px 0;
     }
 }
 

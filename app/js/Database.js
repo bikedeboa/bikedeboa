@@ -27,11 +27,60 @@ BIKE.Database = {
       json += JSON.stringify({
         text: m.text,
         description: m.description,
+        address: m.address,
         lat: m.lat,
         lng: m.lng,
-        address: m.address
+        photo: m.photo,
       });
     });
+  },
+
+
+  _fillAllDescriptionsRec: function(index = 0) {
+    const max = markers.length;
+
+    if (index!=markers.length) {
+      let m = markers[index];
+
+      console.warn(`${index} of ${max}`);
+
+      const key = m.lat+m.lng;
+      const desc = window._hashmap[key];
+      if (desc) { 
+        console.log(desc);
+        BIKE.Database.customAPICall('PUT', 'local/'+m.id,
+          {description: desc},
+          () => {this._fillAllDescriptionsRec(index+1);}
+        );
+      } else {
+        this._fillAllDescriptionsRec(index+1);
+      }
+    }
+  },
+
+  _fillAllDescriptions: function() {
+    var allMarkers = BIKE.MockedDatabase.allMarkers;
+    window._hashmap = {};
+    for(let i=0; i<allMarkers.length; i++) {
+      const m = allMarkers[i];
+      const key = m.lat+m.lng;
+
+      if (m.description && m.description.length > 255) {
+        console.error('Description too big for database!');
+        console.error(m);
+        return false;
+      }
+
+      if (window._hashmap[key]) {
+        console.error('same key!');
+        console.error(key + ' : ' + window._hashmap[key]);
+        console.error(m);
+      }
+
+      window._hashmap[key] = m.description;
+    }
+
+    this._fillAllDescriptionsRec();
   },
 
   _fillAllMarkersAddresses: function(i = 0) {

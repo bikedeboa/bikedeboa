@@ -115,13 +115,11 @@
                                     <span class="numreviews">{{numReviews}}</span>
                                 </div>
 
-                                <hr>
-
-                                <div class="info row">
+                                <div class="info clearfix">
                                     <div class="col-half">
                                         {{#if noIsPublicData}}
                                             <div class="icon-label">
-                                                <small>Sem informação sobre restrição :(</small>
+                                                <small>Sem informação sobre restrição</small>
                                             </div>
                                         {{else}}
                                             {{#if isPublic}}
@@ -141,7 +139,11 @@
                                             <img id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                                         {{/if}}
                                         <div class="icon-label" id="placeDetails_structureType">
-                                            {{{structureTypeLabel}}}
+                                            {{#if structureTypeLabel}}
+                                                {{{structureTypeLabel}}}
+                                            {{else}}
+                                                <small>Sem informação sobre tipo de bicicletário</small>
+                                            {{/if}}
                                         </div>
                                     </div>
 
@@ -151,6 +153,15 @@
                                 {{#if tags}}
                                     <div class="tagsContainer">
                                         {{{tags}}}
+                                    </div>
+                                {{/if}}
+
+                                {{#if description}}
+                                    <div class="description">
+                                        <h2><span class="glyphicon glyphicon-info-sign "></span>  Mais informações</h2>
+                                        <small>
+                                            {{{description}}}
+                                        </small>
                                     </div>
                                 {{/if}}
                             </div>
@@ -274,18 +285,7 @@
                               <!-- <div data-type="grade" class="typeIcon"> <img src="/img/tipo_grade.svg"/> </div> -->
                               <div data-type="other" class="typeIcon"> <img src="/img/tipo_other.svg"/> </div>
                             </div>
-
-                           <!--  <hr>
-
-                            <h2>Características</h2>
-
-                            <div class="tagsContainer">
-                                <button class="btn btn-tag" data-toggle="button">Iluminado</button>
-                                <button class="btn btn-tag" data-toggle="button">Movimentado</button>
-                                <button class="btn btn-tag" data-toggle="button">Monitorado</button>
-                                <button class="btn btn-tag" data-toggle="button">Fácil acesso</button>
-                                <button class="btn btn-tag" data-toggle="button">Espaçoso</button>
-                            </div> -->
+                            
                         </div>
 
                         <div class="modal-footer">
