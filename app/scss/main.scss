@@ -293,7 +293,7 @@ body.beta #map {
     top: 0;
     left: 0;
     z-index: 9999;
-    
+
     // Leave it visible by default so it's the first thing rendered in the screen
     // display: none;
 }
@@ -543,7 +543,7 @@ body.beta #map {
         font-size: 14px;
         color: $gray;
         margin-top: 0px;
-        margin-left: 40px;
+        /* margin-left: 40px; */
     }
 
     & .title {
@@ -699,7 +699,7 @@ body.beta #map {
 }
 
 .icon-label {
-    margin-top: 10px; 
+    margin-top: 10px;
     color: $gray;
     font-weight: 400;
 }
