@@ -360,13 +360,16 @@ $(function () {
 
     place.lat = isUpdate ? openedMarker.lat : newMarkerTemp.lat;
     place.lng = isUpdate ? openedMarker.lng : newMarkerTemp.lng;
-    place.address = !isUpdate && newMarkerTemp.address;
+    if (!isUpdate && newMarkerTemp.address) {
+      place.address = newMarkerTemp.address;
+    }
 
     place.text = $('#newPlaceModal #titleInput').val();
     place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
     place.structureType = $('#newPlaceModal .typeIcon.active').data('type');
     place.photo = _uploadingPhotoBlob;
-
+    place.description = $('#newPlaceModal #descriptionInput').val();
+ 
     const callback = () => {
       Database.getPlaces(updateMarkers);
     };
@@ -509,6 +512,7 @@ $(function () {
     $('#newPlaceModal .typeIcon').removeClass('active');
     $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
     $('#newPlaceModal #photoInputBg').attr('src', '');
+    $('#newPlaceModal #descriptionInput').val('');
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
     // Not creating a new one, but editing
@@ -521,6 +525,7 @@ $(function () {
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
+      $('#newPlaceModal #descriptionInput').val(m.description);
 
       // $('#placeDetailsModal').modal('hide');
       History.pushState({}, 'bike de boa', '/');
@@ -681,7 +686,7 @@ $(function () {
     });
 
     // Review panel
-    $('body').on('click', '#ratingDisplay, #openReviewPanelBtn', () => {
+    $('body').on('click', '#ratingDisplay, .openReviewPanelBtn', () => {
       openReviewPanel();
     });
 

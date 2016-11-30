@@ -91,29 +91,41 @@ BIKE.Database = {
     this._fillAllDescriptionsRec();
   },
 
-  _fillAllMarkersAddresses: function(i = 0) {
+  _fillMarkersAddressesOnlyIfMissing() {
+    this.getPlaces(() => {
+      this._fillMarkersAddresses(0, true);
+    }, null, null, true);
+  },
+
+  _fillMarkersAddresses: function(i = 0, onlyIfMissing = false) {
     const max = markers.length;
+    const MIN_ADDRESS_SIZE = 6;
 
     if (i!=markers.length) {
       let m = markers[i];
 
       console.warn(`${i} of ${max}`);
 
-      BIKE.geocodeLatLng(
-        m.lat, m.lng,
-        (address) => {
-          console.log(m.lat, m.lng, m.id);
-          console.log('address');
-          BIKE.Database.customAPICall('PUT','local/'+m.id, {address: address}, () => {
-            _fillAllMarkersAddresses(i+1);
-          });
-        }, () => {
-          // Failed, probably due to quota limites. Try again after 2s
-          setTimeout(() => {
-            _fillAllMarkersAddresses(i);
-          }, 2000)
-        }
-      );
+      if (onlyIfMissing && m.address && m.address.length > MIN_ADDRESS_SIZE) {
+        // console.log(m.address);
+        this._fillMarkersAddresses(i+1, onlyIfMissing);
+      } else {
+        BIKE.geocodeLatLng(
+          m.lat, m.lng,
+          (address) => {
+            console.log(m.lat, m.lng, m.id);
+            console.log(address);
+            this.customAPICall('PUT','local/'+m.id, {address: address}, () => {
+              this._fillMarkersAddresses(i+1, onlyIfMissing);
+            });
+          }, () => {
+            // Failed, probably due to quota limites. Try again after 2s
+            setTimeout(() => {
+              this._fillMarkersAddresses(i, onlyIfMissing);
+            }, 2000);
+          }
+        );
+      }
     }
   },
 
@@ -426,7 +438,7 @@ BIKE.Database = {
     });
   },
 
-  getPlaces: function(successCB, failCB, alwaysCB) {
+  getPlaces: function(successCB, failCB, alwaysCB, getFullData = false) {
     const self = this;
 
     console.log('Getting all places...');
@@ -434,7 +446,7 @@ BIKE.Database = {
     $.ajax({
       type: 'get',
       headers: self._headers,
-      url: self.API_URL + '/local/light'
+      url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
     }).done(function(data) {
       console.log('Successfully retrieved ' + data.length + ' places!');
 

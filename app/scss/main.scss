@@ -2,6 +2,7 @@
 $darkGreen: #30bb6a;
 $lightGreen: #2cd978;
 $yellow: #eedc12;
+$darkYellow: #E9BB2B;
 $red: #f15f74;
 
 // Other colors
@@ -401,15 +402,21 @@ body.beta #map {
     }
 
     .description {
-        margin: 10px;
+        margin: 12px 5%;
         padding: 10px 30px 20px;
         /* color: #828b90; */
         /* border-top: 1px solid #eee; */
         background: rgb(250,250,250);
+        border-radius: 10px;
+        color: rgb(100,100,100);
 
         h2 {
             margin-top: 0;
             font-size: 12px;
+        }
+
+        #descriptionInput {
+            resize: vertical;
         }
     }
 }
@@ -600,29 +607,31 @@ body.beta #map {
 
 .average {
     font-size: 30px;
-    // vertical-align: bottom;
+    vertical-align: bottom;
     font-family: $headingFont;
     font-weight: 700;
 }
 
 .ghost {
-    border: 1px solid $gray;
+    display: block;
+    border: 1px solid $darkYellow;
     background-color: #fff;
-    color: $gray;
-    margin-left: 10px;
+    color: $darkYellow;
+    margin: 5px auto;
     font-size: 14px;
     width: 30%;
     border-radius: 5px;
     vertical-align: middle;
     min-width: 80px;
     transition: all 0.2s ease;
+    font-family: $headingFont;
 }
 .ghost:hover,
 .ghost:focus,
 .ghost:active {
     color: white;
     border: 1px solid white;
-    background-color: $darkGreen;
+    background-color: $darkYellow;
 }
 
 .modal-footer {
@@ -882,6 +891,7 @@ body.beta #map {
     /*color: #ddd; */
     float: right;
     cursor: pointer;
+    margin: 0;
 }
 
 /***** CSS Magic to Highlight Stars on Hover *****/
