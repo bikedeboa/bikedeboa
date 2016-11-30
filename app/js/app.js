@@ -120,10 +120,10 @@ $(function () {
             console.error(error);
 
             // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
-            if(error.message.indexOf('Only secure origins are allowed') == 0) {
+            // if(error.message.indexOf('Only secure origins are allowed') == 0) {
               // Disable button since it won't work anyway in the current domain.
               $('#geolocationBtn').hide();
-            }
+            // }
 
             if (callback && typeof callback === 'function') {
               callback();
@@ -187,78 +187,81 @@ $(function () {
     }
   }
 
+  function addMarkerToMap(markerIndexInArray) {
+    const i = markerIndexInArray;
+    const m = markers[i];
+
+    // Icon and Scaling
+    let iconUrl;
+    let scale;
+    if (!m.average || m.average === 0) {
+      iconUrl = MARKER_ICON_GRAY;
+      scale = 0.8;
+    } else if (m.average > 0 && m.average < 2) {
+      iconUrl = MARKER_ICON_RED;
+    } else if (m.average >= 2 && m.average < 3.5) {
+      iconUrl = MARKER_ICON_YELLOW;
+    } else if (m.average >= 3.5) {
+      iconUrl = MARKER_ICON_GREEN;
+    } else {
+      iconUrl = MARKER_ICON_GRAY;
+    }
+    if (!scale) {
+      scale = 0.5 + (m.average/10);
+    }
+
+    const icon = {
+      url: iconUrl, // url
+      scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
+      origin: new google.maps.Point(0, 0), // origin
+      anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+    };
+
+    // @todo temporarily disabled this because backend still doesnt support flags for these
+    // let labelStr;
+    // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
+    //   labelStr = '?';
+    // }
+
+    _gmarkers.push(new google.maps.Marker({
+      position: {
+        lat: Number.parseFloat(m.lat),
+        lng: Number.parseFloat(m.lng)
+      },
+      map: map,
+      icon: icon,
+      title: m.text,
+      // label: labelStr && {
+      //   text: labelStr,
+      //   color: 'white',
+      //   fontFamily: 'Roboto'
+      // },
+      zIndex: i, //markers should be ordered by average
+      // opacity: 0.1 + (m.average/5).
+    }));
+
+    (function (markerIndex) {
+      _gmarkers[markerIndex].addListener('click', () => {
+        onMarkerClick(markerIndex);
+      });
+    }(i));
+  }
+
   function updateMarkers() {
     hideSpinner();
 
-    deleteMarkers();
+    clearMarkers();
 
     // Markers from Database
     if (markers && markers.length > 0) {
-      // Order by average
+      // Order by average so best ones will have higher z-index
       markers = markers.sort((a, b) => {
         return a.average - b.average;
       });
 
       for(let i=0; i<markers.length; i++) {
-        const m = markers[i];
-
-        // Icon and Scaling
-        let iconUrl;
-        let scale;
-        if (!m.average || m.average === 0) {
-          iconUrl = MARKER_ICON_GRAY;
-          scale = 0.8;
-        } else if (m.average > 0 && m.average < 2) {
-          iconUrl = MARKER_ICON_RED;
-        } else if (m.average >= 2 && m.average < 3.5) {
-          iconUrl = MARKER_ICON_YELLOW;
-        } else if (m.average >= 3.5) {
-          iconUrl = MARKER_ICON_GREEN;
-        } else {
-          iconUrl = MARKER_ICON_GRAY;
-        }
-
-        if (!scale) {
-          scale = 0.5 + (m.average/10);
-        }
-
-        const icon = {
-          url: iconUrl, // url
-          scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-          origin: new google.maps.Point(0, 0), // origin
-          anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
-        };
-
-        // @todo temporarily disabled this because backend still doesnt support flags for these
-        // let labelStr;
-        // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
-        //   labelStr = '?';
-        // }
-
-        _gmarkers[i] = new google.maps.Marker({
-          position: {
-            lat: Number.parseFloat(m.lat),
-            lng: Number.parseFloat(m.lng)
-          },
-          map: map,
-          icon: icon,
-          title: m.text,
-          // label: labelStr && {
-          //   text: labelStr,
-          //   color: 'white',
-          //   fontFamily: 'Roboto'
-          // },
-          zIndex: i, //markers should be ordered by average
-          // opacity: 0.1 + (m.average/5).
-        });
-
-        (function (markerIndex) {
-          _gmarkers[markerIndex].addListener('click', () => {
-            onMarkerClick(markerIndex);
-          });
-        }(i));
+        addMarkerToMap(i);
       }
-      // });
     }
   }
 
@@ -310,7 +313,7 @@ $(function () {
   }
 
   // Deletes all markers in the array by removing references to them.
-  function deleteMarkers () {
+  function clearMarkers () {
     setMapOnAll(null);
     _gmarkers = [];
   }
@@ -369,7 +372,7 @@ $(function () {
     place.structureType = $('#newPlaceModal .typeIcon.active').data('type');
     place.photo = _uploadingPhotoBlob;
     place.description = $('#newPlaceModal #descriptionInput').val();
- 
+
     const callback = () => {
       Database.getPlaces(updateMarkers);
     };
@@ -396,7 +399,7 @@ $(function () {
     autocomplete.bindTo('bounds', map);
 
     // var infowindow = new google.maps.InfoWindow();
-    let marker = new google.maps.Marker({
+    _searchResultMarker = new google.maps.Marker({
       map: map,
       anchorPoint: new google.maps.Point(0, -29)
     });
@@ -404,7 +407,7 @@ $(function () {
 
     autocomplete.addListener('place_changed', () => {
       // infowindow.close();
-      marker.setVisible(false);
+      _searchResultMarker.setVisible(false);
       const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
@@ -420,7 +423,7 @@ $(function () {
       }
 
       // Custom icon depending on place type
-      // marker.setIcon(/** @type {google.maps.Icon} */({
+      // _searchResultMarker.setIcon(/** @type {google.maps.Icon} */({
       //   url: place.icon,
       //   size: new google.maps.Size(71, 71),
       //   origin: new google.maps.Point(0, 0),
@@ -428,8 +431,8 @@ $(function () {
       //   scaledSize: new google.maps.Size(35, 35)
       // }));
 
-      marker.setPosition(place.geometry.location);
-      marker.setVisible(true);
+      _searchResultMarker.setPosition(place.geometry.location);
+      _searchResultMarker.setVisible(true);
 
       // var address = '';
       // if (place.address_components) {
@@ -525,7 +528,7 @@ $(function () {
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
-      $('#newPlaceModal #descriptionInput').val(m.description); 
+      $('#newPlaceModal #descriptionInput').val(m.description);
 
       if (m.description && m.description.length > 0) {
         $('#newPlaceModal .description').addClass('expanded');
@@ -587,7 +590,7 @@ $(function () {
       return `<button class="btn btn-tag ${isPrepoped && 'active'}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
     }).join('');
 
-    
+
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
@@ -647,8 +650,22 @@ $(function () {
   function _initTriggers() {
     // Home
     $('body').on('click', '#locationQueryBtn', searchLocation);
+    $('body').on('click', '#clearLocationQueryBtn', () => {
+      $('#locationQueryInput').val('');
+      $('#clearLocationQueryBtn').css('opacity', 0);
+      _searchResultMarker.setVisible(false);
+    });
+    $('body').on('input', '#locationQueryInput', () => {
+      if ($('#locationQueryInput').val().length > 0) {
+        $('#clearLocationQueryBtn').css('opacity', 1);
+      } else {
+        $('#clearLocationQueryBtn').css('opacity', 0);
+      }
+    });
+
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
+
 
     // @todo FIX ME! This is getting triggered when changing between modals...
     // $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
@@ -758,7 +775,7 @@ $(function () {
         lat: -30.0346,
         lng: -51.2177
       },
-      zoom: 14,
+      zoom: 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,

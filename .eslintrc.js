@@ -54,5 +54,6 @@ module.exports = {
         "_uploadingPhotoBlob": true,
         "templates": true,
         "loggedUser": true,
+        "_searchResultMarker": true,
     }
 };

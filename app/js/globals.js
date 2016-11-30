@@ -58,5 +58,6 @@ let newMarkerTemp = {};
 let currentPendingRating;
 let _uploadingPhotoBlob;
 let loggedUser;
+let _searchResultMarker;
 
 let templates = {};

@@ -24,7 +24,7 @@ BIKE.Database = {
 
       if (data && data.length > 0) {
         fullMarkers = data;
-        
+
         fullMarkers.forEach( m => {
           // json += JSON.stringify({
           //   text: m.text,
@@ -54,7 +54,7 @@ BIKE.Database = {
 
       const key = m.lat+m.lng;
       const desc = window._hashmap[key];
-      if (desc) { 
+      if (desc) {
         console.log(desc);
         BIKE.Database.customAPICall('PUT', 'local/'+m.id,
           {description: desc},
@@ -356,14 +356,17 @@ BIKE.Database = {
     });
   },
 
-  updatePlace: function(placeId, data, callback) {
+  updatePlace: function(placeId, place, callback) {
     const self = this;
+
+    console.log('Updating place:');
+    console.log(place);
 
     $.ajax({
       type: 'put',
       headers: self._headers,
       url: self.API_URL + '/local/' + placeId,
-      data: data,
+      data: place,
       error: function(e) {
         console.error(e);
       },

@@ -54,6 +54,7 @@
                 <img src="/img/bici.svg"/>
             </span>
             <input id="locationQueryInput" type="text" placeholder="Onde tu procuras um bicicletário?">
+            <button id="clearLocationQueryBtn">✕</button>
             <!-- <span>
                 <button id="filterBtn" type="button">
                     <img src="/img/icon_filter.svg" class="icon"/>
@@ -94,7 +95,7 @@
                                 {{/if}}
 
                                 <div class="review">
-                                    {{#if average}} 
+                                    {{#if average}}
                                         <span class="average">{{average}}</span>
                                     {{/if}}
 
@@ -115,7 +116,7 @@
                                         <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
                                     </fieldset>
 
-                                    {{#unless average}} 
+                                    {{#unless average}}
                                         <button class="openReviewPanelBtn ghost">AVALIAR</button>
                                     {{/unless}}
 
@@ -272,7 +273,7 @@
                                 <input required id="titleInput" type="text" class="text-input" placeholder="Título">
                             </div>
 
-                            <div class="radio-group" style="margin: 25px 0;"> 
+                            <div class="radio-group" style="margin: 25px 0;">
                               <label>
                                 <input required type="radio" name="isPublicRadioGrp" value="true" />
                                 <span class="radio-image"></span>
@@ -324,7 +325,7 @@
 
                                 <small>
                                     <textarea id="descriptionInput" maxlength="250" type="text" class="text-input" placeholder="Algo mais que tu aches importante comentar?"></textarea>
-                                </small> 
+                                </small>
                             </div>
                         </div>
 
