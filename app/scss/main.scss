@@ -421,6 +421,38 @@ body.beta #map {
             resize: vertical;
             border-radius: 3px;
         }
+
+        &.collapsable {
+            max-height: 30px;
+            overflow: hidden;
+
+            transition: max-height 0.5s ease-in-out;
+
+            h2 {
+                cursor: pointer;
+            }
+
+            h2:hover {
+                text-decoration: underline;
+            }
+
+            h2:after {
+                position: relative;
+                top: 1px;
+                display: inline-block;
+                font-family: 'Glyphicons Halflings';
+                font-weight: 400;
+                line-height: 1;
+                content: "\e252";
+            }
+        }
+
+        &.expanded {
+            max-height: 500px;
+            h2:after {
+                content: "\e253";
+            }
+        }
     }
 }
 
@@ -857,6 +889,9 @@ body.beta #map {
         cursor: pointer;
         opacity: 0.9;
         transition: opacity 0.2s ease-out;
+
+        border-radius: 50%;
+        box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .3);
     }
 
     & + label:hover,

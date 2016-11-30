@@ -527,6 +527,10 @@ $(function () {
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
       $('#newPlaceModal #descriptionInput').val(m.description); 
 
+      if (m.description && m.description.length > 0) {
+        $('#newPlaceModal .description').addClass('expanded');
+      }
+
       // $('#placeDetailsModal').modal('hide');
       History.pushState({}, 'bike de boa', '/');
 
@@ -683,6 +687,10 @@ $(function () {
         reader.onload = photoUploadCB;
         reader.readAsDataURL(this.files[0]);
       }
+    });
+
+    $('body').on('click', '.description.collapsable h2', (e) => {
+      $(e.currentTarget).parent().toggleClass('expanded');
     });
 
     // Review panel
