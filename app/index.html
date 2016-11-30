@@ -15,7 +15,6 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
 
         <script defer src="/js/vendors.min.js"></script>
-        <!-- <script src="/js/app.min.js"></script> -->
         <script defer src="/js/app.min.js"></script>
 
         <!-- Google Analytics -->
@@ -37,13 +36,6 @@
 
     <body class="beta">
         <div id="spinnerOverlay">
-            <!-- <img src="/img/spinner_bike.svg"/>
-            <div id="wheel1" class="spinnerContainer">
-                <img src="/img/spinner_wheel.svg"/>
-            </div>
-            <div id="wheel2" class="spinnerContainer">
-                <img src="/img/spinner_wheel.svg"/>
-            </div> -->
             <div class="spinnerContainer">
                 <img src="/img/spinner_animated.svg"/>
             </div>
@@ -62,142 +54,173 @@
             </span> -->
         </div>
 
-        <div id="placeDetailsModalTemplatePlaceholder"></div>
 
-        <div id="reviewPanelTemplatePlaceholder"></div>
+        <div id="placeDetailsModal" class="modal fade" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
 
-        <!-- View Details Modal -->
-        <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-            <div id="placeDetailsModal" class="modal fade" tabindex="-1">
-                <div class="vertical-alignment-helper">
-                    <div class="modal-dialog vertical-align-center">
-                        <div class="modal-content">
-                            <div class="modal-header {{#if photoUrl}}hasImage{{/if}}">
-                                <!-- <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="position: absolute; color: white; font-size: 20px; background: rgba(0,0,0,0.5); padding: 5px; right: 10px; top: 10px; pointer-events: none; "></span> -->
-                                {{#if photoUrl}}
-                                    <img src="{{photoUrl}}"/>
-                                {{/if}}
+                        <div id="placeDetailsModalTemplatePlaceholder"></div>
 
-                                {{#if isAdmin}}
-                                    <button id="editPlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
-                                    <button id="deletePlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
-                                {{/if}}
+                        <div class="modal-footer">
+                            <div class="col-half">
+                                <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
+                                <a href="{{{gmapsRedirectUrl}}}" target="_blank" class="btn green btn-footer">
+                                    <!-- <span class="glyphicon glyphicon-play"></span> -->
+                                    Traçar Rota <span class="glyphicon glyphicon-new-window" style="font-size: 0.8em; margin-left: 5px;"></span> </a>
                             </div>
-
-                            <div class="modal-body">
-                                {{#if title}}
-                                    <div id="placeDetails_heading" class="title title-icon">
-                                        {{title}}
-                                        <p class="address">
-                                            {{address}}
-                                        </p>
-                                    </div>
-                                {{/if}}
-
-                                <div class="review">
-                                    {{#if average}}
-                                        <span class="average">{{average}}</span>
-                                    {{/if}}
-
-                                    <fieldset id="ratingDisplay" class="rating disabled">
-                                        <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                                        <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
-
-                                        <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                                        <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
-
-                                        <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                                        <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
-
-                                        <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                                        <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
-
-                                        <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                                        <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
-                                    </fieldset>
-
-                                    {{#unless average}}
-                                        <button class="openReviewPanelBtn ghost">AVALIAR</button>
-                                    {{/unless}}
-
-                                    {{#if numReviews}}
-                                        <span class="numreviews">{{numReviews}}</span>
-                                    {{/if}}
-                                </div>
-
-                                <div class="info clearfix">
-                                    <div class="col-half">
-                                        {{#if noIsPublicData}}
-                                            <div class="icon-label">
-                                                <small>Sem informação sobre restrição</small>
-                                            </div>
-                                        {{else}}
-                                            {{#if isPublic}}
-                                                <img src="/img/icon_public.svg"/>
-                                                <div class="icon-label"> Público </div>
-                                            {{else}}
-                                                <img src="/img/icon_private.svg"/>
-                                                <div class="icon-label">
-                                                    Restrito<br>
-                                                    <small>(só clientes)</small>
-                                                </div>
-                                            {{/if}}
-                                        {{/if}}
-                                    </div>
-                                    <div class="col-half">
-                                        {{#if structureTypeIcon}}
-                                            <img id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
-                                        {{/if}}
-                                        <div class="icon-label" id="placeDetails_structureType">
-                                            {{#if structureTypeLabel}}
-                                                {{{structureTypeLabel}}}
-                                            {{else}}
-                                                <small>Sem informação sobre tipo de bicicletário</small>
-                                            {{/if}}
-                                        </div>
-                                    </div>
-
-                                    <!-- <div>{{numCheckins}}</div> -->
-                                </div>
-
-                                {{#if tags}}
-                                    <div class="tagsContainer">
-                                        {{{tags}}}
-                                    </div>
-                                {{/if}}
-
-                                {{#if description}}
-                                    <div class="description">
-                                        <h2>
-                                            <!-- <span class="glyphicon glyphicon-info-sign "></span> -->
-                                            Mais informações
-                                        </h2>
-
-                                        <small>
-                                            {{{description}}}
-                                        </small>
-                                    </div>
-                                {{/if}}
-                            </div>
-
-                            <div class="modal-footer">
-                                <div class="col-half">
-                                    <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
-                                    <a href="{{{gmapsRedirectUrl}}}" target="_blank" class="btn green btn-footer">
-                                        <!-- <span class="glyphicon glyphicon-play"></span> -->
-                                        Traçar Rota <span class="glyphicon glyphicon-new-window" style="font-size: 0.8em; margin-left: 5px;"></span> </a>
-                                </div>
-                                <div class="col-half">
-                                    <button class="btn green btn-footer openReviewPanelBtn">
-                                        <!-- <span class="glyphicon glyphicon-pencil"></span> -->
-                                        Avaliar
-                                    </button>
-                                </div>
+                            <div class="col-half">
+                                <button class="btn green btn-footer openReviewPanelBtn">
+                                    <!-- <span class="glyphicon glyphicon-pencil"></span> -->
+                                    Avaliar
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div id="reviewPanelTemplatePlaceholder"></div>
+
+        <!-- View Details Modal -->
+        <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
+          <div class="modal-header {{#if photoUrl}}hasImage{{/if}}">
+              {{#if photoUrl}}
+                  <img src="{{photoUrl}}"/>
+              {{/if}}
+
+              {{#if isAdmin}}
+                  <button id="editPlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
+                  <button id="deletePlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
+              {{/if}}
+          </div>
+
+          <div class="modal-body">
+              {{#if title}}
+                  <div id="placeDetails_heading" class="title title-icon">
+                      {{title}}
+                      <p class="address">
+                          {{address}}
+                      </p>
+                  </div>
+              {{/if}}
+
+              <div class="review">
+                  {{#if average}}
+                      <span class="average">{{average}}</span>
+                  {{/if}}
+
+                  <fieldset id="ratingDisplay" class="rating disabled">
+                      <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                      <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
+
+                      <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                      <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
+
+                      <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                      <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
+
+                      <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                      <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
+
+                      <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                      <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
+                  </fieldset>
+
+                  {{#unless average}}
+                      <button class="openReviewPanelBtn ghost">AVALIAR</button>
+                  {{/unless}}
+
+                  {{#if numReviews}}
+                      <span class="numreviews">{{numReviews}}</span>
+                  {{/if}}
+              </div>
+
+              <div class="info clearfix">
+                  <div class="col-half">
+                      {{#if noIsPublicData}}
+                          <div class="icon-label">
+                              <small>Sem informação sobre restrição</small>
+                          </div>
+                      {{else}}
+                          {{#if isPublic}}
+                              <img src="/img/icon_public.svg"/>
+                              <div class="icon-label"> Público </div>
+                          {{else}}
+                              <img src="/img/icon_private.svg"/>
+                              <div class="icon-label">
+                                  Restrito<br>
+                                  <small>(só clientes)</small>
+                              </div>
+                          {{/if}}
+                      {{/if}}
+                  </div>
+                  <div class="col-half">
+                      {{#if structureTypeIcon}}
+                          <img id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
+                      {{/if}}
+                      <div class="icon-label" id="placeDetails_structureType">
+                          {{#if structureTypeLabel}}
+                              {{{structureTypeLabel}}}
+                          {{else}}
+                              <small>Sem informação sobre tipo de bicicletário</small>
+                          {{/if}}
+                      </div>
+                  </div>
+
+                  <!-- <div>{{numCheckins}}</div> -->
+              </div>
+
+              {{#if tags}}
+                  <div class="tagsContainer">
+                      {{{tags}}}
+                  </div>
+              {{/if}}
+
+              {{#if description}}
+                  <div class="description">
+                      <h2>
+                          <!-- <span class="glyphicon glyphicon-info-sign "></span> -->
+                          Mais informações
+                      </h2>
+
+                      <small>
+                          {{{description}}}
+                      </small>
+                  </div>
+              {{/if}}
+          </div>
+        </script>
+
+        <!-- View Details Empty Shell Modal -->
+        <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
+          <div class="modal-header" style="opacity: 0.8;">
+          </div>
+
+          <div class="modal-body" style="opacity: 0.8;">
+              <div class="review">
+                  <fieldset id="ratingDisplay" class="rating disabled">
+                      <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                      <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
+
+                      <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                      <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
+
+                      <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                      <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
+
+                      <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                      <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
+
+                      <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                      <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
+                  </fieldset>
+              </div>
+
+              <div class="info clearfix">
+              </div>
+          </div>
         </script>
 
         <!-- Review Modal -->

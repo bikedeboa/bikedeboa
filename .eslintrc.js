@@ -27,6 +27,7 @@ module.exports = {
         "$": false,
         "google": false,
         "Cookies": false,
+        "Handlebars": false,
 
         "SIMULATED_DELAY_MS": false,
         "MARKER_W": false,

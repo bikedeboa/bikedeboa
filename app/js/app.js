@@ -87,10 +87,6 @@ $(function () {
     // Template is rendered, start jquerying
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
     $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
-
-
-    // $('#placeDetailsModal .flipper').removeClass('flipped');
-    $('#placeDetailsModal').modal('show');
   }
 
   function _geolocate(toCenter, callback) {
@@ -176,10 +172,14 @@ $(function () {
   function onMarkerClick(markerIndex) {
     const marker = markers[markerIndex];
 
+    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalLoadingTemplate());
+    $('#placeDetailsModal').modal('show');
+
     if (marker._hasDetails) {
       openDetailsModal(markerIndex);
     } else {
       showSpinner();
+
       Database.getPlaceDetails(marker.id, () => {
         hideSpinner();
         openDetailsModal(markerIndex);
@@ -472,6 +472,7 @@ $(function () {
   function _initTemplates() {
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
     templates.reviewPanelTemplate = Handlebars.compile($('#reviewPanelTemplate').html());
+    templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
   }
 
   function validateNewPlaceForm() {
@@ -668,11 +669,11 @@ $(function () {
 
 
     // @todo FIX ME! This is getting triggered when changing between modals...
-    // $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
-    //   if (History.getState().title !== 'bike de boa') {
-    // pushtory.replaceState({}, 'bike de boa', '/');
-    //   }
-    // });
+    $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
+      // if (History.getState().title !== 'bike de boa') {
+      //   pushtory.replaceState({}, 'bike de boa', '/');
+      // }
+    });
 
 
     // New place panel
@@ -838,7 +839,7 @@ $(function () {
       if (loggedUser) {
         $('#locationSearch').append('<span class="logged-user"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
         $('.logged-user button').on('click', () => {
-          Cookies.remove('user');
+          Cookies.remove('bikedeboa_user');
           window.location.reload();
         });
       }
