@@ -525,7 +525,7 @@ $(function () {
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
-      $('#newPlaceModal #descriptionInput').val(m.description);
+      $('#newPlaceModal #descriptionInput').val(m.description); 
 
       // $('#placeDetailsModal').modal('hide');
       History.pushState({}, 'bike de boa', '/');
@@ -819,9 +819,7 @@ $(function () {
       }
 
       // Reset URL
-      if (window.location.pathname !== '/admin') {
-        History.replaceState({}, 'bike de boa', '/');
-      }
+      History.replaceState({}, 'bike de boa', '/');
 
       Database.getAllTags();
       Database.getPlaces(updateMarkers);

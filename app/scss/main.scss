@@ -9,6 +9,7 @@ $red: #f15f74;
 $white: #fafafa;
 $paleWhite: #F3F3F3;
 $gray: #828b90;
+$lightGray: #b3b3b3;
 
 $bootstrapBackdropColor: white;
 $bootstrapBackdropOpacity: 0.7;
@@ -402,21 +403,23 @@ body.beta #map {
     }
 
     .description {
-        margin: 12px 5%;
+        margin: 0 5%;
         padding: 10px 30px 20px;
         /* color: #828b90; */
         /* border-top: 1px solid #eee; */
         background: rgb(250,250,250);
         border-radius: 10px;
         color: rgb(100,100,100);
+        text-align: justify;
 
         h2 {
             margin-top: 0;
             font-size: 12px;
         }
 
-        #descriptionInput {
+        textarea {
             resize: vertical;
+            border-radius: 3px;
         }
     }
 }
@@ -569,12 +572,12 @@ body.beta #map {
         // overflow-y: hidden;
         width: 100%;
         padding: 10px 0;
-        max-width: 500px;
+        max-width: 400px;
         margin: 0 auto;
     }
 
     .typeIcon {
-        width: 23%;
+        width: 32%;
         height: auto;
         display: inline-block;
         cursor: pointer;
@@ -645,7 +648,7 @@ body.beta #map {
 }
 
 .info {
-    padding: 10px 5%;
+    padding: 20px 5%;
     text-align: center;
     border-top: 1px solid #eee;
     margin: 10px 0;
@@ -653,20 +656,20 @@ body.beta #map {
     img {
         margin: 0 5px;
         display: inline-block;
-        width: 40%;
+        width: 60%;
         max-width: 100px;
         height: auto;
-    }
-
-    .icon-label {
-        margin-top: 10px;
-        color: $gray;
-        font-weight: 100;
     }
 
     small {
         color: $gray;
     }
+}
+
+.icon-label {
+    margin-top: 10px; 
+    color: $gray;
+    font-weight: 400;
 }
 
 #placeDetailsModal {
@@ -773,6 +776,7 @@ body.beta #map {
 
     .badge {
         margin-right: 2px;
+        background-color: #b3b3b3;
     }
 }
 
@@ -934,6 +938,9 @@ body.beta #map {
 .radio-group label > input { /* HIDE RADIO */
     visibility: hidden; /* Makes input not-clickable */
     position: absolute; /* Remove input from document flow */
+
+    /* Preloads the checked state image to prevent flicker when first activating the button */
+    background-image: url(/img/radio_checked.svg);
 }
 .radio-group label > input + .radio-image{ /* IMAGE STYLES */
     background-image: url(/img/radio.svg);

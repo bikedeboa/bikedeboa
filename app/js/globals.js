@@ -25,10 +25,10 @@ const MARKER_ICON_RED = 'img/pin_red.svg';
 const MARKER_ICON_GRAY = 'img/pin_gray.svg';
 const GMAPS_DIRECTIONS_URL = 'http://maps.google.com/maps?saddr="#{origin}"&daddr="#{destination}"';
 
-// const STRUCTURE_NAMES = ['U Invertido', 'De roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
-// const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-const STRUCTURE_NAMES = ['U Invertido', 'De roda', 'Bizarro', 'Suspenso'];
-const STRUCTURE_CODES = ['uinvertido', 'deroda', 'other', 'suspenso'];
+const STRUCTURE_NAMES = ['U Invertido', 'De roda', 'Trave', 'Suspenso', 'Grade', 'Estranho'];
+const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+// const STRUCTURE_NAMES = ['U Invertido', 'De roda', 'Estranho', 'Suspenso'];
+// const STRUCTURE_CODES = ['uinvertido', 'deroda', 'other', 'suspenso'];
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 

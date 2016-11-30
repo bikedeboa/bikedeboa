@@ -138,7 +138,7 @@
                                                 <img src="/img/icon_private.svg"/>
                                                 <div class="icon-label">
                                                     Restrito<br>
-                                                    <small>(apenas clientes)</small>
+                                                    <small>(só clientes)</small>
                                                 </div>
                                             {{/if}}
                                         {{/if}}
@@ -272,7 +272,7 @@
                                 <input required id="titleInput" type="text" class="text-input" placeholder="Título">
                             </div>
 
-                            <div class="radio-group" style="margin: 20px 0;"> 
+                            <div class="radio-group" style="margin: 25px 0;"> 
                               <label>
                                 <input required type="radio" name="isPublicRadioGrp" value="true" />
                                 <span class="radio-image"></span>
@@ -291,12 +291,30 @@
                             <h2>Tipo de bicicletário</h2>
 
                             <div class="typeIconsGroup">
-                              <div data-type="deroda" class="typeIcon"> <img src="/img/tipo_deroda.svg"/> </div>
-                              <div data-type="uinvertido" class="typeIcon"> <img src="/img/tipo_uinvertido.svg"/> </div>
-                              <div data-type="suspenso" class="typeIcon"> <img src="/img/tipo_suspenso.svg"/> </div>
-                              <!-- <div data-type="trave" class="typeIcon"> <img src="/img/tipo_trave.svg"/> </div> -->
-                              <!-- <div data-type="grade" class="typeIcon"> <img src="/img/tipo_grade.svg"/> </div> -->
-                              <div data-type="other" class="typeIcon"> <img src="/img/tipo_other.svg"/> </div>
+                                <div data-type="uinvertido" class="typeIcon">
+                                    <img src="/img/tipo_uinvertido.svg"/>
+                                    <div class="icon-label">U Invertido</div>
+                                </div>
+                                <div data-type="deroda" class="typeIcon">
+                                    <img src="/img/tipo_deroda.svg"/>
+                                    <div class="icon-label">De Roda</div>
+                                </div>
+                                <div data-type="suspenso" class="typeIcon">
+                                    <img src="/img/tipo_suspenso.svg"/>
+                                    <div class="icon-label">Suspenso</div>
+                                </div>
+                                <div data-type="trave" class="typeIcon">
+                                    <img src="/img/tipo_trave.svg"/>
+                                    <div class="icon-label">Trave</div>
+                                </div>
+                                <div data-type="grade" class="typeIcon">
+                                    <img src="/img/tipo_grade.svg"/>
+                                    <div class="icon-label">Grade</div>
+                                </div>
+                                <div data-type="other" class="typeIcon">
+                                    <img src="/img/tipo_other.svg"/>
+                                    <div class="icon-label">Outro</div>
+                                </div>
                             </div>
 
                             <div class="description">
@@ -305,7 +323,7 @@
                                 </h2>
 
                                 <small>
-                                    <textarea id="descriptionInput" maxlength="250" type="text" class="text-input" placeholder="Mais alguma coisa que tu ache muito importante mencionar? (máx. 250 caracteres)"></textarea>
+                                    <textarea id="descriptionInput" maxlength="250" type="text" class="text-input" placeholder="Algo mais que tu ache importante mencionar?"></textarea>
                                 </small>
                             </div>
                         </div>
