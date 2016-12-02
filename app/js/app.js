@@ -116,10 +116,10 @@ $(function () {
             console.error(error);
 
             // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
-            // if(error.message.indexOf('Only secure origins are allowed') == 0) {
+            if(error.message.indexOf('Only secure origins are allowed') == 0) {
               // Disable button since it won't work anyway in the current domain.
               $('#geolocationBtn').hide();
-            // }
+            }
 
             if (callback && typeof callback === 'function') {
               callback();
