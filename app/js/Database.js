@@ -236,7 +236,7 @@ BIKE.Database = {
       },
       success: function(data) {
         if (data.token && data.token.length > 0) {
-          console.log('Authentication successful.');
+          console.log('API connected.');
 
           if (user) {
             // This is the only place that should set 'loggedUser'

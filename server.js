@@ -9,6 +9,15 @@ app.use(express.static('public'));
 app.use(express.static('assets'));
 app.use(express.static('dist'));
 
+// Automatically redirect HTTP to HTTPS
+app.get('*',function(req,res,next){
+	// console.log(req.headers.host.split(':')[0]);
+	if (req.headers.host.split(':')[0] !== 'localhost' && req.headers['x-forwarded-proto']!='https')
+		res.redirect('https://'+req.url);
+	else
+    next(); /* Continue to other routes if we're not redirecting */
+});
+
 router.use(function (req,res,next) {
   console.log('/' + req.method);
   next();
