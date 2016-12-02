@@ -4,12 +4,12 @@
 
 $(function () {
   function openDetailsModal(i) {
-    if (addLocationMode) {
-      return false;
-    }
-
     openedMarker = markers[i];
     const m = openedMarker;
+    
+    if (addLocationMode || !m._hasDetails) {
+      return false;
+    }
 
     History.pushState({}, 'Detalhes do bicicletário', 'detalhes');
 
@@ -87,6 +87,10 @@ $(function () {
     // Template is rendered, start jquerying
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
     $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
+
+
+    // If not yet shown...
+    $('#placeDetailsModal').modal('show');
   }
 
   function _geolocate(toCenter, callback) {
@@ -172,13 +176,13 @@ $(function () {
   function onMarkerClick(markerIndex) {
     const marker = markers[markerIndex];
 
-    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalLoadingTemplate());
-    $('#placeDetailsModal').modal('show');
-
     if (marker._hasDetails) {
       openDetailsModal(markerIndex);
     } else {
       showSpinner();
+
+      $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalLoadingTemplate());
+      $('#placeDetailsModal').modal('show');
 
       Database.getPlaceDetails(marker.id, () => {
         hideSpinner();
