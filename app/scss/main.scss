@@ -591,6 +591,11 @@ body.beta #map {
         padding-bottom: 10px;
         font-family: $headingFont;
         font-weight: 700;
+
+        .wireframe-like-box {
+            width: 200px;
+            height: 30px;
+        }
     }
 
     & .title-icon:before {
@@ -722,12 +727,17 @@ body.beta #map {
     border-top: 1px solid #eee;
     margin: 10px 0;
 
+    .wireframe-like-box,
     img {
         margin: 0 5px;
         display: inline-block;
         width: 60%;
         max-width: 100px;
         height: auto;
+    }
+
+    .wireframe-like-box {
+        height: 90px;
     }
 
     small {
@@ -936,6 +946,16 @@ body.beta #map {
         opacity: 1;
     }
 }
+
+.wireframe-like-box {
+    background: rgba(0,0,0,0.1);
+    display: inline-block;
+}
+
+
+////////////////////////////////////////////////////////////
+// External ////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 /****** Style Star Rating Widget *****/
 /* https://codepen.io/jamesbarnett/pen/vlpkh */

@@ -65,20 +65,6 @@
 
                         <div id="placeDetailsModalTemplatePlaceholder"></div>
 
-                        <div class="modal-footer">
-                            <div class="col-half">
-                                <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
-                                <a href="{{{gmapsRedirectUrl}}}" target="_blank" class="btn green btn-footer">
-                                    <!-- <span class="glyphicon glyphicon-play"></span> -->
-                                    Traçar Rota <span class="glyphicon glyphicon-new-window" style="font-size: 0.8em; margin-left: 5px;"></span> </a>
-                            </div>
-                            <div class="col-half">
-                                <button class="btn green btn-footer openReviewPanelBtn">
-                                    <!-- <span class="glyphicon glyphicon-pencil"></span> -->
-                                    Avaliar
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -194,36 +180,70 @@
                   </div>
               {{/if}}
           </div>
+
+          <div class="modal-footer">
+                <div class="col-half">
+                    <!-- <button id="checkinBtn" class="btn green btn-footer">CHECK-IN</button> -->
+                    <a href="{{{gmapsRedirectUrl}}}" target="_blank" class="btn green btn-footer">
+                        <!-- <span class="glyphicon glyphicon-play"></span> -->
+                        Traçar Rota <span class="glyphicon glyphicon-new-window" style="font-size: 0.8em; margin-left: 5px;"></span> </a>
+                </div>
+                <div class="col-half">
+                    <button class="btn green btn-footer openReviewPanelBtn">
+                        <!-- <span class="glyphicon glyphicon-pencil"></span> -->
+                        Avaliar
+                    </button>
+                </div>
+            </div>
         </script>
 
         <!-- View Details Empty Shell Modal -->
         <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
-          <div class="modal-header" style="opacity: 0.8;">
-          </div>
+            <div class="modal-header" style="opacity: 0.8;">
+            </div>
 
-          <div class="modal-body" style="opacity: 0.8;">
-              <div class="review">
-                  <fieldset id="ratingDisplay" class="rating disabled">
-                      <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                      <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
+            <div class="modal-body" style="opacity: 0.8;">
+                <div id="placeDetails_heading" class="title">
+                    <span class="wireframe-like-box"></span>
+                </div>
 
-                      <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                      <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
+                <div class="review">
+                    <fieldset id="ratingDisplay" class="rating disabled">
+                        <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                        <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
 
-                      <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                      <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
+                        <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                        <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
 
-                      <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                      <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
+                        <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                        <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
 
-                      <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                      <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
-                  </fieldset>
-              </div>
+                        <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                        <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
 
-              <div class="info clearfix">
-              </div>
-          </div>
+                        <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                        <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
+                    </fieldset>
+                </div>
+
+                <div class="info clearfix">
+                    <div class="col-half">
+                        <span class="wireframe-like-box"></span>
+                    </div>
+                    <div class="col-half">
+                        <span class="wireframe-like-box"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="col-half">
+                        <a class="btn green btn-footer"></a>
+                    </div>
+                    <div class="col-half">
+                        <a class="btn green btn-footer"></a>
+                    </div>
+                </div>
+            </div>
         </script>
 
         <!-- Review Modal -->
