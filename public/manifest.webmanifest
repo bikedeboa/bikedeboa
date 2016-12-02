@@ -6,12 +6,9 @@
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#47b970",
+  "theme_color": "#2cd978",
   "description": "Encontre onde deixar tua bici de boa.",
   "icons": [{
-    "src": "/favicon.ico",
-    "sizes": "48x48",
-    "type": "image/x-icon"
-  }, {
     "src": "/android-chrome-192x192.png",
     "sizes": "72x72",
     "type": "image/png"

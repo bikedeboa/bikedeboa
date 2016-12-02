@@ -833,7 +833,7 @@ $(function () {
         '/css/main.css',
         '/js/vendors.min.js',
         '/js/app.min.js',
-        'img/*'
+        '/img/*'
       ]
     });
   }
