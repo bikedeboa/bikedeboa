@@ -824,6 +824,11 @@ $(function () {
         $('#newPlaceModal').modal('hide');
       }
     });
+
+    // Service Worker
+    UpUp.start({
+      'content-url': 'offline.html' // show this page to offline users
+    });
   }
 
   function init() {

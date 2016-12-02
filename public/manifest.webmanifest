@@ -1,0 +1,36 @@
+{
+  "name": "bike de boa",
+  "short_name": "bike de boa",
+  "start_url": ".",
+  "lang": "pt-br",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#2cd978",
+  "description": "Encontre onde deixar tua bici de boa.",
+  "icons": [{
+    "src": "/favicon.ico",
+    "sizes": "48x48",
+    "type": "image/x-icon"
+  }, {
+    "src": "/android-chrome-192x192.png",
+    "sizes": "72x72",
+    "type": "image/png"
+  }, {
+    "src": "/android-chrome-192x192.png",
+    "sizes": "96x96",
+    "type": "image/png"
+  }, {
+    "src": "/android-chrome-192x192.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }, {
+    "src": "/android-chrome-192x192.png",
+    "sizes": "168x168",
+    "type": "image/png"
+  }, {
+    "src": "/android-chrome-192x192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "prefer_related_applications": false
+}
