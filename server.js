@@ -11,11 +11,11 @@ app.use(express.static('dist'));
 
 // Automatically redirect HTTP to HTTPS
 app.get('*',function(req,res,next){
-	// console.log(req.headers.host.split(':')[0]);
-	if (req.headers.host.split(':')[0] !== 'localhost' && req.headers['x-forwarded-proto']!='https')
-		res.redirect('https://'+req.url);
-	else
-    next(); /* Continue to other routes if we're not redirecting */
+  // console.log(req.headers.host.split(':')[0]);
+  if (req.headers.host.split(':')[0] !== 'localhost' && req.headers['x-forwarded-proto']!='https') {
+    res.redirect('https://www.bikedeboa.com.br' + req.url);
+  } else
+  next(); /* Continue to other routes if we're not redirecting */
 });
 
 router.use(function (req,res,next) {

@@ -827,7 +827,14 @@ $(function () {
 
     // Service Worker
     UpUp.start({
-      'content-url': 'offline.html' // show this page to offline users
+      'content': 'Foi mal, o Bike De Boa ainda não funciona offline.',
+      assets: [
+        '/css/vendors.min.css',
+        '/css/main.css',
+        '/js/vendors.min.js',
+        '/js/app.min.js',
+        'img/*'
+      ]
     });
   }
 
