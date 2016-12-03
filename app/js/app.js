@@ -668,6 +668,10 @@ $(function () {
       }
     });
 
+    $('body').on('click', '#loginBtn', () => {
+      login(true);
+    });
+
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
@@ -842,19 +846,12 @@ $(function () {
     });
   }
 
-  function init() {
-    if (isDemoMode) {
-      Database = BIKE.MockedDatabase;
-    } else {
-      Database = BIKE.Database;
-    }
-
-    showSpinner();
-
-    Database.authenticate(() => {
+  function login(isUserLogin = false) {
+    Database.authenticate(isUserLogin, () => {
       if (loggedUser) {
-        $('#locationSearch').append('<span class="logged-user"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
-        $('.logged-user button').on('click', () => {
+        $('.login-display').hide();
+        $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
+        $('.login-display button').on('click', () => {
           Cookies.remove('bikedeboa_user');
           window.location.reload();
         });
@@ -866,6 +863,18 @@ $(function () {
       Database.getAllTags();
       Database.getPlaces(updateMarkers);
     });
+  }
+
+  function init() {
+    if (isDemoMode) {
+      Database = BIKE.MockedDatabase;
+    } else {
+      Database = BIKE.Database;
+    }
+
+    showSpinner();
+
+    login();
   }
 
   window.toggleDemoMode = () => {

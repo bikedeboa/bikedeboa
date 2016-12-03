@@ -215,14 +215,17 @@ BIKE.Database = {
     });
   },
 
-  authenticate: function(callback) {
+  authenticate: function(isUserLogin, callback) {
     const self = this;
 
     // Custom login
-    const isLogin = window.location.pathname === '/admin';
+    if (!isUserLogin) {
+      isUserLogin = window.location.pathname === '/admin';
+    }
+    
     let user = Cookies.get('bikedeboa_user');
     let pw;
-    if (isLogin && !user) {
+    if (isUserLogin && !user) {
       user = prompt('Usuário:','');
     }
 

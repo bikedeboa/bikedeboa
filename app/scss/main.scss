@@ -43,7 +43,7 @@ body {
 }
 
 body.beta #map {
-    border: 5px solid $red;
+    // border: 5px solid $red;
 
     &:before {
         content: 'beta';
@@ -118,11 +118,11 @@ body.beta #map {
       }
     }
 
-    .logged-user {
+    .login-display {
         display: none;
 
-        background-color: #eedc12;
-        color: white;
+        background-color: rgba(0,0,0,0.2);
+        color: $paleWhite;
         padding: 5px;
         font-family: $headingFont;
         font-weight: 700;
@@ -139,6 +139,11 @@ body.beta #map {
         button {
             border: none;
             background: transparent;
+        }
+
+        &.logged {
+            background-color: #eedc12;
+            color: white;
         }
     }
 }
