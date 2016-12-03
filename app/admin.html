@@ -1,0 +1,198 @@
+<!doctype html>
+
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>admin</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css" href="../dist/css/vendors.min.css"/>
+        <!-- <link rel="stylesheet" type="text/css" href="../dist/css/main.css"/> -->
+
+        <!-- Google Fonts (async) -->
+        <link async href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <link async href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+        <!-- Google Maps API -->
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script> -->
+
+        <!-- JS -->
+        <script src="../dist/js/vendors.min.js"></script>
+        <script src="../dist/js/app.min.js"></script>
+
+        <!-- Bootstrap Extended Tables -->
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+
+        <style>
+          body {
+            font-family: "Roboto", Arial, sans-serif;
+          }
+
+          tbody > tr:not(.detail-view) {
+            cursor: pointer;
+          }
+
+          tbody > tr:hover:not(.detail-view) {
+            background-color: #f5f5f5;
+          }
+
+          th, .col-title {
+            font-family: 'Raleway', sans-serif;
+          }
+
+          td {
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          th {
+            text-align: center;
+          }
+
+          .col-title {
+            max-width: 150px;
+          }
+          td.col-title {
+            font-size: 1.2em;
+            font-weight: 600;
+          }
+
+          td.col-description,
+          td.col-address {
+            font-size: 0.8em;
+          }
+ 
+          .col-id {
+            width: 60px;
+            color: gray;
+          }
+
+          .details-view img {
+            float: right;
+          }
+
+
+        </style>
+    </head>
+
+    <body>
+
+      <table
+        id="table"
+        data-classes="table table-no-bordered"
+        data-striped="true"
+        data-search="true"
+        data-show-refresh="true"
+        data-show-toggle="true"
+        data-show-columns="true"
+        data-show-export="true"
+        data-detail-view="true"
+        data-detail-formatter="detailFormatter"
+        data-row-style="rowStyle"
+        data-show-footer="false">
+      </table> 
+
+      <script>
+        function detailFormatter(index, row) {
+          var html = '';
+          
+          html += '<div class="details-view">';
+
+          if (row.photo) {
+            html += `<img src='${row.photo}'></img>`;
+          }
+
+          $.each(row, function (key, value) {
+            if (key !== 'photo') {
+              html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
+            }
+          });
+          
+          html += '</div>';
+          
+          // console.log(row);
+
+          return html;
+        }
+
+        function rowStyle(row, index) {
+          // const classes = ['active', 'success', 'info', 'warning', 'danger'];
+          if (row.text && row.text.length > 0 &&
+              row.structureType != null &&
+              row.isPublic != null) {
+            return {
+              // classes: 'success'
+            };
+          } else {
+            return {
+              // classes: 'warning'
+            };
+          }
+        }
+
+        function updateTable() {
+          $('#table').bootstrapTable({
+            columns: [
+              {
+                field: 'id', title: '#', sortable: true, class: 'col-id',
+              },
+              {
+                field: 'text', title: 'Titulo', sortable: true, class: 'col-title',
+              },
+              {
+                field: 'address', title: 'Endereço', sortable: true, class: 'col-address',
+              },
+              {
+                field: 'lat', title: 'lat', sortable: true, visible: false,
+              },
+              {
+                field: 'lng', title: 'lng', sortable: true, visible: false,
+              },
+              {
+                field: 'isPublic', title: 'Publico?', sortable: true,
+              },
+              {
+                field: 'structureType', title: 'Tipo', sortable: true,
+              },
+              {
+                field: 'average', title: 'Média', sortable: true, visible: false, 
+              },
+              {
+                field: 'reviews', title: 'No.Avaliações', sortable: true,
+              },
+              {
+                field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
+              },
+              {
+                field: 'description', title: 'Descrição', sortable: true, class: 'col-description', 
+              },
+              {
+                field: 'photo', title: 'Foto', sortable: true
+              }
+            ],
+            data: markers
+          });
+
+          $('tbody tr td').on('click', (e) => {
+            e.stopPropagation();
+            $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
+          });
+        }
+
+        Database = BIKE.Database;
+        
+        Database.authenticate(false, () => {
+          Database.getAllTags();
+          Database.getPlaces( () => {
+            updateTable();
+          }, null, null, true);
+        });
+
+      </script>
+
+    </body>
+
+</html>
