@@ -5,11 +5,21 @@
         <meta charset="UTF-8">
         <title>bike de boa</title>
 
+        <!-- META tags -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#2cd978"> <!-- Chrome mobile nav color -->
+        
+        <meta property="og:title" content="bike de boa"/>
+        <meta property="og:site_name" content="bike de boa">
+        <meta property="og:description" content="Encontre onde estacionar tua bicicleta pra ficar de boa."/>
+        <meta name="description" content="Encontre onde estacionar tua bicicleta pra ficar de boa.">
+        <meta name="keywords" content="mapa bicicleta bici biciletario seguranca estacionamento estacionar deixar prender ulock colaborativo vadebici massa critica porto alegre">
+        <link rel="canonical" href="https://www.bikedeboa.com.br" />
 
+        <!-- Progressive Webapp Manifest -->
         <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json">
 
+        <!-- Favicons -->
         <!-- Thanks https://realfavicongenerator.net/ -->
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
@@ -70,6 +80,100 @@
         </div>
 
         <div id="reviewPanelTemplatePlaceholder"></div>
+
+        <div class="modal fade" id="newPlaceModal" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <img id="photoInputBg"/>
+
+                            <input type="file" name="photoInput" id="photoInput" accept="image/*">
+                            <label for="photoInput"></label>
+                        </div>
+
+                        <div class="modal-body text-center">
+                            <div class="text-input-wrapper">
+                                <span class="little-pin gray"></span>
+                                <input required id="titleInput" type="text" class="text-input" placeholder="Título">
+                            </div>
+
+                            <div class="radio-group" style="margin: 25px 0;">
+                              <label>
+                                <input required type="radio" name="isPublicRadioGrp" value="true" />
+                                <span class="radio-image"></span>
+                                Público
+                              </label>
+
+                              <label>
+                                <input required type="radio" name="isPublicRadioGrp" value="false" />
+                                <span class="radio-image"></span>
+                                Restrito (só clientes)
+                              </label>
+                            </div>
+
+                            <hr>
+
+                            <h2>Tipo de bicicletário</h2>
+
+                            <div class="typeIconsGroup">
+                                <div data-type="uinvertido" class="typeIcon">
+                                    <img src="/img/tipo_uinvertido.svg"/>
+                                    <div class="icon-label">U Invertido</div>
+                                </div>
+                                <div data-type="deroda" class="typeIcon">
+                                    <img src="/img/tipo_deroda.svg"/>
+                                    <div class="icon-label">De Roda</div>
+                                </div>
+                                <div data-type="suspenso" class="typeIcon">
+                                    <img src="/img/tipo_suspenso.svg"/>
+                                    <div class="icon-label">Suspenso</div>
+                                </div>
+                                <div data-type="trave" class="typeIcon">
+                                    <img src="/img/tipo_trave.svg"/>
+                                    <div class="icon-label">Trave</div>
+                                </div>
+                                <div data-type="grade" class="typeIcon">
+                                    <img src="/img/tipo_grade.svg"/>
+                                    <div class="icon-label">Grade</div>
+                                </div>
+                                <div data-type="other" class="typeIcon">
+                                    <img src="/img/tipo_other.svg"/>
+                                    <div class="icon-label">Outro</div>
+                                </div>
+                            </div>
+
+                            <div class="description collapsable">
+                                <h2>
+                                    Mais informações
+                                </h2>
+
+                                <small>
+                                    <textarea id="descriptionInput" maxlength="250" type="text" class="text-input" placeholder="Algo mais que tu aches importante comentar?"></textarea>
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button id="saveNewPlaceBtn" class="btn border btn-footer green">SALVAR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="addPlace" class="bigRoundedButton coolHide">
+            ADICIONAR BICICLETÁRIO
+        </button>
+
+        <span id="newPlaceholderShadow"></span>
+        <button id="newPlaceholder">
+            <img src="/img/pin_bike.svg"/>
+        </button>
+
+        
+        <div id="map"></div>
+
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
@@ -302,99 +406,6 @@
                     </div>
             </div>
         </script>
-
-        <!-- New Place Modal -->
-        <div class="modal fade" id="newPlaceModal" tabindex="-1">
-            <div class="vertical-alignment-helper">
-                <div class="modal-dialog vertical-align-center">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <img id="photoInputBg"/>
-
-                            <input type="file" name="photoInput" id="photoInput" accept="image/*">
-                            <label for="photoInput"></label>
-                        </div>
-
-                        <div class="modal-body text-center">
-                            <div class="text-input-wrapper">
-                                <span class="little-pin gray"></span>
-                                <input required id="titleInput" type="text" class="text-input" placeholder="Título">
-                            </div>
-
-                            <div class="radio-group" style="margin: 25px 0;">
-                              <label>
-                                <input required type="radio" name="isPublicRadioGrp" value="true" />
-                                <span class="radio-image"></span>
-                                Público
-                              </label>
-
-                              <label>
-                                <input required type="radio" name="isPublicRadioGrp" value="false" />
-                                <span class="radio-image"></span>
-                                Restrito (só clientes)
-                              </label>
-                            </div>
-
-                            <hr>
-
-                            <h2>Tipo de bicicletário</h2>
-
-                            <div class="typeIconsGroup">
-                                <div data-type="uinvertido" class="typeIcon">
-                                    <img src="/img/tipo_uinvertido.svg"/>
-                                    <div class="icon-label">U Invertido</div>
-                                </div>
-                                <div data-type="deroda" class="typeIcon">
-                                    <img src="/img/tipo_deroda.svg"/>
-                                    <div class="icon-label">De Roda</div>
-                                </div>
-                                <div data-type="suspenso" class="typeIcon">
-                                    <img src="/img/tipo_suspenso.svg"/>
-                                    <div class="icon-label">Suspenso</div>
-                                </div>
-                                <div data-type="trave" class="typeIcon">
-                                    <img src="/img/tipo_trave.svg"/>
-                                    <div class="icon-label">Trave</div>
-                                </div>
-                                <div data-type="grade" class="typeIcon">
-                                    <img src="/img/tipo_grade.svg"/>
-                                    <div class="icon-label">Grade</div>
-                                </div>
-                                <div data-type="other" class="typeIcon">
-                                    <img src="/img/tipo_other.svg"/>
-                                    <div class="icon-label">Outro</div>
-                                </div>
-                            </div>
-
-                            <div class="description collapsable">
-                                <h2>
-                                    Mais informações
-                                </h2>
-
-                                <small>
-                                    <textarea id="descriptionInput" maxlength="250" type="text" class="text-input" placeholder="Algo mais que tu aches importante comentar?"></textarea>
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button id="saveNewPlaceBtn" class="btn border btn-footer green">SALVAR</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button id="addPlace" class="bigRoundedButton coolHide">
-            ADICIONAR BICICLETÁRIO
-        </button>
-
-        <span id="newPlaceholderShadow"></span>
-        <button id="newPlaceholder"> <img src="/img/pin_bike.svg"/> </button>
-
-        
-        <div id="map"></div>
-
 
         <!-- Google Analytics -->
         <script>
