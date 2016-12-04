@@ -60,6 +60,7 @@
             font-weight: 600;
           }
 
+          td.col-timestamp,
           td.col-description,
           td.col-address {
             font-size: 0.8em;
@@ -79,6 +80,10 @@
     </head>
 
     <body>
+
+      <div id="loading">
+        Loading...
+      </div>
 
       <table
         id="table"
@@ -133,6 +138,14 @@
           }
         }
 
+        // function photoColFormatter(value) {
+        //   return value ? 'Sim' : '-';
+        // }
+
+        function timestampColFormatter(value) {
+          return value && new Date(value).toUTCString();
+        }
+
         function updateTable() {
           $('#table').bootstrapTable({
             columns: [
@@ -171,16 +184,19 @@
               },
               {
                 field: 'photo', title: 'Foto', sortable: true
+              },
+              {
+                field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
               }
             ],
             data: markers
           });
-
-          $('tbody tr td').on('click', (e) => {
-            e.stopPropagation();
-            $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
-          });
         }
+
+
+        /////////////////////
+        // Initializations //
+        /////////////////////
 
         Database = BIKE.Database;
         
@@ -188,7 +204,19 @@
           Database.getAllTags();
           Database.getPlaces( () => {
             updateTable();
+            $('#loading').hide();
           }, null, null, true);
+        });
+
+        
+        // 
+        // Triggers
+        // 
+
+        $('body').on('click', 'tbody tr td', (e) => {
+          e.stopPropagation();
+          console.log('details');
+          $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
         });
 
       </script>
