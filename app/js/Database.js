@@ -259,7 +259,7 @@ BIKE.Database = {
         }
       },
       error: function(data) {
-        self.authenticate(callback);
+        self.authenticate(isUserLogin, callback);
       }
     });
   },
