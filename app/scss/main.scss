@@ -76,15 +76,53 @@ body.beta #map {
 }
 
 #locationSearch {
+    top: 15px;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 48px;
+    background-color: $white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    max-width: 600px;
+    width: calc(100% - 30px);
+
+    // display: table;
+
     transition: all 0.5s ease-in-out;
     opacity: 1;
 
+    &:before {
+        position: relative;
+        top: 1px;
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-weight: 400;
+        line-height: 1;
+        content: "\e003";
+        position: absolute;
+        font-size: 16px;
+        top: 0;
+        left: 0;
+        /* opacity: 0.5; */
+        color: grey;
+        padding: 17px;
+        // background: $darkGreen;
+        // color: $paleWhite;
+        color: $darkGreen;
+        // color: $lightGray;
+    }
 
     input {
         width: 100%;
         font-size: 14px;
-        padding: 0 35px 0 15px;
+        padding: 0 0px 0 45px;
         font-weight: lighter;
+        border-radius: 3px;
+
+        border: none;
+        border-bottom: 3px solid $darkGreen;
     }
 
     &.coolHide {
@@ -100,6 +138,7 @@ body.beta #map {
 
     #clearLocationQueryBtn {
       opacity: 0;
+      visibility: hidden;
 
       position: absolute;
       top: 0px;
@@ -163,22 +202,6 @@ body.beta #map {
     }
 }
 
-#locationSearch {
-    top: 15px;
-    position: absolute;
-    z-index: 1;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 95%;
-    height: 48px;
-    background-color: $white;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    max-width: 600px;
-    width: calc(100% - 30px);
-
-    display: table;
-}
-
 #filterBtn img {
     width: 20px;
     height: 20px;
@@ -187,8 +210,8 @@ body.beta #map {
 #locationSearch input,
 #filterBtn {
     height: 48px;
-    display: table-cell;
-    border: none;
+    // display: table-cell;
+    // border: none;
     /* vertical-align: top; */
 }
 

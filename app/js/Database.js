@@ -218,11 +218,6 @@ BIKE.Database = {
   authenticate: function(isUserLogin, callback) {
     const self = this;
 
-    // Custom login
-    if (!isUserLogin) {
-      isUserLogin = window.location.pathname === '/admin';
-    }
-    
     let user = Cookies.get('bikedeboa_user');
     let pw;
     if (isUserLogin && !user) {

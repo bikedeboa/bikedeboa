@@ -1169,7 +1169,7 @@ BIKE.MockedDatabase = {
     }, getSimulatedDelay());
   },
 
-  authenticate: function(callback) {
+  authenticate: function(isUserLogin, callback) {
     if (callback && typeof callback === 'function') {
       callback();
     }

@@ -682,20 +682,28 @@ $(function () {
     $('.modal-header').toggleClass('expanded');
   }
 
+  function toggleClearLocationBtn(stateStr) {
+    if (stateStr === 'show') {
+      $('#clearLocationQueryBtn').css('opacity', 1).css('visibility', 'visible');
+      $('#locationSearch input').css('padding-right', '50px');
+    } else if (stateStr === 'hide') {
+      $('#clearLocationQueryBtn').css('opacity', 0).css('visibility', 'hidden');
+      $('#locationSearch input').css('padding-right', '0');
+    } else {
+      console.error('Invalid arg in toggleClearLocationBtn()');
+    }
+  }
+
   function _initTriggers() {
     // Home
     $('body').on('click', '#locationQueryBtn', searchLocation);
     $('body').on('click', '#clearLocationQueryBtn', () => {
       $('#locationQueryInput').val('');
-      $('#clearLocationQueryBtn').css('opacity', 0);
+      toggleClearLocationBtn('hide');
       _searchResultMarker.setVisible(false);
     });
     $('body').on('input', '#locationQueryInput', () => {
-      if ($('#locationQueryInput').val().length > 0) {
-        $('#clearLocationQueryBtn').css('opacity', 1);
-      } else {
-        $('#clearLocationQueryBtn').css('opacity', 0);
-      }
+      toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     });
 
     $('body').on('click', '#loginBtn', () => {
@@ -707,11 +715,11 @@ $(function () {
 
 
     // @todo FIX ME! This is getting triggered when changing between modals...
-    $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
+    // $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
       // if (History.getState().title !== 'bike de boa') {
       //   pushtory.replaceState({}, 'bike de boa', '/');
       // }
-    });
+    // });
 
 
     // New place panel
