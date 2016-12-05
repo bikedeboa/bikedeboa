@@ -259,7 +259,10 @@ BIKE.Database = {
         }
       },
       error: function(data) {
-        self.authenticate(isUserLogin, callback);
+        console.error('Authentication failed. Trying again in 2s...');
+        setTimeout( () => { 
+          self.authenticate(isUserLogin, callback);
+        }, 2000);
       }
     });
   },
