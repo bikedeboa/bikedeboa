@@ -471,6 +471,7 @@ $(function () {
       let canvas = document.createElement('canvas');
       let img = new Image();
       img.src = e.target.result;
+      // img.style.height = '1000px';
 
       // Resize image fitting PHOTO_UPLOAD_MAX_W and PHOTO_UPLOAD_MAX_H
       let width = img.width;
@@ -491,7 +492,7 @@ $(function () {
       canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
       // Save the resized blob
-      _uploadingPhotoBlob = canvas.toDataURL('image/png');
+      _uploadingPhotoBlob = canvas.toDataURL('image/jpeg', 0.8);
 
       // Present to the user the already resized image
       document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
