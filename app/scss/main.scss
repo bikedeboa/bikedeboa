@@ -11,6 +11,9 @@ $paleWhite: #F3F3F3;
 $gray: #828b90;
 $lightGray: #b3b3b3;
 $lightestGray: #e6e6e6;
+$gray: $grey;
+$lightGray: $lightGrey;
+$lightestGray: $lightestGrey;
 
 $bootstrapBackdropColor: white;
 $bootstrapBackdropOpacity: 0.7;
@@ -408,32 +411,44 @@ body.beta #map {
     // display: none;
 }
 
-#spinnerOverlay > img,
 #spinnerOverlay .spinnerContainer {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
+    
+    text-align: center;
+    
+    img {
+        animation: spin 3s linear infinite;
+        width: 70px;
+        height: 70px;
+    }
+ 
+    p {
+        color: $gray;
+        font-family: $headingFont;
+        margin-top: 10px;
+        font-weight: 700;
+    }
 }
 
-#spinnerOverlay .spinnerContainer img {
-    animation: spin 3s linear infinite;
-    width: 70px;
-    height: 70px;
-}
 
-#spinnerOverlay #wheel1,
-#spinnerOverlay #wheel2 {
-    top: calc(50% - 2px);
-}
+// Old 2-wheel bicycle spinner
 
-#spinnerOverlay #wheel1 {
-    left: calc(50% - 60px);
-}
+// #spinnerOverlay #wheel1,
+// #spinnerOverlay #wheel2 {
+//     top: calc(50% - 2px);
+// }
 
-#spinnerOverlay #wheel2 {
-    left: calc(50% + 65px);
-}
+// #spinnerOverlay #wheel1 {
+//     left: calc(50% - 60px);
+// }
+
+// #spinnerOverlay #wheel2 {
+//     left: calc(50% + 65px);
+// }
+
 
 .modal-dialog {
     margin-top: 60px;
