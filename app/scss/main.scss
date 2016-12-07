@@ -21,6 +21,23 @@ $bodyFont: "Roboto", Arial, sans-serif;
 $headingFont: 'Raleway', sans-serif;
 
 
+@keyframes bounceAndGlow {
+  from { opacity: 0.7; transform: translate(-50%,-100%);}
+  to { opacity: 1; transform: translate(-50%,-110%);}
+}
+
+@keyframes pulse {
+  from { opacity: 0.7;}
+  to { opacity: 1;}
+}
+
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+
 // Thanks to https://gist.github.com/paulmelnikow/7fcfbe4f68e5df7fe326  
 @mixin material-shadow ($level) {
     @if $level == 1 {
@@ -60,6 +77,28 @@ body.beta #map {
     }
 }
 
+.loading {
+    opacity: 0.8;
+
+    // Thanks https://stephanwagner.me/only-css-loading-spinner
+    &:after {
+      content: '';
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 30px;
+      height: 30px;
+      margin-top: -10px;
+      margin-left: -10px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: $darkGreen;
+      animation: spinner .6s linear infinite;
+    }
+}
+
+
 #map {
     width: 100vw;
     height: 100vh;
@@ -83,8 +122,6 @@ body.beta #map {
     transform: translateX(-50%);
     width: 95%;
     height: 48px;
-    background-color: $white;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     max-width: 600px;
     width: calc(100% - 30px);
 
@@ -107,7 +144,7 @@ body.beta #map {
         left: 0;
         /* opacity: 0.5; */
         color: grey;
-        padding: 17px;
+        padding: 15px;
         // background: $darkGreen;
         // color: $paleWhite;
         color: $darkGreen;
@@ -120,6 +157,7 @@ body.beta #map {
         padding: 0 0px 0 45px;
         font-weight: lighter;
         border-radius: 3px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 
         border: none;
         border-bottom: 3px solid $darkGreen;
@@ -170,6 +208,7 @@ body.beta #map {
         top: 50px;
         right: 0;
         width: auto;
+        border-radius: 3px;
 
         .glyphicon {
             margin-right: 5px;
@@ -317,24 +356,6 @@ body.beta #map {
         height: auto;
     }
 }
-
-
-@keyframes bounceAndGlow {
-  from { opacity: 0.7; transform: translate(-50%,-100%);}
-
-  to { opacity: 1; transform: translate(-50%,-110%);}
-
-}
-
-
-@keyframes pulse {
-  from { opacity: 0.7;}
-
-  to { opacity: 1;}
-
-}
-
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 
 #newPlaceholderShadow {
@@ -550,10 +571,8 @@ body.beta #map {
     padding: 0px;
     position: relative;
     background-image: url(/img/bg_header.png);
-    min-height: 170px;
-    height: 170px;
-    max-height: 170px;
     overflow: visible;
+    height: 70px;
 
     // transition: max-height 0.5s ease;
 
@@ -562,12 +581,18 @@ body.beta #map {
         object-fit: cover;
     }
 
-    &.expanded {
-        max-height: 800px;
-        height: auto;
+    &.hasImage {
+        min-height: 170px;
+        height: 170px;
+        max-height: 170px;
+        
+        &.expanded {
+            max-height: 800px;
+            height: auto;
 
-        img {
-            cursor: zoom-out;
+            img {
+                cursor: zoom-out;
+            }
         }
     }
 
@@ -870,6 +895,21 @@ body.beta #map {
     color: #939a9d;
     border-radius: 10px;
     margin: 5px 2px;
+
+    &:before {
+        content: '☐';
+        margin-right: 5px;
+    }
+
+    &.active {
+        background: $darkGreen;
+        color: white;
+
+        &:before {
+            content: '☑';
+        }
+    }
+    
 }
 
 #reviewPanel .btn-tag {
@@ -878,10 +918,6 @@ body.beta #map {
     font-size: 16px;
 }
 
-.btn-tag.active {
-    background: $darkGreen;
-    color: white;
-}
 
 .tagDisplay {
     display: inline-block;

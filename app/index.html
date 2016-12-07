@@ -180,7 +180,7 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-          <div class="modal-header {{#if photoUrl}}hasImage{{/if}}">
+          <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}}">
               {{#if photoUrl}}
                   <img src="{{photoUrl}}"/>
               {{/if}}

@@ -11,7 +11,7 @@ $(function () {
       return false;
     }
 
-    History.pushState({}, 'Detalhes do bicicletário', 'detalhes');
+    History.pushState({}, 'Detalhes do bicicletário', `detalhes/${m.id}`);
 
     let templateData = {};
 
@@ -87,6 +87,11 @@ $(function () {
     // Template is rendered, start jquerying
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
     $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
+
+    $('.modal-header img').on('load', e => { 
+      $(e.target).parent().removeClass('loading'); 
+      console.warn('img loaded');
+    });
 
 
     // If not yet shown...
@@ -619,7 +624,7 @@ $(function () {
     templateData.tagsButtons = tags.map(t => {
       const isPrepoped = previousReview && previousReview.tags.find( (i) => {return parseInt(i.id) === t.id;} );
       // @todo refactor this to use Handlebars' native support for arrays
-      return `<button class="btn btn-tag ${isPrepoped && 'active'}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
+      return `<button class="btn btn-tag ${isPrepoped ? 'active' : ''}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
     }).join('');
 
 
@@ -695,6 +700,46 @@ $(function () {
     }
   }
 
+  function sendReviewBtnCB() {
+    const activeTagBtns = $('#reviewPanel .tagsContainer .btn.active');
+    let reviewTags = [];
+    for(let i=0; i<activeTagBtns.length; i++) {
+      reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
+    }
+
+    showSpinner();
+
+    const reviewObj = {
+      placeId: openedMarker.id,
+      rating: currentPendingRating,
+      tags: reviewTags
+    };
+
+    const callback = () => {
+      Database.sendReview(reviewObj, (reviewId) => {
+        // Update internal state
+        reviewObj.databaseId = reviewId;
+        saveOrUpdateReviewCookie(reviewObj);
+
+        // Update screen state
+        // $('#reviewPanel').modal('hide');
+        // $('#placeDetailsModal').modal('hide');
+        History.pushState({}, 'bike de boa', '/');
+
+        // Update markers data
+        Database.getPlaces(updateMarkers);
+      });
+    };
+
+    const previousReview = getReviewFromSession(openedMarker.id);
+    if (previousReview) {
+      // Delete previous
+      Database.deleteReview(previousReview.databaseId, callback);
+    } else {
+      callback();
+    }
+  }
+
   function _initTriggers() {
     // Home
     $('body').on('click', '#locationQueryBtn', searchLocation);
@@ -710,7 +755,6 @@ $(function () {
     $('body').on('click', '#loginBtn', () => {
       login(true);
     });
-
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
@@ -771,43 +815,7 @@ $(function () {
     });
 
     $('body').on('click', '#sendReviewBtn', () => {
-      const activeTagBtns = $('#reviewPanel .tagsContainer .btn.active');
-      let reviewTags = [];
-      for(let i=0; i<activeTagBtns.length; i++) {
-        reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
-      }
-
-      showSpinner();
-
-      const reviewObj = {
-        placeId: openedMarker.id,
-        rating: currentPendingRating,
-        tags: reviewTags
-      };
-
-      const callback = () => {
-        Database.sendReview(reviewObj, (reviewId) => {
-          // Update internal state
-          reviewObj.databaseId = reviewId;
-          saveOrUpdateReviewCookie(reviewObj);
-
-          // Update screen state
-          // $('#reviewPanel').modal('hide');
-          // $('#placeDetailsModal').modal('hide');
-          History.pushState({}, 'bike de boa', '/');
-
-          // Update markers data
-          Database.getPlaces(updateMarkers);
-        });
-      };
-
-      const previousReview = getReviewFromSession(openedMarker.id);
-      if (previousReview) {
-        // Delete previous
-        Database.deleteReview(previousReview.databaseId, callback);
-      } else {
-        callback();
-      }
+      sendReviewBtnCB();
     });
 
 
