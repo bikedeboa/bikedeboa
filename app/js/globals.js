@@ -23,7 +23,7 @@ const MARKER_ICON_GREEN = 'img/pin_green.svg';
 const MARKER_ICON_YELLOW = 'img/pin_yellow.svg';
 const MARKER_ICON_RED = 'img/pin_red.svg';
 const MARKER_ICON_GRAY = 'img/pin_gray.svg';
-const GMAPS_DIRECTIONS_URL = 'http://maps.google.com/maps?saddr="#{origin}"&daddr="#{destination}"';
+// const GMAPS_DIRECTIONS_URL = 'http://maps.google.com/maps?saddr="#{origin}"&daddr="#{destination}"';
 const PHOTO_UPLOAD_MAX_W = 1000;
 const PHOTO_UPLOAD_MAX_H = 1000;
 
