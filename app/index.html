@@ -43,12 +43,8 @@
     </head>
 
     <body class="beta">
-        <div id="spinnerOverlay">
-            <div class="spinnerContainer">
-                <img src="/img/spinner_animated.svg"/>
-            </div>
-        </div>
-
+        <div id="map"></div>
+        
         <div id="locationSearch" class="coolHide">
             <!-- <span class="balaca">
                 <img src="/img/bici.svg"/>
@@ -171,8 +167,15 @@
             <img src="/img/pin_bike.svg"/>
         </button>
 
+        <div id="reviewPanelTemplatePlaceholder"></div>
         
-        <div id="map"></div>
+        <div id="messageModalPlaceholder"></div>
+
+        <div id="spinnerOverlay">
+            <div class="spinnerContainer">
+                <img src="/img/spinner_animated.svg"/>
+            </div>
+        </div>
 
 
         <!-- View Details Modal -->
@@ -404,6 +407,31 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </script>
+
+        <!-- Message Modal -->
+        <script id="messageModalTemplate" type="text/x-handlebars-template">
+           <div id="messageModal" class="modal fade {{messageClasses}}" tabindex="-1">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="message-content"> 
+                                    <p>
+                                        <span class="glyphicon {{glyphiconClass}}" style="font-size: 60px; color: white;"></span>
+                                    </p>
+                                    {{messageContent}}
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button id="messageModalOkBtn" class="btn border btn-footer">{{buttonLabel}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </script>
 
