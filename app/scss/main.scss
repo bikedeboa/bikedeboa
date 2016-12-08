@@ -11,9 +11,9 @@ $paleWhite: #F3F3F3;
 $gray: #828b90;
 $lightGray: #b3b3b3;
 $lightestGray: #e6e6e6;
-$gray: $grey;
-$lightGray: $lightGrey;
-$lightestGray: $lightestGrey;
+$grey: $gray;
+$lightGrey: $lightGray;
+$lightestGrey: $lightestGray;
 
 $bootstrapBackdropColor: white;
 $bootstrapBackdropOpacity: 0.7;
@@ -95,7 +95,7 @@ body.beta #map {
       margin-top: -10px;
       margin-left: -10px;
       border-radius: 50%;
-      border: 2px solid transparent;
+      border: 3px solid transparent;
       border-top-color: $darkGreen;
       animation: spinner .6s linear infinite;
     }
@@ -594,6 +594,10 @@ body.beta #map {
     img {
         cursor: zoom-in;
         object-fit: cover;
+    }
+
+    &.photoInputContainer {
+        height: 100px;
     }
 
     &.hasImage {

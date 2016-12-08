@@ -257,8 +257,6 @@ $(function () {
   }
 
   function updateMarkers() {
-    hideSpinner();
-
     clearMarkers();
 
     // Markers from Database
@@ -383,7 +381,10 @@ $(function () {
     place.description = $('#newPlaceModal #descriptionInput').val();
 
     const callback = () => {
-      Database.getPlaces(updateMarkers);
+      Database.getPlaces( () => {
+        updateMarkers();
+        hideSpinner();
+      });
     };
 
     if (isUpdate) {
@@ -398,7 +399,10 @@ $(function () {
       $('#placeDetailsModal').modal('show');
 
       showSpinner();
-      Database.getPlaces(updateMarkers);
+      Database.getPlaces( () => {
+        updateMarkers();
+        hideSpinner();
+      });
     });
   }
 
@@ -604,7 +608,10 @@ $(function () {
         Database.deletePlace(openedMarker.id, () => {
           // $('#newPlaceModal').modal('hide');
           History.pushState({}, 'bike de boa', '/');
-          Database.getPlaces(updateMarkers);
+          Database.getPlaces( () => {
+            updateMarkers();
+            hideSpinner();
+          });
         });
       }
     }
@@ -727,7 +734,10 @@ $(function () {
         History.pushState({}, 'bike de boa', '/');
 
         // Update markers data
-        Database.getPlaces(updateMarkers);
+        Database.getPlaces( () => {
+          updateMarkers();
+          hideSpinner();
+        });
       });
     };
 
@@ -906,11 +916,14 @@ $(function () {
         });
       }
 
-      // Reset URL
-      History.replaceState({}, 'bike de boa', '/');
-
       Database.getAllTags();
-      Database.getPlaces(updateMarkers);
+      Database.getPlaces( () => {
+        updateMarkers();
+        
+        hideSpinner();
+
+        $('#map').css('filter', 'none');
+      });
     });
   }
 
@@ -948,13 +961,14 @@ $(function () {
   };
 
   function init() {
+    // Reset URL
+    History.replaceState({}, 'bike de boa', '/');
+
     if (isDemoMode) {
       Database = BIKE.MockedDatabase;
     } else {
       Database = BIKE.Database;
     }
-
-    showSpinner();
 
     login();
   }
