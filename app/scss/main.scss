@@ -678,7 +678,7 @@ body.beta #map {
         margin-top: 0px;
         /* margin-left: 40px; */
 
-        .wireframe-like-box {
+        .skeleton-box {
             width: 100%;
             height: 20px;
         }
@@ -693,7 +693,7 @@ body.beta #map {
         font-family: $headingFont;
         font-weight: 700;
 
-        & > .wireframe-like-box {
+        & > .skeleton-box {
             width: 70%;
             height: 40px;
             background: rgba(0,0,0,0.2);
@@ -829,7 +829,7 @@ body.beta #map {
     border-top: 1px solid #eee;
     margin: 10px 0;
 
-    .wireframe-like-box,
+    .skeleton-box,
     img {
         margin: 0 5px;
         display: inline-block;
@@ -838,20 +838,25 @@ body.beta #map {
         height: auto;
     }
 
-    .wireframe-like-box {
+    .skeleton-box {
         height: 90px;
     }
 
     small {
         color: $gray;
     }
+
+    .icon-label {
+        margin-top: 10px;
+        color: $gray;
+        font-weight: 400;
+
+        &.skeleton-box {
+            height: 20px;
+        }
+    }
 }
 
-.icon-label {
-    margin-top: 10px;
-    color: $gray;
-    font-weight: 400;
-}
 
 #placeDetailsModal {
     .modal-body {
@@ -1011,6 +1016,7 @@ body.beta #map {
         // Override stupid bootstrap rule
         color: rgb(250,250,250);
     }
+
 }
 
 .light {
@@ -1065,7 +1071,7 @@ body.beta #map {
     }
 }
 
-.wireframe-like-box {
+.skeleton-box {
     background: rgba(0,0,0,0.1);
     display: inline-block;
 }

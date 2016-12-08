@@ -90,7 +90,6 @@ $(function () {
 
     $('.modal-header img').on('load', e => { 
       $(e.target).parent().removeClass('loading'); 
-      console.warn('img loaded');
     });
 
 
