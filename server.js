@@ -2,6 +2,10 @@ var express = require('express');
 var app = express();
 var router = express.Router();
 var path = __dirname + '/app/';
+var compression = require('compression');
+
+// GZIP!!!!!
+app.use(compression());
 
 // Static libs
 app.use('/bower_components', express.static(__dirname + '/bower_components'));

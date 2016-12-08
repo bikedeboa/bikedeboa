@@ -12,7 +12,7 @@ const child = require('child_process');
 const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const runSequence = require('run-sequence');
-const size = require('gulp-size');
+const fileSizes = require('gulp-size');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const plumber = require('gulp-plumber');
@@ -49,6 +49,7 @@ gulp.task('sass', () => {
         .pipe(concat('main.min.css'))
         .pipe(minifycss())
         .pipe(sourcemaps.write('.'))
+        .pipe(fileSizes({title: 'main.min.css', gzip: true}))
         .pipe(gulp.dest('dist/css'));
 });
 
@@ -70,6 +71,7 @@ gulp.task('scripts', () => {
     .pipe(rename('app.min.js'))
     .pipe(uglify())
     .pipe(sourcemaps.write('maps'))
+    .pipe(fileSizes({title: 'app.min.js', gzip: true}))
     .pipe(gulp.dest('dist/js'));
 });
 
@@ -83,7 +85,7 @@ gulp.task('bower', function() {
 
   return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
 
-  .pipe(size({title: 'bower files', gzip: true, showFiles: true}))
+  .pipe(fileSizes({title: 'bower files', gzip: true, showFiles: true}))
 
   // grab vendor js files from bower_components, minify and push in DEST_PATH
   .pipe(jsFilter)
@@ -93,6 +95,7 @@ gulp.task('bower', function() {
   // .pipe(rename({
   //   suffix: ".min"
   // }))
+  .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
   .pipe(gulp.dest(DEST_PATH + '/js/'))
   .pipe(jsFilter.restore)
 
@@ -104,6 +107,7 @@ gulp.task('bower', function() {
   // .pipe(rename({
   //     suffix: ".min"
   // }))
+  .pipe(fileSizes({title: 'vendors.min.css', gzip: true}))
   .pipe(gulp.dest(DEST_PATH + '/css'))
   .pipe(cssFilter.restore);
 
@@ -116,6 +120,7 @@ gulp.task('bower', function() {
 gulp.task('bower-fonts', function() {
   return gulp.src('./bower_components/**/*.{eot,svg,ttf,woff,woff2}')
     .pipe(flatten())
+    .pipe(fileSizes({title: 'bower fonts', gzip: true}))
     .pipe(gulp.dest(DEST_PATH + '/fonts'));
 });
 
@@ -145,7 +150,7 @@ gulp.task('clean', del.bind(null, ['dist']));
 
 gulp.task('build', () => {
   runSequence(['clean'], ['bower', 'bower-fonts', 'sass', 'scripts'], () => {
-    return gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
+    return gulp.src('dist/**/*').pipe(fileSizes({title: 'total output', gzip: true}));
   });
 });
 

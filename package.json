@@ -39,6 +39,7 @@
     "postinstall": "./node_modules/bower/bin/bower install; gulp build"
   },
   "devDependencies": {
+    "compression": "^1.6.2",
     "gulp-clean-css": "^2.1.2"
   }
 }
