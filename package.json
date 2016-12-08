@@ -12,6 +12,7 @@
     "browser-sync": "^2.2.1",
     "del": "^2.2.0",
     "express": "^4.14.0",
+    "compression": "^1.6.2",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.1",
     "gulp-babel": "^6.1.1",
@@ -31,15 +32,12 @@
     "gulp-sourcemaps": "^1.5.0",
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.0.0",
+    "gulp-clean-css": "^2.1.2",
     "main-bower-files": "^2.5.0",
     "run-sequence": "^1.2.2",
     "wiredep": "^4.0.0"
   },
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install; gulp build"
-  },
-  "devDependencies": {
-    "compression": "^1.6.2",
-    "gulp-clean-css": "^2.1.2"
   }
 }
