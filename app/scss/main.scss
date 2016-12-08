@@ -972,7 +972,11 @@ body.beta #map {
 }
 
 .modal-footer .col-half + .col-half {
-    border-left: 1px solid rgba(44,217,120,0.5);
+    border-left: 2px solid rgba(44,217,120,0.5);
+}
+
+#placeDetailsModalTemplatePlaceholder .modal-footer .col-half + .col-half {
+    border-left: 2px solid $white;
 }
 
 .btn {

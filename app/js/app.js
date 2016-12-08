@@ -185,9 +185,11 @@ $(function () {
     } else {
       showSpinner();
 
+      // Load skeleton modal template
       $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalLoadingTemplate());
       $('#placeDetailsModal').modal('show');
 
+      // Request content
       Database.getPlaceDetails(marker.id, () => {
         hideSpinner();
         openDetailsModal(markerIndex);
@@ -362,7 +364,7 @@ $(function () {
   function sendNewPlace() {
     // $('#newPlaceModal').modal('hide');
     History.pushState({}, 'bike de boa', '/');
-    showSpinner();
+    showSpinner('Salvando bicicletário...');
 
     const isUpdate = openedMarker && loggedUser;
     let place = {};
@@ -463,13 +465,18 @@ $(function () {
     $('#spinnerOverlay').fadeToggle();
   }
 
-  function showSpinner () {
+  function showSpinner (label) {
     console.log('showspinner');
+    if (label) {
+      $('#globalSpinnerLabel').html(label);
+    }
     $('#spinnerOverlay').fadeIn();
   }
 
   function hideSpinner () {
-    $('#spinnerOverlay').fadeOut();
+    $('#spinnerOverlay').fadeOut(400, () => {
+      $('#globalSpinnerLabel').html('');
+    });
     $('.coolHide').removeClass('coolHide');
   }
 
@@ -604,6 +611,7 @@ $(function () {
   function deletePlace() {
     if (openedMarker && loggedUser) {
       if (confirm('Tem certeza que quer deletar este bicicletário?')) {
+        showSpinner();
         Database.deletePlace(openedMarker.id, () => {
           // $('#newPlaceModal').modal('hide');
           History.pushState({}, 'bike de boa', '/');
