@@ -130,7 +130,7 @@ body.beta #map {
 
     // display: table;
 
-    transition: all 0.5s ease-in-out;
+    transition: top 0.5s ease-out, opacity 0.5s ease-out;
     opacity: 1;
 
     &:before {
@@ -254,7 +254,7 @@ body.beta #map {
 }
 
 #addPlace {
-    transition: all 0.5s ease-in-out;
+    transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
     opacity: 0.9;
 
     &.coolHide {
@@ -265,6 +265,20 @@ body.beta #map {
     &:active,
     &:focus {
         opacity: 1;
+    }
+
+    &.active {
+        font-size: 0;
+        width: 50px;
+        background-color: rgb(20,20,20);
+
+        transition: background-color 0.5s ease, font-size 0s ease;
+    }
+
+    &.active:after {
+        content: '✕';
+        color: $darkGreen;
+        font-size: 24px;
     }
 }
 
@@ -325,20 +339,6 @@ body.beta #map {
 .bigRoundedButton:focus {
     color: white;
     background-color: $lightGreen;
-}
-
-#addPlace.active {
-    font-size: 0;
-    width: 50px;
-    background-color: rgb(20,20,20);
-
-    transition: background-color 0.5s ease, font-size 0s ease;
-}
-
-#addPlace.active:after {
-    content: '✕';
-    color: $darkGreen;
-    font-size: 24px;
 }
 
 #newPlaceholder {

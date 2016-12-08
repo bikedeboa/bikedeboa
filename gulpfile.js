@@ -46,7 +46,8 @@ gulp.task('sass', () => {
         .pipe(autoprefixer({
             browsers: ['> 1%']
         }))
-        .pipe(concat('main.css'))
+        .pipe(concat('main.min.css'))
+        .pipe(minifycss())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/css'));
 });
@@ -78,9 +79,11 @@ gulp.task('bower', function() {
       cssFilter = filter('**/*.css', {restore: true}),
       fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
 
-  console.log(mainBowerFiles());
+  // console.log(mainBowerFiles());
 
   return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
+
+  .pipe(size({title: 'bower files', gzip: true, showFiles: true}))
 
   // grab vendor js files from bower_components, minify and push in DEST_PATH
   .pipe(jsFilter)
