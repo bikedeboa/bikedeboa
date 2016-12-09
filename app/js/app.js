@@ -201,60 +201,69 @@ $(function () {
     const i = markerIndexInArray;
     const m = markers[i];
 
-    // Icon and Scaling
-    let iconUrl;
-    let scale;
-    if (!m.average || m.average === 0) {
-      iconUrl = MARKER_ICON_GRAY;
-      scale = 0.8;
-    } else if (m.average > 0 && m.average < 2) {
-      iconUrl = MARKER_ICON_RED;
-    } else if (m.average >= 2 && m.average < 3.5) {
-      iconUrl = MARKER_ICON_YELLOW;
-    } else if (m.average >= 3.5) {
-      iconUrl = MARKER_ICON_GREEN;
+    if (m) {
+      // Icon and Scaling
+      let iconUrl;
+      let scale;
+      if (!m.average || m.average === 0) {
+        iconUrl = MARKER_ICON_GRAY;
+        scale = 0.8;
+      } else if (m.average > 0 && m.average < 2) {
+        iconUrl = MARKER_ICON_RED;
+      } else if (m.average >= 2 && m.average < 3.5) {
+        iconUrl = MARKER_ICON_YELLOW;
+      } else if (m.average >= 3.5) {
+        iconUrl = MARKER_ICON_GREEN;
+      } else {
+        iconUrl = MARKER_ICON_GRAY;
+      }
+      if (!scale) {
+        scale = 0.5 + (m.average/10);
+      }
+
+      const icon = {
+        url: iconUrl, // url
+        scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+      };
+
+      // @todo temporarily disabled this because backend still doesnt support flags for these
+      // let labelStr;
+      // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
+      //   labelStr = '?';
+      // }
+
+      if (m.lat && m.lng) {
+        _gmarkers.push(new google.maps.Marker({
+          position: {
+            lat: parseFloat(m.lat),
+            lng: parseFloat(m.lng)
+          },
+          map: map,
+          icon: icon,
+          title: m.text,
+          // label: labelStr && {
+          //   text: labelStr,
+          //   color: 'white',
+          //   fontFamily: 'Roboto'
+          // },
+          zIndex: i, //markers should be ordered by average
+          // opacity: 0.1 + (m.average/5).
+        }));
+
+        (function (markerIndex) {
+          _gmarkers[markerIndex].addListener('click', () => {
+            onMarkerClick(markerIndex);
+          });
+        }(i));
+      } else {
+        console.error('not lat or long o.O');
+      }
+      
     } else {
-      iconUrl = MARKER_ICON_GRAY;
+      console.error('marker is weirdly empty on addMarkerToMap()');
     }
-    if (!scale) {
-      scale = 0.5 + (m.average/10);
-    }
-
-    const icon = {
-      url: iconUrl, // url
-      scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-      origin: new google.maps.Point(0, 0), // origin
-      anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
-    };
-
-    // @todo temporarily disabled this because backend still doesnt support flags for these
-    // let labelStr;
-    // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
-    //   labelStr = '?';
-    // }
-
-    _gmarkers.push(new google.maps.Marker({
-      position: {
-        lat: Number.parseFloat(m.lat),
-        lng: Number.parseFloat(m.lng)
-      },
-      map: map,
-      icon: icon,
-      title: m.text,
-      // label: labelStr && {
-      //   text: labelStr,
-      //   color: 'white',
-      //   fontFamily: 'Roboto'
-      // },
-      zIndex: i, //markers should be ordered by average
-      // opacity: 0.1 + (m.average/5).
-    }));
-
-    (function (markerIndex) {
-      _gmarkers[markerIndex].addListener('click', () => {
-        onMarkerClick(markerIndex);
-      });
-    }(i));
   }
 
   function updateMarkers() {
@@ -900,16 +909,19 @@ $(function () {
     });
 
     // Service Worker
-    UpUp.start({
-      'content': 'Foi mal, o Bike De Boa ainda não funciona offline.',
-      assets: [
-        '/css/vendors.min.css',
-        '/css/main.css',
-        '/js/vendors.min.js',
-        '/js/app.min.js',
-        '/img/*'
-      ]
-    });
+    if (window.UpUp) {
+      UpUp.start({
+        'content': 'Foi mal, o Bike De Boa ainda não funciona offline.',
+        'cache-version': 'v2',
+        assets: [
+          '/css/vendors.min.css',
+          '/css/main.min.css',
+          '/js/vendors.min.js',
+          '/js/app.min.js',
+          '/img/*'
+        ]
+      });
+    }
   }
 
   function login(isUserLogin = false) {
