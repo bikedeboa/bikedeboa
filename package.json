@@ -17,7 +17,7 @@
     "gulp-autoprefixer": "^3.0.1",
     "gulp-babel": "^6.1.1",
     "gulp-cache": "^0.4.2",
-    "gulp-clean-css": "^2.0.13",
+    "gulp-clean-css": "^2.1.2",
     "gulp-cssnano": "^2.0.0",
     "gulp-eslint": "^3.0.0",
     "gulp-filter": "^4.0.0",
@@ -32,12 +32,14 @@
     "gulp-sourcemaps": "^1.5.0",
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.0.0",
-    "gulp-clean-css": "^2.1.2",
     "main-bower-files": "^2.5.0",
     "run-sequence": "^1.2.2",
     "wiredep": "^4.0.0"
   },
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install; gulp build"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-assign": "^6.8.0"
   }
 }
