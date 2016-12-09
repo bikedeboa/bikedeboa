@@ -36,7 +36,7 @@
         <link async href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
         <!-- Google Maps API (deferred) -->
-        <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script> 
+        <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
 
         <!-- JS (deferred)-->
         <script defer src="/upup.min.js"></script>
@@ -46,7 +46,7 @@
 
     <body class="beta">
         <div id="map" style="filter: blur(2px);"></div>
-        
+
         <div id="locationSearch" class="coolHide">
             <!-- <span class="balaca">
                 <img src="/img/bici.svg"/>
@@ -170,12 +170,13 @@
         </button>
 
         <div id="reviewPanelTemplatePlaceholder"></div>
-        
+
         <div id="messageModalPlaceholder"></div>
 
         <div id="spinnerOverlay">
             <div class="spinnerContainer">
-                <img src="/img/spinner_animated.svg"/>
+                <!-- <img src="/img/spinner_animated.svg"/> -->
+                <img src="/img/spinner.svg"/>
 
                 <p id="globalSpinnerLabel">
                     Conectando...
@@ -428,7 +429,7 @@
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
                             <div class="modal-body">
-                                <div class="message-content"> 
+                                <div class="message-content">
                                     <p>
                                         <span class="glyphicon {{glyphiconClass}}" style="font-size: 60px; color: white;"></span>
                                     </p>
