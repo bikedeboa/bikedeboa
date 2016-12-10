@@ -187,7 +187,7 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-          <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}}">
+          <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
               {{#if photoUrl}}
                   <img src="{{photoUrl}}"/>
               {{/if}}
@@ -199,16 +199,18 @@
           </div>
 
           <div class="modal-body">
-              {{#if title}}
-                  <div id="placeDetails_heading" class="title title-icon">
+                <div id="placeDetails_heading" class="title title-icon {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
+                    {{#if title}}
                       {{title}}
-                      <p class="address">
-                          {{address}}
-                      </p>
-                  </div>
-              {{/if}}
+                    {{else}}
+                      <small class="muted">Sem título</small>
+                    {{/if}}
+                    <p class="address">
+                        {{address}}
+                    </p>
+                </div>
 
-              <div class="review">
+              <div class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}">
                   {{#if average}}
                       <span class="average">{{average}}</span>
                   {{/if}}
@@ -240,7 +242,7 @@
               </div>
 
               <div class="info clearfix">
-                  <div class="col-half">
+                  <div class="col-half {{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
                       {{#if noIsPublicData}}
                           <div class="icon-label">
                               <small>Sem informação sobre restrição</small>
@@ -258,10 +260,10 @@
                           {{/if}}
                       {{/if}}
                   </div>
-                  <div class="col-half">
+                  <div class="col-half {{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
                       {{#if structureTypeIcon}}
                           <img id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
-                      {{/if}}
+                      {{/if}} 
                       <div class="icon-label" id="placeDetails_structureType">
                           {{#if structureTypeLabel}}
                               {{{structureTypeLabel}}}

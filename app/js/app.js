@@ -524,6 +524,38 @@ $(function () {
   }
 
   function _initTemplates() {
+    // Thanks https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
+    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+      switch (operator) {
+        case '==':
+          return (v1 == v2) ? options.fn(this) : options.inverse(this);
+        case '===':
+          return (v1 === v2) ? options.fn(this) : options.inverse(this);
+        case '!=':
+          return (v1 != v2) ? options.fn(this) : options.inverse(this);
+        case '!==':
+          return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+        case '<':
+          return (v1 < v2) ? options.fn(this) : options.inverse(this);
+        case '<=':
+          return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+        case '>':
+          return (v1 > v2) ? options.fn(this) : options.inverse(this);
+        case '>=':
+          return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+        case '&&':
+          return (v1 && v2) ? options.fn(this) : options.inverse(this);
+        case '&&!':
+          return (v1 && !v2) ? options.fn(this) : options.inverse(this);
+        case '||':
+          return (v1 || v2) ? options.fn(this) : options.inverse(this);
+        case '||!':
+          return (v1 || !v2) ? options.fn(this) : options.inverse(this);
+        default:
+          return options.inverse(this);
+      }
+    });
+
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
     templates.reviewPanelTemplate = Handlebars.compile($('#reviewPanelTemplate').html());
     templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
