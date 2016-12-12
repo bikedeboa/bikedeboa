@@ -24,9 +24,23 @@
         <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
         <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 
+        <!-- Extensions -->
+        <!-- editable -->
+        <script src="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
+        <link rel="stylesheet" href="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
+        <script src="../public/lib/bootstrap-table-extensions/editable/bootstrap-table-editable.js"></script>
+        <!-- export -->
+        <script src="../public/lib/bootstrap-table-extensions/export/bootstrap-table-export.js"></script>
+        <!-- mobile -->
+        <script src="../public/lib/bootstrap-table-extensions/mobile/bootstrap-table-mobile.js"></script>
+        <!-- sticky-header -->
+        <script src="../public/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.js"></script>
+        <link rel="stylesheet" href="../public/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.css">
+
         <style>
           body {
             font-family: "Roboto", Arial, sans-serif;
+            margin-top: 100px;
           }
 
           tbody > tr:not(.detail-view) {
@@ -41,15 +55,24 @@
             font-family: 'Raleway', sans-serif;
           }
 
-          td {
+          td,
+          td a.editable-pre-wrapped {
             max-width: 100px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
           }
 
+          .editable-empty {
+            color: #E9BB2B;
+          }
+
           th {
             text-align: center;
+          }
+
+          .col-reviews {
+            max-width: 70px;
           }
 
           .col-title {
@@ -97,7 +120,8 @@
         data-detail-view="true"
         data-detail-formatter="detailFormatter"
         data-row-style="rowStyle"
-        data-show-footer="false">
+        data-show-footer="false"
+        data-sticky-header="true">
       </table> 
 
       <script>
@@ -118,8 +142,6 @@
           
           html += '</div>';
           
-          // console.log(row);
-
           return html;
         }
 
@@ -147,16 +169,37 @@
         }
 
         function updateTable() {
+          $.fn.editable.defaults.toggle = 'dblclick';
+
+          let structureTypes = [];
+          for(let i=0; i < STRUCTURE_NAMES.length; i++) {
+            structureTypes.push({value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i]});
+          }
+
+          // Massage data for BootstrapTable
+          markers.forEach( m => {
+            if (m.isPublic === true) {
+              m.isPublic = 1;
+            } else if (m.isPublic === false) {
+              m.isPublic = 0;
+            }
+          });
+
           $('#table').bootstrapTable({
             columns: [
+              {
+                field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+              },
               {
                 field: 'id', title: '#', sortable: true, class: 'col-id',
               },
               {
                 field: 'text', title: 'Titulo', sortable: true, class: 'col-title',
+                  editable: true
               },
               {
                 field: 'address', title: 'Endereço', sortable: true, class: 'col-address',
+                  editable: true, 'editable-type': 'textarea'
               },
               {
                 field: 'lat', title: 'lat', sortable: true, visible: false,
@@ -165,31 +208,33 @@
                 field: 'lng', title: 'lng', sortable: true, visible: false,
               },
               {
-                field: 'isPublic', title: 'Publico?', sortable: true,
+                field: 'isPublic', title: 'Público?', sortable: true,
+                  editable: true, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
               },
               {
                 field: 'structureType', title: 'Tipo', sortable: true,
+                  editable: true, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
               },
               {
                 field: 'average', title: 'Média', sortable: true, visible: false, 
               },
               {
-                field: 'reviews', title: 'No.Avaliações', sortable: true,
+                field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
               },
               {
                 field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
               },
               {
-                field: 'description', title: 'Descrição', sortable: true, class: 'col-description', 
+                field: 'description', title: 'Descrição', sortable: true, class: 'col-description',
+                  editable: true, 'editable-type': 'textarea'
               },
               {
-                field: 'photo', title: 'Foto', sortable: true
-              },
-              {
-                field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                field: 'photo', title: 'Foto', sortable: true,
+                  editable: true
               }
             ],
-            data: markers
+            data: markers,
+            sortName: 'updatedAt', sortOrder: 'desc'
           });
         }
 
@@ -213,11 +258,30 @@
         // Triggers
         // 
 
-        $('body').on('click', 'tbody tr td', (e) => {
-          e.stopPropagation();
-          console.log('details');
-          $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
+        // $('body').on('click', 'tbody tr td', (e) => {
+        //   e.stopPropagation();
+        //   console.log('details');
+        //   $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
+        // });
+
+        $('body').on('editable-save.bs.table', (e, field, row, oldValue, $el) => {
+          const localId = row.id;
+          let dataToUpdate = {};
+
+          if (field === 'isPublic') {
+            row[field] = row[field]==='1' ? true : false;
+          }
+
+          dataToUpdate[field] = row[field];
+
+          // Send the updated data through the API
+          if (dataToUpdate) {
+            console.log('updating:', dataToUpdate);
+            BIKE.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
+          }
+
         });
+
 
       </script>
 
