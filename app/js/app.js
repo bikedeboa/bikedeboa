@@ -957,15 +957,23 @@ $(function () {
     }
   }
 
+  function handleLoggedUser() {
+    // Setup little user label underneath the location search bar
+    $('.login-display').hide();
+    $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
+    $('.login-display button').on('click', () => {
+      Cookies.remove('bikedeboa_user');
+      window.location.reload();
+    });
+
+    // Set User ID feature on Google Analytics
+    ga('set', 'userId', loggedUser);
+  }
+
   function login(isUserLogin = false) {
     Database.authenticate(isUserLogin, () => {
       if (loggedUser) {
-        $('.login-display').hide();
-        $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
-        $('.login-display button').on('click', () => {
-          Cookies.remove('bikedeboa_user');
-          window.location.reload();
-        });
+        handleLoggedUser();
       }
 
       Database.getAllTags();
