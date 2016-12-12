@@ -814,6 +814,8 @@ $(function () {
       login(true);
     });
 
+    $('body').on('click', '#addPlace', toggleLocationInputMode);
+
     $('body').on('click', '.modal', e => {
       // If click was on modal backdrop
       if (e.target == e.currentTarget) {
