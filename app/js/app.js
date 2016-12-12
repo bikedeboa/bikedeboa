@@ -814,15 +814,16 @@ $(function () {
       login(true);
     });
 
-    $('body').on('click', '#addPlace', toggleLocationInputMode);
-
-
-    // @todo FIX ME! This is getting triggered when changing between modals...
-    // $('body').on('hidden.bs.modal', '#reviewPanel, #placeDetailsModal, #newPlaceModal', (e) => {
-      // if (History.getState().title !== 'bike de boa') {
-      //   pushtory.replaceState({}, 'bike de boa', '/');
-      // }
-    // });
+    $('body').on('click', '.modal', e => {
+      // If click was on modal backdrop
+      if (e.target == e.currentTarget) {
+        if (History.getState().title !== 'bike de boa') {
+          History.replaceState({}, 'bike de boa', '/');
+        }
+      } else {
+        e.stopPropagation();
+      }
+    });
 
 
     // New place panel
@@ -858,7 +859,7 @@ $(function () {
       }
     });
 
-    $('body').on('click', '.description.collapsable h2', (e) => {
+    $('body').on('click', '.description.collapsable h2', e => {
       $(e.currentTarget).parent().toggleClass('expanded');
     });
 

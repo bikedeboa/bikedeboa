@@ -258,11 +258,12 @@
         // Triggers
         // 
 
-        // $('body').on('click', 'tbody tr td', (e) => {
-        //   e.stopPropagation();
-        //   console.log('details');
-        //   $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
-        // });
+        $('body').on('click', 'tbody tr td', (e) => {
+          if (e.target == e.currentTarget) {
+            console.log('details');
+            $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
+          }
+        });
 
         $('body').on('editable-save.bs.table', (e, field, row, oldValue, $el) => {
           const localId = row.id;
