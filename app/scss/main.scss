@@ -31,18 +31,18 @@ $headingFont: 'Raleway', sans-serif;
 }
 
 @keyframes pulse {
-  from { opacity: 0.7;}
-  to { opacity: 1;}
+  from { opacity: 0.4;}
+  to { opacity: 0.6;}
 }
 
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 @keyframes spinner {
   to {transform: rotate(360deg);}
 }
 
 
-// Thanks to https://gist.github.com/paulmelnikow/7fcfbe4f68e5df7fe326  
+// Thanks to https://gist.github.com/paulmelnikow/7fcfbe4f68e5df7fe326
 @mixin material-shadow ($level) {
     @if $level == 1 {
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -104,7 +104,7 @@ body.beta #map {
 
 .missing-info {
     position: relative;
-    
+
     &:after {
         content: "\e101";
         position: absolute;
@@ -438,15 +438,15 @@ body.beta #map {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    
+
     text-align: center;
-    
+
     img {
         animation: spin 3s linear infinite;
         width: 70px;
         height: 70px;
     }
- 
+
     p {
         color: $gray;
         font-family: $headingFont;
@@ -490,6 +490,10 @@ body.beta #map {
   .modal-content:before {
     right: 4px;
   }
+}
+
+.loading-skeleton {
+  animation: pulse 0.5s infinite alternate;
 }
 
 .modal-content {
@@ -622,11 +626,15 @@ body.beta #map {
         height: 100px;
     }
 
+    &.skeleton-box {
+      display: block;
+    }
+
     &.hasImage {
         min-height: 170px;
         height: 170px;
         max-height: 170px;
-        
+
         &.expanded {
             max-height: 800px;
             height: auto;
@@ -945,6 +953,7 @@ body.beta #map {
     &:before {
         content: '☐';
         margin-right: 5px;
+        font-family: 'Arial';
     }
 
     &.active {
@@ -955,7 +964,7 @@ body.beta #map {
             content: '☑';
         }
     }
-    
+
 }
 
 #reviewPanel .btn-tag {

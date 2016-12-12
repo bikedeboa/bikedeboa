@@ -65,12 +65,12 @@
         </div>
 
 
-        <div id="placeDetailsModal" class="modal fade" tabindex="-1" data-backdrop="static">
+        <div id="placeDetailsModal" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
 
-                        <div id="placeDetailsModalTemplatePlaceholder"></div>
+                        <div id="placeDetailsModalTemplatePlaceholder" class="loading-skeleton"></div>
 
                     </div>
                 </div>
@@ -263,7 +263,7 @@
                   <div class="col-half {{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
                       {{#if structureTypeIcon}}
                           <img id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
-                      {{/if}} 
+                      {{/if}}
                       <div class="icon-label" id="placeDetails_structureType">
                           {{#if structureTypeLabel}}
                               {{{structureTypeLabel}}}
@@ -314,10 +314,10 @@
 
         <!-- View Details Empty Shell Modal -->
         <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
-            <div class="modal-header" style="opacity: 0.8;">
+            <div class="modal-header skeleton-box">
             </div>
 
-            <div class="modal-body" style="opacity: 0.8;">
+            <div class="modal-body">
                 <div id="placeDetails_heading" class="title">
                     <span class="skeleton-box"></span>
                     <p class="address">

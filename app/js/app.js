@@ -82,7 +82,7 @@ $(function () {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
+    $('#placeDetailsModalTemplatePlaceholder').removeClass('loading-skeleton').html(templates.placeDetailsModalTemplate(templateData));
 
     // Template is rendered, start jquerying
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
@@ -93,8 +93,11 @@ $(function () {
     });
 
 
-    // If not yet shown...
-    $('#placeDetailsModal').modal('show');
+    // If we rendered a skeleton modal then the modal is visible already
+    if (!$('#placeDetailsModal').is(':visible')) {
+      $('#placeDetailsModal').modal('show');
+    }
+    $('.modal-header, .modal-body > div').velocity('transition.fadeIn', {stagger: 75});
   }
 
   function _geolocate(toCenter, callback) {
@@ -183,11 +186,12 @@ $(function () {
     if (marker._hasDetails) {
       openDetailsModal(markerIndex);
     } else {
-      showSpinner();
+      // showSpinner();
 
       // Load skeleton modal template
-      $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalLoadingTemplate());
+      $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
       $('#placeDetailsModal').modal('show');
+      $('.modal-header, .modal-body > div').velocity('transition.slideDownIn', { stagger: 75 });
 
       // Request content
       Database.getPlaceDetails(marker.id, () => {
@@ -479,13 +483,13 @@ $(function () {
     if (label) {
       $('#globalSpinnerLabel').html(label);
     }
-    $('#spinnerOverlay').fadeIn();
+    $('#spinnerOverlay').velocity('transition.fadeIn');
   }
 
   function hideSpinner () {
-    $('#spinnerOverlay').fadeOut(400, () => {
+    $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
       $('#globalSpinnerLabel').html('');
-    });
+    }});
     $('.coolHide').removeClass('coolHide');
   }
 
@@ -826,9 +830,14 @@ $(function () {
     });
 
     // Replace bootstrap modal animation with Velocity.js
-    // $('body').on('show.bs.modal', '.modal', function(e) {
-    //   $('.modal-dialog').velocity('transition.slideDownIn');
-    // }
+    $('body').on('show.bs.modal', '.modal', e => {
+      $('.modal-dialog').velocity('transition.slideDownBigIn', {duration: 700});
+    });
+
+    // @todo there's something buggy about this
+    // $('body').on('hide.bs.modal', '.modal', e => {
+    //   $('.modal-dialog').velocity('transition.slideDownBigOut');
+    // });
 
 
     // New place panel
@@ -837,7 +846,7 @@ $(function () {
       openNewPlaceModal();
     });
 
-    $('body').on('click', '.typeIcon', function(e){
+    $('body').on('click', '.typeIcon', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
     });
@@ -873,7 +882,7 @@ $(function () {
       openReviewPanel();
     });
 
-    $('body').on('change', '#reviewPanel .rating', function(e) {
+    $('body').on('change', '#reviewPanel .rating', e => {
       currentPendingRating = $(e.target).val();
       validateReviewForm();
     });
