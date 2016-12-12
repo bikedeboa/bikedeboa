@@ -6,7 +6,7 @@ $(function () {
   function openDetailsModal(i) {
     openedMarker = markers[i];
     const m = openedMarker;
-    
+
     if (addLocationMode || !m._hasDetails) {
       return false;
     }
@@ -88,8 +88,8 @@ $(function () {
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
     $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
 
-    $('.modal-header img').on('load', e => { 
-      $(e.target).parent().removeClass('loading'); 
+    $('.modal-header img').on('load', e => {
+      $(e.target).parent().removeClass('loading');
     });
 
 
@@ -260,7 +260,7 @@ $(function () {
       } else {
         console.error('not lat or long o.O');
       }
-      
+
     } else {
       console.error('marker is weirdly empty on addMarkerToMap()');
     }
@@ -820,8 +820,6 @@ $(function () {
         if (History.getState().title !== 'bike de boa') {
           History.replaceState({}, 'bike de boa', '/');
         }
-      } else {
-        e.stopPropagation();
       }
     });
 
@@ -984,7 +982,7 @@ $(function () {
       Database.getAllTags();
       Database.getPlaces( () => {
         updateMarkers();
-        
+
         hideSpinner();
 
         $('#map').css('filter', 'none');
