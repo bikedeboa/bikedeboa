@@ -825,6 +825,11 @@ $(function () {
       }
     });
 
+    // Replace bootstrap modal animation with Velocity.js
+    // $('body').on('show.bs.modal', '.modal', function(e) {
+    //   $('.modal-dialog').velocity('transition.slideDownIn');
+    // }
+
 
     // New place panel
     $('body').on('click', '#newPlaceholder', () => {
