@@ -351,16 +351,22 @@ $(function () {
     addLocationMode = !addLocationMode;
 
     if (addLocationMode) {
+      hideUI();
+
+      // ESC button cancels locationinput
       $(document).on('keyup.disableInput', e => {
         if (e.keyCode === 27) {
           toggleLocationInputMode();
         }
       });
+
       // Adjust for a minimum zoom for improved recommended precision
       // if (map.getZoom() < 18) {
       //   map.setZoom(18);
       // }
     } else {
+      showUI();
+
       $(document).off('keyup.disableInput');
     }
 
@@ -368,9 +374,19 @@ $(function () {
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
     $('#geolocationBtnBtn').toggle();
-    $('#locationSearch').toggleClass('coolHide');
+    // $('#locationSearch').toggleClass('coolHide');
 
     toggleMarkers();
+  }
+
+  function showUI() {
+    $('#locationSearch').velocity('transition.slideDownIn');
+    // $('#addPlace').velocity('transition.slideUpIn');
+  }
+
+  function hideUI() {
+    $('#locationSearch').velocity('transition.slideUpOut');
+    // $('#addPlace').velocity('transition.slideDownOut');
   }
 
   // @todo refactor this, it's confusing
@@ -490,7 +506,6 @@ $(function () {
     $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
       $('#globalSpinnerLabel').html('');
     }});
-    $('.coolHide').removeClass('coolHide');
   }
 
   function photoUploadCB(e) {
@@ -996,10 +1011,19 @@ $(function () {
 
         hideSpinner();
 
+        $('#locationSearch').velocity('transition.slideDownIn', {delay: 300});
+        $('#addPlace').velocity('transition.slideUpIn', {delay: 300});
         $('#map').css('filter', 'none');
       });
     });
   }
+
+  // Thanks https://stackoverflow.com/questions/17772260/textarea-auto-height/24676492#24676492
+  window.autoGrowTextArea = function(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight+20)+"px";
+  }
+
 
   window.showMessage = function(_data) {
     const okCallback = () => {
