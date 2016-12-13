@@ -60,5 +60,6 @@ let currentPendingRating;
 let _uploadingPhotoBlob;
 let loggedUser;
 let _searchResultMarker;
+let _abortedDetailsRequest;
 
 let templates = {};

@@ -182,6 +182,7 @@ $(function () {
 
   function onMarkerClick(markerIndex) {
     const marker = markers[markerIndex];
+    _abortedDetailsRequest = false;
 
     if (marker._hasDetails) {
       openDetailsModal(markerIndex);
@@ -195,8 +196,10 @@ $(function () {
 
       // Request content
       Database.getPlaceDetails(marker.id, () => {
-        hideSpinner();
-        openDetailsModal(markerIndex);
+        // hideSpinner();
+        if (!_abortedDetailsRequest) {
+          openDetailsModal(markerIndex);
+        }
       });
     }
   }
@@ -835,9 +838,15 @@ $(function () {
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
+    // Capture modal closing by 
     $('body').on('click', '.modal', e => {
-      // If click was on modal backdrop
+      // If click was on modal backdroplick
       if (e.target == e.currentTarget) {
+        // If a details request was under way
+        _abortedDetailsRequest = true;
+        
+        // Reset history state
+        // @todo just do a history.back(), so a forward would reopen the modal
         if (History.getState().title !== 'bike de boa') {
           History.replaceState({}, 'bike de boa', '/');
         }

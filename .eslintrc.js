@@ -58,5 +58,6 @@ module.exports = {
         "templates": true,
         "loggedUser": true,
         "_searchResultMarker": true,
+        "_abortedDetailsRequest": true,
     }
 };
