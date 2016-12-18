@@ -906,14 +906,14 @@ body.beta #map {
     padding: 0;
 }
 
-#deletePlaceBtn {
-    left: 70px;
+#editPlaceBtn {
+    right: 70px;
 }
 
 .btn-admin {
     position: absolute;
     top: 10px;
-    left: 10px;
+    right: 10px;
     background: repeating-linear-gradient( 45deg, $yellow, $yellow 10px, #E9D812 10px, #E9D812 20px );
     border: 3px solid $yellow;
     color: white;

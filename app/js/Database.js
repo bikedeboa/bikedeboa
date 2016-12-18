@@ -349,9 +349,10 @@ BIKE.Database = {
       },
       success: function(data) {
         console.log('Addition success!');
+        console.log(data);
 
         if (callback && typeof callback === 'function') {
-          callback();
+          callback(data);
         }
       }
     });

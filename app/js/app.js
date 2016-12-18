@@ -3,8 +3,8 @@
 
 
 $(function () {
-  function openDetailsModal(i) {
-    openedMarker = markers[i];
+  function openDetailsModal(marker) {
+    openedMarker = marker;
     const m = openedMarker;
 
     if (addLocationMode || !m._hasDetails) {
@@ -180,12 +180,11 @@ $(function () {
 
   }
 
-  function onMarkerClick(markerIndex) {
-    const marker = markers[markerIndex];
+  function onMarkerClick(marker, callback) {
     _abortedDetailsRequest = false;
 
     if (marker._hasDetails) {
-      openDetailsModal(markerIndex);
+      openDetailsModal(marker);
     } else {
       // showSpinner();
 
@@ -198,7 +197,11 @@ $(function () {
       Database.getPlaceDetails(marker.id, () => {
         // hideSpinner();
         if (!_abortedDetailsRequest) {
-          openDetailsModal(markerIndex);
+          openDetailsModal(marker);
+
+          if (callback && typeof callback === 'function') {
+            callback();
+          }
         }
       });
     }
@@ -261,7 +264,7 @@ $(function () {
 
         (function (markerIndex) {
           _gmarkers[markerIndex].addListener('click', () => {
-            onMarkerClick(markerIndex);
+            onMarkerClick(markers[markerIndex]);
           });
         }(i));
       } else {
@@ -413,10 +416,17 @@ $(function () {
     place.photo = _uploadingPhotoBlob;
     place.description = $('#newPlaceModal #descriptionInput').val();
 
-    const callback = () => {
+    const callback = newLocal => {
       Database.getPlaces( () => {
         updateMarkers();
         hideSpinner();
+
+        const newMarker = markers.find( i => i.id === newLocal.id );
+        if (newMarker) {
+          onMarkerClick(newMarker, () => {
+            $('.review').velocity('callout.shake');
+          });
+        }
       });
     };
 
@@ -855,7 +865,7 @@ $(function () {
 
     // Replace bootstrap modal animation with Velocity.js
     $('body').on('show.bs.modal', '.modal', e => {
-      $('.modal-dialog').velocity('transition.slideDownBigIn', {duration: 700});
+      $('.modal-dialog').velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION});
     });
 
     // @todo there's something buggy about this

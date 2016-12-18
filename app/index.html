@@ -187,16 +187,16 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-          <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
-              {{#if photoUrl}}
-                  <img src="{{photoUrl}}"/>
-              {{/if}}
+          {{#if isAdmin}}
+              <button id="editPlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
+              <button id="deletePlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
+          {{/if}}
 
-              {{#if isAdmin}}
-                  <button id="editPlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
-                  <button id="deletePlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
-              {{/if}}
-          </div>
+          {{#if photoUrl}}
+            <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
+              <img src="{{photoUrl}}"/>
+            </div>
+          {{/if}}
 
           <div class="modal-body">
                 <div id="placeDetails_heading" class="title title-icon {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
@@ -244,9 +244,11 @@
               <div class="info clearfix">
                   <div class="col-half {{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
                       {{#if noIsPublicData}}
-                          <div class="icon-label">
-                              <small>Sem informação sobre restrição</small>
-                          </div>
+                          {{#if isAdmin}}
+                            <div class="icon-label">
+                                <small>Sem informação sobre restrição</small>
+                            </div>
+                          {{/if}}
                       {{else}}
                           {{#if isPublic}}
                               <img src="/img/icon_public.svg"/>
@@ -268,7 +270,9 @@
                           {{#if structureTypeLabel}}
                               {{{structureTypeLabel}}}
                           {{else}}
-                              <small>Sem informação sobre tipo de bicicletário</small>
+                              {{#if isAdmin}}
+                                <small>Sem informação sobre tipo de bicicletário</small>
+                              {{/if}}
                           {{/if}}
                       </div>
                   </div>
@@ -358,14 +362,14 @@
                 </div>
             </div>
 
-            <div class="modal-footer">
+            <!-- <div class="modal-footer">
                 <div class="col-half">
                     <a class="btn skeleton-box btn-footer"></a>
                 </div>
                 <div class="col-half">
                     <a class="btn skeleton-box btn-footer"></a>
                 </div>
-            </div>
+            </div> -->
         </script>
 
         <!-- Review Modal -->
