@@ -96,6 +96,7 @@
 
           .details-view img {
             float: right;
+            max-height: 600px;
           }
 
 
@@ -104,9 +105,9 @@
 
     <body>
 
-      <div id="loading">
-        Loading...
-      </div>
+      <h2 id="heading">
+        Carregando...
+      </h2>
 
       <table
         id="table"
@@ -133,6 +134,8 @@
           if (row.photo) {
             html += `<img src='${row.photo}'></img>`;
           }
+
+          html += '<iframe width="500" height="250" style="float: right;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q='+row.lat+','+row.lng+'&hl=es;z=14&amp;output=embed"></iframe>';
 
           $.each(row, function (key, value) {
             if (key !== 'photo') {
@@ -249,7 +252,7 @@
           Database.getAllTags();
           Database.getPlaces( () => {
             updateTable();
-            $('#loading').hide();
+            $('#heading').html(`Mostrando ${markers.length} bicicletários`);
           }, null, null, true);
         });
 

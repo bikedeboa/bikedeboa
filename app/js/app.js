@@ -396,7 +396,7 @@ $(function () {
   }
 
   // @todo refactor this, it's confusing
-  function sendNewPlace() {
+  function createOrUpdatePlace() {
     // $('#newPlaceModal').modal('hide');
     History.pushState({}, 'bike de boa', '/');
     showSpinner('Salvando bicicletário...');
@@ -421,11 +421,13 @@ $(function () {
         updateMarkers();
         hideSpinner();
 
-        const newMarker = markers.find( i => i.id === newLocal.id );
-        if (newMarker) {
-          onMarkerClick(newMarker, () => {
-            $('.review').velocity('callout.shake');
-          });
+        if (!isUpdate) {
+          const newMarker = markers.find( i => i.id === newLocal.id );
+          if (newMarker) {
+            onMarkerClick(newMarker, () => {
+              $('.review').velocity('callout.shake');
+            });
+          }
         }
       });
     };
@@ -433,7 +435,7 @@ $(function () {
     if (isUpdate) {
       Database.updatePlace(openedMarker.id, place, callback);
     } else {
-      Database.sendPlace(place, callback);
+      Database.createOrUpdatePlace(place, callback);
     }
   }
 
@@ -891,7 +893,7 @@ $(function () {
     });
 
 
-    $('body').on('click', '#saveNewPlaceBtn', sendNewPlace);
+    $('body').on('click', '#saveNewPlaceBtn', createOrUpdatePlace);
 
     $('body').on('click', '#editPlaceBtn', openNewPlaceModal);
 
