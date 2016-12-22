@@ -292,7 +292,7 @@
 
 
         
-        Database.authenticate(false, () => {
+        Database.authenticate(true, () => {
           BIKE.Database.customAPICall('get','user', null, data => {
             users = data;
 

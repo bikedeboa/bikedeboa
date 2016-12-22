@@ -465,7 +465,7 @@ $(function () {
     if (isUpdate) {
       Database.updatePlace(openedMarker.id, place, callback);
     } else {
-      Database.createOrUpdatePlace(place, callback);
+      Database.sendPlace(place, callback);
     }
   }
 
