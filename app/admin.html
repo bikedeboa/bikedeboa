@@ -110,7 +110,18 @@
       </h2>
 
       <table
-        id="table"
+        id="usersTable"
+        data-classes="table table-no-bordered"
+        data-striped="true"
+        data-search="true"
+        data-show-toggle="true"
+        data-show-columns="true"
+        data-show-footer="false"
+        data-sticky-header="true">
+      </table> 
+
+      <table
+        id="localsTable"
         data-classes="table table-no-bordered"
         data-striped="true"
         data-search="true"
@@ -172,8 +183,6 @@
         }
 
         function updateTable() {
-          $.fn.editable.defaults.toggle = 'dblclick';
-
           let structureTypes = [];
           for(let i=0; i < STRUCTURE_NAMES.length; i++) {
             structureTypes.push({value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i]});
@@ -188,7 +197,7 @@
             }
           });
 
-          $('#table').bootstrapTable({
+          $('#localsTable').bootstrapTable({
             columns: [
               {
                 field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
@@ -241,14 +250,55 @@
           });
         }
 
+        function updateUsersTable() {
+          $('#usersTable').bootstrapTable({
+            columns: [
+              {
+                field: 'id', title: 'id', sortable: true, class: 'col-id',
+              },
+              {
+                field: 'username', title: 'username', sortable: true, class: 'col-title',
+              },
+              {
+                field: 'fullname', title: 'fullname', sortable: true, editable: true
+              },
+              {
+                field: 'role', title: 'role', sortable: true, editable: true
+              },
+              {
+                field: 'updatedAt', title: 'updatedAt', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+              },
+              {
+                field: 'createdAt', title: 'createdAt', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+              },
+            ],
+            data: users,
+            sortName: 'id', sortOrder: 'desc'
+          });
+        }
+
 
         /////////////////////
         // Initializations //
         /////////////////////
 
         Database = BIKE.Database;
+
+        // Admin-only Globals
+        let users;
+
+
+        $.fn.editable.defaults.toggle = 'dblclick';
+
+
         
         Database.authenticate(false, () => {
+          BIKE.Database.customAPICall('get','user', null, data => {
+            users = data;
+
+            updateUsersTable();
+          });
+
           Database.getAllTags();
           Database.getPlaces( () => {
             updateTable();
@@ -268,7 +318,19 @@
           }
         });
 
-        $('body').on('editable-save.bs.table', (e, field, row, oldValue, $el) => {
+        function updateUser(field, row, oldValue, $el) {
+          const userId = row.id;
+          let dataToUpdate = {};
+          dataToUpdate[field] = row[field];
+
+          // Send the updated data through the API
+          if (dataToUpdate) {
+            console.log('updating:', dataToUpdate);
+            BIKE.Database.customAPICall('put', 'user/5', dataToUpdate);
+          }
+        }
+
+        function updateLocal(field, row, oldValue, $el) {
           const localId = row.id;
           let dataToUpdate = {};
 
@@ -282,6 +344,14 @@
           if (dataToUpdate) {
             console.log('updating:', dataToUpdate);
             BIKE.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
+          }
+        }
+
+        $('body').on('editable-save.bs.table', (e, field, row, oldValue, $el) => {
+          if (row.username) {
+            updateUser(field, row, oldValue, $el);
+          } else {
+            updateLocal(field, row, oldValue, $el);
           }
 
         });
