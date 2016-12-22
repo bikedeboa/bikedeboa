@@ -105,8 +105,8 @@
 
     <body>
 
-      <h2 id="heading">
-        Carregando...
+      <h2 id="heading1">
+        Carregando usuários...
       </h2>
 
       <table
@@ -119,6 +119,10 @@
         data-show-footer="false"
         data-sticky-header="true">
       </table> 
+
+      <h2 id="heading2">
+        Carregando bicicletários...
+      </h2>
 
       <table
         id="localsTable"
@@ -203,7 +207,7 @@
                 field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
               },
               {
-                field: 'id', title: '#', sortable: true, class: 'col-id',
+                field: 'id', title: 'ID', sortable: true, class: 'col-id',
               },
               {
                 field: 'text', title: 'Titulo', sortable: true, class: 'col-title',
@@ -254,22 +258,22 @@
           $('#usersTable').bootstrapTable({
             columns: [
               {
-                field: 'id', title: 'id', sortable: true, class: 'col-id',
+                field: 'id', title: 'ID', sortable: true, class: 'col-id',
               },
               {
-                field: 'username', title: 'username', sortable: true, class: 'col-title',
+                field: 'username', title: 'Usuário', sortable: true, class: 'col-title',
               },
               {
-                field: 'fullname', title: 'fullname', sortable: true, editable: true
+                field: 'fullname', title: 'Nome completo', sortable: true, editable: true
+              },
+              { 
+                field: 'role', title: 'Cargo', sortable: true, editable: true, 'editable-type': 'select', 'editable-source': "[{'value': 'admin', 'text': 'Admin'}, {'value': 'colaborator', 'text': 'Colaborador'}, {'value': 'client', 'text': 'Cliente'} ]"
               },
               {
-                field: 'role', title: 'role', sortable: true, editable: true
+                field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
               },
               {
-                field: 'updatedAt', title: 'updatedAt', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-              },
-              {
-                field: 'createdAt', title: 'createdAt', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
               },
             ],
             data: users,
@@ -296,13 +300,15 @@
           BIKE.Database.customAPICall('get','user', null, data => {
             users = data;
 
+            $('#heading1').html(`Mostrando ${users.length} usuários`);
+
             updateUsersTable();
           });
 
           Database.getAllTags();
           Database.getPlaces( () => {
             updateTable();
-            $('#heading').html(`Mostrando ${markers.length} bicicletários`);
+            $('#heading2').html(`Mostrando ${markers.length} bicicletários`);
           }, null, null, true);
         });
 
