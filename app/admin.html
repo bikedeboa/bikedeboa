@@ -326,7 +326,7 @@
           // Send the updated data through the API
           if (dataToUpdate) {
             console.log('updating:', dataToUpdate);
-            BIKE.Database.customAPICall('put', 'user/5', dataToUpdate);
+            BIKE.Database.customAPICall('put', `user/${userId}`, dataToUpdate);
           }
         }
 

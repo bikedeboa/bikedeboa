@@ -109,14 +109,9 @@ $(function () {
     };
 
     _geolocationMarker.setPosition(pos);
-    _geolocationMarker.setZIndex(markers.length);
-    _geolocationMarker.setVisible(true);
 
     _geolocationRadius.setCenter(pos);
     _geolocationRadius.setRadius(position.coords.accuracy);
-    _geolocationRadius.setVisible(true);
-
-    $('#geolocationBtn').css('border', '2px solid lightblue');
   }
 
   function _geolocate(toCenter, callback) {
@@ -132,6 +127,11 @@ $(function () {
             console.log(position);
 
             updateCurrentPosition(position);
+
+            $('#geolocationBtn').css('border', '2px solid lightblue');
+            _geolocationMarker.setZIndex(markers.length);
+            _geolocationMarker.setVisible(true);
+            _geolocationRadius.setVisible(true);
             
             if (toCenter) {
               const pos = {
