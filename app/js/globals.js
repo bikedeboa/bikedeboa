@@ -53,6 +53,7 @@ let idToTag = {};
 let tagToId = {};
 let _gmarkers;
 let _geolocationMarker;
+let _geolocationRadius;
 let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker = {};
@@ -62,5 +63,6 @@ let _uploadingPhotoBlob;
 let loggedUser;
 let _searchResultMarker;
 let _abortedDetailsRequest;
+let _positionWatcher;
 
 let templates = {};

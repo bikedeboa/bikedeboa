@@ -59,5 +59,9 @@ module.exports = {
         "loggedUser": true,
         "_searchResultMarker": true,
         "_abortedDetailsRequest": true,
+        "_geolocationMarker": true,
+        "_positionWatcher": true,
+        "_geolocationRadius": true,
+        
     }
 };

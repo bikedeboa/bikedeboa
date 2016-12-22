@@ -97,31 +97,57 @@ $(function () {
     if (!$('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('show');
     }
+    
+    // Animate modal content
     $('.modal-header, .modal-body > div').velocity('transition.fadeIn', {stagger: 75});
+  }
+
+  function updateCurrentPosition(position) {
+    const pos = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+
+    _geolocationMarker.setPosition(pos);
+    _geolocationMarker.setZIndex(markers.length);
+    _geolocationMarker.setVisible(true);
+
+    _geolocationRadius.setCenter(pos);
+    _geolocationRadius.setRadius(position.coords.accuracy);
+    _geolocationRadius.setVisible(true);
+
+    $('#geolocationBtn').css('border', '2px solid lightblue');
   }
 
   function _geolocate(toCenter, callback) {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-          function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
 
+      navigator.geolocation.getCurrentPosition(
+          position => {
+            console.log(position);
+
+            updateCurrentPosition(position);
+            
             if (toCenter) {
-              map.panTo(pos);
+              const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude 
+              };
+  
+              map.panTo(pos); 
               map.setZoom(17);
             }
-
-            _geolocationMarker.setPosition(pos);
-            _geolocationMarker.setVisible(true);
 
             if (callback && typeof callback === 'function') {
               callback();
             }
           },
-          (error) => {
+          error => {
               // @todo show something more informative to the user
             console.error('Geolocation failed!');
             console.error(error);
@@ -135,11 +161,15 @@ $(function () {
             if (callback && typeof callback === 'function') {
               callback();
             }
-          }, {
-            enableHighAccuracy: true,
-            timeout: 5000
-          }
+          },
+          options
       );
+
+      if (_positionWatcher) {
+        navigator.geolocation.clearWatch(_positionWatcher);
+      }
+      _positionWatcher = navigator.geolocation.watchPosition(updateCurrentPosition, null, options);
+
     }
   }
 
@@ -386,12 +416,12 @@ $(function () {
   }
 
   function showUI() {
-    $('#locationSearch').velocity('transition.slideDownIn');
+    $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
     // $('#addPlace').velocity('transition.slideUpIn');
   }
 
   function hideUI() {
-    $('#locationSearch').velocity('transition.slideUpOut');
+    $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
     // $('#addPlace').velocity('transition.slideDownOut');
   }
 
@@ -976,6 +1006,15 @@ $(function () {
       }
     });
 
+    _geolocationRadius = new google.maps.Circle({
+      map: map,
+      clickable: false,
+      fillColor: 'lightblue', //color,
+      fillOpacity: '0.4', //opacity from 0.0 to 1.0,
+      strokeColor: 'transparent', //stroke color,
+      strokeOpacity: '0' //opacity from 0.0 to 1.0
+    });
+
     _initTriggers();
 
     _initTemplates();
@@ -1032,8 +1071,8 @@ $(function () {
 
         hideSpinner();
 
-        $('#locationSearch').velocity('transition.slideDownIn', {delay: 300});
-        $('#addPlace').velocity('transition.slideUpIn', {delay: 300});
+        $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+        $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
         $('#map').css('filter', 'none');
       });
     });
@@ -1104,5 +1143,5 @@ $(function () {
 
   setup();
   init();
-  _geolocate();
+  // _geolocate();
 });
