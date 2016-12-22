@@ -116,59 +116,78 @@ $(function () {
 
   function _geolocate(toCenter, callback) {
     if (navigator.geolocation) {
-      const options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      };
-
-      navigator.geolocation.getCurrentPosition(
-          position => {
-            console.log(position);
-
-            updateCurrentPosition(position);
-
-            $('#geolocationBtn').css('border', '2px solid lightblue');
-            _geolocationMarker.setZIndex(markers.length);
-            _geolocationMarker.setVisible(true);
-            _geolocationRadius.setVisible(true);
-            
-            if (toCenter) {
-              const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude 
-              };
-  
-              map.panTo(pos); 
-              map.setZoom(17);
-            }
-
-            if (callback && typeof callback === 'function') {
-              callback();
-            }
-          },
-          error => {
-              // @todo show something more informative to the user
-            console.error('Geolocation failed!');
-            console.error(error);
-
-            // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
-            if(error.message.indexOf('Only secure origins are allowed') == 0) {
-              // Disable button since it won't work anyway in the current domain.
-              $('#geolocationBtn').hide();
-            }
-
-            if (callback && typeof callback === 'function') {
-              callback();
-            }
-          },
-          options
-      );
-
+      // @todo split both behaviors into different functions
       if (_positionWatcher) {
-        navigator.geolocation.clearWatch(_positionWatcher);
+        const markerPos = _geolocationMarker.getPosition();
+        const pos = {
+          lat: markerPos.lat(),
+          lng: markerPos.lng() 
+        };
+
+        map.panTo(pos); 
+        if (map.getZoom() < 17) {
+          map.setZoom(17);
+        }
+      } else {
+        showSpinner();
+
+        const options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        };
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+              console.log(position);
+
+              updateCurrentPosition(position);
+
+              $('#geolocationBtn').css('border', '2px solid lightblue');
+              _geolocationMarker.setZIndex(markers.length);
+              _geolocationMarker.setVisible(true);
+              _geolocationRadius.setVisible(true);
+              
+              if (toCenter) {
+                const pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude 
+                };
+    
+                map.panTo(pos); 
+                if (map.getZoom() < 17) {
+                  map.setZoom(17);
+                }
+              }
+
+              if (callback && typeof callback === 'function') {
+                callback();
+              }
+            },
+            error => {
+                // @todo show something more informative to the user
+              console.error('Geolocation failed!');
+              console.error(error);
+
+              // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
+              if(error.message.indexOf('Only secure origins are allowed') == 0) {
+                // Disable button since it won't work anyway in the current domain.
+                $('#geolocationBtn').hide();
+              }
+
+              if (callback && typeof callback === 'function') {
+                callback();
+              }
+            },
+            options
+        );
+
+        if (_positionWatcher) {
+          navigator.geolocation.clearWatch(_positionWatcher);
+        }
+        _positionWatcher = navigator.geolocation.watchPosition(updateCurrentPosition, null, options);
       }
-      _positionWatcher = navigator.geolocation.watchPosition(updateCurrentPosition, null, options);
+
 
     }
   }
@@ -202,7 +221,6 @@ $(function () {
 
     // Setup the click event listeners
     controlUI.addEventListener('click', () => {
-      showSpinner();
       _geolocate(true, () => {
         hideSpinner();
       });
