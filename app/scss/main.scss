@@ -373,6 +373,24 @@ body.beta #map {
         width: 100px;
         height: auto;
     }
+
+    &.active {
+        pointer-events: initial;
+        top: 50%;
+        opacity: 1; 
+
+        animation: bounceAndGlow 0.5s infinite alternate;
+        
+        &:hover {
+            animation: none;
+        }
+    }
+
+    &.invalid {
+        animation: none;
+        filter: grayscale(1);
+    }
+
 }
 
 
@@ -390,18 +408,6 @@ body.beta #map {
     display: none;
 
     /*animation: pulse 0.5s infinite alternate;*/
-}
-
-#newPlaceholder.active {
-    pointer-events: initial;
-    top: 50%;
-    opacity: 1;
-
-    animation: bounceAndGlow 0.5s infinite alternate;
-}
-
-#newPlaceholder.active:hover {
-    animation: none;
 }
 
 

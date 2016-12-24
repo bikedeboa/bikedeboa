@@ -401,11 +401,23 @@ $(function () {
     }
   }
 
+  function testNewLocalBounds() {
+    const isWithinBounds = _mapBounds.contains(map.getCenter());
+    $('#newPlaceholder').toggleClass('invalid', !isWithinBounds);
+    return isWithinBounds;
+  }
+
   function toggleLocationInputMode() {
     addLocationMode = !addLocationMode;
 
     if (addLocationMode) {
       hideUI();
+
+      testNewLocalBounds();
+      map.addListener('center_changed', () => {
+        console.log('center_changed');
+        testNewLocalBounds();
+      });
 
       // ESC button cancels locationinput
       $(document).on('keyup.disableInput', e => {
@@ -422,6 +434,8 @@ $(function () {
       showUI();
 
       $(document).off('keyup.disableInput');
+
+      google.maps.event.clearInstanceListeners(map);
     }
 
     $('#addPlace').toggleClass('active');
@@ -917,12 +931,11 @@ $(function () {
 
     // New place panel
     $('body').on('click', '#newPlaceholder', () => {
-      // New pin is outside our current supported bounds
-      if (!_mapBounds.contains(map.getCenter())) {
-        alert('Foi mal, por enquanto não dá pra adicionar bicicletários nesta região.');
-      } else {
-        openedMarker = null;
+      openedMarker = null;
+      if (testNewLocalBounds()) {
         openNewPlaceModal();
+      } else {
+        alert('Foi mal, por enquanto não dá pra adicionar bicicletários nesta região.');
       }
     });
 
