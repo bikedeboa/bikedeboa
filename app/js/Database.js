@@ -215,13 +215,11 @@ BIKE.Database = {
     });
   },
 
-  authenticate: function(isUserLogin, callback) {
+  _loginPromptCallback(user, isUserLogin, callback) {
     const self = this;
-
-    let user = Cookies.get('bikedeboa_user');
     let pw;
-    if (isUserLogin && !user) {
-      user = prompt('Usuário:','');
+    
+    if (user && user !== 'client') {
       pw = 'abcd123';
     }
 
@@ -237,9 +235,9 @@ BIKE.Database = {
         if (data.token && data.token.length > 0) {
           console.log('API connected.');
 
-          if (user) {
+          if (user && user !== 'client') {
             // This is the only place that should set 'loggedUser'
-            loggedUser = user;
+            loggedUser = user; 
 
             // Save username in session
             Cookies.set('bikedeboa_user', loggedUser, { expires: 7 });
@@ -266,6 +264,34 @@ BIKE.Database = {
         }, 2000);
       }
     });
+  },  
+
+  authenticate: function(isUserLogin, callback) {
+    const self = this;
+
+    if (isUserLogin) {
+      // user = prompt('Usuário:','');
+      swal(
+        {
+          title: 'Login',
+          text: 'Digite seu nome de usuário:',
+          type: 'input',
+          showCancelButton: true,
+          closeOnConfirm: true,
+        },
+        (input) => {
+          if (input) {
+            self._loginPromptCallback(input, isUserLogin, callback);
+            return true;
+          } else {
+            return false;
+          }
+        }
+      );
+    } else {
+      const user = Cookies.get('bikedeboa_user');
+      self._loginPromptCallback(user, isUserLogin, callback);
+    }
   },
 
   deleteReview: function(reviewId, callback) {

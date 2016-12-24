@@ -935,7 +935,7 @@ $(function () {
       if (testNewLocalBounds()) {
         openNewPlaceModal();
       } else {
-        alert('Foi mal, por enquanto não dá pra adicionar bicicletários nesta região.');
+        swal('Ops', 'Foi mal, por enquanto não dá pra adicionar bicicletários nesta região.', 'warning');
       }
     });
 
@@ -1062,7 +1062,7 @@ $(function () {
       }
     });
 
-    // Service Worker
+    // Set up Service Worker
     if (window.UpUp) {
       UpUp.start({
         'content': 'Foi mal, o Bike De Boa ainda não funciona offline.',
@@ -1076,6 +1076,14 @@ $(function () {
         ]
       });
     }
+
+    // Set up Sweet Alert
+    swal.setDefaults({
+      animation: false,
+      confirmButtonColor: '#30bb6a',
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancelar'
+    });
   }
 
   function handleLoggedUser() {

@@ -28,6 +28,8 @@ module.exports = {
         "google": false,
         "Cookies": false,
         "Handlebars": false,
+        "UpUp": false,
+        "swal": false,
 
         "SIMULATED_DELAY_MS": false,
         "MARKER_W": false,
