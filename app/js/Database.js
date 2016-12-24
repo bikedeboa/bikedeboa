@@ -222,6 +222,7 @@ BIKE.Database = {
     let pw;
     if (isUserLogin && !user) {
       user = prompt('Usuário:','');
+      pw = 'abcd123';
     }
 
     $.ajax({
@@ -229,8 +230,8 @@ BIKE.Database = {
       headers: self._headers,
       url: self.API_URL + '/token',
       data: {
-        username: user || 'cristiano',
-        password: pw || 'abcd123'
+        username: user || 'client',
+        password: pw || 'deboanalagoa'
       },
       success: function(data) {
         if (data.token && data.token.length > 0) {

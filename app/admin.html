@@ -40,7 +40,8 @@
         <style>
           body {
             font-family: "Roboto", Arial, sans-serif;
-            margin-top: 100px;
+            /*margin-top: 100px;*/
+            padding: 2%;
           }
 
           tbody > tr:not(.detail-view) {
@@ -100,27 +101,53 @@
           }
 
 
+          .dashboard-panel {
+            max-height: 70vh;
+            overflow-y: auto;
+            /*overflow-x: hidden; */
+          }
+
+
         </style>
     </head>
 
     <body>
 
-      <h2 id="heading1">
-        Carregando usuários...
-      </h2>
+      <div class="row">
+        <div class="col-md-6 dashboard-panel"> 
+          <h2 id="headingUsers">
+            Carregando usuários...
+          </h2>
 
-      <table
-        id="usersTable"
-        data-classes="table table-no-bordered"
-        data-striped="true"
-        data-search="true"
-        data-show-toggle="true"
-        data-show-columns="true"
-        data-show-footer="false"
-        data-sticky-header="true">
-      </table> 
+          <table
+            id="usersTable"
+            data-classes="table table-no-bordered"
+            data-search="true"
+            data-show-toggle="true"
+            data-show-columns="true"
+            data-show-footer="false"
+            data-sticky-header="true">
+          </table>
+        </div>
+        
+        <div class="col-md-6 dashboard-panel">
+          <h2 id="headingLog">
+            Carregando log...
+          </h2>
 
-      <h2 id="heading2">
+          <table
+            id="logTable"
+            data-classes="table table-no-bordered"
+            data-search="true"
+            data-show-toggle="true"
+            data-show-columns="true"
+            data-show-footer="false"
+            data-sticky-header="true">
+          </table> 
+        </div>
+      </div>
+
+      <h2 id="headingBikes">
         Carregando bicicletários...
       </h2>
 
@@ -183,7 +210,15 @@
         // }
 
         function timestampColFormatter(value) {
-          return value && new Date(value).toUTCString();
+          return value && new Date(value).toLocaleString('pt-BR');
+        }
+
+        function endpointNameColFormatter(value) {
+          return value && value.slice(34);
+        }
+
+        function jsonColFormatter(value) {
+          return value && JSON.stringify(value);
         }
 
         function updateTable() {
@@ -258,7 +293,7 @@
           $('#usersTable').bootstrapTable({
             columns: [
               {
-                field: 'id', title: 'ID', sortable: true, class: 'col-id',
+                field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
               },
               {
                 field: 'username', title: 'Usuário', sortable: true, class: 'col-title',
@@ -281,6 +316,36 @@
           });
         }
 
+        function updateLogTable() {
+          $('#logTable').bootstrapTable({
+            columns: [
+              {
+                field: 'updatedAt', title: 'updatedAt', sortable: true, formatter: 'timestampColFormatter', visible: false,
+              },
+              {
+                field: 'createdAt', title: 'createdAt', sortable: true, formatter: 'timestampColFormatter'
+              },
+              {
+                field: 'user', title: 'user', sortable: true
+              },
+              {
+                field: 'role', title: 'role', sortable: true, visible: false,
+              },
+              {
+                field: 'endpoint', title: 'endpoint', sortable: true, formatter: 'endpointNameColFormatter'
+              },
+              {
+                field: 'id', title: 'id', sortable: true, visible: false,
+              },
+              {
+                field: 'body', title: 'body', sortable: true, formatter: 'jsonColFormatter'
+              },
+            ],
+            data: log,
+            sortName: 'createdAt', sortOrder: 'desc'
+          });
+        }
+
 
         /////////////////////
         // Initializations //
@@ -290,25 +355,34 @@
 
         // Admin-only Globals
         let users;
+        let log;
 
 
         $.fn.editable.defaults.toggle = 'dblclick';
 
 
         
-        Database.authenticate(true, () => {
+        Database.authenticate(false, () => {
           BIKE.Database.customAPICall('get','user', null, data => {
             users = data;
 
-            $('#heading1').html(`Mostrando ${users.length} usuários`);
+            $('#headingUsers').html(`Usuários (${users.length})`);
 
             updateUsersTable();
+          });
+
+          BIKE.Database.customAPICall('get','log', null, data => {
+            log = data;
+
+            $('#headingLog').html(`Log (${log.length})`); 
+
+            updateLogTable();
           });
 
           Database.getAllTags();
           Database.getPlaces( () => {
             updateTable();
-            $('#heading2').html(`Mostrando ${markers.length} bicicletários`);
+            $('#headingBikes').html(`Bicicletários (${markers.length})`);
           }, null, null, true);
         });
 
