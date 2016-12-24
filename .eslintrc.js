@@ -62,6 +62,8 @@ module.exports = {
         "_geolocationMarker": true,
         "_positionWatcher": true,
         "_geolocationRadius": true,
+        "_mapBounds": true,
+        "_mapBoundsCoords": true,
         
     }
 };

@@ -9,6 +9,8 @@ BIKE.geocodeLatLng = function(lat, lng, successCB, failCB) {
 
   geocoder.geocode({'location': latlng}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
+      // console.log('geocoding results', results);
+      
       if (results[0]) {
         if (successCB && typeof successCB === 'function') {
           successCB(results[0].formatted_address);

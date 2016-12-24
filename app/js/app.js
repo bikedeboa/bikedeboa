@@ -667,17 +667,9 @@ $(function () {
     $('#sendReviewBtn').prop('disabled', !isOk);
   }
 
+  // @todo clean up this mess
   function openNewPlaceModal() {
-    function activateModal() {
-      $('#newPlaceModal').modal('show');
-
-      History.pushState({}, 'Novo bicicletário', 'novo');
-
-      validateNewPlaceForm();
-    }
-
     // Reset fields
-    newMarkerTemp = {};
     _uploadingPhotoBlob = '';
     $('#newPlaceModal .little-pin').toggleClass('gray', true);
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
@@ -710,25 +702,24 @@ $(function () {
     } else {
       toggleLocationInputMode();
 
-      // Automatically get the address
+      // Queries Google Geocoding service for the position address
       const mapCenter = map.getCenter();
-      newMarkerTemp.lat = mapCenter.lat();
-      newMarkerTemp.lng = mapCenter.lng();
+      newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
       BIKE.geocodeLatLng(
         newMarkerTemp.lat, newMarkerTemp.lng,
         (address) => {
           console.log('Resolved location address:');
           console.log(address);
           newMarkerTemp.address = address;
-          // activateModal();
         }, () => {
-          // Failed
-          // activateModal();
         }
       );
     }
 
-    activateModal();
+    // Finally, activate modal
+    $('#newPlaceModal').modal('show');
+    History.pushState({}, 'Novo bicicletário', 'novo');
+    validateNewPlaceForm();
   }
 
   function deletePlace() {
@@ -926,8 +917,13 @@ $(function () {
 
     // New place panel
     $('body').on('click', '#newPlaceholder', () => {
-      openedMarker = null;
-      openNewPlaceModal();
+      // New pin is outside our current supported bounds
+      if (!_mapBounds.contains(map.getCenter())) {
+        alert('Foi mal, por enquanto não dá pra adicionar bicicletários nesta região.');
+      } else {
+        openedMarker = null;
+        openNewPlaceModal();
+      }
     });
 
     $('body').on('click', '.typeIcon', e => {
@@ -996,7 +992,12 @@ $(function () {
       clickableIcons: false,
       zoomControl: isDesktop(),
       styles: _gmapsCustomStyle,
-    });
+    }); 
+
+    _mapBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
+        new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
+    );
 
     geocoder = new google.maps.Geocoder();
 
