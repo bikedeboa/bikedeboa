@@ -57,6 +57,9 @@ $headingFont: 'Raleway', sans-serif;
     }
 }
 
+html, body {
+    height: 100%;
+}
 
 body {
     overflow: hidden;
@@ -125,7 +128,8 @@ body.beta #map {
 
 #map {
     width: 100vw;
-    height: 100vh;
+    // height: 100vh;
+    height: 100%;
     /*margin-top: 50px;*/
 }
 
@@ -447,7 +451,7 @@ body.beta #map {
 #spinnerOverlay {
     background-color: $backdropColor;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
