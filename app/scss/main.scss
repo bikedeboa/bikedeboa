@@ -405,7 +405,7 @@ body.beta #map {
     &:after {
         content: 'Aqui';
         position: absolute;
-        left: 19px;
+        left: 50%;
         bottom: 46px;
         color: white;
         font-size: 12px;
@@ -413,6 +413,7 @@ body.beta #map {
         line-height: 1em;
         text-transform: uppercase;
         font-family: $headingFont;
+        transform: translateX(-50%);
     }
 
 }
@@ -1464,6 +1465,12 @@ body.beta #map {
 
 .side-nav__footer {
     padding: 16px;
+
+    .disclaimer {
+        font-size: 12px;
+        color: $gray;
+        font-style: italic;
+    }
 }
 
 .side-nav__content {
