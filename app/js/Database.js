@@ -281,8 +281,13 @@ BIKE.Database = {
         },
         (input) => {
           if (input) {
-            self._loginPromptCallback(input, isUserLogin, callback);
-            return true;
+            // if (input === '') {
+            //   swal.showInputError();
+            //   return false;
+            // } else {
+              self._loginPromptCallback(input, isUserLogin, callback);
+              return true;
+            // }
           } else {
             return false;
           }

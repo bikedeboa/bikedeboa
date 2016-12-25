@@ -911,7 +911,8 @@ $(function () {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     });
 
-    $('body').on('click', '#loginBtn', () => {
+    $('#loginBtn').on('click', () => {
+      _sidenav.hide();
       login(true);
     });
 
@@ -1098,6 +1099,8 @@ $(function () {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancelar'
     });
+
+    _sidenav = new SideNav();
   }
 
   function handleLoggedUser() {

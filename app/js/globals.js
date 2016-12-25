@@ -66,5 +66,6 @@ let loggedUser;
 let _searchResultMarker;
 let _abortedDetailsRequest;
 let _positionWatcher;
+let _sidenav;
 
 let templates = {};

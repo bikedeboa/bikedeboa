@@ -72,7 +72,7 @@ body.beta #map {
         bottom: -8px;
         right: 0;
         font-size: 20px;
-        z-index: 2;
+        z-index: 1;
         color: $red;
         font-family: $headingFont;
         font-weight: 700;
@@ -155,43 +155,47 @@ body.beta #map {
     transition: top 0.5s ease-out, opacity 0.5s ease-out;
     opacity: 0;
 
-    &:before {
-        position: relative;
-        top: 1px;
-        display: inline-block;
-        font-family: 'Glyphicons Halflings';
-        font-weight: 400;
-        line-height: 1;
-        content: "\e003";
-        position: absolute;
-        font-size: 16px;
-        top: 0;
-        left: 0;
-        /* opacity: 0.5; */
-        color: grey;
-        padding: 15px;
-        // background: $darkGreen;
-        // color: $paleWhite;
-        color: $darkGreen;
-        // color: $lightGray;
-    }
+    // &:before {
+    //     position: relative;
+    //     top: 1px;
+    //     display: inline-block;
+    //     font-family: 'Glyphicons Halflings';
+    //     font-weight: 400;
+    //     line-height: 1;
+    //     content: "\e003";
+    //     position: absolute;
+    //     font-size: 16px;
+    //     top: 0;
+    //     left: 0;
+    //     /* opacity: 0.5; */
+    //     color: grey;
+    //     padding: 15px;
+    //     // background: $darkGreen;
+    //     // color: $paleWhite;
+    //     color: $darkGreen;
+    //     // color: $lightGray;
+    // }
 
     input {
         width: 100%;
         font-size: 14px;
-        padding: 0 0px 0 45px;
+        padding: 0 0px 0 60px;
         font-weight: lighter;
         border-radius: 3px;
         box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 
         border: none;
-        border-bottom: 3px solid $darkGreen;
+        // border-bottom: 3px solid $darkGreen;
     }
 
     .balaca {
-        background-color: $darkGreen;
+        position: absolute;
         width: 48px;
-        display: table-cell;
+        height: 48px;
+        padding: 12px;
+        font-size: 20px;
+        color: $gray;
+        // background-color: white;
     }
 
     #clearLocationQueryBtn {
@@ -1121,6 +1125,7 @@ body.beta #map {
         cursor: pointer;
         opacity: 0.9;
         transition: opacity 0.2s ease-out;
+        text-shadow: 1px 1px 1px white;
 
         border-radius: 50%;
         box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .3);
@@ -1132,8 +1137,18 @@ body.beta #map {
             left: -12px;
             width: 90px;
             font-weight: 700;
-            font-family: 'Raleway';
+            font-family: $headingFont;
+            color: $gray;
+
+            content: 'Adicionar foto';
+            position: absolute;
+            bottom: -23px;
+            left: -13px;
+            width: 95px;
+            font-weight: 900;
             color: rgb(60,60,60);
+            text-transform: uppercase;
+            font-size: 11px;
         }
     }
 
@@ -1314,3 +1329,153 @@ body.beta #map {
 }
 
 
+/**
+ *
+ * Copyright 2016 Google Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// .header {
+//   width: 100%;
+//   height: 56px;
+//   box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+//   background: #333;
+//   color: #FFF;
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   padding: 0 16px;
+// }
+
+.header__menu-toggle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 48px;
+    color: white;
+    border: none;
+    margin: 0;
+    padding: 13px;
+    font-size: 18px;
+    background-color: $darkGreen;
+    // color: #828b90;
+}
+
+.side-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.side-nav--visible {
+  pointer-events: auto;
+}
+
+.side-nav::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 0.3s cubic-bezier(0,0,0.3,1);
+}
+
+.side-nav__container {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  background: #FFF;
+  height: 100%;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.4);
+  transform: translateX(-102%);
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.side-nav--animatable .side-nav__container {
+  transition: transform 0.13s cubic-bezier(0,0,0.3,1);
+}
+
+.side-nav--visible.side-nav--animatable .side-nav__container {
+  transition: transform 0.33s cubic-bezier(0,0,0.3,1);
+}
+
+.side-nav--visible::before {
+  opacity: 1;
+}
+
+.side-nav--visible .side-nav__container {
+  transform: none;
+}
+
+.side-nav__hide {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  background: none;
+  border: none;
+  color: #FFF;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+}
+
+.side-nav__header {
+    font-family: $headingFont;
+    height: 200px;
+    background: #30bb6a;
+    color: #FFF;
+    display: flex;
+    padding: 16px;
+    align-items: flex-end;
+    font-size: 30px;
+}
+
+.side-nav__footer {
+    padding: 16px;
+}
+
+.side-nav__content {
+  padding-top: 32px;
+  flex: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.side-nav__content li {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 16px;
+}
+
+.side-nav__content li:hover {
+  background: #CCC;
+}

@@ -9,14 +9,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#2cd978"> <!-- Chrome mobile nav color -->
 
-        <meta name="description" content="Encontre onde estacionar tua bicicleta pra ficar de boa.">
+        <meta name="description" content="Encontre lugares pra estacionar tua bicicleta e ficar de boa.">
         <meta name="keywords" content="mapa bicicleta bici biciletario seguranca estacionamento estacionar deixar prender ulock colaborativo vadebici massa critica porto alegre">
         <link rel="canonical" href="https://www.bikedeboa.com.br" />
         <meta property="og:image" content="https://www.bikedeboa.com.br/fb.png"/>
         <meta property="og:url" content="https://www.bikedeboa.com.br"/>
         <meta property="og:title" content="bike de boa"/>
         <meta property="og:site_name" content="bike de boa">
-        <meta property="og:description" content="Encontre onde estacionar tua bicicleta pra ficar de boa."/>
+        <meta property="og:description" content="Encontre lugares pra estacionar tua bicicleta e ficar de boa."/>
 
         <!-- Progressive Webapp Manifest -->
         <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json">
@@ -40,6 +40,9 @@
         <!-- Google Maps API (deferred) -->
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
 
+        <!-- GitHub Buttons -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
         <!-- JS (deferred)-->
         <script defer src="/upup.min.js"></script>
         <script defer src="/js/vendors.min.js"></script>
@@ -50,14 +53,15 @@
         <div id="map" style="filter: blur(1px);"></div>
 
         <div id="locationSearch" class="coolHide">
+            <button class="js-menu-show header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
             <!-- <span class="balaca">
-                <img src="/img/bici.svg"/>
+              <img src="/img/bici.svg"/>
             </span> -->
             <input id="locationQueryInput" type="text" placeholder="Buscar um endereço">
             <button id="clearLocationQueryBtn">✕</button>
 
             <span class="login-display">
-                <span class="glyphicon glyphicon-user"></span><button id="loginBtn">Login</button>
+                <!-- <span class="glyphicon glyphicon-user"></span><button id="loginBtn">Login</button> -->
             </span>
             <!-- <span>
                 <button id="filterBtn" type="button">
@@ -429,6 +433,33 @@
                 </div>
             </div>
         </script>
+
+        <aside class="js-side-nav side-nav">
+          <nav class="js-side-nav-container side-nav__container">
+            <button class="js-menu-hide side-nav__hide">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            
+            <header class="side-nav__header">
+              bike de boa
+            </header>
+
+            <ul class="side-nav__content">
+              <li id="loginBtn">
+                <!-- <span class="glyphicon glyphicon-user"></span> -->
+                Login Colaborador
+              </li>
+              <!-- <li>
+                Sobre
+              </li> -->
+            </ul>
+
+            <footer class="side-nav__footer">
+              <!-- Place this tag where you want the button to render. -->
+              <a class="github-button" href="https://github.com/cmdalbem/bikedeboa" data-style="mega" data-count-href="/cmdalbem/bikedeboa/stargazers" data-count-api="/repos/cmdalbem/bikedeboa#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star cmdalbem/bikedeboa on GitHub">Star</a>
+            </footer>
+          </nav>
+        </aside>
 
         <!-- Message Modal -->
         <script id="messageModalTemplate" type="text/x-handlebars-template">

@@ -66,6 +66,7 @@ module.exports = {
         "_geolocationRadius": true,
         "_mapBounds": true,
         "_mapBoundsCoords": true,
+        "_sidenav": true,
         
     }
 };
