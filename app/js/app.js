@@ -706,6 +706,8 @@ $(function () {
     $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
     $('#newPlaceModal #photoInputBg').attr('src', '');
     $('#newPlaceModal #descriptionInput').val('');
+    $('#newPlaceModal .description.collapsable').removeClass('expanded');
+
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
     // Not creating a new one, but editing
@@ -1137,9 +1139,9 @@ $(function () {
 
   // Thanks https://stackoverflow.com/questions/17772260/textarea-auto-height/24676492#24676492
   window.autoGrowTextArea = function(element) {
-    element.style.height = "5px";
-    element.style.height = (element.scrollHeight+20)+"px";
-  }
+    element.style.height = '5px';
+    element.style.height = (element.scrollHeight+20)+'px';
+  };
 
 
   window.showMessage = function(_data) {
