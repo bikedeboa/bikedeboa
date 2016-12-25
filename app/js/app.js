@@ -25,6 +25,20 @@ $(function () {
         m.average = m.average.toFixed(1);
       }
       templateData.average = m.average;
+
+      if (!m.average || m.average === 0) {
+        templateData.pinColor = 'gray';
+      } else if (m.average > 0 && m.average < 2) {
+        templateData.pinColor = 'red';
+      } else if (m.average >= 2 && m.average < 3.5) {
+        templateData.pinColor = 'yellow';
+      } else if (m.average >= 3.5) {
+        templateData.pinColor = 'green';
+      } else {
+        templateData.pinColor = 'gray';
+      }
+    } else {
+      templateData.pinColor = 'gray';
     }
 
     // Tags
@@ -411,7 +425,7 @@ $(function () {
     addLocationMode = !addLocationMode;
 
     if (addLocationMode) {
-      hideUI();
+      // hideUI();
 
       testNewLocalBounds();
       map.addListener('center_changed', () => {
@@ -431,7 +445,7 @@ $(function () {
       //   map.setZoom(18);
       // }
     } else {
-      showUI();
+      // showUI();
 
       $(document).off('keyup.disableInput');
 

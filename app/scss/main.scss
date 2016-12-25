@@ -391,6 +391,19 @@ body.beta #map {
         filter: grayscale(1);
     }
 
+    &:after {
+        content: 'Aqui';
+        position: absolute;
+        left: 19px;
+        bottom: 46px;
+        color: white;
+        font-size: 12px;
+        width: 75px;
+        line-height: 1em;
+        text-transform: uppercase;
+        font-family: $headingFont;
+    }
+
 }
 
 
@@ -517,16 +530,19 @@ body.beta #map {
 
         & > .little-pin {
             position: absolute;
-            top: 15px;
-            left: 12px;
-            width: 22px;
-            height: 22px;
-            background-image: url(/img/pin_green.svg);
-            background-size: 70%;
-            background-repeat: no-repeat;
-
+            top: 18px;
+            left: 14px;
+            width: 16px;
+            height: 16px;
+            /* background-image: url(/img/pin_green.svg); */
+            /* background-size: 70%; */
+            /* background-repeat: no-repeat; */
+            background-color: $darkGreen;
+            border-radius: 50%;
+ 
             &.gray {
-                background-image: url(/img/pin_gray.svg);
+                // background-image: url(/img/pin_gray.svg);
+                background: $gray;
             }
         }
     }
@@ -538,6 +554,8 @@ body.beta #map {
 
     #titleInput {
         padding-left: 35px;
+        border-radius: 3px;
+        border: 1px solid $lightGray;
     }
 
     .tagsContainer {
@@ -622,7 +640,7 @@ body.beta #map {
     }
 
     &.photoInputContainer {
-        height: 100px;
+        height: 130px;
     }
 
     &.skeleton-box {
@@ -735,12 +753,25 @@ body.beta #map {
         display: inline-block;
         width: 22px;
         height: 28px;
-        background-image: url(/img/pin_green.svg);
         background-size: 100%;
         background-repeat: no-repeat;
         margin-right: 10px;
         vertical-align: text-top;
     }
+
+    & .title-icon.green:before {
+        background-image: url(/img/pin_green.svg);
+    }
+    & .title-icon.yellow:before {
+        background-image: url(/img/pin_yellow.svg);
+    }
+    & .title-icon.red:before {
+        background-image: url(/img/pin_red.svg);
+    }
+    & .title-icon.gray:before {
+        background-image: url(/img/pin_gray.svg);
+    }
+
 }
 
 .review {
@@ -1080,7 +1111,7 @@ body.beta #map {
 
     & + label {
         position: absolute;
-        top: 50%;
+        top: 40%;
         left: 50%;
         background: url(/img/icon_photo.svg);
         background-size: 100%;
@@ -1093,6 +1124,17 @@ body.beta #map {
 
         border-radius: 50%;
         box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .3);
+
+        &:after {
+            content: 'Adicionar foto';
+            position: absolute;
+            bottom: -23px;
+            left: -12px;
+            width: 90px;
+            font-weight: 700;
+            font-family: 'Raleway';
+            color: rgb(60,60,60);
+        }
     }
 
     & + label:hover,
@@ -1205,45 +1247,45 @@ body.beta #map {
 
 
 // Thanks to https://davidwalsh.name/css-flip
-/* entire container, keeps perspective */
-.flip-container {
-    perspective: 1000px;
-}
+// entire container, keeps perspective
+// .flip-container {
+//     perspective: 1000px;
+// }
 
-/* flip the pane when hovered */
-.flipper.flipped {
-    transform: rotateY(180deg);
-}
+// // flip the pane when hovered
+// .flipper.flipped {
+//     transform: rotateY(180deg);
+// }
 
-/* flip speed goes here */
-.flipper {
-    transition: 0.8s ease-out;
-    transform-style: preserve-3d;
+// // flip speed goes here
+// .flipper {
+//     transition: 0.8s ease-out;
+//     transform-style: preserve-3d;
 
-    position: relative;
-}
+//     position: relative;
+// }
 
-/* hide back of pane during swap */
-.front, .back {
-    backface-visibility: hidden;
+// // hide back of pane during swap
+// .front, .back {
+//     backface-visibility: hidden;
 
-    position: absolute;
-    top: 0;
-    left: 0;
-}
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+// }
 
-/* front pane, placed above back */
-.front {
-    z-index: 2;
-    /* for firefox 31 */
-    transform: rotateY(0deg);
-    position: relative;
-}
+// // front pane, placed above back
+// .front {
+//     z-index: 2;
+//     /* for firefox 31 */
+//     transform: rotateY(0deg);
+//     position: relative;
+// }
 
-/* back, initially hidden pane */
-.back {
-    transform: rotateY(180deg);
-}
+// // back, initially hidden pane
+// .back {
+//     transform: rotateY(180deg);
+// }
 
 
 // Bootstrap modal vertical centralizer

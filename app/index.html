@@ -12,7 +12,7 @@
         <meta name="description" content="Encontre onde estacionar tua bicicleta pra ficar de boa.">
         <meta name="keywords" content="mapa bicicleta bici biciletario seguranca estacionamento estacionar deixar prender ulock colaborativo vadebici massa critica porto alegre">
         <link rel="canonical" href="https://www.bikedeboa.com.br" />
-        <meta property="og:image" content="https://www.bikedeboa.com.br/android-chrome-512x512.png"/>
+        <meta property="og:image" content="https://www.bikedeboa.com.br/android-chrome-192x192.png"/>
         <meta property="og:url" content="https://www.bikedeboa.com.br"/>
         <meta property="og:title" content="bike de boa"/>
         <meta property="og:site_name" content="bike de boa">
@@ -201,7 +201,7 @@
           {{/if}}
 
           <div class="modal-body">
-                <div id="placeDetails_heading" class="title title-icon {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
+                <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
                     {{#if title}}
                       {{title}}
                     {{else}}
