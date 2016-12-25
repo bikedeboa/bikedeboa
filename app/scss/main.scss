@@ -134,6 +134,13 @@ body.beta #map {
     overflow-y: auto;
 }
 
+// iOS Fix
+// source: https://github.com/twbs/bootstrap/issues/14839
+.modal {
+    -webkit-overflow-scrolling: auto !important;
+    overflow-y: auto !important;
+}
+
 #locationQueryBtn {
     display: none;
 }
