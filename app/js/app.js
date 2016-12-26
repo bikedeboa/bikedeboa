@@ -131,7 +131,7 @@ $(function () {
   function _geolocate(toCenter, callback) {
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
-      if (_positionWatcher) {
+      if (_geolocationInitialized) {
         const markerPos = _geolocationMarker.getPosition();
         const pos = {
           lat: markerPos.lat(),
@@ -145,6 +145,8 @@ $(function () {
       } else {
         showSpinner();
 
+        _geolocationInitialized = false;
+
         const options = {
           enableHighAccuracy: true,
           timeout: 5000,
@@ -154,6 +156,8 @@ $(function () {
         navigator.geolocation.getCurrentPosition(
             position => {
               console.log(position);
+
+              _geolocationInitialized = true;
 
               updateCurrentPosition(position);
 
@@ -182,6 +186,7 @@ $(function () {
                 // @todo show something more informative to the user
               console.error('Geolocation failed!');
               console.error(error);
+              swal('Ops', 'Geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
 
               // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
               if(error.message.indexOf('Only secure origins are allowed') == 0) {
