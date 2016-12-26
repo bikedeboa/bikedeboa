@@ -5,6 +5,11 @@ $greenery: #86af49;
 $yellow: #eedc12;
 $darkYellow: #E9BB2B;
 $red: #f15f74;
+$blue: #329BCE;
+$paleBlue: #437E9B;
+$darkBlue: #106086;
+$lightBlue: #63BCE7;
+$lightestBlue: #86C7E7;
 
 // Other colors
 $white: #fafafa;
@@ -143,6 +148,15 @@ body.beta #map {
 .modal {
     -webkit-overflow-scrolling: auto !important;
     overflow-y: auto !important;
+}
+
+.obfuscate {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+.link-like {
+    color: $blue;
 }
 
 #locationQueryBtn {
