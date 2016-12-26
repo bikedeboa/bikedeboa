@@ -114,6 +114,8 @@ $(function () {
     
     // Animate modal content
     $('.modal-header, .modal-body > div').velocity('transition.fadeIn', {stagger: 75});
+
+    ga('send', 'event', 'Local', 'view', ''+m.id);
   }
 
   function updateCurrentPosition(position) {
@@ -129,11 +131,13 @@ $(function () {
   }
 
   function _geolocate(toCenter, callback) {
+    ga('send', 'event', 'Geolocation', 'click');
+
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
         const markerPos = _geolocationMarker.getPosition();
-        const pos = {
+        const pos = { 
           lat: markerPos.lat(),
           lng: markerPos.lng() 
         };
@@ -158,6 +162,8 @@ $(function () {
               console.log(position);
 
               _geolocationInitialized = true;
+
+              ga('send', 'event', 'Geolocation', 'init');
 
               updateCurrentPosition(position);
 
@@ -514,8 +520,10 @@ $(function () {
     };
 
     if (isUpdate) {
+      ga('send', 'event', 'Local', 'update', ''+openedMarker.id);
       Database.updatePlace(openedMarker.id, place, callback);
     } else {
+      ga('send', 'event', 'Local', 'create');
       Database.sendPlace(place, callback);
     }
   }
@@ -572,6 +580,8 @@ $(function () {
 
       _searchResultMarker.setPosition(place.geometry.location);
       _searchResultMarker.setVisible(true);
+ 
+      ga('send', 'event', 'Search', 'location', place.formatted_address);
 
       // var address = '';
       // if (place.address_components) {
@@ -731,6 +741,7 @@ $(function () {
         $('#newPlaceModal .description').addClass('expanded');
       }
 
+      ga('send', 'event', 'Local', 'update - pending', ''+m.id);
       // $('#placeDetailsModal').modal('hide');
       History.pushState({}, 'bike de boa', '/');
 
@@ -749,6 +760,8 @@ $(function () {
         }, () => {
         }
       );
+
+      ga('send', 'event', 'Local', 'create - pending');
     }
 
     // Finally, activate modal
@@ -760,6 +773,8 @@ $(function () {
   function deletePlace() {
     if (openedMarker && loggedUser) {
       if (confirm('Tem certeza que quer deletar este bicicletário?')) {
+        ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
+
         showSpinner();
         Database.deletePlace(openedMarker.id, () => {
           // $('#newPlaceModal').modal('hide');
@@ -802,10 +817,16 @@ $(function () {
 
     // Prepopulate rating
     if (previousReview) {
+      _updatingReview = true;
       currentPendingRating = previousReview.rating;
       $('input[name=rating]').val([previousReview.rating]);
-    }
 
+      ga('send', 'event', 'Review', 'update - pending', ''+m.id);
+    } else {
+      _updatingReview = false;
+      ga('send', 'event', 'Review', 'create - pending', ''+m.id);
+    }
+ 
     validateReviewForm();
 
     $('#placeDetailsModal').modal('hide');
@@ -889,6 +910,12 @@ $(function () {
         // $('#placeDetailsModal').modal('hide');
         History.pushState({}, 'bike de boa', '/');
 
+        if (_updatingReview) {
+          ga('send', 'event', 'Review', 'update', ''+openedMarker.id, parseInt(currentPendingRating));
+        } else {
+          ga('send', 'event', 'Review', 'create', ''+openedMarker.id, parseInt(currentPendingRating));
+        }
+
         // Update markers data
         Database.getPlaces( () => {
           updateMarkers();
@@ -908,7 +935,7 @@ $(function () {
 
   function _initTriggers() {
     // Home
-    $('body').on('click', '#locationQueryBtn', searchLocation);
+    // $('body').on('click', '#locationQueryBtn', searchLocation);
     $('body').on('click', '#clearLocationQueryBtn', () => {
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
@@ -1118,9 +1145,6 @@ $(function () {
       Cookies.remove('bikedeboa_user');
       window.location.reload();
     });
-
-    // Set User ID feature on Google Analytics
-    ga('set', 'userId', loggedUser);
   }
 
   function login(isUserLogin = false) {
@@ -1149,44 +1173,44 @@ $(function () {
   };
 
 
-  window.showMessage = function(_data) {
-    const okCallback = () => {
-      $('#messageModal').modal('hide');
-    };
+  // window.showMessage = function(_data) {
+  //   const okCallback = () => {
+  //     $('#messageModal').modal('hide');
+  //   };
 
-    let data = {
-      messageClasses: _data && _data.type || 'success',
-      messageContent: _data && _data.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend scelerisque scelerisque.',
-      buttonLabel: _data && _data.buttonLabel ||  'Tá',
-    };
+  //   let data = {
+  //     messageClasses: _data && _data.type || 'success',
+  //     messageContent: _data && _data.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend scelerisque scelerisque.',
+  //     buttonLabel: _data && _data.buttonLabel ||  'Tá',
+  //   };
 
-    switch (data.messageClasses) {
-      case 'success':
-        data.glyphiconClass = 'glyphicon-ok-sign';
-        break;
-      case 'warning':
-        data.glyphiconClass = 'glyphicon-info-sign';
-        break;
-      case 'error':
-        data.glyphiconClass = 'glyphicon-remove-sign';
-        break;
-    }
+  //   switch (data.messageClasses) {
+  //     case 'success':
+  //       data.glyphiconClass = 'glyphicon-ok-sign';
+  //       break;
+  //     case 'warning':
+  //       data.glyphiconClass = 'glyphicon-info-sign';
+  //       break;
+  //     case 'error':
+  //       data.glyphiconClass = 'glyphicon-remove-sign';
+  //       break;
+  //   }
 
-    ////////////////////////////////
-    // Render handlebars template //
-    ////////////////////////////////
-    $('#messageModalPlaceholder').html(templates.messageModalTemplate(data));
+  //   ////////////////////////////////
+  //   // Render handlebars template //
+  //   ////////////////////////////////
+  //   $('#messageModalPlaceholder').html(templates.messageModalTemplate(data));
 
-    $('#messageModalOkBtn').on('click', okCallback);
+  //   $('#messageModalOkBtn').on('click', okCallback);
 
-    $('#messageModal').modal('show');
-  };
+  //   $('#messageModal').modal('show');
+  // };
 
   function init() {
     // Reset URL
     History.replaceState({}, 'bike de boa', '/');
 
-    if (isDemoMode) {
+    if (isDemoMode) { 
       Database = BIKE.MockedDatabase;
     } else {
       Database = BIKE.Database;
@@ -1196,7 +1220,7 @@ $(function () {
   }
 
   window.toggleDemoMode = () => {
-    showSpinner();
+    showSpinner(); 
     isDemoMode = !isDemoMode;
     init();
   };

@@ -244,6 +244,9 @@ BIKE.Database = {
 
             // Clean URL
             // History.replaceState({}, 'bike de boa', '/');
+
+            ga('set', 'userId', loggedUser);
+            ga('send', 'event', 'Login', 'success', user);
           }
 
           // Set headers for future calls
@@ -258,6 +261,8 @@ BIKE.Database = {
         }
       },
       error: function(data) {
+        ga('send', 'event', 'Login', 'fail', user);
+
         console.error('Authentication failed. Trying again in 2s...');
         setTimeout( () => { 
           self.authenticate(isUserLogin, callback);

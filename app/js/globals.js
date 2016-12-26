@@ -68,5 +68,6 @@ let _abortedDetailsRequest;
 let _positionWatcher;
 let _sidenav;
 let _geolocationInitialized;
+let _updatingReview;
 
 let templates = {};

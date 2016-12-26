@@ -30,6 +30,7 @@ module.exports = {
         "Handlebars": false,
         "UpUp": false,
         "swal": false,
+        "ga": false,
 
         "SIMULATED_DELAY_MS": false,
         "MARKER_W": false,
@@ -45,6 +46,8 @@ module.exports = {
         "PHOTO_UPLOAD_MAX_W": false,
         "PHOTO_UPLOAD_MAX_H": false,
 
+        "BIKE": true,
+        "isDemoMode": true,
         "Database": true,
         "map": true,
         "geocoder": true,
@@ -61,12 +64,13 @@ module.exports = {
         "loggedUser": true,
         "_searchResultMarker": true,
         "_abortedDetailsRequest": true,
+        "_geolocationInitialized": true,
         "_geolocationMarker": true,
         "_positionWatcher": true,
         "_geolocationRadius": true,
         "_mapBounds": true,
         "_mapBoundsCoords": true,
         "_sidenav": true,
-        
+        "_updatingReview": true,
     }
 };
