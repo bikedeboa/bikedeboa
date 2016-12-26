@@ -429,7 +429,7 @@ $(function () {
 
       testNewLocalBounds();
       map.addListener('center_changed', () => {
-        console.log('center_changed');
+        // console.log('center_changed');
         testNewLocalBounds();
       });
 
