@@ -979,7 +979,7 @@ $(function () {
         reader.onload = photoUploadCB;
         reader.readAsDataURL(this.files[0]);
       } else {
-        console.error('Algo deu errado com a foto, por favor tente novamente.');
+        swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       }
     });
 
