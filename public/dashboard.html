@@ -6,8 +6,8 @@
         <title>admin</title>
 
         <!-- CSS -->
-        <link rel="stylesheet" type="text/css" href="../dist/css/vendors.min.css"/>
-        <!-- <link rel="stylesheet" type="text/css" href="../dist/css/main.css"/> -->
+        <link rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
+        <!-- <link rel="stylesheet" type="text/css" href="/css/main.css"/> -->
 
         <!-- Google Fonts (async) -->
         <link async href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
@@ -17,8 +17,8 @@
         <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script> -->
 
         <!-- JS -->
-        <script src="../dist/js/vendors.min.js"></script>
-        <script src="../dist/js/app.min.js"></script>
+        <script src="/js/vendors.min.js"></script>
+        <script src="/js/app.min.js"></script>
 
         <!-- Bootstrap Extended Tables -->
         <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
@@ -28,14 +28,14 @@
         <!-- editable -->
         <script src="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
-        <script src="../public/lib/bootstrap-table-extensions/editable/bootstrap-table-editable.js"></script>
+        <script src="/lib/bootstrap-table-extensions/editable/bootstrap-table-editable.js"></script>
         <!-- export -->
-        <script src="../public/lib/bootstrap-table-extensions/export/bootstrap-table-export.js"></script>
+        <script src="/lib/bootstrap-table-extensions/export/bootstrap-table-export.js"></script>
         <!-- mobile -->
-        <script src="../public/lib/bootstrap-table-extensions/mobile/bootstrap-table-mobile.js"></script>
+        <script src="/lib/bootstrap-table-extensions/mobile/bootstrap-table-mobile.js"></script>
         <!-- sticky-header -->
-        <script src="../public/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.js"></script>
-        <link rel="stylesheet" href="../public/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.css">
+        <script src="/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.js"></script>
+        <link rel="stylesheet" href="/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.css">
 
         <style>
           body {
@@ -374,13 +374,13 @@
           });
 
           // Log
-          // BIKE.Database.customAPICall('get','log', null, data => {
-          //   log = data;
+          BIKE.Database.customAPICall('get','log', null, data => {
+            log = data;
 
-          //   $('#headingLog').html(`Log (${log.length})`); 
+            $('#headingLog').html(`Log (${log.length})`); 
 
-          //   updateLogTable();
-          // });
+            updateLogTable();
+          });
 
           Database.getAllTags();
           Database.getPlaces( () => {
