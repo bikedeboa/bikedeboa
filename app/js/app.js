@@ -189,7 +189,9 @@ $(function () {
               }
             },
             error => {
-                // @todo show something more informative to the user
+              ga('send', 'event', 'Geolocation', error.message ? `fail - ${error.message}`: 'fail - no_message');
+
+              // @todo show something more informative to the user
               console.error('Geolocation failed!');
               console.error(error);
               swal('Ops', 'Geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');

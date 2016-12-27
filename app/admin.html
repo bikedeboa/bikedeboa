@@ -356,6 +356,7 @@
         // Admin-only Globals
         let users;
         let log;
+        let ga = function() {};
 
 
         $.fn.editable.defaults.toggle = 'dblclick';
@@ -363,6 +364,7 @@
 
         
         Database.authenticate(false, () => {
+          // User
           BIKE.Database.customAPICall('get','user', null, data => {
             users = data;
 
@@ -371,13 +373,14 @@
             updateUsersTable();
           });
 
-          BIKE.Database.customAPICall('get','log', null, data => {
-            log = data;
+          // Log
+          // BIKE.Database.customAPICall('get','log', null, data => {
+          //   log = data;
 
-            $('#headingLog').html(`Log (${log.length})`); 
+          //   $('#headingLog').html(`Log (${log.length})`); 
 
-            updateLogTable();
-          });
+          //   updateLogTable();
+          // });
 
           Database.getAllTags();
           Database.getPlaces( () => {
