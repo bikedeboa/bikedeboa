@@ -169,6 +169,10 @@ BIKE.Database = {
     });
   },
 
+  _setOriginHeader: function(ip) {
+    this._headers.ip_origin = ip;
+  },
+
   customAPICall: function(type, endpoint, data, callback) {
     const self = this;
 
@@ -247,16 +251,16 @@ BIKE.Database = {
 
             ga('set', 'userId', loggedUser);
             ga('send', 'event', 'Login', 'success', user);
+          } else {
+            loggedUser = null;
           }
 
           // Set headers for future calls
           self._authToken = data.token;
-          self._headers = {
-            'x-access-token': data.token
-          };
+          self._headers['x-access-token'] = data.token;
 
           if (callback && typeof callback === 'function') {
-            callback();
+            callback(loggedUser);
           }
         }
       },

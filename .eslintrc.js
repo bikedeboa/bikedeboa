@@ -30,7 +30,7 @@ module.exports = {
         "Handlebars": false,
         "UpUp": false,
         "swal": false,
-        "ga": false,
+        "ga": true, //overriden on localhost
 
         "SIMULATED_DELAY_MS": false,
         "MARKER_W": false,
@@ -72,5 +72,6 @@ module.exports = {
         "_mapBoundsCoords": true,
         "_sidenav": true,
         "_updatingReview": true,
+        "_userIP": true,
     }
 };

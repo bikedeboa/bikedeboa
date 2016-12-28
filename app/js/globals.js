@@ -69,5 +69,6 @@ let _positionWatcher;
 let _sidenav;
 let _geolocationInitialized;
 let _updatingReview;
+let _userIP;
 
 let templates = {};

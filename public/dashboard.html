@@ -21,10 +21,10 @@
         <script src="/js/app.min.js"></script>
 
         <!-- Bootstrap Extended Tables -->
-        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 
-        <!-- Extensions -->
+        <!-- Extensions --> 
         <!-- editable -->
         <script src="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
@@ -107,14 +107,66 @@
             /*overflow-x: hidden; */
           }
 
+          #logged {
+            display: none;
+          }
+
 
         </style>
     </head>
 
     <body>
 
-      <div class="row">
-        <div class="col-md-6 dashboard-panel"> 
+      <div id="loginWrapper" style="float: right;">
+        <button id="login" type="button" class="btn btn-lg btn-default" >
+          <span class="glyphicon glyphicon-user"></span> Login
+        </button>
+
+        <div id="logged" class="btn-group">
+          <button class="btn btn-default btn-lg btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-user"></span> <span id="loggedUser"></span> <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a id="logOff" href="#">Log off</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <br>
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">Bicicletarios</a></li>
+        <li role="presentation"><a href="#log" aria-controls="log" role="tab" data-toggle="tab">Log</a></li>
+        <li role="presentation"><a href="#usuarios" aria-controls="usuarios" role="tab" data-toggle="tab">Usuarios</a></li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="bicicletarios">
+          
+          <h2 id="headingBikes">
+            Carregando bicicletários...
+          </h2>
+
+          <table
+            id="localsTable"
+            data-classes="table table-no-bordered"
+            data-striped="true"
+            data-search="true"
+            data-show-refresh="true"
+            data-show-toggle="true"
+            data-show-columns="true"
+            data-show-export="true"
+            data-detail-view="true"
+            data-detail-formatter="detailFormatter"
+            data-row-style="rowStyle"
+            data-show-footer="false"
+            data-sticky-header="true">
+          </table> 
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="usuarios">
           <h2 id="headingUsers">
             Carregando usuários...
           </h2>
@@ -129,10 +181,10 @@
             data-sticky-header="true">
           </table>
         </div>
-        
-        <div class="col-md-6 dashboard-panel">
+
+        <div role="tabpanel" class="tab-pane fade" id="log">
           <h2 id="headingLog">
-            Carregando log...
+            Carregando log... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
           </h2>
 
           <table
@@ -145,27 +197,8 @@
             data-sticky-header="true">
           </table> 
         </div>
+
       </div>
-
-      <h2 id="headingBikes">
-        Carregando bicicletários...
-      </h2>
-
-      <table
-        id="localsTable"
-        data-classes="table table-no-bordered"
-        data-striped="true"
-        data-search="true"
-        data-show-refresh="true"
-        data-show-toggle="true"
-        data-show-columns="true"
-        data-show-export="true"
-        data-detail-view="true"
-        data-detail-formatter="detailFormatter"
-        data-row-style="rowStyle"
-        data-show-footer="false"
-        data-sticky-header="true">
-      </table> 
 
       <script>
         function detailFormatter(index, row) {
@@ -221,128 +254,202 @@
           return value && JSON.stringify(value);
         }
 
-        function updateTable() {
-          let structureTypes = [];
-          for(let i=0; i < STRUCTURE_NAMES.length; i++) {
-            structureTypes.push({value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i]});
-          }
+        function updateLocalsTable() {
+          Database.getPlaces( () => {
+            $('#headingBikes').html(`Bicicletários (${markers.length})`);
 
-          // Massage data for BootstrapTable
-          markers.forEach( m => {
-            if (m.isPublic === true) {
-              m.isPublic = 1;
-            } else if (m.isPublic === false) {
-              m.isPublic = 0;
+            let structureTypes = [];
+            for(let i=0; i < STRUCTURE_NAMES.length; i++) {
+              structureTypes.push({value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i]});
             }
-          });
 
-          $('#localsTable').bootstrapTable({
-            columns: [
-              {
-                field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-              },
-              {
-                field: 'id', title: 'ID', sortable: true, class: 'col-id',
-              },
-              {
-                field: 'text', title: 'Titulo', sortable: true, class: 'col-title',
-                  editable: true
-              },
-              {
-                field: 'address', title: 'Endereço', sortable: true, class: 'col-address',
-                  editable: true, 'editable-type': 'textarea'
-              },
-              {
-                field: 'lat', title: 'lat', sortable: true, visible: false,
-              },
-              {
-                field: 'lng', title: 'lng', sortable: true, visible: false,
-              },
-              {
-                field: 'isPublic', title: 'Público?', sortable: true,
-                  editable: true, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
-              },
-              {
-                field: 'structureType', title: 'Tipo', sortable: true,
-                  editable: true, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
-              },
-              {
-                field: 'average', title: 'Média', sortable: true, visible: false, 
-              },
-              {
-                field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
-              },
-              {
-                field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
-              },
-              {
-                field: 'description', title: 'Descrição', sortable: true, class: 'col-description',
-                  editable: true, 'editable-type': 'textarea'
-              },
-              {
-                field: 'photo', title: 'Foto', sortable: true,
-                  editable: true
+            // Massage data for BootstrapTable
+            markers.forEach( m => {
+              if (m.isPublic === true) {
+                m.isPublic = 1;
+              } else if (m.isPublic === false) {
+                m.isPublic = 0;
               }
-            ],
-            data: markers,
-            sortName: 'updatedAt', sortOrder: 'desc'
-          });
+            });
+
+            $('#localsTable').bootstrapTable({
+              columns: [
+                {
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id',
+                },
+                {
+                  field: 'text', title: 'Titulo', sortable: true, class: 'col-title',
+                    editable: loggedUser && true
+                },
+                {
+                  field: 'address', title: 'Endereço', sortable: true, class: 'col-address',
+                    editable: loggedUser && true, 'editable-type': 'textarea'
+                },
+                {
+                  field: 'lat', title: 'lat', sortable: true, visible: false,
+                },
+                {
+                  field: 'lng', title: 'lng', sortable: true, visible: false,
+                },
+                {
+                  field: 'isPublic', title: 'Público?', sortable: true,
+                    editable: loggedUser && true, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
+                },
+                {
+                  field: 'structureType', title: 'Tipo', sortable: true,
+                    editable: loggedUser && true, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
+                },
+                {
+                  field: 'average', title: 'Média', sortable: true, visible: false, 
+                },
+                {
+                  field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
+                },
+                {
+                  field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
+                },
+                {
+                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description',
+                    editable: loggedUser && true, 'editable-type': 'textarea'
+                },
+                {
+                  field: 'photo', title: 'Foto', sortable: true,
+                    editable: loggedUser && true
+                }
+              ],
+              data: markers,
+              sortName: 'updatedAt', sortOrder: 'desc'
+            });
+          }, null, null, true);
         }
 
         function updateUsersTable() {
-          $('#usersTable').bootstrapTable({
-            columns: [
-              {
-                field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
-              },
-              {
-                field: 'username', title: 'Usuário', sortable: true, class: 'col-title',
-              },
-              {
-                field: 'fullname', title: 'Nome completo', sortable: true, editable: true
-              },
-              { 
-                field: 'role', title: 'Cargo', sortable: true, editable: true, 'editable-type': 'select', 'editable-source': "[{'value': 'admin', 'text': 'Admin'}, {'value': 'colaborator', 'text': 'Colaborador'}, {'value': 'client', 'text': 'Cliente'} ]"
-              },
-              {
-                field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-              },
-              {
-                field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-              },
-            ],
-            data: users,
-            sortName: 'id', sortOrder: 'desc'
+          if (users) {
+            return;
+          }
+
+          BIKE.Database.customAPICall('get','user', null, data => {
+            users = data;
+
+            $('#headingUsers').html(`Usuários (${users.length})`);
+
+            $('#usersTable').bootstrapTable({
+              columns: [
+                {
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
+                },
+                {
+                  field: 'username', title: 'Usuário', sortable: true, class: 'col-title',
+                },
+                {
+                  field: 'fullname', title: 'Nome completo', sortable: true, editable: loggedUser && true
+                },
+                { 
+                  field: 'role', title: 'Cargo', sortable: true, editable: loggedUser && true, 'editable-type': 'select', 'editable-source': "[{'value': 'admin', 'text': 'Admin'}, {'value': 'colaborator', 'text': 'Colaborador'}, {'value': 'client', 'text': 'Cliente'} ]"
+                },
+                {
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+              ],
+              data: users,
+              sortName: 'id', sortOrder: 'desc'
+            });
           });
         }
 
         function updateLogTable() {
-          $('#logTable').bootstrapTable({
-            columns: [
-              {
-                field: 'updatedAt', title: 'updatedAt', sortable: true, formatter: 'timestampColFormatter', visible: false,
-              },
-              {
-                field: 'createdAt', title: 'createdAt', sortable: true, formatter: 'timestampColFormatter'
-              },
-              {
-                field: 'user', title: 'user', sortable: true
-              },
-              {
-                field: 'role', title: 'role', sortable: true, visible: false,
-              },
-              {
-                field: 'endpoint', title: 'endpoint', sortable: true, formatter: 'endpointNameColFormatter'
-              },
-              {
-                field: 'id', title: 'id', sortable: true, visible: false,
-              },
-              {
-                field: 'body', title: 'body', sortable: true, formatter: 'jsonColFormatter'
-              },
-            ],
-            data: log,
-            sortName: 'createdAt', sortOrder: 'desc'
+          if (log) {
+            return;
+          }
+
+          BIKE.Database.customAPICall('get','log', null, data => {
+            log = data;
+
+            $('#headingLog').html(`Log (${log.length})`); 
+
+            // let html = '';
+            // log.forEach( i => {
+            //   html += '<p>';
+            //   html += `${i.updatedAt}<br>`;
+            //   html += `${i.createdAt}<br>`;
+            //   html += `${i.user}<br>`;
+            //   html += `${i.role}<br>`;
+            //   html += `${i.endpoint}<br>`;
+            //   html += `${i.id}<br>`;
+            //   html += `${i.body}<br>`;
+            //   html += '</p>';
+            // });
+            // $('#logTable').html(html);
+
+            $('#logTable').bootstrapTable({
+              columns: [
+                {
+                  field: 'updatedAt', title: 'updatedAt', sortable: true, formatter: 'timestampColFormatter', visible: false,
+                },
+                {
+                  field: 'createdAt', title: 'createdAt', sortable: true, formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'user', title: 'user', sortable: true
+                },
+                {
+                  field: 'ip_origin', title: 'IP', sortable: true
+                },
+                {
+                  field: 'role', title: 'role', sortable: true, visible: false,
+                },
+                {
+                  field: 'endpoint', title: 'endpoint', sortable: true, formatter: 'endpointNameColFormatter'
+                },
+                {
+                  field: 'id', title: 'id', sortable: true, visible: false,
+                },
+                {
+                  field: 'body', title: 'body', sortable: true, formatter: 'jsonColFormatter'
+                },
+              ],
+              data: log,
+              sortName: 'createdAt', sortOrder: 'desc'
+            });
+          });
+          
+        }
+
+        function handleLoggedUser() {
+          if (loggedUser) {
+            $('#login').hide();
+            $('#logged').show();
+            $('#loggedUser').html(loggedUser);
+          }
+        }
+
+        function login() {
+          Database.authenticate(true, () => {
+            if (loggedUser) {
+              window.location.reload();
+            }
+          });
+        }
+
+        function logOff() {
+          Cookies.remove('bikedeboa_user');
+          window.location.reload();
+        }
+
+        function init() {
+          Database.authenticate(false, () => {
+            if (loggedUser) {
+              handleLoggedUser();
+            }
+
+            Database.getAllTags();
+            updateLocalsTable();
           });
         }
 
@@ -361,40 +468,35 @@
 
         $.fn.editable.defaults.toggle = 'dblclick';
 
-
         
-        Database.authenticate(false, () => {
-          // User
-          BIKE.Database.customAPICall('get','user', null, data => {
-            users = data;
+        init();
 
-            $('#headingUsers').html(`Usuários (${users.length})`);
-
-            updateUsersTable();
-          });
-
-          // Log
-          BIKE.Database.customAPICall('get','log', null, data => {
-            log = data;
-
-            $('#headingLog').html(`Log (${log.length})`); 
-
-            updateLogTable();
-          });
-
-          Database.getAllTags();
-          Database.getPlaces( () => {
-            updateTable();
-            $('#headingBikes').html(`Bicicletários (${markers.length})`);
-          }, null, null, true);
-        });
-
-        
         // 
         // Triggers
         // 
 
-        $('body').on('click', 'tbody tr td', (e) => {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
+          const tabName = e.target.getAttribute('aria-controls');
+          switch (tabName) {
+            case 'log':
+              updateLogTable();
+              break;
+            case 'usuarios':
+              updateUsersTable();
+              break;
+          }
+        });
+
+        $('#login').on('click', e => {
+          login();
+        });
+
+        $('body').on('click', '#logOff', e => {
+          logOff();
+        });
+
+
+        $('body').on('click', 'tbody tr td', e => {
           if (e.target == e.currentTarget) {
             console.log('details');
             $(e.currentTarget).siblings().find('.detail-icon').trigger('click');

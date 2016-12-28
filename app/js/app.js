@@ -1218,6 +1218,15 @@ $(function () {
       Database = BIKE.Database;
     }
 
+    // Use external service to get user's IP 
+    $.getJSON('//ipinfo.io/json', data => {
+      if (data && data.ip) {
+        Database._setOriginHeader(data.ip);
+      } else {
+        console.log('Something went wrong when trying to retrieve user IP.');
+      }
+    });
+
     login();
   }
 
