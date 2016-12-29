@@ -191,10 +191,22 @@ $(function () {
             error => {
               ga('send', 'event', 'Geolocation', error.message ? `fail - ${error.message}`: 'fail - no_message');
 
-              // @todo show something more informative to the user
-              console.error('Geolocation failed!');
-              console.error(error);
-              swal('Ops', 'Geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
+              console.error('Geolocation failed.', error);
+
+              switch(error.code) {
+              case 1:
+                // PERMISSION_DENIED
+                swal('Ops', 'Parece que seu dispositivo negou acesso à sua localização. Acesse suas configurações para ligá-lo denovo.', 'warning');
+                break;
+              case 2:
+                // POSITION_UNAVAILABLE
+                swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
+                break;
+              case 3:
+                // TIMEOUT
+                swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente denovo que deve dar ;)', 'warning');
+                break;
+              }
 
               // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
               if(error.message.indexOf('Only secure origins are allowed') == 0) {
@@ -1066,6 +1078,17 @@ $(function () {
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
 
+    // If permission to geolocation was already granted we already center the map
+    if (navigator.permissions) {
+      navigator.permissions.query({'name': 'geolocation'})
+        .then( permission => {
+          if (permission.state === 'granted') {
+            _geolocate(true);
+          }
+        }
+      );
+    }
+
     geocoder = new google.maps.Geocoder();
 
     setupAutocomplete();
@@ -1227,7 +1250,7 @@ $(function () {
       Database = BIKE.Database;
     }
 
-    // Use external service to get user's IP 
+    // Use external service to get user's IP
     $.getJSON('//ipinfo.io/json', data => {
       if (data && data.ip) {
         Database._setOriginHeader(data.ip);
@@ -1235,6 +1258,17 @@ $(function () {
         console.error('Something went wrong when trying to retrieve user IP.');
         ga('send', 'event', 'Misc', 'IP retrieval error');
       }
+
+      // Coords via IP
+      // if (data && data.loc) {
+      //   const coords = data.loc.split(',');
+      //   const pos = {
+      //     lat: parseFloat(coords[0]),
+      //     lng: parseFloat(coords[1]) 
+      //   };
+
+      //   map.panTo(pos); 
+      // }
     });
 
     localhostOverrides();
