@@ -28,9 +28,9 @@ $(function () {
 
       if (!m.average || m.average === 0) {
         templateData.pinColor = 'gray';
-      } else if (m.average > 0 && m.average < 2) {
+      } else if (m.average > 0 && m.average <= 2) {
         templateData.pinColor = 'red';
-      } else if (m.average >= 2 && m.average < 3.5) {
+      } else if (m.average > 2 && m.average < 3.5) {
         templateData.pinColor = 'yellow';
       } else if (m.average >= 3.5) {
         templateData.pinColor = 'green';
@@ -103,7 +103,7 @@ $(function () {
     if (m.average) {
       $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
     } else {
-      $('#ratingDisplay').addClass('emptyr');
+      $('#ratingDisplay').addClass('empty');
     }
 
     $('.modal-header img').on('load', e => {
