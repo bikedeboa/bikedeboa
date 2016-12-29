@@ -1,6 +1,7 @@
 // Color Pallette
 $darkGreen: #30bb6a;
 $lightGreen: #2cd978;
+$yellowGreen: #e0fb72;
 $greenery: #86af49;
 $yellow: #eedc12;
 $darkYellow: #E9BB2B;
@@ -379,6 +380,7 @@ a,
     margin: auto;
     z-index: 1;
     background: $darkGreen;
+    background: linear-gradient(45deg, $darkGreen 0%, $lightGreen 100%);
     border: none;
     color: white;
     border-radius: 25px;
@@ -1488,7 +1490,8 @@ a,
 .side-nav__header {
     font-family: $headingFont;
     height: 200px;
-    background: #30bb6a;
+    background: $darkGreen;
+    background: linear-gradient(45deg, $darkGreen 0%, $lightGreen 100%);
     color: #FFF;
     display: flex;
     padding: 16px;
