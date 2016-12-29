@@ -134,7 +134,7 @@ $(function () {
     _geolocationRadius.setRadius(position.coords.accuracy);
   }
 
-  function _geolocate(toCenter, callback) {
+  function _geolocate(toCenter, callback, quiet = false) {
     ga('send', 'event', 'Geolocation', 'click');
 
     if (navigator.geolocation) {
@@ -197,20 +197,22 @@ $(function () {
 
               console.error('Geolocation failed.', error);
 
-              switch(error.code) {
-              case 1:
-                // PERMISSION_DENIED
-                swal('Ops', 'Parece que seu dispositivo negou acesso à sua localização. Acesse suas configurações para ligá-lo denovo.', 'warning');
-                break;
-              case 2:
-                // POSITION_UNAVAILABLE
-                swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
-                break;
-              case 3:
-                // TIMEOUT
-                swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente denovo que deve dar ;)', 'warning');
-                break;
-              }
+              if (!quiet) {
+                switch(error.code) {
+                case 1:
+                  // PERMISSION_DENIED
+                  swal('Ops', 'Parece que seu dispositivo negou acesso à sua localização. Acesse suas configurações para ligá-lo denovo.', 'warning');
+                  break;
+                case 2:
+                  // POSITION_UNAVAILABLE
+                  swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
+                  break;
+                case 3:
+                  // TIMEOUT
+                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente denovo que deve dar ;)', 'warning');
+                  break;
+                }
+              }  
 
               // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
               if(error.message.indexOf('Only secure origins are allowed') == 0) {
@@ -1082,7 +1084,7 @@ $(function () {
       navigator.permissions.query({'name': 'geolocation'})
         .then( permission => {
           if (permission.state === 'granted') {
-            _geolocate(true);
+            _geolocate(true, null, true);
           }
         }
       );
