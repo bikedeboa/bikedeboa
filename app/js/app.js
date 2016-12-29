@@ -986,6 +986,9 @@ $(function () {
       if (testNewLocalBounds()) {
         openNewPlaceModal();
       } else {
+        const mapCenter = map.getCenter();
+        const coords = mapCenter.lat() + mapCenter.lng();
+        ga('send', 'event', 'Local', `out of bounds - ${coords}`);
         swal('Ops', 'Foi mal, por enquanto não dá pra adicionar bicicletários nesta região.', 'warning');
       }
     });
@@ -1223,7 +1226,8 @@ $(function () {
       if (data && data.ip) {
         Database._setOriginHeader(data.ip);
       } else {
-        console.log('Something went wrong when trying to retrieve user IP.');
+        console.error('Something went wrong when trying to retrieve user IP.');
+        ga('send', 'event', 'Misc', 'IP retrieval error');
       }
     });
 
