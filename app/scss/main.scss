@@ -155,6 +155,7 @@ body.beta #map {
     direction: rtl;
 }
 
+a,
 .link-like {
     color: $blue;
 }
@@ -296,6 +297,20 @@ body.beta #map {
         font-size: 30px;
         padding: 30px;
         color: white;
+    }
+}
+
+#aboutModal {
+    .modal-header {
+        height: auto;
+        background: $lightGreen;
+        color: white;
+    }
+
+    .modal-title {
+        font-family: $headingFont;
+        padding: 30px 12px 12px;
+        font-size: 2em;
     }
 }
 
@@ -1496,10 +1511,15 @@ body.beta #map {
   flex: 1;
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 12px 0 0;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+
+  .glyphicon {
+    margin-right: 10px;
+    opacity: 0.5;
+  }
 }
 
 .side-nav__content li {

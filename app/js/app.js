@@ -964,6 +964,11 @@ $(function () {
       login(true);
     });
 
+    $('#aboutBtn').on('click', () => {
+      _sidenav.hide();
+      $('#aboutModal').modal('show');
+    });
+
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
     // Capture modal closing by 
