@@ -173,7 +173,7 @@ BIKE.Database = {
     this._headers.ip_origin = ip;
   },
 
-  customAPICall: function(type, endpoint, data, callback) {
+  customAPICall: function(type, endpoint, data, callback, quiet = false) {
     const self = this;
 
     if (!type) {
@@ -190,7 +190,10 @@ BIKE.Database = {
       data: data,
       success: function(data) {
         console.log('_customCall success.');
-        console.log(data);
+        
+        if (!quiet) {
+          console.log(data);
+        }
 
         if (callback && typeof callback === 'function') {
           callback(data);

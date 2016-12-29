@@ -111,7 +111,6 @@
             display: none;
           }
 
-
         </style>
     </head>
 
@@ -187,6 +186,8 @@
             Carregando log... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
           </h2>
 
+          <!-- <div id="logTable"></div> -->
+ 
           <table
             id="logTable"
             data-classes="table table-no-bordered"
@@ -247,7 +248,16 @@
         }
 
         function endpointNameColFormatter(value) {
-          return value && value.slice(34);
+          let ret = value;
+          if (value) {
+            if (value.indexOf('bikedeboa-api') > 0) {
+              ret = ret.slice(34);
+            } else if (value.indexOf('localhost') > 0) {
+              ret = ret.slice(21);
+            }
+          }
+
+          return ret;
         }
 
         function jsonColFormatter(value) {
@@ -373,18 +383,32 @@
 
             $('#headingLog').html(`Log (${log.length})`); 
 
-            // let html = '';
+            // let html = '<table style="width: 100%;">';
+            // html += '<thead>';
+            // html += '<tr>';
+            // html += '<th>updatedAt</th>';
+            // html += '<th>createdAt</th>';
+            // html += '<th>user</th>';
+            // html += '<th>ip_origin</th>';
+            // html += '<th>role</th>';
+            // html += '<th>endpoint</th>';
+            // html += '<th>id</th>';
+            // html += '<th>body</th>';
+            // html += '</tr>';
+            // html += '</thead><tbody>';
             // log.forEach( i => {
-            //   html += '<p>';
-            //   html += `${i.updatedAt}<br>`;
-            //   html += `${i.createdAt}<br>`;
-            //   html += `${i.user}<br>`;
-            //   html += `${i.role}<br>`;
-            //   html += `${i.endpoint}<br>`;
-            //   html += `${i.id}<br>`;
-            //   html += `${i.body}<br>`;
-            //   html += '</p>';
+            //   html += '<tr>';
+            //   html += `<td>${timestampColFormatter(i.updatedAt)}</td>`;
+            //   html += `<td>${timestampColFormatter(i.createdAt)}</td>`;
+            //   html += `<td>${i.user}</td>`;
+            //   html += `<td>${i.ip_origin}</td>`;
+            //   html += `<td>${i.role}</td>`;
+            //   html += `<td>${endpointNameColFormatter(i.endpoint)}</td>`;
+            //   html += `<td>${i.id}</td>`;
+            //   html += `<td>${jsonColFormatter(i.body)}</td>`;
+            //   html += '</tr>';
             // });
+            // html += '</tbody></table>'; 
             // $('#logTable').html(html);
 
             $('#logTable').bootstrapTable({
@@ -408,6 +432,9 @@
                   field: 'endpoint', title: 'endpoint', sortable: true, formatter: 'endpointNameColFormatter'
                 },
                 {
+                  field: 'method', title: 'method', sortable: true
+                },
+                {
                   field: 'id', title: 'id', sortable: true, visible: false,
                 },
                 {
@@ -417,8 +444,7 @@
               data: log,
               sortName: 'createdAt', sortOrder: 'desc'
             });
-          });
-          
+          }, true);
         }
 
         function handleLoggedUser() {
