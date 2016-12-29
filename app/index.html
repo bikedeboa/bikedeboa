@@ -269,21 +269,21 @@
                       <span class="average">{{average}}</span>
                   {{/if}}
 
-                  <fieldset id="ratingDisplay" class="rating disabled">
+                  <fieldset id="ratingDisplay" class="rating">
                       <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                      <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
+                      <label class="full-star" data-value="5" for="placeDetails_star5" data-toggle="tooltip" data-placement="bottom" title="Excelente!"></label>
 
                       <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                      <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
+                      <label class="full-star" data-value="4" for="placeDetails_star4" data-toggle="tooltip" data-placement="bottom" title="Bacana"></label>
 
                       <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                      <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
+                      <label class="full-star" data-value="3" for="placeDetails_star3" data-toggle="tooltip" data-placement="bottom" title="Hum..."></label>
 
                       <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                      <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
+                      <label class="full-star" data-value="2" for="placeDetails_star2" data-toggle="tooltip" data-placement="bottom" title="Ruinzinho"></label>
 
                       <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                      <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
+                      <label class="full-star" data-value="1" for="placeDetails_star1" data-toggle="tooltip" data-placement="bottom" title="Muito ruim"></label>
                   </fieldset>
 
                   {{#unless average}}
@@ -386,19 +386,19 @@
                 <div class="review">
                     <fieldset id="ratingDisplay" class="rating disabled">
                         <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                        <label class="full-star" for="placeDetails_star5" title="Excelente!"></label>
+                        <label class="full-star" for="placeDetails_star5"></label>
 
                         <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                        <label class="full-star" for="placeDetails_star4" title="Bacana"></label>
+                        <label class="full-star" for="placeDetails_star4"></label>
 
                         <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                        <label class="full-star" for="placeDetails_star3" title="Hum..."></label>
+                        <label class="full-star" for="placeDetails_star3"></label>
 
                         <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                        <label class="full-star" for="placeDetails_star2" title="Ruinzinho"></label>
+                        <label class="full-star" for="placeDetails_star2"></label>
 
                         <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                        <label class="full-star" for="placeDetails_star1" title="Muito ruim"></label>
+                        <label class="full-star" for="placeDetails_star1"></label> 
                     </fieldset>
                 </div>
 
@@ -448,22 +448,22 @@
 
                                 <div class="review">
                                     <h2>Dê uma nota</h2>
-                                    <span id="review_average" class="average"></span>
+                                    <span id="review_average" class="average"></span> 
                                     <fieldset class="rating">
                                         <input type="radio" id="star5" name="rating" value="5" />
-                                        <label class="full-star" for="star5" title="Excelente!"></label>
+                                        <label class="full-star" data-value="5" for="star5" data-toggle="tooltip" data-placement="bottom" title="Excelente!"></label>
 
                                         <input type="radio" id="star4" name="rating" value="4" />
-                                        <label class="full-star" for="star4" title="Bacana"></label>
+                                        <label class="full-star" data-value="4" for="star4" data-toggle="tooltip" data-placement="bottom" title="Bacana"></label>
 
                                         <input type="radio" id="star3" name="rating" value="3" />
-                                        <label class="full-star" for="star3" title="Hum..."></label>
+                                        <label class="full-star" data-value="3" for="star3" data-toggle="tooltip" data-placement="bottom" title="Hum..."></label>
 
                                         <input type="radio" id="star2" name="rating" value="2" />
-                                        <label class="full-star" for="star2" title="Ruinzinho"></label>
+                                        <label class="full-star" data-value="2" for="star2" data-toggle="tooltip" data-placement="bottom" title="Ruinzinho"></label>
 
                                         <input type="radio" id="star1" name="rating" value="1" />
-                                        <label class="full-star" for="star1" title="Muito ruim"></label>
+                                        <label class="full-star" data-value="1" for="star1" data-toggle="tooltip" data-placement="bottom" title="Muito ruim"></label>
                                     </fieldset>
                                 </div>
 
@@ -489,7 +489,7 @@
             </button>
             
             <header class="side-nav__header">
-              bike de boa
+              <span>bike de boa</span>
             </header>
 
             <ul class="side-nav__content">

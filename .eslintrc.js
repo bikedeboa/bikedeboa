@@ -45,6 +45,7 @@ module.exports = {
         "GMAPS_DIRECTIONS_URL": false,
         "PHOTO_UPLOAD_MAX_W": false,
         "PHOTO_UPLOAD_MAX_H": false,
+        "STRUCTURE_CODE_TO_NAME": false,
 
         "BIKE": true,
         "isDemoMode": true,

@@ -80,12 +80,12 @@ $(function () {
     // Structure type
     let structureTypeIcon;
     switch (m.structureType) {
-      case 'uinvertido': structureTypeIcon = '/img/tipo_uinvertido.svg'; break;
-      case 'deroda': structureTypeIcon = '/img/tipo_deroda.svg'; break;
-      case 'trave': structureTypeIcon = '/img/tipo_trave.svg'; break;
-      case 'suspenso': structureTypeIcon = '/img/tipo_suspenso.svg'; break;
-      case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break;
-      case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
+    case 'uinvertido': structureTypeIcon = '/img/tipo_uinvertido.svg'; break;
+    case 'deroda': structureTypeIcon = '/img/tipo_deroda.svg'; break;
+    case 'trave': structureTypeIcon = '/img/tipo_trave.svg'; break;
+    case 'suspenso': structureTypeIcon = '/img/tipo_suspenso.svg'; break;
+    case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break; 
+    case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
     }
     if (m.structureType) {
       templateData.structureTypeLabel = 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType];
@@ -100,7 +100,11 @@ $(function () {
 
     // Template is rendered, start jquerying
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
-    $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
+    if (m.average) {
+      $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
+    } else {
+      $('#ratingDisplay').addClass('emptyr');
+    }
 
     $('.modal-header img').on('load', e => {
       $(e.target).parent().removeClass('loading');
@@ -113,7 +117,7 @@ $(function () {
     }
     
     // Animate modal content
-    $('.modal-header, .modal-body > div').velocity('transition.fadeIn', {stagger: 75});
+    $('.modal-header, .modal-body > div').velocity('transition.fadeIn', {stagger: 75, queue: false});
 
     ga('send', 'event', 'Local', 'view', ''+m.id);
   }
@@ -278,7 +282,7 @@ $(function () {
       // Load skeleton modal template
       $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
       $('#placeDetailsModal').modal('show');
-      $('.modal-header, .modal-body > div').velocity('transition.slideDownIn', { stagger: 75 });
+      $('.modal-header, .modal-body > div').velocity('transition.slideDownIn', { stagger: 50 });
 
       // Request content
       Database.getPlaceDetails(marker.id, () => {
@@ -377,26 +381,6 @@ $(function () {
         addMarkerToMap(i);
       }
     }
-  }
-
-  function searchLocation() {
-    var address = $('#locationQueryInput').val();
-
-    console.log('Searching for ' + address);
-
-    geocoder.geocode({'address': address}, function(results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
-        map.panTo(results[0].geometry.location);
-
-        // Create marker on located place
-        // new google.maps.Marker({
-        //     map: map,
-        //     position: results[0].geometry.location
-        // });
-      } else {
-        console.error('Geocode was not successful for the following reason: ' + status);
-      }
-    });
   }
 
   // Sets the map on all markers in the array.
@@ -660,38 +644,40 @@ $(function () {
       // Present to the user the already resized image
       document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
     }
+
+    hideSpinner();
   }
 
   function _initTemplates() {
     // Thanks https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
     Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
       switch (operator) {
-        case '==':
-          return (v1 == v2) ? options.fn(this) : options.inverse(this);
-        case '===':
-          return (v1 === v2) ? options.fn(this) : options.inverse(this);
-        case '!=':
-          return (v1 != v2) ? options.fn(this) : options.inverse(this);
-        case '!==':
-          return (v1 !== v2) ? options.fn(this) : options.inverse(this);
-        case '<':
-          return (v1 < v2) ? options.fn(this) : options.inverse(this);
-        case '<=':
-          return (v1 <= v2) ? options.fn(this) : options.inverse(this);
-        case '>':
-          return (v1 > v2) ? options.fn(this) : options.inverse(this);
-        case '>=':
-          return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-        case '&&':
-          return (v1 && v2) ? options.fn(this) : options.inverse(this);
-        case '&&!':
-          return (v1 && !v2) ? options.fn(this) : options.inverse(this);
-        case '||':
-          return (v1 || v2) ? options.fn(this) : options.inverse(this);
-        case '||!':
-          return (v1 || !v2) ? options.fn(this) : options.inverse(this);
-        default:
-          return options.inverse(this);
+      case '==':
+        return (v1 == v2) ? options.fn(this) : options.inverse(this);
+      case '===':
+        return (v1 === v2) ? options.fn(this) : options.inverse(this);
+      case '!=':
+        return (v1 != v2) ? options.fn(this) : options.inverse(this);
+      case '!==':
+        return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+      case '<':
+        return (v1 < v2) ? options.fn(this) : options.inverse(this);
+      case '<=':
+        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+      case '>':
+        return (v1 > v2) ? options.fn(this) : options.inverse(this);
+      case '>=':
+        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+      case '&&':
+        return (v1 && v2) ? options.fn(this) : options.inverse(this);
+      case '&&!':
+        return (v1 && !v2) ? options.fn(this) : options.inverse(this);
+      case '||':
+        return (v1 || v2) ? options.fn(this) : options.inverse(this);
+      case '||!':
+        return (v1 || !v2) ? options.fn(this) : options.inverse(this);
+      default:
+        return options.inverse(this);
       }
     });
 
@@ -802,7 +788,7 @@ $(function () {
     }
   }
 
-  function openReviewPanel() {
+  function openReviewPanel(prepopedRating) {
     const m = openedMarker;
 
     let templateData = {};
@@ -810,7 +796,7 @@ $(function () {
     templateData.address = m.address;
 
     const previousReview = getReviewFromSession(m.id);
-    console.log(previousReview);
+    // console.log(previousReview);
 
     // Tags
     templateData.tagsButtons = tags.map(t => {
@@ -829,6 +815,8 @@ $(function () {
     // Template is rendered, start jquerying
     //
 
+    $('#reviewPanel .full-star').tooltip();
+
     // Prepopulate rating
     if (previousReview) {
       _updatingReview = true;
@@ -836,6 +824,9 @@ $(function () {
       $('input[name=rating]').val([previousReview.rating]);
 
       ga('send', 'event', 'Review', 'update - pending', ''+m.id);
+    } else if (prepopedRating) {
+      currentPendingRating = prepopedRating;
+      $('input[name=rating]').val([prepopedRating]);      
     } else {
       _updatingReview = false;
       ga('send', 'event', 'Review', 'create - pending', ''+m.id);
@@ -966,6 +957,7 @@ $(function () {
 
     $('#aboutBtn').on('click', () => {
       _sidenav.hide();
+      $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: 75 });
       $('#aboutModal').modal('show');
     });
 
@@ -1029,6 +1021,8 @@ $(function () {
 
     $('#photoInput').change(function () {
       if (this.files && this.files[0] && this.files[0].type.match(/image.*/)) {
+        showSpinner();
+
         var reader = new FileReader();
         reader.onload = photoUploadCB;
         reader.readAsDataURL(this.files[0]);
@@ -1042,8 +1036,8 @@ $(function () {
     });
 
     // Review panel
-    $('body').on('click', '#ratingDisplay, .openReviewPanelBtn', () => {
-      openReviewPanel();
+    $('body').on('click', '#ratingDisplay .full-star, .openReviewPanelBtn', e => {
+      openReviewPanel($(e.target).data('value'));
     });
 
     $('body').on('change', '#reviewPanel .rating', e => {
