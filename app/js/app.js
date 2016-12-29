@@ -1211,6 +1211,12 @@ $(function () {
   //   $('#messageModal').modal('show');
   // };
 
+  function localhostOverrides() {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      Database.API_URL = 'http://localhost:3000';
+    }
+  }
+
   function init() {
     // Reset URL
     History.replaceState({}, 'bike de boa', '/');
@@ -1230,6 +1236,8 @@ $(function () {
         ga('send', 'event', 'Misc', 'IP retrieval error');
       }
     });
+
+    localhostOverrides();
 
     login();
   }
