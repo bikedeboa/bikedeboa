@@ -201,7 +201,7 @@ $(function () {
                 switch(error.code) {
                 case 1:
                   // PERMISSION_DENIED
-                  swal('Ops', 'Parece que seu dispositivo negou acesso à sua localização. Acesse suas configurações para ligá-lo denovo.', 'warning');
+                  swal('Ops', 'Sua localização está desabilitada. Acesse suas configurações para ligá-lo denovo.', 'warning');
                   break;
                 case 2:
                   // POSITION_UNAVAILABLE
