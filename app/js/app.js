@@ -383,6 +383,8 @@ $(function () {
         addMarkerToMap(i);
       }
     }
+
+    _geolocationMarker.setZIndex(markers.length);
   }
 
   // Sets the map on all markers in the array.
@@ -1110,9 +1112,9 @@ $(function () {
       map: map,
       icon: {
         url: '/img/current_position.svg', // url
-        scaledSize: new google.maps.Size(15, 15), // scaled size
+        scaledSize: new google.maps.Size(16, 16), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(7, 7), // anchor
+        anchor: new google.maps.Point(8, 8), // anchor
       }
     });
 
