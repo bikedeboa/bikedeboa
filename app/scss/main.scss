@@ -301,7 +301,8 @@ a,
     }
 }
 
-#aboutModal {
+#aboutModal,
+#revisionModal {
     .modal-header {
         height: auto;
         background: $lightGreen;
@@ -490,7 +491,7 @@ a,
     z-index: 9999;
 
     // Leave it visible by default so it's the first thing rendered in the screen
-    // display: none;
+    display: none;
 }
 
 #spinnerOverlay .spinnerContainer {
