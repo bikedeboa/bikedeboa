@@ -2,34 +2,34 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="192.5px" height="209.105px" viewBox="0 0 192.5 209.105" enable-background="new 0 0 192.5 209.105" xml:space="preserve">
+	 width="452px" height="485.75px" viewBox="0 0 452 485.75" enable-background="new 0 0 452 485.75" xml:space="preserve">
 <g>
 	<g>
 		
-			<path fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M111.752,90.801c5.74-9.838,13.361-20.853,23.255-33.182"/>
+			<path fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="227.5111,36.4019" d="
+			M263.123,207.957c13.348-22.872,31.068-48.479,54.075-77.146"/>
 		
-			<path fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M135.007,205.368v-32.688c0,0-28.936-2.564-36.509-25.62"/>
+			<path fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="227.5111,36.4019" d="
+			M317.198,474.323v-75.998c0,0-67.28-5.96-84.888-59.562"/>
 		
-			<path fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M135.007,172.681c0,0,86.181-7.643,0-115.061"/>
+			<path fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="227.5111,36.4019" d="
+			M317.198,398.325c0,0,200.369-17.77,0-267.514"/>
 		
-			<path fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M135.007,205.368"/>
+			<path fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="227.5111,36.4019" d="
+			M317.198,474.323"/>
 	</g>
 	
-		<line fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="87.874,11.3386" x1="188.077" y1="205.368" x2="4.087" y2="205.368"/>
+		<line fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="440.585" y1="474.323" x2="12.805" y2="474.323"/>
 	<g>
 		
-			<path fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M63.221,205.368v-43.902c0,0-115.756-10.265,0-154.543"/>
+			<path fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="273.0135,36.4019" d="
+			M150.292,474.323V372.25c0,0-269.135-23.862,0-359.309"/>
 		
-			<path fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,11.3386" d="
-			M63.221,161.466c0,0,115.753-10.265,0-154.543"/>
+			<path fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="273.0135,36.4019" d="
+			M150.292,372.25c0,0,269.124-23.862,0-359.309"/>
 		
-			<path fill="none" stroke="#47B970" stroke-width="7.0866" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="70.8661,7.0866" d="
-			M63.221,205.368"/>
+			<path fill="none" stroke="#47B970" stroke-width="22.7511" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="227.5111,22.7511" d="
+			M150.292,474.323"/>
 	</g>
 </g>
 </svg>
