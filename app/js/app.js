@@ -311,9 +311,9 @@ $(function () {
       if (!m.average || m.average === 0) {
         iconUrl = MARKER_ICON_GRAY;
         scale = 0.8;
-      } else if (m.average > 0 && m.average < 2) {
+      } else if (m.average > 0 && m.average <= 2) {
         iconUrl = MARKER_ICON_RED;
-      } else if (m.average >= 2 && m.average < 3.5) {
+      } else if (m.average > 2 && m.average < 3.5) {
         iconUrl = MARKER_ICON_YELLOW;
       } else if (m.average >= 3.5) {
         iconUrl = MARKER_ICON_GREEN;
