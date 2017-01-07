@@ -64,6 +64,10 @@
             text-overflow: ellipsis;
           }
 
+          td.multiline {
+            white-space: normal;
+          }
+
           .editable-empty {
             color: #E9BB2B;
           }
@@ -84,9 +88,13 @@
             font-weight: 600;
           }
 
+          .col-timestamp {
+            max-width: 150px;
+          }
+
           td.col-timestamp,
           td.col-description,
-          td.col-address {
+          td.col-address { 
             font-size: 0.8em;
           }
  
@@ -137,6 +145,7 @@
         <li role="presentation" class="active"><a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">Bicicletarios</a></li>
         <li role="presentation"><a href="#log" aria-controls="log" role="tab" data-toggle="tab">Log</a></li>
         <li role="presentation"><a href="#usuarios" aria-controls="usuarios" role="tab" data-toggle="tab">Usuarios</a></li>
+        <li role="presentation"><a href="#sugestoes" aria-controls="sugestoes" role="tab" data-toggle="tab">Sugestões de edição</a></li>
       </ul>
 
       <!-- Tab panes -->
@@ -197,6 +206,22 @@
             data-show-footer="false"
             data-sticky-header="true">
           </table> 
+        </div>
+
+         <div role="tabpanel" class="tab-pane fade" id="sugestoes">
+          <h2 id="headingRevisions">
+            Carregando sugestões...
+          </h2>
+
+          <table
+            id="revisionsTable"
+            data-classes="table table-no-bordered"
+            data-search="true"
+            data-show-toggle="true"
+            data-show-columns="true"
+            data-show-footer="false"
+            data-sticky-header="true">
+          </table>
         </div>
 
       </div>
@@ -344,7 +369,7 @@
           BIKE.Database.customAPICall('get','user', null, data => {
             users = data;
 
-            $('#headingUsers').html(`Usuários (${users.length})`);
+            $('#headingUsers').html(`Usuários (${data.length})`);
 
             $('#usersTable').bootstrapTable({
               columns: [
@@ -373,6 +398,64 @@
           });
         }
 
+        function updateRevisionTable(force = false) {
+          if (!force && revisions) {
+            return;
+          }
+
+          BIKE.Database.customAPICall('get','revision', null, data => {
+            revisions = data;
+
+            $('#headingRevisions').html(`(${data.length})`);
+
+            $('#revisionsTable').bootstrapTable({
+              columns: [
+                {
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'local_id', title: 'ID Bicicletário', sortable: true, visible: false
+                },
+                {
+                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
+                },
+                {
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
+                },
+                {
+                  field: 'comments', title: 'Mensagem', sortable: true, class: 'col-description',
+                },
+                {
+                  field: 'operate', title: '', align: 'center', events: operateEvents, formatter: operateFormatter
+                }
+              ],
+              data: revisions,
+              sortName: 'id', sortOrder: 'desc'
+            });
+          });
+        }
+
+        window.operateEvents = {
+          'click .remove': function (e, value, row, index) {
+            if (confirm('Tem certeza?')) {
+              BIKE.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
+                updateRevisionTable(true);
+              });
+            }
+          }
+        };
+
+        function operateFormatter(value, row, index) {
+          return [
+            '<a class="remove" href="javascript:void(0)" title="Deletar">',
+            '<i class="glyphicon glyphicon-trash"></i>',
+            '</a>'
+          ].join('');
+        }
+
         function updateLogTable() {
           if (log) {
             return;
@@ -381,7 +464,7 @@
           BIKE.Database.customAPICall('get','log', null, data => {
             log = data;
 
-            $('#headingLog').html(`Log (${log.length})`); 
+            $('#headingLog').html(`Log (${data.length})`); 
 
             // let html = '<table style="width: 100%;">';
             // html += '<thead>';
@@ -489,6 +572,7 @@
         // Admin-only Globals
         let users;
         let log;
+        let revisions;
         let ga = function() {};
 
 
@@ -504,12 +588,15 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
           const tabName = e.target.getAttribute('aria-controls');
           switch (tabName) {
-            case 'log':
-              updateLogTable();
-              break;
-            case 'usuarios':
-              updateUsersTable();
-              break;
+          case 'log':
+            updateLogTable();
+            break;
+          case 'usuarios':
+            updateUsersTable();
+            break;
+          case 'sugestoes':
+            updateRevisionTable();
+            break;
           }
         });
 

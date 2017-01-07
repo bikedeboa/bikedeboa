@@ -56,7 +56,8 @@
     </head>
 
     <body>
-        <div id="map" style="filter: blur(1px);"></div>
+        <!-- <div id="map" style="filter: blur(1px);"></div> -->
+        <div id="map"></div>
 
         <div id="locationSearch" class="coolHide">
             <button class="js-menu-show header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
@@ -84,8 +85,12 @@
                           <h1 class="modal-title">Sobre o projeto</h1>
                         </div>
 
-                        <div class="modal-body ">
-                            <div class="disclaimer">
+                        <div class="modal-body">
+                            <article>
+                              <p>
+                                <img src="/img/icon_public.svg" style="width: 60px; height: auto; margin: 0 auto 20px; display: block;"/>
+                              </p>
+
                               <p>
                                 O bike de boa é feito por ciclistas e amigos da bike e não ganhamos nada, é tudo na parceria.
                               </p>
@@ -109,49 +114,12 @@
                               <br>
 
                               <p class="text-center">
+                                <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fwww.bikedeboa.com.br&layout=button_count&size=small&mobile_iframe=false&appId=1814653185457307&width=95&height=20" width="95" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                                &nbsp;
                                 <!-- Place this tag where you want the button to render. -->
                                 <a class="github-button" href="https://github.com/cmdalbem/bikedeboa" data-count-href="/cmdalbem/bikedeboa/stargazers" data-count-api="/repos/cmdalbem/bikedeboa#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star cmdalbem/bikedeboa on GitHub">GitHub</a>
                               </p>
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal" id="revisionModal" tabindex="-1">
-            <div class="vertical-alignment-helper">
-                <div class="modal-dialog vertical-align-center">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title">Enviar correções</h1>
-                        </div>
-
-                        <div class="modal-body ">
-                            <div id="placeDetails_heading" class="title title-icon green {{pinColor}}">
-                                Biciclário Lorem Ipsum
-                                <p class="address">
-                                    Rua Visconde do Herval 472. Menino Deus, Porto Alegre.
-                                </p>
-                            </div>
-
-                            <div style="margin-top: 20px;">
-                              <p style="color: inherit;">
-                                Tem alguma coisa errada com este bicicletário? Está faltando alguma informação essencial? Algo está desatualizado, ou talvez este bicicletário nem exista mais? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil para nossos amigos ciclistas.
-                              </p>
-
-                              <p>
-                                <textarea id="" maxlength="250" onload="autoGrowTextArea(this)" onkeyup="autoGrowTextArea(this)" type="text" class="text-input"></textarea>
-                              </p> 
-
-                              <p style="font-size: 12px; margin-top: 20px 0 0; color: #828b90;">
-                                Para qualquer comentário sobre o site em geral, lembre que estamos sempre de ouvidos abertos em <span class="link-like obfuscate">moc.liamg@aobedekib</span>
-                              </p>
-                            </div> 
-                        </div>
-
-                        <div class="modal-footer">
-                            <button id="" class="btn border btn-footer green">ENVIAR</button>
+                            </article> 
                         </div>
                     </div>
                 </div>
@@ -169,6 +137,8 @@
                 </div>
             </div>
         </div>
+
+        <div id="revisionModalTemplatePlaceholder"></div>
 
         <div id="reviewPanelTemplatePlaceholder"></div>
 
@@ -240,7 +210,7 @@
                                 </h2>
 
                                 <small>
-                                    <textarea id="descriptionInput" maxlength="250" onload="autoGrowTextArea(this)" onkeyup="autoGrowTextArea(this)" type="text" class="text-input" placeholder="Mais alguma coisa importante?"></textarea>
+                                    <textarea id="descriptionInput" maxlength="250" onload="autoGrowTextArea(this)" onkeyup="autoGrowTextArea(this)" type="text" class="text-input" placeholder="Mais alguma coisa importante? (máx. 250 caracteres)"></textarea>
                                 </small>
                             </div>
                         </div>
@@ -257,7 +227,7 @@
             <span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO
         </button>
 
-        <span id="newPlaceholderShadow"></span>
+        <!-- <span id="newPlaceholderShadow"></span> -->
         <img src="/img/target.svg" id="newPlaceholderTarget"></img>
 
 
@@ -272,12 +242,58 @@
         <div id="spinnerOverlay">
             <div class="spinnerContainer">
                 <!-- <img src="/img/spinner_animated.svg"/> -->
-                <img src="/img/spinner.png"/>
+                <img src="/img/spinner.svg"/>
 
                 <p id="globalSpinnerLabel"> </p>
             </div>
         </div>
 
+        <script id="revisionModalTemplate" type="text/x-handlebars-template">
+            <div class="modal" id="revisionModal" tabindex="-1">
+              <div class="vertical-alignment-helper">
+                  <div class="modal-dialog vertical-align-center">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title">Sugerir mudança</h1>
+                          </div>
+
+                          <div class="modal-body ">
+                              <div id="placeDetails_heading" class="title title-icon {{pinColor}}">
+                                  {{#if title}}
+                                    {{title}}
+                                  {{else}}
+                                    <small class="muted">Sem título</small>
+                                  {{/if}}
+
+                                  <p class="address">
+                                      {{address}}
+                                  </p>
+                              </div>
+
+                              <div style="margin-top: 20px;">
+                                <p style="color: inherit;">
+                                  Tem alguma coisa errada com este bicicletário? Está faltando alguma informação essencial? Algo está desatualizado, ou talvez este bicicletário nem exista mais? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil para nossos amigos ciclistas.
+                                </p>
+
+                                <p>
+                                  <textarea id="revisionText" maxlength="250" onload="autoGrowTextArea(this)" onkeyup="autoGrowTextArea(this)" type="text" class="text-input" placeholder="Sua sugestão"></textarea>
+                                </p> 
+
+                                <p class="disclaimer">
+                                  Para qualquer comentário sobre o site em geral, lembre que estamos sempre de ouvidos abertos em <span class="link-like obfuscate">moc.liamg@aobedekib</span>
+                                </p>
+                              </div> 
+                          </div>
+
+                          <div class="modal-footer">
+                              <!-- <button id="" class="btn border btn-footer btn-action btn-secondary">CANCELAR</button> -->
+                              <button id="sendRevisionBtn" class="btn border btn-footer btn-action green">ENVIAR</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </script>
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
@@ -392,6 +408,12 @@
                       </small>
                   </div>
               {{/if}}
+
+              <div class="footer-toolbar">
+                <button id="createRevisionBtn" class="link-button"">
+                  <span class="glyphicon glyphicon-pencil"></span> Sugerir mudança
+                </button>
+              </div>
           </div>
 
           <div class="modal-footer">
@@ -472,19 +494,23 @@
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
-                            <!-- <div class="modal-header">
-                                <img id="review_photo" src="/img/bg_header.png">
-                            </div> -->
+                            <div class="modal-header">
+                                <!-- <img id="review_photo" src="/img/bg_header.png"> -->
+                                <h1 class="modal-title">Avaliar bicicletário</h1>
+                            </div>
 
                             <div class="modal-body">
-                                {{#if title}}
-                                    <div id="review_title" class="title title-icon">
-                                        {{title}}
-                                        <!-- <p class="address">
-                                            {{address}}
-                                        </p> -->
-                                    </div>
-                                {{/if}}
+                                <div id="review_title" class="title">
+                                  {{#if title}}
+                                    {{title}}
+                                  {{else}}
+                                    <small class="muted">Sem título</small>
+                                  {{/if}}
+
+                                  <p class="address">
+                                      {{address}}
+                                  </p>
+                                </div>
 
                                 <div class="review">
                                     <h2>Dê uma nota</h2>
@@ -514,7 +540,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button id="sendReviewBtn" class="btn border btn-footer green">SALVAR AVALIAÇÃO</button>
+                                <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR AVALIAÇÃO</button>
                             </div>
                         </div>
                     </div>
@@ -588,7 +614,6 @@
             ga('create', 'UA-19085664-3', 'auto');
             ga('send', 'pageview');
           }
-
         </script>
 
     </body>

@@ -155,11 +155,17 @@ body.beta #map {
     unicode-bidi: bidi-override;
     direction: rtl;
     user-select: none
+    cursor: default;
 }
 
 a,
 .link-like {
     color: $blue;
+}
+
+.link-button {
+    border: none;
+    background: transparent;
 }
 
 #locationQueryBtn {
@@ -303,7 +309,8 @@ a,
 }
 
 #aboutModal,
-#revisionModal {
+#revisionModal,
+#reviewPanel {
     .modal-header {
         height: auto;
         background: $lightGreen;
@@ -835,6 +842,10 @@ a,
         background-image: url(/img/pin_gray.svg);
     }
 
+    article {
+        padding: 10px 5px;
+    }
+
 }
 
 .review {
@@ -1122,6 +1133,22 @@ a,
     background-color: $darkGreen;
 }
 
+.btn.btn-action.green {
+    border-bottom: 5px solid green;
+}
+
+.btn.btn-action {
+    margin: 0 2% 2%;
+    border-radius: 5px;
+    border-bottom: 5px solid $gray;
+    width: 96%;
+
+    &:active {
+        transform: translateY(3px);
+        outline: none;
+    }
+}
+
 .btn-footer {
     width: 100%;
     padding: 20px;
@@ -1138,6 +1165,7 @@ a,
 
     &:disabled {
         background-color: #989a9d;
+        color: #e6e6e6;
     }
 
     &.focus:disabled,
@@ -1146,7 +1174,6 @@ a,
         // Override stupid bootstrap rule
         color: rgb(250,250,250);
     }
-
 }
 
 .light {
@@ -1218,6 +1245,35 @@ a,
     background: rgba(0,0,0,0.1);
     display: inline-block;
 }
+
+.footer-toolbar {
+    text-align: right;
+    margin-top: 20px;
+    
+    #createRevisionBtn {
+        font-style: italic;
+        color: $gray;
+    }
+}
+
+
+#revisionModal {
+    p {
+        margin-bottom: 20px;
+    }
+
+    textarea {
+        min-height: 100px;
+    }
+    
+    .disclaimer {
+        font-size: 12px;
+        margin: 20px 0 0;
+        color: $gray;
+    }
+}
+
+
 
 
 ////////////////////////////////////////////////////////////
@@ -1517,8 +1573,14 @@ a,
     img {
         width: 100%;
         height: 100%;
-        padding: 5%;
-        opacity: 0.9;
+        padding: 8% 5% 3%;
+        opacity: .8;
+
+        transition: opacity 0.5s ease-out;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 }
 
@@ -1526,10 +1588,6 @@ a,
     padding: 16px;
     background-color: #F3F3F3;
 
-    .disclaimer {
-        font-size: 12px;
-        color: $gray;
-    }
 }
 
 .side-nav__content {

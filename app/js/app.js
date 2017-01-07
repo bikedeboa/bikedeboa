@@ -3,6 +3,33 @@
 
 
 $(function () {
+  function getPinColorFromAverage(average) {
+    let pinColor;
+
+    if (average) {
+      // Truncates average value
+      if (average.toFixed && average !== Math.round(average)) {
+        average = average.toFixed(1);
+      }
+
+      if (!average || average === 0) {
+        pinColor = 'gray';
+      } else if (average > 0 && average <= 2) {
+        pinColor = 'red';
+      } else if (average > 2 && average < 3.5) {
+        pinColor = 'yellow';
+      } else if (average >= 3.5) {
+        pinColor = 'green';
+      } else {
+        pinColor = 'gray';
+      }
+    } else {
+      pinColor = 'gray';
+    }
+
+    return pinColor;
+  }
+
   function openDetailsModal(marker) {
     openedMarker = marker;
     const m = openedMarker;
@@ -20,26 +47,8 @@ $(function () {
     templateData.description = m.description;
 
     // Average
-    if (m.average) {
-      if (m.average.toFixed && m.average !== Math.round(m.average)) {
-        m.average = m.average.toFixed(1);
-      }
-      templateData.average = m.average;
-
-      if (!m.average || m.average === 0) {
-        templateData.pinColor = 'gray';
-      } else if (m.average > 0 && m.average <= 2) {
-        templateData.pinColor = 'red';
-      } else if (m.average > 2 && m.average < 3.5) {
-        templateData.pinColor = 'yellow';
-      } else if (m.average >= 3.5) {
-        templateData.pinColor = 'green';
-      } else {
-        templateData.pinColor = 'gray';
-      }
-    } else {
-      templateData.pinColor = 'gray';
-    }
+    templateData.pinColor = getPinColorFromAverage(m.average);
+    templateData.average = m.average;
 
     // Tags
     const MAX_TAG_COUNT = m.reviews;
@@ -151,7 +160,9 @@ $(function () {
           map.setZoom(17);
         }
       } else {
-        showSpinner();
+        if (!quiet) {
+          showSpinner();
+        }
 
         _geolocationInitialized = false;
 
@@ -690,6 +701,7 @@ $(function () {
     templates.reviewPanelTemplate = Handlebars.compile($('#reviewPanelTemplate').html());
     templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
     templates.messageModalTemplate = Handlebars.compile($('#messageModalTemplate').html());
+    templates.revisionModalTemplate = Handlebars.compile($('#revisionModalTemplate').html());
   }
 
   function validateNewPlaceForm() {
@@ -943,6 +955,38 @@ $(function () {
     }
   }
 
+  function openRevisionPanel() {
+    const m = openedMarker;
+    let templateData = {};
+
+    templateData.pinColor = getPinColorFromAverage(m.average);
+    templateData.title = m.text;
+    templateData.address = m.address;
+    $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
+
+    History.replaceState({}, 'Sugerir mudança', `detalhes/${m.id}/sugestao`);
+    $('#placeDetailsModal').modal('hide');
+    $('#revisionModal').modal('show');
+  }
+
+  function sendRevisionBtn() {
+    showSpinner();
+
+    const revisionObj = {
+      placeId: openedMarker.id,
+      content: $('#revisionText').val()
+    };
+
+    Database.sendRevision(revisionObj, (revisionId) => {
+      hideSpinner();
+
+      swal('Sugestão enviada', 'Obrigado por contribuir com o Bike de Boa. Sua sugestão correção será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
+
+      // Update screen state
+      History.pushState({}, 'bike de boa', '/');
+    });
+  }
+
   function _initTriggers() {
     // Home
     // $('body').on('click', '#locationQueryBtn', searchLocation);
@@ -1061,6 +1105,12 @@ $(function () {
     $('body').on('click', '.modal-header img', e => {
       toggleExpandModalHeader();
     });
+
+
+    // Send Revision Panel
+    $('body').on('click', '#createRevisionBtn', openRevisionPanel);
+    $('body').on('click', '#sendRevisionBtn', sendRevisionBtn);
+
   }
 
   function setup() {
@@ -1140,6 +1190,7 @@ $(function () {
         $('#reviewPanel').modal('hide');
         $('#placeDetailsModal').modal('hide');
         $('#newPlaceModal').modal('hide');
+        $('#revisionModal').modal('hide');
       }
     });
 
@@ -1239,9 +1290,9 @@ $(function () {
   // };
 
   function localhostOverrides() {
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-      Database.API_URL = 'http://localhost:3000';
-    }
+    // if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    //   Database.API_URL = 'http://localhost:3000';
+    // }
   }
 
   function init() {

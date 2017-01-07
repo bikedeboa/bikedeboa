@@ -6,8 +6,7 @@ BIKE.Database = {
   ///////////////////
 
   // API path, without the final slash ('/')
-  API_URL: 'https://bikedeboa-api.herokuapp.com',
-  // API_URL: 'http://localhost:3000',
+  API_URL: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : 'https://bikedeboa-api.herokuapp.com',
   _authToken: '',
   _headers: {},
 
@@ -368,6 +367,28 @@ BIKE.Database = {
       },
       success: function(data) {
         console.log('Review creation successful.');
+        console.log(data);
+
+        if (callback && typeof callback === 'function') {
+          callback(data.id);
+        }
+      }
+    });
+  },
+
+  sendRevision: function(revisionObj, callback) {
+    const self = this;
+
+    $.ajax({
+      type: 'post',
+      headers: self._headers,
+      url: self.API_URL + '/revision',
+      data: {
+        local_id: revisionObj.placeId,
+        comments: revisionObj.content,
+      },
+      success: function(data) {
+        console.log('Revision creation successful.');
         console.log(data);
 
         if (callback && typeof callback === 'function') {
