@@ -90,10 +90,10 @@
                                 O bike de boa é feito por ciclistas e amigos da bike e não ganhamos nada, é tudo na parceria.
                               </p>
                               <p>
-                                Nos inspiramos na iniciativa de ciclistas que se ajudavam mapeando bicicletarios usando ferramentas como o Google Maps, mas queríamos algo mais prático, mais rápido de usar no celular e mais confiável.
+                                Nos inspiramos na iniciativa de ciclistas que se ajudavam mapeando bicicletários usando ferramentas como o Google Maps, mas queríamos algo mais prático, mais rápido de usar no celular. Mas mais importante, queríamos algo mais confiável, e que essa confiança viesse da colaboração.
                               </p>
                               <p>
-                                Queremos desmistificar a ideia de que não dá pra estacionar a bici e ficar de boa. Queremos mostrar ao estabelecimentos comerciais e instituiçoes que precisamos de mais atenção deles.
+                                Queremos desmistificar o mito de que não dá pra estacionar a bici e ficar de boa. Queremos mostrar ao estabelecimentos comerciais e instituições que precisamos de mais atenção deles.
                               </p>
                               
                               <br>
@@ -113,6 +113,45 @@
                                 <a class="github-button" href="https://github.com/cmdalbem/bikedeboa" data-count-href="/cmdalbem/bikedeboa/stargazers" data-count-api="/repos/cmdalbem/bikedeboa#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star cmdalbem/bikedeboa on GitHub">GitHub</a>
                               </p>
                             </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="revisionModal" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title">Enviar correções</h1>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div id="placeDetails_heading" class="title title-icon green {{pinColor}}">
+                                Biciclário Lorem Ipsum
+                                <p class="address">
+                                    Rua Visconde do Herval 472. Menino Deus, Porto Alegre.
+                                </p>
+                            </div>
+
+                            <div style="margin-top: 20px;">
+                              <p style="color: inherit;">
+                                Tem alguma coisa errada com este bicicletário? Está faltando alguma informação essencial? Algo está desatualizado, ou talvez este bicicletário nem exista mais? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil para nossos amigos ciclistas.
+                              </p>
+
+                              <p>
+                                <textarea id="" maxlength="250" onload="autoGrowTextArea(this)" onkeyup="autoGrowTextArea(this)" type="text" class="text-input"></textarea>
+                              </p> 
+
+                              <p style="font-size: 12px; margin-top: 20px 0 0; color: #828b90;">
+                                Para qualquer comentário sobre o site em geral, lembre que estamos sempre de ouvidos abertos em <span class="link-like obfuscate">moc.liamg@aobedekib</span>
+                              </p>
+                            </div> 
+                        </div>
+
+                        <div class="modal-footer">
+                            <button id="" class="btn border btn-footer green">ENVIAR</button>
                         </div>
                     </div>
                 </div>
@@ -219,6 +258,9 @@
         </button>
 
         <span id="newPlaceholderShadow"></span>
+        <img src="/img/target.svg" id="newPlaceholderTarget"></img>
+
+
         <button id="newPlaceholder">
             <img src="/img/pin_bike.svg"/>
         </button>
@@ -230,7 +272,7 @@
         <div id="spinnerOverlay">
             <div class="spinnerContainer">
                 <!-- <img src="/img/spinner_animated.svg"/> -->
-                <img src="/img/spinner.svg"/>
+                <img src="/img/spinner.png"/>
 
                 <p id="globalSpinnerLabel"> </p>
             </div>
@@ -251,16 +293,16 @@
           {{/if}}
 
           <div class="modal-body">
-                <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
-                    {{#if title}}
-                      {{title}}
-                    {{else}}
-                      <small class="muted">Sem título</small>
-                    {{/if}}
-                    <p class="address">
-                        {{address}}
-                    </p>
-                </div>
+              <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
+                  {{#if title}}
+                    {{title}}
+                  {{else}}
+                    <small class="muted">Sem título</small>
+                  {{/if}}
+                  <p class="address">
+                      {{address}}
+                  </p>
+              </div>
 
               <div class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}">
                   {{#if average}}
@@ -487,7 +529,8 @@
             </button>
             
             <header class="side-nav__header">
-              <span>bike de boa</span>
+              <!-- <span>bike de boa</span> -->
+              <img src="/img/banner.svg"/>
             </header>
 
             <ul class="side-nav__content">

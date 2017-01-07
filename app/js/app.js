@@ -468,6 +468,7 @@ $(function () {
     $('#addPlace').toggleClass('active');
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
+    $('#newPlaceholderTarget').toggle();
     $('#geolocationBtnBtn').toggle();
     // $('#locationSearch').toggleClass('coolHide');
 
@@ -961,7 +962,7 @@ $(function () {
 
     $('#aboutBtn').on('click', () => {
       _sidenav.hide();
-      $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: 75 });
+      // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: 75 });
       $('#aboutModal').modal('show');
     });
 
