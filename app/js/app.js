@@ -7,11 +7,6 @@ $(function () {
     let pinColor;
 
     if (average) {
-      // Truncates average value
-      if (average.toFixed && average !== Math.round(average)) {
-        average = average.toFixed(1);
-      }
-
       if (!average || average === 0) {
         pinColor = 'gray';
       } else if (average > 0 && average <= 2) {
@@ -47,6 +42,9 @@ $(function () {
     templateData.description = m.description;
 
     // Average
+    if (m.average.toFixed && m.average !== Math.round(m.average)) {
+      m.average = m.average.toFixed(1);
+    }
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = m.average;
 
