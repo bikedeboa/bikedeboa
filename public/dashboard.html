@@ -64,9 +64,9 @@
             text-overflow: ellipsis;
           }
 
-          td.multiline {
+          td.col-fulltext {
             white-space: normal;
-          }
+          } 
 
           .editable-empty {
             color: #E9BB2B;
@@ -94,6 +94,7 @@
 
           td.col-timestamp,
           td.col-description,
+          td.col-full-text,
           td.col-address { 
             font-size: 0.8em;
           }
@@ -406,7 +407,7 @@
           BIKE.Database.customAPICall('get','revision', null, data => {
             revisions = data;
 
-            $('#headingRevisions').html(`(${data.length})`);
+            $('#headingRevisions').html(`Sugestões (${data.length})`);
 
             $('#revisionsTable').bootstrapTable({
               columns: [
@@ -426,7 +427,7 @@
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
                 },
                 {
-                  field: 'comments', title: 'Mensagem', sortable: true, class: 'col-description',
+                  field: 'comments', title: 'Mensagem', sortable: true, class: 'col-fulltext',
                 },
                 {
                   field: 'operate', title: '', align: 'center', events: operateEvents, formatter: operateFormatter
