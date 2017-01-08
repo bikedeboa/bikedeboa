@@ -978,7 +978,7 @@ $(function () {
     Database.sendRevision(revisionObj, (revisionId) => {
       hideSpinner();
 
-      swal('Sugestão enviada', 'Obrigado por contribuir com o Bike de Boa. Sua sugestão correção será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
+      swal('Sugestão enviada', 'Obrigado por contribuir com o Bike de Boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
 
       // Update screen state
       History.pushState({}, 'bike de boa', '/');
