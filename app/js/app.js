@@ -288,8 +288,6 @@ $(function () {
     if (marker._hasDetails) {
       openDetailsModal(marker);
     } else {
-      // showSpinner();
-
       // Load skeleton modal template
       $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
       $('#placeDetailsModal').modal('show');
@@ -297,7 +295,6 @@ $(function () {
 
       // Request content
       Database.getPlaceDetails(marker.id, () => {
-        // hideSpinner();
         if (!_abortedDetailsRequest) {
           openDetailsModal(marker);
 
