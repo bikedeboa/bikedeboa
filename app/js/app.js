@@ -91,7 +91,7 @@ $(function () {
     case 'deroda': structureTypeIcon = '/img/tipo_deroda.svg'; break;
     case 'trave': structureTypeIcon = '/img/tipo_trave.svg'; break;
     case 'suspenso': structureTypeIcon = '/img/tipo_suspenso.svg'; break;
-    case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break; 
+    case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break;
     case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
     }
     if (m.structureType) {
@@ -122,7 +122,7 @@ $(function () {
     if (!$('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('show');
     }
-    
+
     // Animate modal content
     $('.modal-header, .modal-body > div').velocity('transition.fadeIn', {stagger: 75, queue: false});
 
@@ -148,12 +148,12 @@ $(function () {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
         const markerPos = _geolocationMarker.getPosition();
-        const pos = { 
+        const pos = {
           lat: markerPos.lat(),
-          lng: markerPos.lng() 
+          lng: markerPos.lng()
         };
 
-        map.panTo(pos); 
+        map.panTo(pos);
         if (map.getZoom() < 17) {
           map.setZoom(17);
         }
@@ -184,14 +184,14 @@ $(function () {
               _geolocationMarker.setZIndex(markers.length);
               _geolocationMarker.setVisible(true);
               _geolocationRadius.setVisible(true);
-              
+
               if (toCenter) {
                 const pos = {
                   lat: position.coords.latitude,
-                  lng: position.coords.longitude 
+                  lng: position.coords.longitude
                 };
-    
-                map.panTo(pos); 
+
+                map.panTo(pos);
                 if (map.getZoom() < 17) {
                   map.setZoom(17);
                 }
@@ -221,7 +221,7 @@ $(function () {
                   swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente denovo que deve dar ;)', 'warning');
                   break;
                 }
-              }  
+              }
 
               // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
               if(error.message.indexOf('Only secure origins are allowed') == 0) {
@@ -589,7 +589,7 @@ $(function () {
 
       _searchResultMarker.setPosition(place.geometry.location);
       _searchResultMarker.setVisible(true);
- 
+
       ga('send', 'event', 'Search', 'location', place.formatted_address);
 
       // var address = '';
@@ -838,12 +838,12 @@ $(function () {
       ga('send', 'event', 'Review', 'update - pending', ''+m.id);
     } else if (prepopedRating) {
       currentPendingRating = prepopedRating;
-      $('input[name=rating]').val([prepopedRating]);      
+      $('input[name=rating]').val([prepopedRating]);
     } else {
       _updatingReview = false;
       ga('send', 'event', 'Review', 'create - pending', ''+m.id);
     }
- 
+
     validateReviewForm();
 
     $('#placeDetailsModal').modal('hide');
@@ -1007,13 +1007,13 @@ $(function () {
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
-    // Capture modal closing by 
+    // Capture modal closing by
     $('body').on('click', '.modal', e => {
       // If click was on modal backdroplick
       if (e.target == e.currentTarget) {
         // If a details request was under way
         _abortedDetailsRequest = true;
-        
+
         // Reset history state
         // @todo just do a history.back(), so a forward would reopen the modal
         if (History.getState().title !== 'bike de boa') {
@@ -1105,9 +1105,9 @@ $(function () {
     // Send Revision Panel
     $('body').on('click', '#createRevisionBtn', openRevisionPanel);
     $('body').on('click', '#sendRevisionBtn', sendRevisionBtn);
-
   }
 
+  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {
@@ -1120,7 +1120,7 @@ $(function () {
       clickableIcons: false,
       zoomControl: isDesktop(),
       styles: _gmapsCustomStyle,
-    }); 
+    });
 
     _mapBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
@@ -1213,6 +1213,24 @@ $(function () {
     });
 
     _sidenav = new SideNav();
+
+    // Intercepts Progressive Web App event
+    // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
+    window.addEventListener('beforeinstallprompt', e => {
+      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
+
+      e.userChoice.then(function(choiceResult) {
+        // console.log(choiceResult.outcome);
+        if(choiceResult.outcome == 'dismissed') {
+          // User cancelled home screen install
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+        }
+        else {
+          // User added to home screen
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+        }
+      });
+    });
   }
 
   function handleLoggedUser() {
@@ -1294,7 +1312,7 @@ $(function () {
     // Reset URL
     History.replaceState({}, 'bike de boa', '/');
 
-    if (isDemoMode) { 
+    if (isDemoMode) {
       Database = BIKE.MockedDatabase;
     } else {
       Database = BIKE.Database;
@@ -1314,10 +1332,10 @@ $(function () {
       //   const coords = data.loc.split(',');
       //   const pos = {
       //     lat: parseFloat(coords[0]),
-      //     lng: parseFloat(coords[1]) 
+      //     lng: parseFloat(coords[1])
       //   };
 
-      //   map.panTo(pos); 
+      //   map.panTo(pos);
       // }
     });
 
@@ -1327,7 +1345,7 @@ $(function () {
   }
 
   window.toggleDemoMode = () => {
-    showSpinner(); 
+    showSpinner();
     isDemoMode = !isDemoMode;
     init();
   };
