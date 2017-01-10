@@ -42,7 +42,8 @@ $(function () {
     templateData.description = m.description;
 
     // Average
-    if (m.average.toFixed && m.average !== Math.round(m.average)) {
+    if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
+      // Average might come with crazy floating point value
       m.average = m.average.toFixed(1);
     }
     templateData.pinColor = getPinColorFromAverage(m.average);
