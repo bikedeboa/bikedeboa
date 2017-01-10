@@ -26,3 +26,21 @@ BIKE.geocodeLatLng = function(lat, lng, successCB, failCB) {
     }
   });
 };
+
+window.toggleSpinner = function () {
+  $('#spinnerOverlay').fadeToggle();
+};
+
+window.showSpinner = function (label) {
+  console.log('showspinner');
+  if (label) {
+    $('#globalSpinnerLabel').html(label);
+  }
+  $('#spinnerOverlay').velocity('transition.fadeIn');
+};
+
+window.hideSpinner = function () {
+  $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
+    $('#globalSpinnerLabel').html('');
+  }});
+};

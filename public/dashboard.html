@@ -37,6 +37,9 @@
         <script src="/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.js"></script>
         <link rel="stylesheet" href="/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.css">
 
+        <!-- Font Awesome -->
+        <script src="https://use.fontawesome.com/9c52cfba3f.js"></script>
+
         <style>
           body {
             font-family: "Roboto", Arial, sans-serif;
@@ -120,11 +123,37 @@
             display: none;
           }
 
+          section {
+            padding: 50px;
+            margin: 70px 0 0;
+            background-color: rgba(0,0,0,0.02);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+          }
+
+          section + section {
+            margin: 30px 0;
+          }
+
+          .navbar-default {
+            background-color: #30bb6a;
+          }
+
+          .nav-pills > li {
+            font-size: 1.8em;
+          }
+
+          .tab-content h2 {
+            font-size: 20px;
+          }
+
+          .restricted-access {
+            display: none;
+          }
+
         </style>
     </head>
 
     <body>
-
       <div id="loginWrapper" style="float: right;">
         <button id="login" type="button" class="btn btn-lg btn-default" >
           <span class="glyphicon glyphicon-user"></span> Login
@@ -139,79 +168,18 @@
           </ul>
         </div>
       </div>
+      
+      <!-- <nav class="navbar navbar-default navbar-fixed-top">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+          </li>
+        </ul>
+      </nav> -->
 
-      <br>
-
-      <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">Bicicletarios</a></li>
-        <li role="presentation"><a href="#log" aria-controls="log" role="tab" data-toggle="tab">Log</a></li>
-        <li role="presentation"><a href="#usuarios" aria-controls="usuarios" role="tab" data-toggle="tab">Usuarios</a></li>
-        <li role="presentation"><a href="#sugestoes" aria-controls="sugestoes" role="tab" data-toggle="tab">Sugestões de edição</a></li>
-      </ul>
-
-      <!-- Tab panes -->
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade in active" id="bicicletarios">
-          
-          <h2 id="headingBikes">
-            Carregando bicicletários...
-          </h2>
-
-          <table
-            id="localsTable"
-            data-classes="table table-no-bordered"
-            data-striped="true"
-            data-search="true"
-            data-show-refresh="true"
-            data-show-toggle="true"
-            data-show-columns="true"
-            data-show-export="true"
-            data-detail-view="true"
-            data-detail-formatter="detailFormatter"
-            data-row-style="rowStyle"
-            data-show-footer="false"
-            data-sticky-header="true">
-          </table> 
-
-        </div>
-
-        <div role="tabpanel" class="tab-pane fade" id="usuarios">
-          <h2 id="headingUsers">
-            Carregando usuários...
-          </h2>
-
-          <table
-            id="usersTable"
-            data-classes="table table-no-bordered"
-            data-search="true"
-            data-show-toggle="true"
-            data-show-columns="true"
-            data-show-footer="false"
-            data-sticky-header="true">
-          </table>
-        </div>
-
-        <div role="tabpanel" class="tab-pane fade" id="log">
-          <h2 id="headingLog">
-            Carregando log... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
-          </h2>
-
-          <!-- <div id="logTable"></div> -->
- 
-          <table
-            id="logTable"
-            data-classes="table table-no-bordered"
-            data-search="true"
-            data-show-toggle="true"
-            data-show-columns="true"
-            data-show-footer="false"
-            data-sticky-header="true">
-          </table> 
-        </div>
-
-         <div role="tabpanel" class="tab-pane fade" id="sugestoes">
-          <h2 id="headingRevisions">
-            Carregando sugestões...
+      <section class="restricted-access">
+          <h2>
+            <i class="fa fa-lightbulb-o"></i>
+            <span id="headingRevisions">Carregando sugestões...</span>
           </h2>
 
           <table
@@ -223,9 +191,91 @@
             data-show-footer="false"
             data-sticky-header="true">
           </table>
-        </div>
+      </section>
 
-      </div>
+      <section>
+        <ul class="nav nav-tabs nav-pills nav-justified" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">
+              <i class="fa fa-bicycle"></i>
+              Bicicletarios
+            </a>
+          </li>
+          <li role="presentation" class="restricted-access">
+            <a href="#usuarios" aria-controls="usuarios" role="tab" data-toggle="tab">
+              <i class="fa fa-users"></i>
+              Usuarios
+            </a>
+          </li>
+          <li role="presentation" class="restricted-access">
+            <a href="#log" aria-controls="log" role="tab" data-toggle="tab">
+              <i class="fa fa-list"></i>
+              Log
+            </a>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="bicicletarios">
+            
+            <h2>
+              <span id="headingBikes">Carregando bicicletários...</span>
+            </h2>
+
+            <table
+              id="localsTable"
+              data-classes="table table-no-bordered"
+              data-striped="true"
+              data-search="true"
+              data-show-refresh="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-show-export="true"
+              data-detail-view="true"
+              data-detail-formatter="detailFormatter"
+              data-row-style="rowStyle"
+              data-show-footer="false"
+              data-sticky-header="true">
+            </table> 
+
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade" id="usuarios" class="restricted-access">
+            <h2>
+              <span id="headingUsers">Carregando usuários...</span>
+            </h2>
+
+            <table
+              id="usersTable"
+              data-classes="table table-no-bordered"
+              data-search="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-show-footer="false"
+              data-sticky-header="true">
+            </table>
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade" id="log" class="restricted-access">
+            <h2 id="headingLog">
+              Carregando log... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
+            </h2>
+
+            <!-- <div id="logTable"></div> -->
+   
+            <table
+              id="logTable"
+              data-classes="table table-no-bordered"
+              data-search="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-show-footer="false"
+              data-sticky-header="true">
+            </table> 
+          </div>
+        </div>
+      </section>
 
       <script>
         function detailFormatter(index, row) {
@@ -292,7 +342,7 @@
 
         function updateLocalsTable() {
           Database.getPlaces( () => {
-            $('#headingBikes').html(`Bicicletários (${markers.length})`);
+            $('#headingBikes').html(`<span class="text-muted">(${markers.length} carregados)</span>`);
 
             let structureTypes = [];
             for(let i=0; i < STRUCTURE_NAMES.length; i++) {
@@ -370,7 +420,7 @@
           BIKE.Database.customAPICall('get','user', null, data => {
             users = data;
 
-            $('#headingUsers').html(`Usuários (${data.length})`);
+            $('#headingUsers').html(`<span class="text-muted">(${data.length} carregados)</span>`);
 
             $('#usersTable').bootstrapTable({
               columns: [
@@ -407,7 +457,7 @@
           BIKE.Database.customAPICall('get','revision', null, data => {
             revisions = data;
 
-            $('#headingRevisions').html(`Sugestões (${data.length})`);
+            $('#headingRevisions').html(`Sugestões de Correção <span class="text-muted">(${data.length})</span>`);
 
             $('#revisionsTable').bootstrapTable({
               columns: [
@@ -465,7 +515,7 @@
           BIKE.Database.customAPICall('get','log', null, data => {
             log = data;
 
-            $('#headingLog').html(`Log (${data.length})`); 
+            $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`); 
 
             // let html = '<table style="width: 100%;">';
             // html += '<thead>';
@@ -536,6 +586,7 @@
             $('#login').hide();
             $('#logged').show();
             $('#loggedUser').html(loggedUser);
+            $('.restricted-access').show(); 
           }
         }
 
@@ -553,13 +604,22 @@
         }
 
         function init() {
+          showSpinner();
+
           Database.authenticate(false, () => {
             if (loggedUser) {
               handleLoggedUser();
+            } else {
+              $('.restricted-access').remove(); 
             }
 
             Database.getAllTags();
+
             updateLocalsTable();
+
+            updateRevisionTable();
+
+            hideSpinner();
           });
         }
 
@@ -594,9 +654,6 @@
             break;
           case 'usuarios':
             updateUsersTable();
-            break;
-          case 'sugestoes':
-            updateRevisionTable();
             break;
           }
         });

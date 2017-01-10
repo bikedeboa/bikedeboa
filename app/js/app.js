@@ -605,24 +605,6 @@ $(function () {
     });
   }
 
-  function toggleSpinner () {
-    $('#spinnerOverlay').fadeToggle();
-  }
-
-  function showSpinner (label) {
-    console.log('showspinner');
-    if (label) {
-      $('#globalSpinnerLabel').html(label);
-    }
-    $('#spinnerOverlay').velocity('transition.fadeIn');
-  }
-
-  function hideSpinner () {
-    $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
-      $('#globalSpinnerLabel').html('');
-    }});
-  }
-
   function photoUploadCB(e) {
     if (e.target.result) {
       // $('#photoInput + label').fadeOut();
