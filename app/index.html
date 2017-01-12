@@ -349,6 +349,12 @@
                   {{#if numReviews}}
                       <span class="numreviews">{{numReviews}}</span>
                   {{/if}}
+
+                  {{#if savedRating}}
+                    <div class="savedRating">
+                      Voce deu a nota <b>{{savedRating}}</b><button class="link-button classic-link openReviewPanelBtn">(editar)</button>
+                    </div>
+                  {{/if}}
               </div>
 
               <div class="info clearfix">

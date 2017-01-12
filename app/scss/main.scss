@@ -168,6 +168,12 @@ a,
     background: transparent;
 }
 
+
+.link-button.classic-link {
+    color: inherit;
+    text-decoration: underline;
+}
+
 #locationQueryBtn {
     display: none;
 }
@@ -651,7 +657,7 @@ a,
 
         h2 {
             margin-top: 0;
-            font-size: 12px;
+            font-size: 14px;
         }
 
         textarea {
@@ -868,6 +874,13 @@ a,
             background-repeat: no-repeat;
             margin-right: 5px;
         }
+    }
+
+    .savedRating {
+        color: #828b90;
+        font-weight: 400;
+        margin-top: 10px;
+        font-size: 12px;
     }
 }
 
@@ -1144,8 +1157,9 @@ a,
     width: 96%;
 
     &:active {
-        transform: translateY(3px);
-        outline: none;
+        outline: 0;
+        border-bottom-width: 2px;
+        margin-top: 3px;
     }
 }
 
@@ -1161,7 +1175,7 @@ a,
     background-color: $white;
     color: black;
 
-    transition: background-color 0.5s ease;
+    transition: background-color 0.2s ease-out;
 
     &:disabled {
         background-color: #989a9d;

@@ -100,6 +100,12 @@ $(function () {
     }
     templateData.structureTypeIcon = structureTypeIcon;
 
+    // Retrieves a previous review saved in session 
+    const previousReview = getReviewFromSession(m.id);
+    if (previousReview) {
+      templateData.savedRating = previousReview.rating; 
+    }
+
 
     ////////////////////////////////
     // Render handlebars template //
@@ -791,7 +797,6 @@ $(function () {
     templateData.address = m.address;
 
     const previousReview = getReviewFromSession(m.id);
-    // console.log(previousReview);
 
     // Tags
     templateData.tagsButtons = tags.map(t => {
