@@ -101,7 +101,7 @@ $(function () {
     templateData.structureTypeIcon = structureTypeIcon;
 
     // Retrieves a previous review saved in session 
-    const previousReview = getReviewFromSession(m.id);
+    const previousReview = BIKE.Session.getReviewFromSession(m.id);
     if (previousReview) {
       templateData.savedRating = previousReview.rating; 
     }
@@ -268,7 +268,7 @@ $(function () {
     controlUI.style.textAlign = 'center';
     controlUI.style.boxShadow = '0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06';
 
-    controlUI.title = 'Clique para centralizar mapa';
+    controlUI.title = 'Onde estou?';
 
     controlDiv.appendChild(controlUI);
 
@@ -528,6 +528,7 @@ $(function () {
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
             onMarkerClick(newMarker, () => {
+              $('.review').tooltip('show');
               $('.review').velocity('callout.shake');
             });
           }
@@ -736,6 +737,7 @@ $(function () {
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
+      $('#newPlaceModal #photoInput+label').addClass('editMode');
       $('#newPlaceModal #descriptionInput').val(m.description);
 
       if (m.description && m.description.length > 0) {
@@ -796,7 +798,7 @@ $(function () {
     templateData.title = m.text;
     templateData.address = m.address;
 
-    const previousReview = getReviewFromSession(m.id);
+    const previousReview = BIKE.Session.getReviewFromSession(m.id);
 
     // Tags
     templateData.tagsButtons = tags.map(t => {
@@ -840,39 +842,6 @@ $(function () {
     // $('#placeDetailsModal .flipper').toggleClass('flipped');
   }
 
-  function getReviewFromSession(placeId) {
-    const reviewsArray = Cookies.getJSON('bikedeboa_reviews') || [];
-    return reviewsArray.find((i) => {return i.placeId === placeId;});
-  }
-
-  function saveOrUpdateReviewCookie(reviewObj) {
-    const reviewsArray = Cookies.getJSON('bikedeboa_reviews') || [];
-
-    // Search for previous entered review
-    let review;
-    if (reviewsArray && reviewsArray.length > 0) {
-      review = reviewsArray.find((i) => {return i.placeId === reviewObj.placeId;});
-    }
-
-    if (review) {
-      // Update current review
-      review.placeId = reviewObj.placeId;
-      review.rating = reviewObj.rating;
-      review.tags = reviewObj.tags;
-      review.databaseId = reviewObj.databaseId;
-    } else {
-      // Push a new one
-      reviewsArray.push({
-        placeId: reviewObj.placeId,
-        rating: reviewObj.rating,
-        tags: reviewObj.tags,
-        databaseId: reviewObj.databaseId
-      });
-    }
-
-    Cookies.set('bikedeboa_reviews', reviewsArray, { expires: 365 });
-  }
-
   function toggleExpandModalHeader() {
     $('.modal-header').toggleClass('expanded');
   }
@@ -908,7 +877,7 @@ $(function () {
       Database.sendReview(reviewObj, (reviewId) => {
         // Update internal state
         reviewObj.databaseId = reviewId;
-        saveOrUpdateReviewCookie(reviewObj);
+        BIKE.Session.saveOrUpdateReviewCookie(reviewObj);
 
         // Update screen state
         // $('#reviewPanel').modal('hide');
@@ -929,7 +898,7 @@ $(function () {
       });
     };
 
-    const previousReview = getReviewFromSession(openedMarker.id);
+    const previousReview = BIKE.Session.getReviewFromSession(openedMarker.id);
     if (previousReview) {
       // Delete previous
       Database.deleteReview(previousReview.databaseId, callback);
@@ -1053,7 +1022,7 @@ $(function () {
 
     $('#photoInput').change(function () {
       if (this.files && this.files[0] && this.files[0].type.match(/image.*/)) {
-        showSpinner();
+        showSpinner('Processando imagem...');
 
         var reader = new FileReader();
         reader.onload = photoUploadCB;

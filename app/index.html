@@ -216,7 +216,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button id="saveNewPlaceBtn" class="btn border btn-footer green">SALVAR</button>
+                              <button id="saveNewPlaceBtn" class="btn border btn-footer btn-action green">SALVAR</button>
                         </div>
                     </div>
                 </div>
@@ -320,7 +320,7 @@
                   </p>
               </div>
 
-              <div class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}">
+              <div class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
                   {{#if average}}
                       <span class="average">{{average}}</span>
                   {{/if}}
@@ -546,7 +546,12 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR AVALIAÇÃO</button>
+                                <!-- <div class="col-half">
+                                  <button id="sendReviewBtn" class="btn border btn-footer btn-action">CANCELAR</button>
+                                </div> -->
+                                <!-- <div class="col-half"> -->
+                                  <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR</button>
+                                <!-- </div> -->
                             </div>
                         </div>
                     </div>

@@ -332,13 +332,13 @@ a,
 }
 
 #addPlace {
-    transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+    transition: bottom 0.5s ease-out, background 0.2s ease-out;
     opacity: 0;
 
     &:hover,
     &:active,
     &:focus {
-        opacity: 1;
+        background: linear-gradient(45deg,hsla(145,59%,40%,1) 0,#25cb6d 100%);
     }
 
     &.active {
@@ -1126,10 +1126,6 @@ a,
     float: left;
 }
 
-.modal-footer .col-half + .col-half {
-    border-left: 1px solid rgba(44,217,120,0.5);
-}
-
 // #placeDetailsModalTemplatePlaceholder .modal-footer .col-half + .col-half {
 //     border-left: 1px solid $white;
 // }
@@ -1153,13 +1149,17 @@ a,
 .btn.btn-action {
     margin: 0 2% 2%;
     border-radius: 5px;
-    border-bottom: 5px solid $gray;
+    border-bottom: 5px solid $lightestGray;
     width: 96%;
 
     &:active {
         outline: 0;
         border-bottom-width: 2px;
         margin-top: 3px;
+    }
+
+    &:disabled {
+        border-bottom: 5px solid $gray;
     }
 }
 
@@ -1172,13 +1172,13 @@ a,
     font-family: $headingFont;
     text-transform: uppercase;
     font-weight: 700;
-    background-color: $white;
+    background-color: $lightestGray;
     color: black;
 
     transition: background-color 0.2s ease-out;
 
     &:disabled {
-        background-color: #989a9d;
+        background-color: $lightGray;
         color: #e6e6e6;
     }
 
@@ -1229,7 +1229,7 @@ a,
         height: 67px;
         transform: translate(-50%,-50%);
         cursor: pointer;
-        opacity: 0.9;
+        opacity: 0.8;
         transition: opacity 0.2s ease-out;
         text-shadow: 1px 1px 1px white;
 
@@ -1240,12 +1240,18 @@ a,
             content: 'Adicionar foto';
             position: absolute;
             bottom: -25px;
-            left: -22px;
             width: 120px;
+            left: 50%;
+            transform: translate(-50%);
             font-weight: 900;
             font-family: $headingFont;
             text-transform: uppercase;
             font-size: 13px;
+        }
+
+        &.editMode:after {
+            content: 'Mudar foto';
+            width: 100px;
         }
     }
 
@@ -1588,7 +1594,7 @@ a,
         width: 100%;
         height: 100%; 
         padding: 8% 5% 3%;
-        opacity: .8;
+        opacity: .9;
 
         transition: opacity 0.5s ease-out;
 
@@ -1613,6 +1619,7 @@ a,
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  font-size: 18px;
 
   .glyphicon {
     margin-right: 10px;
