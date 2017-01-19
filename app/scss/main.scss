@@ -13,6 +13,7 @@ $lightBlue: #63BCE7;
 $lightestBlue: #86C7E7;
 
 // Other colors
+$black: #333;
 $white: #fafafa;
 $paleWhite: #F3F3F3;
 $gray: #828b90;
@@ -316,6 +317,7 @@ a,
 
 #aboutModal,
 #revisionModal,
+#faqModal,
 #reviewPanel {
     .modal-header {
         height: auto;
@@ -329,6 +331,40 @@ a,
         padding: 30px 12px 12px;
         font-size: 2em;
     }
+
+    /* h4 {
+      font-size: 30px;
+      color: inherit;
+      text-align: left;
+      font-weight: bold;
+    } */
+}
+
+#faqModal {
+  .panel-heading {
+    padding: 15px;
+  }
+
+  .panel-title {
+    font-family: $headingFont;
+    color: $black;
+  }
+
+  .panel-heading a {
+    .panel-title:before {
+      position: relative;
+      float: right;
+      display: inline-block;
+      font-family: 'Glyphicons Halflings';
+      font-weight: 400;
+      line-height: 1;
+      content: "\e260";
+    }
+
+    &.collapsed .panel-title:before {
+      content: "\e259";
+    }
+  }
 }
 
 #addPlace {

@@ -100,10 +100,10 @@ $(function () {
     }
     templateData.structureTypeIcon = structureTypeIcon;
 
-    // Retrieves a previous review saved in session 
+    // Retrieves a previous review saved in session
     const previousReview = BIKE.Session.getReviewFromSession(m.id);
     if (previousReview) {
-      templateData.savedRating = previousReview.rating; 
+      templateData.savedRating = previousReview.rating;
     }
 
 
@@ -959,7 +959,15 @@ $(function () {
     $('#aboutBtn').on('click', () => {
       _sidenav.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: 75 });
+      History.pushState({}, 'Sobre', 'sobre');
       $('#aboutModal').modal('show');
+    });
+
+    $('#faqBtn').on('click', () => {
+      _sidenav.hide();
+      History.pushState({}, 'Perguntas frequentes', 'faq');
+      $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: 75 });
+      $('#faqModal').modal('show');
     });
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
@@ -1064,6 +1072,15 @@ $(function () {
     $('body').on('click', '#sendRevisionBtn', sendRevisionBtn);
   }
 
+  function hideAllModals() {
+    $('#reviewPanel').modal('hide');
+    $('#placeDetailsModal').modal('hide');
+    $('#newPlaceModal').modal('hide');
+    $('#revisionModal').modal('hide');
+    $('#aboutModal').modal('hide');
+    $('#faqModal').modal('hide');
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -1139,10 +1156,7 @@ $(function () {
       const state = History.getState();
 
       if (state.title === 'bike de boa') {
-        $('#reviewPanel').modal('hide');
-        $('#placeDetailsModal').modal('hide');
-        $('#newPlaceModal').modal('hide');
-        $('#revisionModal').modal('hide');
+        hideAllModals();
       }
     });
 

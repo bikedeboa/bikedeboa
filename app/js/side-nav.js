@@ -121,8 +121,8 @@ class SideNav {
 
   show () {
     // $('.side-nav__header span').velocity('transition.slideDownIn');
-    $('.side-nav__content li').css({opacity: 0}).velocity('transition.slideLeftIn', { delay: 100, stagger: 100, duration: 600 });
-    
+    $('.side-nav__content li').css({opacity: 0}).velocity('transition.slideLeftIn', { delay: 120, stagger: 100, duration: 600 });
+
     this.sideNavEl.classList.add('side-nav--animatable');
     this.sideNavEl.classList.add('side-nav--visible');
     this.sideNavEl.addEventListener('transitionend', this.onTransitionEnd);
