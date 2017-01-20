@@ -365,6 +365,11 @@ a,
       content: "\e259";
     }
   }
+
+  .panel-body {
+    font-size: 16px;
+    color: $gray;
+  }
 }
 
 #addPlace {
@@ -684,7 +689,7 @@ a,
     .description {
         margin: 0 5%;
         padding: 10px 20px 20px;
-        /* color: #828b90; */
+        /* color: $gray; */
         /* border-top: 1px solid #eee; */
         background: rgb(250,250,250);
         border-radius: 10px;
@@ -808,17 +813,17 @@ a,
 }
 
 .modal-body {
-    & img {
+    img {
         width: 18px;
         /*margin-right: 10px;*/
         height: auto;
     }
 
-    & label {
+    label {
         font-weight: initial;
     }
 
-    & h2 {
+    h2 {
         font-family: $headingFont;
         font-weight: lighter;
         font-size: 14px;
@@ -827,7 +832,7 @@ a,
         // text-transform: uppercase;
     }
 
-    & p {
+    p {
         font-size: 16px;
         color: $gray;
     }
@@ -913,7 +918,7 @@ a,
     }
 
     .savedRating {
-        color: #828b90;
+        color: $gray;
         font-weight: 400;
         margin-top: 10px;
         font-size: 12px;
@@ -1152,7 +1157,7 @@ a,
 
     .badge {
         margin-right: 2px;
-        background-color: #b3b3b3;
+        background-color: $lightGray;
     }
 }
 
@@ -1541,7 +1546,7 @@ a,
     padding: 13px;
     font-size: 18px;
     background-color: $darkGreen;
-    // color: #828b90;
+    // color: $gray;
 }
 
 .side-nav {

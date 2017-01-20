@@ -951,6 +951,11 @@ $(function () {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     });
 
+    $('.js-menu-show').on('click', () => {
+      // Menu open is already triggered inside the menu component.
+      ga('send', 'event', 'Misc', 'hamburger menu opened');
+    });
+
     $('#loginBtn').on('click', () => {
       _sidenav.hide();
       login(true);
