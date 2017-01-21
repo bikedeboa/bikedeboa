@@ -41,6 +41,10 @@ module.exports = {
         "MARKER_ICON_YELLOW": false,
         "MARKER_ICON_RED": false,
         "MARKER_ICON_GRAY": false,
+        "MARKER_ICON_GREEN_MINI": false,
+        "MARKER_ICON_YELLOW_MINI": false,
+        "MARKER_ICON_RED_MINI": false,
+        "MARKER_ICON_GRAY_MINI": false,
         "STRUCTURE_TYPES": false,
         "GMAPS_DIRECTIONS_URL": false,
         "PHOTO_UPLOAD_MAX_W": false,
@@ -74,5 +78,6 @@ module.exports = {
         "_sidenav": true,
         "_updatingReview": true,
         "_userIP": true,
+        "_mapZoomLevel": true,
     }
 };

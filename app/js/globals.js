@@ -17,12 +17,18 @@ function getSimulatedDelay () {
 
 const MARKER_W = 20;
 const MARKER_H = 24;
+const MARKER_W_MINI = 10; 
+const MARKER_H_MINI = 12;
 const N_MOCK_PICS = 14;
 const MIN_TITLE_CHARACTERS = 0;
-const MARKER_ICON_GREEN = 'img/pin_green.svg';
+const MARKER_ICON_GREEN = 'img/pin_green.svg'; 
 const MARKER_ICON_YELLOW = 'img/pin_yellow.svg';
 const MARKER_ICON_RED = 'img/pin_red.svg';
 const MARKER_ICON_GRAY = 'img/pin_gray.svg';
+const MARKER_ICON_GREEN_MINI = 'img/pin_green_mini.svg';
+const MARKER_ICON_YELLOW_MINI = 'img/pin_yellow_mini.svg';
+const MARKER_ICON_RED_MINI = 'img/pin_red_mini.svg';
+const MARKER_ICON_GRAY_MINI = 'img/pin_gray_mini.svg';
 // const GMAPS_DIRECTIONS_URL = 'http://maps.google.com/maps?saddr="#{origin}"&daddr="#{destination}"';
 const PHOTO_UPLOAD_MAX_W = 1000;
 const PHOTO_UPLOAD_MAX_H = 1000;
@@ -70,5 +76,6 @@ let _sidenav;
 let _geolocationInitialized;
 let _updatingReview;
 let _userIP;
+let _mapZoomLevel;
 
 let templates = {};

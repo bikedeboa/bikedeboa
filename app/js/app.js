@@ -328,29 +328,41 @@ $(function () {
 
         if (m) {
           // Icon and Scaling
-          let iconUrl;
           let scale;
+          let iconType, iconTypeMini;
           if (!m.average || m.average === 0) {
-            iconUrl = MARKER_ICON_GRAY;
+            iconType = MARKER_ICON_GRAY;
+            iconTypeMini = MARKER_ICON_GRAY_MINI;
             scale = 0.8;
           } else if (m.average > 0 && m.average <= 2) {
-            iconUrl = MARKER_ICON_RED;
+            iconType = MARKER_ICON_RED;
+            iconTypeMini = MARKER_ICON_RED_MINI;
           } else if (m.average > 2 && m.average < 3.5) {
-            iconUrl = MARKER_ICON_YELLOW;
+            iconType = MARKER_ICON_YELLOW;
+            iconTypeMini = MARKER_ICON_YELLOW_MINI;
           } else if (m.average >= 3.5) {
-            iconUrl = MARKER_ICON_GREEN;
+            iconType = MARKER_ICON_GREEN;
+            iconTypeMini = MARKER_ICON_GREEN_MINI;
           } else {
-            iconUrl = MARKER_ICON_GRAY;
+            iconType = MARKER_ICON_GRAY;
+            iconTypeMini = MARKER_ICON_GRAY_MINI; 
           }
           if (!scale) {
-            scale = 0.5 + (m.average/10);
+            scale = 0.5 + (m.average/10); 
           }
 
-          const icon = {
-            url: iconUrl, // url
+          m.icon = {
+            url: iconType, // url
             scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
             origin: new google.maps.Point(0, 0), // origin
             anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+          };
+
+          m.iconMini = {
+            url: iconTypeMini, // url
+            scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
+            origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
           };
 
           // @todo temporarily disabled this because backend still doesnt support flags for these
@@ -366,7 +378,7 @@ $(function () {
                 lng: parseFloat(m.lng)
               },
               map: map,
-              icon: icon,
+              icon: m.icon,
               title: m.text,
               // label: labelStr && {
               //   text: labelStr,
@@ -417,6 +429,15 @@ $(function () {
     areMarkersHidden = false;
     for (let i = 0; i < _gmarkers.length; i++) {
       _gmarkers[i].setOptions({clickable: true, opacity: 1});
+    }
+  }
+
+  // Switches all marker icons to the full or the mini scale
+  function setMarkersIcon (scale) {
+    let m;
+    for (let i = 0; i < _gmarkers.length; i++) {
+      m = markers[i];
+      _gmarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
     }
   }
 
@@ -1098,6 +1119,17 @@ $(function () {
         new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
+
+    google.maps.event.addListener(map, 'zoom_changed', () => {
+      const prevZoomLevel = _mapZoomLevel;
+
+      _mapZoomLevel = map.getZoom() < 13 ? 'mini' : 'full';
+
+      if (prevZoomLevel !== _mapZoomLevel) {
+        console.log('change zoom level');
+        setMarkersIcon(_mapZoomLevel);
+      }
+    });
 
     // If permission to geolocation was already granted we already center the map
     if (navigator.permissions) {
