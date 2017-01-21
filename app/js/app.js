@@ -313,75 +313,6 @@ $(function () {
     }
   }
 
-  function addMarkerToMap(markerIndexInArray) {
-    const i = markerIndexInArray;
-    const m = markers[i];
-
-    if (m) {
-      // Icon and Scaling
-      let iconUrl;
-      let scale;
-      if (!m.average || m.average === 0) {
-        iconUrl = MARKER_ICON_GRAY;
-        scale = 0.8;
-      } else if (m.average > 0 && m.average <= 2) {
-        iconUrl = MARKER_ICON_RED;
-      } else if (m.average > 2 && m.average < 3.5) {
-        iconUrl = MARKER_ICON_YELLOW;
-      } else if (m.average >= 3.5) {
-        iconUrl = MARKER_ICON_GREEN;
-      } else {
-        iconUrl = MARKER_ICON_GRAY;
-      }
-      if (!scale) {
-        scale = 0.5 + (m.average/10);
-      }
-
-      const icon = {
-        url: iconUrl, // url
-        scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-        origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
-      };
-
-      // @todo temporarily disabled this because backend still doesnt support flags for these
-      // let labelStr;
-      // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
-      //   labelStr = '?';
-      // }
-
-      if (m.lat && m.lng) {
-        _gmarkers.push(new google.maps.Marker({
-          position: {
-            lat: parseFloat(m.lat),
-            lng: parseFloat(m.lng)
-          },
-          map: map,
-          icon: icon,
-          title: m.text,
-          // label: labelStr && {
-          //   text: labelStr,
-          //   color: 'white',
-          //   fontFamily: 'Roboto'
-          // },
-          zIndex: i, //markers should be ordered by average
-          // opacity: 0.1 + (m.average/5).
-        }));
-
-        (function (markerIndex) {
-          _gmarkers[markerIndex].addListener('click', () => {
-            onMarkerClick(markers[markerIndex]);
-          });
-        }(i));
-      } else {
-        console.error('not lat or long o.O');
-      }
-
-    } else {
-      console.error('marker is weirdly empty on addMarkerToMap()');
-    }
-  }
-
   function updateMarkers() {
     clearMarkers();
 
@@ -392,9 +323,73 @@ $(function () {
         return a.average - b.average;
       });
 
-      for(let i=0; i<markers.length; i++) {
-        addMarkerToMap(i);
-      }
+      for(let i=0; i < markers.length; i++) {
+        const m = markers[i];
+
+        if (m) {
+          // Icon and Scaling
+          let iconUrl;
+          let scale;
+          if (!m.average || m.average === 0) {
+            iconUrl = MARKER_ICON_GRAY;
+            scale = 0.8;
+          } else if (m.average > 0 && m.average <= 2) {
+            iconUrl = MARKER_ICON_RED;
+          } else if (m.average > 2 && m.average < 3.5) {
+            iconUrl = MARKER_ICON_YELLOW;
+          } else if (m.average >= 3.5) {
+            iconUrl = MARKER_ICON_GREEN;
+          } else {
+            iconUrl = MARKER_ICON_GRAY;
+          }
+          if (!scale) {
+            scale = 0.5 + (m.average/10);
+          }
+
+          const icon = {
+            url: iconUrl, // url
+            scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
+            origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+          };
+
+          // @todo temporarily disabled this because backend still doesnt support flags for these
+          // let labelStr;
+          // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
+          //   labelStr = '?';
+          // }
+
+          if (m.lat && m.lng) {
+            _gmarkers.push(new google.maps.Marker({
+              position: {
+                lat: parseFloat(m.lat),
+                lng: parseFloat(m.lng)
+              },
+              map: map,
+              icon: icon,
+              title: m.text,
+              // label: labelStr && {
+              //   text: labelStr,
+              //   color: 'white',
+              //   fontFamily: 'Roboto'
+              // },
+              zIndex: i, //markers should be ordered by average
+              // opacity: 0.1 + (m.average/5).
+            }));
+
+            (function (markerIndex) {
+              _gmarkers[markerIndex].addListener('click', () => {
+                onMarkerClick(markers[markerIndex]);
+              });
+            }(i));
+          } else {
+            console.error('not lat or long o.O');
+          }
+
+        } else {
+          console.error('marker is weirdly empty on addMarkerToMap()');
+        }
+      } 
     }
 
     _geolocationMarker.setZIndex(markers.length);
@@ -403,28 +398,26 @@ $(function () {
   // Sets the map on all markers in the array.
   function setMapOnAll (map) {
     if (_gmarkers && Array.isArray(_gmarkers)) {
-      _gmarkers.forEach(function(m) {
-        m.setMap(map);
-      });
+      for (let i = 0; i < _gmarkers.length; i++) {
+        _gmarkers[i].setMap(map);
+      }
     }
   }
 
   // Removes the markers from the map, but keeps them in the array.
   function hideMarkers () {
     areMarkersHidden = true;
-    // setMapOnAll(null);
-    _gmarkers.forEach(i => {
-      i.setOptions({clickable: false, opacity: 0.3});
-    });
+    for (let i = 0; i < _gmarkers.length; i++) {
+      _gmarkers[i].setOptions({clickable: false, opacity: 0.3});
+    }
   }
 
   // Shows any markers currently in the array.
   function showMarkers () {
     areMarkersHidden = false;
-    // setMapOnAll(map);
-    _gmarkers.forEach(i => {
-      i.setOptions({clickable: true, opacity: 1});
-    });
+    for (let i = 0; i < _gmarkers.length; i++) {
+      _gmarkers[i].setOptions({clickable: true, opacity: 1});
+    }
   }
 
   // Deletes all markers in the array by removing references to them.
