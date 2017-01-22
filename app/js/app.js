@@ -40,6 +40,8 @@ $(function () {
     templateData.title = m.text;
     templateData.address = m.address;
     templateData.description = m.description;
+ 
+    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=600x150&markers=icon:http://www.iconsdb.com/icons/preview/orange/map-marker-2-xxl.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}`; 
 
     // Average
     if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
@@ -422,25 +424,31 @@ $(function () {
   // Removes the markers from the map, but keeps them in the array.
   function hideMarkers () {
     areMarkersHidden = true;
-    for (let i = 0; i < _gmarkers.length; i++) {
-      _gmarkers[i].setOptions({clickable: false, opacity: 0.3});
+    if (_gmarkers && Array.isArray(_gmarkers)) {
+      for (let i = 0; i < _gmarkers.length; i++) {
+        _gmarkers[i].setOptions({clickable: false, opacity: 0.3});
+      }
     }
   }
 
   // Shows any markers currently in the array.
   function showMarkers () {
     areMarkersHidden = false;
-    for (let i = 0; i < _gmarkers.length; i++) {
-      _gmarkers[i].setOptions({clickable: true, opacity: 1});
+    if (_gmarkers && Array.isArray(_gmarkers)) {
+      for (let i = 0; i < _gmarkers.length; i++) {
+        _gmarkers[i].setOptions({clickable: true, opacity: 1});
+      }
     }
   }
 
   // Switches all marker icons to the full or the mini scale
   function setMarkersIcon (scale) {
-    let m;
-    for (let i = 0; i < _gmarkers.length; i++) {
-      m = markers[i];
-      _gmarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
+    if (_gmarkers && Array.isArray(_gmarkers)) {
+      let m;
+      for (let i = 0; i < _gmarkers.length; i++) {
+        m = markers[i];
+        _gmarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
+      }
     }
   }
 
@@ -1140,7 +1148,7 @@ $(function () {
     });
 
     // If permission to geolocation was already granted we already center the map
-    if (navigator.permissions) {
+    if (!_isLocalhost && navigator.permissions) {
       navigator.permissions.query({'name': 'geolocation'})
         .then( permission => {
           if (permission.state === 'granted') {
@@ -1311,7 +1319,7 @@ $(function () {
   // };
 
   function localhostOverrides() {
-    // if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    // if (_isLocalhost) {
     //   Database.API_URL = 'http://localhost:3000';
     // }
   }

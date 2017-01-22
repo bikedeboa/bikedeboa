@@ -40,7 +40,7 @@ const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', '
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 const MODAL_TRANSITION_IN_DURATION = 700;
-
+const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 /////////////////////////
 //                     //
@@ -52,6 +52,7 @@ let isDemoMode = false;
 
 let map;
 let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+let _isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 let _mapBounds;
 let Database;
 let geocoder;

@@ -452,7 +452,14 @@
                   <p class="address">
                       {{address}}
                   </p>
+
+                  {{#if mapStaticImg}}
+                    <div>
+                      <img src="{{mapStaticImg}}"></img>
+                    </div>
+                  {{/if}}
               </div>
+
 
               <div class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
                   {{#if average}}

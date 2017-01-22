@@ -50,6 +50,7 @@ module.exports = {
         "PHOTO_UPLOAD_MAX_W": false,
         "PHOTO_UPLOAD_MAX_H": false,
         "STRUCTURE_CODE_TO_NAME": false,
+        "GOOGLEMAPS_KEY": false,
 
         "BIKE": true,
         "isDemoMode": true,
@@ -79,5 +80,6 @@ module.exports = {
         "_updatingReview": true,
         "_userIP": true,
         "_mapZoomLevel": true,
+        "_isLocalhost": true
     }
 };
