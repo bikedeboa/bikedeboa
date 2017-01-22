@@ -1315,9 +1315,21 @@ a,
     text-align: right;
     margin-top: 20px;
 
-    #createRevisionBtn {
+    button {
         font-style: italic;
         color: $gray;
+        display: inline-block; 
+    }
+
+    button + button {
+        border-left: 1px solid lightgray;
+        padding-left: 10px;
+    }
+
+    .footer-toolbar--label {
+        font-size: 12px;
+        color: $gray;
+        padding: 5px 0;
     }
 }
 

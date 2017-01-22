@@ -436,11 +436,6 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-          {{#if canModify}}
-              <button id="editPlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
-              <button id="deletePlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
-          {{/if}}
-
           {{#if photoUrl}}
             <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
               <img src="{{photoUrl}}"/>
@@ -555,9 +550,21 @@
               {{/if}}
 
               <div class="footer-toolbar">
-                <button id="createRevisionBtn" class="link-button"">
-                  <span class="glyphicon glyphicon-pencil"></span> Sugerir mudança
-                </button>
+                {{#if canModify }}
+                  <button id="editPlaceBtn" class="link-button">
+                    <span class="glyphicon glyphicon-pencil"></span> Editar
+                  </button>
+                  <button id="deletePlaceBtn" class="link-button">
+                    <span class="glyphicon glyphicon-trash"></span> Excluir
+                  </button>
+                  {{#unless isLoggedUser}}
+                    <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
+                  {{/unless}}
+                {{else}}
+                  <button id="createRevisionBtn" class="link-button">
+                    <span class="glyphicon glyphicon-pencil"></span> Sugerir mudança
+                  </button>
+                {{/if}}
               </div>
           </div>
 
@@ -718,6 +725,9 @@
                 <span class="glyphicon glyphicon-info-sign"></span>
                 Sobre
               </li>
+
+              <hr>
+              
               <li id="faqBtn">
                 <span class="glyphicon glyphicon-question-sign"></span>
                 Perguntas frequentes
