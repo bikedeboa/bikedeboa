@@ -401,6 +401,8 @@ BIKE.Database = {
   sendPlace: function(place, callback) {
     const self = this;
 
+    place.authorIP = this._headers.ip_origin;
+
     console.log('Sending new place:');
     console.log(place);
 
@@ -424,7 +426,7 @@ BIKE.Database = {
   },
 
   updatePlace: function(placeId, place, callback) {
-    const self = this;
+    const self = this; 
 
     console.log('Updating place:');
     console.log(place);

@@ -262,15 +262,13 @@ a,
     }
 
     .login-display {
-        display: none;
-
+        display: block;
         background-color: rgba(0,0,0,0.2);
         color: $paleWhite;
         padding: 5px;
         font-family: $headingFont;
         font-weight: 700;
         position: absolute;
-        display: block;
         top: 50px;
         right: 0;
         width: auto;
@@ -679,7 +677,6 @@ a,
         text-align: center;
         border-top: 1px solid #eee;
         padding: 20px 0;
-        margin-top: 10px;
 
         h2 {
             font-family: $headingFont;
@@ -1017,7 +1014,7 @@ a,
     padding: 20px 5%;
     text-align: center;
     border-top: 1px solid #eee;
-    margin: 10px 0;
+    margin: 10px 0 0;
 
     .skeleton-box,
     img {
@@ -1051,7 +1048,8 @@ a,
 #placeDetailsModal {
     .modal-body {
         padding-top: 25px;
-        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
+        // background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
+        background: $white;
     }
 
     // .modal-header {
