@@ -210,6 +210,15 @@ _gmapsCustomStyle = [
         ]
     },
     {
+        "featureType": "transit.line",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
         "featureType": "transit.station.bus",
         "elementType": "all",
         "stylers": [
