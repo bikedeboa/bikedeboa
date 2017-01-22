@@ -167,8 +167,13 @@ a,
 .link-button {
     border: none;
     background: transparent;
-}
 
+    &:focus,
+    &:active,
+    &:hover {
+        text-decoration: underline;
+    }
+}
 
 .link-button.classic-link {
     color: inherit;

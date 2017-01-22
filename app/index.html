@@ -37,7 +37,7 @@
         <!-- CSS (async) -->
         <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
         <!-- CSS (sync) -->
-        <link rel="stylesheet" type="text/css" href="/css/main.min.css"/>
+        <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/>
 
         <!-- Google Fonts (async) -->
         <link async href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
@@ -436,19 +436,19 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-          {{#if isAdmin}}
+          {{#if canModify}}
               <button id="editPlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-pencil"></span></button>
               <button id="deletePlaceBtn" type="button" class="btn btn-admin"><span class="glyphicon glyphicon-trash"></span></button>
           {{/if}}
 
           {{#if photoUrl}}
-            <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
+            <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
               <img src="{{photoUrl}}"/>
             </div>
           {{/if}}
 
           <div class="modal-body">
-              <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
+              <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
                     {{title}}
                   {{else}}
@@ -459,7 +459,7 @@
                   </p>
               </div>
 
-              <div class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
+              <div class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
                   {{#if average}}
                       <span class="average">{{average}}</span>
                   {{/if}}
@@ -497,9 +497,9 @@
               </div>
 
               <div class="info clearfix">
-                  <div class="col-half {{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
+                  <div class="col-half {{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
                       {{#if noIsPublicData}}
-                          {{#if isAdmin}}
+                          {{#if isLoggedUser}}
                             <div class="icon-label">
                                 <small>Sem informação sobre restrição</small>
                             </div>
@@ -517,7 +517,7 @@
                           {{/if}}
                       {{/if}}
                   </div>
-                  <div class="col-half {{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
+                  <div class="col-half {{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
                       {{#if structureTypeIcon}}
                           <img id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                       {{/if}}
@@ -525,7 +525,7 @@
                           {{#if structureTypeLabel}}
                               {{{structureTypeLabel}}}
                           {{else}}
-                              {{#if isAdmin}}
+                              {{#if isLoggedUser}}
                                 <small>Sem informação sobre tipo de bicicletário</small>
                               {{/if}}
                           {{/if}}

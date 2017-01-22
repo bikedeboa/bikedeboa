@@ -11,22 +11,25 @@ BIKE.Session = {
   ///////////////////
 
   getPlaceFromSession: function (placeId) {
-    const placesArray = Cookies.getJSON('bikedeboa_places') || [];
-    return placesArray.find( i => i.placeId === placeId );
+    // const placesArray = Cookies.getJSON('bikedeboa_places') || [];
+    // return placesArray.find( i => i.placeId === placeId );
+    
+    if (placeId) {
+      return Cookies.get('bikedeboa_local_' + placeId);
+    } else {
+      return;
+    }
   },
 
-  saveOrUpdatePlaceCookie: function (placeObj) {
-    const placesArray = Cookies.getJSON('bikedeboa_places') || [];
+  saveOrUpdatePlaceCookie: function (placeId) {
+    // const placesArray = Cookies.getJSON('bikedeboa_places') || [];
+    // // Push new place
+    // placesArray.push({
+    //   placeId: placeObj.placeId,
+    // });
+    // Cookies.set('bikedeboa_places', placesArray, { expires: 1 });
 
-    // Push new place
-    placesArray.push({
-      placeId: placeObj.placeId,
-      rating: placeObj.rating,
-      tags: placeObj.tags,
-      databaseId: placeObj.databaseId
-    });
-
-    Cookies.set('bikedeboa_places', placesArray, { expires: 365 });
+    Cookies.set('bikedeboa_local_' + placeId, { expires: 1 });
   },
 
   getReviewFromSession: function (placeId) {

@@ -69,7 +69,10 @@ $(function () {
     templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
     if (loggedUser) {
-      templateData.isAdmin = true;
+      templateData.isLoggedUser = true;
+      templateData.canModify = true;
+    } else if (BIKE.Session.getPlaceFromSession(m.id)) {
+      templateData.canModify = true;
     }
 
     // Route button
@@ -518,7 +521,7 @@ $(function () {
     History.pushState({}, 'bike de boa', '/');
     showSpinner('Salvando bicicletário...');
 
-    const isUpdate = openedMarker && loggedUser;
+    const isUpdate = openedMarker;
     let place = {};
 
     place.lat = isUpdate ? openedMarker.lat : newMarkerTemp.lat;
@@ -534,6 +537,11 @@ $(function () {
     place.description = $('#newPlaceModal #descriptionInput').val();
 
     const callback = newLocal => {
+      // Save cookie to temporarily enable edit/delete of this local
+      // Having the cookie isn't enought: the request origin IP is matched with the author IP 
+      //   saved in the database.
+      BIKE.Session.saveOrUpdatePlaceCookie(newLocal.id);
+
       Database.getPlaces( () => {
         updateMarkers();
         hideSpinner();
@@ -742,7 +750,7 @@ $(function () {
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
     // Not creating a new one, but editing
-    if (openedMarker && loggedUser) {
+    if (openedMarker) {
       // @todo refactor this, probably separate into different functions
 
       const m = openedMarker;
@@ -788,7 +796,7 @@ $(function () {
   }
 
   function deletePlace() {
-    if (openedMarker && loggedUser) {
+    if (openedMarker) {
       if (confirm('Tem certeza que quer deletar este bicicletário?')) {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
