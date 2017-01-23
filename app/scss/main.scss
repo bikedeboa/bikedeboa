@@ -1031,6 +1031,7 @@ a,
 
     .skeleton-box {
         height: 90px;
+        background: rgba(0,0,0,0.05);
     }
 
     small {
@@ -1044,6 +1045,7 @@ a,
 
         &.skeleton-box {
             height: 20px;
+            background: rgba(0,0,0,0.05);
         }
     }
 }
@@ -1388,6 +1390,10 @@ a,
     width: 30px;
     height: 30px;
 }
+.loading-skeleton .rating > label:before {
+    opacity: 0.5;
+}
+
 .rating.empty > label:before {
     background-image: url(/img/icon_star_empty.svg);
 }
