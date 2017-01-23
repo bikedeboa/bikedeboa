@@ -41,8 +41,6 @@ $(function () {
     templateData.address = m.address;
     templateData.description = m.description;
  
-    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=600x150&markers=icon:http://www.iconsdb.com/icons/preview/orange/map-marker-2-xxl.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}`; 
-
     // Average
     if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
       // Average might come with crazy floating point value
@@ -50,6 +48,8 @@ $(function () {
     }
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = m.average;
+
+    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=600x150&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`; 
 
     // Tags
     const MAX_TAG_COUNT = m.reviews;
@@ -324,9 +324,9 @@ $(function () {
     // Markers from Database
     if (markers && markers.length > 0) {
       // Order by average so best ones will have higher z-index
-      markers = markers.sort((a, b) => {
-        return a.average - b.average;
-      });
+      // markers = markers.sort((a, b) => {
+      //   return a.average - b.average;
+      // }); 
 
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
@@ -1139,16 +1139,15 @@ $(function () {
     google.maps.event.addListener(map, 'zoom_changed', () => {
       const prevZoomLevel = _mapZoomLevel;
 
-      _mapZoomLevel = map.getZoom() < 13 ? 'mini' : 'full';
+      _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
 
       if (prevZoomLevel !== _mapZoomLevel) {
-        console.log('change zoom level');
         setMarkersIcon(_mapZoomLevel);
       }
     });
 
     // If permission to geolocation was already granted we already center the map
-    if (!_isLocalhost && navigator.permissions) {
+    if (navigator.permissions) {
       navigator.permissions.query({'name': 'geolocation'})
         .then( permission => {
           if (permission.state === 'granted') {
