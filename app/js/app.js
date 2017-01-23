@@ -40,7 +40,7 @@ $(function () {
     templateData.title = m.text;
     templateData.address = m.address;
     templateData.description = m.description;
- 
+
     // Average
     if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
       // Average might come with crazy floating point value
@@ -49,7 +49,7 @@ $(function () {
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = m.average;
 
-    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=600x150&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`; 
+    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=600x150&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
     const MAX_TAG_COUNT = m.reviews;
@@ -326,7 +326,7 @@ $(function () {
       // Order by average so best ones will have higher z-index
       // markers = markers.sort((a, b) => {
       //   return a.average - b.average;
-      // }); 
+      // });
 
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
@@ -350,10 +350,10 @@ $(function () {
             iconTypeMini = MARKER_ICON_GREEN_MINI;
           } else {
             iconType = MARKER_ICON_GRAY;
-            iconTypeMini = MARKER_ICON_GRAY_MINI; 
+            iconTypeMini = MARKER_ICON_GRAY_MINI;
           }
           if (!scale) {
-            scale = 0.5 + (m.average/10); 
+            scale = 0.5 + (m.average/10);
           }
 
           m.icon = {
@@ -406,7 +406,7 @@ $(function () {
         } else {
           console.error('marker is weirdly empty on addMarkerToMap()');
         }
-      } 
+      }
     }
 
     _geolocationMarker.setZIndex(markers.length);
@@ -546,7 +546,7 @@ $(function () {
 
     const callback = newLocal => {
       // Save cookie to temporarily enable edit/delete of this local
-      // Having the cookie isn't enought: the request origin IP is matched with the author IP 
+      // Having the cookie isn't enought: the request origin IP is matched with the author IP
       //   saved in the database.
       BIKE.Session.saveOrUpdatePlaceCookie(newLocal.id);
 
@@ -1259,21 +1259,24 @@ $(function () {
   }
 
   function login(isUserLogin = false) {
+    // This is the only request allowed to be unauthenticated
+    Database.getPlaces( () => {
+      updateMarkers();
+
+      // Hide spinner that is initialized visible on CSS
+      hideSpinner();
+
+      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+      $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+      $('#map').css('filter', 'none');
+    });
+
     Database.authenticate(isUserLogin, () => {
       if (loggedUser) {
         handleLoggedUser();
       }
 
       Database.getAllTags();
-      Database.getPlaces( () => {
-        updateMarkers();
-
-        hideSpinner();
-
-        $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-        $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-        $('#map').css('filter', 'none');
-      });
     });
   }
 
