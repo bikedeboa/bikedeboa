@@ -1054,6 +1054,11 @@ a,
         padding-top: 25px;
         // background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
         background: $white;
+        min-height: 500px;
+    }
+
+    .modal-header, .modal-body > div {
+        display: none;
     }
 
     // .modal-header {
@@ -1317,7 +1322,7 @@ a,
     button {
         font-style: italic;
         color: $gray;
-        display: inline-block; 
+        display: inline-block;
     }
 
     button + button {

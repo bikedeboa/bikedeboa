@@ -189,7 +189,7 @@ BIKE.Database = {
       data: data,
       success: function(data) {
         console.log('_customCall success.');
-        
+
         if (!quiet) {
           console.log(data);
         }
@@ -224,7 +224,7 @@ BIKE.Database = {
   _loginPromptCallback(user, isUserLogin, callback) {
     const self = this;
     let pw;
-    
+
     if (user && user !== 'client') {
       pw = 'abcd123';
     }
@@ -243,7 +243,7 @@ BIKE.Database = {
 
           if (user && user !== 'client') {
             // This is the only place that should set 'loggedUser'
-            loggedUser = user; 
+            loggedUser = user;
 
             // Save username in session
             Cookies.set('bikedeboa_user', loggedUser, { expires: 7 });
@@ -270,12 +270,12 @@ BIKE.Database = {
         ga('send', 'event', 'Login', 'fail', user);
 
         console.error('Authentication failed. Trying again in 2s...');
-        setTimeout( () => { 
+        setTimeout( () => {
           self.authenticate(isUserLogin, callback);
         }, 2000);
       }
     });
-  },  
+  },
 
   authenticate: function(isUserLogin, callback) {
     const self = this;
@@ -426,7 +426,7 @@ BIKE.Database = {
   },
 
   updatePlace: function(placeId, place, callback) {
-    const self = this; 
+    const self = this;
 
     console.log('Updating place:');
     console.log(place);
