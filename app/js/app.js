@@ -301,8 +301,8 @@ $(function () {
       openDetailsModal(marker);
     } else {
       // Load skeleton modal template
-      // $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
-      // $('#placeDetailsModal').modal('show');
+      $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
+      $('#placeDetailsModal').modal('show');
       // $('.modal-header, .modal-body > div').velocity('transition.slideDownIn', { stagger: 50 });
 
       // Request content

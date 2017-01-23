@@ -15,10 +15,10 @@ $lightestBlue: #86C7E7;
 // Other colors
 $black: #333;
 $white: #fafafa;
-$paleWhite: #F3F3F3;
 $gray: #828b90;
 $lightGray: #b3b3b3;
 $lightestGray: #e6e6e6;
+$superLightGray: #F3F3F3;
 $grey: $gray;
 $lightGrey: $lightGray;
 $lightestGrey: $lightestGray;
@@ -218,7 +218,7 @@ a,
     //     color: grey;
     //     padding: 15px;
     //     // background: $darkGreen;
-    //     // color: $paleWhite;
+    //     // color: $superLightGray;
     //     color: $darkGreen;
     //     // color: $lightGray;
     // }
@@ -269,7 +269,7 @@ a,
     .login-display {
         display: block;
         background-color: rgba(0,0,0,0.2);
-        color: $paleWhite;
+        color: $superLightGray;
         padding: 5px;
         font-family: $headingFont;
         font-weight: 700;
@@ -416,7 +416,7 @@ a,
 
 #filterBtn {
     width: 48px;
-    background-color: $paleWhite;
+    background-color: $superLightGray;
     border: 5px solid white;
 }
 
@@ -748,7 +748,7 @@ a,
     padding: 0px;
     position: relative;
     // background-image: url(/img/bg_header.png);
-    background: $paleWhite;
+    background: $superLightGray;
     overflow: visible;
     height: 70px;
 
@@ -1061,6 +1061,11 @@ a,
         display: none;
     }
 
+    .minimap {
+        min-height: 50px;
+        background: $superLightGray;
+    }
+
     // .modal-header {
     //     overflow: visible;
     // }
@@ -1112,7 +1117,7 @@ a,
 }
 
 .btn-tag {
-    background: $paleWhite;
+    background: $superLightGray;
     color: #939a9d;
     border-radius: 10px;
     margin: 5px 2px;
@@ -1158,7 +1163,7 @@ a,
     user-select: none;
     border: 1px solid transparent;
 
-    background: $paleWhite;
+    background: $superLightGray;
     border-radius: 5px;
     margin: 5px;
     color: #333;
@@ -1667,7 +1672,7 @@ a,
 
 .side-nav__footer {
     padding: 16px;
-    background-color: #F3F3F3;
+    background-color: $superLightGray;
 
 }
 
