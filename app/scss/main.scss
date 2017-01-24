@@ -114,6 +114,8 @@ body.beta #map {
 
 .missing-info {
     position: relative;
+    background: floralwhite;
+    padding: 5px;
 
     &:after {
         content: "\e101";
