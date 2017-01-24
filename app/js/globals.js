@@ -33,7 +33,7 @@ const MARKER_ICON_GRAY_MINI = 'img/pin_gray_mini.svg';
 const PHOTO_UPLOAD_MAX_W = 1000;
 const PHOTO_UPLOAD_MAX_H = 1000;
 
-const STRUCTURE_NAMES = ['U Invertido', 'De roda', 'Trave', 'Suspenso', 'Grade', 'Estranho'];
+const STRUCTURE_NAMES = ['U Invertido', 'de Roda', 'Trave', 'Suspenso', 'Grade', 'Estranho'];
 const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
 // const STRUCTURE_NAMES = ['U Invertido', 'De roda', 'Estranho', 'Suspenso'];
 // const STRUCTURE_CODES = ['uinvertido', 'deroda', 'other', 'suspenso'];

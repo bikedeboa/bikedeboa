@@ -548,7 +548,9 @@ $(function () {
       // Save cookie to temporarily enable edit/delete of this local
       // Having the cookie isn't enought: the request origin IP is matched with the author IP
       //   saved in the database.
-      BIKE.Session.saveOrUpdatePlaceCookie(newLocal.id);
+      if (!isUpdate) {
+        BIKE.Session.saveOrUpdatePlaceCookie(newLocal.id);
+      }
 
       Database.getPlaces( () => {
         updateMarkers();
