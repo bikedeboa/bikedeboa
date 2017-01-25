@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
 
-        <!-- Extensions --> 
+        <!-- Extensions -->
         <!-- editable -->
         <script src="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
@@ -69,7 +69,7 @@
 
           td.col-fulltext {
             white-space: normal;
-          } 
+          }
 
           .editable-empty {
             color: #E9BB2B;
@@ -98,10 +98,10 @@
           td.col-timestamp,
           td.col-description,
           td.col-full-text,
-          td.col-address { 
+          td.col-address {
             font-size: 0.8em;
           }
- 
+
           .col-id {
             width: 60px;
             color: gray;
@@ -168,7 +168,7 @@
           </ul>
         </div>
       </div>
-      
+
       <!-- <nav class="navbar navbar-default navbar-fixed-top">
         <ul class="nav navbar-nav navbar-right">
           <li>
@@ -218,7 +218,7 @@
         <!-- Tab panes -->
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="bicicletarios">
-            
+
             <h2>
               <span id="headingBikes">Carregando bicicletários...</span>
             </h2>
@@ -237,7 +237,7 @@
               data-row-style="rowStyle"
               data-show-footer="false"
               data-sticky-header="true">
-            </table> 
+            </table>
 
           </div>
 
@@ -263,7 +263,7 @@
             </h2>
 
             <!-- <div id="logTable"></div> -->
-   
+
             <table
               id="logTable"
               data-classes="table table-no-bordered"
@@ -272,7 +272,7 @@
               data-show-columns="true"
               data-show-footer="false"
               data-sticky-header="true">
-            </table> 
+            </table>
           </div>
         </div>
       </section>
@@ -280,7 +280,7 @@
       <script>
         function detailFormatter(index, row) {
           var html = '';
-          
+
           html += '<div class="details-view">';
 
           if (row.photo) {
@@ -294,9 +294,9 @@
               html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
             }
           });
-          
+
           html += '</div>';
-          
+
           return html;
         }
 
@@ -389,7 +389,7 @@
                     editable: loggedUser && true, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
-                  field: 'average', title: 'Média', sortable: true, visible: false, 
+                  field: 'average', title: 'Média', sortable: true, visible: false,
                 },
                 {
                   field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
@@ -433,7 +433,7 @@
                 {
                   field: 'fullname', title: 'Nome completo', sortable: true, editable: loggedUser && true
                 },
-                { 
+                {
                   field: 'role', title: 'Cargo', sortable: true, editable: loggedUser && true, 'editable-type': 'select', 'editable-source': "[{'value': 'admin', 'text': 'Admin'}, {'value': 'colaborator', 'text': 'Colaborador'}, {'value': 'client', 'text': 'Cliente'} ]"
                 },
                 {
@@ -462,13 +462,13 @@
             $('#revisionsTable').bootstrapTable({
               columns: [
                 {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
                 },
                 {
                   field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
                 },
                 {
-                  field: 'local_id', title: 'ID Bicicletário', sortable: true, visible: false
+                  field: 'local_id', title: 'ID Bicicletário', sortable: true
                 },
                 {
                   field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
@@ -515,7 +515,7 @@
           BIKE.Database.customAPICall('get','log', null, data => {
             log = data;
 
-            $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`); 
+            $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`);
 
             // let html = '<table style="width: 100%;">';
             // html += '<thead>';
@@ -542,7 +542,7 @@
             //   html += `<td>${jsonColFormatter(i.body)}</td>`;
             //   html += '</tr>';
             // });
-            // html += '</tbody></table>'; 
+            // html += '</tbody></table>';
             // $('#logTable').html(html);
 
             $('#logTable').bootstrapTable({
@@ -586,7 +586,7 @@
             $('#login').hide();
             $('#logged').show();
             $('#loggedUser').html(loggedUser);
-            $('.restricted-access').show(); 
+            $('.restricted-access').show();
           }
         }
 
@@ -610,7 +610,7 @@
             if (loggedUser) {
               handleLoggedUser();
             } else {
-              $('.restricted-access').remove(); 
+              $('.restricted-access').remove();
             }
 
             Database.getAllTags();
@@ -639,12 +639,12 @@
 
         $.fn.editable.defaults.toggle = 'dblclick';
 
-        
+
         init();
 
-        // 
+        //
         // Triggers
-        // 
+        //
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
           const tabName = e.target.getAttribute('aria-controls');
