@@ -79,5 +79,6 @@ let _geolocationInitialized;
 let _updatingReview;
 let _userIP;
 let _mapZoomLevel;
+let _isFacebookBrowser;
 
 let templates = {};

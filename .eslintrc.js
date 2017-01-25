@@ -81,5 +81,6 @@ module.exports = {
         "_userIP": true,
         "_mapZoomLevel": true,
         "_isLocalhost": true
+        "_isFacebookBrowser": true
     }
 };

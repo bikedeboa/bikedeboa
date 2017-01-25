@@ -222,7 +222,11 @@ $(function () {
                 switch(error.code) {
                 case 1:
                   // PERMISSION_DENIED
-                  swal('Ops', 'Sua localização está desabilitada. Acesse suas configurações para ligá-lo denovo.', 'warning');
+                  if (_isFacebookBrowser) {
+                    swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
+                  } else {
+                    swal('Ops', 'Sua localização está desabilitada, ou seu navegador parece não suportar essa função.', 'warning');
+                  }
                   break;
                 case 2:
                   // POSITION_UNAVAILABLE
@@ -1168,6 +1172,12 @@ $(function () {
         }
       );
     }
+
+    // User is within Facebook browser.
+    // thanks to: https://stackoverflow.com/questions/31569518/how-to-detect-facebook-in-app-browser
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
+
 
     geocoder = new google.maps.Geocoder();
 
