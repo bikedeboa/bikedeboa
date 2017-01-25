@@ -972,7 +972,9 @@ $(function () {
   }
 
   function _initTriggers() {
+    /////////////////////
     // Home
+
     // $('body').on('click', '#locationQueryBtn', searchLocation);
     $('body').on('click', '#clearLocationQueryBtn', () => {
       $('#locationQueryInput').val('');
@@ -1035,6 +1037,7 @@ $(function () {
     // });
 
 
+    /////////////////////
     // New place panel
     $('body').on('click', '#newPlaceholder', () => {
       openedMarker = null;
@@ -1081,6 +1084,7 @@ $(function () {
       $(e.currentTarget).parent().toggleClass('expanded');
     });
 
+    /////////////////////
     // Review panel
     $('body').on('click', '#ratingDisplay .full-star, .openReviewPanelBtn', e => {
       openReviewPanel($(e.target).data('value'));
@@ -1096,14 +1100,20 @@ $(function () {
     });
 
 
-    // Details panel
+    /////////////////////////
+    // Local Details panel
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
 
     $('body').on('click', '.modal-header img', e => {
       toggleExpandModalHeader();
     });
 
+    $('body').on('click', '.directionsBtn', e => {
+      ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
+    });
 
+
+    /////////////////////////
     // Send Revision Panel
     $('body').on('click', '#createRevisionBtn', openRevisionPanel);
     $('body').on('click', '#sendRevisionBtn', sendRevisionBtn);
