@@ -1053,7 +1053,15 @@ $(function () {
         const mapCenter = map.getCenter();
         const coords = mapCenter.lat() + mapCenter.lng();
         ga('send', 'event', 'Local', `out of bounds - ${coords}`);
-        swal('Ops', 'Foi mal, por enquanto não dá pra adicionar bicicletários nesta região.', 'warning');
+        swal({
+          title: 'Ops',
+          text:
+            'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
+            <br><br>\
+            <small><i>Acompanhe nossa <a href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
+          type: 'warning',
+          html: true
+        });
       }
     });
 
