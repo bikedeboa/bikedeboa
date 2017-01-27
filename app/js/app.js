@@ -25,13 +25,15 @@ $(function () {
     return pinColor;
   }
 
-  function openDetailsModal(marker) {
+  function openDetailsModal(marker, callback) {
     openedMarker = marker;
     const m = openedMarker;
 
     if (addLocationMode || !m._hasDetails) {
       return false;
     }
+
+    ga('send', 'event', 'Local', 'view', ''+m.id);
 
     History.pushState({}, 'Detalhes do bicicletário', `detalhes/${m.id}`);
 
@@ -129,6 +131,7 @@ $(function () {
       $(e.target).parent().removeClass('loading');
     });
 
+    $('.review').tooltip();
 
     // If we rendered a skeleton modal then the modal is visible already
     if (!$('#placeDetailsModal').is(':visible')) {
@@ -136,9 +139,14 @@ $(function () {
     }
 
     // Animate modal content
-    $('.modal-header, .modal-body > div').velocity('transition.fadeIn', {stagger: 75, queue: false});
-
-    ga('send', 'event', 'Local', 'view', ''+m.id);
+    $('.modal-header, .modal-body > div').velocity(
+      'transition.fadeIn',
+      {stagger: 75, queue: false, complete: () => {
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
+    });
   }
 
   function updateCurrentPosition(position) {
@@ -312,11 +320,7 @@ $(function () {
       // Request content
       Database.getPlaceDetails(marker.id, () => {
         if (!_abortedDetailsRequest) {
-          openDetailsModal(marker);
-
-          if (callback && typeof callback === 'function') {
-            callback();
-          }
+          openDetailsModal(marker, callback);
         }
       });
     }
@@ -565,7 +569,7 @@ $(function () {
           if (newMarker) {
             onMarkerClick(newMarker, () => {
               $('.review').tooltip('show');
-              $('.review').velocity('callout.shake');
+              // $('.review').velocity('callout.bounce');
             });
           }
         }
@@ -852,8 +856,6 @@ $(function () {
 
     // Template is rendered, start jquerying
     //
-
-    $('#reviewPanel .full-star').tooltip();
 
     // Prepopulate rating
     if (previousReview) {
