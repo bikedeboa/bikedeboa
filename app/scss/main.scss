@@ -685,11 +685,11 @@ a,
     }
 
     .description {
-        margin: 0 5%;
+        margin: 10px 0;
         padding: 10px 20px 20px;
         /* color: $gray; */
         /* border-top: 1px solid #eee; */
-        background: rgb(250,250,250);
+        background: $superLightGray;
         border-radius: 10px;
         color: rgb(100,100,100);
         text-align: justify;
@@ -702,11 +702,13 @@ a,
         textarea {
             resize: none;
             border-radius: 3px;
+            margin: 10px 0;
         }
 
         &.collapsable {
-            max-height: 30px;
+            max-height: 35px;
             overflow: hidden;
+            position: relative;
 
             transition: max-height 0.5s ease-in-out;
 
@@ -719,12 +721,10 @@ a,
             }
 
             h2:after {
-                position: relative;
-                top: 1px;
-                display: inline-block;
+                position: absolute;
+                top: 10px;
+                right: 20px;
                 font-family: $bootstrapFont;
-                font-weight: 400;
-                line-height: 1;
                 content: "\e252";
             }
         }
@@ -801,6 +801,15 @@ a,
 }
 
 #newPlaceModal {
+    .modal-body > section {
+        margin: 10px 0 20px;
+
+        & > h2 {
+          background: $superLightGray;
+          padding: 10px;  
+        }
+    }
+
     .photo-container:before {
         display: none;
     }
@@ -928,11 +937,14 @@ a,
         margin-bottom: 10px;
     }
 
-    .typeIconsGroup {
-        // white-space: nowrap;
-        // overflow-x: auto;
-        // overflow-y: hidden;
-        width: 100%;
+    .acess-types-group {
+      .typeIcon {
+        width: 32%;
+        margin: 0 6%;
+      }
+    }
+
+    .custom-radio-group {
         padding-bottom: 10px;
         max-width: 400px;
         margin: 0 auto;
@@ -944,22 +956,50 @@ a,
         display: inline-block;
         cursor: pointer;
         vertical-align: middle;
-        border-radius: 50%;
-        padding: 3%;
+        border-radius: 15px;
+        padding: 10px 3% 40px;
+        position: relative;
+        filter: grayscale(100%);
+        opacity: 0.9;
 
         transition: background-color 0.2s ease-out;
 
-        &.active {
-            background-color: hsla(120,90%,88%,1);
+        .icon-label {
+          margin-top: 10px;
+          color: $gray;
+          font-weight: 400;
         }
 
-        &:hover:not(.active) {
-            background-color: hsla(120,90%,95%,1);
+        &:after {
+          background-image: url(/img/radio.svg);
+          width: 22px;
+          height: 20px;
+          transition: background-image .2s ease-in-out;
+          content: '';
+          position: absolute;
+          left: calc(50% - 11px);
+          bottom: 10px;
+          background-size: 100%;
         }
 
         img {
             width: 100%;
             height: 100%;
+        }
+
+        &.active {
+            // background-color: hsla(120,90%,88%,1);
+            filter: none;
+            opacity: 1;
+
+            &:after {
+              background-image: url(/img/radio_checked.svg);
+            }
+        }
+
+        &:hover {
+            background-color: hsla(120,90%,95%,1);
+            opacity: 1;
         }
     }
 }
@@ -1003,11 +1043,11 @@ a,
   text-align: left;
   border: none;
   padding: 0;
-	
-	& img {
-	    width: 25px;
-	    height: 28px;
-	}
+  
+  & img {
+      width: 25px;
+      height: 28px;
+  }
 }
 
 
@@ -1055,7 +1095,7 @@ a,
         // min-height: 500px;
 
         @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
-					min-height: 500px;        	
+          min-height: 500px;          
         }
     }
 
@@ -1360,7 +1400,7 @@ a,
 }
 
 .close-modal {
-	display: none; 
+  display: none; 
 }
 
 // Le Mobile
@@ -1383,15 +1423,15 @@ a,
   } 
 
   .modal-title {
-  	font-size: 1.5em;
+    font-size: 1.5em;
     padding: 0;
     line-height: 50px;
   }
 
   .modal-header {
-  	border: 0;
-  	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  	z-index: 1;
+    border: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    z-index: 1;
     position: relative;
   }
 
@@ -1421,7 +1461,7 @@ a,
       font-family: $bootstrapFont;
       font-size: 20px;
       left: 0;
-    	top: 0;
+      top: 0;
     }
 
     &:focus,

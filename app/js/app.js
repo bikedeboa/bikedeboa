@@ -548,7 +548,7 @@ $(function () {
 
     place.text = $('#newPlaceModal #titleInput').val();
     place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
-    place.structureType = $('#newPlaceModal .typeIcon.active').data('type');
+    place.structureType = $('#newPlaceModal .typeIcon.active').data('value');
     place.photo = _uploadingPhotoBlob;
     place.description = $('#newPlaceModal #descriptionInput').val();
 
@@ -734,7 +734,7 @@ $(function () {
     const isOk =
       textOk &&
       $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val() &&
-      $('#newPlaceModal .typeIcon.active').data('type');
+      $('#newPlaceModal .typeIcon.active').data('value');
 
     $('#newPlaceModal .little-pin').toggleClass('gray', !textOk);
 
