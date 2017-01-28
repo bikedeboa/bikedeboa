@@ -773,7 +773,7 @@ $(function () {
 
       const m = openedMarker;
       $('#newPlaceModal #titleInput').val(m.text);
-      $(`#newPlaceModal .typeIcon[data-type="${m.structureType}"]`).addClass('active');
+      $(`#newPlaceModal .typeIcon[data-value="${m.structureType}"]`).addClass('active');
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
@@ -1034,8 +1034,10 @@ $(function () {
 
     // Replace bootstrap modal animation with Velocity.js
     $('body').on('show.bs.modal', '.modal', e => {
-      $('.modal-dialog').velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION});
-
+      // $('.modal-dialog')
+      //   .velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION})
+      //   .velocity({display: 'table-cell'}); 
+ 
       if (_isMobile) {
         $('#map, #addPlace').addClass('hidden');
       }

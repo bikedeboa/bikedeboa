@@ -1101,11 +1101,11 @@ a,
 
     // Elements that are animated when modal opens 
     .photo-container, .modal-body > div, .modal-footer {
-        display: none;
+        opacity: 0;
     }
 
     .minimap {
-        min-height: 50px;
+        min-height: 90px;
         background: $superLightGray;
     }
 
