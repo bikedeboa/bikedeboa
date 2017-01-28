@@ -51,8 +51,8 @@ const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 const MOBILE_MAX_WIDTH = '414px';
 const DESKTOP_MIN_WIDTH = '414px';
-const _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH})`).matches;
-const _isDesktop = window.matchMedia && window.matchMedia(`(min-width: ${DESKTOP_MIN_WIDTH})`).matches;
+let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH})`).matches;
+let _isDesktop = window.matchMedia && window.matchMedia(`(min-width: ${DESKTOP_MIN_WIDTH})`).matches;
 
 const _isLocalhost = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
 
