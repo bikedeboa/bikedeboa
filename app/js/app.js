@@ -1018,8 +1018,8 @@ $(function () {
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
     // Capture modal closing by
-    $('body').on('click', '.modal', e => {
-      // If click was on modal backdroplick
+    $('body').on('click', '.modal, .close-modal', e => {
+      // If click was on modal backdrop
       if (e.target == e.currentTarget) {
         // If a details request was under way
         _abortedDetailsRequest = true;
@@ -1030,10 +1030,6 @@ $(function () {
           History.replaceState({}, 'bike de boa', '/');
         }
       }
-    });
-
-    $('body').on('click', '.close-modal', e => {
-      $('.modal').modal('hide');
     });
 
     // Replace bootstrap modal animation with Velocity.js

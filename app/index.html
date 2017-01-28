@@ -272,9 +272,11 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
+                      <div class="modal-header">
+                        <button class="close-modal"></button> 
+                      </div>
 
-                        <div id="placeDetailsModalTemplatePlaceholder" class="loading-skeleton"></div>
-
+                      <div id="placeDetailsModalTemplatePlaceholder" class="loading-skeleton"></div>
                     </div>
                 </div>
             </div>
@@ -445,10 +447,6 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
-          <div class="modal-header">
-            <button class="close-modal"></button>
-          </div>
-
           {{#if photoUrl}}
             <div class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
               <img src="{{photoUrl}}"/>
@@ -606,10 +604,6 @@
 
         <!-- View Details Empty Shell Modal -->
         <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
-            <div class="modal-header">
-              <button class="close-modal"></button>
-            </div>
-            
             <div class="photo-container skeleton-box">
             </div>
             

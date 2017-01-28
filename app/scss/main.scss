@@ -1,5 +1,6 @@
 // Color Pallette
-$darkGreen: #30bb6a;
+$green: #30bb6a;
+$darkGreen: #04883A;
 $lightGreen: #2cd978;
 $yellowGreen: #e0fb72;
 $greenery: #86af49;
@@ -114,7 +115,7 @@ body.beta #map {
       margin-left: -10px;
       border-radius: 50%;
       border: 3px solid transparent;
-      border-top-color: $darkGreen;
+      border-top-color: $green;
       animation: spinner .6s linear infinite;
     }
 }
@@ -226,9 +227,9 @@ a,
     //     /* opacity: 0.5; */
     //     color: grey;
     //     padding: 15px;
-    //     // background: $darkGreen;
+    //     // background: $green;
     //     // color: $superLightGray;
-    //     color: $darkGreen;
+    //     color: $green;
     //     // color: $lightGray;
     // }
 
@@ -241,7 +242,7 @@ a,
         box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 
         border: none;
-        // border-bottom: 3px solid $darkGreen;
+        // border-bottom: 3px solid $green;
     }
 
     .balaca {
@@ -380,7 +381,7 @@ a,
 
     &.active:after {
         content: '✕';
-        color: $darkGreen;
+        color: $green;
         font-size: 24px;
     }
 }
@@ -405,7 +406,7 @@ a,
 }
 
 .navbar {
-    background-color: $darkGreen;
+    background-color: $green;
     border: none;
 }
 
@@ -425,8 +426,8 @@ a,
     top: calc(100vh - 50px - 30px);
     margin: auto;
     z-index: 1;
-    background: $darkGreen;
-    background: linear-gradient(45deg, $darkGreen 0%, $lightGreen 100%);
+    background: $green;
+    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
     border: none;
     color: white;
     border-radius: 25px;
@@ -610,7 +611,7 @@ a,
 .modal-header {
   height: auto;
   background: $lightGreen;
-  background: linear-gradient(45deg, $darkGreen 0%, $lightGreen 100%);
+  background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
   color: white;
   padding: 0;
   border-bottom: 1px solid #30bb6a;
@@ -651,7 +652,7 @@ a,
             /* background-image: url(/img/pin_green.svg); */
             /* background-size: 70%; */
             /* background-repeat: no-repeat; */
-            background-color: $darkGreen;
+            background-color: $green;
             border-radius: 50%;
 
             &.gray {
@@ -999,14 +1000,16 @@ a,
 }
 
 .modal-footer {
-    text-align: left;
-    border: none;
+  text-align: left;
+  border: none;
+  padding: 0;
+	
+	& img {
+	    width: 25px;
+	    height: 28px;
+	}
 }
 
-.modal-footer img {
-    width: 25px;
-    height: 28px;
-}
 
 .info {
     padding: 20px 5%;
@@ -1080,10 +1083,6 @@ a,
     margin: 0 5px;
 }
 
-.modal-footer {
-    padding: 0;
-}
-
 #editPlaceBtn {
     right: 70px;
 }
@@ -1129,7 +1128,7 @@ a,
     }
 
     &.active {
-        background: $darkGreen;
+        background: $green;
         color: white;
 
         &:before {
@@ -1193,7 +1192,7 @@ a,
 .btn.green:focus:not([disabled]),
 .btn.green.active:not([disabled]) {
     color: white;
-    background-color: $darkGreen;
+    background-color: $green;
 }
 
 .btn.btn-action.green {
@@ -1368,7 +1367,7 @@ a,
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
   .modal-dialog {
     margin: 0;
-    background: linear-gradient(45deg, $darkGreen 0%, $lightGreen 100%);
+    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
   }
 
   .modal-content {
@@ -1378,14 +1377,22 @@ a,
   }
 
   .modal-body {
-    // min-height: calc(100vh - $MODAL_FOOTER_HEIGHT - $MOBILE_NAVBAR_HEIGHT); 
-    min-height: calc(100vh - $MODAL_BODY_MINHEIGHT_PADDING); 
+    // Explanation on the reason for the string interpolation:
+    //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+    min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING}); 
   } 
 
   .modal-title {
   	font-size: 1.5em;
     padding: 0;
     line-height: 50px;
+  }
+
+  .modal-header {
+  	border: 0;
+  	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  	z-index: 1;
+    position: relative;
   }
 
   .modal-content:before {
@@ -1415,6 +1422,11 @@ a,
       font-size: 20px;
       left: 0;
     	top: 0;
+    }
+
+    &:focus,
+    &:active {
+       background: $darkGreen;
     }
   }
 }
@@ -1633,8 +1645,14 @@ a,
     margin: 0;
     padding: 13px;
     font-size: 18px;
-    background-color: $darkGreen;
+    background-color: $green;
     // color: $gray;
+
+    &:focus,
+    &:active,
+    &:hover {
+        background: $darkGreen;
+    }
 }
 
 .side-nav {
@@ -1711,8 +1729,8 @@ a,
 .side-nav__header {
     font-family: $headingFont;
     height: 200px;
-    background: $darkGreen;
-    background: linear-gradient(45deg, $darkGreen 0%, $lightGreen 100%);
+    background: $green;
+    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
     color: #FFF;
     // display: flex;
     // align-items: flex-end;
