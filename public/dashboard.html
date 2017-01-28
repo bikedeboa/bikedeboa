@@ -271,6 +271,8 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-detail-view="true"
+              data-detail-formatter="detailFormatter"
               data-sticky-header="true">
             </table>
           </div>
@@ -287,11 +289,24 @@
             html += `<img src='${row.photo}'></img>`;
           }
 
-          html += '<iframe width="500" height="250" style="float: right;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q='+row.lat+','+row.lng+'&hl=es;z=14&amp;output=embed"></iframe>';
+          if (row.lat && row.lng) {
+            html += '<iframe width="500" height="250" style="float: right;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q='+row.lat+','+row.lng+'&hl=es;z=14&amp;output=embed"></iframe>';
+          }
 
           $.each(row, function (key, value) {
-            if (key !== 'photo') {
-              html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
+            switch (key) {
+              case 'updatedAt':
+              case 'createdAt':
+                html += '<span><b>' + key + ':</b> ' + timestampColFormatter(value) + '</span><br>';
+                break;
+              case 'body':
+                html += '<span><b>' + key + ':</b> ' + jsonColFormatter(value) + '</span><br>';
+                break;
+              case 'photo':
+                break;
+              default:
+                html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
+                break;
             }
           });
 
@@ -361,7 +376,10 @@
             $('#localsTable').bootstrapTable({
               columns: [
                 {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false,
+                },
+                {
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
                 },
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id',
