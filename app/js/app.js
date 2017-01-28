@@ -127,7 +127,7 @@ $(function () {
       $('#ratingDisplay').addClass('empty');
     }
 
-    $('.modal-header img').on('load', e => {
+    $('.photo-container img').on('load', e => {
       $(e.target).parent().removeClass('loading');
     });
 
@@ -139,9 +139,9 @@ $(function () {
     }
 
     // Animate modal content
-    $('.modal-header, .modal-body > div').velocity(
+    $('.photo-container, .modal-body > div, .modal-footer').velocity(
       'transition.fadeIn',
-      {stagger: 75, queue: false, complete: () => {
+      {stagger: STAGGER_NORMAL, queue: false, complete: () => {
         if (callback && typeof callback === 'function') {
           callback();
         }
@@ -315,7 +315,7 @@ $(function () {
       // Load skeleton modal template
       $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
       $('#placeDetailsModal').modal('show');
-      $('.modal-header, .modal-body > div').velocity('transition.slideDownIn', { stagger: 50 });
+      $('.photo-container, .modal-body > div').velocity('transition.slideDownIn', { stagger: STAGGER_FAST });
 
       // Request content
       Database.getPlaceDetails(marker.id, () => {
@@ -881,15 +881,15 @@ $(function () {
   }
 
   function toggleExpandModalHeader() {
-    $('.modal-header').toggleClass('expanded');
+    $('.photo-container').toggleClass('expanded');
   }
 
   function toggleClearLocationBtn(stateStr) {
     if (stateStr === 'show') {
-      $('#clearLocationQueryBtn').css('opacity', 1).css('visibility', 'visible');
+      $('#clearLocationQueryBtn').css('opacity', 1).css('visibility', 'visible').css('pointer-events', 'auto');
       $('#locationSearch input').css('padding-right', '50px');
     } else if (stateStr === 'hide') {
-      $('#clearLocationQueryBtn').css('opacity', 0).css('visibility', 'hidden');
+      $('#clearLocationQueryBtn').css('opacity', 0).css('visibility', 'hidden').css('pointer-events', 'none');
       $('#locationSearch input').css('padding-right', '0');
     } else {
       console.error('Invalid arg in toggleClearLocationBtn()');
@@ -1003,7 +1003,7 @@ $(function () {
 
     $('#aboutBtn').on('click', () => {
       _sidenav.hide();
-      // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: 75 });
+      // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       History.pushState({}, 'Sobre', 'sobre');
       $('#aboutModal').modal('show');
     });
@@ -1011,7 +1011,7 @@ $(function () {
     $('#faqBtn').on('click', () => {
       _sidenav.hide();
       History.pushState({}, 'Perguntas frequentes', 'faq');
-      $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: 75 });
+      $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       $('#faqModal').modal('show');
     });
 
@@ -1032,15 +1032,26 @@ $(function () {
       }
     });
 
+    $('body').on('click', '.close-modal', e => {
+      $('.modal').modal('hide');
+    });
+
     // Replace bootstrap modal animation with Velocity.js
     $('body').on('show.bs.modal', '.modal', e => {
       $('.modal-dialog').velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION});
+
+      if (_isMobile) {
+        $('#map, #addPlace').addClass('hidden');
+      }
     });
 
-    // @todo there's something buggy about this
-    // $('body').on('hide.bs.modal', '.modal', e => {
-    //   $('.modal-dialog').velocity('transition.slideDownBigOut');
-    // });
+    $('body').on('hide.bs.modal', '.modal', e => {
+      // $('.modal-dialog').velocity('transition.slideDownBigOut');
+
+      if (_isMobile) {
+        $('#map, #addPlace').removeClass('hidden');
+      }
+    });
 
 
     /////////////////////
@@ -1118,7 +1129,7 @@ $(function () {
     // Local Details panel
     $('body').on('click', '#checkinBtn', sendCheckinBtn);
 
-    $('body').on('click', '.modal-header img', e => {
+    $('body').on('click', '.photo-container img', e => {
       toggleExpandModalHeader();
     });
 
@@ -1134,12 +1145,7 @@ $(function () {
   }
 
   function hideAllModals() {
-    $('#reviewPanel').modal('hide');
-    $('#placeDetailsModal').modal('hide');
-    $('#newPlaceModal').modal('hide');
-    $('#revisionModal').modal('hide');
-    $('#aboutModal').modal('hide');
-    $('#faqModal').modal('hide');
+    $('.modal').modal('hide');
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -1153,7 +1159,7 @@ $(function () {
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
-      zoomControl: isDesktop(),
+      zoomControl: _isDesktop,
       styles: _gmapsCustomStyle,
     });
 
@@ -1171,6 +1177,16 @@ $(function () {
         setMarkersIcon(_mapZoomLevel);
       }
     });
+
+    const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
+    isMobileListener.addListener((isMobileListener) => {
+      _isMobile = isMobileListener.matches;
+    });
+    const isDesktopListener = window.matchMedia("(min-width: ${DESKTOP_MIN_WIDTH})");
+    isDesktopListener.addListener((isDesktopListener) => {
+      _isMobile = isDesktopListener.matches;
+    });
+
 
     // If permission to geolocation was already granted we already center the map
     if (navigator.permissions) {

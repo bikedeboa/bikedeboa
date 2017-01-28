@@ -80,6 +80,7 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
+                          <button class="close-modal"></button>
                           <h1 class="modal-title">Sobre o projeto</h1>
                         </div>
 
@@ -129,6 +130,7 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
+                          <button class="close-modal"></button>
                           <h1 class="modal-title">Perguntas frequentes</h1>
                         </div>
 
@@ -286,13 +288,18 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
-                        <div class="modal-header photoInputContainer">
+                        <div class="modal-header">
+                          <button class="close-modal"></button>
+                          <h1 class="modal-title">Novo bicicletário</h1>
+                        </div>
+
+                        <div class="photo-container photoInputContainer">
                             <img id="photoInputBg"/>
 
                             <input id="photoInput" type="file" name="photoInput" accept="image/*">
                             <label for="photoInput"></label>
                         </div>
-
+                        
                         <div class="modal-body text-center">
                             <div class="text-input-wrapper">
                                 <span class="little-pin gray"></span>
@@ -394,6 +401,7 @@
                   <div class="modal-dialog vertical-align-center">
                       <div class="modal-content">
                           <div class="modal-header">
+                            <button class="close-modal"></button>
                             <h1 class="modal-title">Sugerir mudança</h1>
                           </div>
 
@@ -437,12 +445,16 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
+          <div class="modal-header">
+            <button class="close-modal"></button>
+          </div>
+
           {{#if photoUrl}}
-            <div class="modal-header {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
+            <div class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
               <img src="{{photoUrl}}"/>
             </div>
           {{/if}}
-
+          
           <div class="modal-body">
               <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
@@ -594,9 +606,13 @@
 
         <!-- View Details Empty Shell Modal -->
         <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
-            <div class="modal-header skeleton-box">
+            <div class="modal-header">
+              <button class="close-modal"></button>
             </div>
-
+            
+            <div class="photo-container skeleton-box">
+            </div>
+            
             <div class="modal-body">
                 <div id="placeDetails_heading" class="title">
                     <span class="skeleton-box"></span>
@@ -656,8 +672,9 @@
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <!-- <img id="review_photo" src="/img/bg_header.png"> -->
-                                <h1 class="modal-title">Avaliar bicicletário</h1>
+                              <!-- <img id="review_photo" src="/img/bg_header.png"> -->
+                              <button class="close-modal"></button>
+                              <h1 class="modal-title">Avaliar bicicletário</h1>
                             </div>
 
                             <div class="modal-body">
@@ -756,6 +773,10 @@
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
+                            <div class="modal-header">
+                              <button class="close-modal"></button>
+                            </div>
+
                             <div class="modal-body">
                                 <div class="message-content">
                                     <p>
