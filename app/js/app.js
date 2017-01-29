@@ -978,19 +978,18 @@ $(function () {
     });
   }
 
+  function enterLocationSearchMode() {
+    $('#map, #addPlace, .login-display').velocity({ opacity: 0 }, { 'display': "none" });
+  }
+
+  function exitLocationSearchMode() {
+    event.preventDefault();
+    $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': "block" });
+  }
+
   function _initTriggers() {
     /////////////////////
     // Home
-
-    // $('body').on('click', '#locationQueryBtn', searchLocation);
-    $('body').on('click', '#clearLocationQueryBtn', () => {
-      $('#locationQueryInput').val('');
-      toggleClearLocationBtn('hide');
-      _searchResultMarker.setVisible(false);
-    });
-    $('body').on('input', '#locationQueryInput', () => {
-      toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
-    });
 
     $('.js-menu-show').on('click', () => {
       // Menu open is already triggered inside the menu component.
@@ -1033,8 +1032,9 @@ $(function () {
       }
     });
 
-    // Replace bootstrap modal animation with Velocity.js
+    // Mobile optimizations 
     $('body').on('show.bs.modal', '.modal', e => {
+      // Replace bootstrap modal animation with Velocity.js
       // $('.modal-dialog')
       //   .velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION})
       //   .velocity({display: 'table-cell'}); 
@@ -1043,13 +1043,38 @@ $(function () {
         $('#map, #addPlace').addClass('hidden');
       }
     });
-
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
       if (_isMobile) {
         $('#map, #addPlace').removeClass('hidden');
       }
+    });
+
+    // Location Search Mode control
+    // $('body').on('focus', '#locationQueryInput', e => {
+    //   if (_isMobile) { 
+    //     enterLocationSearchMode();
+    //   }
+    // });
+    // $('body').on('blur', '#locationQueryInput', e => {
+    //   if (_isMobile) {
+    //     exitLocationSearchMode();
+    //   }
+    // }); 
+
+    // Location input triggers
+    $('body').on('click', '#clearLocationQueryBtn', () => {
+      if (_isMobile) {
+        exitLocationSearchMode();
+      }
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
+      _searchResultMarker.setVisible(false);
+    });
+
+    $('body').on('input', '#locationQueryInput', () => {
+      toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     });
 
 
