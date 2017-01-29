@@ -132,11 +132,9 @@ $(function () {
       $(e.target).parent().removeClass('loading');
     });
 
-    $('.review').tooltip();
-
     // If we rendered a skeleton modal then the modal is visible already
     if (!$('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('show');
+      $('#placeDetailsModal').modal('show'); 
     }
 
     // Animate modal content
@@ -569,6 +567,7 @@ $(function () {
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
             onMarkerClick(newMarker, () => {
+              console.log('oi');
               $('.review').tooltip('show');
               // $('.review').velocity('callout.bounce');
             });
@@ -857,6 +856,8 @@ $(function () {
 
     // Template is rendered, start jquerying
     //
+
+    $('#reviewPanel .full-star').tooltip();
 
     // Prepopulate rating
     if (previousReview) {

@@ -1100,7 +1100,7 @@ a,
     }
 
     // Elements that are animated when modal opens 
-    .photo-container, .modal-body > div, .modal-footer {
+    .photo-container, .modal-body > div:not(.tooltip), .modal-footer {
         opacity: 0;
     }
 
