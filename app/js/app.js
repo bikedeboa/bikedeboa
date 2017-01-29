@@ -51,7 +51,8 @@ $(function () {
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = m.average;
 
-    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=600x150&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
+    const staticImgDimensions = _isMobile ? '400x100' : '1000x200';
+    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
     const MAX_TAG_COUNT = m.reviews;
@@ -511,6 +512,7 @@ $(function () {
       google.maps.event.clearInstanceListeners(map);
     }
 
+    toggleMarkers();
     $('#addPlace').toggleClass('active');
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
@@ -518,7 +520,6 @@ $(function () {
     $('#geolocationBtnBtn').toggle();
     // $('#locationSearch').toggleClass('coolHide');
 
-    toggleMarkers();
   }
 
   function showUI() {
