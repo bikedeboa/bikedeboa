@@ -134,7 +134,7 @@ $(function () {
 
     // If we rendered a skeleton modal then the modal is visible already
     if (!$('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('show'); 
+      $('#placeDetailsModal').modal('show');
     }
 
     // Animate modal content
@@ -1033,13 +1033,13 @@ $(function () {
       }
     });
 
-    // Mobile optimizations 
+    // Mobile optimizations
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
       // $('.modal-dialog')
       //   .velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION})
-      //   .velocity({display: 'table-cell'}); 
- 
+      //   .velocity({display: 'table-cell'});
+
       if (_isMobile) {
         $('#map, #addPlace').addClass('hidden');
       }
@@ -1049,12 +1049,16 @@ $(function () {
 
       if (_isMobile) {
         $('#map, #addPlace').removeClass('hidden');
+
+        // Fix: https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter(map.getCenter());
       }
     });
 
     // Location Search Mode control
     // $('body').on('focus', '#locationQueryInput', e => {
-    //   if (_isMobile) { 
+    //   if (_isMobile) {
     //     enterLocationSearchMode();
     //   }
     // });
@@ -1062,7 +1066,7 @@ $(function () {
     //   if (_isMobile) {
     //     exitLocationSearchMode();
     //   }
-    // }); 
+    // });
 
     // Location input triggers
     $('body').on('click', '#clearLocationQueryBtn', () => {
@@ -1283,7 +1287,7 @@ $(function () {
       UpUp.start({
         'content': 'Foi mal, o Bike De Boa ainda não funciona offline.',
         'cache-version': 'v2.1',
-        assets: [ 
+        assets: [
           '/css/vendors.min.css',
           '/css/main.min.css',
           '/js/vendors.min.js',

@@ -35,9 +35,9 @@ $bootstrapFont: 'Glyphicons Halflings';
 
 
 $MOBILE_MAX_WIDTH: 414px;
-$MOBILE_NAVBAR_HEIGHT: 50px; 
-$MODAL_FOOTER_HEIGHT: 75px; 
-$MODAL_BODY_MINHEIGHT_PADDING: $MODAL_FOOTER_HEIGHT + $MOBILE_NAVBAR_HEIGHT; 
+$MOBILE_NAVBAR_HEIGHT: 50px;
+$MODAL_FOOTER_HEIGHT: 75px;
+$MODAL_BODY_MINHEIGHT_PADDING: $MODAL_FOOTER_HEIGHT + $MOBILE_NAVBAR_HEIGHT;
 
 
 @keyframes bounceAndGlow {
@@ -806,7 +806,7 @@ a,
 
         & > h2 {
           background: $superLightGray;
-          padding: 10px;  
+          padding: 10px;
         }
     }
 
@@ -1043,7 +1043,7 @@ a,
   text-align: left;
   border: none;
   padding: 0;
-  
+
   & img {
       width: 25px;
       height: 28px;
@@ -1095,11 +1095,11 @@ a,
         // min-height: 500px;
 
         @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
-          min-height: 500px;          
+          min-height: 500px;
         }
     }
 
-    // Elements that are animated when modal opens 
+    // Elements that are animated when modal opens
     .photo-container, .modal-body > div:not(.tooltip), .modal-footer {
         opacity: 0;
     }
@@ -1400,7 +1400,7 @@ a,
 }
 
 .close-modal {
-  display: none; 
+  display: none;
 }
 
 // Le Mobile
@@ -1419,8 +1419,8 @@ a,
   .modal-body {
     // Explanation on the reason for the string interpolation:
     //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-    min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING}); 
-  } 
+    min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
+  }
 
   .modal-title {
     font-size: 1.5em;
@@ -1489,13 +1489,13 @@ a,
 
   .pac-item > span:last-child {
       display: block;
-      padding-left: 22px; 
+      padding-left: 22px;
       font-family: $bodyFont;
       line-height: 1em;
   }
 
   .pac-icon {
-      background-image: url(/img/pin_gray.png) !important; 
+      background-image: url(/img/pin_gray.png) !important;
       background-size: 100%;
       background-repeat: no-repeat;
       background-position: 0px;
