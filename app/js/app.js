@@ -1091,7 +1091,7 @@ $(function () {
         openNewPlaceModal();
       } else {
         const mapCenter = map.getCenter();
-        const coords = mapCenter.lat() + mapCenter.lng();
+        const coords = `${mapCenter.lat()}, ${mapCenter.lng()}`;
         ga('send', 'event', 'Local', `out of bounds - ${coords}`);
         swal({
           title: 'Ops',
