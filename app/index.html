@@ -25,6 +25,8 @@
         <meta property="og:site_name" content="bike de boa">
         <meta property="og:description" content="Encontre lugares pra estacionar tua bicicleta e ficar de boa."/>
 
+        <meta name="google-site-verification" content="ftQlKcMOfc5iuPkN6xINweO31I0WNRE4s9zDbQT9iTY" />
+
         <!-- Progressive Webapp Manifest -->
         <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json">
 
@@ -273,7 +275,7 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <button class="close-modal"></button> 
+                        <button class="close-modal"></button>
                       </div>
 
                       <div id="placeDetailsModalTemplatePlaceholder" class="loading-skeleton"></div>
@@ -301,7 +303,7 @@
                             <input id="photoInput" type="file" name="photoInput" accept="image/*">
                             <label for="photoInput"></label>
                         </div>
-                        
+
                         <div class="modal-body text-center">
                             <section>
                               <div class="text-input-wrapper">
@@ -480,7 +482,7 @@
               <img src="{{photoUrl}}"/>
             </div>
           {{/if}}
-          
+
           <div class="modal-body">
               <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
@@ -634,7 +636,7 @@
         <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
             <div class="photo-container skeleton-box">
             </div>
-            
+
             <div class="modal-body">
                 <div id="placeDetails_heading" class="title">
                     <span class="skeleton-box"></span>
