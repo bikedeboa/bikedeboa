@@ -196,6 +196,7 @@ $(function () {
               _geolocationInitialized = true;
 
               ga('send', 'event', 'Geolocation', 'init');
+              ga('send', 'event', 'Geolocation', `init - ${position.coords.latitude},${position.coords.longitude}`); 
 
               updateCurrentPosition(position);
 
