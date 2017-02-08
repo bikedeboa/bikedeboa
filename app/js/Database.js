@@ -10,10 +10,39 @@ BIKE.Database = {
   _authToken: '',
   _headers: {},
 
+  _currentIDToAdd: 1306,
+
 
   ///////////////////
   // M E T H O D S //
   ///////////////////
+
+  _redoLogEntry: (logEntry, cb) => {
+    console.log('redoing log entry', logEntry);
+
+    const reducedEndpoint = logEntry.endpoint.split('bikedeboa-api.herokuapp.com/')[1]
+
+    BIKE.Database._headers.ip_origin = logEntry.ip_origin;
+
+    if (logEntry.method==='POST' && reducedEndpoint === 'local') {
+      logEntry.body.idLocal = BIKE.Database._currentIDToAdd;
+      if (!logEntry.body.authorIP) {
+        logEntry.body.authorIP = BIKE.Database._currentIDToAdd;
+      }
+    }
+
+    BIKE.Database.customAPICall(logEntry.method, reducedEndpoint, logEntry.body, () => {
+      logEntry.redone = true;
+
+      if (logEntry.method==='POST' && reducedEndpoint === 'local') {
+        BIKE.Database._currentIDToAdd++;
+      }
+
+      if (cb && typeof cb === 'function') {
+        return cb();
+      }
+    });
+  },
 
   // @todo Improve this to automatically save to a file.
   _getDatabaseBackupJSON: function() {
@@ -288,10 +317,10 @@ BIKE.Database = {
           text: 'Se você não é colaborador ainda e gostaria de ser, <a target="_blank" href="https://www.facebook.com/bikedeboaapp">fale com a gente</a>.',
           html: true,
           type: 'input',
-          showCancelButton: true, 
+          showCancelButton: true,
           closeOnConfirm: true,
           inputPlaceholder: "Nome de usuário"
-        }, 
+        },
         (input) => {
           if (input) {
             // if (input === '') {

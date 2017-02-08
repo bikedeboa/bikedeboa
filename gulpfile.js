@@ -35,7 +35,7 @@ const DEST_PATH =  'dist';
 
 // Compile Our Sass
 gulp.task('sass', () => {
-    return gulp.src('app/scss/*.scss') 
+    return gulp.src('app/scss/*.scss')
         .pipe(sourcemaps.init())
         .pipe(plumber())
         .pipe(sass())
@@ -53,7 +53,7 @@ gulp.task('sass', () => {
         .pipe(gulp.dest('dist/css'));
 });
 
-// Concatenate & Minify JS 
+// Concatenate & Minify JS
 gulp.task('scripts', () => {
   return gulp.src('app/js/*.js')
     .pipe(sourcemaps.init())
