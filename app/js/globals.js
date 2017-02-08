@@ -74,8 +74,8 @@ let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}
 let _mapBounds;
 let Database;
 let geocoder;
-let markers = [];
-let tags = [];
+let markers;
+let tags;
 let idToTag = {};
 let tagToId = {};
 let _gmarkers;

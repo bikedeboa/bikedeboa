@@ -219,8 +219,10 @@
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="bicicletarios">
 
+            <!-- Tabela de Bicicletarios -->
+
             <h2>
-              <span id="headingBikes">Carregando bicicletários...</span>
+              <span id="headingBikes"></span>
             </h2>
 
             <table
@@ -241,6 +243,9 @@
 
           </div>
 
+
+          <!-- Tabela de Usuarios -->
+
           <div role="tabpanel" class="tab-pane fade" id="usuarios" class="restricted-access">
             <h2>
               <span id="headingUsers">Carregando usuários...</span>
@@ -256,6 +261,9 @@
               data-sticky-header="true">
             </table>
           </div>
+
+
+          <!-- Tabela de Log -->
 
           <div role="tabpanel" class="tab-pane fade" id="log" class="restricted-access">
             <h2 id="headingLog">
@@ -280,6 +288,7 @@
       </section>
 
       <script>
+        // Generic function to display in textual form all the properties of a table entry
         function detailFormatter(index, row) {
           var html = '';
 
@@ -355,7 +364,17 @@
           return value && JSON.stringify(value);
         }
 
-        function updateLocalsTable() {
+        function updateLocalsTable(force = false) {
+          if (force) {
+            markers = null;
+          }
+
+          if (markers) {
+            return;
+          }
+
+          $('#headingBikes').html('Carregando bicicletários...');
+            
           Database.getPlaces( () => {
             $('#headingBikes').html(`<span class="text-muted">(${markers.length} carregados)</span>`);
 
@@ -375,7 +394,7 @@
 
             $('#localsTable').bootstrapTable({
               columns: [
-                {
+                { 
                   field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false,
                 },
                 {
@@ -422,6 +441,9 @@
                 {
                   field: 'photo', title: 'Foto', sortable: true,
                     editable: loggedUser && true
+                },
+                {
+                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: loggedUser
                 }
               ],
               data: markers,
@@ -468,7 +490,11 @@
         }
 
         function updateRevisionTable(force = false) {
-          if (!force && revisions) {
+          if (force) {
+            revisions = null;
+          }
+          
+          if (revisions) {
             return;
           }
 
@@ -498,7 +524,7 @@
                   field: 'comments', title: 'Mensagem', sortable: true, class: 'col-fulltext',
                 },
                 {
-                  field: 'operate', title: '', align: 'center', events: operateEvents, formatter: operateFormatter
+                  field: 'operate', title: '', align: 'center', events: logTableOperateEvents, formatter: operateFormatter
                 }
               ],
               data: revisions,
@@ -507,11 +533,21 @@
           });
         }
 
-        window.operateEvents = {
+        window.logTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
               BIKE.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
                 updateRevisionTable(true);
+              });
+            }
+          }
+        };
+
+        window.localsTableOperateEvents = {
+          'click .remove': function (e, value, row, index) {
+            if (confirm('Tem certeza?')) {
+              BIKE.Database.customAPICall('delete', `local/${row.id}`, null, () => {
+                updateLocalsTable(true);
               });
             }
           }
@@ -627,15 +663,17 @@
           Database.authenticate(false, () => {
             if (loggedUser) {
               handleLoggedUser();
+
+              Database.getAllTags();
+
+              updateRevisionTable();
+
+              updateLocalsTable();
             } else {
               $('.restricted-access').remove();
+
+              login();
             }
-
-            Database.getAllTags();
-
-            updateLocalsTable();
-
-            updateRevisionTable();
 
             hideSpinner();
           });
