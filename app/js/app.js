@@ -1034,8 +1034,10 @@ $(function () {
         // If a details request was under way
         _abortedDetailsRequest = true;
 
+        hideAllModals();
+
         // Reset history state
-        // @todo just do a history.back(), so a forward would reopen the modal
+        // @todo just do a history.back(), so a forward would reopen the modal ;)
         if (History.getState().title !== 'bike de boa') {
           History.replaceState({}, 'bike de boa', '/');
         }
