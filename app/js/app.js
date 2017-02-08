@@ -1050,14 +1050,14 @@ $(function () {
       //   .velocity({display: 'table-cell'});
 
       if (_isMobile) {
-        $('#map, #addPlace').addClass('hidden');
+        $('#map, #addPlace').addClass('optimized-hidden');
       }
     });
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
       if (_isMobile) {
-        $('#map, #addPlace').removeClass('hidden');
+        $('#map, #addPlace').removeClass('optimized-hidden');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         google.maps.event.trigger(map, 'resize');
