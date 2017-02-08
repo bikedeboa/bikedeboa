@@ -1029,8 +1029,12 @@ $(function () {
 
     // Capture modal closing by
     $('body').on('click', '.modal, .close-modal', e => {
-      // If click was on modal backdrop
-      if (e.target == e.currentTarget) {
+      // If click wasn't on the close button or in the backdrop, but in any other part of the modal
+      if (e.target != e.currentTarget) {
+        return;
+      }
+
+      const proceed = () => {
         // If a details request was under way
         _abortedDetailsRequest = true;
 
@@ -1039,9 +1043,31 @@ $(function () {
         // Reset history state
         // @todo just do a history.back(), so a forward would reopen the modal ;)
         if (History.getState().title !== 'bike de boa') {
+
           History.replaceState({}, 'bike de boa', '/');
         }
       }
+      
+      // @todo Do this check better
+      if (_isMobile && History.getState().title === 'Novo bicicletário') {
+        swal({
+            title: "Descartar",
+            text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#f15f74",
+            confirmButtonText: "Descartar",
+            closeOnConfirm: true
+          },
+          () => {
+            proceed();
+          }
+        );
+      } else {
+        proceed();
+      }
+
+      
     });
 
     // Mobile optimizations
@@ -1382,18 +1408,6 @@ $(function () {
   }
 
   function login(isUserLogin = false) {
-    // This is the only request allowed to be unauthenticated
-    Database.getPlaces( () => {
-      updateMarkers();
-
-      // Hide spinner that is initialized visible on CSS
-      hideSpinner();
-
-      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-      $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-      $('#map').css('filter', 'none');
-    });
-
     Database.authenticate(isUserLogin, () => {
       if (loggedUser) {
         handleLoggedUser();
@@ -1481,6 +1495,18 @@ $(function () {
     });
 
     localhostOverrides();
+
+    // This is the only request allowed to be unauthenticated
+    Database.getPlaces( () => {
+      updateMarkers();
+
+      // Hide spinner that is initialized visible on CSS
+      hideSpinner();
+
+      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+      $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+      $('#map').css('filter', 'none');
+    });
 
     login();
   }
