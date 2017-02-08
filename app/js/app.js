@@ -1059,7 +1059,7 @@ $(function () {
       if (_isMobile) {
         $('#map, #addPlace').removeClass('hidden');
 
-        // Fix: https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
+        // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         google.maps.event.trigger(map, 'resize');
         map.setCenter(map.getCenter());
       }
