@@ -284,12 +284,14 @@ BIKE.Database = {
       // user = prompt('Usuário:','');
       swal(
         {
-          title: 'Login',
-          text: 'Digite seu nome de usuário:',
+          title: 'Login colaborador',
+          text: 'Se você não é colaborador ainda e gostaria de ser, <a target="_blank" href="https://www.facebook.com/bikedeboaapp">fale com a gente</a>.',
+          html: true,
           type: 'input',
-          showCancelButton: true,
+          showCancelButton: true, 
           closeOnConfirm: true,
-        },
+          inputPlaceholder: "Nome de usuário"
+        }, 
         (input) => {
           if (input) {
             // if (input === '') {

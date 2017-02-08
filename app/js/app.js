@@ -815,7 +815,16 @@ $(function () {
 
   function deletePlace() {
     if (openedMarker) {
-      if (confirm('Tem certeza que quer deletar este bicicletário?')) {
+      swal({
+        title: "Deletar bicicletário",
+        text: "Tem certeza disso?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#f15f74",
+        confirmButtonText: "Deletar",
+        closeOnConfirm: true
+      },
+      () => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
@@ -827,7 +836,7 @@ $(function () {
             hideSpinner();
           });
         });
-      }
+      });
     }
   }
 
@@ -1098,7 +1107,7 @@ $(function () {
           text:
             'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
             <br><br>\
-            <small><i>Acompanhe nossa <a href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
+            <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
           type: 'warning',
           html: true
         });
