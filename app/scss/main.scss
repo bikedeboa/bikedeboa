@@ -1457,14 +1457,17 @@ a,
     background: transparent;
     border: 0;
 
-    &:before {
-      color: $white;
-      content: "\e079";
-      font-family: $bootstrapFont;
-      font-size: 20px;
-      left: 0;
-      top: 0;
-    }
+    background: url(/img/back_arrow.svg) 2px 10px no-repeat;
+    background-size: 50px;
+
+    // &:before {
+    //   color: $white;
+    //   content: "\e091";
+    //   font-family: $bootstrapFont;
+    //   font-size: 20px;
+    //   left: 0;
+    //   top: 0;
+    // }
 
     &:focus,
     &:active {
