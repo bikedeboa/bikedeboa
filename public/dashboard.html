@@ -748,6 +748,9 @@
 
           if (field === 'isPublic') {
             row[field] = row[field]==='1' ? true : false;
+          } else if (field === 'photo') {
+            row['photoUrl'] = row[field];
+            field = 'photoUrl';
           }
 
           dataToUpdate[field] = row[field];
