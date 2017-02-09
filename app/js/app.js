@@ -1014,16 +1014,18 @@ $(function () {
     $('#aboutBtn').on('click', () => {
       _sidenav.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      ga('send', 'event', 'Misc', 'about opened');
       History.pushState({}, 'Sobre', 'sobre');
       $('#aboutModal').modal('show');
     });
 
     $('#faqBtn').on('click', () => {
       _sidenav.hide();
+      ga('send', 'event', 'Misc', 'faq opened');
       History.pushState({}, 'Perguntas frequentes', 'faq');
       $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       $('#faqModal').modal('show');
-    });
+    }); 
 
     $('body').on('click', '#addPlace', toggleLocationInputMode);
 
@@ -1128,8 +1130,8 @@ $(function () {
         openNewPlaceModal();
       } else {
         const mapCenter = map.getCenter();
-        const coords = `${mapCenter.lat()}, ${mapCenter.lng()}`;
-        ga('send', 'event', 'Local', `out of bounds - ${coords}`);
+        ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`);
+
         swal({
           title: 'Ops',
           text:
