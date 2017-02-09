@@ -132,6 +132,21 @@ $(function () {
       $(e.target).parent().removeClass('loading');
     });
 
+    // Init click triggers
+    // $('#checkinBtn').on('click', sendCheckinBtn);
+    $('#ratingDisplay .full-star, .openReviewPanelBtn').on('click', e => {
+      openReviewPanel($(e.target).data('value'));
+    });
+    $('.photo-container img').on('click', e => {
+      toggleExpandModalHeader();
+    });
+    $('.directionsBtn').on('click', e => {
+      ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
+    });
+    $('#editPlaceBtn').on('click', openNewPlaceModal);
+    $('#deletePlaceBtn').on('click', deletePlace);
+
+    // Display modal
     // If we rendered a skeleton modal then the modal is visible already
     if (!$('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('show');
@@ -482,13 +497,34 @@ $(function () {
   function toggleLocationInputMode() {
     addLocationMode = !addLocationMode;
 
+    // Turning ON
     if (addLocationMode) {
       // hideUI();
 
       testNewLocalBounds();
       map.addListener('center_changed', () => {
-        // console.log('center_changed');
+        console.log('center_changed');
         testNewLocalBounds();
+      });
+
+      $('#newPlaceholder').on('click', () => {
+        openedMarker = null;
+        if (testNewLocalBounds()) {
+          openNewPlaceModal();
+        } else {
+          const mapCenter = map.getCenter();
+          ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`);
+
+          swal({
+            title: 'Ops',
+            text:
+              'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
+              <br><br>\
+              <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
+            type: 'warning',
+            html: true
+          });
+        }
       });
 
       // ESC button cancels locationinput
@@ -505,8 +541,8 @@ $(function () {
     } else {
       // showUI();
 
+      $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
-
       google.maps.event.clearInstanceListeners(map);
     }
 
@@ -754,6 +790,8 @@ $(function () {
 
   // @todo clean up this mess
   function openNewPlaceModal() {
+    History.pushState({}, 'Novo bicicletário', 'novo');
+
     // Reset fields
     _uploadingPhotoBlob = '';
     $('#newPlaceModal .little-pin').toggleClass('gray', true);
@@ -769,9 +807,11 @@ $(function () {
 
     // Not creating a new one, but editing
     if (openedMarker) {
-      // @todo refactor this, probably separate into different functions
-
+      // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
       const m = openedMarker;
+
+      ga('send', 'event', 'Local', 'update - pending', ''+m.id);
+
       $('#newPlaceModal #titleInput').val(m.text);
       $(`#newPlaceModal .typeIcon[data-value="${m.structureType}"]`).addClass('active');
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
@@ -784,11 +824,12 @@ $(function () {
         $('#newPlaceModal .description').addClass('expanded');
       }
 
-      ga('send', 'event', 'Local', 'update - pending', ''+m.id);
       // $('#placeDetailsModal').modal('hide');
       History.pushState({}, 'bike de boa', '/');
 
     } else {
+      ga('send', 'event', 'Local', 'create - pending');
+
       toggleLocationInputMode();
 
       // Queries Google Geocoding service for the position address
@@ -803,14 +844,36 @@ $(function () {
         }, () => {
         }
       );
-
-      ga('send', 'event', 'Local', 'create - pending');
     }
 
-    // Finally, activate modal
-    $('#newPlaceModal').modal('show');
-    History.pushState({}, 'Novo bicicletário', 'novo');
+    // Initialize triggers
+    $('.typeIcon').on('click', e => {
+      $(e.currentTarget).siblings('.typeIcon').removeClass('active');
+      $(e.currentTarget).addClass('active');
+    });
+    $('#newPlaceModal input, #newPlaceModal .typeIcon').on('change input click', () => {
+      // this has to be AFTER the typeIcon click trigger
+      validateNewPlaceForm();
+    });
     validateNewPlaceForm();
+    $('#saveNewPlaceBtn').on('click', createOrUpdatePlace);
+    $('#photoInput').change(function () {
+      if (this.files && this.files[0] && this.files[0].type.match(/image.*/)) {
+        showSpinner('Processando imagem...');
+
+        var reader = new FileReader();
+        reader.onload = photoUploadCB;
+        reader.readAsDataURL(this.files[0]);
+      } else {
+        swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
+      }
+    });
+    $('.description.collapsable h2').on('click', e => {
+      $(e.currentTarget).parent().toggleClass('expanded');
+    });
+
+    // Finally, display the modal
+    $('#newPlaceModal').modal('show');
   }
 
   function deletePlace() {
@@ -883,8 +946,21 @@ $(function () {
       ga('send', 'event', 'Review', 'create - pending', ''+m.id);
     }
 
+    // Init triggers
+    $('#ratingDisplay .full-star').on('click', e => {
+      openReviewPanel($(e.target).data('value'));
+    });
+    $('#reviewPanel .rating').on('change', e => {
+      currentPendingRating = $(e.target).val();
+      validateReviewForm();
+    });
+    $('#sendReviewBtn').on('click', () => {
+      sendReviewBtnCB();
+    });
+
     validateReviewForm();
 
+    // Display modal
     $('#placeDetailsModal').modal('hide');
     $('#reviewPanel').modal('show');
     History.replaceState({}, 'Nova avaliação', 'avaliar');
@@ -960,12 +1036,19 @@ $(function () {
     const m = openedMarker;
     let templateData = {};
 
+    History.replaceState({}, 'Sugerir mudança', `detalhes/${m.id}/sugestao`);
+
+    // Render template
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.title = m.text;
     templateData.address = m.address;
     $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
 
-    History.replaceState({}, 'Sugerir mudança', `detalhes/${m.id}/sugestao`);
+    // Initialize triggers
+    $('#createRevisionBtn').on('click', openRevisionPanel);
+    $('#sendRevisionBtn').on('click', sendRevisionBtn);
+
+    // Display modal
     $('#placeDetailsModal').modal('hide');
     $('#revisionModal').modal('show');
   }
@@ -998,9 +1081,6 @@ $(function () {
   }
 
   function _initTriggers() {
-    /////////////////////
-    // Home
-
     $('.js-menu-show').on('click', () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
@@ -1025,9 +1105,9 @@ $(function () {
       History.pushState({}, 'Perguntas frequentes', 'faq');
       $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       $('#faqModal').modal('show');
-    }); 
+    });
 
-    $('body').on('click', '#addPlace', toggleLocationInputMode);
+    $('#addPlace').on('click', toggleLocationInputMode);
 
     // Capture modal closing by
     $('body').on('click', '.modal, .close-modal', e => {
@@ -1049,7 +1129,7 @@ $(function () {
           History.replaceState({}, 'bike de boa', '/');
         }
       }
-      
+
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
@@ -1068,8 +1148,6 @@ $(function () {
       } else {
         proceed();
       }
-
-      
     });
 
     // Mobile optimizations
@@ -1096,19 +1174,23 @@ $(function () {
     });
 
     // Location Search Mode control
-    // $('body').on('focus', '#locationQueryInput', e => {
+    // $('#locationQueryInput').on('focus', e => {
     //   if (_isMobile) {
     //     enterLocationSearchMode();
     //   }
     // });
-    // $('body').on('blur', '#locationQueryInput', e => {
+    // $('#locationQueryInput').on('blur', e => {
     //   if (_isMobile) {
     //     exitLocationSearchMode();
     //   }
     // });
 
-    // Location input triggers
-    $('body').on('click', '#clearLocationQueryBtn', () => {
+    // Location Search
+    $('#locationQueryInput').on('input', () => {
+      toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
+    });
+
+    $('#clearLocationQueryBtn').on('click', () => {
       if (_isMobile) {
         exitLocationSearchMode();
       }
@@ -1116,100 +1198,6 @@ $(function () {
       toggleClearLocationBtn('hide');
       _searchResultMarker.setVisible(false);
     });
-
-    $('body').on('input', '#locationQueryInput', () => {
-      toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
-    });
-
-
-    /////////////////////
-    // New place panel
-    $('body').on('click', '#newPlaceholder', () => {
-      openedMarker = null;
-      if (testNewLocalBounds()) {
-        openNewPlaceModal();
-      } else {
-        const mapCenter = map.getCenter();
-        ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`);
-
-        swal({
-          title: 'Ops',
-          text:
-            'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
-            <br><br>\
-            <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
-          type: 'warning',
-          html: true
-        });
-      }
-    });
-
-    $('body').on('click', '.typeIcon', e => {
-      $(e.currentTarget).siblings('.typeIcon').removeClass('active');
-      $(e.currentTarget).addClass('active');
-    });
-
-    $('body').on('change input click','#newPlaceModal input, #newPlaceModal .typeIcon', () => {
-      // this has to be AFTER the typeIcon click trigger
-      validateNewPlaceForm();
-    });
-
-
-    $('body').on('click', '#saveNewPlaceBtn', createOrUpdatePlace);
-
-    $('body').on('click', '#editPlaceBtn', openNewPlaceModal);
-
-    $('body').on('click', '#deletePlaceBtn', deletePlace);
-
-    $('#photoInput').change(function () {
-      if (this.files && this.files[0] && this.files[0].type.match(/image.*/)) {
-        showSpinner('Processando imagem...');
-
-        var reader = new FileReader();
-        reader.onload = photoUploadCB;
-        reader.readAsDataURL(this.files[0]);
-      } else {
-        swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
-      }
-    });
-
-    $('body').on('click', '.description.collapsable h2', e => {
-      $(e.currentTarget).parent().toggleClass('expanded');
-    });
-
-    /////////////////////
-    // Review panel
-    $('body').on('click', '#ratingDisplay .full-star, .openReviewPanelBtn', e => {
-      openReviewPanel($(e.target).data('value'));
-    });
-
-    $('body').on('change', '#reviewPanel .rating', e => {
-      currentPendingRating = $(e.target).val();
-      validateReviewForm();
-    });
-
-    $('body').on('click', '#sendReviewBtn', () => {
-      sendReviewBtnCB();
-    });
-
-
-    /////////////////////////
-    // Local Details panel
-    $('body').on('click', '#checkinBtn', sendCheckinBtn);
-
-    $('body').on('click', '.photo-container img', e => {
-      toggleExpandModalHeader();
-    });
-
-    $('body').on('click', '.directionsBtn', e => {
-      ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
-    });
-
-
-    /////////////////////////
-    // Send Revision Panel
-    $('body').on('click', '#createRevisionBtn', openRevisionPanel);
-    $('body').on('click', '#sendRevisionBtn', sendRevisionBtn);
   }
 
   function hideAllModals() {
@@ -1373,7 +1361,6 @@ $(function () {
 
     // Set up Sweet Alert
     swal.setDefaults({
-      animation: false,
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancelar'
