@@ -1423,6 +1423,7 @@ $(function () {
     // Use external service to get user's IP
     $.getJSON('//ipinfo.io/json', data => {
       if (data && data.ip) {
+        ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
         Database._setOriginHeader(data.ip);
       } else {
         console.error('Something went wrong when trying to retrieve user IP.');
