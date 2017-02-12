@@ -215,9 +215,11 @@ $(function () {
               updateCurrentPosition(position);
 
               $('#geolocationBtn').css('border', '2px solid lightblue');
-              _geolocationMarker.setZIndex(markers.length);
               _geolocationMarker.setVisible(true);
               _geolocationRadius.setVisible(true);
+              if (markers && markers.length) {
+                _geolocationMarker.setZIndex(markers.length);
+              }
 
               if (toCenter) {
                 const pos = {
@@ -568,7 +570,6 @@ $(function () {
 
   // @todo refactor this, it's confusing
   function createOrUpdatePlace() {
-    // $('#newPlaceModal').modal('hide');
     History.pushState({}, 'bike de boa', '/');
     showSpinner('Salvando bicicletário...');
 
@@ -603,7 +604,7 @@ $(function () {
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
             onMarkerClick(newMarker, () => {
-              console.log('oi');
+              // console.log('oi'); 
               $('.review').tooltip('show');
               // $('.review').velocity('callout.bounce');
             });
@@ -824,8 +825,8 @@ $(function () {
         $('#newPlaceModal .description').addClass('expanded');
       }
 
-      // $('#placeDetailsModal').modal('hide');
-      History.pushState({}, 'bike de boa', '/');
+      $('#placeDetailsModal').modal('hide');
+      // History.pushState({}, 'bike de boa', '/');
 
     } else {
       ga('send', 'event', 'Local', 'create - pending');
