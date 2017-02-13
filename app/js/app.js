@@ -176,8 +176,6 @@ $(function () {
   }
 
   function _geolocate(toCenter, callback, quiet = false) {
-    ga('send', 'event', 'Geolocation', 'click');
-
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
@@ -315,6 +313,7 @@ $(function () {
 
     // Setup the click event listeners
     controlUI.addEventListener('click', () => {
+      ga('send', 'event', 'Geolocation', 'geolocate button click');
       _geolocate(true, () => {
         hideSpinner();
       });
@@ -1252,6 +1251,7 @@ $(function () {
       navigator.permissions.query({'name': 'geolocation'})
         .then( permission => {
           if (permission.state === 'granted') {
+            ga('send', 'event', 'Geolocation', 'geolocate on startup');
             _geolocate(true, null, true);
           }
         }
