@@ -134,17 +134,17 @@ $(function () {
 
     // Init click triggers
     // $('#checkinBtn').on('click', sendCheckinBtn);
-    $('#ratingDisplay .full-star, .openReviewPanelBtn').on('click', e => {
+    $('#ratingDisplay .full-star, .openReviewPanelBtn').off('click').on('click', e => {
       openReviewPanel($(e.target).data('value'));
     });
-    $('.photo-container img').on('click', e => {
+    $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
     });
-    $('.directionsBtn').on('click', e => {
+    $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('#editPlaceBtn').on('click', openNewPlaceModal);
-    $('#deletePlaceBtn').on('click', deletePlace);
+    $('#editPlaceBtn').off('click').on('click', openNewPlaceModal);
+    $('#deletePlaceBtn').off('click').on('click', deletePlace);
 
     // Display modal
     // If we rendered a skeleton modal then the modal is visible already
@@ -604,7 +604,6 @@ $(function () {
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
             onMarkerClick(newMarker, () => {
-              // console.log('oi'); 
               $('.review').tooltip('show');
               // $('.review').velocity('callout.bounce');
             });
@@ -848,17 +847,20 @@ $(function () {
     }
 
     // Initialize triggers
-    $('.typeIcon').on('click', e => {
+    $('.typeIcon').off('click.radio').on('click.radio', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
     });
-    $('#newPlaceModal input, #newPlaceModal .typeIcon').on('change input click', () => {
-      // this has to be AFTER the typeIcon click trigger
-      validateNewPlaceForm();
-    });
+    // this has to be AFTER the typeIcon click trigger
+    $('#newPlaceModal input, #newPlaceModal .typeIcon')
+      .off('change.validate input.validate click.validate')
+      .on(' change.validate input.validate click.validate', () => {
+        validateNewPlaceForm();
+      });
     validateNewPlaceForm();
-    $('#saveNewPlaceBtn').on('click', createOrUpdatePlace);
-    $('#photoInput').change(function () {
+
+    $('#saveNewPlaceBtn').off('click').on('click', createOrUpdatePlace);
+    $('#photoInput').off('change').on('change', () => {
       if (this.files && this.files[0] && this.files[0].type.match(/image.*/)) {
         showSpinner('Processando imagem...');
 
@@ -869,7 +871,7 @@ $(function () {
         swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       }
     });
-    $('.description.collapsable h2').on('click', e => {
+    $('.description.collapsable h2').off('click').on('click', e => {
       $(e.currentTarget).parent().toggleClass('expanded');
     });
 
@@ -948,14 +950,14 @@ $(function () {
     }
 
     // Init triggers
-    $('#ratingDisplay .full-star').on('click', e => {
+    $('#ratingDisplay .full-star').off('click').on('click', e => {
       openReviewPanel($(e.target).data('value'));
     });
-    $('#reviewPanel .rating').on('change', e => {
+    $('#reviewPanel .rating').off('change').on('change', e => {
       currentPendingRating = $(e.target).val();
       validateReviewForm();
     });
-    $('#sendReviewBtn').on('click', () => {
+    $('#sendReviewBtn').off('click').on('click', () => {
       sendReviewBtnCB();
     });
 
@@ -1046,8 +1048,8 @@ $(function () {
     $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
 
     // Initialize triggers
-    $('#createRevisionBtn').on('click', openRevisionPanel);
-    $('#sendRevisionBtn').on('click', sendRevisionBtn);
+    $('#createRevisionBtn').off('click').on('click', openRevisionPanel);
+    $('#sendRevisionBtn').off('click').on('click', sendRevisionBtn);
 
     // Display modal
     $('#placeDetailsModal').modal('hide');
@@ -1081,7 +1083,7 @@ $(function () {
     $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': "block" });
   }
 
-  function _initTriggers() {
+  function _initGlobalTriggers() {
     $('.js-menu-show').on('click', () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
@@ -1297,7 +1299,7 @@ $(function () {
       strokeOpacity: '0' //opacity from 0.0 to 1.0
     });
 
-    _initTriggers();
+    _initGlobalTriggers();
 
     _initTemplates();
 
@@ -1349,7 +1351,7 @@ $(function () {
   function handleLoggedUser() {
     // Setup little user label underneath the location search bar
     $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
-    $('.login-display button').on('click', () => {
+    $('.login-display button').off('click').on('click', () => {
       Cookies.remove('bikedeboa_user');
       window.location.reload();
     });
