@@ -546,7 +546,7 @@ BIKE.Database = {
 
     console.log('Getting all places...');
 
-    $.ajax({
+    $.ajax({ 
       type: 'get',
       headers: self._headers,
       url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
@@ -555,7 +555,8 @@ BIKE.Database = {
 
       markers = data;
 
-      markers.forEach(m => {
+      for(let i=0; i < markers.length; i++) {
+        const m = markers[i];
         // Mark that no markers have retrieved their details
         m._hasDetails = false;
 
@@ -563,7 +564,7 @@ BIKE.Database = {
         if (typeof m.average === 'string') {
           m.average = parseFloat(m.average);
         }
-      });
+      };
 
       if (successCB && typeof successCB === 'function') {
         successCB();
