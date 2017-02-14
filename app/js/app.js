@@ -673,7 +673,7 @@ $(function () {
       _searchResultMarker.setPosition(place.geometry.location);
       _searchResultMarker.setVisible(true);
 
-      ga('send', 'event', 'Search', 'location', place.formatted_address);
+      ga('send', 'event', 'Search', 'location', place.formatted_address); 
 
       // var address = '';
       // if (place.address_components) {
@@ -859,13 +859,17 @@ $(function () {
     validateNewPlaceForm();
 
     $('#saveNewPlaceBtn').off('click').on('click', createOrUpdatePlace);
-    $('#photoInput').off('change').on('change', () => {
-      if (this.files && this.files[0] && this.files[0].type.match(/image.*/)) {
+    $('#photoInput').off('change').on('change', e => {
+      // for some weird compiling reason using 'this' doesnt work here
+      const self = document.getElementById('photoInput');
+      const files = self.files ;
+
+      if (files && files[0] && files[0].type.match(/image.*/)) {
         showSpinner('Processando imagem...');
 
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = photoUploadCB;
-        reader.readAsDataURL(this.files[0]);
+        reader.readAsDataURL(self.files[0]);
       } else {
         swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       }
