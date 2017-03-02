@@ -83,7 +83,7 @@ let _geolocationMarker;
 let _geolocationRadius;
 let areMarkersHidden = false;
 let addLocationMode = false;
-let openedMarker = {};
+let openedMarker;
 let newMarkerTemp = {};
 let currentPendingRating;
 let _uploadingPhotoBlob;
