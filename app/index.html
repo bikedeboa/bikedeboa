@@ -312,7 +312,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                           <button class="close-modal"></button>
-                          <h1 class="modal-title">Novo bicicletário</h1>
+                          <h1 class="modal-title"></h1>
                         </div>
 
                         <div class="photo-container photoInputContainer">
@@ -327,6 +327,13 @@
                               <div class="text-input-wrapper">
                                   <span class="little-pin gray"></span>
                                   <input required id="titleInput" type="text" class="text-input" placeholder="Título">
+                              </div>
+                            </section>
+
+                            <section>
+                              <div class="minimap-container">
+                                <img class="minimap" src=""></img>
+                                <button id="editPlacePositionBtn" class="btn link-button"><span class="glyphicon glyphicon-pencil"></span></button>
                               </div>
                             </section>
 
@@ -401,8 +408,6 @@
                                   <small>
                                       <textarea id="descriptionInput"
                                         maxlength="250"
-                                        onload="autoGrowTextArea(this)"
-                                        onkeyup="autoGrowTextArea(this)"
                                         type="text"
                                         class="text-input"
                                         placeholder="Mais alguma coisa importante? Ex.: horário de funcionamento, como acessar o local, serviços adicionais disponíveis, etc. (máx. 250 caracteres)">
@@ -412,8 +417,9 @@
                             </section>
                         </div>
 
-                        <div class="modal-footer">
+                        <div class="modal-footer" style="padding: 0 0 15px; text-align: center;">
                               <button id="saveNewPlaceBtn" class="btn border btn-footer btn-action green">SALVAR</button>
+                              <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button>
                         </div>
                     </div>
                 </div>

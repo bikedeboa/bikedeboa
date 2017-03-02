@@ -26,6 +26,11 @@ $(function () {
   }
 
   function openDetailsModal(marker, callback) {
+    if (!marker) {
+      console.error('Trying to open details modal without a marker.');
+      return;
+    }
+
     openedMarker = marker;
     const m = openedMarker;
 
@@ -143,7 +148,7 @@ $(function () {
     $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('#editPlaceBtn').off('click').on('click', openNewPlaceModal);
+    $('#editPlaceBtn').off('click').on('click', openNewOrEditPlaceModal);
     $('#deletePlaceBtn').off('click').on('click', deletePlace);
 
     // Display modal
@@ -186,6 +191,8 @@ $(function () {
         };
 
         map.panTo(pos);
+        
+        // Set minimum map zoom
         if (map.getZoom() < 17) {
           map.setZoom(17);
         }
@@ -226,6 +233,8 @@ $(function () {
                 };
 
                 map.panTo(pos);
+                
+                // Set minimum map zoom
                 if (map.getZoom() < 17) {
                   map.setZoom(17);
                 }
@@ -497,9 +506,9 @@ $(function () {
 
   function toggleLocationInputMode() {
     addLocationMode = !addLocationMode;
+    const isTurningOn = addLocationMode;
 
-    // Turning ON
-    if (addLocationMode) {
+    if (isTurningOn) {
       // hideUI();
 
       testNewLocalBounds();
@@ -509,23 +518,32 @@ $(function () {
       });
 
       $('#newPlaceholder').on('click', () => {
-        openedMarker = null;
-        if (testNewLocalBounds()) {
-          openNewPlaceModal();
-        } else {
+        if (openedMarker) {
+          // Was editing the marker position, so return to Edit Modal
           const mapCenter = map.getCenter();
-          ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`);
+          openedMarker.lat = mapCenter.lat();
+          openedMarker.lng = mapCenter.lng();
+          openNewOrEditPlaceModal();
+        } else {
+          if (testNewLocalBounds()) {
+            openNewOrEditPlaceModal();
+          } else {
+            const mapCenter = map.getCenter();
+            ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
 
-          swal({
-            title: 'Ops',
-            text:
-              'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
-              <br><br>\
-              <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
-            type: 'warning',
-            html: true
-          });
+            swal({
+              title: 'Ops',
+              text:
+                'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
+                <br><br>\
+                <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
+              type: 'warning',
+              html: true
+            });
+          }
         }
+
+        toggleLocationInputMode();
       });
 
       // ESC button cancels locationinput
@@ -540,6 +558,8 @@ $(function () {
       //   map.setZoom(18);
       // }
     } else {
+      // Turning OFF
+
       // showUI();
 
       $('#newPlaceholder').off('click');
@@ -555,6 +575,10 @@ $(function () {
     $('#geolocationBtnBtn').toggle();
     // $('#locationSearch').toggleClass('coolHide');
 
+    if (!isTurningOn && openedMarker) { 
+      // Was editing the marker position, so return to Edit Modal
+      openNewOrEditPlaceModal();
+    }
   }
 
   function showUI() {
@@ -567,17 +591,18 @@ $(function () {
     // $('#addPlace').velocity('transition.slideDownOut');
   }
 
-  // @todo refactor this, it's confusing
-  function createOrUpdatePlace() {
+  // @todo refactor this, it's fuckin confusing
+  function finishCreateOrUpdatePlace() {
     History.pushState({}, 'bike de boa', '/');
     showSpinner('Salvando bicicletário...');
 
-    const isUpdate = openedMarker;
+    const updatingMarker = openedMarker;
+    openedMarker = null;
     let place = {};
 
-    place.lat = isUpdate ? openedMarker.lat : newMarkerTemp.lat;
-    place.lng = isUpdate ? openedMarker.lng : newMarkerTemp.lng;
-    if (!isUpdate && newMarkerTemp.address) {
+    place.lat = updatingMarker ? updatingMarker.lat : newMarkerTemp.lat;
+    place.lng = updatingMarker ? updatingMarker.lng : newMarkerTemp.lng;
+    if (!updatingMarker && newMarkerTemp.address) {
       place.address = newMarkerTemp.address;
     }
 
@@ -591,7 +616,7 @@ $(function () {
       // Save cookie to temporarily enable edit/delete of this local
       // Having the cookie isn't enought: the request origin IP is matched with the author IP
       //   saved in the database.
-      if (!isUpdate) {
+      if (!updatingMarker) {
         BIKE.Session.saveOrUpdatePlaceCookie(newLocal.id);
       }
 
@@ -599,7 +624,7 @@ $(function () {
         updateMarkers();
         hideSpinner();
 
-        if (!isUpdate) {
+        if (!updatingMarker) {
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
             onMarkerClick(newMarker, () => {
@@ -611,9 +636,9 @@ $(function () {
       });
     };
 
-    if (isUpdate) {
-      ga('send', 'event', 'Local', 'update', ''+openedMarker.id);
-      Database.updatePlace(openedMarker.id, place, callback);
+    if (updatingMarker) {
+      ga('send', 'event', 'Local', 'update', ''+updatingMarker.id);
+      Database.updatePlace(updatingMarker.id, place, callback);
     } else {
       ga('send', 'event', 'Local', 'create');
       Database.sendPlace(place, callback);
@@ -788,7 +813,7 @@ $(function () {
   }
 
   // @todo clean up this mess
-  function openNewPlaceModal() {
+  function openNewOrEditPlaceModal() {
     History.pushState({}, 'Novo bicicletário', 'novo');
 
     // Reset fields
@@ -801,6 +826,11 @@ $(function () {
     $('#newPlaceModal #photoInputBg').attr('src', '');
     $('#newPlaceModal #descriptionInput').val('');
     $('#newPlaceModal .description.collapsable').removeClass('expanded');
+    
+    $('#newPlaceModal #photoInput+label').toggleClass('photo-input-edit', openedMarker && openedMarker.photo.length > 0);
+    $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
+    $('#newPlaceModal .minimap-container').toggle(!!openedMarker);
+    $('#newPlaceModal #cancelEditPlaceBtn').toggle(!!openedMarker);
 
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
@@ -816,20 +846,23 @@ $(function () {
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
-      $('#newPlaceModal #photoInput+label').addClass('editMode');
       $('#newPlaceModal #descriptionInput').val(m.description);
 
+      // Minimap
+      // @todo generalize this
+      const staticImgDimensions = _isMobile ? '400x100' : '1000x100';
+      const minimapUrl = `https://maps.googleapis.com/maps/api/staticmap?zoom=20&size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${getPinColorFromAverage(m.average)}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
+      $('#newPlaceModal .minimap').attr('src', minimapUrl);
+
+      // More info section
       if (m.description && m.description.length > 0) {
         $('#newPlaceModal .description').addClass('expanded');
       }
 
       $('#placeDetailsModal').modal('hide');
       // History.pushState({}, 'bike de boa', '/');
-
     } else {
       ga('send', 'event', 'Local', 'create - pending');
-
-      toggleLocationInputMode();
 
       // Queries Google Geocoding service for the position address
       const mapCenter = map.getCenter();
@@ -857,8 +890,37 @@ $(function () {
         validateNewPlaceForm();
       });
     validateNewPlaceForm();
+    
+    $('#newPlaceModal textarea').off('keyup').on('keyup', e => {
+      autoGrowTextArea(e.currentTarget); 
+    });
 
-    $('#saveNewPlaceBtn').off('click').on('click', createOrUpdatePlace);
+    $('#saveNewPlaceBtn').off('click').on('click', finishCreateOrUpdatePlace);
+
+    // Edit only buttons
+    if (openedMarker) {
+      $('#cancelEditPlaceBtn').off('click').on('click', () => {
+        hideAllModals();
+        openDetailsModal(openedMarker);
+      });
+
+      $('#editPlacePositionBtn').off('click').on('click', () => {
+        hideAllModals();
+        
+        map.setCenter({
+          lat: parseFloat(openedMarker.lat),
+          lng: parseFloat(openedMarker.lng)
+        });
+
+        // Set minimum map zoom
+        if (map.getZoom() < 19) {
+          map.setZoom(19);
+        }
+        
+        toggleLocationInputMode();
+      });
+    }
+    
     $('#photoInput').off('change').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
       const self = document.getElementById('photoInput');
@@ -1123,8 +1185,10 @@ $(function () {
       }
 
       const proceed = () => {
-        // If a details request was under way
+        // If a details request was under way, aborts the request
         _abortedDetailsRequest = true;
+
+        openedMarker = null;
 
         hideAllModals();
 
@@ -1136,6 +1200,7 @@ $(function () {
         }
       }
 
+      // If was creating a new local
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
@@ -1373,8 +1438,10 @@ $(function () {
 
   // Thanks https://stackoverflow.com/questions/17772260/textarea-auto-height/24676492#24676492
   window.autoGrowTextArea = function(element) {
-    element.style.height = '5px';
-    element.style.height = (element.scrollHeight+20)+'px';
+    if (element) {
+      element.style.height = '5px';
+      element.style.height = (element.scrollHeight+20)+'px';
+    }
   };
 
 

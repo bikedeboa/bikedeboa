@@ -69,7 +69,7 @@ gulp.task('scripts', () => {
     // .pipe(sourcemaps.write('maps'))
     // .pipe(gulp.dest('dist/js'))
     .pipe(rename('app.min.js'))
-    .pipe(uglify())
+    // .pipe(uglify())
     .pipe(sourcemaps.write('maps'))
     .pipe(fileSizes({title: 'app.min.js', gzip: true}))
     .pipe(gulp.dest('dist/js'));
@@ -91,7 +91,7 @@ gulp.task('bower', function() {
   .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
   .pipe(concat('vendors.min.js'))
-  .pipe(uglify())
+  // .pipe(uglify())
   // .pipe(rename({
   //   suffix: ".min"
   // }))
