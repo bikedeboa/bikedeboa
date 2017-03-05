@@ -1145,6 +1145,7 @@ a,
     .minimap {
         min-height: 90px;
         background: $superLightGray;
+        border-radius: 15px;
     }
 
     // .photo-container {
@@ -1401,6 +1402,7 @@ a,
 .skeleton-box {
     background: rgba(0,0,0,0.1);
     display: inline-block;
+    border-radius: 10px;
 }
 
 .footer-toolbar {
