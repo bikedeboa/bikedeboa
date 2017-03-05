@@ -947,7 +947,7 @@ $(function () {
     });
 
     // Finally, display the modal
-    if (openedMarker) {
+    if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
         $('#newPlaceModal').modal('show');
       });
@@ -1041,11 +1041,14 @@ $(function () {
     validateReviewForm();
 
     // Display modal
-    $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+    History.replaceState({}, 'Nova avaliação', 'avaliar');
+    if ($('#placeDetailsModal').is(':visible')) {
+      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+        $('#reviewPanel').modal('show');
+      });
+    } else {
       $('#reviewPanel').modal('show');
-      History.replaceState({}, 'Nova avaliação', 'avaliar');
-      // $('#placeDetailsModal .flipper').toggleClass('flipped');
-    });
+    }
   }
 
   function toggleExpandModalHeader() {
@@ -1129,9 +1132,13 @@ $(function () {
     $('#sendRevisionBtn').off('click').on('click', sendRevisionBtn);
 
     // Display modal
-    $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+    if ($('#placeDetailsModal').is(':visible')) {
+      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+        $('#revisionModal').modal('show');
+      });
+    } else {
       $('#revisionModal').modal('show');
-    });
+    }
   }
 
   function sendRevisionBtn() {
@@ -1296,11 +1303,19 @@ $(function () {
   }
 
   function hideAllModals(callback) {
-    $('.modal').modal('hide').one('hidden.bs.modal', () => { 
+    const $modal = $('.modal');
+
+    if ($modal.is(':visible')) {
+      $modal.modal('hide').one('hidden.bs.modal', () => { 
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      });
+    } else {
       if (callback && typeof callback === 'function') {
         callback();
       }
-    });
+    }
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
