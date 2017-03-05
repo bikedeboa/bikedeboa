@@ -1175,7 +1175,14 @@ $(function () {
       $('#faqModal').modal('show');
     });
 
-    $('#addPlace').on('click', toggleLocationInputMode);
+    $('#addPlace').on('click', () => {
+      // Make sure the new local modal won't think we're editing a local
+      if (!$('#addPlace').hasClass('active')) {
+        openedMarker = null;
+      }
+
+      toggleLocationInputMode();
+    });
 
     // Capture modal closing by
     $('body').on('click', '.modal, .close-modal', e => {
@@ -1221,13 +1228,18 @@ $(function () {
       }
     });
 
-    // Mobile optimizations
+    // Modal triggers
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
       // $('.modal-dialog')
       //   .velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION})
       //   .velocity({display: 'table-cell'});
 
+      // Set mobile navbar with modal's title
+      const openingModalTitle = $(e.currentTarget).find('.modal-title').text();
+      $('.top-mobile-bar h1').text(openingModalTitle || '');
+
+      // Mobile optimizations
       if (_isMobile) {
         $('#map, #addPlace').addClass('optimized-hidden');
       }

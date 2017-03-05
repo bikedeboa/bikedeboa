@@ -82,7 +82,6 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
-                          <button class="close-modal"></button>
                           <h1 class="modal-title">Sobre o projeto</h1>
                         </div>
 
@@ -132,7 +131,6 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
-                          <button class="close-modal"></button>
                           <h1 class="modal-title">Perguntas frequentes</h1>
                         </div>
 
@@ -292,10 +290,6 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
-                      <div class="modal-header">
-                        <button class="close-modal"></button>
-                      </div>
-
                       <div id="placeDetailsModalTemplatePlaceholder" class="loading-skeleton"></div>
                     </div>
                 </div>
@@ -310,11 +304,6 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
-                        <div class="modal-header">
-                          <button class="close-modal"></button>
-                          <h1 class="modal-title"></h1>
-                        </div>
-
                         <div class="photo-container photoInputContainer">
                             <img id="photoInputBg"/>
 
@@ -451,13 +440,17 @@
             </div>
         </div>
 
+        <div class="top-mobile-bar">
+          <button class="close-modal"></button>
+          <h1 class="top-mobile-bar-title"></h1>
+        </div>
+
         <script id="revisionModalTemplate" type="text/x-handlebars-template">
             <div class="modal fade" id="revisionModal" tabindex="-1">
               <div class="vertical-alignment-helper">
                   <div class="modal-dialog vertical-align-center">
                       <div class="modal-content">
                           <div class="modal-header">
-                            <button class="close-modal"></button>
                             <h1 class="modal-title">Sugerir mudança</h1>
                           </div>
 
@@ -530,6 +523,11 @@
                   {{#if average}}
                       <span class="average">{{average}}</span>
                   {{/if}}
+                  
+                  {{#unless average}}
+                      <!-- <button class="openReviewPanelBtn ghost">AVALIAR</button> -->
+                      <p class="icon-label">Dê sua nota</p>
+                  {{/unless}}
 
                   <fieldset id="ratingDisplay" class="rating">
                       <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
@@ -547,10 +545,6 @@
                       <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
                       <label class="full-star" data-value="1" for="placeDetails_star1" data-toggle="tooltip" data-placement="bottom" title="Muito ruim"></label>
                   </fieldset>
-
-                  {{#unless average}}
-                      <button class="openReviewPanelBtn ghost">AVALIAR</button>
-                  {{/unless}}
 
                   {{#if numReviews}}
                       <span class="numreviews">{{numReviews}}</span>
@@ -721,7 +715,6 @@
                         <div class="modal-content">
                             <div class="modal-header">
                               <!-- <img id="review_photo" src="/img/bg_header.png"> -->
-                              <button class="close-modal"></button>
                               <h1 class="modal-title">Avaliar bicicletário</h1>
                             </div>
 
@@ -821,10 +814,6 @@
                 <div class="vertical-alignment-helper">
                     <div class="modal-dialog vertical-align-center">
                         <div class="modal-content">
-                            <div class="modal-header">
-                              <button class="close-modal"></button>
-                            </div>
-
                             <div class="modal-body">
                                 <div class="message-content">
                                     <p>
