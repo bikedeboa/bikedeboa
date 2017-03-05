@@ -817,8 +817,6 @@ $(function () {
 
   // @todo clean up this mess
   function openNewOrEditPlaceModal() {
-    History.pushState({}, 'Novo bicicletário', 'novo');
-
     // Reset fields
     _uploadingPhotoBlob = '';
     $('#newPlaceModal .little-pin').toggleClass('gray', true);
@@ -842,6 +840,8 @@ $(function () {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
       const m = openedMarker;
 
+      History.replaceState({}, 'Editar bicicletário', `${m.id}/editar`);
+
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
       $('#newPlaceModal #titleInput').val(m.text);
@@ -863,9 +863,10 @@ $(function () {
         $('#newPlaceModal .description').addClass('expanded');
       }
 
-      $('#placeDetailsModal').modal('hide');
+      // $('#placeDetailsModal').modal('hide');
       // History.pushState({}, 'bike de boa', '/');
     } else {
+      History.pushState({}, 'Novo bicicletário', 'novo');
       ga('send', 'event', 'Local', 'create - pending');
 
       // Queries Google Geocoding service for the position address
@@ -904,8 +905,9 @@ $(function () {
     // Edit only buttons
     if (openedMarker) {
       $('#cancelEditPlaceBtn').off('click').on('click', () => {
-        hideAllModals();
-        openDetailsModal(openedMarker);
+        hideAllModals(() => {
+          openDetailsModal(openedMarker);
+        });
       });
 
       $('#editPlacePositionBtn').off('click').on('click', () => {
@@ -945,7 +947,13 @@ $(function () {
     });
 
     // Finally, display the modal
-    $('#newPlaceModal').modal('show');
+    if (openedMarker) {
+      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+        $('#newPlaceModal').modal('show');
+      });
+    } else {
+      $('#newPlaceModal').modal('show');
+    }
   }
 
   function deletePlace() {
@@ -1033,10 +1041,11 @@ $(function () {
     validateReviewForm();
 
     // Display modal
-    $('#placeDetailsModal').modal('hide');
-    $('#reviewPanel').modal('show');
-    History.replaceState({}, 'Nova avaliação', 'avaliar');
-    // $('#placeDetailsModal .flipper').toggleClass('flipped');
+    $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+      $('#reviewPanel').modal('show');
+      History.replaceState({}, 'Nova avaliação', 'avaliar');
+      // $('#placeDetailsModal .flipper').toggleClass('flipped');
+    });
   }
 
   function toggleExpandModalHeader() {
@@ -1108,7 +1117,7 @@ $(function () {
     const m = openedMarker;
     let templateData = {};
 
-    History.replaceState({}, 'Sugerir mudança', `detalhes/${m.id}/sugestao`);
+    History.replaceState({}, 'Sugerir mudança', `sugestao`);
 
     // Render template
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -1120,8 +1129,9 @@ $(function () {
     $('#sendRevisionBtn').off('click').on('click', sendRevisionBtn);
 
     // Display modal
-    $('#placeDetailsModal').modal('hide');
-    $('#revisionModal').modal('show');
+    $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+      $('#revisionModal').modal('show');
+    });
   }
 
   function sendRevisionBtn() {
@@ -1205,7 +1215,6 @@ $(function () {
         // Reset history state
         // @todo just do a history.back(), so a forward would reopen the modal ;)
         if (History.getState().title !== 'bike de boa') {
-
           History.replaceState({}, 'bike de boa', '/');
         }
       }
@@ -1286,8 +1295,12 @@ $(function () {
     });
   }
 
-  function hideAllModals() {
-    $('.modal').modal('hide');
+  function hideAllModals(callback) {
+    $('.modal').modal('hide').one('hidden.bs.modal', () => { 
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
+    });
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
