@@ -613,7 +613,7 @@ a,
   animation: pulse 0.5s infinite alternate;
 }
 
-.top-mobile-bar,
+#top-mobile-bar,
 .modal-header {
   background: $lightGreen;
   background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
@@ -636,7 +636,7 @@ a,
   }
 }
 
-.top-mobile-bar {
+#top-mobile-bar {
   display: none;
 }
 
@@ -973,6 +973,7 @@ a,
       .typeIcon {
         width: 32%;
         margin: 0 6%;
+        max-width: 128px;
       }
     }
 
@@ -1475,12 +1476,12 @@ a,
     padding-top: $MOBILE_NAVBAR_HEIGHT;
   }
 
-  body.modal-open .top-mobile-bar {
+  body.modal-open #top-mobile-bar {
     opacity: 1;
     pointer-events: auto;
   }
 
-  .top-mobile-bar {
+  #top-mobile-bar {
     border: 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     position: absolute;
@@ -1493,7 +1494,7 @@ a,
     pointer-events: none;
     transition: opacity 0.2s ease;
 
-    .top-mobile-bar-title {
+    .top-mobile-bar-title { 
       float: left;
       margin: 0;
       padding: 0;

@@ -140,7 +140,7 @@ $(function () {
     // Init click triggers
     // $('#checkinBtn').on('click', sendCheckinBtn);
     $('#ratingDisplay .full-star, .openReviewPanelBtn').off('click').on('click', e => {
-      openReviewPanel($(e.target).data('value'));
+      openReviewModal($(e.target).data('value'));
     });
     $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
@@ -150,6 +150,7 @@ $(function () {
     });
     $('#editPlaceBtn').off('click').on('click', openNewOrEditPlaceModal);
     $('#deletePlaceBtn').off('click').on('click', deletePlace);
+    $('#createRevisionBtn').off('click').on('click', openRevisionModal);
 
     // Display modal
     // If we rendered a skeleton modal then the modal is visible already
@@ -607,8 +608,9 @@ $(function () {
     }
 
     place.text = $('#newPlaceModal #titleInput').val();
-    place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
-    place.structureType = $('#newPlaceModal .typeIcon.active').data('value');
+    // place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
+    place.isPublic = $('#newPlaceModal .acess-types-group .active').data('value') === 'public';
+    place.structureType = $('#newPlaceModal .custom-radio-group .active').data('value');
     place.photo = _uploadingPhotoBlob;
     place.description = $('#newPlaceModal #descriptionInput').val();
 
@@ -793,8 +795,9 @@ $(function () {
     const textOk = $('#newPlaceModal #titleInput').val().length > MIN_TITLE_CHARACTERS;
     const isOk =
       textOk &&
-      $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val() &&
-      $('#newPlaceModal .typeIcon.active').data('value');
+      // $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val() &&
+      $('#newPlaceModal .acess-types-group .active').data('value') &&
+      $('#newPlaceModal .custom-radio-group .active').data('value');
 
     $('#newPlaceModal .little-pin').toggleClass('gray', !textOk);
 
@@ -822,7 +825,7 @@ $(function () {
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
     $('#newPlaceModal #titleInput').val('');
     $('#newPlaceModal .typeIcon').removeClass('active');
-    $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
+    // $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
     $('#newPlaceModal #photoInputBg').attr('src', '');
     $('#newPlaceModal #descriptionInput').val('');
     $('#newPlaceModal .description.collapsable').removeClass('expanded');
@@ -842,9 +845,10 @@ $(function () {
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
       $('#newPlaceModal #titleInput').val(m.text);
-      $(`#newPlaceModal .typeIcon[data-value="${m.structureType}"]`).addClass('active');
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
-      $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
+      $(`#newPlaceModal .custom-radio-group [data-value="${m.structureType}"]`).addClass('active');
+      $(`#newPlaceModal .acess-types-group [data-value="${m.isPublic ? 'public' : 'private'}"]`).addClass('active');
+      // $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
       $('#newPlaceModal #descriptionInput').val(m.description);
 
@@ -971,7 +975,7 @@ $(function () {
     }
   }
 
-  function openReviewPanel(prepopedRating) {
+  function openReviewModal(prepopedRating) {
     const m = openedMarker;
 
     let templateData = {};
@@ -1016,7 +1020,7 @@ $(function () {
 
     // Init triggers
     $('#ratingDisplay .full-star').off('click').on('click', e => {
-      openReviewPanel($(e.target).data('value'));
+      openReviewModal($(e.target).data('value'));
     });
     $('#reviewPanel .rating').off('change').on('change', e => {
       currentPendingRating = $(e.target).val();
@@ -1100,7 +1104,7 @@ $(function () {
     }
   }
 
-  function openRevisionPanel() {
+  function openRevisionModal() {
     const m = openedMarker;
     let templateData = {};
 
@@ -1113,7 +1117,6 @@ $(function () {
     $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
 
     // Initialize triggers
-    $('#createRevisionBtn').off('click').on('click', openRevisionPanel);
     $('#sendRevisionBtn').off('click').on('click', sendRevisionBtn);
 
     // Display modal
@@ -1237,7 +1240,7 @@ $(function () {
 
       // Set mobile navbar with modal's title
       const openingModalTitle = $(e.currentTarget).find('.modal-title').text();
-      $('.top-mobile-bar h1').text(openingModalTitle || '');
+      $('#top-mobile-bar h1').text(openingModalTitle || '');
 
       // Mobile optimizations
       if (_isMobile) {

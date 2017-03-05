@@ -329,7 +329,18 @@
                             <section>
                               <h2>Acesso</h2>
 
-                              <div class="radio-group" style="margin: 20px 0 30px;">
+                              <div class="acess-types-group">
+                                  <div data-value="public" class="typeIcon">
+                                      <img src="/img/icon_public.svg"/>
+                                      <div class="icon-label">Público</div>
+                                  </div>
+                                  <div data-value="private" class="typeIcon">
+                                      <img src="/img/icon_private.svg"/>
+                                      <div class="icon-label">Restrito (só clientes)</div>
+                                  </div>
+                              </div>
+
+                              <!-- <div class="radio-group" style="margin: 20px 0 30px;">
                                 <label>
                                   <input required type="radio" name="isPublicRadioGrp" value="true" />
                                   <span class="radio-image"></span>
@@ -341,21 +352,8 @@
                                   <span class="radio-image"></span>
                                   Restrito (só clientes)
                                 </label>
-                              </div>
+                              </div> -->
                             </section>
-
-                           <!--  <div class="acess-types-group">
-                                <div data-value="public" class="typeIcon">
-                                    <img src="/img/icon_public.svg"/>
-                                    <div class="icon-label">Público</div>
-                                </div>
-                                <div data-value="private" class="typeIcon">
-                                    <img src="/img/icon_private.svg"/>
-                                    <div class="icon-label">Restrito (só clientes)</div>
-                                </div>
-                            </div> -->
-
-                            <!-- <hr> -->
 
                             <section>
                               <h2>Tipo de bicicletário</h2>
@@ -440,7 +438,7 @@
             </div>
         </div>
 
-        <div class="top-mobile-bar">
+        <div id="top-mobile-bar">
           <button class="close-modal"></button>
           <h1 class="top-mobile-bar-title"></h1>
         </div>
@@ -526,7 +524,12 @@
                   
                   {{#unless average}}
                       <!-- <button class="openReviewPanelBtn ghost">AVALIAR</button> -->
-                      <p class="icon-label">Dê sua nota</p>
+                      <p class="icon-label" style="font-style: italic;">
+                        Ninguém avaliou este bicicletário ainda. :/
+                      </p>
+                      <p class="icon-label">
+                        Dê sua nota:
+                      </p>
                   {{/unless}}
 
                   <fieldset id="ratingDisplay" class="rating">
