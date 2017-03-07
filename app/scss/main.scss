@@ -888,7 +888,7 @@ a,
     }
 
     & .title {
-        font-size: 26px;
+        font-size: 28px;
         padding-left: 10px;
         vertical-align: middle;
         border-bottom: 1px solid #eee;
@@ -903,29 +903,29 @@ a,
         }
     }
 
-    & .title-icon:before {
-        content: '';
-        display: inline-block;
-        width: 22px;
-        height: 28px;
-        background-size: 100%;
-        background-repeat: no-repeat;
-        margin-right: 5px;
-        vertical-align: text-top;
-    }
+    // & .title-icon:before {
+    //     content: '';
+    //     display: inline-block;
+    //     width: 22px;
+    //     height: 28px;
+    //     background-size: 100%;
+    //     background-repeat: no-repeat;
+    //     margin-right: 5px;
+    //     vertical-align: text-top;
+    // }
 
-    & .title-icon.green:before {
-        background-image: url(/img/pin_green.svg);
-    }
-    & .title-icon.yellow:before {
-        background-image: url(/img/pin_yellow.svg);
-    }
-    & .title-icon.red:before {
-        background-image: url(/img/pin_red.svg);
-    }
-    & .title-icon.gray:before {
-        background-image: url(/img/pin_gray.svg);
-    }
+    // & .title-icon.green:before {
+    //     background-image: url(/img/pin_green.svg);
+    // }
+    // & .title-icon.yellow:before {
+    //     background-image: url(/img/pin_yellow.svg);
+    // }
+    // & .title-icon.red:before {
+    //     background-image: url(/img/pin_red.svg);
+    // }
+    // & .title-icon.gray:before {
+    //     background-image: url(/img/pin_gray.svg);
+    // }
 
     article {
         padding: 10px 5px;
