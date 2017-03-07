@@ -164,6 +164,12 @@ $(function () {
       $('#placeDetailsModal').modal('show');
     }
 
+    $('#placeDetailsModal .full-star').tooltip({
+      toggle: 'tooltip',
+      placement: 'bottom',
+      'delay': {'show': 0, 'hide': 100}
+    });
+
     // Animate modal content
     $('.photo-container, .modal-body > div, .modal-footer').velocity(
       'transition.fadeIn',
@@ -1014,8 +1020,11 @@ $(function () {
 
     // Template is rendered, start jquerying
     //
-
-    $('#reviewPanel .full-star').tooltip();
+    $('#reviewPanel .full-star').tooltip({
+      toggle: 'tooltip',
+      placement: 'bottom',
+      'delay': {'show': 0, 'hide': 100}
+    });
 
     // Prepopulate rating
     if (previousReview) {

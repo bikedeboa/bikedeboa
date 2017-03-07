@@ -1600,48 +1600,56 @@ a,
 }
 .rating > label:before {
     margin: 0 2px;
-    /* font-size: 1.25em; */
-    /* font-size: 30px; */
-    /* font-family: FontAwesome; */
+    font-size: 1.25em;
+    font-size: 30px;
+    // font-family: FontAwesome;
+    font-family: $bootstrapFont;
+    content: "\e006";
     display: inline-block;
-    content: '';
-    background-image: url(/img/icon_star_gray.svg);
-    background-size: 100%;
     background-repeat: no-repeat;
     width: 30px;
     height: 30px;
+    transition: color 0.2s ease, text-shadow 0.2s ease,;
+
+    // content: '';
+    // background-image: url(/img/icon_star_gray.svg);
+    // background-size: 100%;
 }
 .loading-skeleton .rating > label:before {
     opacity: 0.5;
 }
 
 .rating.empty > label:before {
-    background-image: url(/img/icon_star_empty.svg);
+    // background-image: url(/img/icon_star_empty.svg);
 }
 .rating > .half:before {
     content: "\f089";
     position: absolute;
 }
 .rating > label {
-    /*color: #ddd; */
+    color: #ddd; 
     float: right;
     cursor: pointer;
     margin: 0;
 }
 
-/***** CSS Magic to Highlight Stars on Hover *****/
+/* CSS Magic to Highlight Stars on Hover */
 .rating > input:checked ~ label:before, /* show gold star when clicked */
 .rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
 .rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
-    /*color: #eabb2f;*/
-    background-image: url(/img/icon_star.svg);
+    color: #eabb2f;
+    // background-image: url(/img/icon_star.svg);
 }
 
 .rating > input:checked + label:hover:before, /* hover current star when changing rating */
 .rating > input:checked ~ label:hover:before,
+.rating > label:hover:before, /* current start */
+.rating > label:hover ~ label:before, /* ? */
 .rating > label:hover ~ input:checked ~ label:before, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label:before {
-    /*color: #f1d274;*/
+    color: #f1d274 !important;
+    text-shadow: 0 0 10px gold;
+    // background-image: url(/img/icon_star_light.svg) !important;
 }
 
 #reviewPanel .rating > label:before {
