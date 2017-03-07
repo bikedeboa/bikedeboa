@@ -939,20 +939,21 @@ a,
 
     .numreviews {
         color: $gray;
-        font-size: 1.2em;
+        font-size: 1em;
         font-weight: 100;
         vertical-align: text-top;
 
-        &:before {
-            content: '';
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            background-image: url(/img/icon_user.svg);
-            background-size: 100%;
-            background-repeat: no-repeat;
-            margin-right: 5px;
-        }
+        // &:before {
+        //     content: '';
+        //     display: inline-block;
+        //     width: 14px;
+        //     height: 17px;
+        //     background-image: url(/img/icon_user.svg);
+        //     background-size: 100%;
+        //     background-repeat: no-repeat;
+        //     vertical-align: middle;
+        //     margin-right: 5px;
+        // }
     }
 
     .savedRating {
@@ -1143,7 +1144,7 @@ a,
     }
 
     .minimap {
-        min-height: 90px;
+        min-height: 70px;
         background: $superLightGray;
         border-radius: 15px;
     }
@@ -1481,6 +1482,10 @@ a,
   body.modal-open #top-mobile-bar {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  .review .numreviews {
+    display: block;
   }
 
   #top-mobile-bar {

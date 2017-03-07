@@ -75,7 +75,13 @@ $(function () {
     }
 
     // Reviews, checkins
-    templateData.numReviews = m.reviews || '';
+    if (m.reviews === 0) {
+      templateData.numReviews = '';
+    } else if (m.reviews === '1') {
+      templateData.numReviews = '1 avaliação';
+    } else {
+      templateData.numReviews = `${m.reviews} avaliações`;
+    }
     templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
     if (loggedUser) {
