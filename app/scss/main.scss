@@ -877,8 +877,10 @@ a,
 
     .address {
         font-size: 14px;
+        line-height: 14px;
         color: $gray;
         margin-top: 0px;
+        font-weight: 700;
         /* margin-left: 40px; */
 
         .skeleton-box {
@@ -887,14 +889,18 @@ a,
         }
     }
 
-    & .title {
-        font-size: 28px;
+    .title {
         padding-left: 10px;
         vertical-align: middle;
         border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
+        padding-bottom: 20px;
         font-family: $headingFont;
-        font-weight: 700;
+
+        h1 {
+          font-weight: 700;
+          font-size: 28px;
+          line-height: 28px;
+        }
 
         & > .skeleton-box {
             width: 70%;
@@ -1129,7 +1135,7 @@ a,
 
 #placeDetailsModal {
     .modal-body {
-        padding-top: 25px;
+        // padding-top: 25px;
         // background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
         // min-height: 500px;
 
@@ -1621,6 +1627,7 @@ a,
 
 .rating.empty > label:before {
     // background-image: url(/img/icon_star_empty.svg);
+    content: "\e007";
 }
 .rating > .half:before {
     content: "\f089";

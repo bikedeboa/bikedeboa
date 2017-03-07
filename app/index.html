@@ -455,7 +455,7 @@
                           <div class="modal-body ">
                               <div id="placeDetails_heading" class="title">
                                   {{#if title}}
-                                    {{title}}
+                                    <h1>{{title}}<h1>
                                   {{else}}
                                     <small class="muted">Sem título</small>
                                   {{/if}}
@@ -501,7 +501,7 @@
           <div class="modal-body">
               <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
-                    {{title}}
+                    <h1>{{title}}</h1>
                   {{else}}
                     <small class="muted">Sem título</small>
                   {{/if}}
@@ -555,7 +555,7 @@
 
                   {{#if savedRating}}
                     <div class="savedRating">
-                      Você o avaliou como <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b><button class="link-button classic-link openReviewPanelBtn">(editar)</button>
+                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b><button class="link-button classic-link openReviewPanelBtn">(editar)</button>
                     </div>
                   {{/if}}
               </div>
@@ -724,7 +724,7 @@
                             <div class="modal-body">
                                 <div id="review_title" class="title">
                                   {{#if title}}
-                                    {{title}}
+                                    <h1>{{title}}</h1>
                                   {{else}}
                                     <small class="muted">Sem título</small>
                                   {{/if}}
@@ -748,7 +748,7 @@
                                         <label class="full-star" data-value="3" for="star3" title="Hum..."></label>
 
                                         <input type="radio" id="star2" name="rating" value="2" />
-                                        <label class="full-star" data-value="2" for="star2" title="Te liga"></label>
+                                        <label class="full-star" data-value="2" for="star2" title="Te liga hein"></label>
 
                                         <input type="radio" id="star1" name="rating" value="1" />
                                         <label class="full-star" data-value="1" for="star1" title="Horrivel"></label>
