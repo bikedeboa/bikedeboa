@@ -517,7 +517,7 @@
               </div>
 
 
-              <div class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
+              <div class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" {{#if pinColor}}data-color={{pinColor}}{{/if}} data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
                   {{#if average}}
                       <span class="average">{{average}}</span>
                   {{/if}}
@@ -734,7 +734,7 @@
                                   </p>
                                 </div>
 
-                                <div class="review">
+                                <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
                                     <h2>Dê uma nota</h2>
                                     <span id="review_average" class="average"></span>
                                     <fieldset class="rating">

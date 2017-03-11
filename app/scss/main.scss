@@ -1640,6 +1640,16 @@ a,
     margin: 0;
 }
 
+.review[data-color="green"] {
+  color: $green;
+}
+.review[data-color="yellow"] {
+  color: $yellow;
+}
+.review[data-color="red"] {
+  color: $red;
+}
+
 /* CSS Magic to Highlight Stars on Hover */
 .rating > input:checked ~ label:before, /* show gold star when clicked */
 .rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
@@ -1654,9 +1664,30 @@ a,
 .rating > label:hover ~ label:before, /* ? */
 .rating > label:hover ~ input:checked ~ label:before, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label:before {
-    color: #f1d274 !important;
-    text-shadow: 0 0 10px gold;
+    // color: #f1d274 !important;
+    color: #eabb2f !important;
+    text-shadow: 0 0 10px gold; 
+    content: "\e006";
     // background-image: url(/img/icon_star_light.svg) !important;
+}
+
+.review[data-color="green"] > .rating > input:checked ~ label:before,
+.review[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+.review[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+    // color: #eabb2f;
+    color: $green;
+}
+.review[data-color="yellow"] > .rating > input:checked ~ label:before,
+.review[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+.review[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+    // color: #eabb2f;
+    color: $yellow;
+}
+.review[data-color="red"] > .rating > input:checked ~ label:before,
+.review[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+.review[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+    // color: #eabb2f;
+    color: $red;
 }
 
 #reviewPanel .rating > label:before {
