@@ -693,8 +693,8 @@ a,
 
     .tagsContainer {
         text-align: center;
-        border-top: 1px solid #eee;
-        padding: 20px 0;
+        // border-top: 1px solid #eee;
+        padding: 10px 0 0;
 
         h2 {
             font-family: $headingFont;
@@ -702,8 +702,13 @@ a,
         }
     }
 
+    section.rating-input-container {
+      text-align: center;
+      border-top: 1px solid #eee;
+    }
+
     .description {
-        margin: 10px 0;
+        margin: 10px 0 20px;
         padding: 10px 20px 20px;
         /* color: $gray; */
         /* border-top: 1px solid #eee; */
@@ -868,6 +873,7 @@ a,
         color: #999999;
         text-align: center;
         // text-transform: uppercase;
+        user-select: none;
     }
 
     p {
@@ -890,7 +896,7 @@ a,
     }
 
     .title {
-        padding-left: 10px;
+        // padding-left: 10px;
         vertical-align: middle;
         border-bottom: 1px solid #eee;
         padding-bottom: 20px;
@@ -948,6 +954,7 @@ a,
         font-size: 1em;
         font-weight: 100;
         vertical-align: text-top;
+        user-select: none;
 
         // &:before {
         //     content: '';
@@ -1008,6 +1015,7 @@ a,
           margin-top: 10px;
           color: $gray;
           font-weight: 400;
+          user-select: none;
         }
 
         &:after {
@@ -1109,6 +1117,7 @@ a,
         width: 60%;
         max-width: 100px;
         height: auto;
+        filter: grayscale(100%);
     }
 
     .skeleton-box {
@@ -1123,7 +1132,12 @@ a,
     .icon-label {
         margin-top: 10px;
         color: $gray;
-        font-weight: 400;
+        font-weight: 700;
+        user-select: none;
+
+        small {
+          font-weight: 400;
+        }
 
         &.skeleton-box {
             height: 20px;
@@ -1165,7 +1179,6 @@ a,
 }
 
 #ratingDisplay {
-    cursor: pointer;
     margin: 0 5px;
 }
 
@@ -1252,6 +1265,7 @@ a,
     white-space: nowrap;
     user-select: none;
     border: 1px solid transparent;
+    user-select: none;
 
     background: $superLightGray;
     border-radius: 5px;
@@ -1416,7 +1430,7 @@ a,
     $buttons-distance: 10px;
 
     text-align: right;
-    margin-top: 20px;
+    margin: 20px 10px 10px;
 
     button {
         font-style: italic;
@@ -1604,9 +1618,9 @@ a,
 .rating > input {
     display: none;
 }
-.rating > label:before {
+.rating {
+  & > label:before {
     margin: 0 2px;
-    font-size: 1.25em;
     font-size: 30px;
     // font-family: FontAwesome;
     font-family: $bootstrapFont;
@@ -1620,7 +1634,14 @@ a,
     // content: '';
     // background-image: url(/img/icon_star_gray.svg);
     // background-size: 100%;
-}
+  }
+
+  &.rating-big > label:before {
+    font-size: 35px;
+    margin: 0 15px;
+  }
+} 
+
 .loading-skeleton .rating > label:before {
     opacity: 0.5;
 }
@@ -1636,8 +1657,11 @@ a,
 .rating > label {
     color: #ddd; 
     float: right;
-    cursor: pointer;
     margin: 0;
+}
+
+.rating:not(.disabled) > label {  
+    cursor: pointer;
 }
 
 .review[data-color="green"] {
@@ -1658,12 +1682,12 @@ a,
     // background-image: url(/img/icon_star.svg);
 }
 
-.rating > input:checked + label:hover:before, /* hover current star when changing rating */
-.rating > input:checked ~ label:hover:before,
-.rating > label:hover:before, /* current start */
-.rating > label:hover ~ label:before, /* ? */
-.rating > label:hover ~ input:checked ~ label:before, /* lighten current selection */
-.rating > input:checked ~ label:hover ~ label:before {
+.rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
+.rating:not(.disabled) > input:checked ~ label:hover:before,
+.rating:not(.disabled) > label:hover:before, /* current start */
+.rating:not(.disabled) > label:hover ~ label:before, /* ? */
+.rating:not(.disabled) > label:hover ~ input:checked ~ label:before, /* lighten current selection */
+.rating:not(.disabled) > input:checked ~ label:hover ~ label:before {
     // color: #f1d274 !important;
     color: #eabb2f !important;
     text-shadow: 0 0 10px gold; 
@@ -1674,19 +1698,16 @@ a,
 .review[data-color="green"] > .rating > input:checked ~ label:before,
 .review[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
 .review[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    // color: #eabb2f;
     color: $green;
 }
 .review[data-color="yellow"] > .rating > input:checked ~ label:before,
 .review[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
 .review[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    // color: #eabb2f;
     color: $yellow;
-}
+} 
 .review[data-color="red"] > .rating > input:checked ~ label:before,
 .review[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
 .review[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    // color: #eabb2f;
     color: $red;
 }
 

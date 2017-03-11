@@ -493,13 +493,13 @@
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
-            <div class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
+            <section class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
               <img src="{{photoUrl}}"/>
-            </div>
+            </section>
           {{/if}}
 
           <div class="modal-body">
-              <div id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
+              <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
                     <h1>{{title}}</h1>
                   {{else}}
@@ -514,40 +514,52 @@
                       <img class="minimap" src="{{mapStaticImg}}"></img>
                     </div>
                   {{/if}}
-              </div>
+              </section>
 
 
-              <div class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" {{#if pinColor}}data-color={{pinColor}}{{/if}} data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
+              <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" {{#if pinColor}}data-color={{pinColor}}{{/if}} data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
                   {{#if average}}
                       <span class="average">{{average}}</span>
+
+                      <fieldset id="ratingDisplay" class="rating disabled">
+                      <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                      <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
+                      <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                      <label class="full-star" data-value="4" for="placeDetails_star4"></label>
+                      <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                      <label class="full-star" data-value="3" for="placeDetails_star3"></label>
+                      <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                      <label class="full-star" data-value="2" for="placeDetails_star2"></label>
+                      <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                      <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                  </fieldset>
                   {{/if}}
                   
                   {{#unless average}}
                       <!-- <button class="openReviewPanelBtn ghost">AVALIAR</button> -->
-                      <p class="icon-label" style="font-style: italic;">
-                        Ninguém avaliou este bicicletário ainda. :/
+                      <p style="font-style: italic; font-size: 14px;">
+                        Ninguém avaliou este bicicletário ainda. :(
                       </p>
-                      <p class="icon-label">
-                        Dê sua nota:
-                      </p>
+
+                      <div class="rating-input-container">
+                        <h2 style="margin-bottom: 0;">
+                          Dê sua nota 
+                        </h2>
+
+                        <fieldset class="rating rating-big empty">
+                            <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+                            <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
+                            <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+                            <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bacaninha"></label>
+                            <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+                            <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Hum..."></label>
+                            <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+                            <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Te liga hein"></label>
+                            <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+                            <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
+                        </fieldset>
+                      </div>
                   {{/unless}}
-
-                  <fieldset id="ratingDisplay" class="rating">
-                      <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                      <label class="full-star" data-value="5" for="placeDetails_star5" title="De boa!"></label> 
-
-                      <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                      <label class="full-star" data-value="4" for="placeDetails_star4" title="Bacaninha"></label>
-
-                      <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                      <label class="full-star" data-value="3" for="placeDetails_star3" title="Hum..."></label>
-
-                      <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                      <label class="full-star" data-value="2" for="placeDetails_star2" title="Te liga hein"></label>
-
-                      <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                      <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
-                  </fieldset>
 
                   {{#if numReviews}}
                       <span class="numreviews">{{numReviews}}</span>
@@ -558,9 +570,15 @@
                       Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b><button class="link-button classic-link openReviewPanelBtn">(editar)</button>
                     </div>
                   {{/if}}
-              </div>
 
-              <div class="info clearfix">
+                  {{#if tags}}
+                      <div class="tagsContainer">
+                          {{{tags}}}
+                      </div>
+                  {{/if}}
+              </section>
+
+              <section class="info clearfix">
                   <div class="col-half {{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
                       {{#if noIsPublicData}}
                           {{#if isLoggedUser}}
@@ -597,16 +615,10 @@
                   </div>
 
                   <!-- <div>{{numCheckins}}</div> -->
-              </div>
-
-              {{#if tags}}
-                  <div class="tagsContainer">
-                      {{{tags}}}
-                  </div>
-              {{/if}}
+              </section>
 
               {{#if description}}
-                  <div class="description">
+                  <section class="description">
                       <h2>
                           <!-- <span class="glyphicon glyphicon-info-sign "></span> -->
                           Mais informações
@@ -615,27 +627,50 @@
                       <small>
                           {{{description}}}
                       </small>
-                  </div>
+                  </section>
               {{/if}}
 
-              <div class="footer-toolbar">
-                {{#if canModify }}
-                  <button id="editPlaceBtn" class="link-button">
-                    <span class="glyphicon glyphicon-pencil"></span> Editar
-                  </button>
-                  <button id="deletePlaceBtn" class="link-button">
-                    <span class="glyphicon glyphicon-trash"></span> Excluir
-                  </button>
-                  {{#unless isLoggedUser}}
-                    <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
-                  {{/unless}}
-                {{else}}
-                  <button id="createRevisionBtn" class="link-button">
-                    <span class="glyphicon glyphicon-pencil"></span> Sugerir mudança
-                  </button>
+              {{#unless savedRating}}
+                {{#if average}}
+                  <section class="rating-input-container">
+                    <h2 style="margin-bottom: 0;">
+                      Dê sua nota 
+                    </h2>
+
+                    <fieldset class="rating rating-big empty">
+                        <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+                        <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
+                        <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+                        <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bacaninha"></label>
+                        <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+                        <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Hum..."></label>
+                        <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+                        <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Te liga hein"></label>
+                        <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+                        <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
+                    </fieldset>
+                  </section>
                 {{/if}}
-              </div>
+              {{/unless}}
           </div>
+
+          <section class="footer-toolbar">
+            {{#if canModify }}
+              <button id="editPlaceBtn" class="link-button">
+                <span class="glyphicon glyphicon-pencil"></span> Editar
+              </button>
+              <button id="deletePlaceBtn" class="link-button">
+                <span class="glyphicon glyphicon-trash"></span> Excluir
+              </button>
+              {{#unless isLoggedUser}}
+                <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
+              {{/unless}}
+            {{else}}
+              <button id="createRevisionBtn" class="link-button">
+                <span class="glyphicon glyphicon-pencil"></span> Sugerir mudança
+              </button>
+            {{/if}}
+          </section>
 
           <div class="modal-footer">
                 <div class="col-half">
@@ -669,20 +704,20 @@
 
                 <div class="review">
                     <fieldset id="ratingDisplay" class="rating disabled">
-                        <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                        <label class="full-star" for="placeDetails_star5"></label>
+                        <input disabled type="radio" name="placeDetails_rating" value="5" />
+                        <label class="full-star"></label>
 
-                        <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                        <label class="full-star" for="placeDetails_star4"></label>
+                        <input disabled type="radio" name="placeDetails_rating" value="4" />
+                        <label class="full-star"></label>
 
-                        <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                        <label class="full-star" for="placeDetails_star3"></label>
+                        <input disabled type="radio" name="placeDetails_rating" value="3" />
+                        <label class="full-star"></label>
 
-                        <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                        <label class="full-star" for="placeDetails_star2"></label>
+                        <input disabled type="radio" name="placeDetails_rating" value="2" />
+                        <label class="full-star"></label>
 
-                        <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                        <label class="full-star" for="placeDetails_star1"></label>
+                        <input disabled type="radio" name="placeDetails_rating" value="1" />
+                        <label class="full-star"></label>
                     </fieldset>
                 </div>
 

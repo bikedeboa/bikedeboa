@@ -145,7 +145,7 @@ $(function () {
 
     // Init click triggers
     // $('#checkinBtn').on('click', sendCheckinBtn);
-    $('#ratingDisplay .full-star, .openReviewPanelBtn').off('click').on('click', e => {
+    $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
       openReviewModal($(e.target).data('value'));
     });
     $('.photo-container img').off('click').on('click', e => {
@@ -171,7 +171,7 @@ $(function () {
     });
 
     // Animate modal content
-    $('.photo-container, .modal-body > div, .modal-footer').velocity(
+    $('section, .modal-footer').velocity(
       'transition.fadeIn',
       {stagger: STAGGER_NORMAL, queue: false, complete: () => {
         if (callback && typeof callback === 'function') {
@@ -1326,6 +1326,9 @@ $(function () {
           callback();
         }
       });
+
+      // Reset history
+      History.replaceState({}, 'bike de boa', '/');
     } else {
       if (callback && typeof callback === 'function') {
         callback();
