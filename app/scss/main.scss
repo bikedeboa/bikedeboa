@@ -15,7 +15,7 @@ $lightestBlue: #86C7E7;
 
 // Other colors
 $black: #333;
-$white: #fafafa;
+$paleWhite: #fafafa;
 $gray: #828b90;
 $lightGray: #b3b3b3;
 $lightestGray: #e6e6e6;
@@ -24,7 +24,7 @@ $grey: $gray;
 $lightGrey: $lightGray;
 $lightestGrey: $lightestGray;
 
-$bootstrapBackdropColor: $white;
+$bootstrapBackdropColor: $paleWhite;
 $bootstrapBackdropOpacity: 0.7;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
 
@@ -368,6 +368,7 @@ a,
   .panel-body {
     font-size: 16px;
     color: $gray;
+    border-left: 3px solid #ddd;
   }
 }
 
@@ -704,11 +705,17 @@ a,
 
     section.rating-input-container {
       text-align: center;
-      border-top: 1px solid #eee;
+      // border-top: 1px solid #eee;
+      padding: 20px 0 30px;
+      background: $paleWhite;
+
+      h2 {
+        margin: 0;
+      }
     }
 
     .description {
-        margin: 10px 0 20px;
+        margin: 10px 10px 20px 10px;
         padding: 10px 20px 20px;
         /* color: $gray; */
         /* border-top: 1px solid #eee; */
@@ -775,7 +782,7 @@ a,
 
     img {
         cursor: zoom-in;
-        object-fit: cover;
+        object-fit: cover; 
     }
 
     &.photoInputContainer {
@@ -785,6 +792,8 @@ a,
     &.skeleton-box {
       display: block;
       height: 170px;
+      background: rgba(0,0,0,.2);
+      border-radius: 0;
     }
 
     &.hasImage {
@@ -856,7 +865,7 @@ a,
     }
 }
 
-.modal-body {
+.modal-content {
     // img {
     //     width: 18px;
     //     height: auto;
@@ -874,6 +883,7 @@ a,
         text-align: center;
         // text-transform: uppercase;
         user-select: none;
+        cursor: default;
     }
 
     p {
@@ -883,7 +893,7 @@ a,
 
     .address {
         font-size: 14px;
-        line-height: 14px;
+        line-height: 16px;
         color: $gray;
         margin-top: 0px;
         font-weight: 700;
@@ -891,7 +901,7 @@ a,
 
         .skeleton-box {
             width: 100%;
-            height: 20px;
+            height: 30px;
         }
     }
 
@@ -904,8 +914,8 @@ a,
 
         h1 {
           font-weight: 700;
-          font-size: 28px;
-          line-height: 28px;
+          font-size: 30px;
+          line-height: normal;
         }
 
         & > .skeleton-box {
@@ -955,6 +965,7 @@ a,
         font-weight: 100;
         vertical-align: text-top;
         user-select: none;
+        cursor: default;
 
         // &:before {
         //     content: '';
@@ -973,7 +984,11 @@ a,
         color: $gray;
         font-weight: 400;
         margin-top: 10px;
-        font-size: 12px;
+        font-size: 14px;
+    }
+
+    .rating-display-container {
+        margin: 20px 0 10px 0;
     }
 }
 
@@ -1016,6 +1031,7 @@ a,
           color: $gray;
           font-weight: 400;
           user-select: none;
+          cursor: default;
         }
 
         &:after {
@@ -1066,8 +1082,12 @@ a,
 .average {
     font-size: 30px;
     vertical-align: bottom;
-    font-family: $headingFont;
+    // font-family: $headingFont;
     font-weight: 700;
+    color: #fff;
+    border-radius: 10px;
+    padding: 3px 10px;
+    background-color: $gray; //to be overriden
 }
 
 .ghost {
@@ -1134,6 +1154,7 @@ a,
         color: $gray;
         font-weight: 700;
         user-select: none;
+        cursor: default;
 
         small {
           font-weight: 400;
@@ -1264,8 +1285,8 @@ a,
     text-align: center;
     white-space: nowrap;
     user-select: none;
+    cursor: default;
     border: 1px solid transparent;
-    user-select: none;
 
     background: $superLightGray;
     border-radius: 5px;
@@ -1472,6 +1493,58 @@ a,
     }
 }
 
+.top-toolbar {
+  display: flex !important;
+  justify-content: space-around;
+  // justify-content: flex-end;
+  align-items: flex-start;
+  margin: 10px 10px -10px 0;
+  border-bottom: 1px solid #eee;
+
+  hr {
+    border-left: 1px solid #eee;
+    height: 50px;
+    margin: 0;
+    border-top: 0;
+  }
+
+  .toolbar-item {
+    text-align: center;
+    cursor: pointer;
+    filter: grayscale(100%);
+    transition: filter 0.2s ease;
+    border: 0;
+    background: none;
+    color: $green;
+    // min-width: 110px;
+
+    .toolbar-item-icon {
+      width: 30px;
+      height: 30px;
+      &.glyphicon {
+        font-size: 20px;
+        line-height: 30px; 
+      }
+    }
+
+    label {
+      display: block;
+      text-transform: uppercase; 
+      font-weight: 700;
+      padding: 5px;
+      pointer-events: none;
+      margin: 0;
+      font-size: 12px; 
+    }
+
+    &:hover {
+      filter: none;
+      text-decoration: none;
+    }
+  }
+
+}
+
 // Le Mobile
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
   .modal-dialog {
@@ -1506,6 +1579,24 @@ a,
 
   .review .numreviews {
     display: block;
+  }
+
+  .top-toolbar {
+    // justify-content: space-around;
+    // margin: 10px 10px -30px 0;
+
+    hr {
+      // display: none;
+      height: 60px;
+    }
+
+    .toolbar-item {
+      max-width: 90px;
+
+      label {
+        font-size: 10px;
+      }
+    }
   }
 
   #top-mobile-bar {
@@ -1550,7 +1641,7 @@ a,
       background-size: 50px;
 
       // &:before {
-      //   color: $white;
+      //   color: $paleWhite;
       //   content: "\e091";
       //   font-family: $bootstrapFont;
       //   font-size: 20px;
@@ -1562,7 +1653,7 @@ a,
 
   .modal-content:before {
     content: ''
-    // color: $white;
+    // color: $paleWhite;
     // content: "\e079";
     // font-family: $bootstrapFont;
     // font-size: 25px;
@@ -1664,14 +1755,14 @@ a,
     cursor: pointer;
 }
 
-.review[data-color="green"] {
-  color: $green;
+.rating-display-container[data-color="green"] .average {
+  background-color: $green;
 }
-.review[data-color="yellow"] {
-  color: $yellow;
+.rating-display-container[data-color="yellow"] .average {
+  background-color: $yellow;
 }
-.review[data-color="red"] {
-  color: $red;
+.rating-display-container[data-color="red"] .average {
+  background-color: $red;
 }
 
 /* CSS Magic to Highlight Stars on Hover */
@@ -1695,19 +1786,19 @@ a,
     // background-image: url(/img/icon_star_light.svg) !important;
 }
 
-.review[data-color="green"] > .rating > input:checked ~ label:before,
-.review[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.review[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+.rating-display-container[data-color="green"] > .rating > input:checked ~ label:before,
+.rating-display-container[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+.rating-display-container[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
     color: $green;
 }
-.review[data-color="yellow"] > .rating > input:checked ~ label:before,
-.review[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.review[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+.rating-display-container[data-color="yellow"] > .rating > input:checked ~ label:before,
+.rating-display-container[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+.rating-display-container[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
     color: $yellow;
 } 
-.review[data-color="red"] > .rating > input:checked ~ label:before,
-.review[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.review[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+.rating-display-container[data-color="red"] > .rating > input:checked ~ label:before,
+.rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+.rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
     color: $red;
 }
 
