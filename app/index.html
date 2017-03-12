@@ -149,7 +149,7 @@
                                   <div id="collapseTwo" class="panel-collapse collapse in">
                                     <div class="panel-body">
                                       <p>
-                                        Não temos aplicativos para baixar no Google Play ou na Apple Store, mas ainda assim você pode instalá-lo no seu celular muito facilmente graças a uma nova tecnologia da Google chamada <a target="_blank" href="https://codelabs.developers.google.com/codelabs/your-first-pwapp-pt/index.html?index=..%2F..%2Findex#0">Apps Progressivos</a>.
+                                        Não temos aplicativos para baixar no Google Play ou na Apple Store, mas ainda assim você pode instalá-lo no seu celular muito facilmente graças a uma nova tecnologia da Google chamada <a target="_blank" rel="noopener" href="https://codelabs.developers.google.com/codelabs/your-first-pwapp-pt/index.html?index=..%2F..%2Findex#0">Apps Progressivos</a>.
                                       </p>
                                       <p>
                                         Siga os passos abaixo para adicionar um atalho do Bike de Boa na tela inicial do seu celular e sair usando como um aplicativo normal:
@@ -202,7 +202,7 @@
                                         Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem seus custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso ao sul do Brasil por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
                                       </p>
                                       <p>
-                                        Acompanhe novidades como essa e outras na nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
+                                        Acompanhe novidades como essa e outras na nossa <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
                                       </p>
                                     </div>
                                   </div>
@@ -243,7 +243,7 @@
                                         <ul>
                                           <li>Se você se interessa pelo tema e está cheia(o) de ideias temos um grupo de discussão no Slack onde compartilhamos e debatemos todas elas, sua participação seria muito bem vinda.</li>
                                           <li>Se é ciclista ou tá sempre por aí você pode ser um Colaborador e nos ajudar a "polir" nosso banco de dados.</li>
-                                          <li>Se você é desenvolvedor web (<a target="_blank" href="https://github.com/cmdalbem/bikedeboa">front-end</a> ou <a target="_blank" href="https://github.com/dennerevaldt/bikedeboa-api">back-end</a>) deve ser super simples contribuir nos nossos Githubs - e se não for, a culpa é nossa!</li>
+                                          <li>Se você é desenvolvedor web (<a target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">front-end</a> ou <a target="_blank" rel="noopener" href="https://github.com/dennerevaldt/bikedeboa-api">back-end</a>) deve ser super simples contribuir nos nossos Githubs - e se não for, a culpa é nossa!</li>
                                         </ul>
                                       </p>
                                     </div>
@@ -460,7 +460,7 @@
                                 </p>
 
                                 <p class="disclaimer">
-                                  Para qualquer comentário sobre o site em geral, lembre que estamos sempre de ouvidos abertos no <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span>email</a> ou na nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
+                                  Para qualquer comentário sobre o site em geral, lembre que estamos sempre de ouvidos abertos no <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span>email</a> ou na nossa <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
                                 </p>
                               </div>
                           </div>
@@ -484,7 +484,7 @@
           {{/if}}
 
           <section class="top-toolbar">
-            <a href="{{{gmapsRedirectUrl}}}" target="_blank" class="toolbar-item directionsBtn">
+            <a href="{{{gmapsRedirectUrl}}}" target="_blank" rel="noopener" class="toolbar-item directionsBtn">
               <img class="toolbar-item-icon" src="/img/route.svg">
               <label>Como chegar</label>
             </a>
@@ -830,9 +830,15 @@
 
             </ul>
 
-            <!-- <footer class="side-nav__footer">
-              <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.bikedeboa.com.br%2F&width=280&layout=button_count&action=like&size=small&show_faces=false&share=true&height=46&appId=1814653185457307" width="280" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-            </footer> -->
+            <footer class="side-nav__footer">
+              <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.bikedeboa.com.br%2F&width=280&layout=button_count&action=like&size=small&show_faces=false&share=true&height=46&appId=1814653185457307" width="280" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
+              <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp" class="social-link">
+                <img src="/img/facebook_logo.svg"/>
+              </a>
+              <a target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa" class="social-link">
+                <img src="/img/github_logo.svg"/>
+              </a>
+            </footer>
           </nav>
         </aside>
 

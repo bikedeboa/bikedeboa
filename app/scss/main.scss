@@ -121,6 +121,24 @@ body.beta #map {
     }
 }
 
+.social-link {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+  border: 0;
+  margin: 0 10px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    opacity: 1;
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+  }
+}
+
 .optimized-hidden {
     opacity: 0;
     pointer-events: none;
@@ -559,7 +577,7 @@ a,
     z-index: 9999;
 
     // Leave it visible by default so it's the first thing rendered in the screen
-    // display: none;
+    display: none;
 }
 
 #spinnerOverlay .spinnerContainer {
@@ -2064,7 +2082,6 @@ a,
 .side-nav__footer {
     padding: 16px;
     background-color: $superLightGray;
-
 }
 
 .side-nav__content {

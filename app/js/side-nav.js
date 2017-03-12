@@ -121,7 +121,12 @@ class SideNav {
 
   show () {
     // $('.side-nav__header span').velocity('transition.slideDownIn');
-    $('.side-nav__content li').css({opacity: 0}).velocity('transition.slideLeftIn', { delay: 120, stagger: 100, duration: 600 });
+    $('.side-nav__content li')
+      .css({opacity: 0})
+      .velocity('transition.slideLeftIn', { delay: 120, stagger: 100, duration: 600 });
+    // $('.side-nav__footer > *')
+    //   .css({opacity: 0})
+    //   .velocity('transition.slideUpIn', { delay: 120, duration: 1000 });
 
     this.sideNavEl.classList.add('side-nav--animatable');
     this.sideNavEl.classList.add('side-nav--visible');
