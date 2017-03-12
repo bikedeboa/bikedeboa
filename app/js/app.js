@@ -1189,6 +1189,14 @@ $(function () {
       ga('send', 'event', 'Misc', 'hamburger menu opened');
     });
 
+    $('#facebook-social-link').on('click', () => {
+      ga('send', 'event', 'Misc', 'facebook hamburger menu link click');
+    });
+
+    $('#github-social-link').on('click', () => {
+      ga('send', 'event', 'Misc', 'github hamburger menu link click');
+    });
+
     $('#loginBtn').on('click', () => {
       _sidenav.hide();
       login(true);
