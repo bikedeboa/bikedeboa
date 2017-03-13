@@ -17,4 +17,6 @@ All our tasks are [here](https://trello.com/b/2skCAJnL/bikedeboa). Please let us
 
 ## Contact
 
-bikedeboa [at] gmail [dot] com
+Facebook: https://www.facebook.com/bikedeboaapp
+
+Email: bikedeboa@gmail.com
