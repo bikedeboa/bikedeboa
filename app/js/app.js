@@ -164,11 +164,13 @@ $(function () {
       $('#placeDetailsModal').modal('show');
     }
 
-    $('#placeDetailsModal .full-star').tooltip({
-      toggle: 'tooltip',
-      placement: 'bottom',
-      'delay': {'show': 0, 'hide': 100}
-    });
+    if(!_isTouchDevice) {
+      $('#placeDetailsModal .full-star').tooltip({
+        toggle: 'tooltip',
+        placement: 'bottom',
+        'delay': {'show': 0, 'hide': 100}
+      });
+    }
 
     // Animate modal content
     $('section, .modal-footer').velocity(
@@ -1020,11 +1022,13 @@ $(function () {
 
     // Template is rendered, start jquerying
     //
-    $('#reviewPanel .full-star').tooltip({
-      toggle: 'tooltip',
-      placement: 'bottom',
-      'delay': {'show': 0, 'hide': 100}
-    });
+    if(!_isTouchDevice) {
+      $('#reviewPanel .full-star').tooltip({
+        toggle: 'tooltip',
+        placement: 'bottom',
+        'delay': {'show': 0, 'hide': 100}
+      });
+    }
 
     // Prepopulate rating
     if (previousReview) {

@@ -55,7 +55,7 @@ let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX
 let _isDesktop = window.matchMedia && window.matchMedia(`(min-width: ${DESKTOP_MIN_WIDTH})`).matches;
 
 const _isLocalhost = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
-
+const _isTouchDevice = ('ontouchstart' in window || navigator.msMaxTouchPoints);
 
 /////////////
 // Globals //
