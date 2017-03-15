@@ -1784,25 +1784,9 @@ a,
   background-color: $red;
 }
 
-/* CSS Magic to Highlight Stars on Hover */
-.rating > input:checked ~ label:before, /* show gold star when clicked */
-.rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
-.rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
+.rating > input:checked ~ label:before {
     color: #eabb2f;
     // background-image: url(/img/icon_star.svg);
-}
-
-.rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
-.rating:not(.disabled) > input:checked ~ label:hover:before,
-.rating:not(.disabled) > label:hover:before, /* current start */
-.rating:not(.disabled) > label:hover ~ label:before, /* ? */
-.rating:not(.disabled) > label:hover ~ input:checked ~ label:before, /* lighten current selection */
-.rating:not(.disabled) > input:checked ~ label:hover ~ label:before {
-    // color: #f1d274 !important;
-    color: #eabb2f !important;
-    text-shadow: 0 0 10px gold; 
-    content: "\e006";
-    // background-image: url(/img/icon_star_light.svg) !important;
 }
 
 .rating-display-container[data-color="green"] > .rating > input:checked ~ label:before,
@@ -1819,6 +1803,28 @@ a,
 .rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
 .rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
     color: $red;
+}
+
+// Only use hover effects on desktop
+@media screen and (min-width: $MOBILE_MAX_WIDTH) {
+  .rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
+  .rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
+      color: #eabb2f;
+      // background-image: url(/img/icon_star.svg);
+  }
+
+  .rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
+  .rating:not(.disabled) > input:checked ~ label:hover:before,
+  .rating:not(.disabled) > label:hover:before, /* current start */
+  .rating:not(.disabled) > label:hover ~ label:before, /* ? */
+  .rating:not(.disabled) > label:hover ~ input:checked ~ label:before, /* lighten current selection */
+  .rating:not(.disabled) > input:checked ~ label:hover ~ label:before {
+      // color: #f1d274 !important;
+      color: #eabb2f !important;
+      text-shadow: 0 0 10px gold; 
+      content: "\e006";
+      // background-image: url(/img/icon_star_light.svg) !important;
+  }
 }
 
 #reviewPanel .rating > label:before {
