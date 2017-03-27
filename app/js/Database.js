@@ -6,7 +6,7 @@ BIKE.Database = {
   ///////////////////
 
   // API path, without the final slash ('/')
-  API_URL: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : 'https://bikedeboa-api.herokuapp.com',
+  API_URL: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : 'https://bdb-api.herokuapp.com',
   _authToken: '',
   _headers: {},
 
@@ -20,7 +20,7 @@ BIKE.Database = {
   _redoLogEntry: (logEntry, cb) => {
     console.log('redoing log entry', logEntry);
 
-    const reducedEndpoint = logEntry.endpoint.split('bikedeboa-api.herokuapp.com/')[1]
+    const reducedEndpoint = logEntry.endpoint.split('bdb-api.herokuapp.com/')[1]
 
     BIKE.Database._headers.ip_origin = logEntry.ip_origin;
 
@@ -546,7 +546,7 @@ BIKE.Database = {
 
     console.log('Getting all places...');
 
-    $.ajax({ 
+    $.ajax({
       type: 'get',
       headers: self._headers,
       url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
