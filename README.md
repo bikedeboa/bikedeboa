@@ -7,7 +7,7 @@ Webapp for colaboratively mapping and reviewing your cities' bike racks.
 
 This web client consumes from an API. Feel free to use it if you'd like to implement your own web or native app client.
 * Code: https://github.com/dennerevaldt/bikedeboa-api
-* Documenation: https://bikedeboa-api.herokuapp.com/v1/doc
+* Documenation: https://bdb-api.herokuapp.com/v1/doc
 
 ## Contribute
 
