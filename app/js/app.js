@@ -644,7 +644,7 @@ $(function () {
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
             onMarkerClick(newMarker, () => {
-              $('.rating-input-container').tooltip('show');
+              $('.openReviewPanelBtn').tooltip('show');
               // $('.rating-input-container').velocity('callout.bounce');
             });
           }

@@ -121,6 +121,25 @@ body.beta #map {
     }
 }
 
+.tooltip {
+  font-family: $bodyFont;
+
+  .tooltip-inner {
+    padding: 8px;
+    background-color: $black; 
+  }
+
+  &.bottom .tooltip-arrow,
+  &.bottom-left .tooltip-arrow,
+  &.bottom-right .tooltip-arrow {
+    border-bottom-color: $black;
+  }
+
+  &.in {
+    opacity: 1;
+  }
+}
+
 .social-link {
   opacity: 0.3;
   transition: opacity 0.2s ease;

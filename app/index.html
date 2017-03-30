@@ -491,7 +491,7 @@
             
             <hr>
 
-            <button class="toolbar-item openReviewPanelBtn" tabindex="0">
+            <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa!">
               <img class="toolbar-item-icon" src="/img/review.svg">
               <label>Avaliar</label>
             </button>
@@ -561,11 +561,11 @@
                     
                     {{#unless average}}
                         <!-- <button class="openReviewPanelBtn ghost">AVALIAR</button> -->
-                        <p style="font-style: italic; font-size: 14px;">
-                          Ninguém avaliou este bicicletário ainda. :(
-                        </p>
+                        <!-- <p style="font-style: italic; font-size: 14px;">
+                          Ninguém avaliou este bicicletário ainda.
+                        </p> -->
 
-                        <div class="rating-input-container" data-toggle="tooltip" data-placement="bottom" title="Dê uma nota pra ajudar outros usuários a saber se esse bicicletário é bom ou não.">
+                        <div class="rating-input-container">
                           <h2 style="margin-bottom: 0;">
                             Dê sua nota 
                           </h2>
