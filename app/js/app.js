@@ -961,12 +961,17 @@ $(function () {
     });
 
     // Finally, display the modal
+    const showModal = () => {
+      $('#newPlaceModal').modal('show');
+      // We can only set the nav title after the modal has been opened
+      setMobileHeaderTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+    }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
-        $('#newPlaceModal').modal('show');
+        showModal();
       });
     } else {
-      $('#newPlaceModal').modal('show');
+      showModal();
     }
   }
 
@@ -1187,6 +1192,10 @@ $(function () {
     $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': "block" });
   }
 
+  function setMobileHeaderTitle(text) {
+    $('#top-mobile-bar h1').text(text || '');
+  }
+
   function _initGlobalTriggers() {
     $('.js-menu-show').on('click', () => {
       // Menu open is already triggered inside the menu component.
@@ -1283,7 +1292,7 @@ $(function () {
 
       // Set mobile navbar with modal's title
       const openingModalTitle = $(e.currentTarget).find('.modal-title').text();
-      $('#top-mobile-bar h1').text(openingModalTitle || '');
+      setMobileHeaderTitle(openingModalTitle || '')
 
       // Mobile optimizations
       if (_isMobile) {
