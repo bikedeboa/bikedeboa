@@ -409,6 +409,18 @@ a,
   }
 }
 
+.tutorial-gif {
+  max-width: 260px;
+  height: auto;
+  margin: 20px auto 40px auto;
+  display: block;
+  box-shadow: 10px 10px 30px rgba(0,0,0,0.2);
+  // box-shadow: 10px 10px 0 #E9BB2B;
+
+  min-height: 460px;
+  background: $lightGrey;
+}
+
 #addPlace {
     transition: bottom 0.5s ease-out, background 0.2s ease-out;
     opacity: 0;
@@ -2102,6 +2114,12 @@ a,
         &:hover {
             opacity: 1;
         }
+    }
+
+    @media screen and (max-height: 512px) {
+      & {
+        display: none;
+      }
     }
 }
 

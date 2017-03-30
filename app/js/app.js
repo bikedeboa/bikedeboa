@@ -1223,6 +1223,21 @@ $(function () {
       $('#aboutModal').modal('show');
     });
 
+    $('#howToInstallBtn').on('click', () => {
+      _sidenav.hide();
+      // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      ga('send', 'event', 'Misc', 'how-to-install opened');
+      History.pushState({}, 'Como instalar o app', 'como-instalar');
+      
+      $('#howToInstallModal').modal('show').one('shown.bs.modal', () => { 
+        // Lazy load gifs when modal is shown
+        $('#howToInstallModal .tutorial-gif').each( (i, v) => {
+          $(v).attr('src', $(v).data('src'));
+        });
+      });
+      
+    });
+
     $('#faqBtn').on('click', () => {
       _sidenav.hide();
       ga('send', 'event', 'Misc', 'faq opened');
