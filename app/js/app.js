@@ -1374,6 +1374,20 @@ $(function () {
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
+        // Set up Service Worker
+    if (window.UpUp) {
+      UpUp.start({
+        'content': 'Você está offline. :(',
+        'cache-version': 'v2.2',
+      });
+    }
+
+    // Detect if webapp was launched from mobile homescreen
+    // Source: https://developers.google.com/web/updates/2015/10/display-mode
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      ga('send', 'event', 'Misc', 'launched with display=standalone');
+    }
+
     map = new google.maps.Map(document.getElementById('map'), {
       center: {
         lat: -30.0346,
@@ -1477,14 +1491,6 @@ $(function () {
         hideAllModals();
       }
     });
-
-    // Set up Service Worker
-    if (window.UpUp) {
-      UpUp.start({
-        'content': 'Você está offline. :(',
-        'cache-version': 'v2.2',
-      });
-    }
 
     // Set up Sweet Alert
     swal.setDefaults({
