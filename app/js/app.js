@@ -1382,9 +1382,12 @@ $(function () {
       });
     }
 
-    // Detect if webapp was launched from mobile homescreen
-    // Source: https://developers.google.com/web/updates/2015/10/display-mode
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    // Detect if webapp was launched from mobile homescreen (for Android and iOS)
+    // References:
+    //   https://developers.google.com/web/updates/2015/10/display-mode
+    //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
+
+    if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
 
