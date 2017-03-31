@@ -1229,12 +1229,26 @@ $(function () {
       ga('send', 'event', 'Misc', 'how-to-install opened');
       History.pushState({}, 'Como instalar o app', 'como-instalar');
       
-      $('#howToInstallModal').modal('show').one('shown.bs.modal', () => { 
-        // Lazy load gifs when modal is shown
-        $('#howToInstallModal .tutorial-gif').each( (i, v) => {
-          $(v).attr('src', $(v).data('src'));
-        });
+      // Tries to guess the user agent to initialize the correspondent accordion item opened
+      const userAgent = window.getBrowserName();
+      switch (userAgent) {
+        case 'Chrome':
+          $('#collapse-chrome').addClass('in');
+          break;
+        case 'Firefox':
+          $('#collapse-firefox').addClass('in');
+          break;
+        case 'Safari':
+          $('#collapse-safari').addClass('in');
+          break;
+      }
+
+      // Lazy load gifs when modal is shown
+      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
+        $(v).attr('src', $(v).data('src'));
       });
+
+      $('#howToInstallModal').modal('show');
       
     });
 
