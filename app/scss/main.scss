@@ -2203,7 +2203,7 @@ a,
   flex-direction: column;
   will-change: transform;
 
-  @media screen and (max-height: 512px) {
+  @media screen and (max-height: 700px) {
     .side-nav__header {
       display: none;
     }
