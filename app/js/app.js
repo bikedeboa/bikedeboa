@@ -398,7 +398,8 @@ $(function () {
 
     const isPublicFilters = filters.filter(i => i.prop === 'isPublic');
     const ratingFilters = filters.filter(i => i.prop === 'rating');
-    const categories = [isPublicFilters, ratingFilters];
+    const structureFilters = filters.filter(i => i.prop === 'structureType');
+    const categories = [isPublicFilters, ratingFilters, structureFilters];
 
     for(let i=0; i < markers.length; i++) {
       const m = markers[i];
