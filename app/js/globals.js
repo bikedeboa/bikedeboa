@@ -91,11 +91,13 @@ let loggedUser;
 let _searchResultMarker;
 let _abortedDetailsRequest;
 let _positionWatcher;
-let _sidenav;
+let _hamburgerMenu;
+let _filterMenu;
 let _geolocationInitialized;
 let _updatingReview;
 let _userIP;
 let _mapZoomLevel;
 let _isFacebookBrowser;
+let _activeFilters;
 
 let templates = {};

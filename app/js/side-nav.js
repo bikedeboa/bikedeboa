@@ -16,13 +16,24 @@
  */
 
 class SideNav {
-  constructor () {
-    this.showButtonEl = document.querySelector('.js-menu-show');
-    this.hideButtonEl = document.querySelector('.js-menu-hide');
-    this.sideNavEl = document.querySelector('.js-side-nav');
-    this.sideNavContainerEl = document.querySelector('.js-side-nav-container');
+  constructor (id, options) {
+    this.showButtonEl = document.querySelector(`.js-menu-show-${id}`);
+    this.hideButtonEl = document.querySelector(`#${id} .js-menu-hide`);
+    this.sideNavEl = document.querySelector(`#${id}`);
+    this.sideNavContainerEl = document.querySelector(`#${id} .js-side-nav-container`);
+    
+    if (!this.showButtonEl ||
+        !this.hideButtonEl ||
+        !this.sideNavEl ||
+        !this.sideNavContainerEl) {
+      console.error('Something went wrong when initializing sidenav ' + id);
+      return;
+    }
+
     // Control whether the container's children can be focused
     // Set initial state to inert since the drawer is offscreen
+
+    this.options = options || {};
 
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
@@ -36,6 +47,7 @@ class SideNav {
     this.startX = 0;
     this.currentX = 0;
     this.touchingSideNav = false;
+    this.viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
     this.supportsPassive = undefined;
     this.addEventListeners();
@@ -60,7 +72,9 @@ class SideNav {
   addEventListeners () {
     this.showButtonEl.addEventListener('click', this.show);
     this.hideButtonEl.addEventListener('click', this.hide);
-    this.sideNavEl.addEventListener('click', this.hide);
+    if (!this.options.fixed) {
+      this.sideNavEl.addEventListener('click', this.hide);
+    }
     this.sideNavContainerEl.addEventListener('click', this.blockClicks);
 
     this.sideNavEl.addEventListener('touchstart', this.onTouchStart, this.applyPassive());
@@ -92,11 +106,22 @@ class SideNav {
 
     this.touchingSideNav = false;
 
-    const translateX = Math.min(0, this.currentX - this.startX);
+    let translateX;
+    if (this.options.inverted) {
+      translateX = Math.max(0, this.currentX - this.startX);
+    } else {
+      translateX = Math.min(0, this.currentX - this.startX);
+    }
     this.sideNavContainerEl.style.transform = '';
 
-    if (translateX < 0) {
-      this.hide();
+    if (this.options.inverted) {
+      if (translateX > 0) {
+        this.hide();
+      }
+    } else {
+      if (translateX < 0) {
+        this.hide();
+      }
     }
   }
 
@@ -106,7 +131,13 @@ class SideNav {
 
     requestAnimationFrame(this.update);
 
-    const translateX = Math.min(0, this.currentX - this.startX);
+    let translateX;
+    if (this.options.inverted) {
+      translateX = Math.max(0, this.currentX - this.startX);
+    } else {
+      translateX = Math.min(0, this.currentX - this.startX);
+    }
+
     this.sideNavContainerEl.style.transform = `translateX(${translateX}px)`;
   }
 
@@ -121,12 +152,14 @@ class SideNav {
 
   show () {
     // $('.side-nav__header span').velocity('transition.slideDownIn');
-    $('.side-nav__content li')
-      .css({opacity: 0})
-      .velocity('transition.slideLeftIn', { delay: 120, stagger: 100, duration: 600 });
-    // $('.side-nav__footer > *')
-    //   .css({opacity: 0})
-    //   .velocity('transition.slideUpIn', { delay: 120, duration: 1000 });
+    if (!this.options.dontAnimate) {
+      $('.side-nav__content li')
+        .css({opacity: 0})
+        .velocity('transition.slideLeftIn', { delay: 120, stagger: 100, duration: 600 });
+      // $('.side-nav__footer > *')
+      //   .css({opacity: 0})
+      //   .velocity('transition.slideUpIn', { delay: 120, duration: 1000 });
+    }
 
     this.sideNavEl.classList.add('side-nav--animatable');
     this.sideNavEl.classList.add('side-nav--visible');

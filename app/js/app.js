@@ -365,6 +365,99 @@ $(function () {
     }
   }
 
+  function updateFilters() {
+    let filters = [];
+    $('.filter-checkbox:checked').each( (i, f) => {
+      const p = $(f).data('prop');
+      let v = $(f).data('value'); 
+
+      filters.push({prop: p, value: v});
+    });
+
+    const resultsCount = applyFilters(filters);
+    if (filters.length > 0) {
+      $('#filter-results-counter').html(resultsCount);
+      $('#active-filters-counter').html(filters.length);
+      $('#filterBtn').toggleClass('active', true);
+      $('#filter-results-counter-container').velocity({ opacity: 1 });
+    } else {
+      $('#filter-results-counter-container').velocity({ opacity: 0 });
+      $('#active-filters-counter').html('');
+      $('#filterBtn').toggleClass('active', false);
+    }
+  }
+
+  // Array of filters in the form of [{prop: 'a property', value: 'a value'}, ...]
+  // Logical expression: 
+  //   showIt = (prop1_val1 OR ... OR prop1_valN) AND
+  //            (prop2_val1 OR ... OR prop2_valN) AND 
+  //            ...
+  //            (propN_val1 OR ... OR propN_valN)
+  function applyFilters(filters = []) {
+    let cont = 0;
+
+    const isPublicFilters = filters.filter(i => i.prop === 'isPublic');
+    const ratingFilters = filters.filter(i => i.prop === 'rating');
+    const categories = [isPublicFilters, ratingFilters];
+
+    for(let i=0; i < markers.length; i++) {
+      const m = markers[i];
+      let showIt = true;
+
+      // Apply all filters to this marker
+      for(let cat=0; cat < categories.length && showIt; cat++) {
+        let catResult = false;
+        
+        if (categories[cat].length) {
+          for(let f_index=0; f_index < categories[cat].length && showIt; f_index++) {
+            const f = categories[cat][f_index];
+            let testResult;
+
+            if (f.prop !== 'rating') {
+              testResult = m[f.prop] === f.value;
+            } else {
+              // Custom test case: rating range
+              switch (f.value) {
+                case 'good':
+                  testResult = m.average >= 3.5;
+                  break;
+                case 'medium':
+                  testResult = m.average > 2 && m.average < 3.5;
+                  break;
+                case 'bad':
+                  testResult = m.average > 0 && m.average <= 2;
+                  break;
+                case 'none':
+                  testResult = m.average === null;
+                  break;
+              }
+            }
+            
+            // Filters inside each category are compared with OR
+            catResult = catResult || testResult;
+          }
+          
+          // Category are compared with each other with AND
+          showIt = showIt && catResult;
+        }
+      }
+
+      // _gmarkers[i].setMap(showIt ? map : null);
+      _gmarkers[i].setIcon(showIt ? m.icon : m.iconMini);
+      _gmarkers[i].setOptions({opacity: (showIt ? 1 : 0.3)});
+      _gmarkers[i].collapsed = !showIt;
+      cont += showIt ? 1 : 0;
+    }
+
+    _activeFilters = filters.length;
+
+    return cont;
+  }
+
+  function clearFilters() {
+    setMapOnAll(map);
+  }
+
   function updateMarkers() {
     clearMarkers();
 
@@ -1197,9 +1290,14 @@ $(function () {
   }
 
   function _initGlobalTriggers() {
-    $('.js-menu-show').on('click', () => {
+    $('.js-menu-show-hamburger-menu').on('click', () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
+    });
+    
+    $('.js-menu-show-filter-menu').on('click', () => {
+      // Menu open is already triggered inside the menu component.
+      ga('send', 'event', 'Filter', 'filter menu opened');
     });
 
     $('#facebook-social-link').on('click', () => {
@@ -1211,12 +1309,12 @@ $(function () {
     });
 
     $('#loginBtn').on('click', () => {
-      _sidenav.hide();
+      _hamburgerMenu.hide();
       login(true);
     });
 
     $('#aboutBtn').on('click', () => {
-      _sidenav.hide();
+      _hamburgerMenu.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'about opened');
       History.pushState({}, 'Sobre', 'sobre');
@@ -1253,7 +1351,7 @@ $(function () {
     });
 
     $('#faqBtn').on('click', () => {
-      _sidenav.hide();
+      _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       History.pushState({}, 'Perguntas frequentes', 'faq');
       $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
@@ -1267,6 +1365,23 @@ $(function () {
       }
 
       toggleLocationInputMode();
+    });
+
+    $('#clear-filters-btn').on('click', () => {
+      $('.filter-checkbox:checked').prop('checked', false);
+
+      ga('send', 'event', 'Filter', `clear filters`);
+      
+      updateFilters();
+    });
+
+    $('.filter-checkbox').on('change', e => {
+      // ga('send', 'event', 'Misc', 'launched with display=standalone');
+      const $target = $(e.currentTarget);
+
+      ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(":checked") ? 'ON' : 'OFF'}`);
+
+      updateFilters();
     });
 
     // Capture modal closing by
@@ -1429,7 +1544,9 @@ $(function () {
       _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
 
       if (prevZoomLevel !== _mapZoomLevel) {
-        setMarkersIcon(_mapZoomLevel);
+        if (!_activeFilters) {
+          setMarkersIcon(_mapZoomLevel);
+        }
       }
     });
 
@@ -1516,7 +1633,11 @@ $(function () {
       cancelButtonText: 'Cancelar'
     });
 
-    _sidenav = new SideNav();
+    _hamburgerMenu = new SideNav('hamburger-menu');
+    _hamburgerMenu = new SideNav(
+      'filter-menu',
+      {dontAnimate: true, inverted: true/*, fixed: true*/}
+    );
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
@@ -1640,6 +1761,9 @@ $(function () {
 
     // This is the only request allowed to be unauthenticated
     Database.getPlaces( () => {
+      $('#filter-results-counter').html(markers.length);
+      $('#filter-results-total').html(markers.length);
+
       updateMarkers();
 
       // Hide spinner that is initialized visible on CSS

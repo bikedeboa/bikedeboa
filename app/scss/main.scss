@@ -11,6 +11,7 @@ $blue: #329BCE;
 $paleBlue: #437E9B;
 $darkBlue: #106086;
 $lightBlue: #63BCE7;
+$lightestBlue: lightblue;
 $lightestBlue: #86C7E7;
 
 // Other colors
@@ -446,11 +447,6 @@ a,
     }
 }
 
-#filterBtn img {
-    width: 20px;
-    height: 20px;
-}
-
 #locationSearch input,
 #filterBtn {
     height: 48px;
@@ -460,9 +456,28 @@ a,
 }
 
 #filterBtn {
-    width: 48px;
-    background-color: $superLightGray;
-    border: 5px solid white;
+    float: right;
+    border-radius: 10px;
+    border: 0;
+    background-color: white;
+    height: 40px;
+    margin: 10px 0;
+    font-family: $bodyFont;
+    font-weight: 700;
+    color: $gray;
+    padding: 0 10px;
+    @include material-shadow(1);
+
+    &.active {
+      border: 2px solid $lightestBlue;
+      background-color: $paleWhite;
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+    }
 }
 
 .navbar {
@@ -493,7 +508,7 @@ a,
     border-radius: 25px;
     width: 70%;
     height: 50px;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06);
+    @include material-shadow(1);
     font-family: $headingFont;
     font-weight: 700;
     min-width: 250px;
@@ -1595,7 +1610,122 @@ a,
 
 }
 
-// Le Mobile
+#filter-menu {
+  h3:first-child {
+    margin-top: 0;
+  }
+
+  .side-nav__header {
+    height: auto;
+    background: none;
+  }
+
+  .side-nav__container {
+    padding: 0 20px;
+  }
+
+  .side-nav__hide {
+    color: black;
+  }
+
+  li {
+    display: flex !important;
+    align-items: baseline;
+   
+    label {
+      flex-grow: 1;
+      margin: 0 0 0 10px;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    input:checked + label {
+      font-weight: bold;
+    }
+  }
+
+  h2 {
+    margin-top: 50px;
+    color: $black;
+
+  }
+
+  #filter-results-counter-container {
+    // padding: 16px 0 16px 16px;
+    padding-left: 16px;
+    font-size: 12px;
+    color: $gray;
+    opacity: 0;
+  }
+
+  #filter-results-counter {
+    font-weight: bold;
+    // color: $black;
+  }
+}
+
+// Google Maps API Customizations
+// Autocomplete results dropdown
+.pac-container {
+  .pac-item-query {
+      font-size: 17px;
+      // font-family: $headingFont;
+      display: inline-block;
+  }
+
+  .pac-item {
+      font-size: 12px;
+      display: block;
+      padding: 10px;
+      cursor: pointer;
+  }
+
+  .pac-item > span:last-child {
+      display: block;
+      padding-left: 22px;
+      font-family: $bodyFont;
+      line-height: 1em;
+  }
+
+  /* Overrides marker */
+  /* .pac-icon {
+      background-image: url(/img/pin_gray.png) !important;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: 0px;
+  } */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Mobile //////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
   .modal-dialog {
     margin: 0;
@@ -1712,42 +1842,39 @@ a,
     // top: 15px;
     // right: 0;
   }
+
+  #filter-menu {
+    .side-nav__container {
+      max-width: 250px;
+      padding: 0;
+    }
+  }
 }
 
-// Google Maps API Customizations
-// Autocomplete results dropdown
-.pac-container {
-  .pac-item-query {
-      font-size: 17px;
-      // font-family: $headingFont;
-      display: inline-block;
-  }
 
-  .pac-item {
-      font-size: 12px;
-      display: block;
-      padding: 10px;
-      cursor: pointer;
-  }
 
-  .pac-item > span:last-child {
-      display: block;
-      padding-left: 22px;
-      font-family: $bodyFont;
-      line-height: 1em;
-  }
 
-  /* Overrides marker */
-  /* .pac-icon {
-      background-image: url(/img/pin_gray.png) !important;
-      background-size: 100%;
-      background-repeat: no-repeat;
-      background-position: 0px;
-  } */
-}
+
+
+
+
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // External ////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /****** Style Star Rating Widget *****/
@@ -1789,7 +1916,12 @@ a,
 
 .rating.empty > label:before {
     // background-image: url(/img/icon_star_empty.svg);
+    
+    // hollow star
     content: "\e007";
+    
+    // empty gray star
+    // content: "\e006";
 }
 .rating > .half:before {
     content: "\f089";
@@ -2032,8 +2164,17 @@ a,
   pointer-events: none;
 }
 
-.side-nav--visible {
-  pointer-events: auto;
+.side-nav-inverted {
+  .side-nav__container {
+    position: absolute;
+    right: 0;
+    transform: translateX(102%);
+  }
+
+  .side-nav__hide {
+    right: 0;
+    left: auto;
+  }
 }
 
 .side-nav::before {
@@ -2061,14 +2202,28 @@ a,
   display: flex;
   flex-direction: column;
   will-change: transform;
+
+  @media screen and (max-height: 512px) {
+    .side-nav__header {
+      display: none;
+    }
+    .side-nav__hide {
+      color: black;
+      right: 16px;
+      left: auto;
+    }
+    .side-nav__content {
+      margin-top: 50px;
+    }
+  }
 }
 
 .side-nav--animatable .side-nav__container {
-  transition: transform 0.13s cubic-bezier(0,0,0.3,1);
+  transition: transform 0.2s cubic-bezier(0,0,0.3,1);
 }
 
 .side-nav--visible.side-nav--animatable .side-nav__container {
-  transition: transform 0.33s cubic-bezier(0,0,0.3,1);
+  transition: transform 0.5s cubic-bezier(0,0,0.3,1);
 }
 
 .side-nav--visible::before {
@@ -2079,15 +2234,20 @@ a,
   transform: none;
 }
 
+.side-nav--visible {
+  pointer-events: auto;
+}
+
 .side-nav__hide {
   position: absolute;
-  left: 16px;
-  top: 16px;
+  left: 0;
+  top: 0;
+  width: 56px;
+  height: 56px;
+  font-size: 20px;
   background: none;
   border: none;
   color: #FFF;
-  width: 24px;
-  height: 24px;
   padding: 0;
   margin: 0;
 }
@@ -2115,12 +2275,6 @@ a,
             opacity: 1;
         }
     }
-
-    @media screen and (max-height: 512px) {
-      & {
-        display: none;
-      }
-    }
 }
 
 .side-nav__footer {
@@ -2129,9 +2283,7 @@ a,
 }
 
 .side-nav__content {
-  padding-top: 32px;
   flex: 1;
-  list-style: none;
   padding: 0;
   margin: 12px 0 0;
   overflow-x: hidden;
@@ -2139,19 +2291,37 @@ a,
   -webkit-overflow-scrolling: touch;
   font-size: 18px;
 
-  .glyphicon {
-    margin-right: 10px;
-    opacity: 0.5;
+  h3 {
+    padding: 10px;
+    font-weight: lighter;
+    font-size: 14px;
+    color: #999;
+    user-select: none;
+    padding: 10px 0 0 16px;
+    text-transform: uppercase;
   }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .glyphicon {
+      margin-right: 10px;
+      opacity: 0.5;
+    }
+
+    li {
+      height: 48px;
+      line-height: 48px;
+      padding: 0 16px;
+      cursor: pointer;
+    }
+
+    li:hover {
+      background: #CCC;
+    }
+  }
+
 }
 
-.side-nav__content li {
-  height: 48px;
-  line-height: 48px;
-  padding: 0 16px;
-  cursor: pointer;
-}
-
-.side-nav__content li:hover {
-  background: #CCC;
-}

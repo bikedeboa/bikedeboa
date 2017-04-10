@@ -63,18 +63,20 @@
         <div id="map"></div>
 
         <div id="locationSearch" class="coolHide">
-            <button class="js-menu-show header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+            <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
             <!-- <span class="balaca">
               <img src="/img/bici.svg"/>
             </span> -->
             <input id="locationQueryInput" type="text" placeholder="Buscar endereço, estabelecimento, ...">
             <button id="clearLocationQueryBtn">✕</button>
 
-            <!-- <span>
-                <button id="filterBtn" type="button">
+            <span>
+                <button id="filterBtn" type="button" class="js-menu-show-filter-menu">
                     <img src="/img/icon_filter.svg" class="icon"/>
+                    Filtrar
+                    <span id="active-filters-counter" class="badge"></span>
                 </button>
-            </span> -->
+            </span>
         </div>
 
         <div class="modal fade" id="aboutModal" tabindex="-1">
@@ -855,7 +857,7 @@
             </div>
         </script>
 
-        <aside class="js-side-nav side-nav">
+        <aside id="hamburger-menu" class="js-side-nav side-nav">
           <nav class="js-side-nav-container side-nav__container">
             <header class="side-nav__header">
               <!-- <span>bike de boa</span> -->
@@ -866,28 +868,29 @@
               <span class="glyphicon glyphicon-remove"></span>
             </button>
 
-            <ul class="side-nav__content">
-              <li id="aboutBtn">
-                <span class="glyphicon glyphicon-info-sign"></span>
-                Sobre o projeto
-              </li>
-              <li id="faqBtn">
-                <span class="glyphicon glyphicon-question-sign"></span>
-                Perguntas frequentes
-              </li>
-              <li id="howToInstallBtn">
-                <span class="glyphicon glyphicon-download-alt"></span>
-                Instalar o app
-              </li>
-              
-              <hr>
-              
-              <li id="loginBtn">
-                <span class="glyphicon glyphicon-user"></span>
-                Login colaborador
-              </li>
-
-            </ul>
+            <div class="side-nav__content">
+              <ul>
+                <li id="aboutBtn">
+                  <span class="glyphicon glyphicon-info-sign"></span>
+                  Sobre o projeto
+                </li>
+                <li id="faqBtn">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+                  Perguntas frequentes
+                </li>
+                <li id="howToInstallBtn">
+                  <span class="glyphicon glyphicon-download-alt"></span>
+                  Instalar o app
+                </li>
+                
+                <hr>
+                
+                <li id="loginBtn">
+                  <span class="glyphicon glyphicon-user"></span>
+                  Login colaborador
+                </li>
+              </ul>
+            </div>
 
             <footer class="side-nav__footer">
               <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.bikedeboa.com.br%2F&width=280&layout=button_count&action=like&size=small&show_faces=false&share=true&height=46&appId=1814653185457307" width="280" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
@@ -898,6 +901,66 @@
                 <img src="/img/github_logo.svg"/>
               </a>
             </footer>
+          </nav>
+        </aside>
+
+        <aside id="filter-menu" class="js-side-nav side-nav side-nav-inverted side-nav-fixed">
+          <nav class="js-side-nav-container side-nav__container">
+            <header class="side-nav__header">
+              <h2>Filtrar Bicicletários</h2>
+            </header>
+
+            <button class="js-menu-hide side-nav__hide">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button> 
+
+            <div class="side-nav__content">
+              <div id="filter-results-counter-container">
+                Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
+              </div>
+
+              <h3>Acesso</h3>
+
+              <ul>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
+                    <label for="filter_public">Públicos</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
+                    <label for="filter_private">Restritos</label>
+                </li>
+              </ul>
+
+              <h3>Avaliações</h3>
+
+              <ul>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
+                    <label for="filter_rating_good">Excelentes</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_medium" data-prop="rating" data-value="medium">
+                    <label for="filter_rating_medium">Médios</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_bad" data-prop="rating" data-value="bad">
+                    <label for="filter_rating_bad">Ruins</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_none" data-prop="rating" data-value="none">
+                    <label for="filter_rating_none">Sem avaliação</label>
+                </li>
+              </ul>
+            </div>
+
+            <!-- <footer>
+              <div id="filter-results-counter-container">
+                Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
+              </div>
+              <button id="clear-filters-btn" class="link-button classic-link">Limpar</button>
+            </footer> -->
+
           </nav>
         </aside>
 
