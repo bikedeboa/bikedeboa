@@ -92,7 +92,7 @@ $(function () {
     }
 
     // Route button
-    templateData.gmapsRedirectUrl = `https://www.google.com/maps/dir//${m.lat},${m.lng}`;
+    templateData.gmapsRedirectUrl = `https://www.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
 
     // Photo
     templateData.photoUrl = m.photo;
