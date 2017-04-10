@@ -1644,19 +1644,25 @@ a,
     color: black;
   }
 
-  li {
-    display: flex !important;
-    align-items: baseline;
-   
-    label {
-      flex-grow: 1;
-      margin: 0 0 0 10px;
-      font-weight: normal;
-      cursor: pointer;
-    }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
 
-    input:checked + label {
-      font-weight: bold;
+    li {
+      display: flex !important;
+      align-items: baseline;
+      width: 50%;
+     
+      label {
+        flex-grow: 1;
+        margin: 0 0 0 10px;
+        font-weight: normal;
+        cursor: pointer;
+      }
+
+      input:checked + label {
+        font-weight: bold;
+      }
     }
   }
 
@@ -1681,7 +1687,7 @@ a,
   @media screen and (max-height: 700px) {
     .side-nav__header {
       padding-bottom: 0;
-      
+
       h2 {
         display: none;
       }
@@ -1880,6 +1886,10 @@ a,
     .side-nav__container {
       max-width: 250px;
       padding: 0;
+    }
+
+    ul li {
+      width: 100%;
     }
   }
 }
