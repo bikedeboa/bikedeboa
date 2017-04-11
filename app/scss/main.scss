@@ -1638,7 +1638,7 @@ a,
   }
 
   .side-nav__container {
-    padding: 0 20px;
+    padding: 0 0 0 20px;
   }
 
   .side-nav__hide {
@@ -1653,12 +1653,18 @@ a,
       display: flex !important;
       align-items: baseline;
       width: 50%;
+      white-space: nowrap;
      
       label {
         flex-grow: 1;
         margin: 0 0 0 10px;
         font-weight: normal;
         cursor: pointer;
+
+        img {
+          height: 1em;
+          // margin-right: 5px;
+        }
       }
 
       input:checked + label {
