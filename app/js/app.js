@@ -445,7 +445,7 @@ $(function () {
 
       // _gmarkers[i].setMap(showIt ? map : null);
       _gmarkers[i].setIcon(showIt ? m.icon : m.iconMini);
-      _gmarkers[i].setOptions({opacity: (showIt ? 1 : 0.3)});
+      _gmarkers[i].setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
       _gmarkers[i].collapsed = !showIt;
       cont += showIt ? 1 : 0;
     }
