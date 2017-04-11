@@ -47,6 +47,7 @@ class SideNav {
     this.startX = 0;
     this.currentX = 0;
     this.touchingSideNav = false;
+    this.panelWidth = this.sideNavContainerEl.getBoundingClientRect().width;
     this.viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
     this.supportsPassive = undefined;
@@ -115,11 +116,11 @@ class SideNav {
     this.sideNavContainerEl.style.transform = '';
 
     if (this.options.inverted) {
-      if (translateX > 0) {
+      if (translateX > this.panelWidth/2) {
         this.hide();
       }
     } else {
-      if (translateX < 0) {
+      if (translateX < -this.panelWidth/2) {
         this.hide();
       }
     }
