@@ -1294,11 +1294,13 @@ $(function () {
     $('.js-menu-show-hamburger-menu').on('click', () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
+      History.pushState({}, '', 'nav');
     });
     
     $('.js-menu-show-filter-menu').on('click', () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
+      History.pushState({}, '', 'filtros');
     });
 
     $('#facebook-social-link').on('click', () => {
@@ -1310,23 +1312,24 @@ $(function () {
     });
 
     $('#loginBtn').on('click', () => {
-      _hamburgerMenu.hide();
+      _hamburgerMenu.hide({dontMessWithState: true});
+      History.replaceState({}, 'Login colaborador', 'login');
       login(true);
     });
 
     $('#aboutBtn').on('click', () => {
-      _hamburgerMenu.hide();
+      _hamburgerMenu.hide({dontMessWithState: true});
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'about opened');
-      History.pushState({}, 'Sobre', 'sobre');
+      History.replaceState({}, 'Sobre', 'sobre');
       $('#aboutModal').modal('show');
     });
 
     $('#howToInstallBtn').on('click', () => {
-      _sidenav.hide();
+      _hamburgerMenu.hide({dontMessWithState: true});
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'how-to-install opened');
-      History.pushState({}, 'Como instalar o app', 'como-instalar');
+      History.replaceState({}, 'Como instalar o app', 'como-instalar');
       
       // Tries to guess the user agent to initialize the correspondent accordion item opened
       const userAgent = window.getBrowserName();
@@ -1352,9 +1355,9 @@ $(function () {
     });
 
     $('#faqBtn').on('click', () => {
-      _hamburgerMenu.hide();
+      _hamburgerMenu.hide({dontMessWithState: true});
       ga('send', 'event', 'Misc', 'faq opened');
-      History.pushState({}, 'Perguntas frequentes', 'faq');
+      History.replaceState({}, 'Perguntas frequentes', 'faq');
       $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       $('#faqModal').modal('show');
     });
@@ -1500,6 +1503,10 @@ $(function () {
         callback();
       }
     }
+
+    // Close any sidenavs
+    _hamburgerMenu.hide();
+    _filterMenu.hide();
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -1635,7 +1642,7 @@ $(function () {
     });
 
     _hamburgerMenu = new SideNav('hamburger-menu');
-    _hamburgerMenu = new SideNav(
+    _filterMenu = new SideNav(
       'filter-menu',
       {dontAnimate: true, inverted: true/*, fixed: true*/}
     );

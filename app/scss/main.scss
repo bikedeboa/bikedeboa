@@ -379,12 +379,13 @@ a,
 
 .panel-group {
   .panel-heading {
-    padding: 15px;
+    padding: 0;
   }
 
   .panel-title {
     font-family: $headingFont;
     color: $black;
+    padding: 15px;
   }
 
   .panel-heading a {
@@ -2279,6 +2280,10 @@ a,
   color: #FFF;
   padding: 0;
   margin: 0;
+
+  &:hover {
+    background: rgba(0,0,0,0.1);
+  }
 }
 
 .side-nav__header {

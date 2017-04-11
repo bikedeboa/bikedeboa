@@ -167,7 +167,11 @@ class SideNav {
     this.sideNavEl.addEventListener('transitionend', this.onTransitionEnd);
   }
 
-  hide () {
+  hide (e = {}) {
+    if (!e.dontMessWithState) {
+      History.replaceState({}, 'bike de boa', '/');
+    }
+
     this.sideNavEl.classList.add('side-nav--animatable');
     this.sideNavEl.classList.remove('side-nav--visible');
     this.sideNavEl.addEventListener('transitionend', this.onTransitionEnd);
