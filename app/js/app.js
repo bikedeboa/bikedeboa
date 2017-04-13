@@ -1458,9 +1458,19 @@ $(function () {
         map.setCenter(map.getCenter());
       }
     }); 
-
-    $('.promo-banner-container button, .promo-banner-container link').on('click', e => {
+    
+    $('.promo-banner-container button').on('click', e => {
       $('.promo-banner-container').remove();
+      BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - closed');
+    });
+
+    $('.promo-banner-container a').on('click', e => {
+      $('.promo-banner-container').remove();
+      BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - link click');
     });
 
     // Location Search Mode control
@@ -1781,9 +1791,17 @@ $(function () {
       // Hide spinner that is initialized visible on CSS
       hideSpinner();
 
+      // Show controls over the map
       $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
       $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
       $('#map').css('filter', 'none');
+
+      // Promo banner
+      if (!BIKE.Session.getPromoBannerViewed()) {
+        setTimeout( () => {
+          $('.promo-banner-container').show();
+        }, 2000); 
+      }
     });
 
     login();

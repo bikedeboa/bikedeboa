@@ -29,6 +29,7 @@ BIKE.Session = {
     // });
     // Cookies.set('bikedeboa_places', placesArray, { expires: 1 });
 
+    // User has 24 hours to edit that pin
     Cookies.set('bikedeboa_local_' + placeId, { expires: 1 });
   },
 
@@ -64,6 +65,14 @@ BIKE.Session = {
 
     Cookies.set('bikedeboa_reviews', reviewsArray, { expires: 365 });
   },
+
+  setPromoBannerViewed: () => {
+    Cookies.set('bikedeboa_promobanner_questionario', 'true', { expires: 365 }); 
+  },
+
+  getPromoBannerViewed: () => {
+    return Cookies.get('bikedeboa_promobanner_questionario');
+  }
 
 
 };
