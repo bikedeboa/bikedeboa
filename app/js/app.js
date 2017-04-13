@@ -1772,11 +1772,11 @@ $(function () {
     localhostOverrides();
 
     // This is the only request allowed to be unauthenticated
-    // Database.getPlaces( () => {
-    //   $('#filter-results-counter').html(markers.length);
-    //   $('#filter-results-total').html(markers.length);
+    Database.getPlaces( () => {
+      $('#filter-results-counter').html(markers.length);
+      $('#filter-results-total').html(markers.length);
 
-    //   updateMarkers();
+      updateMarkers();
 
       // Hide spinner that is initialized visible on CSS
       hideSpinner();
@@ -1784,7 +1784,7 @@ $(function () {
       $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
       $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
       $('#map').css('filter', 'none');
-    // });
+    });
 
     login();
   }
