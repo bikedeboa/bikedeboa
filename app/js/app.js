@@ -143,7 +143,7 @@ $(function () {
       $(e.target).parent().removeClass('loading');
     });
 
-    // Init click triggers
+    // Init click callbacks
     // $('#checkinBtn').on('click', sendCheckinBtn);
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
       openReviewModal($(e.target).data('value'));
@@ -991,7 +991,7 @@ $(function () {
       );
     }
 
-    // Initialize triggers
+    // Initialize callbacks
     $('.typeIcon').off('click.radio').on('click.radio', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
@@ -1144,7 +1144,7 @@ $(function () {
       ga('send', 'event', 'Review', 'create - pending', ''+m.id);
     }
 
-    // Init triggers
+    // Init callbacks
     $('#ratingDisplay .full-star').off('click').on('click', e => {
       openReviewModal($(e.target).data('value'));
     });
@@ -1246,7 +1246,7 @@ $(function () {
     templateData.address = m.address;
     $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
 
-    // Initialize triggers
+    // Initialize callbacks
     $('#sendRevisionBtn').off('click').on('click', sendRevisionBtn);
 
     // Display modal
@@ -1290,7 +1290,7 @@ $(function () {
     $('#top-mobile-bar h1').text(text || '');
   }
 
-  function _initGlobalTriggers() {
+  function _initGlobalCallbacks() {
     $('.js-menu-show-hamburger-menu').on('click', () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
@@ -1431,7 +1431,7 @@ $(function () {
       }
     });
 
-    // Modal triggers
+    // Modal callbacks
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
       // $('.modal-dialog')
@@ -1457,6 +1457,10 @@ $(function () {
         google.maps.event.trigger(map, 'resize');
         map.setCenter(map.getCenter());
       }
+    }); 
+
+    $('.promo-banner-container button, .promo-banner-container link').on('click', e => {
+      $('.promo-banner-container').remove();
     });
 
     // Location Search Mode control
@@ -1621,7 +1625,7 @@ $(function () {
       strokeOpacity: '0' //opacity from 0.0 to 1.0
     });
 
-    _initGlobalTriggers();
+    _initGlobalCallbacks();
 
     _initTemplates();
 
@@ -1768,11 +1772,11 @@ $(function () {
     localhostOverrides();
 
     // This is the only request allowed to be unauthenticated
-    Database.getPlaces( () => {
-      $('#filter-results-counter').html(markers.length);
-      $('#filter-results-total').html(markers.length);
+    // Database.getPlaces( () => {
+    //   $('#filter-results-counter').html(markers.length);
+    //   $('#filter-results-total').html(markers.length);
 
-      updateMarkers();
+    //   updateMarkers();
 
       // Hide spinner that is initialized visible on CSS
       hideSpinner();
@@ -1780,7 +1784,7 @@ $(function () {
       $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
       $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
       $('#map').css('filter', 'none');
-    });
+    // });
 
     login();
   }
