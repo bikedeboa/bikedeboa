@@ -828,32 +828,34 @@ $(function () {
       // $('#photoInput + label').fadeOut();
       let canvas = document.createElement('canvas');
       let img = new Image();
-      img.src = e.target.result;
-      // img.style.height = '1000px';
 
-      // Resize image fitting PHOTO_UPLOAD_MAX_W and PHOTO_UPLOAD_MAX_H
-      let width = img.width;
-      let height = img.height;
-      if (width > height) {
-        if (width > PHOTO_UPLOAD_MAX_W) {
-          height *= PHOTO_UPLOAD_MAX_W / width;
-          width = PHOTO_UPLOAD_MAX_W;
+      img.onload = () => {
+        // Resize image fitting PHOTO_UPLOAD_MAX_W and PHOTO_UPLOAD_MAX_H
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > PHOTO_UPLOAD_MAX_W) {
+            height *= PHOTO_UPLOAD_MAX_W / width;
+            width = PHOTO_UPLOAD_MAX_W;
+          }
+        } else {
+          if (height > PHOTO_UPLOAD_MAX_H) {
+            width *= PHOTO_UPLOAD_MAX_H / height;
+            height = PHOTO_UPLOAD_MAX_H;
+          }
         }
-      } else {
-        if (height > PHOTO_UPLOAD_MAX_H) {
-          width *= PHOTO_UPLOAD_MAX_H / height;
-          height = PHOTO_UPLOAD_MAX_H;
-        }
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+        // Save the resized blob
+        _uploadingPhotoBlob = canvas.toDataURL('image/jpeg', 0.8);
+
+        // Present to the user the already resized image
+        document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
       }
-      canvas.width = width;
-      canvas.height = height;
-      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-
-      // Save the resized blob
-      _uploadingPhotoBlob = canvas.toDataURL('image/jpeg', 0.8);
-
-      // Present to the user the already resized image
-      document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
+      
+      img.src = e.target.result;
     }
 
     hideSpinner();
