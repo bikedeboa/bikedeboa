@@ -853,6 +853,7 @@ $(function () {
 
         // Present to the user the already resized image
         document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
+        $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
       }
       
       img.src = e.target.result;
@@ -938,7 +939,7 @@ $(function () {
     $('#newPlaceModal #descriptionInput').val('');
     $('#newPlaceModal .description.collapsable').removeClass('expanded');
     
-    $('#newPlaceModal #photoInput+label').toggleClass('photo-input-edit', openedMarker && openedMarker.photo.length > 0);
+    $('#newPlaceModal #photoInput+label').removeClass('photo-input--edit-mode');
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
     $('#newPlaceModal .minimap-container').toggle(!!openedMarker);
     $('#newPlaceModal #cancelEditPlaceBtn').toggle(!!openedMarker);
@@ -971,6 +972,10 @@ $(function () {
       // More info section
       if (m.description && m.description.length > 0) {
         $('#newPlaceModal .description').addClass('expanded');
+      }
+
+      if (openedMarker.photo.length > 0) {
+        $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
       }
 
       // $('#placeDetailsModal').modal('hide');
