@@ -1811,7 +1811,7 @@ $(function () {
           if (_isMobile) {
             $('.promo-banner-container').show();
           } else {
-            $('.promo-banner-container').velocity("fadeIn", { duration: 1500 })
+            $('.promo-banner-container').velocity("fadeIn", { duration: 3000 });
           }
         }, 2000); 
       }
