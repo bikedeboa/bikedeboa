@@ -1177,7 +1177,7 @@ $(function () {
   }
 
   function toggleExpandModalHeader() {
-    ga('send', 'event', 'Local', 'photo click', ''+m.id);
+    ga('send', 'event', 'Local', 'photo click', ''+openedMarker.id);
 
     $('.photo-container').toggleClass('expanded');
   }
