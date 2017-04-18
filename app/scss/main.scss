@@ -278,7 +278,7 @@ a,
 }
 
 #locationSearch {
-    top: 15px;
+    top: 10px;
     position: absolute;
     left: 0;
     right: 0;
@@ -287,7 +287,7 @@ a,
     width: 95%;
     height: 48px;
     max-width: 600px;
-    width: calc(100% - 30px);
+    width: calc(100% - 20px);
 
     // display: table;
 
@@ -537,7 +537,7 @@ a,
     left: 0;
     right: 0;
     //top: calc(100vh - 50px - 20px);
-    bottom: 20px;
+    bottom: 15px;
     margin: auto;
     z-index: 1;
     background: $green;
@@ -886,7 +886,8 @@ a,
 
     img {
         cursor: zoom-in;
-        object-fit: cover; 
+        object-fit: cover;
+        // object-fit: contain;
     }
 
     &.photoInputContainer {
@@ -1224,6 +1225,10 @@ a,
   & img {
       width: 25px;
       height: 28px;
+  }
+
+  .btn + .btn {
+    text-transform: uppercase;
   }
 }
 
