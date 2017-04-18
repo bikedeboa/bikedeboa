@@ -1312,6 +1312,18 @@ $(function () {
       History.pushState({}, '', 'filtros');
     });
 
+    $('#show-bike-layer').on('change', e => {
+      const $target = $(e.currentTarget);
+
+      if ($target.is(":checked")) {
+        ga('send', 'event', 'Filter', 'bike layer - SHOW');
+        showBikeLayer();
+      } else {
+        ga('send', 'event', 'Filter', 'bike layer - HIDE');
+        hideBikeLayer();
+      }
+    });
+
     $('#facebook-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'facebook hamburger menu link click');
     });
@@ -1532,6 +1544,16 @@ $(function () {
     _filterMenu.hide();
   }
 
+  function showBikeLayer() {
+    _bikeLayer.setMap(map);
+    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
+  }
+
+  function hideBikeLayer() {
+    _bikeLayer.setMap(null);
+    map.setOptions({styles: _gmapsCustomStyle});
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
         // Set up Service Worker
@@ -1546,7 +1568,6 @@ $(function () {
     // References:
     //   https://developers.google.com/web/updates/2015/10/display-mode
     //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
-
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
@@ -1613,9 +1634,9 @@ $(function () {
 
     setupAutocomplete();
 
-    // Add cyclable path bike Layer
-    // var bikeLayer = new google.maps.BicyclingLayer();
-    // bikeLayer.setMap(map);
+    // Cyclable path bike Layer
+    window._bikeLayer = new google.maps.BicyclingLayer();
+    // _bikeLayer.setMap(map);
 
     // Geolocalization button
     if (navigator.geolocation) {
