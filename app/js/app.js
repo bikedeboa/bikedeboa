@@ -1808,7 +1808,11 @@ $(function () {
       // Promo banner
       if (!BIKE.Session.getPromoBannerViewed()) {
         setTimeout( () => {
-          $('.promo-banner-container').show();
+          if (_isMobile) {
+            $('.promo-banner-container').show();
+          } else {
+            $('.promo-banner-container').velocity("fadeIn", { duration: 1500 })
+          }
         }, 2000); 
       }
     });
