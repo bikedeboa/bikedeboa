@@ -17,6 +17,8 @@
 
 class SideNav {
   constructor (id, options) {
+    this.id = id;
+
     this.showButtonEl = document.querySelector(`.js-menu-show-${id}`);
     this.hideButtonEl = document.querySelector(`#${id} .js-menu-hide`);
     this.sideNavEl = document.querySelector(`#${id}`);
@@ -114,13 +116,14 @@ class SideNav {
       translateX = Math.min(0, this.currentX - this.startX);
     }
     this.sideNavContainerEl.style.transform = '';
+    this.sideNavContainerEl.style.transition = '';
 
     if (this.options.inverted) {
-      if (translateX > this.panelWidth/2) {
+      if (translateX > this.panelWidth/4) {
         this.hide();
       }
     } else {
-      if (translateX < -this.panelWidth/2) {
+      if (translateX < -this.panelWidth/4) {
         this.hide();
       }
     }
@@ -139,7 +142,8 @@ class SideNav {
       translateX = Math.min(0, this.currentX - this.startX);
     }
 
-    this.sideNavContainerEl.style.transform = `translateX(${translateX}px)`;
+    this.sideNavContainerEl.style.transform = `translateX(${translateX}px) translateZ(0px)`;
+    this.sideNavContainerEl.style.transition = 'none';
   }
 
   blockClicks (evt) {
@@ -154,12 +158,15 @@ class SideNav {
   show () {
     // $('.side-nav__header span').velocity('transition.slideDownIn');
     if (!this.options.dontAnimate) {
-      $('.side-nav__content li')
+      $(`#${this.id} .side-nav__content li`)
         .css({opacity: 0})
-        .velocity('transition.slideLeftIn', { delay: 120, stagger: 100, duration: 600 });
+        .velocity(
+          this.options.inverted ? 'transition.slideRightIn' : 'transition.slideLeftIn',
+          { delay: 300, stagger: 100, duration: 600 }
+        );
       // $('.side-nav__footer > *')
       //   .css({opacity: 0})
-      //   .velocity('transition.slideUpIn', { delay: 120, duration: 1000 });
+      //   .velocity('transition.slideUpIn', { delay: 200, duration: 1000 });
     }
 
     this.sideNavEl.classList.add('side-nav--animatable');
@@ -169,7 +176,7 @@ class SideNav {
 
   hide (e = {}) {
     if (!e.dontMessWithState) {
-      History.replaceState({}, 'bike de boa', '/');
+      History.replaceState({dontUpdateView: true}, 'bike de boa', '/');
     }
 
     this.sideNavEl.classList.add('side-nav--animatable');

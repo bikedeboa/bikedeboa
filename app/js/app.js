@@ -1652,7 +1652,7 @@ $(function () {
     History.Adapter.bind(window,'statechange',function(){
       const state = History.getState();
 
-      if (state.title === 'bike de boa') {
+      if (state.title === 'bike de boa' && !state.data.dontUpdateView) {
         hideAllModals();
       }
     });

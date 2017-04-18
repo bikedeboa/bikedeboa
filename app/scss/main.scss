@@ -37,8 +37,7 @@ $bootstrapFont: 'Glyphicons Halflings';
 
 $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
-$MODAL_FOOTER_HEIGHT: 75px;
-$MODAL_BODY_MINHEIGHT_PADDING: $MODAL_FOOTER_HEIGHT + $MOBILE_NAVBAR_HEIGHT;
+$MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
 
 @keyframes bounceAndGlow {
@@ -290,7 +289,7 @@ a,
         width: 100%;
         font-size: 14px;
         padding: 0 0px 0 60px;
-        font-weight: lighter;
+        // font-weight: lighter;
         border-radius: 3px;
         box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 
@@ -2288,7 +2287,7 @@ a,
     border: none;
     margin: 0;
     padding: 13px;
-    font-size: 18px;
+    font-size: 19px;
     background-color: $green;
     // color: $gray;
 
@@ -2334,7 +2333,7 @@ a,
   background: rgba(0,0,0,0.4);
   opacity: 0;
   will-change: opacity;
-  transition: opacity 0.3s cubic-bezier(0,0,0.3,1);
+  transition: opacity 0.3s ease-in-out;
 }
 
 .side-nav__container {
@@ -2348,15 +2347,16 @@ a,
   display: flex;
   flex-direction: column;
   will-change: transform;
+  transition: transform 0.3s ease-in-out;
 }
 
-.side-nav--animatable .side-nav__container {
-  transition: transform 0.2s cubic-bezier(0,0,0.3,1);
-}
+// .side-nav--animatable .side-nav__container {
+//   transition: transform 0.2s ease-in-out;
+// }
 
-.side-nav--visible.side-nav--animatable .side-nav__container {
-  transition: transform 0.5s cubic-bezier(0,0,0.3,1);
-}
+// .side-nav--visible.side-nav--animatable .side-nav__container {
+//   transition: transform 0.3s ease-in-out;
+// }
 
 .side-nav--visible::before {
   opacity: 1;
