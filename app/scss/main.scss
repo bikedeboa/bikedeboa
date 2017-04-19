@@ -458,27 +458,29 @@ a,
 }
 
 #addPlace {
-    transition: bottom 0.5s ease-out, background 0.2s ease-out;
+    transition: background 0.2s ease-out, width 0.5s ease-out;
     opacity: 0;
 
     &:hover,
     &:active,
     &:focus {
         background: linear-gradient(45deg,hsla(145,59%,40%,1) 0,#25cb6d 100%);
-    }
+    } 
 
     &.active {
-        font-size: 0;
+        // font-size: 0;
         width: 50px;
-        background: rgb(20,20,20);
+        min-width: 0;
+        background: $black;
 
-        transition: background 0.5s ease, font-size 0s ease;
-    }
-
-    &.active:after {
-        content: '✕';
-        color: $green;
-        font-size: 24px;
+        transition: background 0.5s ease-out, width 0.5s ease-out;
+        
+        &:after {
+            content: '✕';
+            // color: $green;
+            color: white;
+            font-size: 24px;
+        }
     }
 }
 
@@ -564,85 +566,93 @@ a,
     background-color: $lightGreen;
 }
 
-#newPlaceholder {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%,-100%);
-    z-index: 1;
-    opacity: 0;
-    background: transparent;
-    border: none;
-    pointer-events: none;
+#newPlaceholderContainer {
+    #newPlaceholder {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%,-100%);
+        z-index: 1;
+        opacity: 0;
+        background: transparent;
+        border: none;
+        pointer-events: none;
 
-    transition: top 0.5s ease;
+        transition: top 0.5s ease;
 
-    img {
-        width: 100px;
+        img {
+            width: 100px;
+            height: auto;
+        }
+
+        &.active {
+            pointer-events: initial;
+            top: 50%;
+            opacity: 1;
+
+            animation: bounceAndGlow 0.5s infinite alternate;
+        }
+
+        &.invalid {
+            animation: none;
+            filter: grayscale(1);
+        }
+
+        &:after {
+            content: 'Aqui';
+            position: absolute;
+            left: 50%;
+            bottom: 46px;
+            color: white;
+            font-size: 12px;
+            width: 75px;
+            line-height: 1em;
+            text-transform: uppercase;
+            font-family: $headingFont;
+            transform: translateX(-50%);
+        }
+
+    }
+    // #newPlaceholderShadow {
+    //     position: absolute;
+    //     top: 50%;
+    //     left: 50%;
+    //     transform: translate(-50%,-50%);
+    //     z-index: 1;
+    //     width: 10px;
+    //     height: 5px;
+    //     border-radius: 50%;
+    //     background-color: rgb(20,20,20);
+    //     opacity: 0.5;
+    //     display: none;
+
+    //     // animation: pulse 0.5s infinite alternate-reverse;
+    // }
+
+    #newPlaceholderTarget {
+        position: absolute;
+        top: calc(50% - 9px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        width: 30px;
         height: auto;
+        opacity: 0.5;
+        display: none;
     }
 
-    &.active {
-        pointer-events: initial;
-        top: 50%;
-        opacity: 1;
-
-        animation: bounceAndGlow 0.5s infinite alternate;
-
-        &:hover {
+    &:hover {
+        #newPlaceholder.active {
             animation: none;
         }
-    }
 
-    &.invalid {
-        animation: none;
-        filter: grayscale(1);
+        #newPlaceholderTarget {
+            opacity: 1;
+        }
     }
-
-    &:after {
-        content: 'Aqui';
-        position: absolute;
-        left: 50%;
-        bottom: 46px;
-        color: white;
-        font-size: 12px;
-        width: 75px;
-        line-height: 1em;
-        text-transform: uppercase;
-        font-family: $headingFont;
-        transform: translateX(-50%);
-    }
-
 }
 
 
-#newPlaceholderShadow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 1;
-    width: 10px;
-    height: 5px;
-    border-radius: 50%;
-    background-color: rgb(20,20,20);
-    opacity: 0.5;
-    display: none;
-
-    // animation: pulse 0.5s infinite alternate-reverse;
-}
-
-#newPlaceholderTarget {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 1;
-    width: 30px;
-    height: auto;
-    // opacity: 0.5;
-    display: none;
-}
 
 
 .modal-backdrop {
@@ -1957,7 +1967,7 @@ a,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Mobile //////////////////////////////////////////////////////////////////////////////////////////
+// Le Mobile ///////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2092,6 +2102,16 @@ a,
       margin-left: -16px;
       padding-left: 16px;
       margin-right: -16px;
+    }
+  }
+
+  #addPlace {
+    &.active {
+        max-width: none;
+        width: 100%;
+        border-radius: 0;
+        height: 70px;
+        bottom: 0;
     }
   }
 }

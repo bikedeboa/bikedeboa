@@ -678,6 +678,7 @@ $(function () {
 
     toggleMarkers();
     $('#addPlace').toggleClass('active');
+    $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
@@ -1705,7 +1706,7 @@ $(function () {
     _hamburgerMenu = new SideNav('hamburger-menu');
     _filterMenu = new SideNav(
       'filter-menu',
-      {dontAnimate: true, inverted: true/*, fixed: true*/}
+      {inverted: true/*, fixed: true*/}
     );
 
     // Intercepts Progressive Web App event

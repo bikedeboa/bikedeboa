@@ -158,15 +158,18 @@ class SideNav {
   show () {
     // $('.side-nav__header span').velocity('transition.slideDownIn');
     if (!this.options.dontAnimate) {
-      $(`#${this.id} .side-nav__content li`)
+      $(`#${this.id} .side-nav--animate-in`)
         .css({opacity: 0})
         .velocity(
           this.options.inverted ? 'transition.slideRightIn' : 'transition.slideLeftIn',
-          { delay: 300, stagger: 100, duration: 600 }
+          { delay: 300, stagger: 100, duration: 600, display: null } 
         );
-      // $('.side-nav__footer > *')
-      //   .css({opacity: 0})
-      //   .velocity('transition.slideUpIn', { delay: 200, duration: 1000 });
+        // .css({opacity: 0, translateX: (this.options.inverted ? '100px' : '-100px')})
+        // .velocity( 
+        //   // this.options.inverted ? 'transition.slideRightIn' : 'transition.slideLeftIn',
+        //   { translateX: 0, opacity: 1 },
+        //   { delay: 300, stagger: 100, duration: 600 }
+        // );
     }
 
     this.sideNavEl.classList.add('side-nav--animatable');

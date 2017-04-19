@@ -475,16 +475,17 @@
         </div>
 
         <button id="addPlace" class="bigRoundedButton coolHide">
-            <span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO
+            <span><span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO</span>
         </button>
 
-        <!-- <span id="newPlaceholderShadow"></span> -->
-        <img src="/img/target.svg" id="newPlaceholderTarget"></img>
+        <div id="newPlaceholderContainer">
+          <!-- <span id="newPlaceholderShadow"></span> -->
+          <img src="/img/target.svg" id="newPlaceholderTarget"></img>
 
-
-        <button id="newPlaceholder">
-            <img src="/img/pin_bike.svg"/>
-        </button>
+          <button id="newPlaceholder">
+              <img src="/img/pin_bike.svg"/>
+          </button>
+        </div>
 
         <div id="reviewPanelTemplatePlaceholder"></div>
 
@@ -888,22 +889,22 @@
 
             <div class="side-nav__content">
               <ul>
-                <li id="aboutBtn">
+                <li class="side-nav--animate-in" id="aboutBtn">
                   <span class="glyphicon glyphicon-info-sign"></span>
                   Sobre o projeto
                 </li>
-                <li id="faqBtn">
+                <li class="side-nav--animate-in" id="faqBtn">
                   <span class="glyphicon glyphicon-question-sign"></span>
                   Perguntas frequentes
                 </li>
-                <li id="howToInstallBtn">
+                <li class="side-nav--animate-in" id="howToInstallBtn">
                   <span class="glyphicon glyphicon-download-alt"></span>
                   Instalar o app
                 </li>
                 
                 <hr>
                 
-                <li id="loginBtn">
+                <li class="side-nav--animate-in" id="loginBtn">
                   <!-- <span class="glyphicon glyphicon-user"></span> -->
                   Login colaborador
                 </li>
@@ -941,7 +942,7 @@
                 <span class="glyphicon glyphicon-chevron-left"></span> Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
               </div>
 
-              <div class="setting-checkbox-container">
+              <div class="side-nav--animate-in setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
                   <label for="show-bike-layer"> Mostrar ciclovias e ciclofaixas <span style="opacity: 0.5;">beta</span></label>
               </div>
@@ -949,9 +950,9 @@
 
             <div class="side-nav__content">
 
-              <h3>Avaliações</h3>
+              <h3 class="side-nav--animate-in">Avaliações</h3>
 
-              <ul>
+              <ul class="side-nav--animate-in">
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
                     <label for="filter_rating_good"><img src="/img/pin_green.png"/> Excelentes</label>
@@ -972,9 +973,9 @@
 
               <hr>
 
-              <h3>Acesso</h3>
+              <h3 class="side-nav--animate-in">Acesso</h3>
 
-              <ul>
+              <ul class="side-nav--animate-in">
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
                     <label for="filter_public">Públicos</label>
@@ -987,9 +988,9 @@
 
               <hr>
 
-              <h3>Tipos de Bicicletário</h3>
+              <h3 class="side-nav--animate-in">Tipos de Bicicletário</h3>
 
-              <ul>
+              <ul class="side-nav--animate-in">
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
                     <label for="filter_structure_deroda">De roda</label>
