@@ -7,6 +7,7 @@ BIKE.Database = {
 
   // API path, without the final slash ('/')
   API_URL: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000' : 'https://bdb-api.herokuapp.com',
+  isAuthenticated: false,
   _authToken: '',
   _headers: {},
 
@@ -287,6 +288,7 @@ BIKE.Database = {
           }
 
           // Set headers for future calls
+          self.isAuthenticated = true;
           self._authToken = data.token;
           self._headers['x-access-token'] = data.token;
 
@@ -584,40 +586,53 @@ BIKE.Database = {
     });
   },
 
+  waitAuthentication: function(callback) {
+    if (this.isAuthenticated) {
+      callback();
+    } else {
+      console.log('Waiting authentication...');
+      setTimeout(this.waitAuthentication.bind(this, callback), 1000);  
+    }
+  },
+
   getPlaceDetails: function(placeId, successCB, failCB, alwaysCB) {
     const self = this;
 
     console.log('Getting place detail...');
 
-    $.ajax({
-      type: 'get',
-      headers: self._headers,
-      url: self.API_URL + '/local/' + placeId
-    }).done(function(data) {
-      if (data) {
-        console.log('Got place detail:');
-        console.log(data);
+    function justDoIt() { 
+      $.ajax({
+        type: 'get',
+        headers: self._headers,
+        url: self.API_URL + '/local/' + placeId
+      }).done(function(data) {
+        if (data) {
+          console.log('Got place detail:');
+          console.log(data);
 
-        let updatedMarker = markers.find(m => {return m.id === placeId; });
+          let updatedMarker = markers.find(m => {return m.id === placeId; });
 
-        Object.assign(updatedMarker, data);
+          Object.assign(updatedMarker, data);
 
-        updatedMarker._hasDetails = true;
+          updatedMarker._hasDetails = true;
 
-        if (successCB && typeof successCB === 'function') {
-          successCB();
+          if (successCB && typeof successCB === 'function') {
+            successCB();
+          }
         }
-      }
-    })
-    .fail(function() {
-      if (failCB && typeof failCB === 'function') {
-        failCB();
-      }
-    })
-    .always(function() {
-      if (alwaysCB && typeof alwaysCB === 'function') {
-        alwaysCB();
-      }
-    });
+      })
+      .fail(function() {
+        if (failCB && typeof failCB === 'function') {
+          failCB();
+        }
+      })
+      .always(function() {
+        if (alwaysCB && typeof alwaysCB === 'function') {
+          alwaysCB();
+        }
+      });
+    }
+
+    this.waitAuthentication(justDoIt); 
   },
 };

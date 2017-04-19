@@ -1813,7 +1813,7 @@ $(function () {
 
     // Authenticate to be ready for next calls
     login();
-
+ 
     // Retrieve markers saved in a past access
     markers = JSON.parse( localStorage.getItem('markers') );
     if (markers && markers.length) {
