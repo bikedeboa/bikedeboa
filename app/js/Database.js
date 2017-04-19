@@ -551,9 +551,11 @@ BIKE.Database = {
       headers: self._headers,
       url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
     }).done(function(data) {
-      console.log('Successfully retrieved ' + data.length + ' places!');
+      console.log('Retrieved ' + data.length + ' locations from API.');
 
       markers = data;
+
+      localStorage.setItem( 'markers', JSON.stringify(markers) );
 
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
@@ -567,7 +569,7 @@ BIKE.Database = {
       };
 
       if (successCB && typeof successCB === 'function') {
-        successCB();
+        successCB(markers);
       }
     })
     .fail(function() {

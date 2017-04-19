@@ -1811,6 +1811,17 @@ $(function () {
 
     localhostOverrides();
 
+    // Authenticate to be ready for next calls
+    login();
+
+    // Retrieve markers saved in a past access
+    markers = JSON.parse( localStorage.getItem('markers') );
+    if (markers && markers.length) {
+      console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
+      updateMarkers();
+      hideSpinner();
+    }
+
     // This is the only request allowed to be unauthenticated
     Database.getPlaces( () => {
       $('#filter-results-counter').html(markers.length);
@@ -1820,25 +1831,23 @@ $(function () {
 
       // Hide spinner that is initialized visible on CSS
       hideSpinner();
-
-      // Show controls over the map
-      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-      $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-      $('#map').css('filter', 'none');
-
-      // Promo banner
-      if (!BIKE.Session.getPromoBannerViewed()) {
-        setTimeout( () => {
-          if (_isMobile) {
-            $('.promo-banner-container').show();
-          } else {
-            $('.promo-banner-container').velocity("fadeIn", { duration: 3000 });
-          }
-        }, 2000); 
-      }
     });
 
-    login();
+    // Show controls over the map
+    $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+    $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+    $('#map').css('filter', 'none');
+
+    // Promo banner
+    if (!BIKE.Session.getPromoBannerViewed()) {
+      setTimeout( () => {
+        if (_isMobile) {
+          $('.promo-banner-container').show();
+        } else {
+          $('.promo-banner-container').velocity("fadeIn", { duration: 3000 });
+        }
+      }, 2000); 
+    }
   }
 
   window.toggleDemoMode = () => {
