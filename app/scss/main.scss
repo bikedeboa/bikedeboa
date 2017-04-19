@@ -31,7 +31,7 @@ $lightestGrey: $lightestGray;
 
 // Dynamic colors
 $bootstrapBackdropColor: $paleWhite;
-$bootstrapBackdropOpacity: 0.7;
+$bootstrapBackdropOpacity: 0.8;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
 
 $filtersHightlightColor: $paleBlue;
@@ -757,7 +757,13 @@ a,
 
 
 .modal-content {
-    &:before {
+    border: 0;
+    margin-bottom: 40px;
+    margin-top: 10px;
+    @include material-shadow(3);
+    // border-radius: 10px; //not working? :(
+
+    &:before { 
         content: '✕';
         color: $gray;
         position: absolute;
@@ -1617,7 +1623,8 @@ a,
   justify-content: space-around;
   // justify-content: flex-end;
   align-items: flex-start;
-  margin: 10px 10px -10px 0;
+  margin: 0 10px -10px 0;
+  padding-top: 10px;
   border-bottom: 1px solid #eee;
 
   hr {
@@ -2363,7 +2370,8 @@ a,
     width:inherit;
     height:inherit;
     /* To center horizontally */
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
     pointer-events: all;
 }
 
