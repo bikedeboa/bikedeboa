@@ -557,7 +557,7 @@ BIKE.Database = {
 
       markers = data;
 
-      localStorage.setItem( 'markers', JSON.stringify(markers) );
+      BIKE.saveMarkersToLocalStorage(markers);
 
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
@@ -602,7 +602,7 @@ BIKE.Database = {
 
     function justDoIt() { 
       $.ajax({
-        type: 'get',
+        type: 'get', 
         headers: self._headers,
         url: self.API_URL + '/local/' + placeId
       }).done(function(data) {
@@ -610,11 +610,15 @@ BIKE.Database = {
           console.log('Got place detail:');
           console.log(data);
 
+          // Combine detailed data with what we had
           let updatedMarker = markers.find(m => {return m.id === placeId; });
-
           Object.assign(updatedMarker, data);
 
+          // Set flag
           updatedMarker._hasDetails = true;
+
+          // Update offline-stored markers with new state
+          BIKE.saveMarkersToLocalStorage(markers);
 
           if (successCB && typeof successCB === 'function') {
             successCB();

@@ -1833,12 +1833,12 @@ $(function () {
     login();
  
     // Retrieve markers saved in a past access
-    markers = JSON.parse( localStorage.getItem('markers') );
+    markers = BIKE.getMarkersFromLocalStorage();
     if (markers && markers.length) {
       console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
       hideSpinner();
-    }
+    } 
 
     // This is the only request allowed to be unauthenticated
     Database.getPlaces( () => {

@@ -1,5 +1,13 @@
 var BIKE = BIKE || {};
 
+BIKE.getMarkersFromLocalStorage = () => {
+  return JSON.parse( localStorage.getItem('markers') );
+}
+
+BIKE.saveMarkersToLocalStorage = markersToSave => {
+  localStorage.setItem( 'markers', JSON.stringify(markersToSave) );
+}
+
 BIKE.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
