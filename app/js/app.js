@@ -1545,13 +1545,23 @@ $(function () {
   }
 
   function showBikeLayer() {
+    // Bike layer from Google Maps
     _bikeLayer.setMap(map);
     map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
+
+    // GeoJSON data from #datapoa
+    // map.data.setStyle({
+    //   visible: true
+    // });
   }
 
   function hideBikeLayer() {
     _bikeLayer.setMap(null);
     map.setOptions({styles: _gmapsCustomStyle});
+
+    // map.data.setStyle({
+    //   visible: false
+    // });
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -1618,7 +1628,7 @@ $(function () {
         .then( permission => {
           if (permission.state === 'granted') {
             ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            _geolocate(true, null, true);
+            _geolocate(true, null, true); 
           }
         }
       );
@@ -1634,9 +1644,16 @@ $(function () {
 
     setupAutocomplete();
 
-    // Cyclable path bike Layer
+    // Bike Layer: google maps bycicling layer
     window._bikeLayer = new google.maps.BicyclingLayer();
-    // _bikeLayer.setMap(map);
+    
+    // Bike layer: GeoJSON from #datapoa
+    // map.data.loadGeoJson('ciclovias_portoalegre.json');
+    // map.data.setStyle({
+    //   strokeColor: 'green',
+    //   strokeWeight: 3,
+    //   visible: false;
+    // });
 
     // Geolocalization button
     if (navigator.geolocation) {

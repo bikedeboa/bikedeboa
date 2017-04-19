@@ -1688,6 +1688,17 @@ a,
     color: black;
   }
 
+  .setting-checkbox-container {
+    display: flex;
+
+    input + label {
+      color: $gray;
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+  }
+
   ul {
     display: flex;
     flex-wrap: wrap;
@@ -1720,8 +1731,8 @@ a,
         flex-grow: 1;
         font-weight: normal;
         cursor: pointer;
-        padding: 10px 20px;
-        margin: 0 10px;
+        padding: 10px 10px;
+        margin: 0 8px;
         border-radius: 10px;
 
         transition: color 0.2s ease, background 0.2s ease;
@@ -1777,14 +1788,9 @@ a,
     color: $gray;
   }
 
-  #show-bike-layer + label {
-    color: $gray;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
   @media screen and (max-height: 700px) {
     .side-nav__header {
+      // padding-top: 30px;
       padding-bottom: 0;
 
       h2 {
