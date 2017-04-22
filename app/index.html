@@ -651,11 +651,11 @@
                               <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
                               <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
                               <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bacaninha"></label>
+                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
                               <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Hum..."></label>
+                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
                               <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Te liga hein"></label>
+                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
                               <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
                               <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
                           </fieldset>
@@ -746,11 +746,11 @@
                       <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
                       <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
                       <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-                      <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bacaninha"></label>
+                      <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
                       <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-                      <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Hum..."></label>
+                      <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
                       <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-                      <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Te liga hein"></label>
+                      <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
                       <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
                       <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
                   </fieldset>
@@ -847,11 +847,11 @@
                                         <input type="radio" id="star5" name="rating" value="5" />
                                         <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
                                         <input type="radio" id="star4" name="rating" value="4" />
-                                        <label class="full-star" data-value="4" for="star4" title="Bacaninha"></label>
+                                        <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
                                         <input type="radio" id="star3" name="rating" value="3" />
-                                        <label class="full-star" data-value="3" for="star3" title="Hum..."></label>
+                                        <label class="full-star" data-value="3" for="star3" title="Médio"></label>
                                         <input type="radio" id="star2" name="rating" value="2" />
-                                        <label class="full-star" data-value="2" for="star2" title="Te liga hein"></label>
+                                        <label class="full-star" data-value="2" for="star2" title="Ruim"></label>
                                         <input type="radio" id="star1" name="rating" value="1" />
                                         <label class="full-star" data-value="1" for="star1" title="Horrivel"></label>
                                     </fieldset>
@@ -1081,23 +1081,25 @@
                   <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
                   <label class="full-star" data-value="1" for="placeDetails_star1"></label>
                 </fieldset> 
+
+                <!-- {{#if numReviews}}
+                  <span class="numreviews">({{numReviews}})</span>
+                {{/if}} -->
               {{else}}
                 <span style="font-style: italic; color: #828b90;">Sem avaliações</span>
               {{/if}}
-
-              <!-- @todo number of reviews should come from API -->
-              <!-- {{#if numReviews}}
-                  <span class="numreviews">{{numReviews}}</span>
-              {{/if}} -->
+              
             </div>
 
             <!-- <div class="infobox--label">
               Mais detalhes <span class="glyphicon glyphicon-chevron-right"></span>
             </div> -->
 
-            <!-- <div class="infobox--label">
-              Clique para mais detalhes
-            </div> -->
+            {{#unless average}}
+              <div class="infobox--label">
+                Clique para ver mais
+              </div>
+            {{/unless}}
 
           </div>
         </script>

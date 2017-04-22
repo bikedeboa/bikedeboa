@@ -549,7 +549,7 @@ $(function () {
             // Info window
             if (!_isMobile) {
               if (m.photo) {
-                m.photo = m.photo.replace('images', 'thumbs');
+                m.photo = m.photo.replace('images', 'images/thumbs');
               }
               let templateData = {
                 thumbnailUrl: m.photo,
