@@ -142,8 +142,8 @@ body.beta #map {
       left: 50%;
       width: 30px;
       height: 30px;
-      margin-top: -10px;
-      margin-left: -10px;
+      margin-top: -15px;
+      margin-left: -15px;
       border-radius: 50%;
       border: 3px solid transparent;
       border-top-color: $green;
@@ -1080,10 +1080,24 @@ a,
     text-align: center;
     margin-top: 10px;
 
+    .savedRating {
+        color: $gray;
+        font-weight: 400;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .rating-display-container {
+      margin: 20px 0 10px 0;
+    }
+}
+
+.rating-display-container {
     .numreviews {
         color: $gray;
-        font-size: 1em;
+        font-size: 14px;
         font-weight: 100;
+        font-family: $bodyFont;
         vertical-align: text-top;
         user-select: none;
         cursor: default;
@@ -1099,17 +1113,6 @@ a,
         //     vertical-align: middle;
         //     margin-right: 5px;
         // }
-    }
-
-    .savedRating {
-        color: $gray;
-        font-weight: 400;
-        margin-top: 10px;
-        font-size: 14px;
-    }
-
-    .rating-display-container {
-        margin: 20px 0 10px 0;
     }
 }
 
@@ -1202,7 +1205,8 @@ a,
 
 .average {
     font-size: 30px;
-    vertical-align: bottom;
+    // vertical-align: bottom;
+    vertical-align: middle;
     // font-family: $headingFont;
     font-weight: 700;
     color: #fff;
@@ -1951,6 +1955,69 @@ a,
   }
 }
 
+.infoBox {
+  background: white;
+  @include material-shadow(1);
+  display: flex;
+  height: 75px;
+  // cursor: pointer !important;
+
+  // &:hover {
+  //   background: $paleWhite; 
+  // }
+
+  .infobox--img {
+    width: 75px;
+    height: 75px;
+    position: relative;
+    background: $lightestGrey;
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .infobox--content {
+    // margin: 10px;
+    margin: 5px 10px 0;
+    overflow: hidden;
+    width: 100%;
+
+    h2 {
+      font-family: $headingFont;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: normal;
+      margin: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .rating-display-container {
+      margin-top: 6px;
+    }
+  }
+
+  .infobox--details {
+    color: $gray;
+    font-size: 10px;
+    font-family: $bodyFont;
+  }
+
+  .infobox--label {
+    margin-top: 7px;
+    text-align: right;
+    color: $lightGrey;
+    font-size: 10px;
+    font-family: $bodyFont;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
 
 
 
@@ -2304,6 +2371,20 @@ a,
 }
 .radio-group label > input:checked + .radio-image{ /* (RADIO CHECKED) IMAGE STYLES */
     background-image: url(/img/radio_checked.svg);
+}
+
+.rating-display-mini {
+  $mini-size: 12px;
+
+  .average,
+  .rating>label:before {
+    font-size: $mini-size;
+  }
+
+  .rating>label:before {
+    width: $mini-size;
+    height: $mini-size;
+  }
 }
 
 

@@ -10,7 +10,7 @@ $(function () {
       if (!average || average === 0) {
         pinColor = 'gray';
       } else if (average > 0 && average <= 2) {
-        pinColor = 'red';
+        pinColor = 'red'; 
       } else if (average > 2 && average < 3.5) {
         pinColor = 'yellow';
       } else if (average >= 3.5) {
@@ -49,10 +49,6 @@ $(function () {
     templateData.description = m.description;
 
     // Average
-    if (m.average && m.average.toFixed && m.average !== Math.round(m.average)) {
-      // Average might come with crazy floating point value
-      m.average = m.average.toFixed(1);
-    }
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = m.average;
 
@@ -82,7 +78,8 @@ $(function () {
     } else {
       templateData.numReviews = `${m.reviews} avaliações`;
     }
-    templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
+    
+    // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
     if (loggedUser) {
       templateData.isLoggedUser = true;
@@ -134,7 +131,7 @@ $(function () {
     // Template is rendered, start jquerying
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
     if (m.average) {
-      $('input[name=placeDetails_rating]').val([''+Math.round(m.average)]);
+      $('input[name=placeDetails_rating]').val(['' + Math.round(m.average)]);
     } else {
       $('#ratingDisplay').addClass('empty');
     }
@@ -511,6 +508,15 @@ $(function () {
             anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
           };
 
+          // Average might come with crazy floating point value
+          if (m.average) {
+            m.average = parseFloat(m.average);
+            if (m.average.toFixed && m.average !== Math.round(m.average)) {
+              m.average = m.average.toFixed(1);
+            }
+            m.average = '' + m.average;
+          }
+
           // @todo temporarily disabled this because backend still doesnt support flags for these
           // let labelStr;
           // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
@@ -525,7 +531,7 @@ $(function () {
               },
               map: map,
               icon: m.icon,
-              title: m.text,
+              // title: m.text,
               // label: labelStr && {
               //   text: labelStr,
               //   color: 'white',
@@ -535,11 +541,46 @@ $(function () {
               // opacity: 0.1 + (m.average/5).
             }));
 
-            (function (markerIndex) {
-              _gmarkers[markerIndex].addListener('click', () => {
-                onMarkerClick(markers[markerIndex]);
+            // Modal
+            _gmarkers[i].addListener('click', () => {
+              onMarkerClick(markers[i]);
+            });
+
+            // Info window
+            if (!_isMobile) {
+              if (m.photo) {
+                m.photo = m.photo.replace('images', 'thumbs');
+              }
+              let templateData = {
+                thumbnailUrl: m.photo,
+                title: m.text,
+                average: m.average,
+                roundedAverage: m.average && ('' + Math.round(m.average)),
+                pinColor: getPinColorFromAverage(m.average),
+                numReviews: m.reviews,
+              };
+
+              const contentString = templates.infoWindowTemplate(templateData);
+
+              _gmarkers[i].addListener('mouseover', () => {
+                // _infoWindow.close();
+                _infoWindow.setContent(contentString);
+                _infoWindow.open(map, _gmarkers[i]);
+                _infoWindow.addListener('domready', () => {
+                  $('.infobox--img img').off('load').on('load', e => {
+                    $(e.target).parent().removeClass('loading');
+                  });
+
+                  $('.infoBox').off('click').on('click', () => {
+                    onMarkerClick(markers[i]);
+                  });
+                });
               });
-            }(i));
+
+              _gmarkers[i].addListener('mouseout', () => {
+                _infoWindow.close();
+              });  
+            }
           } else {
             console.error('not lat or long o.O');
           }
@@ -901,6 +942,7 @@ $(function () {
     templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
     templates.messageModalTemplate = Handlebars.compile($('#messageModalTemplate').html());
     templates.revisionModalTemplate = Handlebars.compile($('#revisionModalTemplate').html());
+    templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
   }
 
   function validateNewPlaceForm() {
@@ -1601,6 +1643,28 @@ $(function () {
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
 
+    // _infoWindow = new google.maps.InfoWindow({
+    //   disableAutoPan: true
+    // });
+
+    const myOptions = {
+      maxWidth: 0,
+      pixelOffset: new google.maps.Size(-150, 20),
+      disableAutoPan: true,
+      zIndex: null,
+      boxStyle: {
+        width: '300px',
+        cursor: 'pointer',
+      },
+      // closeBoxMargin: '10px 2px 2px 2px',
+      closeBoxURL: '',
+      infoBoxClearance: new google.maps.Size(1, 1),
+      isHidden: false,
+      pane: 'floatPane',
+      enableEventPropagation: false,
+    };
+    _infoWindow = new InfoBox(myOptions);
+
     google.maps.event.addListener(map, 'zoom_changed', () => {
       const prevZoomLevel = _mapZoomLevel;
 
@@ -1666,6 +1730,7 @@ $(function () {
 
     _geolocationMarker = new google.maps.Marker({
       map: map,
+      clickable: false,
       icon: {
         url: '/img/current_position.svg', // url
         scaledSize: new google.maps.Size(16, 16), // scaled size

@@ -52,7 +52,7 @@ BIKE.Session = {
       review.placeId = reviewObj.placeId;
       review.rating = reviewObj.rating;
       review.tags = reviewObj.tags;
-      review.databaseId = reviewObj.databaseId;
+      review.databaseId = reviewObj.databaseId; 
     } else {
       // Push a new one
       reviewsArray.push({
