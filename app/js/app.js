@@ -563,7 +563,8 @@ $(function () {
               const contentString = templates.infoWindowTemplate(templateData);
 
               _gmarkers[i].addListener('mouseover', () => {
-                // _infoWindow.close();
+                ga('send', 'event', 'Local', 'infobox opened', m.id); 
+
                 _infoWindow.setContent(contentString);
                 _infoWindow.open(map, _gmarkers[i]);
                 _infoWindow.addListener('domready', () => {
