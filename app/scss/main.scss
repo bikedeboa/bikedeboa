@@ -2013,8 +2013,11 @@ a,
   }
 
   .infobox--label {
-    margin-top: 7px;
-    text-align: right;
+    // margin-top: 7px;
+    // text-align: right;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
     color: $lightGrey;
     font-size: 10px;
     font-family: $bodyFont;

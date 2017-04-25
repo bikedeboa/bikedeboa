@@ -587,9 +587,9 @@ $(function () {
                 });
               });
 
-              _gmarkers[i].addListener('mouseout', () => {
-                _infoWindow.close();
-              });  
+              // _gmarkers[i].addListener('mouseout', () => {
+              //   _infoWindow.close();
+              // });  
             }
           } else {
             console.error('not lat or long o.O');
