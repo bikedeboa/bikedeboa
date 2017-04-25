@@ -560,6 +560,15 @@ $(function () {
                 numReviews: m.reviews,
               };
 
+              if (m.isPublic != null) {
+                templateData.isPublic = m.isPublic === true;
+              } else {
+                templateData.noIsPublicData = true;
+              }
+              if (m.structureType) {
+                templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+              }
+
               const contentString = templates.infoWindowTemplate(templateData);
 
               _gmarkers[i].addListener('mouseover', () => {

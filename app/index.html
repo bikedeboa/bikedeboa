@@ -1065,10 +1065,23 @@
               <h2>{{title}}</h2>
             {{/if}}
 
+            <div class="infobox--details">
+              {{#unless noIsPublicData}}
+                  {{#if isPublic}}
+                      Público
+                  {{else}}
+                      Restrito
+                  {{/if}}
+              {{/unless}}
+              {{#if structureTypeLabel}}
+                {{#unless noIsPublicData}}
+                 · 
+                {{/unless}}
+                {{{structureTypeLabel}}}
+              {{/if}}
+            </div>
+
             <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-              <!-- <div class="infobox--details">
-                Público · U Invertido
-              </div> -->
 
               {{#if average}}
                 <span class="average">{{average}}</span>

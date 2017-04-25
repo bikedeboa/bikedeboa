@@ -43,7 +43,7 @@ const MODAL_TRANSITION_IN_DURATION = 700 * ANIMATIONS_MULTIPLIER;
 const STAGGER_NORMAL = 75 * ANIMATIONS_MULTIPLIER;
 const STAGGER_FAST = 50 * ANIMATIONS_MULTIPLIER;
 
-const STRUCTURE_NAMES = ['U Invertido', 'de Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
+const STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
 const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
