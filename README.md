@@ -20,3 +20,6 @@ All our tasks are [here](https://trello.com/b/2skCAJnL/bikedeboa). Please let us
 Facebook: https://www.facebook.com/bikedeboaapp
 
 Email: bikedeboa@gmail.com
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
