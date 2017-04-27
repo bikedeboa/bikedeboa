@@ -391,7 +391,7 @@
                             <section>
                               <div class="text-input-wrapper">
                                   <span class="little-pin gray"></span>
-                                  <input required id="titleInput" type="text" class="text-input" placeholder="Título">
+                                  <input required id="titleInput" type="text" class="text-input" placeholder="Digite um título">
                               </div>
                             </section>
 
@@ -829,17 +829,13 @@
                             </div>
 
                             <div class="modal-body">
-                                <div id="review_title" class="title">
+                                <!-- <div id="review_title" class="title">
                                   {{#if title}}
                                     <h1>{{title}}</h1>
                                   {{else}}
                                     <small class="muted">Sem título</small>
                                   {{/if}}
-
-                                  <!-- <p class="address">
-                                      {{address}}
-                                  </p> -->
-                                </div>
+                                </div> -->
 
                                 <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
                                     <h2>Dê uma nota</h2>
@@ -861,16 +857,18 @@
                                     <h2>Vantagens</h2>
                                     {{{tagsButtons}}}
                                 </div>
+
+                                <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR</button>
                             </div>
 
-                            <div class="modal-footer">
+                            <!-- <div class="modal-footer"> -->
                                 <!-- <div class="col-half">
                                   <button id="sendReviewBtn" class="btn border btn-footer btn-action">CANCELAR</button>
                                 </div> -->
                                 <!-- <div class="col-half"> -->
-                                  <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR</button>
+                                  <!-- <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR</button> -->
                                 <!-- </div> -->
-                            </div>
+                            <!-- </div> -->
                         </div>
                     </div>
                 </div>
