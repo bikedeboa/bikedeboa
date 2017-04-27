@@ -179,7 +179,8 @@ class SideNav {
 
   hide (e = {}) {
     if (!e.dontMessWithState) {
-      History.replaceState({dontUpdateView: true}, 'bike de boa', '/');
+      // History.replaceState({dontUpdateView: true}, 'bike de boa', '/');
+      History.replaceState({}, 'bike de boa', '/');
     }
 
     this.sideNavEl.classList.add('side-nav--animatable');

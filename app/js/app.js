@@ -1593,8 +1593,8 @@ $(function () {
     }
 
     // Close any sidenavs
-    _hamburgerMenu.hide();
-    _filterMenu.hide();
+    _hamburgerMenu.hide({dontMessWithState: false});
+    _filterMenu.hide({dontMessWithState: false});
   }
 
   function showBikeLayer() {
