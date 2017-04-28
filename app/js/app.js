@@ -2,6 +2,7 @@
 /* eslint-env node, jquery */
 
 
+
 $(function () {
   function getPinColorFromAverage(average) {
     let pinColor;
@@ -787,15 +788,23 @@ $(function () {
         hideSpinner();
 
         if (!updatingMarker) {
-          swal('Bicicletário adicionado', 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
-
-          const newMarker = markers.find( i => i.id === newLocal.id );
-          if (newMarker) {
-            onMarkerClick(newMarker, () => {
-              $('.openReviewPanelBtn').tooltip('show');
-              // $('.rating-input-container').velocity('callout.bounce');
-            });
-          }
+          swal({
+            title: "Bicicletário criado",
+            text: "Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)",
+            type: "success",
+            closeOnConfirm: true,
+            allowOutsideClick: false, // because this wouldnt trigger the callback @todo
+            allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
+          }, () => {
+            // Clicked OK or dismissed the modal
+            const newMarker = markers.find( i => i.id === newLocal.id );
+            if (newMarker) {
+              onMarkerClick(newMarker, () => {
+                $('.openReviewPanelBtn').tooltip('show');
+                // $('.rating-input-container').velocity('callout.bounce');
+              });
+            }
+          });
         }
       });
     };
@@ -1281,7 +1290,7 @@ $(function () {
           ga('send', 'event', 'Review', 'create', ''+openedMarker.id, parseInt(currentPendingRating));
         }
 
-        swal('Avaliação salva', 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
+        swal('Avaliação salva', 'Valeu! Tua avaliação ajuda outros ciclistas a conhecerem melhor este bicicletário.', 'success');
 
         // Update markers data
         Database.getPlaces( () => {
