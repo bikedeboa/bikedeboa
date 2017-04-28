@@ -1471,7 +1471,9 @@ a,
     &:active {
         outline: 0;
         border-bottom-width: 2px;
-        margin-top: 3px;
+        transform: translateY(3px);
+        // compensate for relayout because of changing border size
+        margin-bottom: calc(2% + 3px);
     }
 
     &:disabled {
@@ -1653,6 +1655,7 @@ a,
     border: 0;
     background: none;
     color: $green;
+    width: 100%;
     // min-width: 110px;
 
     .toolbar-item-icon {
@@ -2687,16 +2690,35 @@ a,
 }
 
 
-// .sweetAlert {
-//   padding-left: 5%;
-//   padding-right: 5%;
+.sweet-alert {
+  padding-left: 5%;
+  padding-right: 5%;
+  font-family: $bodyFont;
 
-//   button {
-//     border-bottom: 5px solid $lightestGray;
-//     border-radius: 5px;
-//   }
+  h2 {
+    font-family: $headingFont;
+  }
 
-//   .confirm {
-//     border-bottom: 5px solid green;
-//   }
-// }
+  button {
+    border-bottom: 5px solid $gray;
+    border-radius: 5px;
+    font-weight: 700;
+    width: 90px;
+    margin-top: 50px;
+    
+    &.confirm {
+      border-bottom: 5px solid green;
+    }
+
+    &:active {
+        outline: 0;
+        border-bottom-width: 2px;
+        transform: translateY(3px);
+        // compensate for relayout because of changing border size
+        margin-bottom: 3px;
+    }
+  }
+
+
+
+}

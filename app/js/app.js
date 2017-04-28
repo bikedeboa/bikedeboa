@@ -787,7 +787,7 @@ $(function () {
         hideSpinner();
 
         if (!updatingMarker) {
-          swal('Obrigado por adicionar este bicicletário', 'Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
+          swal('Bicicletário adicionado', 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
 
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
@@ -1281,7 +1281,7 @@ $(function () {
           ga('send', 'event', 'Review', 'create', ''+openedMarker.id, parseInt(currentPendingRating));
         }
 
-        swal('Obrigado por avaliar este bicicletário', 'Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
+        swal('Avaliação salva', 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
 
         // Update markers data
         Database.getPlaces( () => {
@@ -1498,7 +1498,8 @@ $(function () {
             showCancelButton: true,
             confirmButtonColor: "#f15f74",
             confirmButtonText: "Descartar",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            allowOutsideClick: false
           },
           () => {
             proceed();
@@ -1779,7 +1780,8 @@ $(function () {
     swal.setDefaults({
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: true
     });
 
     _hamburgerMenu = new SideNav('hamburger-menu');
