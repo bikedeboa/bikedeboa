@@ -2121,7 +2121,7 @@ a,
     top: 0;
     left: 0;
     right: 0;
-    z-index: 999999; //@todo
+    z-index: 9999; //@todo
     display: block;
     opacity: 0;
     pointer-events: none;
@@ -2686,3 +2686,17 @@ a,
 
 }
 
+
+// .sweetAlert {
+//   padding-left: 5%;
+//   padding-right: 5%;
+
+//   button {
+//     border-bottom: 5px solid $lightestGray;
+//     border-radius: 5px;
+//   }
+
+//   .confirm {
+//     border-bottom: 5px solid green;
+//   }
+// }

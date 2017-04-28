@@ -787,6 +787,8 @@ $(function () {
         hideSpinner();
 
         if (!updatingMarker) {
+          swal('Obrigado por adicionar este bicicletário', 'Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
+
           const newMarker = markers.find( i => i.id === newLocal.id );
           if (newMarker) {
             onMarkerClick(newMarker, () => {
@@ -1278,6 +1280,8 @@ $(function () {
         } else {
           ga('send', 'event', 'Review', 'create', ''+openedMarker.id, parseInt(currentPendingRating));
         }
+
+        swal('Obrigado por avaliar este bicicletário', 'Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)', 'success');
 
         // Update markers data
         Database.getPlaces( () => {
