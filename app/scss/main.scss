@@ -1717,6 +1717,15 @@ a,
 
   .side-nav__hide {
     color: black;
+
+    .glyphicon:after {
+        content: 'Feito';
+        display: block;
+        font-family: Ubuntu;
+        font-size: 12px;
+        margin-top: 5px;
+        color: gray;
+    }
   }
 
   .setting-checkbox-container {
@@ -1799,6 +1808,7 @@ a,
     margin-left: -36px;
     padding-left: 36px;
     margin-right: -16px;
+    margin-bottom: 10px;
   }
 
   #filter-results-counter {
