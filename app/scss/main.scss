@@ -911,7 +911,7 @@ a,
 
     // transition: max-height 0.5s ease;
 
-    img {
+    &.hasImage img {
         cursor: zoom-in;
         object-fit: cover;
         // object-fit: contain;
@@ -980,21 +980,99 @@ a,
     }
 
     .photo-container img {
-        opacity: 0.5;
+        // opacity: 0.8;
+        object-fit: contain;
     }
 
     .minimap-container {
         position: relative;
 
         button {
+          background-image: url(/img/icon_edit.svg);
+            background-size: 50%;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            background-color: #30bb6a;
             position: absolute;
-            top: 0;
-            right: 0;
-            background: rgba(255,255,255,0.9);
-            color: #333;
-            border-bottom-left-radius: 15px;
+            top: 5px;
+            right: 5px;
+            border-radius: 50%;
+            opacity: .8;
+            filter: grayscale(100%);
+            @include material-shadow(1);
+
+            transition: all 0.2s ease-out;
+
+            &:hover {
+              filter: none;
+              opacity: 1
+            }
         }
     }
+
+    #photoInput {
+      opacity: 0;
+      overflow: hidden;
+      z-index: -1;
+
+      & + label {
+          position: absolute;
+          top: 50%;
+          left: calc(50% - 60px);
+          transform: translate(-50%,-50%);
+          background: url(/img/icon_photo.svg);
+          background-size: 100%;
+          width: 67px;
+          height: 67px;
+          cursor: pointer;
+          filter: grayscale(100%);
+          text-shadow: 1px 1px 1px white;
+
+          border-radius: 50%;
+          @include material-shadow(1);
+          
+          transition: all 0.2s ease-out;
+
+          &:after {
+              content: 'Adicionar foto';
+              position: absolute;
+              top: 26px;
+              left: 135px;
+              width: 120px;
+              transform: translate(-50%);
+              font-weight: 700;
+              text-transform: uppercase;
+              font-size: 13px;
+              color: $green;
+          }
+
+          &.photo-input--edit-mode {
+            background-image: url(/img/icon_edit.svg);
+            background-size: 50%;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+            background-color: $green;
+            left: 50%;
+            opacity: .8;
+            transform: none;
+            top: 10px;
+            right: 10px;
+            left: auto;
+            width: 40px;
+            height: 40px;
+
+            &:after {
+              display: none;
+            }
+          }
+      }
+
+      & + label:hover,
+      & + label:focus {
+          opacity: 1;
+          filter: none;
+      }
+  }
 }
 
 .modal-content {
@@ -1538,57 +1616,6 @@ a,
     opacity: 1;
 }
 */
-
-#photoInput {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-
-    & + label {
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        background: url(/img/icon_photo.svg);
-        background-size: 100%;
-        width: 67px;
-        height: 67px;
-        transform: translate(-50%,-50%);
-        cursor: pointer;
-        filter: grayscale(100%);
-
-        border-radius: 50%;
-        box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .3);
-        
-        transition: all 0.2s ease-out;
-
-        &:after {
-            content: 'Adicionar foto';
-            position: absolute;
-            bottom: -25px;
-            width: 120px;
-            left: 50%;
-            transform: translate(-50%);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 13px;
-            color: $green;
-        }
-
-        &.photo-input--edit-mode:after {
-            content: 'Mudar foto';
-            width: 100px;
-        }
-    }
-
-    & + label:hover,
-    & + label:focus {
-        opacity: 1;
-        filter: none;
-    }
-}
 
 .skeleton-box {
     background: rgba(0,0,0,0.1);
