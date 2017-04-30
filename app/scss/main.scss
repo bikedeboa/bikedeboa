@@ -2704,6 +2704,7 @@ a,
   padding-left: 5%;
   padding-right: 5%;
   font-family: $bodyFont;
+  @include material-shadow(1);
 
   h2 {
     // font-family: $headingFont;
@@ -2713,9 +2714,8 @@ a,
   button {
     border-bottom: 5px solid $gray;
     border-radius: 5px;
-    font-weight: 700;
-    width: 90px;
-    margin-top: 50px;
+    font-weight: 700;  
+    min-width: 90px;
     
     &.confirm {
       border-bottom: 5px solid green;
@@ -2730,6 +2730,8 @@ a,
     }
   }
 
-
+  .sa-button-container {
+    margin-top: 30px;
+  }
 
 }
