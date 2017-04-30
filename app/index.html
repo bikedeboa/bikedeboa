@@ -411,7 +411,7 @@
                                   </div>
                                   <div data-value="private" class="typeIcon" tab-index="0">
                                       <img src="/img/icon_private.svg"/>
-                                      <div class="icon-label">Restrito (só clientes)</div>
+                                      <div class="icon-label">Privado</div>
                                   </div>
                               </div>
                             </section> 
@@ -684,7 +684,7 @@
                       {{#if noIsPublicData}}
                           {{#if isLoggedUser}}
                             <div class="icon-label">
-                                <small>Sem informação sobre restrição</small>
+                                <small>Sem informação sobre restrição de acesso</small>
                             </div>
                           {{/if}}
                       {{else}}
@@ -694,7 +694,7 @@
                           {{else}}
                               <img src="/img/icon_private.svg"/>
                               <div class="icon-label">
-                                  Restrito<br>
+                                  Privado<br>
                                   <small>(só clientes)</small>
                               </div>
                           {{/if}}
@@ -980,7 +980,7 @@
                 </li>
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
-                    <label for="filter_private">Restritos</label>
+                    <label for="filter_private">Privados</label>
                 </li>
               </ul>
 
