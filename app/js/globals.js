@@ -26,7 +26,6 @@ const MARKER_W = 20;
 const MARKER_H = 24;
 const MARKER_W_MINI = 10;
 const MARKER_H_MINI = 12;
-const MIN_TITLE_CHARACTERS = 0;
 const MARKER_ICON_GREEN = 'img/pin_green.svg';
 const MARKER_ICON_YELLOW = 'img/pin_yellow.svg';
 const MARKER_ICON_RED = 'img/pin_red.svg';

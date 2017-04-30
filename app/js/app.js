@@ -53,7 +53,7 @@ $(function () {
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = m.average;
 
-    const staticImgDimensions = _isMobile ? '400x100' : '1000x200';
+    const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
@@ -967,14 +967,12 @@ $(function () {
   }
 
   function validateNewPlaceForm() {
-    const textOk = $('#newPlaceModal #titleInput').val().length > MIN_TITLE_CHARACTERS;
+    const textOk = $('#newPlaceModal #titleInput').is(':valid');
     const isOk =
       textOk &&
       // $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val() &&
       $('#newPlaceModal .acess-types-group .active').data('value') &&
       $('#newPlaceModal .custom-radio-group .active').data('value');
-
-    $('#newPlaceModal .little-pin').toggleClass('gray', !textOk);
 
     // console.log('validating');
 
@@ -994,7 +992,6 @@ $(function () {
   function openNewOrEditPlaceModal() {
     // Reset fields
     _uploadingPhotoBlob = '';
-    $('#newPlaceModal .little-pin').toggleClass('gray', true);
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
     $('#newPlaceModal #titleInput').val('');
     $('#newPlaceModal .typeIcon').removeClass('active');

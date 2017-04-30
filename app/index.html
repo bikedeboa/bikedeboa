@@ -68,7 +68,7 @@
             <!-- <span class="balaca">
               <img src="/img/bici.svg"/>
             </span> -->
-            <input id="locationQueryInput" type="text" placeholder="Buscar endereço, estabelecimento, ...">
+            <input id="locationQueryInput" type="search" placeholder="Buscar endereço, estabelecimento, ...">
             <button id="clearLocationQueryBtn">✕</button>
 
             <span>
@@ -390,7 +390,6 @@
                         <div class="modal-body text-center">
                             <section>
                               <div class="text-input-wrapper">
-                                  <span class="little-pin gray"></span>
                                   <input required id="titleInput" type="text" class="text-input" placeholder="Digite um título">
                               </div>
                             </section>
@@ -406,42 +405,42 @@
                               <h2>Acesso</h2>
 
                               <div class="acess-types-group">
-                                  <div data-value="public" class="typeIcon">
+                                  <div data-value="public" class="typeIcon" tab-index="0">
                                       <img src="/img/icon_public.svg"/>
                                       <div class="icon-label">Público</div>
                                   </div>
-                                  <div data-value="private" class="typeIcon">
+                                  <div data-value="private" class="typeIcon" tab-index="0">
                                       <img src="/img/icon_private.svg"/>
                                       <div class="icon-label">Restrito (só clientes)</div>
                                   </div>
                               </div>
-                            </section>
+                            </section> 
 
                             <section>
                               <h2>Tipo de bicicletário</h2>
 
                               <div class="custom-radio-group">
-                                  <div data-value="deroda" class="typeIcon">
+                                  <div data-value="deroda" class="typeIcon" tab-index="0">
                                       <img src="/img/tipo_deroda.svg"/>
                                       <div class="icon-label">De Roda</div>
                                   </div>
-                                  <div data-value="uinvertido" class="typeIcon">
+                                  <div data-value="uinvertido" class="typeIcon" tab-index="0">
                                       <img src="/img/tipo_uinvertido.svg"/>
                                       <div class="icon-label">U Invertido</div>
                                   </div>
-                                  <div data-value="suspenso" class="typeIcon">
+                                  <div data-value="suspenso" class="typeIcon" tab-index="0">
                                       <img src="/img/tipo_suspenso.svg"/>
                                       <div class="icon-label">Suspenso</div>
                                   </div>
-                                  <div data-value="grade" class="typeIcon">
+                                  <div data-value="grade" class="typeIcon" tab-index="0">
                                       <img src="/img/tipo_grade.svg"/>
                                       <div class="icon-label">Grade</div>
                                   </div>
-                                  <div data-value="trave" class="typeIcon">
+                                  <div data-value="trave" class="typeIcon" tab-index="0">
                                       <img src="/img/tipo_trave.svg"/>
                                       <div class="icon-label">Trave</div>
                                   </div>
-                                  <div data-value="other" class="typeIcon">
+                                  <div data-value="other" class="typeIcon" tab-index="0">
                                       <img src="/img/tipo_other.svg"/>
                                       <div class="icon-label">Outro</div>
                                   </div>
@@ -1097,9 +1096,9 @@
                   <label class="full-star" data-value="1" for="placeDetails_star1"></label>
                 </fieldset> 
 
-                <!-- {{#if numReviews}}
+                {{#if numReviews}}
                   <span class="numreviews">({{numReviews}})</span>
-                {{/if}} -->
+                {{/if}}
               {{else}}
                 <span style="font-style: italic; color: #828b90;">Sem avaliações</span>
               {{/if}}

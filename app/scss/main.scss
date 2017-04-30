@@ -808,9 +808,19 @@ a,
     }
 
     #titleInput {
-        padding-left: 35px;
         border-radius: 3px;
-        border: 1px solid $lightGray;
+        border: 2px solid $lightestGray;
+        // font-size: 30px;
+
+        &:valid {
+          border-color: $lightGreen;
+          border-width: 3px;
+        }
+
+        &:invalid {
+          border-color: $lightestGray;
+          border-width: 3px;
+        }
     }
 
     .tagsContainer {
@@ -1547,12 +1557,12 @@ a,
         height: 67px;
         transform: translate(-50%,-50%);
         cursor: pointer;
-        opacity: 0.8;
-        transition: opacity 0.2s ease-out;
-        text-shadow: 1px 1px 1px white;
+        filter: grayscale(100%);
 
         border-radius: 50%;
         box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .3);
+        
+        transition: all 0.2s ease-out;
 
         &:after {
             content: 'Adicionar foto';
@@ -1561,10 +1571,10 @@ a,
             width: 120px;
             left: 50%;
             transform: translate(-50%);
-            font-weight: 900;
-            font-family: $headingFont;
+            font-weight: 700;
             text-transform: uppercase;
             font-size: 13px;
+            color: $green;
         }
 
         &.photo-input--edit-mode:after {
@@ -1576,6 +1586,7 @@ a,
     & + label:hover,
     & + label:focus {
         opacity: 1;
+        filter: none;
     }
 }
 
