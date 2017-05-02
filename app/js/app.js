@@ -3,7 +3,7 @@
 
 
 
-$(function () {
+$(() => {
   function getPinColorFromAverage(average) {
     let pinColor;
 
@@ -40,8 +40,6 @@ $(function () {
     }
 
     ga('send', 'event', 'Local', 'view', ''+m.id);
-
-    History.pushState({}, 'Detalhes do bicicletário', `detalhes/${m.id}`);
 
     let templateData = {};
 
@@ -343,7 +341,20 @@ $(function () {
 
   }
 
-  function onMarkerClick(marker, callback) {
+  function getMarkerById(id) {
+    if (id) {
+      const res = markers.filter( i => i.id === id );
+      if (res.length > 0) {
+        return res[0];
+      }
+    }
+  }
+
+  function openLocalDetails(marker, callback) {
+    History.pushState({id: marker.id, action: 'openDetails'}, 'Detalhes do bicicletário', `detalhes/${marker.id}`);
+  }
+
+  function _openLocalDetails(marker, callback) {
     _abortedDetailsRequest = false;
 
     if (marker._hasDetails) {
@@ -544,7 +555,7 @@ $(function () {
 
             // Modal
             _gmarkers[i].addListener('click', () => {
-              onMarkerClick(markers[i]);
+              openLocalDetails(markers[i]);
             });
 
             // Info window
@@ -583,7 +594,7 @@ $(function () {
                   });
 
                   $('.infoBox').off('click').on('click', () => {
-                    onMarkerClick(markers[i]);
+                    openLocalDetails(markers[i]);
                   });
                 });
               });
@@ -755,7 +766,7 @@ $(function () {
 
   // @todo refactor this, it's fuckin confusing
   function finishCreateOrUpdatePlace() {
-    History.pushState({}, 'bike de boa', '/');
+    goHome();
     showSpinner('Salvando bicicletário...');
 
     const updatingMarker = openedMarker;
@@ -799,7 +810,7 @@ $(function () {
             // Clicked OK or dismissed the modal
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
-              onMarkerClick(newMarker, () => {
+              openLocalDetails(newMarker, () => {
                 $('.openReviewPanelBtn').tooltip('show');
                 // $('.rating-input-container').velocity('callout.bounce');
               });
@@ -1082,7 +1093,7 @@ $(function () {
     if (openedMarker) {
       $('#cancelEditPlaceBtn').off('click').on('click', () => {
         hideAllModals(() => {
-          openDetailsModal(openedMarker);
+          openLocalDetails(openedMarker);
         });
       });
 
@@ -1154,7 +1165,7 @@ $(function () {
         showSpinner();
         Database.deletePlace(openedMarker.id, () => {
           // $('#newPlaceModal').modal('hide');
-          History.pushState({}, 'bike de boa', '/');
+          goHome();
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
@@ -1279,7 +1290,7 @@ $(function () {
         // Update screen state
         // $('#reviewPanel').modal('hide');
         // $('#placeDetailsModal').modal('hide');
-        History.pushState({}, 'bike de boa', '/');
+        goHome();
 
         if (_updatingReview) {
           ga('send', 'event', 'Review', 'update', ''+openedMarker.id, parseInt(currentPendingRating));
@@ -1344,8 +1355,7 @@ $(function () {
 
       swal('Sugestão enviada', 'Obrigado por contribuir com o Bike de Boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
 
-      // Update screen state
-      History.pushState({}, 'bike de boa', '/');
+      goHome();
     });
   }
 
@@ -1360,6 +1370,10 @@ $(function () {
 
   function setMobileHeaderTitle(text) {
     $('#top-mobile-bar h1').text(text || '');
+  }
+
+  function goHome() {
+    History.pushState({}, 'bike de boa', '/');
   }
 
   function _initGlobalCallbacks() {
@@ -1483,15 +1497,7 @@ $(function () {
         // If a details request was under way, aborts the request
         _abortedDetailsRequest = true;
 
-        openedMarker = null;
-
-        hideAllModals();
-
-        // Reset history state
-        // @todo just do a history.back(), so a forward would reopen the modal ;)
-        if (History.getState().title !== 'bike de boa') {
-          History.replaceState({}, 'bike de boa', '/');
-        }
+        goHome();
       }
 
       // If was creating a new local
@@ -1588,6 +1594,8 @@ $(function () {
   function hideAllModals(callback) {
     const $modal = $('.modal');
 
+    openedMarker = null;
+
     if ($modal.is(':visible')) {
       $modal.modal('hide').one('hidden.bs.modal', () => { 
         if (callback && typeof callback === 'function') {
@@ -1596,7 +1604,7 @@ $(function () {
       });
 
       // Reset history
-      History.replaceState({}, 'bike de boa', '/');
+      // History.replaceState({}, 'bike de boa', '/');
     } else {
       if (callback && typeof callback === 'function') {
         callback();
@@ -1628,15 +1636,27 @@ $(function () {
     // });
   }
 
+  function handleRouting() {
+    const state = History.getState();
+
+    if (state.title === 'bike de boa' && !state.data.dontUpdateView) {
+      hideAllModals();
+    } else {
+      if (state.data && state.data.action === 'openDetails') {
+        _openLocalDetails(getMarkerById(state.data.id));
+      }
+    }
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
-        // Set up Service Worker
-    if (window.UpUp) {
-      UpUp.start({
-        'content': 'Você está offline. :(',
-        'cache-version': 'v2.2',
-      });
-    }
+    // Set up Service Worker
+    // if (window.UpUp) {
+    //   UpUp.start({
+    //     'content': 'Você está offline. :(',
+    //     'cache-version': 'v2.2',
+    //   });
+    // }
 
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
     // References:
@@ -1774,12 +1794,8 @@ $(function () {
     _initTemplates();
 
     // Bind trigger for history changes
-    History.Adapter.bind(window,'statechange',function(){
-      const state = History.getState();
-
-      if (state.title === 'bike de boa' && !state.data.dontUpdateView) {
-        hideAllModals();
-      }
+    History.Adapter.bind(window, 'statechange', () => {
+      handleRouting();
     });
 
     // Set up Sweet Alert
@@ -1884,7 +1900,7 @@ $(function () {
 
   function init() {
     // Reset URL
-    History.replaceState({}, 'bike de boa', '/');
+    // History.replaceState({}, 'bike de boa', '/');
 
     if (isDemoMode) {
       Database = BIKE.MockedDatabase;
@@ -1967,5 +1983,6 @@ $(function () {
 
   setup();
   init();
+  // handleRouting(); 
   // _geolocate();
 });
