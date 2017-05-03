@@ -170,6 +170,18 @@ body.beta #map {
   }
 }
 
+.help-tooltip-trigger {
+  cursor: pointer;
+  color: $gray;
+  
+  & + .tooltip {
+    .tooltip-inner {
+      text-align: left;
+      max-width: 400px;
+    }
+  }
+}
+
 .social-link {
   opacity: 0.3;
   transition: opacity 0.2s ease;

@@ -1057,6 +1057,8 @@ $(function () {
         }, () => {
         }
       );
+
+      $('#newPlaceModal .help-tooltip-trigger').tooltip();
     }
 
     // Initialize callbacks
@@ -1452,6 +1454,7 @@ $(function () {
         openedMarker = null;
       }
 
+      ga('send', 'event', 'Local', 'toggle create pin mode');
       toggleLocationInputMode();
     });
 
