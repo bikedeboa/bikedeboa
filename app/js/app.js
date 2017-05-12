@@ -170,6 +170,8 @@ $(function () {
       });
     }
 
+    $('#placeDetailsModal .help-tooltip-trigger').tooltip();
+
     // Animate modal content
     $('section, .modal-footer').velocity(
       'transition.fadeIn',

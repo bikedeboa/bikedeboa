@@ -410,11 +410,15 @@
                               <div class="acess-types-group">
                                   <div data-value="public" class="typeIcon" tab-index="0">
                                       <img src="/img/icon_public.svg"/>
-                                      <div class="icon-label">Público</div>
+                                      <div class="icon-label">
+                                        Público
+                                      </div>
                                   </div>
                                   <div data-value="private" class="typeIcon" tab-index="0">
                                       <img src="/img/icon_private.svg"/>
-                                      <div class="icon-label">Privado</div>
+                                      <div class="icon-label">
+                                        Privado
+                                      </div>
                                   </div>
                               </div>
                             </section> 
@@ -696,12 +700,15 @@
                       {{else}}
                           {{#if isPublic}}
                               <img src="/img/icon_public.svg"/>
-                              <div class="icon-label"> Público </div>
+                              <div class="icon-label">
+                                Público
+                                <span class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="<b>Bicicletário público:</b> pode ser usado em qualquer horário por qualquer pessoa. Normalmente está em espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.">
+                              </div>
                           {{else}}
                               <img src="/img/icon_private.svg"/>
                               <div class="icon-label">
-                                  Privado<br>
-                                  <small>(só clientes)</small>
+                                  Privado
+                                  <span class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="<b>Bicicletário privado:</b> o uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.">
                               </div>
                           {{/if}}
                       {{/if}}
