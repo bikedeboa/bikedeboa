@@ -2265,6 +2265,11 @@ a,
         border-radius: 0;
         height: 70px;
         bottom: 0;
+        font-weight: 100;
+
+        &:after {
+            content: 'Cancelar';
+        }
     }
   }
 }
