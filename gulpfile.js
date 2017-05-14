@@ -20,6 +20,8 @@ const mainBowerFiles = require('main-bower-files');
 const filter = require('gulp-filter');
 const flatten = require('gulp-flatten');
 const minifycss = require('gulp-clean-css');
+var path = require('path');
+var swPrecache = require('sw-precache');
 // const fs = require('fs');w
 
 const BOWER_PATH = './bower_components';
@@ -55,6 +57,9 @@ gulp.task('sass', () => {
 
 // Concatenate & Minify JS
 gulp.task('scripts', () => {
+  gulp.src('app/service-worker-registration.js')
+    .pipe(gulp.dest('dist/'));
+
   return gulp.src('app/js/*.js')
     .pipe(sourcemaps.init())
     .pipe(plumber())
@@ -74,6 +79,28 @@ gulp.task('scripts', () => {
     .pipe(fileSizes({title: 'app.min.js', gzip: true}))
     .pipe(gulp.dest('dist/js'));
 });
+
+gulp.task('html', () => {
+  return gulp.src('app/*.html')
+    .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('generate-service-worker', function(callback) {
+  swPrecache.write(`dist/service-worker.js`, {
+    staticFileGlobs: ['dist/**/*.{js,html,css}', 'assets/**/*.{png,jpg,svg}'],
+    stripPrefixMulti: {
+      'dist/': '/',
+      'assets/': '/',
+      'public/': '/'
+    },
+    // If handleFetch is false (i.e. because this is called from generate-service-worker-dev), then
+    // the service worker will precache resources but won't actually serve them.
+    // This allows you to test precaching behavior without worry about the cache preventing your
+    // local changes from being picked up during the development cycle.
+    handleFetch: true
+  }, callback);
+});
+
 
 // grab libraries files from bower_components, minify and push in DEST_PATH
 gulp.task('bower', function() {
@@ -128,9 +155,15 @@ gulp.task('bower-fonts', function() {
 gulp.task('watch', () => {
   // gulp.watch('js/*.js', ['lint', 'scripts']);
   // gulp.watch('assets/*', ['images']);
-  gulp.watch('app/js/*.js', ['scripts']);
-  gulp.watch('app/scss/*.scss', ['sass']);
-  gulp.watch('bower.json', ['bower', 'bower-fonts']);
+  gulp.watch('app/js/*.js', () => {
+    runSequence(['scripts'], ['generate-service-worker'])
+  });
+  gulp.watch('app/scss/*.scss', () => {
+    runSequence(['sass'], ['generate-service-worker'])
+  });
+  gulp.watch('app/*.html', () => {
+    runSequence(['html'], ['generate-service-worker'])
+  });
 });
 
 gulp.task('images', () => {
@@ -147,9 +180,9 @@ gulp.task('server', () => {
 });
 
 gulp.task('clean', del.bind(null, ['dist']));
-
+ 
 gulp.task('build', () => {
-  runSequence(['clean'], ['bower', 'bower-fonts', 'sass', 'scripts'], () => {
+  runSequence(['clean'], ['bower', 'bower-fonts', 'html', 'sass', 'scripts'], ['generate-service-worker'], () => {
     return gulp.src('dist/**/*').pipe(fileSizes({title: 'total output', gzip: true}));
   });
 });

@@ -99,5 +99,6 @@ let _mapZoomLevel;
 let _isFacebookBrowser;
 let _activeFilters;
 let _infoWindow;
+let _isOffline;
 
 let templates = {};

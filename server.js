@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var path = __dirname + '/app/';
+var path = __dirname;
 var compression = require('compression');
 
 // GZIP!!!!!
@@ -29,14 +29,14 @@ router.use(function (req,res,next) {
 
 // Home
 router.get('/*',function(req,res){
-  res.sendFile(path + 'index.html');
+  res.sendFile('index.html');
 });
 
 app.use('/',router);
 
 // 404
 app.use('*',function(req,res){
-  res.sendFile(path + '404.html');
+  res.sendFile('404.html');
 });
 
 var port = process.env.PORT || 5000;

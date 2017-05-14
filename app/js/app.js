@@ -1,8 +1,6 @@
 /* eslint no-console: ["warn", { allow: ["log", "warn", "error"] }] */
 /* eslint-env node, jquery */
 
-
-
 $(function () {
   function getPinColorFromAverage(average) {
     let pinColor;
@@ -189,27 +187,31 @@ $(function () {
       lng: position.coords.longitude
     };
 
-    _geolocationMarker.setPosition(pos);
+    if (map) {
+      _geolocationMarker.setPosition(pos);
 
-    _geolocationRadius.setCenter(pos);
-    _geolocationRadius.setRadius(position.coords.accuracy);
+      _geolocationRadius.setCenter(pos);
+      _geolocationRadius.setRadius(position.coords.accuracy);
+    }
   }
 
   function _geolocate(toCenter, callback, quiet = false) {
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
-        const markerPos = _geolocationMarker.getPosition();
-        const pos = {
-          lat: markerPos.lat(),
-          lng: markerPos.lng()
-        };
+        if (map) {
+          const markerPos = _geolocationMarker.getPosition();
+          const pos = {
+            lat: markerPos.lat(),
+            lng: markerPos.lng()
+          };
 
-        map.panTo(pos);
-        
-        // Set minimum map zoom
-        if (map.getZoom() < 17) {
-          map.setZoom(17);
+          map.panTo(pos);
+          
+          // Set minimum map zoom
+          if (map.getZoom() < 17) {
+            map.setZoom(17);
+          }
         }
       } else {
         if (!quiet) {
@@ -235,10 +237,11 @@ $(function () {
               updateCurrentPosition(position);
 
               $('#geolocationBtn').css('border', '2px solid lightblue');
-              _geolocationMarker.setVisible(true);
-              _geolocationRadius.setVisible(true);
-              if (markers && markers.length) {
-                _geolocationMarker.setZIndex(markers.length);
+              if (map) {
+                _geolocationRadius.setVisible(true);
+                if (markers && markers.length) {
+                  _geolocationMarker.setZIndex(markers.length);
+                }
               }
 
               if (toCenter) {
@@ -247,11 +250,13 @@ $(function () {
                   lng: position.coords.longitude
                 };
 
-                map.panTo(pos);
-                
-                // Set minimum map zoom
-                if (map.getZoom() < 17) {
-                  map.setZoom(17);
+                if (map) {
+                  map.panTo(pos);
+                  
+                  // Set minimum map zoom
+                  if (map.getZoom() < 17) {
+                    map.setZoom(17);
+                  }
                 }
               }
 
@@ -497,19 +502,21 @@ $(function () {
             scale = 0.5 + (m.average/10);
           }
 
-          m.icon = {
-            url: iconType, // url
-            scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-            origin: new google.maps.Point(0, 0), // origin
-            anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
-          };
+          if (map) {
+            m.icon = {
+              url: iconType, // url
+              scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
+              origin: new google.maps.Point(0, 0), // origin
+              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+            };
 
-          m.iconMini = {
-            url: iconTypeMini, // url
-            scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
-            origin: new google.maps.Point(0, 0), // origin
-            anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
-          };
+            m.iconMini = {
+              url: iconTypeMini, // url
+              scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
+              origin: new google.maps.Point(0, 0), // origin
+              anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
+            };
+          }
 
           // Average might come with crazy floating point value
           if (m.average) {
@@ -526,76 +533,78 @@ $(function () {
           //   labelStr = '?';
           // }
 
-          if (m.lat && m.lng) {
-            _gmarkers.push(new google.maps.Marker({
-              position: {
-                lat: parseFloat(m.lat),
-                lng: parseFloat(m.lng)
-              },
-              map: map,
-              icon: m.icon,
-              // title: m.text,
-              // label: labelStr && {
-              //   text: labelStr,
-              //   color: 'white',
-              //   fontFamily: 'Roboto'
-              // },
-              zIndex: i, //markers should be ordered by average
-              // opacity: 0.1 + (m.average/5).
-            }));
+          if (map) {
+            if (m.lat && m.lng) {
+              _gmarkers.push(new google.maps.Marker({
+                position: {
+                  lat: parseFloat(m.lat),
+                  lng: parseFloat(m.lng)
+                },
+                map: map,
+                icon: m.icon,
+                // title: m.text,
+                // label: labelStr && {
+                //   text: labelStr,
+                //   color: 'white',
+                //   fontFamily: 'Roboto'
+                // },
+                zIndex: i, //markers should be ordered by average
+                // opacity: 0.1 + (m.average/5).
+              }));
 
-            // Modal
-            _gmarkers[i].addListener('click', () => {
-              onMarkerClick(markers[i]);
-            });
-
-            // Info window
-            if (!_isMobile) {
-              if (m.photo) {
-                m.photo = m.photo.replace('images', 'images/thumbs');
-              }
-              let templateData = {
-                thumbnailUrl: m.photo,
-                title: m.text,
-                average: m.average,
-                roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average),
-                numReviews: m.reviews,
-              };
-
-              if (m.isPublic != null) {
-                templateData.isPublic = m.isPublic === true;
-              } else {
-                templateData.noIsPublicData = true;
-              }
-              if (m.structureType) {
-                templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
-              }
-
-              const contentString = templates.infoWindowTemplate(templateData);
-
-              _gmarkers[i].addListener('mouseover', () => {
-                ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                _infoWindow.setContent(contentString);
-                _infoWindow.open(map, _gmarkers[i]);
-                _infoWindow.addListener('domready', () => {
-                  $('.infobox--img img').off('load').on('load', e => {
-                    $(e.target).parent().removeClass('loading');
-                  });
-
-                  $('.infoBox').off('click').on('click', () => {
-                    onMarkerClick(markers[i]);
-                  });
-                });
+              // Modal
+              _gmarkers[i].addListener('click', () => {
+                onMarkerClick(markers[i]);
               });
 
-              _gmarkers[i].addListener('mouseout', () => {
-                _infoWindow.close();
-              });  
+              // Info window
+              if (!_isMobile) {
+                if (m.photo) {
+                  m.photo = m.photo.replace('images', 'images/thumbs');
+                }
+                let templateData = {
+                  thumbnailUrl: m.photo,
+                  title: m.text,
+                  average: m.average,
+                  roundedAverage: m.average && ('' + Math.round(m.average)),
+                  pinColor: getPinColorFromAverage(m.average),
+                  numReviews: m.reviews,
+                };
+
+                if (m.isPublic != null) {
+                  templateData.isPublic = m.isPublic === true;
+                } else {
+                  templateData.noIsPublicData = true;
+                }
+                if (m.structureType) {
+                  templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+                }
+
+                const contentString = templates.infoWindowTemplate(templateData);
+
+                _gmarkers[i].addListener('mouseover', () => {
+                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
+
+                  _infoWindow.setContent(contentString);
+                  _infoWindow.open(map, _gmarkers[i]);
+                  _infoWindow.addListener('domready', () => {
+                    $('.infobox--img img').off('load').on('load', e => {
+                      $(e.target).parent().removeClass('loading');
+                    });
+
+                    $('.infoBox').off('click').on('click', () => {
+                      onMarkerClick(markers[i]);
+                    });
+                  });
+                });
+
+                _gmarkers[i].addListener('mouseout', () => {
+                  _infoWindow.close();
+                });  
+              }
+            } else {
+              console.error('error: pin with no latitude/longitude');
             }
-          } else {
-            console.error('not lat or long o.O');
           }
 
         } else {
@@ -604,7 +613,9 @@ $(function () {
       }
     }
 
-    _geolocationMarker.setZIndex(markers.length);
+    if (map) {
+      _geolocationMarker.setZIndex(markers.length);
+    }
   }
 
   // Sets the map on all markers in the array.
@@ -727,7 +738,9 @@ $(function () {
 
       $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
-      google.maps.event.clearInstanceListeners(map);
+      if (map) {
+        google.maps.event.clearInstanceListeners(map);
+      }
     }
 
     toggleMarkers();
@@ -1544,8 +1557,10 @@ $(function () {
         $('#map, #addPlace').removeClass('optimized-hidden');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
-        google.maps.event.trigger(map, 'resize');
-        map.setCenter(map.getCenter());
+        if (map) {
+          google.maps.event.trigger(map, 'resize');
+          map.setCenter(map.getCenter());
+        }
       }
     }); 
     
@@ -1564,7 +1579,7 @@ $(function () {
     });
 
     // Location Search Mode control
-    // $('#locationQueryInput').on('focus', e => {
+    // $('#locationQueryInput').on('focus', e => { 
     //   if (_isMobile) {
     //     enterLocationSearchMode();
     //   }
@@ -1633,24 +1648,7 @@ $(function () {
     // });
   }
 
-  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
-  function setup() {
-        // Set up Service Worker
-    if (window.UpUp) {
-      UpUp.start({
-        'content': 'Você está offline. :(',
-        'cache-version': 'v2.2',
-      });
-    }
-
-    // Detect if webapp was launched from mobile homescreen (for Android and iOS)
-    // References:
-    //   https://developers.google.com/web/updates/2015/10/display-mode
-    //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
-    if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
-      ga('send', 'event', 'Misc', 'launched with display=standalone');
-    }
-
+  function setupGoogleMaps() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {
         lat: -30.0346,
@@ -1703,34 +1701,6 @@ $(function () {
       }
     });
 
-    const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
-    isMobileListener.addListener((isMobileListener) => {
-      _isMobile = isMobileListener.matches;
-    });
-    const isDesktopListener = window.matchMedia("(min-width: ${DESKTOP_MIN_WIDTH})");
-    isDesktopListener.addListener((isDesktopListener) => {
-      _isMobile = isDesktopListener.matches;
-    });
-
-
-    // If permission to geolocation was already granted we already center the map
-    if (navigator.permissions) {
-      navigator.permissions.query({'name': 'geolocation'})
-        .then( permission => {
-          if (permission.state === 'granted') {
-            ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            _geolocate(true, null, true); 
-          }
-        }
-      );
-    }
-
-    // User is within Facebook browser.
-    // thanks to: https://stackoverflow.com/questions/31569518/how-to-detect-facebook-in-app-browser
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
-
-
     geocoder = new google.maps.Geocoder();
 
     setupAutocomplete();
@@ -1773,6 +1743,52 @@ $(function () {
       strokeColor: 'transparent', //stroke color,
       strokeOpacity: '0' //opacity from 0.0 to 1.0
     });
+  }
+
+  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
+  function setup() {
+    // Detect if webapp was launched from mobile homescreen (for Android and iOS)
+    // References:
+    //   https://developers.google.com/web/updates/2015/10/display-mode
+    //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
+    if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+      ga('send', 'event', 'Misc', 'launched with display=standalone');
+    }
+
+    if (window.google) {
+      console.log('Got Google, probably we\'re online.');
+      setupGoogleMaps();
+    } else {
+      _isOffline = true;
+    }
+
+    const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
+    isMobileListener.addListener((isMobileListener) => {
+      _isMobile = isMobileListener.matches;
+    });
+    const isDesktopListener = window.matchMedia("(min-width: ${DESKTOP_MIN_WIDTH})");
+    isDesktopListener.addListener((isDesktopListener) => {
+      _isMobile = isDesktopListener.matches;
+    });
+
+
+    // If permission to geolocation was already granted we already center the map
+    if (navigator.permissions) {
+      navigator.permissions.query({'name': 'geolocation'})
+        .then( permission => {
+          if (permission.state === 'granted') {
+            ga('send', 'event', 'Geolocation', 'geolocate on startup');
+            _geolocate(true, null, true); 
+          }
+        }
+      );
+    }
+
+    // User is within Facebook browser.
+    // thanks to: https://stackoverflow.com/questions/31569518/how-to-detect-facebook-in-app-browser
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
+
 
     _initGlobalCallbacks();
 
@@ -1921,9 +1937,6 @@ $(function () {
 
     localhostOverrides();
 
-    // Authenticate to be ready for next calls
-    login();
- 
     // Retrieve markers saved in a past access
     markers = BIKE.getMarkersFromLocalStorage();
     if (markers && markers.length) {
@@ -1932,21 +1945,28 @@ $(function () {
       hideSpinner();
     } 
 
-    // This is the only request allowed to be unauthenticated
-    Database.getPlaces( () => {
-      $('#filter-results-counter').html(markers.length);
-      $('#filter-results-total').html(markers.length);
+    if (!_isOffline) {
+      // Authenticate to be ready for next calls
+      login();
 
-      updateMarkers();
+      // This is the only request allowed to be unauthenticated
+      Database.getPlaces( () => {
+        $('#filter-results-counter').html(markers.length);
+        $('#filter-results-total').html(markers.length);
 
-      // Hide spinner that is initialized visible on CSS
-      hideSpinner();
-    });
+        updateMarkers();
 
-    // Show controls over the map
-    $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-    $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-    $('#map').css('filter', 'none');
+        // Hide spinner that is initialized visible on CSS
+        hideSpinner();
+      });
+
+      // Show controls over the map
+      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+      $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+      $('#map').css('filter', 'none');
+    } else {
+      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+    }
 
     // Promo banner
     if (!BIKE.Session.getPromoBannerViewed()) {
