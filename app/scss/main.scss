@@ -153,9 +153,10 @@ body.beta #map {
 
 .tooltip {
   font-family: $bodyFont;
+  z-index: 20;
 
   .tooltip-inner {
-    padding: 8px;
+    padding: 10px;
     background-color: $black; 
   }
 
