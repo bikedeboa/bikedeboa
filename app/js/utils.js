@@ -39,17 +39,25 @@ window.toggleSpinner = function () {
   $('#spinnerOverlay').fadeToggle();
 };
 
-window.showSpinner = function (label) {
+window.showSpinner = function (label, callback) {
   console.log('showspinner');
   if (label) {
     $('#globalSpinnerLabel').html(label);
   }
-  $('#spinnerOverlay').velocity('transition.fadeIn');
+  $('#spinnerOverlay').velocity('transition.fadeIn', {complete: () => {
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
+  }});
 };
 
-window.hideSpinner = function () {
+window.hideSpinner = function (callback) {
   $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
     $('#globalSpinnerLabel').html('');
+
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
   }});
 };
 

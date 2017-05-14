@@ -87,7 +87,7 @@ gulp.task('html', () => {
 
 gulp.task('generate-service-worker', function(callback) {
   swPrecache.write(`dist/service-worker.js`, {
-    staticFileGlobs: ['dist/**/*.{js,html,css}', 'assets/**/*.{png,jpg,svg}'],
+    staticFileGlobs: ['dist/**/*.{js,html,css}', 'dist/**/*.{woff,woff2,ttf}', 'public/**/*.{webmanifest}', 'assets/**/*.{png,jpg,svg}'], 
     stripPrefixMulti: {
       'dist/': '/',
       'assets/': '/',

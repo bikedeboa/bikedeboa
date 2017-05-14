@@ -79,24 +79,214 @@
             </span>
         </div>
 
-        <!-- <div class="promo-banner-container">
-          <div class="promo-banner">
-            <button>
+        <div id="revisionModalTemplatePlaceholder"></div>
+
+        <div id="reviewPanelTemplatePlaceholder"></div>
+
+        <div id="offline-overlay">
+          <div class="offline-overlay-content">
+            <div class="offline-label"> 
+              Você está<b> offline</b>.
+            </div>
+
+            <button id="reloadBtn" class="btn">
+              Recarregar
+            </button>
+          </div>
+        </div>
+
+        <button id="addPlace" class="bigRoundedButton coolHide">
+            <span role="heading" aria-level="2"><span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO</span>
+        </button>
+
+        <div id="newPlaceholderContainer">
+          <!-- <span id="newPlaceholderShadow"></span> -->
+          <img src="/img/target.svg" id="newPlaceholderTarget"/>
+
+          <button id="newPlaceholder">
+              <img src="/img/pin_bike.svg"/>
+          </button>
+        </div>
+
+        <div id="reviewPanelTemplatePlaceholder"></div>
+
+        <div id="messageModalPlaceholder"></div>
+
+        <div id="spinnerOverlay">
+            <div class="spinnerContainer">
+                <img src="/img/spinner.svg"/>
+
+                <p id="globalSpinnerLabel"> </p>
+            </div>
+        </div>
+
+        <div id="top-mobile-bar">
+          <button class="close-modal"></button>
+          <h1 class="top-mobile-bar-title"></h1>
+        </div>
+
+        
+        <!-- Menus -->
+
+        <aside id="hamburger-menu" class="js-side-nav side-nav">
+          <nav class="js-side-nav-container side-nav__container">
+            <header class="side-nav__header">
+              <!-- <span>bike de boa</span> -->
+              <img src="/img/banner.svg"/>
+            </header>
+
+            <button class="js-menu-hide side-nav__hide">
               <span class="glyphicon glyphicon-remove"></span>
             </button>
 
-            <img src=""> 
-            <h2>
-              Texto do banner
-            </h2>
-            <div>
-              <a target="_blank" rel="noopener" href="#</a>
+            <div class="side-nav__content">
+              <ul>
+                <li class="side-nav--animate-in" id="aboutBtn">
+                  <span class="glyphicon glyphicon-info-sign"></span>
+                  Sobre o projeto
+                </li>
+                <li class="side-nav--animate-in" id="faqBtn">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+                  Perguntas frequentes
+                </li>
+                <li class="side-nav--animate-in" id="howToInstallBtn">
+                  <span class="glyphicon glyphicon-download-alt"></span>
+                  Instalar o app
+                </li>
+                
+                <hr>
+                
+                <li class="side-nav--animate-in" id="loginBtn">
+                  <!-- <span class="glyphicon glyphicon-user"></span> -->
+                  Login colaborador
+                </li>
+
+                <!-- <li>
+                  <span class="glyphicon glyphicon-pencil"></span>
+                  Questionário bicicletários
+                  <a target="_blank" rel="noopener" href="http://www.iagentemail.com.br/v3/TRC/S/1033/9840622/">Questionário bicicletários</a>
+                </li> -->
+              </ul>
             </div>
 
-            <aside>Aberto até 20/04</aside>
-          </div>
-        </div> -->
+            <footer class="side-nav__footer">
+              <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.bikedeboa.com.br%2F&width=280&layout=button_count&action=like&size=small&show_faces=false&share=true&height=46&appId=1814653185457307" width="280" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
+              <a id="facebook-social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp" class="social-link">
+                <img src="/img/facebook_logo.svg"/>
+              </a>
+              <a id="github-social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa" class="social-link">
+                <img src="/img/github_logo.svg"/>
+              </a>
+            </footer>
+          </nav>
+        </aside>
 
+        <aside id="filter-menu" class="js-side-nav side-nav side-nav-inverted side-nav-fixed">
+          <nav class="js-side-nav-container side-nav__container">
+            <button class="js-menu-hide side-nav__hide">
+              <span class="glyphicon glyphicon-ok"></span>
+            </button> 
+            
+            <header class="side-nav__header">
+              <h2>Filtrar Bicicletários</h2>
+
+              <div id="filter-results-counter-container">
+                <span class="glyphicon glyphicon-chevron-left"></span> Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
+              </div>
+
+              <div class="side-nav--animate-in setting-checkbox-container">
+                  <input type="checkbox" id="show-bike-layer">
+                  <label for="show-bike-layer">
+                  Mostrar ciclovias e ciclofaixas
+                  <span class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" title="Dados de ciclovias do <b>EPTC</b>, do <b>Google Maps</b> e do <b>DataPOA</b>. Nos dá um toque se perceber algo de errado! :)"></span>
+                  </label>
+              </div>
+            </header>
+
+            <div class="side-nav__content">
+
+              <h3 class="side-nav--animate-in">Avaliações</h3>
+
+              <ul class="side-nav--animate-in">
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
+                    <label for="filter_rating_good"><img src="/img/pin_green.png"/> Excelentes</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_medium" data-prop="rating" data-value="medium">
+                    <label for="filter_rating_medium"><img src="/img/pin_yellow.png"/> Médios</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_bad" data-prop="rating" data-value="bad">
+                    <label for="filter_rating_bad"><img src="/img/pin_red.png"/> Ruins</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_rating_none" data-prop="rating" data-value="none">
+                    <label for="filter_rating_none"><img src="/img/pin_gray.png"/> Sem avaliação</label>
+                </li>
+              </ul>
+
+              <hr>
+
+              <h3 class="side-nav--animate-in">Acesso</h3>
+
+              <ul class="side-nav--animate-in">
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
+                    <label for="filter_public">Públicos</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
+                    <label for="filter_private">Privados</label>
+                </li>
+              </ul>
+
+              <hr>
+
+              <h3 class="side-nav--animate-in">Tipos de Bicicletário</h3>
+
+              <ul class="side-nav--animate-in">
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
+                    <label for="filter_structure_deroda">De roda</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_structure_uinvertido" data-prop="structureType" data-value="uinvertido">
+                    <label for="filter_structure_uinvertido">U Invertido</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_structure_suspenso" data-prop="structureType" data-value="suspenso">
+                    <label for="filter_structure_suspenso">Suspenso</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_structure_grade" data-prop="structureType" data-value="grade">
+                    <label for="filter_structure_grade">Grade</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_structure_trave" data-prop="structureType" data-value="trave">
+                    <label for="filter_structure_trave">Trave</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_structure_other" data-prop="structureType" data-value="other">
+                    <label for="filter_structure_other">Outros</label>
+                </li>
+              </ul>
+            </div>
+
+            <!-- <footer>
+              <div id="filter-results-counter-container">
+                Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
+              </div>
+              <button id="clear-filters-btn" class="link-button classic-link">Limpar</button>
+            </footer> -->
+
+          </nav>
+        </aside>
+
+        
+        <!-- Views -->
+
+        <!-- About -->
         <div class="modal fade" id="aboutModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
@@ -146,6 +336,7 @@
             </div>
         </div>
         
+        <!-- How To Install -->
         <div class="modal fade" id="howToInstallModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
@@ -236,6 +427,7 @@
             </div>
         </div>
 
+        <!-- FAQ -->
         <div class="modal fade" id="faqModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
@@ -361,6 +553,7 @@
             </div>
         </div>
 
+        <!-- Pin Details -->
         <div id="placeDetailsModal" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
@@ -371,10 +564,7 @@
             </div>
         </div>
 
-        <div id="revisionModalTemplatePlaceholder"></div>
-
-        <div id="reviewPanelTemplatePlaceholder"></div>
-
+        <!-- New Pin Modal -->
         <div class="modal fade" id="newPlaceModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
@@ -425,7 +615,7 @@
                             <section>
                               <h2>
                                 Tipo de bicicletário
-                                <span class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se tu não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
+                                <span class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
                               </h2>
 
                               <div class="custom-radio-group">
@@ -483,36 +673,7 @@
             </div>
         </div>
 
-        <button id="addPlace" class="bigRoundedButton coolHide">
-            <span role="heading" aria-level="2"><span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO</span>
-        </button>
-
-        <div id="newPlaceholderContainer">
-          <!-- <span id="newPlaceholderShadow"></span> -->
-          <img src="/img/target.svg" id="newPlaceholderTarget"/>
-
-          <button id="newPlaceholder">
-              <img src="/img/pin_bike.svg"/>
-          </button>
-        </div>
-
-        <div id="reviewPanelTemplatePlaceholder"></div>
-
-        <div id="messageModalPlaceholder"></div>
-
-        <div id="spinnerOverlay">
-            <div class="spinnerContainer">
-                <img src="/img/spinner.svg"/>
-
-                <p id="globalSpinnerLabel"> </p>
-            </div>
-        </div>
-
-        <div id="top-mobile-bar">
-          <button class="close-modal"></button>
-          <h1 class="top-mobile-bar-title"></h1>
-        </div>
-
+        <!-- New Revision Modal -->
         <script id="revisionModalTemplate" type="text/x-handlebars-template">
             <div class="modal fade" id="revisionModal" tabindex="-1">
               <div class="vertical-alignment-helper">
@@ -886,161 +1047,6 @@
             </div>
         </script>
 
-        <aside id="hamburger-menu" class="js-side-nav side-nav">
-          <nav class="js-side-nav-container side-nav__container">
-            <header class="side-nav__header">
-              <!-- <span>bike de boa</span> -->
-              <img src="/img/banner.svg"/>
-            </header>
-
-            <button class="js-menu-hide side-nav__hide">
-              <span class="glyphicon glyphicon-remove"></span>
-            </button>
-
-            <div class="side-nav__content">
-              <ul>
-                <li class="side-nav--animate-in" id="aboutBtn">
-                  <span class="glyphicon glyphicon-info-sign"></span>
-                  Sobre o projeto
-                </li>
-                <li class="side-nav--animate-in" id="faqBtn">
-                  <span class="glyphicon glyphicon-question-sign"></span>
-                  Perguntas frequentes
-                </li>
-                <li class="side-nav--animate-in" id="howToInstallBtn">
-                  <span class="glyphicon glyphicon-download-alt"></span>
-                  Instalar o app
-                </li>
-                
-                <hr>
-                
-                <li class="side-nav--animate-in" id="loginBtn">
-                  <!-- <span class="glyphicon glyphicon-user"></span> -->
-                  Login colaborador
-                </li>
-
-                <!-- <li>
-                  <span class="glyphicon glyphicon-pencil"></span>
-                  Questionário bicicletários
-                  <a target="_blank" rel="noopener" href="http://www.iagentemail.com.br/v3/TRC/S/1033/9840622/">Questionário bicicletários</a>
-                </li> -->
-              </ul>
-            </div>
-
-            <footer class="side-nav__footer">
-              <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.bikedeboa.com.br%2F&width=280&layout=button_count&action=like&size=small&show_faces=false&share=true&height=46&appId=1814653185457307" width="280" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
-              <a id="facebook-social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp" class="social-link">
-                <img src="/img/facebook_logo.svg"/>
-              </a>
-              <a id="github-social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa" class="social-link">
-                <img src="/img/github_logo.svg"/>
-              </a>
-            </footer>
-          </nav>
-        </aside>
-
-        <aside id="filter-menu" class="js-side-nav side-nav side-nav-inverted side-nav-fixed">
-          <nav class="js-side-nav-container side-nav__container">
-            <button class="js-menu-hide side-nav__hide">
-              <span class="glyphicon glyphicon-ok"></span>
-            </button> 
-            
-            <header class="side-nav__header">
-              <h2>Filtrar Bicicletários</h2>
-
-              <div id="filter-results-counter-container">
-                <span class="glyphicon glyphicon-chevron-left"></span> Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
-              </div>
-
-              <div class="side-nav--animate-in setting-checkbox-container">
-                  <input type="checkbox" id="show-bike-layer">
-                  <label for="show-bike-layer">
-                  Mostrar ciclovias e ciclofaixas
-                  <span class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" title="Dados de ciclovias do <b>EPTC</b>, do <b>Google Maps</b> e do <b>DataPOA</b>. Nos dá um toque se perceber algo de errado! :)"></span>
-                  </label>
-              </div>
-            </header>
-
-            <div class="side-nav__content">
-
-              <h3 class="side-nav--animate-in">Avaliações</h3>
-
-              <ul class="side-nav--animate-in">
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
-                    <label for="filter_rating_good"><img src="/img/pin_green.png"/> Excelentes</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_medium" data-prop="rating" data-value="medium">
-                    <label for="filter_rating_medium"><img src="/img/pin_yellow.png"/> Médios</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_bad" data-prop="rating" data-value="bad">
-                    <label for="filter_rating_bad"><img src="/img/pin_red.png"/> Ruins</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_none" data-prop="rating" data-value="none">
-                    <label for="filter_rating_none"><img src="/img/pin_gray.png"/> Sem avaliação</label>
-                </li>
-              </ul>
-
-              <hr>
-
-              <h3 class="side-nav--animate-in">Acesso</h3>
-
-              <ul class="side-nav--animate-in">
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
-                    <label for="filter_public">Públicos</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
-                    <label for="filter_private">Privados</label>
-                </li>
-              </ul>
-
-              <hr>
-
-              <h3 class="side-nav--animate-in">Tipos de Bicicletário</h3>
-
-              <ul class="side-nav--animate-in">
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
-                    <label for="filter_structure_deroda">De roda</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_uinvertido" data-prop="structureType" data-value="uinvertido">
-                    <label for="filter_structure_uinvertido">U Invertido</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_suspenso" data-prop="structureType" data-value="suspenso">
-                    <label for="filter_structure_suspenso">Suspenso</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_grade" data-prop="structureType" data-value="grade">
-                    <label for="filter_structure_grade">Grade</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_trave" data-prop="structureType" data-value="trave">
-                    <label for="filter_structure_trave">Trave</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_other" data-prop="structureType" data-value="other">
-                    <label for="filter_structure_other">Outros</label>
-                </li>
-              </ul>
-            </div>
-
-            <!-- <footer>
-              <div id="filter-results-counter-container">
-                Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
-              </div>
-              <button id="clear-filters-btn" class="link-button classic-link">Limpar</button>
-            </footer> -->
-
-          </nav>
-        </aside>
-
         <!-- Message Modal -->
         <script id="messageModalTemplate" type="text/x-handlebars-template">
            <div id="messageModal" class="modal {{messageClasses}}" tabindex="-1">
@@ -1131,7 +1137,10 @@
             {{/unless}}
 
           </div>
-        </script>
+        </script> 
+
+
+        <!-- External -->
 
         <!-- Google Analytics -->
         <script>

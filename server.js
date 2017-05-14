@@ -1,14 +1,14 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var path = __dirname;
+var path = __dirname + '/';
 var compression = require('compression');
 
 // GZIP!!!!!
 app.use(compression());
 
 // Static libs
-app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use('/bower_components', express.static(path + 'bower_components'));
 app.use(express.static('public'));
 app.use(express.static('assets'));
 app.use(express.static('dist'));
@@ -29,14 +29,14 @@ router.use(function (req,res,next) {
 
 // Home
 router.get('/*',function(req,res){
-  res.sendFile('index.html');
+  res.sendFile(path + 'dist/index.html');
 });
 
 app.use('/',router);
 
 // 404
 app.use('*',function(req,res){
-  res.sendFile('404.html');
+  res.sendFile(path + 'dist/404.html');
 });
 
 var port = process.env.PORT || 5000;

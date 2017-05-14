@@ -19,7 +19,7 @@ BIKE.Database = {
   ///////////////////
 
   _redoLogEntry: (logEntry, cb) => {
-    console.log('redoing log entry', logEntry);
+    console.debug('redoing log entry', logEntry);
 
     const reducedEndpoint = logEntry.endpoint.split('bdb-api.herokuapp.com/')[1]
 
@@ -66,8 +66,8 @@ BIKE.Database = {
           json += JSON.stringify(m);
         });
 
-        console.log('Database backup DONE');
-        console.log(json);
+        console.debug('Database backup DONE');
+        console.debug(json);
       }
     });
   },
@@ -84,7 +84,7 @@ BIKE.Database = {
       const key = m.lat+m.lng;
       const desc = window._hashmap[key];
       if (desc) {
-        console.log(desc);
+        console.debug(desc);
         BIKE.Database.customAPICall('PUT', 'local/'+m.id,
           {description: desc},
           () => {this._fillAllDescriptionsRec(index+1);}
@@ -136,14 +136,14 @@ BIKE.Database = {
       console.warn(`${i} of ${max}`);
 
       if (onlyIfMissing && m.address && m.address.length > MIN_ADDRESS_SIZE) {
-        // console.log(m.address);
+        // console.debug(m.address);
         this._fillMarkersAddresses(i+1, onlyIfMissing);
       } else {
         BIKE.geocodeLatLng(
           m.lat, m.lng,
           (address) => {
-            console.log(m.lat, m.lng, m.id);
-            console.log(address);
+            console.debug(m.lat, m.lng, m.id);
+            console.debug(address);
             this.customAPICall('PUT','local/'+m.id, {address: address}, () => {
               this._fillMarkersAddresses(i+1, onlyIfMissing);
             });
@@ -161,7 +161,7 @@ BIKE.Database = {
   _removeAll: function() {
     const self = this;
 
-    console.log('Removing all entries in 5 seconds...');
+    console.debug('Removing all entries in 5 seconds...');
 
     setTimeout(function() {
       $.ajax({
@@ -169,7 +169,7 @@ BIKE.Database = {
         type: 'DELETE',
         headers: self._headers,
       }).done(function(data) {
-        console.log(data);
+        console.debug(data);
       });
     }, 5000);
   },
@@ -186,7 +186,7 @@ BIKE.Database = {
     }
 
 
-    console.log('Sending ALL ' + allMarkers.length + ' places.');
+    console.debug('Sending ALL ' + allMarkers.length + ' places.');
 
     allMarkers.forEach(function(m){
       $.ajax({
@@ -218,10 +218,10 @@ BIKE.Database = {
       url: self.API_URL + '/' + endpoint,
       data: data,
       success: function(data) {
-        console.log('_customCall success.');
+        console.debug('_customCall success.');
 
         if (!quiet) {
-          console.log(data);
+          console.debug(data);
         }
 
         if (callback && typeof callback === 'function') {
@@ -242,7 +242,7 @@ BIKE.Database = {
         idLocal: placeId,
       },
       success: function(data) {
-        console.log('Check-in success.');
+        console.debug('Check-in success.');
 
         if (callback && typeof callback === 'function') {
           callback();
@@ -269,7 +269,7 @@ BIKE.Database = {
       },
       success: function(data) {
         if (data.token && data.token.length > 0) {
-          console.log('API connected.');
+          console.debug('API connected.');
 
           if (user && user !== 'client') {
             // This is the only place that should set 'loggedUser'
@@ -359,7 +359,7 @@ BIKE.Database = {
         console.error(e);
       },
       success: function(data) {
-        console.log('Review deletion successful.');
+        console.debug('Review deletion successful.');
 
         if (callback && typeof callback === 'function') {
           callback();
@@ -377,7 +377,7 @@ BIKE.Database = {
       url: self.API_URL + '/review/' + reviewObj.databaseId,
       data: reviewObj,
       success: function(data) {
-        console.log('Review update successful.');
+        console.debug('Review update successful.');
 
         if (callback && typeof callback === 'function') {
           callback();
@@ -399,8 +399,8 @@ BIKE.Database = {
         tags: reviewObj.tags
       },
       success: function(data) {
-        console.log('Review creation successful.');
-        console.log(data);
+        console.debug('Review creation successful.');
+        console.debug(data);
 
         if (callback && typeof callback === 'function') {
           callback(data.id);
@@ -421,8 +421,8 @@ BIKE.Database = {
         comments: revisionObj.content,
       },
       success: function(data) {
-        console.log('Revision creation successful.');
-        console.log(data);
+        console.debug('Revision creation successful.');
+        console.debug(data);
 
         if (callback && typeof callback === 'function') {
           callback(data.id);
@@ -436,8 +436,8 @@ BIKE.Database = {
 
     place.authorIP = this._headers.ip_origin;
 
-    console.log('Sending new place:');
-    console.log(place);
+    console.debug('Sending new place:');
+    console.debug(place);
 
     $.ajax({
       type: 'post',
@@ -448,8 +448,8 @@ BIKE.Database = {
         console.error(e);
       },
       success: function(data) {
-        console.log('Addition success!');
-        console.log(data);
+        console.debug('Addition success!');
+        console.debug(data);
 
         if (callback && typeof callback === 'function') {
           callback(data);
@@ -461,8 +461,8 @@ BIKE.Database = {
   updatePlace: function(placeId, place, callback) {
     const self = this;
 
-    console.log('Updating place:');
-    console.log(place);
+    console.debug('Updating place:');
+    console.debug(place);
 
     $.ajax({
       type: 'put',
@@ -473,7 +473,7 @@ BIKE.Database = {
         console.error(e);
       },
       success: function(data) {
-        console.log('Update successful!');
+        console.debug('Update successful!');
 
         if (callback && typeof callback === 'function') {
           callback();
@@ -493,7 +493,7 @@ BIKE.Database = {
         console.error(e);
       },
       success: function(data) {
-        console.log('Delete successful!');
+        console.debug('Delete successful!');
 
         if (callback && typeof callback === 'function') {
           callback();
@@ -505,7 +505,7 @@ BIKE.Database = {
   getAllTags: function(successCB, failCB, alwaysCB) {
     const self = this;
 
-    console.log('Getting tags...');
+    console.debug('Getting tags...');
 
     $.ajax({
       type: 'get',
@@ -513,7 +513,7 @@ BIKE.Database = {
       url: self.API_URL + '/tag'
     }).done(function(data) {
       if (data && data.length > 0) {
-        console.log('Successfully retrieved ' + data.length + ' tags.');
+        console.debug('Successfully retrieved ' + data.length + ' tags.');
 
         tags = data;
 
@@ -546,14 +546,14 @@ BIKE.Database = {
   getPlaces: function(successCB, failCB, alwaysCB, getFullData = false) {
     const self = this;
 
-    console.log('Getting all places...');
+    console.debug('Getting all places...');
 
     $.ajax({
       type: 'get',
       headers: self._headers,
       url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
     }).done(function(data) {
-      console.log('Retrieved ' + data.length + ' locations from API.');
+      console.debug('Retrieved ' + data.length + ' locations from API.');
 
       markers = data;
 
@@ -590,7 +590,7 @@ BIKE.Database = {
     if (this.isAuthenticated) {
       callback();
     } else {
-      console.log('Waiting authentication...');
+      console.debug('Waiting authentication...');
       setTimeout(this.waitAuthentication.bind(this, callback), 1000);  
     }
   },
@@ -598,7 +598,7 @@ BIKE.Database = {
   getPlaceDetails: function(placeId, successCB, failCB, alwaysCB) {
     const self = this;
 
-    console.log('Getting place detail...');
+    console.debug('Getting place detail...');
 
     function justDoIt() { 
       $.ajax({
@@ -607,8 +607,8 @@ BIKE.Database = {
         url: self.API_URL + '/local/' + placeId
       }).done(function(data) {
         if (data) {
-          console.log('Got place detail:');
-          console.log(data);
+          console.debug('Got place detail:');
+          console.debug(data);
 
           // Combine detailed data with what we had
           let updatedMarker = markers.find(m => {return m.id === placeId; });

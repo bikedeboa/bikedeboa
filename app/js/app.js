@@ -228,7 +228,7 @@ $(function () {
 
         navigator.geolocation.getCurrentPosition(
             position => {
-              console.log(position);
+              console.debug(position);
 
               _geolocationInitialized = true;
 
@@ -1516,11 +1516,10 @@ $(function () {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-            title: "Descartar",
+            title: "Descartar?",
             text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
             type: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#f15f74",
             confirmButtonText: "Descartar",
             closeOnConfirm: true,
             allowOutsideClick: false
@@ -1742,6 +1741,21 @@ $(function () {
     });
   }
 
+  function setOfflineMode() {
+    _isOffline = true;
+    $('body').addClass('offline');
+    
+    $('#reloadBtn').on('click', () => {
+      showSpinner('', () => {
+        window.location.reload();
+      });
+    })
+    
+    // Show minimal UI
+    $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+    $('#offline-overlay').velocity('transition.fadeIn', {delay: 300, queue: false, display: 'flex'})
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
@@ -1753,10 +1767,10 @@ $(function () {
     }
 
     if (window.google) {
-      console.log('Got Google, probably we\'re online.');
+      // console.log('Got Google, probably we\'re online.');
       setupGoogleMaps();
     } else {
-      _isOffline = true;
+      setOfflineMode();
     }
 
     const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
@@ -1911,28 +1925,6 @@ $(function () {
       Database = BIKE.Database;
     }
 
-    // Use external service to get user's IP
-    $.getJSON('//ipinfo.io/json', data => {
-      if (data && data.ip) {
-        ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
-        Database._setOriginHeader(data.ip);
-      } else {
-        console.error('Something went wrong when trying to retrieve user IP.');
-        ga('send', 'event', 'Misc', 'IP retrieval error');
-      }
-
-      // Coords via IP
-      // if (data && data.loc) {
-      //   const coords = data.loc.split(',');
-      //   const pos = {
-      //     lat: parseFloat(coords[0]),
-      //     lng: parseFloat(coords[1])
-      //   };
-
-      //   map.panTo(pos);
-      // }
-    });
-
     localhostOverrides();
 
     // Retrieve markers saved in a past access
@@ -1944,6 +1936,28 @@ $(function () {
     } 
 
     if (!_isOffline) {
+      // Use external service to get user's IP
+      $.getJSON('//ipinfo.io/json', data => {
+        if (data && data.ip) {
+          ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
+          Database._setOriginHeader(data.ip);
+        } else {
+          console.error('Something went wrong when trying to retrieve user IP.');
+          ga('send', 'event', 'Misc', 'IP retrieval error');
+        }
+
+        // Coords via IP
+        // if (data && data.loc) {
+        //   const coords = data.loc.split(',');
+        //   const pos = {
+        //     lat: parseFloat(coords[0]),
+        //     lng: parseFloat(coords[1])
+        //   };
+
+        //   map.panTo(pos);
+        // }
+      });
+
       // Authenticate to be ready for next calls
       login();
 
@@ -1962,8 +1976,6 @@ $(function () {
       $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
       $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
       $('#map').css('filter', 'none');
-    } else {
-      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
     }
 
     // Promo banner
