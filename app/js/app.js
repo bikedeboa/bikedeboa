@@ -1629,23 +1629,20 @@ $(function () {
   }
 
   function showBikeLayer() {
+    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
+    
     // Bike layer from Google Maps
     _bikeLayer.setMap(map);
-    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
-
-    // GeoJSON data from #datapoa
-    // map.data.setStyle({
-    //   visible: true
-    // });
+    
+    // GeoJSON data from #datapoa/EPTC
+    map.data.setMap(map);
   }
 
   function hideBikeLayer() {
-    _bikeLayer.setMap(null);
     map.setOptions({styles: _gmapsCustomStyle});
-
-    // map.data.setStyle({
-    //   visible: false
-    // });
+    
+    _bikeLayer.setMap(null);
+    map.data.setMap(null);
   }
 
   function setupGoogleMaps() {
@@ -1709,12 +1706,12 @@ $(function () {
     window._bikeLayer = new google.maps.BicyclingLayer();
     
     // Bike layer: GeoJSON from #datapoa
-    // map.data.loadGeoJson('ciclovias_portoalegre.json');
-    // map.data.setStyle({
-    //   strokeColor: 'green',
-    //   strokeWeight: 3,
-    //   visible: false;
-    // });
+    map.data.map = null;
+    map.data.loadGeoJson('ciclovias_portoalegre.json');
+    map.data.setStyle({
+      strokeColor: 'green',
+      strokeWeight: 5
+    });
 
     // Geolocalization button
     if (navigator.geolocation) {
@@ -1816,6 +1813,7 @@ $(function () {
       'filter-menu',
       {inverted: true/*, fixed: true*/}
     );
+    $('#filter-menu .help-tooltip-trigger').tooltip();
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
