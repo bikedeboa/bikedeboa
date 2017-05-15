@@ -1,32 +1,36 @@
 {
-  "name": "bike de boa - encontre e avalie bicicletários no RS",
+  "name": "bike de boa",
   "short_name": "bike de boa",
   "start_url": ".",
   "lang": "pt-br",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#2cd978",
+  "orientation": "portrait",
+  "background_color": "#04883A",
   "theme_color": "#2cd978",
-  "description": "Encontre onde deixar tua bici de boa.",
+  "description": "Encontre e avalie mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e RS. Acesse o site e aplicativo no seu celular, computador ou tablet. O bike de boa é, e sempre será, totalmente gratuito!",
   "icons": [{
-    "src": "/android-chrome-192x192.png",
+    "src": "/icon-36x36.png",
+    "sizes": "36x36",
+    "type": "image/png"
+  }, {
+    "src": "/icon-48x48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  }, {
+    "src": "/icon-72x72.png",
     "sizes": "72x72",
     "type": "image/png"
   }, {
-    "src": "/android-chrome-192x192.png",
+    "src": "/icon-96x96.png",
     "sizes": "96x96",
     "type": "image/png"
   }, {
-    "src": "/android-chrome-192x192.png",
-    "sizes": "144x144",
-    "type": "image/png"
-  }, {
-    "src": "/android-chrome-192x192.png",
-    "sizes": "168x168",
-    "type": "image/png"
-  }, {
-    "src": "/android-chrome-192x192.png",
+    "src": "/icon-192x192.png",
     "sizes": "192x192",
+    "type": "image/png"
+  }, {
+    "src": "/icon-512x512.png",
+    "sizes": "512x512",
     "type": "image/png"
   }],
   "prefer_related_applications": false
