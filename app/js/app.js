@@ -51,7 +51,7 @@ $(function () {
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
-    templateData.average = m.average;
+    templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
@@ -459,6 +459,18 @@ $(function () {
     setMapOnAll(map);
   }
 
+  function formatAverage(avg) {
+    if (avg) {
+      avg = parseFloat(avg);
+      if (avg.toFixed && avg !== Math.round(avg)) {
+        avg = avg.toFixed(1);
+      }
+      avg = '' + avg;
+    }
+
+    return avg;
+  }
+
   function updateMarkers() {
     clearMarkers();
 
@@ -512,13 +524,7 @@ $(function () {
           };
 
           // Average might come with crazy floating point value
-          if (m.average) {
-            m.average = parseFloat(m.average);
-            if (m.average.toFixed && m.average !== Math.round(m.average)) {
-              m.average = m.average.toFixed(1);
-            }
-            m.average = '' + m.average;
-          }
+          m.average = formatAverage(m.average);
 
           // @todo temporarily disabled this because backend still doesnt support flags for these
           // let labelStr;

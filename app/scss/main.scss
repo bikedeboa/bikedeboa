@@ -173,7 +173,7 @@ body.beta #map {
 
 .help-tooltip-trigger {
   cursor: pointer;
-  color: $gray;
+  color: $lightGray;
   
   & + .tooltip {
     .tooltip-inner {
@@ -1203,18 +1203,6 @@ a,
         vertical-align: text-top;
         user-select: none;
         cursor: default;
-
-        &:before {
-            content: '';
-            display: inline-block;
-            width: 14px;
-            height: 17px;
-            background-image: url(/img/icon_user.svg);
-            background-size: 100%;
-            background-repeat: no-repeat;
-            vertical-align: middle;
-            margin-right: 5px;
-        }
     }
 }
 
@@ -1419,6 +1407,18 @@ a,
         min-height: 70px;
         background: $superLightGray;
         border-radius: 15px;
+    }
+
+    .numreviews:before {
+        content: '';
+        display: inline-block;
+        width: 14px;
+        height: 17px;
+        background-image: url(/img/icon_user.svg);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        vertical-align: middle;
+        margin-right: 5px;
     }
 
     // .photo-container {
@@ -2038,6 +2038,10 @@ a,
   // &:hover {
   //   background: $paleWhite; 
   // }
+
+  .numreviews {
+    color: $lightGray;
+  }
 
   .infobox--img {
     width: 75px;
