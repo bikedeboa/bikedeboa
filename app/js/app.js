@@ -49,7 +49,7 @@ $(() => {
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
-    templateData.average = m.average;
+    templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
@@ -167,6 +167,8 @@ $(() => {
         'delay': {'show': 0, 'hide': 100}
       });
     }
+
+    $('#placeDetailsModal .help-tooltip-trigger').tooltip();
 
     // Animate modal content
     $('section, .modal-footer').velocity(
@@ -468,6 +470,18 @@ $(() => {
     setMapOnAll(map);
   }
 
+  function formatAverage(avg) {
+    if (avg) {
+      avg = parseFloat(avg);
+      if (avg.toFixed && avg !== Math.round(avg)) {
+        avg = avg.toFixed(1);
+      }
+      avg = '' + avg;
+    }
+
+    return avg;
+  }
+
   function updateMarkers() {
     clearMarkers();
 
@@ -521,13 +535,7 @@ $(() => {
           };
 
           // Average might come with crazy floating point value
-          if (m.average) {
-            m.average = parseFloat(m.average);
-            if (m.average.toFixed && m.average !== Math.round(m.average)) {
-              m.average = m.average.toFixed(1);
-            }
-            m.average = '' + m.average;
-          }
+          m.average = formatAverage(m.average);
 
           // @todo temporarily disabled this because backend still doesnt support flags for these
           // let labelStr;
@@ -1068,6 +1076,8 @@ $(() => {
         }, () => {
         }
       );
+
+      $('#newPlaceModal .help-tooltip-trigger').tooltip();
     }
 
     // Initialize callbacks
@@ -1466,6 +1476,7 @@ $(() => {
         openedMarker = null;
       }
 
+      ga('send', 'event', 'Local', 'toggle create pin mode');
       toggleLocationInputMode();
     });
 
@@ -1617,23 +1628,20 @@ $(() => {
   }
 
   function showBikeLayer() {
+    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
+    
     // Bike layer from Google Maps
     _bikeLayer.setMap(map);
-    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
-
-    // GeoJSON data from #datapoa
-    // map.data.setStyle({
-    //   visible: true
-    // });
+    
+    // GeoJSON data from #datapoa/EPTC
+    map.data.setMap(map);
   }
 
   function hideBikeLayer() {
-    _bikeLayer.setMap(null);
     map.setOptions({styles: _gmapsCustomStyle});
-
-    // map.data.setStyle({
-    //   visible: false
-    // });
+    
+    _bikeLayer.setMap(null);
+    map.data.setMap(null);
   }
 
   function handleRouting() {
@@ -1754,12 +1762,12 @@ $(() => {
     window._bikeLayer = new google.maps.BicyclingLayer();
     
     // Bike layer: GeoJSON from #datapoa
-    // map.data.loadGeoJson('ciclovias_portoalegre.json');
-    // map.data.setStyle({
-    //   strokeColor: 'green',
-    //   strokeWeight: 3,
-    //   visible: false;
-    // });
+    map.data.map = null;
+    map.data.loadGeoJson('ciclovias_portoalegre.json');
+    map.data.setStyle({
+      strokeColor: 'green',
+      strokeWeight: 5
+    });
 
     // Geolocalization button
     if (navigator.geolocation) {
@@ -1811,6 +1819,7 @@ $(() => {
       'filter-menu',
       {inverted: true/*, fixed: true*/}
     );
+    $('#filter-menu .help-tooltip-trigger').tooltip();
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/

@@ -3,9 +3,14 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <title>bike de boa</title>
+        <title>bike de boa - encontre e avalie bicicletários no RS</title>
+        <meta property="og:title" content="bike de boa - encontre e avalie bicicletários no RS"/>
+        <meta property="og:site_name" content="bike de boa - encontre e avalie bicicletários no RS">
+      
+        <meta name="description" content="Encontre e avalie mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e RS. Acesse o site e aplicativo no seu celular, computador ou tablet. O bike de boa é, e sempre será, totalmente gratuito!">
+        <meta property="og:description" content="Encontre e avalie mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e RS. Acesse o site e aplicativo no seu celular, computador ou tablet. O bike de boa é, e sempre será, totalmente gratuito!" />
 
-        <!-- META tags -->
+      
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
 
         <!-- iOS fullscreen experience -->
@@ -15,16 +20,11 @@
         <!-- Chrome mobile nav color -->
         <meta name="theme-color" content="#2cd978">
 
-        <meta name="description" content="Encontre lugares pra estacionar tua bicicleta e ficar de boa.">
         <meta name="keywords" content="mapa bicicleta bici biciletario seguranca estacionamento estacionar deixar prender ulock colaborativo vadebici massa critica porto alegre">
         <link rel="canonical" href="https://www.bikedeboa.com.br" />
+        <meta property="og:url" content="https://www.bikedeboa.com.br"/>
         <meta property="fb:app_id" content="1814653185457307"/>
         <meta property="og:image" content="https://www.bikedeboa.com.br/fb.png"/>
-        <meta property="og:url" content="https://www.bikedeboa.com.br"/>
-        <meta property="og:title" content="bike de boa"/>
-        <meta property="og:site_name" content="bike de boa">
-        <meta property="og:description" content="Encontre lugares pra estacionar tua bicicleta e ficar de boa."/>
-
         <meta name="google-site-verification" content="ftQlKcMOfc5iuPkN6xINweO31I0WNRE4s9zDbQT9iTY" />
 
         <!-- Progressive Webapp Manifest -->
@@ -57,7 +57,7 @@
         <script defer src="/js/vendors.min.js"></script>
         <script defer src="/lib/infobox.js"></script>
         <script defer src="/js/app.min.js"></script> 
-    </head>
+    </head> 
 
     <body>
         <!-- <div id="map" style="filter: blur(1px);"></div> -->
@@ -138,7 +138,7 @@
                                 <br> 
                                 
                                 <!-- Github Like Button -->
-                                <a class="github-button" href="https://github.com/cmdalbem/bikedeboa" data-count-href="/cmdalbem/bikedeboa/stargazers" data-count-api="/repos/cmdalbem/bikedeboa#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star cmdalbem/bikedeboa on GitHub">GitHub</a>
+                                <a class="github-button" href="https://github.com/cmdalbem/bikedeboa" data-show-count="true" aria-label="Star cmdalbem/bikedeboa on GitHub">GitHub</a>
                               </p>
                             </article>
                         </div>
@@ -315,13 +315,13 @@
                                       <p>
                                         Se você se encaixa em um ou mais desses perfis <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
                                       </p>
-                                      <p>
+                                      <div>
                                         <ul>
                                           <li>Se você se interessa pelo tema e está cheia(o) de ideias temos um grupo de discussão no Slack onde compartilhamos e debatemos todas elas, sua participação seria muito bem vinda.</li>
                                           <li>Se é ciclista ou tá sempre por aí você pode ser um Colaborador e nos ajudar corrigindo e complementando nosso banco de dados.</li>
                                           <li>Se você é desenvolvedor web (<a target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">front-end</a> ou <a target="_blank" rel="noopener" href="https://github.com/dennerevaldt/bikedeboa-api">back-end</a>) deve ser super simples contribuir nos nossos repositórios no Github (e se não for, a culpa é nossa!).</li>
                                         </ul>
-                                      </p>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -396,28 +396,38 @@
 
                             <section>
                               <div class="minimap-container">
-                                <img class="minimap" src=""></img>
-                                <button id="editPlacePositionBtn" class="btn link-button"></span></button>
+                                <img class="minimap" src=""/>
+                                <button id="editPlacePositionBtn" class="btn link-button"></button>
                               </div>
                             </section>
 
                             <section>
-                              <h2>Acesso</h2>
+                              <h2>
+                                Acesso
+                                <span class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="<b>Público:</b> pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p><b>Privado:</b> o uso é restrito para clientes, funcionários ou moradores e este acesso é controlado."></span>
+                              </h2>
 
                               <div class="acess-types-group">
                                   <div data-value="public" class="typeIcon" tab-index="0">
                                       <img src="/img/icon_public.svg"/>
-                                      <div class="icon-label">Público</div>
+                                      <div class="icon-label">
+                                        Público
+                                      </div>
                                   </div>
                                   <div data-value="private" class="typeIcon" tab-index="0">
                                       <img src="/img/icon_private.svg"/>
-                                      <div class="icon-label">Privado</div>
+                                      <div class="icon-label">
+                                        Privado
+                                      </div>
                                   </div>
                               </div>
                             </section> 
 
                             <section>
-                              <h2>Tipo de bicicletário</h2>
+                              <h2>
+                                Tipo de bicicletário
+                                <span class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se tu não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
+                              </h2>
 
                               <div class="custom-radio-group">
                                   <div data-value="deroda" class="typeIcon" tab-index="0">
@@ -475,12 +485,12 @@
         </div>
 
         <button id="addPlace" class="bigRoundedButton coolHide">
-            <span><span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO</span>
+            <span role="heading" aria-level="2"><span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO</span>
         </button>
 
         <div id="newPlaceholderContainer">
           <!-- <span id="newPlaceholderShadow"></span> -->
-          <img src="/img/target.svg" id="newPlaceholderTarget"></img>
+          <img src="/img/target.svg" id="newPlaceholderTarget"/>
 
           <button id="newPlaceholder">
               <img src="/img/pin_bike.svg"/>
@@ -690,12 +700,15 @@
                       {{else}}
                           {{#if isPublic}}
                               <img src="/img/icon_public.svg"/>
-                              <div class="icon-label"> Público </div>
+                              <div class="icon-label">
+                                Público
+                                <span class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="<b>Bicicletário público:</b> pode ser usado em qualquer horário por qualquer pessoa. Normalmente está em espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não."></span>
+                              </div>
                           {{else}}
                               <img src="/img/icon_private.svg"/>
                               <div class="icon-label">
-                                  Privado<br>
-                                  <small>(só clientes)</small>
+                                  Privado
+                                  <span class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" title="<b>Bicicletário privado:</b> o uso é restrito para clientes, funcionários ou moradores e este acesso é controlado."></span>
                               </div>
                           {{/if}}
                       {{/if}}
@@ -738,7 +751,7 @@
               {{#if average}}
                 <section class="rating-input-container">
                   <h2>
-                    Dê sua nota
+                    Dê sua nota para este bicicletário
                   </h2>
 
                   <fieldset class="rating rating-big empty">
@@ -888,15 +901,15 @@
             <div class="side-nav__content">
               <ul>
                 <li class="side-nav--animate-in" id="aboutBtn">
-                  <span class="glyphicon glyphicon-info-sign"></span>
+                  <img src="/img/icon_info.svg"/>
                   Sobre o projeto
                 </li>
                 <li class="side-nav--animate-in" id="faqBtn">
-                  <span class="glyphicon glyphicon-question-sign"></span>
+                  <img src="/img/icon_faq.svg"/>
                   Perguntas frequentes
                 </li>
                 <li class="side-nav--animate-in" id="howToInstallBtn">
-                  <span class="glyphicon glyphicon-download-alt"></span>
+                  <img src="/img/icon_app.svg"/>
                   Instalar o app
                 </li>
                 
@@ -940,10 +953,13 @@
                 <span class="glyphicon glyphicon-chevron-left"></span> Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
               </div>
 
-              <!-- <div class="side-nav--animate-in setting-checkbox-container">
+              <div class="side-nav--animate-in setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
-                  <label for="show-bike-layer"> Mostrar ciclovias e ciclofaixas <span style="opacity: 0.5;">beta</span></label>
-              </div> -->
+                  <label for="show-bike-layer">
+                  Mostrar ciclovias e ciclofaixas
+                  <span class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" title="Dados de ciclovias do <b>EPTC</b>, do <b>Google Maps</b> e do <b>DataPOA</b>. Nos dá um toque se perceber algo de errado! :)"></span>
+                  </label>
+              </div>
             </header>
 
             <div class="side-nav__content">
@@ -1100,7 +1116,7 @@
                   <span class="numreviews">({{numReviews}})</span>
                 {{/if}}
               {{else}}
-                <span style="font-style: italic; color: #828b90;">Sem avaliações</span>
+                <!-- <span style="font-style: italic; color: #828b90;">Sem avaliações</span> -->
               {{/if}}
               
             </div>
@@ -1146,6 +1162,25 @@
             })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
           }
         </script>
+
+        <!-- Facebook Pixel Code -->
+        <script>
+          !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+          n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+          document,'script','https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '120844115145673', {
+          em: 'insert_email_variable,'
+          });
+          fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=120844115145673&ev=PageView&noscript=1"
+        /></noscript>
+        <!-- DO NOT MODIFY -->
+        <!-- End Facebook Pixel Code -->
+
 
     </body>
 
