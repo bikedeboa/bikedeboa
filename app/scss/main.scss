@@ -1204,17 +1204,17 @@ a,
         user-select: none;
         cursor: default;
 
-        // &:before {
-        //     content: '';
-        //     display: inline-block;
-        //     width: 14px;
-        //     height: 17px;
-        //     background-image: url(/img/icon_user.svg);
-        //     background-size: 100%;
-        //     background-repeat: no-repeat;
-        //     vertical-align: middle;
-        //     margin-right: 5px;
-        // }
+        &:before {
+            content: '';
+            display: inline-block;
+            width: 14px;
+            height: 17px;
+            background-image: url(/img/icon_user.svg);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
     }
 }
 
@@ -1741,11 +1741,13 @@ a,
     .side-nav__header {
       display: none;
     }
+
     .side-nav__hide {
       color: black;
       right: 16px;
       left: auto;
     }
+
     .side-nav__content {
       margin-top: 50px;
     }
@@ -2746,6 +2748,12 @@ a,
       line-height: 48px;
       padding: 0 16px;
       cursor: pointer;
+
+      img {
+        height: 1em;
+        width: 1em;
+        margin-right: 5px;
+      }
     }
 
     li:hover {
