@@ -442,18 +442,18 @@ $(() => {
             } else {
               // Custom test case: rating range
               switch (f.value) {
-                case 'good':
-                  testResult = m.average >= 3.5;
-                  break;
-                case 'medium':
-                  testResult = m.average > 2 && m.average < 3.5;
-                  break;
-                case 'bad':
-                  testResult = m.average > 0 && m.average <= 2;
-                  break;
-                case 'none':
-                  testResult = m.average === null;
-                  break;
+              case 'good':
+                testResult = m.average >= 3.5;
+                break;
+              case 'medium':
+                testResult = m.average > 2 && m.average < 3.5;
+                break;
+              case 'bad':
+                testResult = m.average > 0 && m.average <= 2;
+                break;
+              case 'none':
+                testResult = m.average === null;
+                break;
               }
             }
             
@@ -479,6 +479,7 @@ $(() => {
   }
 
   function clearFilters() {
+    _activeFilters = null;
     setMapOnAll(map);
   }
 
@@ -544,7 +545,7 @@ $(() => {
             scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
             origin: new google.maps.Point(0, 0), // origin
             anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
-          };
+          }; 
 
           // Average might come with crazy floating point value
           m.average = formatAverage(m.average);
@@ -615,7 +616,7 @@ $(() => {
 
                   $('.infoBox').off('click').on('click', () => {
                     openLocalDetails(markers[i]);
-                  });
+                  }); 
                 });
               });
 
@@ -823,9 +824,9 @@ $(() => {
           swal('Bicicletário atualizado', 'Valeu pela contribuição!', 'success');
         } else {
           swal({
-            title: "Bicicletário criado",
-            text: "Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)",
-            type: "success",
+            title: 'Bicicletário criado',
+            text: 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
+            type: 'success',
             closeOnConfirm: true,
             allowOutsideClick: false, // because this wouldnt trigger the callback @todo
             allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
@@ -939,7 +940,7 @@ $(() => {
         // Present to the user the already resized image
         document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
         $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
-      }
+      };
       
       img.src = e.target.result;
     }
@@ -1194,7 +1195,7 @@ $(() => {
 
     let templateData = {};
     templateData.title = m.text;
-    templateData.address = m.address;
+    templateData.address = m.address; 
 
     const previousReview = BIKE.Session.getReviewFromSession(m.id);
 
@@ -1364,7 +1365,7 @@ $(() => {
       content: $('#revisionText').val()
     };
 
-    Database.sendRevision(revisionObj, (revisionId) => {
+    Database.sendRevision(revisionObj, revisionId => {
       hideSpinner();
 
       swal('Sugestão enviada', 'Obrigado por contribuir com o Bike de Boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
@@ -1374,12 +1375,12 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display').velocity({ opacity: 0 }, { 'display': "none" });
+    $('#map, #addPlace, .login-display').velocity({ opacity: 0 }, { 'display': 'none' });
   }
 
   function exitLocationSearchMode() {
     event.preventDefault();
-    $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': "block" });
+    $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': 'block' });
   }
 
   function setMobileHeaderTitle(text) {
@@ -1904,16 +1905,7 @@ $(() => {
       Database.getAllTags();
     });
   }
-
-  // Thanks https://stackoverflow.com/questions/17772260/textarea-auto-height/24676492#24676492
-  window.autoGrowTextArea = function(element) {
-    if (element) {
-      element.style.height = '5px';
-      element.style.height = (element.scrollHeight+20)+'px';
-    }
-  };
-
-
+ 
   // window.showMessage = function(_data) {
   //   const okCallback = () => {
   //     $('#messageModal').modal('hide');

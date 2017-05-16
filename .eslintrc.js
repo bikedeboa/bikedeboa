@@ -24,6 +24,7 @@ module.exports = {
         ]
     },
     "globals": {
+        // Libs
         "$": false,
         "google": false,
         "Cookies": false,
@@ -32,6 +33,7 @@ module.exports = {
         "swal": false,
         "ga": true, //overriden on localhost
 
+        // Constants
         "SIMULATED_DELAY_MS": false,
         "MARKER_W": false,
         "MARKER_H": false,
@@ -51,7 +53,20 @@ module.exports = {
         "PHOTO_UPLOAD_MAX_H": false,
         "STRUCTURE_CODE_TO_NAME": false,
         "GOOGLEMAPS_KEY": false,
+        "MARKER_W_MINI": false,
+        "MARKER_H_MINI": false,
 
+        // Global util functions
+        "toggleSpinner": true,
+        "showSpinner": true,
+        "hideSpinner": true,
+        "defaultFailCallback": true,
+        "getBrowserName": true,
+        "removeAccents": true,
+        "slugify": true,
+        "autoGrowTextArea": true,
+
+        // Global variables
         "BIKE": true,
         "SideNav": true,
         "isDemoMode": true,
@@ -83,6 +98,10 @@ module.exports = {
         "_mapZoomLevel": true,
         "_isLocalhost": true,
         "_isFacebookBrowser": true,
-        "_isMobile": true
+        "_isMobile": true,
+        "_gmapsCustomStyleStaticApi": true,
+        "_activeFilters": true,
+        "_infoWindow": true,
+        "_isTouchDevice": true
     }
 };

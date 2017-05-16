@@ -2,11 +2,11 @@ var BIKE = BIKE || {};
 
 BIKE.getMarkersFromLocalStorage = () => {
   return JSON.parse( localStorage.getItem('markers') );
-}
+};
 
 BIKE.saveMarkersToLocalStorage = markersToSave => {
   localStorage.setItem( 'markers', JSON.stringify(markersToSave) );
-}
+};
 
 BIKE.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
@@ -131,5 +131,13 @@ window.slugify = text => {
       .replace(/-+$/, '');            // Trim - from end of text
   } else {
     return '';
+  }
+};
+
+// Thanks https://stackoverflow.com/questions/17772260/textarea-auto-height/24676492#24676492
+window.autoGrowTextArea = function(element) {
+  if (element) {
+    element.style.height = '5px';
+    element.style.height = (element.scrollHeight+20)+'px';
   }
 };
