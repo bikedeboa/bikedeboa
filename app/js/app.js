@@ -26,7 +26,7 @@ $(() => {
     return pinColor;
   }
 
-  function openDetailsModal(marker, callback) {
+  function openDetailsModal(marker) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
       return;
@@ -34,7 +34,7 @@ $(() => {
 
     openedMarker = marker;
     const m = openedMarker;
-
+ 
     if (addLocationMode || !m._hasDetails) {
       return false;
     }
@@ -174,8 +174,9 @@ $(() => {
     $('section, .modal-footer').velocity(
       'transition.fadeIn',
       {stagger: STAGGER_NORMAL, queue: false, complete: () => {
-        if (callback && typeof callback === 'function') {
-          callback();
+        if (_tempCallback && typeof _tempCallback === 'function') {
+          _tempCallback();
+          _tempCallback = undefined;
         }
       }
     });
@@ -344,7 +345,7 @@ $(() => {
   }
 
   function getMarkerById(id) {
-    if (id) {
+    if (id && id >= 0) {
       const res = markers.filter( i => i.id === id );
       if (res.length > 0) {
         return res[0];
@@ -352,27 +353,38 @@ $(() => {
     }
   }
 
+  // Just delegate the action to the route controller
   function openLocalDetails(marker, callback) {
-    History.pushState({id: marker.id, action: 'openDetails'}, 'Detalhes do bicicletário', `detalhes/${marker.id}`);
+    let url = `/b/${marker.id}`;
+    if (marker.text) {
+      url += `-${slugify(marker.text)}`;
+    }
+
+    window._tempCallback = callback;
+
+    marker.url = url;
+    History.pushState({}, 'Detalhes do bicicletário', url);
   }
 
   function _openLocalDetails(marker, callback) {
-    _abortedDetailsRequest = false;
+    if (marker) {
+      _abortedDetailsRequest = false;
 
-    if (marker._hasDetails) {
-      openDetailsModal(marker);
-    } else {
-      // Load skeleton modal template
-      $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
-      $('#placeDetailsModal').modal('show');
-      $('.photo-container, .modal-body > div').velocity('transition.slideDownIn', { stagger: STAGGER_FAST });
+      if (marker._hasDetails) {
+        openDetailsModal(marker);
+      } else {
+        // Load skeleton modal template
+        $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
+        $('#placeDetailsModal').modal('show');
+        $('.photo-container, .modal-body > div').velocity('transition.slideDownIn', { stagger: STAGGER_FAST });
 
-      // Request content
-      Database.getPlaceDetails(marker.id, () => {
-        if (!_abortedDetailsRequest) {
-          openDetailsModal(marker, callback);
-        }
-      });
+        // Request content
+        Database.getPlaceDetails(marker.id, () => {
+          if (!_abortedDetailsRequest) {
+            openDetailsModal(marker, callback);
+          }
+        });
+      }
     }
   }
 
@@ -566,7 +578,7 @@ $(() => {
               openLocalDetails(markers[i]);
             });
 
-            // Info window
+            // Initialize infobox window
             if (!_isMobile) {
               if (m.photo) {
                 m.photo = m.photo.replace('images', 'images/thumbs');
@@ -774,11 +786,12 @@ $(() => {
 
   // @todo refactor this, it's fuckin confusing
   function finishCreateOrUpdatePlace() {
+    const updatingMarker = openedMarker;
+    openedMarker = null;
+    
     goHome();
     showSpinner('Salvando bicicletário...');
 
-    const updatingMarker = openedMarker;
-    openedMarker = null;
     let place = {};
 
     place.lat = updatingMarker ? updatingMarker.lat : newMarkerTemp.lat;
@@ -806,7 +819,9 @@ $(() => {
         updateMarkers();
         hideSpinner();
 
-        if (!updatingMarker) {
+        if (updatingMarker) {
+          swal('Bicicletário atualizado', 'Valeu pela contribuição!', 'success');
+        } else {
           swal({
             title: "Bicicletário criado",
             text: "Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)",
@@ -835,18 +850,6 @@ $(() => {
       ga('send', 'event', 'Local', 'create');
       Database.sendPlace(place, callback);
     }
-  }
-
-  function sendCheckinBtn() {
-    Database.sendCheckin(openedMarker.id, () => {
-      $('#placeDetailsModal').modal('show');
-
-      showSpinner();
-      Database.getPlaces( () => {
-        updateMarkers();
-        hideSpinner();
-      });
-    });
   }
 
   function setupAutocomplete() {
@@ -1031,7 +1034,7 @@ $(() => {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
       const m = openedMarker;
 
-      History.replaceState({}, 'Editar bicicletário', `${m.id}/editar`);
+      // History.pushState({}, 'Editar bicicletário', '/editar');
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
@@ -1108,7 +1111,8 @@ $(() => {
       });
 
       $('#editPlacePositionBtn').off('click').on('click', () => {
-        hideAllModals();
+        // Ask to keep opened marker temporarily
+        hideAllModals(null, true);
         
         map.setCenter({
           lat: parseFloat(openedMarker.lat),
@@ -1165,7 +1169,6 @@ $(() => {
         text: "Tem certeza disso?",
         type: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#f15f74",
         confirmButtonText: "Deletar",
         closeOnConfirm: true
       },
@@ -1179,6 +1182,7 @@ $(() => {
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
+            swal('Bicicletário deletado', 'Espero que você saiba o que está fazendo.', 'success');
           });
         });
       });
@@ -1248,7 +1252,7 @@ $(() => {
     validateReviewForm();
 
     // Display modal
-    History.replaceState({}, 'Nova avaliação', 'avaliar');
+    // History.pushState({}, 'Nova avaliação', '/avaliar');
     if ($('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
         $('#reviewPanel').modal('show');
@@ -1331,7 +1335,7 @@ $(() => {
     const m = openedMarker;
     let templateData = {};
 
-    History.replaceState({}, 'Sugerir mudança', `sugestao`);
+    // History.pushState({}, 'Sugerir mudança', '/sugestao');
 
     // Render template
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -1420,24 +1424,24 @@ $(() => {
     });
 
     $('#loginBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
-      History.replaceState({}, 'Login colaborador', 'login');
+      _hamburgerMenu.hide();
+      History.replaceState({}, 'Login colaborador', '/login');
       login(true);
     });
 
     $('#aboutBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
+      _hamburgerMenu.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'about opened');
-      History.replaceState({}, 'Sobre', 'sobre');
+      History.replaceState({}, 'Sobre', '/sobre');
       $('#aboutModal').modal('show');
     });
 
     $('#howToInstallBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
+      _hamburgerMenu.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'how-to-install opened');
-      History.replaceState({}, 'Como instalar o app', 'como-instalar');
+      History.replaceState({}, 'Como instalar o app', '/como-instalar');
       
       // Tries to guess the user agent to initialize the correspondent accordion item opened
       const userAgent = window.getBrowserName();
@@ -1463,9 +1467,9 @@ $(() => {
     });
 
     $('#faqBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
+      _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
-      History.replaceState({}, 'Perguntas frequentes', 'faq');
+      History.replaceState({}, 'Perguntas frequentes', '/faq');
       $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       $('#faqModal').modal('show');
     });
@@ -1602,10 +1606,12 @@ $(() => {
     });
   }
 
-  function hideAllModals(callback) {
+  function hideAllModals(callback, keepOpenedMarker) {
     const $modal = $('.modal');
 
-    openedMarker = null;
+    if (!keepOpenedMarker) {
+      openedMarker = null;
+    }
 
     if ($modal.is(':visible')) {
       $modal.modal('hide').one('hidden.bs.modal', () => { 
@@ -1613,9 +1619,6 @@ $(() => {
           callback();
         }
       });
-
-      // Reset history
-      // History.replaceState({}, 'bike de boa', '/');
     } else {
       if (callback && typeof callback === 'function') {
         callback();
@@ -1644,15 +1647,27 @@ $(() => {
     map.data.setMap(null);
   }
 
-  function handleRouting() {
-    const state = History.getState();
+  function handleRouting(isFirstRun) { 
+    const urlBreakdown = window.location.pathname.split('/');
+    let match = true;
 
-    if (state.title === 'bike de boa' && !state.data.dontUpdateView) {
-      hideAllModals();
-    } else {
-      if (state.data && state.data.action === 'openDetails') {
-        _openLocalDetails(getMarkerById(state.data.id));
-      }
+    switch (urlBreakdown[1]) {
+      case 'b':
+        if (urlBreakdown[2]) {
+          let id = urlBreakdown[2].split('-')[0];
+          if (id) {
+            id = parseInt(id);
+            _openLocalDetails(getMarkerById(id));
+          }
+        }
+        break;
+      default:
+        match = false;
+        break;
+    }
+
+    if (isFirstRun && !match) {
+      History.replaceState({}, 'bike de boa', '/');
     }
   }
 
@@ -1763,7 +1778,7 @@ $(() => {
     
     // Bike layer: GeoJSON from #datapoa
     map.data.map = null;
-    map.data.loadGeoJson('ciclovias_portoalegre.json');
+    map.data.loadGeoJson('/ciclovias_portoalegre.json');
     map.data.setStyle({
       strokeColor: 'green',
       strokeWeight: 5
@@ -1803,7 +1818,12 @@ $(() => {
 
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
-      handleRouting();
+      const state = History.getState();
+      if (state.title === 'bike de boa' && !state.data.dontUpdateView) {
+        hideAllModals();
+      } else {
+        handleRouting();
+      }
     });
 
     // Set up Sweet Alert
@@ -1814,11 +1834,26 @@ $(() => {
       allowOutsideClick: true
     });
 
-    _hamburgerMenu = new SideNav('hamburger-menu');
+    const sidenavHideCallback = () => {
+      // @todo explain me
+      History.replaceState({}, 'bike de boa', '/');
+    };
+
+    _hamburgerMenu = new SideNav(
+      'hamburger-menu',
+      {
+        hideCallback: sidenavHideCallback
+      }
+    );
     _filterMenu = new SideNav(
       'filter-menu',
-      {inverted: true/*, fixed: true*/}
+      {
+        inverted: true,
+        hideCallback: sidenavHideCallback
+        /*fixed: true*/
+      }
     );
+
     $('#filter-menu .help-tooltip-trigger').tooltip();
 
     // Intercepts Progressive Web App event
@@ -1908,9 +1943,6 @@ $(() => {
   }
 
   function init() {
-    // Reset URL
-    // History.replaceState({}, 'bike de boa', '/');
-
     if (isDemoMode) {
       Database = BIKE.MockedDatabase;
     } else {
@@ -1974,7 +2006,7 @@ $(() => {
         if (_isMobile) {
           $('.promo-banner-container').show();
         } else {
-          $('.promo-banner-container').velocity("fadeIn", { duration: 3000 });
+          $('.promo-banner-container').velocity('fadeIn', { duration: 3000 });
         }
       }, 2000); 
     }
@@ -1990,8 +2022,10 @@ $(() => {
   // Start initialization //
   //////////////////////////
 
-  setup();
+  setup(); 
   init();
-  // handleRouting(); 
-  // _geolocate();
+
+  $(window).on('load', () => {
+    handleRouting(true);
+  });
 });

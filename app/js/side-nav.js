@@ -39,6 +39,7 @@ class SideNav {
 
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
+    this._hide = this._hide.bind(this);
     this.blockClicks = this.blockClicks.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
@@ -74,9 +75,9 @@ class SideNav {
 
   addEventListeners () {
     this.showButtonEl.addEventListener('click', this.show);
-    this.hideButtonEl.addEventListener('click', this.hide);
+    this.hideButtonEl.addEventListener('click', this._hide);
     if (!this.options.fixed) {
-      this.sideNavEl.addEventListener('click', this.hide);
+      this.sideNavEl.addEventListener('click', this._hide);
     }
     this.sideNavContainerEl.addEventListener('click', this.blockClicks);
 
@@ -120,11 +121,11 @@ class SideNav {
 
     if (this.options.inverted) {
       if (translateX > this.panelWidth/4) {
-        this.hide();
+        this._hide();
       }
     } else {
       if (translateX < -this.panelWidth/4) {
-        this.hide();
+        this._hide();
       }
     }
   }
@@ -177,12 +178,15 @@ class SideNav {
     this.sideNavEl.addEventListener('transitionend', this.onTransitionEnd);
   }
 
-  hide (e = {}) {
-    if (!e.dontMessWithState) {
-      // History.replaceState({dontUpdateView: true}, 'bike de boa', '/');
-      History.replaceState({}, 'bike de boa', '/');
+  _hide () {
+    if (this.options.hideCallback) {
+      this.options.hideCallback();
     }
 
+    this.hide();
+  }
+
+  hide () {
     this.sideNavEl.classList.add('side-nav--animatable');
     this.sideNavEl.classList.remove('side-nav--visible');
     this.sideNavEl.addEventListener('transitionend', this.onTransitionEnd);

@@ -53,6 +53,7 @@ module.exports = {
         "GOOGLEMAPS_KEY": false,
 
         "BIKE": true,
+        "SideNav": true,
         "isDemoMode": true,
         "Database": true,
         "map": true,
@@ -80,7 +81,8 @@ module.exports = {
         "_updatingReview": true,
         "_userIP": true,
         "_mapZoomLevel": true,
-        "_isLocalhost": true
-        "_isFacebookBrowser": true
+        "_isLocalhost": true,
+        "_isFacebookBrowser": true,
+        "_isMobile": true
     }
 };

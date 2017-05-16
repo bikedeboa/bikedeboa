@@ -526,9 +526,9 @@
                           <div class="modal-body ">
                               <div id="placeDetails_heading" class="title">
                                   {{#if title}}
-                                    <h1>{{title}}<h1>
+                                    <h1>{{title}}</h1>
                                   {{else}}
-                                    <small class="muted">Sem título</small>
+                                    <h1 style="font-style: italic;">Sem título</h1>
                                   {{/if}}
 
                                   <p class="address">
@@ -612,7 +612,7 @@
                   {{#if title}}
                     <h1>{{title}}</h1>
                   {{else}}
-                    <small class="muted">Sem título</small>
+                    <h1 style="font-style: italic;">Sem título</h1>
                   {{/if}}
                   <p class="address">
                       {{address}}
@@ -845,7 +845,7 @@
                                   {{#if title}}
                                     <h1>{{title}}</h1>
                                   {{else}}
-                                    <small class="muted">Sem título</small>
+                                    <small style="font-style: italic;">Sem título</small>
                                   {{/if}}
                                 </div> -->
 
@@ -1076,6 +1076,8 @@
           <div class="infobox--content">
             {{#if title}}
               <h2>{{title}}</h2>
+            {{else}}
+              <h2 style="font-style: italic;">Sem título</h2>
             {{/if}}
 
             <div class="infobox--details">
