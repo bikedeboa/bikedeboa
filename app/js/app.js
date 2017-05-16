@@ -172,9 +172,9 @@ $(() => {
     $('section, .modal-footer').velocity(
       'transition.fadeIn',
       {stagger: STAGGER_NORMAL, queue: false, complete: () => {
-        if (_tempCallback && typeof _tempCallback === 'function') {
-          _tempCallback();
-          _tempCallback = undefined;
+        if (window._tempCallback && typeof window._tempCallback === 'function') {
+          window._tempCallback();
+          window._tempCallback = undefined;
         }
       }
     });
@@ -241,15 +241,13 @@ $(() => {
                 if (markers && markers.length) {
                   _geolocationMarker.setZIndex(markers.length);
                 }
-              }
 
-              if (toCenter) {
-                const pos = {
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude
-                };
+                if (toCenter) {
+                  const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                  };
 
-                if (map) {
                   map.panTo(pos);
                   
                   // Set minimum map zoom
@@ -717,7 +715,7 @@ $(() => {
 
       testNewLocalBounds();
       map.addListener('center_changed', () => {
-        console.log('center_changed');
+        // console.log('center_changed');
         testNewLocalBounds();
       });
 
@@ -1660,7 +1658,7 @@ $(() => {
     $('#howToInstallModal').modal('show');
   }
 
-  function handleRouting(isFirstRun) { 
+  function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = true;
 
@@ -1692,9 +1690,7 @@ $(() => {
         break;
     }
 
-    if (isFirstRun && !match) {
-      History.replaceState({}, 'bike de boa', '/');
-    }
+    return match;
   }
 
   function setupGoogleMaps() {
@@ -1792,6 +1788,11 @@ $(() => {
       strokeColor: 'transparent', //stroke color,
       strokeOpacity: '0' //opacity from 0.0 to 1.0
     });
+
+    // Finally, enable the basic UI
+    $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+    $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+    $('#map').css('filter', 'none');
   }
 
   function setOfflineMode() {
@@ -1821,7 +1822,9 @@ $(() => {
 
     if (window.google) {
       // console.log('Got Google, probably we\'re online.');
-      setupGoogleMaps();
+      if (window.location.pathname === '/') {
+        setupGoogleMaps();
+      }
     } else {
       setOfflineMode();
     }
@@ -1861,10 +1864,27 @@ $(() => {
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
-      if (state.title === 'bike de boa' && !state.data.dontUpdateView) {
+      if (state.title === 'bike de boa') {
+        // If map wasn't initialized before (custom routing case)
+        if (!map && !_isOffline) {
+          $('#map').removeClass('mock-map');
+          setupGoogleMaps();
+          updateMarkers();
+        }
+
         hideAllModals();
       } else {
         handleRouting();
+      }
+    });
+
+    // Initialize router
+    $(window).on('load', () => {
+      const isMatch = handleRouting();
+      if (!isMatch) {
+        History.replaceState({}, 'bike de boa', '/');
+      } else {
+        $('#map').addClass('mock-map');
       }
     });
 
@@ -2028,11 +2048,6 @@ $(() => {
         // Hide spinner that is initialized visible on CSS
         hideSpinner();
       });
-
-      // Show controls over the map
-      $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-      $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-      $('#map').css('filter', 'none');
     }
 
     // Promo banner
@@ -2059,8 +2074,4 @@ $(() => {
 
   setup(); 
   init();
-
-  $(window).on('load', () => {
-    handleRouting(true);
-  });
 });

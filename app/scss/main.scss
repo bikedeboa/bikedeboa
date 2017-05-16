@@ -289,6 +289,12 @@ body.offline {
     // height: 100vh;
     height: 100%;
     /*margin-top: 50px;*/
+
+    &.mock-map {
+      background: url(/img/blank_map_colored.jpg);
+      background-size: cover;
+      background-position: 50% 50%;
+    }
 }
 
 .modal {
@@ -826,8 +832,8 @@ a,
 
 .modal-content {
     border: 0;
-    margin-bottom: 40px;
-    margin-top: 10px;
+    margin-top: 50px;
+    margin-bottom: 100px;
     @include material-shadow(3);
     // border-radius: 10px; //not working? :(
 
@@ -992,7 +998,8 @@ a,
       display: block;
       height: 170px;
       background: rgba(0,0,0,.2);
-      border-radius: 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     &.hasImage {
