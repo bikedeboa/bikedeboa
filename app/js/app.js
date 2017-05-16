@@ -1,7 +1,7 @@
 /* eslint no-console: ["warn", { allow: ["log", "warn", "error"] }] */
 /* eslint-env node, jquery */
 
-$(function () {
+$(() => {
   function getPinColorFromAverage(average) {
     let pinColor;
 
@@ -24,7 +24,7 @@ $(function () {
     return pinColor;
   }
 
-  function openDetailsModal(marker, callback) {
+  function openDetailsModal(marker) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
       return;
@@ -32,14 +32,12 @@ $(function () {
 
     openedMarker = marker;
     const m = openedMarker;
-
+ 
     if (addLocationMode || !m._hasDetails) {
       return false;
     }
 
     ga('send', 'event', 'Local', 'view', ''+m.id);
-
-    History.pushState({}, 'Detalhes do bicicletário', `detalhes/${m.id}`);
 
     let templateData = {};
 
@@ -49,7 +47,7 @@ $(function () {
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
-    templateData.average = m.average;
+    templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
@@ -174,8 +172,9 @@ $(function () {
     $('section, .modal-footer').velocity(
       'transition.fadeIn',
       {stagger: STAGGER_NORMAL, queue: false, complete: () => {
-        if (callback && typeof callback === 'function') {
-          callback();
+        if (_tempCallback && typeof _tempCallback === 'function') {
+          _tempCallback();
+          _tempCallback = undefined;
         }
       }
     });
@@ -350,23 +349,47 @@ $(function () {
 
   }
 
-  function onMarkerClick(marker, callback) {
-    _abortedDetailsRequest = false;
+  function getMarkerById(id) {
+    if (id && id >= 0) {
+      const res = markers.filter( i => i.id === id );
+      if (res.length > 0) {
+        return res[0];
+      }
+    }
+  }
 
-    if (marker._hasDetails) {
-      openDetailsModal(marker);
-    } else {
-      // Load skeleton modal template
-      $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
-      $('#placeDetailsModal').modal('show');
-      $('.photo-container, .modal-body > div').velocity('transition.slideDownIn', { stagger: STAGGER_FAST });
+  // Just delegate the action to the route controller
+  function openLocalDetails(marker, callback) {
+    let url = `/b/${marker.id}`;
+    if (marker.text) {
+      url += `-${slugify(marker.text)}`;
+    }
 
-      // Request content
-      Database.getPlaceDetails(marker.id, () => {
-        if (!_abortedDetailsRequest) {
-          openDetailsModal(marker, callback);
-        }
-      });
+    window._tempCallback = callback;
+
+    marker.url = url;
+    History.pushState({}, 'Detalhes do bicicletário', url);
+  }
+
+  function _openLocalDetails(marker, callback) {
+    if (marker) {
+      _abortedDetailsRequest = false;
+
+      if (marker._hasDetails) {
+        openDetailsModal(marker);
+      } else {
+        // Load skeleton modal template
+        $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
+        $('#placeDetailsModal').modal('show');
+        $('.photo-container, .modal-body > div').velocity('transition.slideDownIn', { stagger: STAGGER_FAST });
+
+        // Request content
+        Database.getPlaceDetails(marker.id, () => {
+          if (!_abortedDetailsRequest) {
+            openDetailsModal(marker, callback);
+          }
+        });
+      }
     }
   }
 
@@ -424,18 +447,18 @@ $(function () {
             } else {
               // Custom test case: rating range
               switch (f.value) {
-                case 'good':
-                  testResult = m.average >= 3.5;
-                  break;
-                case 'medium':
-                  testResult = m.average > 2 && m.average < 3.5;
-                  break;
-                case 'bad':
-                  testResult = m.average > 0 && m.average <= 2;
-                  break;
-                case 'none':
-                  testResult = m.average === null;
-                  break;
+              case 'good':
+                testResult = m.average >= 3.5;
+                break;
+              case 'medium':
+                testResult = m.average > 2 && m.average < 3.5;
+                break;
+              case 'bad':
+                testResult = m.average > 0 && m.average <= 2;
+                break;
+              case 'none':
+                testResult = m.average === null;
+                break;
               }
             }
             
@@ -461,7 +484,20 @@ $(function () {
   }
 
   function clearFilters() {
+    _activeFilters = null;
     setMapOnAll(map);
+  }
+
+  function formatAverage(avg) {
+    if (avg) {
+      avg = parseFloat(avg);
+      if (avg.toFixed && avg !== Math.round(avg)) {
+        avg = avg.toFixed(1);
+      }
+      avg = '' + avg;
+    }
+
+    return avg;
   }
 
   function updateMarkers() {
@@ -519,13 +555,7 @@ $(function () {
           }
 
           // Average might come with crazy floating point value
-          if (m.average) {
-            m.average = parseFloat(m.average);
-            if (m.average.toFixed && m.average !== Math.round(m.average)) {
-              m.average = m.average.toFixed(1);
-            }
-            m.average = '' + m.average;
-          }
+          m.average = formatAverage(m.average);
 
           // @todo temporarily disabled this because backend still doesnt support flags for these
           // let labelStr;
@@ -554,7 +584,7 @@ $(function () {
 
               // Modal
               _gmarkers[i].addListener('click', () => {
-                onMarkerClick(markers[i]);
+                openLocalDetails(markers[i]);
               });
 
               // Info window
@@ -572,7 +602,7 @@ $(function () {
                 };
 
                 if (m.isPublic != null) {
-                  templateData.isPublic = m.isPublic === true;
+                  templateData.isPublic = m.isPublic === true; 
                 } else {
                   templateData.noIsPublicData = true;
                 }
@@ -592,9 +622,9 @@ $(function () {
                       $(e.target).parent().removeClass('loading');
                     });
 
-                    $('.infoBox').off('click').on('click', () => {
-                      onMarkerClick(markers[i]);
-                    });
+                    // $('.infoBox').off('click').on('click', () => {
+                    //   openLocalDetails(markers[i]);
+                    // });
                   });
                 });
 
@@ -615,7 +645,7 @@ $(function () {
 
     if (map) {
       _geolocationMarker.setZIndex(markers.length);
-    }
+    } 
   }
 
   // Sets the map on all markers in the array.
@@ -770,11 +800,12 @@ $(function () {
 
   // @todo refactor this, it's fuckin confusing
   function finishCreateOrUpdatePlace() {
-    History.pushState({}, 'bike de boa', '/');
-    showSpinner('Salvando bicicletário...');
-
     const updatingMarker = openedMarker;
     openedMarker = null;
+    
+    goHome();
+    showSpinner('Salvando bicicletário...');
+
     let place = {};
 
     place.lat = updatingMarker ? updatingMarker.lat : newMarkerTemp.lat;
@@ -802,11 +833,13 @@ $(function () {
         updateMarkers();
         hideSpinner();
 
-        if (!updatingMarker) {
+        if (updatingMarker) {
+          swal('Bicicletário atualizado', 'Valeu pela contribuição!', 'success');
+        } else {
           swal({
-            title: "Bicicletário criado",
-            text: "Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)",
-            type: "success",
+            title: 'Bicicletário criado',
+            text: 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
+            type: 'success',
             closeOnConfirm: true,
             allowOutsideClick: false, // because this wouldnt trigger the callback @todo
             allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
@@ -814,7 +847,7 @@ $(function () {
             // Clicked OK or dismissed the modal
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
-              onMarkerClick(newMarker, () => {
+              openLocalDetails(newMarker, () => {
                 $('.openReviewPanelBtn').tooltip('show');
                 // $('.rating-input-container').velocity('callout.bounce');
               });
@@ -831,18 +864,6 @@ $(function () {
       ga('send', 'event', 'Local', 'create');
       Database.sendPlace(place, callback);
     }
-  }
-
-  function sendCheckinBtn() {
-    Database.sendCheckin(openedMarker.id, () => {
-      $('#placeDetailsModal').modal('show');
-
-      showSpinner();
-      Database.getPlaces( () => {
-        updateMarkers();
-        hideSpinner();
-      });
-    });
   }
 
   function setupAutocomplete() {
@@ -932,7 +953,7 @@ $(function () {
         // Present to the user the already resized image
         document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
         $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
-      }
+      };
       
       img.src = e.target.result;
     }
@@ -1027,7 +1048,7 @@ $(function () {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
       const m = openedMarker;
 
-      History.replaceState({}, 'Editar bicicletário', `${m.id}/editar`);
+      // History.pushState({}, 'Editar bicicletário', '/editar');
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
@@ -1099,12 +1120,13 @@ $(function () {
     if (openedMarker) {
       $('#cancelEditPlaceBtn').off('click').on('click', () => {
         hideAllModals(() => {
-          openDetailsModal(openedMarker);
+          openLocalDetails(openedMarker);
         });
       });
 
       $('#editPlacePositionBtn').off('click').on('click', () => {
-        hideAllModals();
+        // Ask to keep opened marker temporarily
+        hideAllModals(null, true);
         
         map.setCenter({
           lat: parseFloat(openedMarker.lat),
@@ -1161,7 +1183,6 @@ $(function () {
         text: "Tem certeza disso?",
         type: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#f15f74",
         confirmButtonText: "Deletar",
         closeOnConfirm: true
       },
@@ -1171,10 +1192,11 @@ $(function () {
         showSpinner();
         Database.deletePlace(openedMarker.id, () => {
           // $('#newPlaceModal').modal('hide');
-          History.pushState({}, 'bike de boa', '/');
+          goHome();
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
+            swal('Bicicletário deletado', 'Espero que você saiba o que está fazendo.', 'success');
           });
         });
       });
@@ -1186,7 +1208,7 @@ $(function () {
 
     let templateData = {};
     templateData.title = m.text;
-    templateData.address = m.address;
+    templateData.address = m.address; 
 
     const previousReview = BIKE.Session.getReviewFromSession(m.id);
 
@@ -1244,7 +1266,7 @@ $(function () {
     validateReviewForm();
 
     // Display modal
-    History.replaceState({}, 'Nova avaliação', 'avaliar');
+    // History.pushState({}, 'Nova avaliação', '/avaliar');
     if ($('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
         $('#reviewPanel').modal('show');
@@ -1296,7 +1318,7 @@ $(function () {
         // Update screen state
         // $('#reviewPanel').modal('hide');
         // $('#placeDetailsModal').modal('hide');
-        History.pushState({}, 'bike de boa', '/');
+        goHome();
 
         if (_updatingReview) {
           ga('send', 'event', 'Review', 'update', ''+openedMarker.id, parseInt(currentPendingRating));
@@ -1327,7 +1349,7 @@ $(function () {
     const m = openedMarker;
     let templateData = {};
 
-    History.replaceState({}, 'Sugerir mudança', `sugestao`);
+    // History.pushState({}, 'Sugerir mudança', '/sugestao');
 
     // Render template
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -1356,27 +1378,30 @@ $(function () {
       content: $('#revisionText').val()
     };
 
-    Database.sendRevision(revisionObj, (revisionId) => {
+    Database.sendRevision(revisionObj, revisionId => {
       hideSpinner();
 
       swal('Sugestão enviada', 'Obrigado por contribuir com o Bike de Boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
 
-      // Update screen state
-      History.pushState({}, 'bike de boa', '/');
+      goHome();
     });
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display').velocity({ opacity: 0 }, { 'display': "none" });
+    $('#map, #addPlace, .login-display').velocity({ opacity: 0 }, { 'display': 'none' });
   }
 
   function exitLocationSearchMode() {
     event.preventDefault();
-    $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': "block" });
+    $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': 'block' });
   }
 
   function setMobileHeaderTitle(text) {
     $('#top-mobile-bar h1').text(text || '');
+  }
+
+  function goHome() {
+    History.pushState({}, 'bike de boa', '/');
   }
 
   function _initGlobalCallbacks() {
@@ -1413,54 +1438,29 @@ $(function () {
     });
 
     $('#loginBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
-      History.replaceState({}, 'Login colaborador', 'login');
+      _hamburgerMenu.hide();
+      History.replaceState({}, 'Login colaborador', '/login');
       login(true);
     });
 
     $('#aboutBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
+      _hamburgerMenu.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'about opened');
-      History.replaceState({}, 'Sobre', 'sobre');
-      $('#aboutModal').modal('show');
+      History.replaceState({}, 'Sobre', '/sobre');
     });
 
     $('#howToInstallBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
+      _hamburgerMenu.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'how-to-install opened');
-      History.replaceState({}, 'Como instalar o app', 'como-instalar');
-      
-      // Tries to guess the user agent to initialize the correspondent accordion item opened
-      const userAgent = window.getBrowserName();
-      switch (userAgent) {
-        case 'Chrome':
-          $('#collapse-chrome').addClass('in');
-          break;
-        case 'Firefox':
-          $('#collapse-firefox').addClass('in');
-          break;
-        case 'Safari':
-          $('#collapse-safari').addClass('in');
-          break;
-      }
-
-      // Lazy load gifs when modal is shown
-      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
-        $(v).attr('src', $(v).data('src'));
-      });
-
-      $('#howToInstallModal').modal('show');
-      
+      History.replaceState({}, 'Como instalar o app', '/como-instalar');
     });
 
     $('#faqBtn').on('click', () => {
-      _hamburgerMenu.hide({dontMessWithState: true});
+      _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
-      History.replaceState({}, 'Perguntas frequentes', 'faq');
-      $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-      $('#faqModal').modal('show');
+      History.replaceState({}, 'Perguntas frequentes', '/faq');
     });
 
     $('#addPlace').on('click', () => {
@@ -1501,15 +1501,7 @@ $(function () {
         // If a details request was under way, aborts the request
         _abortedDetailsRequest = true;
 
-        openedMarker = null;
-
-        hideAllModals();
-
-        // Reset history state
-        // @todo just do a history.back(), so a forward would reopen the modal ;)
-        if (History.getState().title !== 'bike de boa') {
-          History.replaceState({}, 'bike de boa', '/');
-        }
+        goHome();
       }
 
       // If was creating a new local
@@ -1604,8 +1596,12 @@ $(function () {
     });
   }
 
-  function hideAllModals(callback) {
+  function hideAllModals(callback, keepOpenedMarker) {
     const $modal = $('.modal');
+
+    if (!keepOpenedMarker) {
+      openedMarker = null;
+    }
 
     if ($modal.is(':visible')) {
       $modal.modal('hide').one('hidden.bs.modal', () => { 
@@ -1613,9 +1609,6 @@ $(function () {
           callback();
         }
       });
-
-      // Reset history
-      History.replaceState({}, 'bike de boa', '/');
     } else {
       if (callback && typeof callback === 'function') {
         callback();
@@ -1642,6 +1635,66 @@ $(function () {
     
     _bikeLayer.setMap(null);
     map.data.setMap(null);
+  }
+
+  function openHowToInstallModal() {
+    // Tries to guess the user agent to initialize the correspondent accordion item opened
+    const userAgent = window.getBrowserName();
+    switch (userAgent) {
+      case 'Chrome':
+        $('#collapse-chrome').addClass('in');
+        break;
+      case 'Firefox':
+        $('#collapse-firefox').addClass('in');
+        break;
+      case 'Safari':
+        $('#collapse-safari').addClass('in');
+        break;
+    }
+
+    // Lazy load gifs when modal is shown
+    $('#howToInstallModal .tutorial-gif').each( (i, v) => {
+      $(v).attr('src', $(v).data('src'));
+    });
+
+    $('#howToInstallModal').modal('show');
+  }
+
+  function handleRouting(isFirstRun) { 
+    const urlBreakdown = window.location.pathname.split('/');
+    let match = true;
+
+    switch (urlBreakdown[1]) {
+      case 'b':
+        if (urlBreakdown[2]) {
+          let id = urlBreakdown[2].split('-')[0];
+          if (id) {
+            id = parseInt(id);
+            _openLocalDetails(getMarkerById(id));
+          }
+        }
+        break;
+      case 'faq':
+        $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+        $('#faqModal').modal('show');
+        break;
+      case 'como-instalar':
+        openHowToInstallModal();
+        break;
+      case 'sobre':
+        $('#aboutModal').modal('show');
+        break;
+      // case 'nav':
+      // case 'filtros':
+      //   hideAllModals();
+      default:
+        match = false;
+        break;
+    }
+
+    if (isFirstRun && !match) {
+      History.replaceState({}, 'bike de boa', '/');
+    }
   }
 
   function setupGoogleMaps() {
@@ -1706,7 +1759,7 @@ $(function () {
     
     // Bike layer: GeoJSON from #datapoa
     map.data.map = null;
-    map.data.loadGeoJson('ciclovias_portoalegre.json');
+    map.data.loadGeoJson('/ciclovias_portoalegre.json');
     map.data.setStyle({
       strokeColor: 'green',
       strokeWeight: 5
@@ -1806,11 +1859,12 @@ $(function () {
     _initTemplates();
 
     // Bind trigger for history changes
-    History.Adapter.bind(window,'statechange',function(){
+    History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
-
       if (state.title === 'bike de boa' && !state.data.dontUpdateView) {
         hideAllModals();
+      } else {
+        handleRouting();
       }
     });
 
@@ -1822,11 +1876,26 @@ $(function () {
       allowOutsideClick: true
     });
 
-    _hamburgerMenu = new SideNav('hamburger-menu');
+    const sidenavHideCallback = () => {
+      // @todo explain me
+      History.replaceState({}, 'bike de boa', '/');
+    };
+
+    _hamburgerMenu = new SideNav(
+      'hamburger-menu',
+      {
+        hideCallback: sidenavHideCallback
+      }
+    );
     _filterMenu = new SideNav(
       'filter-menu',
-      {inverted: true/*, fixed: true*/}
+      {
+        inverted: true,
+        hideCallback: sidenavHideCallback
+        /*fixed: true*/
+      }
     );
+
     $('#filter-menu .help-tooltip-trigger').tooltip();
 
     // Intercepts Progressive Web App event
@@ -1866,16 +1935,7 @@ $(function () {
       Database.getAllTags();
     });
   }
-
-  // Thanks https://stackoverflow.com/questions/17772260/textarea-auto-height/24676492#24676492
-  window.autoGrowTextArea = function(element) {
-    if (element) {
-      element.style.height = '5px';
-      element.style.height = (element.scrollHeight+20)+'px';
-    }
-  };
-
-
+ 
   // window.showMessage = function(_data) {
   //   const okCallback = () => {
   //     $('#messageModal').modal('hide');
@@ -1916,9 +1976,6 @@ $(function () {
   }
 
   function init() {
-    // Reset URL
-    History.replaceState({}, 'bike de boa', '/');
-
     if (isDemoMode) {
       Database = BIKE.MockedDatabase;
     } else {
@@ -1984,7 +2041,7 @@ $(function () {
         if (_isMobile) {
           $('.promo-banner-container').show();
         } else {
-          $('.promo-banner-container').velocity("fadeIn", { duration: 3000 });
+          $('.promo-banner-container').velocity('fadeIn', { duration: 3000 });
         }
       }, 2000); 
     }
@@ -2000,7 +2057,10 @@ $(function () {
   // Start initialization //
   //////////////////////////
 
-  setup();
+  setup(); 
   init();
-  // _geolocate();
+
+  $(window).on('load', () => {
+    handleRouting(true);
+  });
 });

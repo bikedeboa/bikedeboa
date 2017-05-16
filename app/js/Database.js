@@ -46,7 +46,7 @@ BIKE.Database = {
   },
 
   // @todo Improve this to automatically save to a file.
-  _getDatabaseBackupJSON: function() {
+  _getDatabaseBackupJSON: () => {
     BIKE.Database.customAPICall('get','local', {}, (data) => {
       let json = '';
       let fullMarkers = [];
@@ -95,7 +95,7 @@ BIKE.Database = {
     }
   },
 
-  _fillAllDescriptions: function() {
+  _fillAllDescriptions: () => {
     var allMarkers = BIKE.MockedDatabase.allMarkers;
     window._hashmap = {};
     for(let i=0; i<allMarkers.length; i++) {
@@ -158,12 +158,12 @@ BIKE.Database = {
     }
   },
 
-  _removeAll: function() {
+  _removeAll: () => {
     const self = this;
 
     console.debug('Removing all entries in 5 seconds...');
 
-    setTimeout(function() {
+    setTimeout(() => {
       $.ajax({
         url: self.API_URL + '/local',
         type: 'DELETE',
@@ -199,7 +199,7 @@ BIKE.Database = {
   },
 
   _setOriginHeader: function(ip) {
-    this._headers.ip_origin = ip;
+    this._headers.ip_origin = ip; 
   },
 
   customAPICall: function(type, endpoint, data, callback, quiet = false) {
@@ -356,6 +356,7 @@ BIKE.Database = {
       headers: self._headers,
       url: self.API_URL + '/review/' + reviewId,
       error: function(e) {
+        defaultFailCallback();
         console.error(e);
       },
       success: function(data) {
@@ -445,6 +446,7 @@ BIKE.Database = {
       url: self.API_URL + '/local',
       data: place,
       error: function(e) {
+        defaultFailCallback();
         console.error(e);
       },
       success: function(data) {
@@ -470,6 +472,7 @@ BIKE.Database = {
       url: self.API_URL + '/local/' + placeId,
       data: place,
       error: function(e) {
+        defaultFailCallback();
         console.error(e);
       },
       success: function(data) {
@@ -490,6 +493,7 @@ BIKE.Database = {
       headers: self._headers,
       url: self.API_URL + '/local/' + placeId,
       error: function(e) {
+        defaultFailCallback();
         console.error(e);
       },
       success: function(data) {
@@ -527,16 +531,22 @@ BIKE.Database = {
         if (successCB && typeof successCB === 'function') {
           successCB();
         }
-      } else if (failCB && typeof failCB === 'function') {
-        failCB();
+      } else {
+        defaultFailCallback();
+
+        if (failCB && typeof failCB === 'function') {
+          failCB();
+        }
       }
     })
-    .fail(function() {
+    .fail(() => {
+      defaultFailCallback();
+
       if (failCB && typeof failCB === 'function') {
         failCB();
       }
     })
-    .always(function() {
+    .always(() => {
       if (alwaysCB && typeof alwaysCB === 'function') {
         alwaysCB();
       }
@@ -574,12 +584,14 @@ BIKE.Database = {
         successCB(markers);
       }
     })
-    .fail(function() {
+    .fail(() => {
+      defaultFailCallback();
+
       if (failCB && typeof failCB === 'function') {
         failCB();
       }
     })
-    .always(function() {
+    .always(() => {
       if (alwaysCB && typeof alwaysCB === 'function') {
         alwaysCB();
       }
@@ -625,12 +637,14 @@ BIKE.Database = {
           }
         }
       })
-      .fail(function() {
+      .fail(() => {
+        defaultFailCallback();
+
         if (failCB && typeof failCB === 'function') {
           failCB();
         }
       })
-      .always(function() {
+      .always(() => {
         if (alwaysCB && typeof alwaysCB === 'function') {
           alwaysCB();
         }
