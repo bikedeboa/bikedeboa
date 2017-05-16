@@ -1434,7 +1434,6 @@ $(() => {
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'about opened');
       History.replaceState({}, 'Sobre', '/sobre');
-      $('#aboutModal').modal('show');
     });
 
     $('#howToInstallBtn').on('click', () => {
@@ -1442,36 +1441,12 @@ $(() => {
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'how-to-install opened');
       History.replaceState({}, 'Como instalar o app', '/como-instalar');
-      
-      // Tries to guess the user agent to initialize the correspondent accordion item opened
-      const userAgent = window.getBrowserName();
-      switch (userAgent) {
-        case 'Chrome':
-          $('#collapse-chrome').addClass('in');
-          break;
-        case 'Firefox':
-          $('#collapse-firefox').addClass('in');
-          break;
-        case 'Safari':
-          $('#collapse-safari').addClass('in');
-          break;
-      }
-
-      // Lazy load gifs when modal is shown
-      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
-        $(v).attr('src', $(v).data('src'));
-      });
-
-      $('#howToInstallModal').modal('show');
-      
     });
 
     $('#faqBtn').on('click', () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       History.replaceState({}, 'Perguntas frequentes', '/faq');
-      $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-      $('#faqModal').modal('show');
     });
 
     $('#addPlace').on('click', () => {
@@ -1647,6 +1622,29 @@ $(() => {
     map.data.setMap(null);
   }
 
+  function openHowToInstallModal() {
+    // Tries to guess the user agent to initialize the correspondent accordion item opened
+    const userAgent = window.getBrowserName();
+    switch (userAgent) {
+      case 'Chrome':
+        $('#collapse-chrome').addClass('in');
+        break;
+      case 'Firefox':
+        $('#collapse-firefox').addClass('in');
+        break;
+      case 'Safari':
+        $('#collapse-safari').addClass('in');
+        break;
+    }
+
+    // Lazy load gifs when modal is shown
+    $('#howToInstallModal .tutorial-gif').each( (i, v) => {
+      $(v).attr('src', $(v).data('src'));
+    });
+
+    $('#howToInstallModal').modal('show');
+  }
+
   function handleRouting(isFirstRun) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = true;
@@ -1661,6 +1659,19 @@ $(() => {
           }
         }
         break;
+      case 'faq':
+        $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+        $('#faqModal').modal('show');
+        break;
+      case 'como-instalar':
+        openHowToInstallModal();
+        break;
+      case 'sobre':
+        $('#aboutModal').modal('show');
+        break;
+      // case 'nav':
+      // case 'filtros':
+      //   hideAllModals();
       default:
         match = false;
         break;
