@@ -1688,12 +1688,12 @@ $(() => {
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Set up Service Worker
-    // if (window.UpUp) {
-    //   UpUp.start({
-    //     'content': 'Você está offline. :(',
-    //     'cache-version': 'v2.2',
-    //   });
-    // }
+    if (window.UpUp) {
+      UpUp.start({
+        'content': 'Você está offline. :(',
+        'cache-version': 'v2.3',
+      });
+    } 
 
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
     // References:
