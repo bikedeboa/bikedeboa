@@ -35,7 +35,8 @@
     "main-bower-files": "^2.5.0",
     "run-sequence": "^1.2.2",
     "wiredep": "^4.0.0",
-    "babel-plugin-transform-object-assign": "^6.8.0"
+    "babel-plugin-transform-object-assign": "^6.8.0",
+    "sw-precache": "^5.1.1"
   },
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install; gulp build"
@@ -45,7 +46,6 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3",
-    "sw-precache": "^5.1.1"
+    "eslint-plugin-react": "^6.10.3"
   }
 }
