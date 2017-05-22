@@ -1293,6 +1293,8 @@ $(() => {
   }
 
   function sendReviewBtnCB() {
+    const m = openedMarker;
+
     const activeTagBtns = $('#reviewPanel .tagsContainer .btn.active');
     let reviewTags = [];
     for(let i=0; i<activeTagBtns.length; i++) {
@@ -1302,7 +1304,7 @@ $(() => {
     showSpinner();
 
     const reviewObj = {
-      placeId: openedMarker.id,
+      placeId: m.id,
       rating: currentPendingRating,
       tags: reviewTags
     };
@@ -1319,9 +1321,9 @@ $(() => {
         goHome();
 
         if (_updatingReview) {
-          ga('send', 'event', 'Review', 'update', ''+openedMarker.id, parseInt(currentPendingRating));
+          ga('send', 'event', 'Review', 'update', ''+m.id, parseInt(currentPendingRating));
         } else {
-          ga('send', 'event', 'Review', 'create', ''+openedMarker.id, parseInt(currentPendingRating));
+          ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
         }
 
         swal('Avaliação salva', 'Valeu! Tua avaliação ajuda outros ciclistas a conhecerem melhor este bicicletário.', 'success');
@@ -1334,7 +1336,7 @@ $(() => {
       });
     };
 
-    const previousReview = BIKE.Session.getReviewFromSession(openedMarker.id);
+    const previousReview = BIKE.Session.getReviewFromSession(m.id);
     if (previousReview) {
       // Delete previous
       Database.deleteReview(previousReview.databaseId, callback);
