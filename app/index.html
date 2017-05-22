@@ -787,6 +787,10 @@
 
 
               <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}">
+                  {{#if numReviews}}
+                      <span class="numreviews">{{numReviews}}</span>
+                  {{/if}}
+                  
                   <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
                     {{#if average}}
                         <span class="average">{{average}}</span>
@@ -831,9 +835,6 @@
                         </div>
                     {{/unless}}
 
-                    {{#if numReviews}}
-                        <span class="numreviews">{{numReviews}}</span>
-                    {{/if}}
                   </div>
 
                   {{#if tags}}

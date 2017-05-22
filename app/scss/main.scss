@@ -51,6 +51,8 @@ $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
+$BASIC_MODAL_MARGIN: 12px;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -897,9 +899,8 @@ a,
     }
 
     .tagsContainer {
-        text-align: center;
         // border-top: 1px solid #eee;
-        padding: 10px 0 0;
+        padding: 0;
 
         h2 {
             font-family: $headingFont;
@@ -910,7 +911,7 @@ a,
     section.rating-input-container {
       text-align: center;
       // border-top: 1px solid #eee;
-      padding: 20px 0 30px;
+      padding: $BASIC_MODAL_MARGIN*2 0 $BASIC_MODAL_MARGIN*3;
       background: $paleWhite;
 
       h2 {
@@ -919,7 +920,7 @@ a,
     }
 
     .description {
-        margin: 10px 10px 20px 10px;
+        margin: $BASIC_MODAL_MARGIN 10px $BASIC_MODAL_MARGIN*2 10px;
         padding: 10px 20px 20px;
         /* color: $gray; */
         /* border-top: 1px solid #eee; */
@@ -1193,13 +1194,14 @@ a,
         // padding-left: 10px;
         vertical-align: middle;
         border-bottom: 1px solid #eee;
-        padding-bottom: 20px;
+        padding-bottom: $BASIC_MODAL_MARGIN*2;
         font-family: $headingFont;
 
         h1 {
           font-weight: 700;
           font-size: 30px;
           line-height: normal;
+          margin-top: $BASIC_MODAL_MARGIN*2;
         }
 
         & > .skeleton-box {
@@ -1241,7 +1243,7 @@ a,
 
 .review {
     text-align: center;
-    margin-top: 10px;
+    margin-top: $BASIC_MODAL_MARGIN*2; 
 
     .savedRating {
         color: $gray;
@@ -1251,7 +1253,12 @@ a,
     }
 
     .rating-display-container {
-      margin: 20px 0 10px 0;
+      margin: $BASIC_MODAL_MARGIN 0;
+    }
+
+    img {
+        width: 22px;
+        height: auto;
     }
 }
 
@@ -1349,11 +1356,6 @@ a,
 }
 
 
-.review img {
-    width: 22px;
-    height: auto;
-}
-
 .average {
     font-size: 30px;
     // vertical-align: bottom;
@@ -1405,10 +1407,10 @@ a,
 
 
 .info {
-    padding: 20px 5%;
+    padding: $BASIC_MODAL_MARGIN*2 5%;
     text-align: center;
     border-top: 1px solid #eee;
-    margin: 10px 0 0;
+    margin: $BASIC_MODAL_MARGIN*2 0 0;
 
     .skeleton-box,
     img {
@@ -1588,11 +1590,11 @@ a,
 
     background: $superLightGray;
     border-radius: 5px;
-    margin: 5px;
+    margin: 5px 10px 5px 0;
     color: #333;
 
     .badge {
-        margin-right: 2px;
+        margin-left: 2px;
         background-color: $gray;
     }
 }
@@ -2223,8 +2225,12 @@ a,
     pointer-events: auto;
   }
 
-  .review .numreviews {
-    display: block;
+  .review {
+    text-align: left;
+
+    .numreviews {
+      display: block;
+    }
   }
 
   .top-toolbar {
