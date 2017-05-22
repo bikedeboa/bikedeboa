@@ -1814,6 +1814,11 @@ $(() => {
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
+    // Shitty client-side redirection, if GoDaddy redirection doesn't work.
+    if (!_isLocalhost && location.protocol != 'https:') {
+     location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    }
+
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
     // References:
     //   https://developers.google.com/web/updates/2015/10/display-mode
