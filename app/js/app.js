@@ -124,7 +124,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#placeDetailsModalTemplatePlaceholder').removeClass('loading-skeleton').html(templates.placeDetailsModalTemplate(templateData));
+    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
 
     // Template is rendered, start jquerying
     $('.numreviews').toggle(m.reviews && m.reviews > 0);
@@ -154,9 +154,22 @@ $(() => {
     $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionModal));
 
     // Display modal
-    // If we rendered a skeleton modal then the modal is visible already
     if (!$('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('show');
+      // $('section, .modal-footer').css({opacity: 0});
+
+      $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
+        // Animate modal content
+        // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+
+        // @todo do this better please
+        if (window._openLocalDetailsCallback && typeof window._openLocalDetailsCallback === 'function') {
+          window._openLocalDetailsCallback();
+          window._openLocalDetailsCallback = undefined;
+        }
+      });
+    } else {
+      // Just fade new detailed content in
+      $('.photo-container, .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -168,17 +181,6 @@ $(() => {
       });
     }
     $('#placeDetailsModal .help-tooltip-trigger').tooltip();
-
-    // Animate modal content
-    $('section, .modal-footer').velocity(
-      'transition.fadeIn',
-      {stagger: STAGGER_NORMAL, queue: false, complete: () => {
-        if (window._tempCallback && typeof window._tempCallback === 'function') {
-          window._tempCallback();
-          window._tempCallback = undefined;
-        }
-      }
-    });
   }
 
   function updateCurrentPosition(position) {
@@ -364,7 +366,7 @@ $(() => {
       url += `-${slugify(marker.text)}`;
     }
 
-    window._tempCallback = callback;
+    window._openLocalDetailsCallback = callback;
 
     marker.url = url;
     History.pushState({}, 'Detalhes do bicicletário', url);
@@ -1451,14 +1453,12 @@ $(() => {
 
     $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
-      // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'about opened');
       History.replaceState({}, 'Sobre', '/sobre');
     }));
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
-      // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'how-to-install opened');
       History.replaceState({}, 'Como instalar o app', '/como-instalar');
     }));
@@ -1496,7 +1496,6 @@ $(() => {
       queueUiCallback(updateFilters);
     });
 
-    // Capture modal closing by
     $('body').on('click', '.modal, .close-modal', e => {
       // If click wasn't on the close button or in the backdrop, but in any other part of the modal
       if (e.target != e.currentTarget) {
