@@ -581,9 +581,9 @@ $(() => {
               }));
 
               // Modal
-              _gmarkers[i].addListener('click', () => {
+              _gmarkers[i].addListener('click', queueUiCallback.bind(this, () => {
                 openLocalDetails(markers[i]);
-              });
+              }));
 
               // Info window
               if (!_isMobile) {
@@ -1499,7 +1499,7 @@ $(() => {
 
       ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(":checked") ? 'ON' : 'OFF'}`);
 
-      updateFilters();
+      queueUiCallback(updateFilters);
     });
 
     // Capture modal closing by
@@ -1509,12 +1509,12 @@ $(() => {
         return;
       }
 
-      const proceed = () => {
+      const proceed = queueUiCallback.bind(this, () => {
         // If a details request was under way, aborts the request
         _abortedDetailsRequest = true;
 
         goHome();
-      }
+      });
 
       // If was creating a new local
       // @todo Do this check better

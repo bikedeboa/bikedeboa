@@ -46,6 +46,7 @@ $bodyFont: "Ubuntu", Arial, sans-serif;
 $headingFont: 'Raleway', sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
+$separatorBorderStyle: 2px dotted #eee;
 
 $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
@@ -899,7 +900,7 @@ a,
     }
 
     .tagsContainer {
-        // border-top: 1px solid #eee;
+        // border-top: $separatorBorderStyle;
         padding: 0;
 
         h2 {
@@ -910,7 +911,7 @@ a,
 
     section.rating-input-container {
       text-align: center;
-      // border-top: 1px solid #eee;
+      // border-top: $separatorBorderStyle;
       padding: $BASIC_MODAL_MARGIN*2 0 $BASIC_MODAL_MARGIN*3;
       background: $paleWhite;
 
@@ -923,7 +924,7 @@ a,
         margin: $BASIC_MODAL_MARGIN 10px $BASIC_MODAL_MARGIN*2 10px;
         padding: 10px 20px 20px;
         /* color: $gray; */
-        /* border-top: 1px solid #eee; */
+        /* border-top: $separatorBorderStyle; */
         background: $superLightGray;
         border-radius: 10px;
         color: rgb(100,100,100);
@@ -1193,7 +1194,7 @@ a,
     .title {
         // padding-left: 10px;
         vertical-align: middle;
-        border-bottom: 1px solid #eee;
+        border-bottom: $separatorBorderStyle;
         padding-bottom: $BASIC_MODAL_MARGIN*2;
         font-family: $headingFont;
 
@@ -1409,7 +1410,7 @@ a,
 .info {
     padding: $BASIC_MODAL_MARGIN*2 5%;
     text-align: center;
-    border-top: 1px solid #eee;
+    border-top: $separatorBorderStyle;
     margin: $BASIC_MODAL_MARGIN*2 0 0;
 
     .skeleton-box,
@@ -1573,13 +1574,17 @@ a,
             font-size: 14px;
         }
     }
+
+    .tagsContainer {
+      text-align: center;
+    }
 }
 
 
 .tagDisplay {
     display: inline-block;
     padding: 6px 12px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.42857143;
     text-align: center;
