@@ -148,9 +148,9 @@ $(() => {
     $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('#editPlaceBtn').off('click').on('click', openNewOrEditPlaceModal);
-    $('#deletePlaceBtn').off('click').on('click', deletePlace);
-    $('#createRevisionBtn').off('click').on('click', openRevisionModal);
+    $('#editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
+    $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
+    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionModal));
 
     // Display modal
     // If we rendered a skeleton modal then the modal is visible already
@@ -719,7 +719,7 @@ $(() => {
         testNewLocalBounds();
       });
 
-      $('#newPlaceholder').on('click', () => {
+      $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
         if (openedMarker) {
           // Was editing the marker position, so return to Edit Modal
           const mapCenter = map.getCenter();
@@ -746,7 +746,7 @@ $(() => {
         }
 
         toggleLocationInputMode();
-      });
+      }));
 
       // ESC button cancels locationinput
       $(document).on('keyup.disableInput', e => {
@@ -1112,7 +1112,7 @@ $(() => {
       autoGrowTextArea(e.currentTarget); 
     });
 
-    $('#saveNewPlaceBtn').off('click').on('click', finishCreateOrUpdatePlace);
+    $('#saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
 
     // Edit only buttons
     if (openedMarker) {
@@ -1358,7 +1358,7 @@ $(() => {
     $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
 
     // Initialize callbacks
-    $('#sendRevisionBtn').off('click').on('click', sendRevisionBtn);
+    $('#sendRevisionBtn').off('click').on('click', queueUiCallback.bind(this, sendRevisionBtn));
 
     // Display modal
     if ($('#placeDetailsModal').is(':visible')) {
@@ -1404,18 +1404,30 @@ $(() => {
     History.pushState({}, 'bike de boa', '/');
   }
 
+  function queueUiCallback(callback) {
+    if (window.requestAnimationFrame) {
+      requestAnimationFrame( () => {
+        requestAnimationFrame( () => {
+          callback();
+        });
+      });
+    } else {
+      callback();
+    }
+  }
+
   function _initGlobalCallbacks() {
-    $('.js-menu-show-hamburger-menu').on('click', () => {
+    $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
       History.pushState({}, '', 'nav');
-    });
+    }));
     
-    $('.js-menu-show-filter-menu').on('click', () => {
+    $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
       History.pushState({}, '', 'filtros');
-    });
+    }));
 
     $('#show-bike-layer').on('change', e => {
       const $target = $(e.currentTarget);
@@ -1437,33 +1449,33 @@ $(() => {
       ga('send', 'event', 'Misc', 'github hamburger menu link click');
     });
 
-    $('#loginBtn').on('click', () => {
+    $('#loginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       History.replaceState({}, 'Login colaborador', '/login');
       login(true);
-    });
+    }));
 
-    $('#aboutBtn').on('click', () => {
+    $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'about opened');
       History.replaceState({}, 'Sobre', '/sobre');
-    });
+    }));
 
-    $('#howToInstallBtn').on('click', () => {
+    $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       // $('.modal-body p').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       ga('send', 'event', 'Misc', 'how-to-install opened');
       History.replaceState({}, 'Como instalar o app', '/como-instalar');
-    });
+    }));
 
-    $('#faqBtn').on('click', () => {
+    $('#faqBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       History.replaceState({}, 'Perguntas frequentes', '/faq');
-    });
+    }));
 
-    $('#addPlace').on('click', () => {
+    $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // Make sure the new local modal won't think we're editing a local
       if (!$('#addPlace').hasClass('active')) {
         openedMarker = null;
@@ -1471,7 +1483,7 @@ $(() => {
 
       ga('send', 'event', 'Local', 'toggle create pin mode');
       toggleLocationInputMode();
-    });
+    }));
 
     $('#clear-filters-btn').on('click', () => {
       $('.filter-checkbox:checked').prop('checked', false);
@@ -1582,18 +1594,18 @@ $(() => {
     // });
 
     // Location Search
-    $('#locationQueryInput').on('input', () => {
+    $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
-    });
+    }));
 
-    $('#clearLocationQueryBtn').on('click', () => {
+    $('#clearLocationQueryBtn').on('click', queueUiCallback.bind(this, () => {
       if (_isMobile) {
         exitLocationSearchMode();
       }
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
       _searchResultMarker.setVisible(false);
-    });
+    }));
   }
 
   function hideAllModals(callback, keepOpenedMarker) {
