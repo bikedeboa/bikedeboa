@@ -33,7 +33,7 @@ $(() => {
     openedMarker = marker;
     const m = openedMarker;
  
-    if (addLocationMode || !m._hasDetails) {
+    if (addLocationMode) {
       return false;
     }
 
@@ -53,9 +53,10 @@ $(() => {
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
-    const MAX_TAG_COUNT = m.reviews;
-    const MIN_TAG_OPACITY = 0.2;
     if (m.tags && m.tags.length > 0) {
+      const MAX_TAG_COUNT = m.reviews;
+      const MIN_TAG_OPACITY = 0.2;
+
       templateData.tags = m.tags
         .sort((a, b) => {return b.count - a.count;})
         .map(t => {
@@ -158,6 +159,7 @@ $(() => {
       $('#placeDetailsModal').modal('show');
     }
 
+    // Tooltips
     if(!_isTouchDevice) {
       $('#placeDetailsModal .full-star').tooltip({
         toggle: 'tooltip',
@@ -165,7 +167,6 @@ $(() => {
         'delay': {'show': 0, 'hide': 100}
       });
     }
-
     $('#placeDetailsModal .help-tooltip-trigger').tooltip();
 
     // Animate modal content
@@ -371,21 +372,12 @@ $(() => {
 
   function _openLocalDetails(marker, callback) {
     if (marker) {
-      _abortedDetailsRequest = false;
+      openDetailsModal(marker, callback);
 
-      if (marker._hasDetails) {
-        openDetailsModal(marker);
-      } else {
-        // Load skeleton modal template
-        $('#placeDetailsModalTemplatePlaceholder').addClass('loading-skeleton').html(templates.placeDetailsModalLoadingTemplate());
-        $('#placeDetailsModal').modal('show');
-        $('.photo-container, .modal-body > div').velocity('transition.slideDownIn', { stagger: STAGGER_FAST });
-
+      if (!marker._hasDetails) {
         // Request content
         Database.getPlaceDetails(marker.id, () => {
-          if (!_abortedDetailsRequest) {
-            openDetailsModal(marker, callback);
-          }
+          openDetailsModal(marker, callback);
         });
       }
     }
@@ -1513,8 +1505,6 @@ $(() => {
 
       const proceed = queueUiCallback.bind(this, () => {
         // If a details request was under way, aborts the request
-        _abortedDetailsRequest = true;
-
         goHome();
       });
 
