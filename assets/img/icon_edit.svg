@@ -1,6 +1,20 @@
-
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" x="0px" y="0px" viewBox="0 0 100 100">
-	<g transform="translate(0,-952.36218)">
-		<path style="opacity:1;color:#fff;fill:#fff;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;fill-opacity:1;stroke-dasharray:none" d="M 70 13 L 61.4375 21.5625 L 78.4375 38.5625 L 87 30 L 70 13 z M 58.59375 24.40625 L 20.4375 62.5625 L 37.4375 79.5625 L 75.59375 41.40625 L 58.59375 24.40625 z M 17.84375 65.65625 L 13 87 L 34.34375 82.15625 L 17.84375 65.65625 z " transform="translate(0,952.36218)"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="566.929px" height="566.929px" viewBox="0 0 566.929 566.929" enable-background="new 0 0 566.929 566.929"
+	 xml:space="preserve">
+<g>
+	<g>
+		
+			<polyline fill="#FFFFFF" stroke="#979797" stroke-width="32.9196" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+			190.859,457.647 90.088,477.553 109.985,376.903 		"/>
+		
+			<path fill="#FFFFFF" stroke="#979797" stroke-width="32.9196" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			M458.552,190.05c24.622-24.716,26.493-62.83,4.146-85.106c-22.312-22.346-60.39-20.355-85.004,4.129l-267.709,267.83
+			l80.874,80.744L458.552,190.05z"/>
+		
+			<line fill="#FFFFFF" stroke="#979797" stroke-width="32.9196" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="351.892" y1="137.548" x2="429.353" y2="215.008"/>
 	</g>
+</g>
 </svg>
