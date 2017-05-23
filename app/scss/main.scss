@@ -657,7 +657,7 @@ a,
         transition: top 0.5s ease;
 
         img {
-            width: 100px;
+            width: 90px;
             height: auto;
         }
 
@@ -674,19 +674,19 @@ a,
             filter: grayscale(1);
         }
 
-        &:after {
-            content: 'Aqui';
-            position: absolute;
-            left: 50%;
-            bottom: 46px;
-            color: white;
-            font-size: 12px;
-            width: 75px;
-            line-height: 1em;
-            text-transform: uppercase;
-            font-family: $headingFont;
-            transform: translateX(-50%);
-        }
+        // &:after {
+        //     content: 'Aqui';
+        //     position: absolute;
+        //     left: 50%;
+        //     bottom: 46px;
+        //     color: white;
+        //     font-size: 12px;
+        //     width: 75px;
+        //     line-height: 1em;
+        //     text-transform: uppercase;
+        //     font-family: $headingFont;
+        //     transform: translateX(-50%);
+        // }
 
     }
     // #newPlaceholderShadow {
@@ -1318,8 +1318,8 @@ a,
 
         &:after {
           background-image: url(/img/radio.svg);
-          width: 22px;
-          height: 20px;
+          width: 18px;
+          height: 18px;
           transition: background-image .2s ease-in-out;
           content: '';
           position: absolute;

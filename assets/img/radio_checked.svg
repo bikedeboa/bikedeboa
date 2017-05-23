@@ -2,13 +2,11 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="100.016px" height="98.682px" viewBox="0 0 100.016 98.682" enable-background="new 0 0 100.016 98.682"
+	 width="566.929px" height="566.929px" viewBox="0 0 566.929 566.929" enable-background="new 0 0 566.929 566.929"
 	 xml:space="preserve">
-<path fill="none" stroke="#47B970" stroke-width="8.5039" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
-	M90.535,47.539c0,23.482-19.036,42.519-42.518,42.519S5.499,71.021,5.499,47.539S24.536,5.021,48.018,5.021
-	c5.286,0,10.346,0.966,15.016,2.728"/>
-<polyline fill="none" stroke="#47B970" stroke-width="8.5039" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
-	27.285,37.837 48.262,59.862 94.832,12.752 "/>
-<g id="Star_-_Orange">
-</g>
+<path fill="none" stroke="#47B970" stroke-width="51.3133" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+	M541.388,283.262c0,142.146-115.237,257.375-257.382,257.375c-142.15,0-257.395-115.229-257.395-257.375
+	c0-142.157,115.244-257.387,257.395-257.387C426.15,25.875,541.388,141.105,541.388,283.262z"/>
+<path fill="#47B970" d="M435.193,283.262c0,83.494-67.693,151.187-151.188,151.187c-83.507,0-151.193-67.693-151.193-151.187
+	c0-83.507,67.687-151.2,151.193-151.2C367.5,132.062,435.193,199.755,435.193,283.262z"/>
 </svg>
