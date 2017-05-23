@@ -1917,6 +1917,11 @@ a,
 
   }
 
+  #clear-filters-btn {
+    opacity: 0;
+    color: $gray;
+  }
+
   #filter-results-counter-container {
     font-family: $bodyFont;
     font-size: 12px;

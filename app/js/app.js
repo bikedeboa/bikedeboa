@@ -406,8 +406,10 @@ $(() => {
       $('#active-filters-counter').html(filters.length);
       $('#filterBtn').toggleClass('active', true);
       $('#filter-results-counter-container').velocity({ opacity: 1 });
+      $('#clear-filters-btn').velocity({ opacity: 1 });
     } else {
       $('#filter-results-counter-container').velocity({ opacity: 0 });
+      $('#clear-filters-btn').velocity({ opacity: 0 });
       $('#active-filters-counter').html('');
       $('#filterBtn').toggleClass('active', false);
     }
