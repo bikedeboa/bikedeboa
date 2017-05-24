@@ -155,7 +155,7 @@ window.setOfflineMode = () => {
   $('body').addClass('offline');
 
   // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
-  toastr['info']('Mas fica à vontade, você ainda pode explorar os bicicletários.', 'Você está offline');
+  toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Offline');
 
   // $('#reloadBtn').on('click', () => {
   //   showSpinner('', () => {

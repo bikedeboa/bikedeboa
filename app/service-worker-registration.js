@@ -44,7 +44,7 @@ if ('serviceWorker' in navigator) {
                 console.log('[Service Worker] New or updated content is available.');
                 
                 if (window.toastr) {
-                  toastr['success']('Seu app foi atualizado automaticamente.');
+                  toastr['success']('O webapp foi atualizado automaticamente.');
                 }
               } else {
                 // At this point, everything has been precached.
@@ -52,7 +52,7 @@ if ('serviceWorker' in navigator) {
                 console.log('[Service Worker] Content is now available offline!');
 
                 if (window.toastr) {
-                  toastr['success']('Agora você já pode explorar os bicicletários mesmo sem Internet.', 'App salvo offline');
+                  toastr['success']('A partir de agora você pode explorar os bicicletários mesmo sem Internet.', 'Webapp salvo offline');
                 }
               }
               break;

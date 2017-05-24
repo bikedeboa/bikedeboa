@@ -52,7 +52,7 @@ $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
-$BASIC_MODAL_MARGIN: 12px;
+$GENERAL_PADDING: 12px;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -917,7 +917,7 @@ a,
     section.rating-input-container {
       text-align: center;
       // border-top: $separatorBorderStyle;
-      padding: $BASIC_MODAL_MARGIN*2 0 $BASIC_MODAL_MARGIN*3;
+      padding: $GENERAL_PADDING*2 0 $GENERAL_PADDING*3;
       background: $paleWhite;
 
       h2 {
@@ -926,7 +926,7 @@ a,
     }
 
     .description {
-        margin: $BASIC_MODAL_MARGIN 10px $BASIC_MODAL_MARGIN*2 10px;
+        margin: $GENERAL_PADDING 10px $GENERAL_PADDING*2 10px;
         padding: 10px 20px 20px;
         /* color: $gray; */
         /* border-top: $separatorBorderStyle; */
@@ -1200,14 +1200,14 @@ a,
         // padding-left: 10px;
         vertical-align: middle;
         border-bottom: $separatorBorderStyle;
-        padding-bottom: $BASIC_MODAL_MARGIN*2;
+        padding-bottom: $GENERAL_PADDING*2;
         font-family: $headingFont;
 
         h1 {
           font-weight: 700;
           font-size: 30px;
           line-height: normal;
-          margin-top: $BASIC_MODAL_MARGIN*2;
+          margin-top: $GENERAL_PADDING*2;
         }
 
         & > .skeleton-box {
@@ -1249,7 +1249,7 @@ a,
 
 .review {
     text-align: center;
-    margin-top: $BASIC_MODAL_MARGIN*2; 
+    margin-top: $GENERAL_PADDING*2; 
 
     .savedRating {
         color: $gray;
@@ -1259,7 +1259,7 @@ a,
     }
 
     .rating-display-container {
-      margin: $BASIC_MODAL_MARGIN 0;
+      margin: $GENERAL_PADDING 0;
     }
 
     img {
@@ -1413,10 +1413,10 @@ a,
 
 
 .info {
-    padding: $BASIC_MODAL_MARGIN*2 5%;
+    padding: $GENERAL_PADDING*2 5%;
     text-align: center;
     border-top: $separatorBorderStyle;
-    margin: $BASIC_MODAL_MARGIN*2 0 0;
+    margin: $GENERAL_PADDING*2 0 0;
 
     .skeleton-box,
     img {
@@ -2897,7 +2897,22 @@ a,
   }
 }
 
-#toast-container > div {
+#toast-container {
+  & > div {
     font-family: $bodyFont;
-    opacity: 1;
+    opacity: 0.9;
+    padding: $GENERAL_PADDING*2 $GENERAL_PADDING*2 $GENERAL_PADDING*2 50px; 
+  }
+
+  & > .toast-success {
+    background-color: $green;
+  }
+
+  & > .toast-info {
+    background-color: $blue;
+  }
+
+  & > .toast-warning {
+    background-color: $darkYellow;
+  }
 }

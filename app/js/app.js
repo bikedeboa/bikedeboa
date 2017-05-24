@@ -1893,7 +1893,9 @@ $(() => {
 
     // Toastr options
     toastr.options = {
-      "positionClass": "toast-bottom-center",
+      'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
+      'closeButton': false,
+      'progressBar': false,
     }
 
     const sidenavHideCallback = () => {
