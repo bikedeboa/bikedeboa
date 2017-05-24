@@ -52,7 +52,7 @@ if ('serviceWorker' in navigator) {
                 console.log('[Service Worker] Content is now available offline!');
 
                 if (window.toastr) {
-                  toastr['success']('Agora você já pode explorar os bicicletários mesmo sem conexão.', 'App salvo offline');
+                  toastr['success']('Agora você já pode explorar os bicicletários mesmo internet..', 'App salvo offline');
                 }
               }
               break;
