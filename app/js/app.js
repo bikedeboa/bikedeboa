@@ -167,9 +167,9 @@ $(() => {
           window._openLocalDetailsCallback = undefined;
         }
       });
-    } else {
+    } else { 
       // Just fade new detailed content in
-      $('.photo-container, .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('.photo-container, .tagsContainer, .address').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -1760,7 +1760,7 @@ $(() => {
     
     // Bike layer: GeoJSON from #datapoa
     map.data.map = null;
-    map.data.loadGeoJson('/ciclovias_portoalegre.json');
+    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
     map.data.setStyle({
       strokeColor: 'green',
       strokeWeight: 5
@@ -1798,21 +1798,6 @@ $(() => {
     $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
     $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
     $('#map').css('filter', 'none');
-  }
-
-  function setOfflineMode() {
-    _isOffline = true;
-    $('body').addClass('offline');
-    
-    $('#reloadBtn').on('click', () => {
-      showSpinner('', () => {
-        window.location.reload();
-      });
-    })
-    
-    // Show minimal UI
-    $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-    $('#offline-overlay').velocity('transition.fadeIn', {delay: 300, queue: false, display: 'flex'})
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -1905,6 +1890,11 @@ $(() => {
       cancelButtonText: 'Cancelar',
       allowOutsideClick: true
     });
+
+    // Toastr options
+    toastr.options = {
+      "positionClass": "toast-bottom-center",
+    }
 
     const sidenavHideCallback = () => {
       // @todo explain me

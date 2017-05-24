@@ -63,7 +63,7 @@ window.hideSpinner = callback => {
 
 window.defaultFailCallback = () => {
   hideSpinner();
-  swal('Ops', 'Algo deu errado. :/', 'error');
+  // swal('Ops', 'Algo deu errado. :/', 'error');
 },
 
 /**
@@ -149,3 +149,19 @@ window.autoGrowTextArea = function(element) {
     element.style.height = (element.scrollHeight+20)+'px';
   }
 };
+
+window.setOfflineMode = () => {
+  _isOffline = true;
+  $('body').addClass('offline');
+
+  // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
+  toastr['info']('Mas fica à vontade, você ainda pode explorar os bicicletários.', 'Você está offline');
+
+  // $('#reloadBtn').on('click', () => {
+  //   showSpinner('', () => {
+  //     window.location.reload();
+  //   });
+  // })
+
+  // $('#offline-overlay').velocity('transition.fadeIn', {delay: 300, queue: false, display: 'flex'})
+}

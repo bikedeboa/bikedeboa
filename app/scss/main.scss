@@ -145,8 +145,13 @@ body.offline {
   #locationQueryInput,
   #howToInstallBtn,
   #filterBtn,
-  #loginBtn {
-    display: none;
+  #loginBtn,
+  .top-toolbar,
+  .rating-input-container,
+  .minimap,
+  #about-social-buttons,
+  #hamburger-menu .side-nav__footer {
+    display: none !important;
   }
 
   #map {
@@ -1463,11 +1468,11 @@ a,
     }
 
     // Elements that are animated when modal opens
-    .photo-container, .modal-body > div:not(.tooltip), .modal-footer {
-        opacity: 0;
-    }
+    // .photo-container, .modal-body > div:not(.tooltip), .modal-footer {
+    //     opacity: 0;
+    // }
 
-    .minimap {
+    .minimap { 
         min-height: 70px;
         background: $superLightGray;
         border-radius: 15px;
@@ -1751,7 +1756,7 @@ a,
 }
 
 .top-toolbar {
-  display: flex !important;
+  display: flex;
   justify-content: space-around;
   // justify-content: flex-end;
   align-items: flex-start;
@@ -2890,5 +2895,8 @@ a,
   .sa-button-container {
     margin-top: 30px;
   }
+}
 
+.toast {
+    font-family: $bodyFont;
 }

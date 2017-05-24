@@ -10,6 +10,7 @@ BIKE.Database = {
   isAuthenticated: false, 
   _authToken: '',
   _headers: {},
+  _authenticationAttemptsLeft: 3,
 
   _currentIDToAdd: 1306,
 
@@ -148,7 +149,6 @@ BIKE.Database = {
               this._fillMarkersAddresses(i+1, onlyIfMissing);
             });
           }, () => {
-            // Failed, probably due to quota limites. Try again after 2s
             setTimeout(() => {
               this._fillMarkersAddresses(i, onlyIfMissing);
             }, 2000);
@@ -300,10 +300,16 @@ BIKE.Database = {
       error: function(data) {
         ga('send', 'event', 'Login', 'fail', user);
 
-        console.error('Authentication failed. Trying again in 2s...');
-        setTimeout( () => {
-          self.authenticate(isUserLogin, callback);
-        }, 2000);
+        BIKE.Database._authenticationAttemptsLeft--;
+        if (BIKE.Database._authenticationAttemptsLeft > 0) {
+          console.error(`Authentication failed, ${BIKE.Database._authenticationAttemptsLeft} attempts left. Trying again in 2s...`);
+          setTimeout( () => {
+            self.authenticate(isUserLogin, callback);
+          }, 2000);
+        } else {
+          // Permanently failed
+          setOfflineMode();
+        }
       }
     });
   },
