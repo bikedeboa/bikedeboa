@@ -2893,10 +2893,11 @@ a,
   }
 
   .sa-button-container {
-    margin-top: 30px;
+    margin-top: 30px; 
   }
 }
 
-.toast {
+#toast-container > div {
     font-family: $bodyFont;
+    opacity: 1;
 }
