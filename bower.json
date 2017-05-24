@@ -2,7 +2,7 @@
   "name": "bikedeboa",
   "private": true,
   "dependencies": {
-    "jquery": "^3.1.1",
+    "jquery": "^3.2.1",
     "bootstrap": "boostrap#^3.3.7",
     "handlebars": "^4.0.5",
     "js-cookie": "^2.1.3",
