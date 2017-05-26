@@ -1,8 +1,12 @@
 var express = require('express');
+var secure = require('express-force-https');
 var app = express();
 var router = express.Router();
 var path = __dirname + '/';
 var compression = require('compression');
+
+// Automatically redirects to HTTPS
+app.use(secure);
 
 // GZIP!!!!!
 app.use(compression());
