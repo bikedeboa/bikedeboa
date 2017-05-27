@@ -744,6 +744,13 @@
 
             <hr>
 
+            <button class="toolbar-item shareBtn" tabindex="0">
+              <img class="toolbar-item-icon" src="/img/icon_share.svg">
+              <label>Compartilhar</label>
+            </button>
+
+            <hr>
+            
             {{#if canModify }}
               <button id="editPlaceBtn" class="toolbar-item">
                 <img class="toolbar-item-icon" src="/img/icon_edit.svg">
@@ -760,13 +767,6 @@
                 <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
               {{/unless}} -->
             {{else}}
-              <button class="toolbar-item shareBtn" tabindex="0">
-                <img class="toolbar-item-icon" src="/img/icon_share.svg">
-                <label>Compartilhar</label>
-              </button>
-
-              <hr>
-              
               <button id="createRevisionBtn" class="toolbar-item">
                 <img class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Sugerir mudança</label>
