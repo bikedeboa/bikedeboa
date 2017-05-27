@@ -1789,10 +1789,10 @@ $(() => {
     _geolocationRadius = new google.maps.Circle({
       map: map,
       clickable: false,
-      fillColor: '#533FB4', //color,
-      fillOpacity: '0.4', //opacity from 0.0 to 1.0,
-      strokeColor: 'transparent', //stroke color,
-      strokeOpacity: '0' //opacity from 0.0 to 1.0
+      fillColor: '#705EC7',
+      fillOpacity: '0.2',
+      strokeColor: 'transparent',
+      strokeOpacity: '0'
     });
 
     // Finally, enable the basic UI
