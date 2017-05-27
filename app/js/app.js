@@ -144,6 +144,18 @@ $(() => {
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
       openReviewModal($(e.target).data('value'));
     });
+    $('.shareBtn').off('click').on('click', e => {
+      // openReviewModal($(e.target).data('valuoe'));
+      // console.log(openedMarker);
+      swal({
+        title: ' ',
+        text:
+          `Copie e cole o link abaixo para compartilhar este bicicletário:<br><br>\
+          <a href="${window.location.href}">${window.location.href}</a>`, 
+        type: 'info',
+        html: true
+      });
+    });
     $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
     });
