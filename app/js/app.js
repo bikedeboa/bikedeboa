@@ -239,7 +239,7 @@ $(() => {
 
               updateCurrentPosition(position);
 
-              $('#geolocationBtn').css('border', '2px solid lightblue');
+              $('#geolocationBtn').css('border', '2px solid #533FB4');
               if (map) {
                 _geolocationRadius.setVisible(true);
                 if (markers && markers.length) {
@@ -1789,7 +1789,7 @@ $(() => {
     _geolocationRadius = new google.maps.Circle({
       map: map,
       clickable: false,
-      fillColor: 'lightblue', //color,
+      fillColor: '#533FB4', //color,
       fillOpacity: '0.4', //opacity from 0.0 to 1.0,
       strokeColor: 'transparent', //stroke color,
       strokeOpacity: '0' //opacity from 0.0 to 1.0

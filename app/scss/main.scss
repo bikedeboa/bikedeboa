@@ -8,15 +8,14 @@ $darkGreen: #04883A;
 $lightGreen: #2cd978;
 $yellowGreen: #e0fb72;
 $greenery: #86af49;
-$yellow: #eedc12;
-$darkYellow: #E9BB2B;
-$red: #f15f74;
-$blue: #329BCE;
-$paleBlue: #437E9B;
-$darkBlue: #106086; 
-$lightBlue: #63BCE7;
-$lightestBlue: lightblue;
-$lightestBlue: #86C7E7;
+$yellow: #F6C913;
+$darkYellow: #F6C913;
+$red: #FF8265;
+$blue: #533FB4;
+$paleBlue: #705EC7;
+$darkBlue: #3821AA; 
+$lightBlue: #705EC7;
+$lightestBlue: #9688DC;
 
 // Grays
 $black: #333;
@@ -1070,24 +1069,24 @@ a,
 
         button {
           background-image: url(/img/icon_edit.svg);
-            background-size: 50%;
-            background-repeat: no-repeat;
-            background-position: 50% 50%;
-            background-color: #30bb6a;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            border-radius: 50%;
-            opacity: .8;
-            filter: grayscale(100%);
-            @include material-shadow(1);
+          background-size: 50%;
+          background-repeat: no-repeat;
+          background-position: 50% 50%;
+          background-color: white;
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          border-radius: 50%;
+          opacity: .8;
+          filter: grayscale(100%);
+          @include material-shadow(1);
 
-            transition: all 0.2s ease-out;
+          transition: all 0.2s ease-out;
 
-            &:hover {
-              filter: none;
-              opacity: 1
-            }
+          &:hover {
+            filter: none;
+            opacity: 1
+          }
         }
     }
 
@@ -1132,7 +1131,7 @@ a,
             background-size: 50%;
             background-repeat: no-repeat;
             background-position: 50% 50%;
-            background-color: $green;
+            background-color: white;
             left: 50%;
             opacity: .8;
             transform: none;
