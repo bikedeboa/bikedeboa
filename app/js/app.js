@@ -1385,12 +1385,11 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display').velocity({ opacity: 0 }, { 'display': 'none' });
+    $('#map, #addPlace, .login-display, filterBtn').velocity({ opacity: 0 }, { 'display': 'none' });
   }
 
   function exitLocationSearchMode() {
-    event.preventDefault();
-    $('#map, #addPlace, .login-display').velocity({ opacity: 1 }, { 'display': 'block' });
+    $('#map, #addPlace, .login-display, filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
   }
 
   function setMobileHeaderTitle(text) {
@@ -1595,9 +1594,9 @@ $(() => {
     }));
 
     $('#clearLocationQueryBtn').on('click', queueUiCallback.bind(this, () => {
-      if (_isMobile) {
-        exitLocationSearchMode();
-      }
+      // if (_isMobile) {
+      //   exitLocationSearchMode();
+      // }
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
       _searchResultMarker.setVisible(false);
