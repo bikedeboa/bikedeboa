@@ -163,7 +163,7 @@ class SideNav {
         .css({opacity: 0})
         .velocity(
           this.options.inverted ? 'transition.slideRightIn' : 'transition.slideLeftIn',
-          { delay: 300, stagger: 100, duration: 600, display: null } 
+          { delay: 300, stagger: 70, duration: 500, display: null } 
         );
         // .css({opacity: 0, translateX: (this.options.inverted ? '100px' : '-100px')})
         // .velocity( 

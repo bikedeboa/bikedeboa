@@ -1,0 +1,17 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" data-name="Your Icon" viewBox="0 0 100 100" x="0px" y="0px">
+	<defs>
+	<style>
+
+		.cls-1,
+		.cls-2 {
+			fill:none;stroke:#000;stroke-linecap:round;stroke-miterlimit:10;
+		}
+		.cls-1 {stroke-width:7px;}
+		.cls-2 {stroke-width:6px;}
+</style>
+</defs>
+<circle class="cls-1" cx="50" cy="50" r="18.94"/>
+<circle class="cls-2" cx="74.5" cy="27.13" r="2.91"/>
+<rect class="cls-1" x="9" y="9" width="82" height="82" rx="19" ry="19"/>
+</svg>

@@ -149,7 +149,8 @@ body.offline {
   .rating-input-container,
   .minimap,
   #about-social-buttons,
-  #hamburger-menu .side-nav__footer {
+  #hamburger-menu .side-nav__footer,
+  #placeDetailsModal .photo-container.hasImage.loading {
     display: none !important;
   }
 
@@ -1846,7 +1847,7 @@ a,
     .glyphicon:after {
         content: 'Feito';
         display: block;
-        font-family: Ubuntu;
+        font-family: $bodyFont;
         font-size: 12px;
         margin-top: 5px;
         color: gray;
@@ -2737,7 +2738,7 @@ a,
   display: flex;
   flex-direction: column;
   will-change: transform;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.5s ease-in-out;
 }
 
 // .side-nav--animatable .side-nav__container {
