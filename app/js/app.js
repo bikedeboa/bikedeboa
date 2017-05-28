@@ -298,7 +298,7 @@ $(() => {
                   break;
                 case 3:
                   // TIMEOUT
-                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente denovo que deve dar ;)', 'warning');
+                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente de novo que deve dar ;)', 'warning');
                   break;
                 }
               }
