@@ -589,35 +589,57 @@ $(() => {
                 // opacity: 0.1 + (m.average/5).
               }));
 
-              // Modal
-              _gmarkers[i].addListener('click', queueUiCallback.bind(this, () => {
-                openLocalDetails(markers[i]);
-              }));
-
               // Info window
-              if (!_isMobile) {
-                if (m.photo) {
-                  m.photo = m.photo.replace('images', 'images/thumbs');
-                }
-                let templateData = {
-                  thumbnailUrl: m.photo,
-                  title: m.text,
-                  average: m.average,
-                  roundedAverage: m.average && ('' + Math.round(m.average)),
-                  pinColor: getPinColorFromAverage(m.average),
-                  numReviews: m.reviews,
-                };
+              if (m.photo) {
+                m.photo = m.photo.replace('images', 'images/thumbs');
+              }
+              let templateData = {
+                thumbnailUrl: m.photo,
+                title: m.text,
+                average: m.average,
+                roundedAverage: m.average && ('' + Math.round(m.average)),
+                pinColor: getPinColorFromAverage(m.average),
+                numReviews: m.reviews,
+              };
 
-                if (m.isPublic != null) {
-                  templateData.isPublic = m.isPublic === true; 
-                } else {
-                  templateData.noIsPublicData = true;
-                }
-                if (m.structureType) {
-                  templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
-                }
+              if (m.isPublic != null) {
+                templateData.isPublic = m.isPublic === true; 
+              } else {
+                templateData.noIsPublicData = true;
+              }
+              if (m.structureType) {
+                templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+              }
 
-                const contentString = templates.infoWindowTemplate(templateData);
+              const contentString = templates.infoWindowTemplate(templateData);
+
+              if (_isMobile) {
+                _gmarkers[i].addListener('click', () => {
+                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
+
+                  map.setCenter(_gmarkers[i].getPosition());
+
+                  _infoWindow.setContent(contentString);
+                  _infoWindow.open(map, _gmarkers[i]);
+                  _infoWindow.addListener('domready', () => {
+                    $('.infobox--img img').off('load').on('load', e => {
+                      $(e.target).parent().removeClass('loading');
+                    });
+
+                    $('.infoBox').off('click').on('click', () => {
+                      openLocalDetails(markers[i]);
+                    });
+                  });
+                });
+
+                map.addListener('click', () => {
+                  _infoWindow.close();
+                });
+              } else {
+                // Modal
+                _gmarkers[i].addListener('click', () => {
+                  openLocalDetails(markers[i]);
+                });
 
                 _gmarkers[i].addListener('mouseover', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
@@ -628,16 +650,12 @@ $(() => {
                     $('.infobox--img img').off('load').on('load', e => {
                       $(e.target).parent().removeClass('loading');
                     });
-
-                    // $('.infoBox').off('click').on('click', () => {
-                    //   openLocalDetails(markers[i]);
-                    // });
                   });
                 });
 
                 _gmarkers[i].addListener('mouseout', () => {
                   _infoWindow.close();
-                });  
+                });
               }
             } else {
               console.error('error: pin with no latitude/longitude');
@@ -1740,10 +1758,11 @@ $(() => {
     const myOptions = {
       maxWidth: 0,
       pixelOffset: new google.maps.Size(-150, 20),
-      disableAutoPan: true,
+      disableAutoPan: _isMobile ? false : true,
       zIndex: null,
       boxStyle: {
         width: '300px',
+        height: '75px', 
         cursor: 'pointer',
       },
       // closeBoxMargin: '10px 2px 2px 2px',

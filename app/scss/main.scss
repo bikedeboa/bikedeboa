@@ -2115,12 +2115,12 @@ a,
   background: white;
   @include material-shadow(1);
   display: flex;
-  height: 75px;
-  // cursor: pointer !important;
 
-  // &:hover {
-  //   background: $paleWhite; 
-  // }
+  &:active,
+  &:focus,
+  &:hover {
+    background: $paleWhite; 
+  }
 
   .numreviews {
     color: $lightGray;
@@ -2183,6 +2183,15 @@ a,
     font-family: $bodyFont;
     font-weight: 700;
     text-transform: uppercase;
+  }
+
+  .infobox--arrow {
+    position: absolute;
+    top: -15px;
+    left: calc(50% - 10px);
+    font-size: 20px;
+    color: white;
+    text-shadow: 0px -1px 3px rgba(0,0,0,.24);
   }
 }
 
