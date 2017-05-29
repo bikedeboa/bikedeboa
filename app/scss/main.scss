@@ -401,7 +401,7 @@ a,
     input {
         width: 100%;
         font-size: 14px;
-        padding: 0 0px 0 60px;
+        padding: 0 50px 0 60px;
         // font-weight: lighter;
         border-radius: 3px;
         box-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -421,9 +421,6 @@ a,
     }
 
     #clearLocationQueryBtn {
-      opacity: 0;
-      visibility: hidden;
-
       position: absolute;
       top: 0px;
       right: 0;
@@ -436,8 +433,39 @@ a,
 
       transition: all 0.2s ease;
 
-      &:hover {
-        background: $lightestGray;
+      pointer-events: none;
+
+      .search-icon {
+        opacity: 1;
+        visibility: visible;
+
+        height: 20px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+
+      .clear-icon {
+        opacity: 0;
+        visibility: hidden;
+      }
+      
+      &.clear-mode {
+        pointer-events: auto; 
+
+        &:hover {
+          background: $lightestGray;
+        }
+
+        .search-icon {
+          opacity: 0;
+          visibility: hidden;
+        }
+
+        .clear-icon {
+          opacity: 1;
+          visibility: visible;
+        }
       }
     }
 

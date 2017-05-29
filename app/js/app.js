@@ -298,7 +298,7 @@ $(() => {
                   break;
                 case 3:
                   // TIMEOUT
-                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente denovo que deve dar ;)', 'warning');
+                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente de novo que deve dar ;)', 'warning');
                   break;
                 }
               }
@@ -1309,11 +1309,9 @@ $(() => {
 
   function toggleClearLocationBtn(stateStr) {
     if (stateStr === 'show') {
-      $('#clearLocationQueryBtn').css('opacity', 1).css('visibility', 'visible').css('pointer-events', 'auto');
-      $('#locationSearch input').css('padding-right', '50px');
+      $('#clearLocationQueryBtn').addClass('clear-mode');
     } else if (stateStr === 'hide') {
-      $('#clearLocationQueryBtn').css('opacity', 0).css('visibility', 'hidden').css('pointer-events', 'none');
-      $('#locationSearch input').css('padding-right', '0');
+      $('#clearLocationQueryBtn').removeClass('clear-mode');
     } else {
       console.error('Invalid arg in toggleClearLocationBtn()');
     }
