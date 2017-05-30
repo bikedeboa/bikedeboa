@@ -1789,7 +1789,7 @@ a,
   justify-content: space-around;
   // justify-content: flex-end;
   align-items: flex-start;
-  margin: 0 10px -10px 0;
+  margin: 0 0 -10px 0;
   padding-top: 10px;
   border-bottom: 1px solid #eee;
 
@@ -1827,7 +1827,7 @@ a,
       padding: 5px;
       pointer-events: none;
       margin: 0;
-      font-size: 12px; 
+      font-size: 10px; 
     }
 
     &:hover {
@@ -2213,13 +2213,9 @@ a,
     text-transform: uppercase;
   }
 
-  .infobox--arrow {
-    position: absolute;
-    top: -15px;
-    left: calc(50% - 10px);
-    font-size: 20px;
-    color: white;
-    text-shadow: 0px -1px 3px rgba(0,0,0,.24);
+  .infobox--arrow,
+  .infobox--caret {
+    display: none;
   }
 }
 
@@ -2303,7 +2299,7 @@ a,
       max-width: 90px;
 
       label {
-        font-size: 10px;
+        font-size: 8px;
       }
     }
   }
@@ -2406,6 +2402,37 @@ a,
         &:after {
             content: 'Cancelar';
         }
+    }
+  }
+
+  .infoBox {
+    .infobox--content {
+      margin-right: 50px;
+    }
+
+    .infobox--label {
+      display: none;
+    }
+
+    .infobox--arrow {
+      display: block;
+
+      position: absolute;
+      top: -13px;
+      left: calc(50% - 10px);
+      font-size: 20px;
+      color: white; 
+      text-shadow: 1px -2px 2px rgba(0,0,0,.2);
+    }
+
+    .infobox--caret {
+      display: block;
+
+      position: absolute;
+      right: 20px;
+      top: calc(50% - 10px);
+      font-size: 20px;
+      color: $gray;
     }
   }
 }

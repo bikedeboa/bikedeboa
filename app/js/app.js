@@ -617,7 +617,7 @@ $(() => {
                 _gmarkers[i].addListener('click', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
-                  map.setCenter(_gmarkers[i].getPosition());
+                  map.panTo(_gmarkers[i].getPosition());
 
                   _infoWindow.setContent(contentString);
                   _infoWindow.open(map, _gmarkers[i]);
@@ -628,6 +628,7 @@ $(() => {
 
                     $('.infoBox').off('click').on('click', () => {
                       openLocalDetails(markers[i]);
+                      _infoWindow.close();
                     });
                   });
                 });
@@ -1753,13 +1754,14 @@ $(() => {
     //   disableAutoPan: true
     // });
 
+    const infoboxWidth = $(window).width() * 0.95;
     const myOptions = {
       maxWidth: 0,
-      pixelOffset: new google.maps.Size(-150, 20),
+      pixelOffset: new google.maps.Size(-infoboxWidth/2, 20),
       disableAutoPan: _isMobile ? false : true,
       zIndex: null,
       boxStyle: {
-        width: '300px',
+        width: _isMobile ? `${infoboxWidth}px` : '300px',
         height: '75px', 
         cursor: 'pointer',
       },
