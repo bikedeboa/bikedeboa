@@ -194,6 +194,30 @@ $(() => {
       });
     }
     $('#placeDetailsModal .help-tooltip-trigger').tooltip();
+    $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details public access');
+    });
+    $('#private-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details private access');
+    });
+    $('#uinvertido-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details uinvertido type');
+    });
+    $('#deroda-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details deroda type');
+    });
+    $('#trave-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details trave type');
+    });
+    $('#suspenso-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details suspenso type');
+    });
+    $('#grade-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details grade type');
+    });
+    $('#other-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details other type');
+    });
   }
 
   function updateCurrentPosition(position) {
@@ -1121,6 +1145,12 @@ $(() => {
       );
 
       $('#newPlaceModal .help-tooltip-trigger').tooltip();
+      $('#access-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+        ga('send', 'event', 'Misc', 'tooltip - new pin access help');
+      });
+      $('#type-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+        ga('send', 'event', 'Misc', 'tooltip - new pin type help');
+      });
     }
 
     // Initialize callbacks
@@ -1949,6 +1979,9 @@ $(() => {
     );
 
     $('#filter-menu .help-tooltip-trigger').tooltip();
+    $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - ciclovias');
+    });
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/

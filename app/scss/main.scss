@@ -606,14 +606,14 @@ a,
 #filterBtn {
     float: right;
     border-radius: 25px;
+    padding: 0 15px;
+    margin: 10px 0;
     border: 0;
     background-color: white;
     height: 40px;
-    margin: 10px 0;
     font-family: $bodyFont;
     font-weight: 700;
     color: $gray;
-    padding: 0 15px;
     @include material-shadow(1);
 
     &.active {
