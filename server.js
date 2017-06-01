@@ -33,7 +33,8 @@ router.use(function (req,res,next) {
 
 // Home
 router.get('/io',function(req,res){
-  res.redirect('https://drive.google.com/open?id=18DyziybC2Benf43OMAd5T7611QULd9oWA1L60rzvrsM');
+  // res.redirect('https://drive.google.com/open?id=18DyziybC2Benf43OMAd5T7611QULd9oWA1L60rzvrsM');
+  res.sendFile(path + 'dist/io.html');
 });
 
 // Home
