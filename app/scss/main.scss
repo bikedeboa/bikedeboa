@@ -522,6 +522,17 @@ a,
     }
 }
 
+#howToInstallModal {
+  .browser-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .browser-icon + span {
+    vertical-align: middle;
+  }
+}
+
 .panel-group {
   .panel-heading {
     padding: 0;
@@ -538,6 +549,7 @@ a,
       position: relative;
       float: right;
       display: inline-block;
+      margin-top: 8px;
       font-family: $bootstrapFont;
       font-weight: 400;
       line-height: 1;
