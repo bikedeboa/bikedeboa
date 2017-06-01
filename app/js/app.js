@@ -1754,14 +1754,14 @@ $(() => {
     //   disableAutoPan: true
     // });
 
-    const infoboxWidth = $(window).width() * 0.95;
+    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
       maxWidth: 0,
-      pixelOffset: new google.maps.Size(-infoboxWidth/2, 20),
+      pixelOffset: new google.maps.Size(-infoboxWidth/2, _isMobile ? 10 : 20),
       disableAutoPan: _isMobile ? false : true,
       zIndex: null,
       boxStyle: {
-        width: _isMobile ? `${infoboxWidth}px` : '300px',
+        width: `${infoboxWidth}px`,
         height: '75px', 
         cursor: 'pointer',
       },

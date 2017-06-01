@@ -605,7 +605,7 @@ a,
 
 #filterBtn {
     float: right;
-    border-radius: 10px;
+    border-radius: 25px;
     border: 0;
     background-color: white;
     height: 40px;
@@ -613,7 +613,7 @@ a,
     font-family: $bodyFont;
     font-weight: 700;
     color: $gray;
-    padding: 0 10px;
+    padding: 0 15px;
     @include material-shadow(1);
 
     &.active {
@@ -2422,7 +2422,7 @@ a,
       left: calc(50% - 10px);
       font-size: 20px;
       color: white; 
-      text-shadow: 1px -2px 2px rgba(0,0,0,.2);
+      text-shadow: 1px -2px 3px rgba(0,0,0,.15);
     }
 
     .infobox--caret {
