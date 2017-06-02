@@ -223,10 +223,8 @@ body.offline {
     background-color: $black; 
   }
 
-  &.bottom .tooltip-arrow,
-  &.bottom-left .tooltip-arrow,
-  &.bottom-right .tooltip-arrow {
-    border-bottom-color: $black;
+  .tooltip-arrow {
+    border-color: $black;
   }
 
   &.in {
@@ -1032,12 +1030,6 @@ a,
 
     // transition: max-height 0.5s ease;
 
-    &.hasImage img {
-        cursor: zoom-in;
-        object-fit: cover;
-        // object-fit: contain;
-    }
-
     &.photoInputContainer {
         height: 130px;
     }
@@ -1061,28 +1053,45 @@ a,
 
             img {
                 cursor: zoom-out;
+
+                &:hover {
+                  opacity: inherit;
+                }
             }
+        }
+
+        & img {
+            cursor: zoom-in;
+            object-fit: cover;
+            // object-fit: contain;
+
+            // transition: opacity 0.1s ease-out;
+
+            &:hover {
+              opacity: 0.8;
+            }
+        }
+
+        &:after {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: rgba(0,0,0,0.7);
+            background: rgba(255,255,255,0.8);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 20px;
+            content: "\e096";
+            font-family: $bootstrapFont;
+            font-weight: 400;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            pointer-events: none;
         }
     }
 
-    &.hasImage:before {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        color: rgba(0,0,0,0.7);
-        background: rgba(255,255,255,0.8);
-        padding: 10px;
-        border-radius: 5px;
-        font-size: 20px;
-        content: "\e096";
-        font-family: $bootstrapFont;
-        font-weight: 400;
-        line-height: 1;
-        -webkit-font-smoothing: antialiased;
-        pointer-events: none;
-    }
 
-    &.expanded:before {
+    &.expanded:after {
         content: "\e097";
     }
 }
@@ -1198,10 +1207,8 @@ a,
 }
 
 .modal-content {
-    // img {
-    //     width: 18px;
-    //     height: auto;
-    // }
+    border-radius: 5px;
+    overflow: hidden;
 
     label {
         font-weight: initial;
@@ -1677,22 +1684,24 @@ a,
 }
 
 .btn.btn-action {
+    $depth: 3px;
+
     margin: 0 2% 2%;
     border-radius: 5px;
-    border-bottom: 5px solid $lightestGray;
+    border-bottom: $depth solid $lightestGray;
     width: 96%;
     padding: 20px;
 
     &:active {
         outline: 0;
-        border-bottom-width: 2px;
+        border-bottom-width: ($depth - 3px);
         transform: translateY(3px);
         // compensate for relayout because of changing border size
         margin-bottom: calc(2% + 3px);
     }
 
     &:disabled {
-        border-bottom: 5px solid $gray;
+        border-bottom: $depth solid $gray;
     }
 }
 
@@ -2951,18 +2960,18 @@ a,
   }
 
   button {
-    border-bottom: 5px solid $gray;
+    border-bottom: 3px solid $gray;
     border-radius: 5px;
     font-weight: 700;  
     min-width: 90px;
     
     &.confirm {
-      border-bottom: 5px solid green;
+      border-bottom: 3px solid green;
     }
 
     &:active {
         outline: 0;
-        border-bottom-width: 2px;
+        border-bottom-width: 0;
         transform: translateY(3px);
         // compensate for relayout because of changing border size
         margin-bottom: 3px;
