@@ -21,21 +21,22 @@
         <script src="/js/app.min.js"></script>
 
         <!-- Bootstrap Extended Tables -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
 
         <!-- Extensions -->
         <!-- editable -->
         <script src="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js"></script>
         <link rel="stylesheet" href="https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css">
         <script src="/lib/bootstrap-table-extensions/editable/bootstrap-table-editable.js"></script>
-        <!-- export -->
-        <script src="/lib/bootstrap-table-extensions/export/bootstrap-table-export.js"></script>
         <!-- mobile -->
         <script src="/lib/bootstrap-table-extensions/mobile/bootstrap-table-mobile.js"></script>
         <!-- sticky-header -->
         <script src="/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.js"></script>
         <link rel="stylesheet" href="/lib/bootstrap-table-extensions/sticky-header/bootstrap-table-sticky-header.css">
+        <!-- export -->
+        <script src="/lib/bootstrap-table-extensions/export/bootstrap-table-export.js"></script>
+        <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
 
         <!-- Font Awesome -->
         <script src="https://use.fontawesome.com/9c52cfba3f.js"></script>
@@ -426,7 +427,7 @@
                     editable: loggedUser && true, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
-                  field: 'average', title: 'Média', sortable: true, visible: false,
+                  field: 'average', title: 'Média', sortable: true, visible: true,
                 },
                 {
                   field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
@@ -440,7 +441,7 @@
                 },
                 {
                   field: 'photo', title: 'Foto', sortable: true,
-                    editable: loggedUser && true
+                    editable: loggedUser && true 
                 },
                 {
                   field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: loggedUser
