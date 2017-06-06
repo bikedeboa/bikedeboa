@@ -145,8 +145,8 @@ $(() => {
       openReviewModal($(e.target).data('value'));
     });
     $('.shareBtn').off('click').on('click', e => {
-      // openReviewModal($(e.target).data('valuoe'));
-      // console.log(openedMarker);
+      ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
+
       swal({
         title: ' ',
         text:
