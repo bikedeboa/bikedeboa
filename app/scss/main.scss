@@ -52,7 +52,7 @@ $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
-$GENERAL_PADDING: 12px;
+$GRID_SPACE: 12px;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -578,9 +578,48 @@ a,
   background: $lightGrey;
 }
 
+#geolocationBtn {
+    margin: 0px $GRID_SPACE $GRID_SPACE*2;
+
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    filter: grayscale(100%);
+    
+    @include material-shadow(3);
+
+    &.active {
+        filter: none;
+    }
+}
+
 #addPlace {
-    transition: background 0.2s ease-out, width 0.5s ease-out;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 0 $GRID_SPACE $GRID_SPACE*3;
+
+    background: linear-gradient(45deg,#30bb6a 0,#2cd978 100%);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    @include material-shadow(3);
+
+    // transition: background 0.2s ease-out, width 0.5s ease-out;
     opacity: 0;
+
+    img {
+        width: 22px;
+        margin-left: 3px;
+        margin-top: 2px;
+    }
 
     &:hover,
     &:active,
@@ -589,18 +628,22 @@ a,
     } 
 
     &.active {
-        // font-size: 0;
-        width: 50px;
-        min-width: 0;
         background: $black;
+        width: auto;
+        border-radius: 25px;
 
-        transition: background 0.5s ease-out, width 0.5s ease-out;
+        // transition: background 0.5s ease-out, width 0.5s ease-out;
+
+        img {
+            display: none;
+        }
         
         &:after {
-            content: '✕';
+            content: '✕ Cancelar';
             // color: $green;
             color: white;
-            font-size: 24px;
+            font-size: 18px;
+            padding: 0 $GRID_SPACE;
         }
     }
 }
@@ -956,7 +999,7 @@ a,
     section.rating-input-container {
       text-align: center;
       // border-top: $separatorBorderStyle;
-      padding: $GENERAL_PADDING*2 0 $GENERAL_PADDING*3;
+      padding: $GRID_SPACE*2 0 $GRID_SPACE*3;
       background: $paleWhite;
 
       h2 {
@@ -965,7 +1008,7 @@ a,
     }
 
     .description {
-        margin: $GENERAL_PADDING 10px $GENERAL_PADDING*2 10px;
+        margin: $GRID_SPACE 10px $GRID_SPACE*2 10px;
         padding: 10px 20px 20px;
         /* color: $gray; */
         /* border-top: $separatorBorderStyle; */
@@ -1252,14 +1295,14 @@ a,
         // padding-left: 10px;
         vertical-align: middle;
         border-bottom: $separatorBorderStyle;
-        padding-bottom: $GENERAL_PADDING*2;
+        padding-bottom: $GRID_SPACE*2;
         font-family: $headingFont;
 
         h1 {
           font-weight: 700;
           font-size: 30px;
           line-height: normal;
-          margin-top: $GENERAL_PADDING*2;
+          margin-top: $GRID_SPACE*2;
         }
 
         & > .skeleton-box {
@@ -1301,7 +1344,7 @@ a,
 
 .review {
     text-align: center;
-    margin-top: $GENERAL_PADDING*2; 
+    margin-top: $GRID_SPACE*2; 
 
     .savedRating {
         color: $gray;
@@ -1311,7 +1354,7 @@ a,
     }
 
     .rating-display-container {
-      margin: $GENERAL_PADDING 0;
+      margin: $GRID_SPACE 0;
     }
 
     img {
@@ -1465,10 +1508,10 @@ a,
 
 
 .info {
-    padding: $GENERAL_PADDING*2 5%;
+    padding: $GRID_SPACE*2 5%;
     text-align: center;
     border-top: $separatorBorderStyle;
-    margin: $GENERAL_PADDING*2 0 0;
+    margin: $GRID_SPACE*2 0 0;
 
     .skeleton-box,
     img {
@@ -2415,20 +2458,20 @@ a,
     }
   }
 
-  #addPlace {
-    &.active {
-        max-width: none;
-        width: 100%;
-        border-radius: 0;
-        height: 70px;
-        bottom: 0;
-        font-weight: 100;
+  // #addPlace {
+  //   &.active {
+  //       max-width: none;
+  //       width: 70%;
+  //       border-radius: 25px;
+  //       height: 70px;
+  //       bottom: 0;
+  //       font-weight: 100;
 
-        &:after {
-            content: 'Cancelar';
-        }
-    }
-  }
+  //       &:after {
+  //           content: 'Cancelar';
+  //       }
+  //   }
+  // }
 
   .infoBox {
     .infobox--content {
@@ -2991,7 +3034,7 @@ a,
   & > div {
     font-family: $bodyFont;
     opacity: 0.9;
-    padding: $GENERAL_PADDING*2 $GENERAL_PADDING*2 $GENERAL_PADDING*2 50px; 
+    padding: $GRID_SPACE*2 $GRID_SPACE*2 $GRID_SPACE*2 50px; 
   }
 
   & > .toast-success {

@@ -275,7 +275,7 @@ $(() => {
 
               updateCurrentPosition(position);
 
-              $('#geolocationBtn').css('border', '2px solid #533FB4');
+              $('#geolocationBtn').addClass('active');
               if (map) {
                 _geolocationRadius.setVisible(true);
                 if (markers && markers.length) {
@@ -354,17 +354,6 @@ $(() => {
     // Set CSS for the control border.
     var controlUI = document.createElement('div');
     controlUI.id = 'geolocationBtn';
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.border = '2px solid #fff';
-    controlUI.style.borderRadius = '50%';
-    // controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.margin = '0 20px 90px';
-    controlUI.style.width = '50px';
-    controlUI.style.height = '50px';
-    controlUI.style.textAlign = 'center';
-    controlUI.style.boxShadow = '0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06';
-
     controlUI.title = 'Onde estou?';
 
     controlDiv.appendChild(controlUI);
@@ -1831,11 +1820,12 @@ $(() => {
       strokeWeight: 5
     });
 
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
+
     // Geolocalization button
     if (navigator.geolocation) {
       let geolocationBtnDiv = document.createElement('div');
       new geolocationBtn(geolocationBtnDiv, map);
-      geolocationBtnDiv.index = 1;
       map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationBtnDiv);
     }
 

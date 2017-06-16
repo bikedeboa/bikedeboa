@@ -1,0 +1,4 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 100">
+	<path d="M600,1200 c-250,0,-450,-200,-450,-450 c0,-250,200,-450,450,-750 c250,300,450,500,450,750 c0,250,-200,450,-450,450 Z M828,820 c30,0,30,-135,0,-135 l-157,0 l0,-158 c0,-30,-135,-30,-135,0 l0,158 l-158,0 c-30,0,-30,135,0,135 l158,0 l0,157 c0,30,135,30,135,0 l0,-157 Z M828,820 " fill="#fff" stroke="none" stroke-dasharray="none" stroke-linecap="inherit" stroke-linejoin="inherit" stroke-width="1" transform="matrix(0.05,0.0,0.0,-0.05,20.0,80.0)"/>
+</svg>
