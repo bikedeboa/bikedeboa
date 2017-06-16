@@ -31,14 +31,24 @@ router.use(function (req,res,next) {
   next();
 });
 
-// Home
+// Google IO Presentation Redirect
 router.get('/io',function(req,res){
   // res.redirect('https://drive.google.com/open?id=18DyziybC2Benf43OMAd5T7611QULd9oWA1L60rzvrsM');
   res.sendFile(path + 'dist/io.html');
 });
 
+// SEO server-side rendering test
+router.get('/seo/*',function(req,res) {
+  var userAgent = req.headers['user-agent'];
+  if (userAgent.startsWith('facebookexternalhit/1.1') || userAgent === 'Facebot' || userAgent.startsWith('Twitterbot')) {
+    res.sendFile(path + 'dist/index_seo.html');
+  } else {
+    res.sendFile(path + 'dist/index.html');
+  }
+});
+
 // Home
-router.get('/*',function(req,res){
+router.get('/*',function(req,res) {
   res.sendFile(path + 'dist/index.html');
 });
 
