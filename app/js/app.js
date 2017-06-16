@@ -352,7 +352,7 @@ $(() => {
   }
 
   function geolocationBtn() {
-    let controlDiv document.createElement('div')
+    let controlDiv = document.createElement('div');
     let controlUI = document.createElement('div');
     controlUI.id = 'geolocationBtn';
     controlUI.title = 'Onde estou?';
