@@ -9,7 +9,7 @@ $lightGreen: #2cd978;
 $yellowGreen: #e0fb72;
 $greenery: #86af49;
 $yellow: #F6C913;
-$darkYellow: #F6C913;
+$darkYellow: #F6C913; 
 $red: #FF8265;
 $strongRed: #FF6541;
 $blue: #533FB4;
@@ -1047,6 +1047,13 @@ a,
         height: 170px;
         max-height: 170px;
 
+        & img {
+            object-fit: cover;
+            // object-fit: contain;
+        }
+    }
+
+    &.hasImage:not(.loading) {
         &.expanded {
             max-height: 800px;
             height: auto;
@@ -1062,9 +1069,6 @@ a,
 
         & img {
             cursor: zoom-in;
-            object-fit: cover;
-            // object-fit: contain;
-
             // transition: opacity 0.1s ease-out;
 
             &:hover {
