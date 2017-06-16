@@ -276,6 +276,7 @@ $(() => {
               updateCurrentPosition(position);
 
               $('#geolocationBtn').addClass('active');
+              
               if (map) {
                 _geolocationRadius.setVisible(true);
                 if (markers && markers.length) {
@@ -350,16 +351,16 @@ $(() => {
     }
   }
 
-  function geolocationBtn(controlDiv) {
-    // Set CSS for the control border.
-    var controlUI = document.createElement('div');
+  function geolocationBtn() {
+    let controlDiv document.createElement('div')
+    let controlUI = document.createElement('div');
     controlUI.id = 'geolocationBtn';
     controlUI.title = 'Onde estou?';
 
     controlDiv.appendChild(controlUI);
 
     // Set CSS for the control interior.
-    var controlText = document.createElement('div');
+    let controlText = document.createElement('div');
     controlText.style.color = '#30bb6a';
     controlText.style.width = '100%';
     controlText.style.paddingTop = '13px';
@@ -374,6 +375,7 @@ $(() => {
       });
     });
 
+    return controlDiv;
   }
 
   function getMarkerById(id) {
@@ -611,9 +613,17 @@ $(() => {
                 title: m.text,
                 average: m.average,
                 roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average),
-                numReviews: m.reviews,
+                pinColor: getPinColorFromAverage(m.average)
               };
+
+              // Reviews count
+              if (m.reviews === 0) {
+                templateData.numReviews = '';
+              } else if (m.reviews === '1') {
+                templateData.numReviews = '1 avaliação';
+              } else {
+                templateData.numReviews = `${m.reviews} avaliações`;
+              }
 
               if (m.isPublic != null) {
                 templateData.isPublic = m.isPublic === true; 
@@ -760,6 +770,8 @@ $(() => {
         testNewLocalBounds();
       });
 
+      $('body').addClass('position-pin-mode');
+
       $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
         if (openedMarker) {
           // Was editing the marker position, so return to Edit Modal
@@ -807,6 +819,7 @@ $(() => {
 
       $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
+      $('body').removeClass('position-pin-mode');
       if (map) {
         google.maps.event.clearInstanceListeners(map);
       }
@@ -1824,9 +1837,8 @@ $(() => {
 
     // Geolocalization button
     if (navigator.geolocation) {
-      let geolocationBtnDiv = document.createElement('div');
-      new geolocationBtn(geolocationBtnDiv, map);
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationBtnDiv);
+      let btnDiv = new geolocationBtn(map);
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btnDiv);
     }
 
     _geolocationMarker = new google.maps.Marker({
