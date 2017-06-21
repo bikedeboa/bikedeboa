@@ -22,7 +22,7 @@ const flatten = require('gulp-flatten');
 const minifycss = require('gulp-clean-css');
 var path = require('path');
 var swPrecache = require('sw-precache');
-// const fs = require('fs');w
+var htmlmin = require('gulp-htmlmin');
 
 const BOWER_PATH = './bower_components';
 const DEST_PATH =  'dist';
@@ -74,7 +74,7 @@ gulp.task('scripts', () => {
     // .pipe(sourcemaps.write('maps'))
     // .pipe(gulp.dest('dist/js'))
     .pipe(rename('app.min.js'))
-    // .pipe(uglify())
+    .pipe(uglify())
     .pipe(sourcemaps.write('maps'))
     .pipe(fileSizes({title: 'app.min.js', gzip: true}))
     .pipe(gulp.dest('dist/js'));
@@ -82,6 +82,12 @@ gulp.task('scripts', () => {
 
 gulp.task('html', () => {
   return gulp.src('app/*.html')
+    .pipe(htmlmin({
+      collapseWhitespace: true,
+      removeComments: true,
+      minifyJS: true,
+      // processScripts: ['text/x-handlebars-template']
+    }))
     .pipe(gulp.dest('dist/'));
 });
 
@@ -118,7 +124,7 @@ gulp.task('bower', function() {
   .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
   .pipe(concat('vendors.min.js'))
-  // .pipe(uglify())
+  .pipe(uglify())
   // .pipe(rename({
   //   suffix: ".min"
   // }))
