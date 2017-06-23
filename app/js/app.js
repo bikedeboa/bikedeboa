@@ -926,6 +926,7 @@ $(() => {
     // var infowindow = new google.maps.InfoWindow();
     _searchResultMarker = new google.maps.Marker({
       map: map,
+      clickable: false,
       anchorPoint: new google.maps.Point(0, -29)
     });
 
