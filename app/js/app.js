@@ -397,7 +397,7 @@ $(() => {
     window._openLocalDetailsCallback = callback;
 
     marker.url = url;
-    History.pushState({}, 'Detalhes do bicicletário', url);
+    setView(marker.text || 'Detalhes do bicicletário', url);
   }
 
   function _openLocalDetails(marker, callback) {
@@ -1131,7 +1131,7 @@ $(() => {
       // $('#placeDetailsModal').modal('hide');
       // History.pushState({}, 'bike de boa', '/');
     } else {
-      History.pushState({}, 'Novo bicicletário', 'novo');
+      setView('Novo bicicletário', 'novo');
       ga('send', 'event', 'Local', 'create - pending');
 
       // Queries Google Geocoding service for the position address
@@ -1224,7 +1224,7 @@ $(() => {
     const showModal = () => {
       $('#newPlaceModal').modal('show');
       // We can only set the nav title after the modal has been opened
-      setMobileHeaderTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+      setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
     }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
@@ -1454,12 +1454,32 @@ $(() => {
     $('#map, #addPlace, .login-display, filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
   }
 
-  function setMobileHeaderTitle(text) {
+  function setPageTitle(text) {
+    // Header that imitates native mobile navbar
     $('#top-mobile-bar h1').text(text || '');
+
+    // Basic website metatags
+    if (!text || text.length == 0) {
+      text = 'bike de boa';
+    }
+    document.title = text;
+    $('meta[name="og:title"]').attr("content", text);
+  }
+
+  function setView(title, view, isReplaceState) {
+    _currentView = view;
+
+    if (isReplaceState) {
+      History.replaceState({}, title, view);
+    } else {
+      History.pushState({}, title, view);
+    }
+
+    ga('send', 'pageview');
   }
 
   function goHome() {
-    History.pushState({}, 'bike de boa', '/');
+    setView('bike de boa', '/');
   }
 
   function queueUiCallback(callback) {
@@ -1478,13 +1498,13 @@ $(() => {
     $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
-      History.pushState({}, '', 'nav');
+      setView('', 'nav');
     }));
     
     $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
-      History.pushState({}, '', 'filtros');
+      setView('', 'filtros');
     }));
 
     $('#show-bike-layer').on('change', e => {
@@ -1513,26 +1533,26 @@ $(() => {
 
     $('#loginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
-      History.replaceState({}, 'Login colaborador', '/login');
+      setView('Login colaborador', '/login', true);
       login(true);
     }));
 
     $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
-      History.replaceState({}, 'Sobre', '/sobre');
+      setView('Sobre', '/sobre', true);
     }));
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'how-to-install opened');
-      History.replaceState({}, 'Como instalar o app', '/como-instalar');
+      setView('Como instalar o app', '/como-instalar', true);
     }));
 
     $('#faqBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
-      History.replaceState({}, 'Perguntas frequentes', '/faq');
+      setView('Perguntas frequentes', '/faq', true);
     }));
 
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
@@ -1602,8 +1622,10 @@ $(() => {
       //   .velocity({display: 'table-cell'});
 
       // Set mobile navbar with modal's title
-      const openingModalTitle = $(e.currentTarget).find('.modal-title').text();
-      setMobileHeaderTitle(openingModalTitle || '')
+      const openingModalTitle = $(e.currentTarget).find('.view-name').text();
+      if (openingModalTitle) {
+        setPageTitle(openingModalTitle)
+      }
 
       // Mobile optimizations
       if (_isMobile) {
@@ -1940,7 +1962,7 @@ $(() => {
     $(window).on('load', () => {
       const isMatch = handleRouting();
       if (!isMatch) {
-        History.replaceState({}, 'bike de boa', '/');
+        goHome();
       } else {
         $('#map').addClass('mock-map');
       }
@@ -1963,7 +1985,7 @@ $(() => {
 
     const sidenavHideCallback = () => {
       // @todo explain me
-      History.replaceState({}, 'bike de boa', '/');
+      setView('bike de boa', '/', true);
     };
 
     _hamburgerMenu = new SideNav(

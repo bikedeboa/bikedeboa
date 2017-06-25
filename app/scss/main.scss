@@ -846,28 +846,28 @@ a,
 
     // Leave it visible by default so it's the first thing rendered in the screen
     // display: none;
-}
 
-#spinnerOverlay .spinnerContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    .spinnerContainer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
 
-    text-align: center;
+      text-align: center;
 
-    img {
-        animation: spin 3s linear infinite;
-        width: 90px;
-        height: 90px;
-    }
+      img {
+          animation: spin 3s linear infinite;
+          width: 90px;
+          height: 90px;
+      }
 
-    p {
-        color: $gray;
-        font-family: $headingFont;
-        margin-top: 10px;
-        font-weight: 700;
-    }
+      p {
+          color: $gray;
+          font-family: $headingFont;
+          margin-top: 10px;
+          font-weight: 700;
+      }
+  }
 }
 
 
@@ -2400,6 +2400,10 @@ a,
       font-size: 1.5em;
       font-family: $headingFont;
       line-height: 50px;
+      max-width: calc(100% - 100px);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     button {
