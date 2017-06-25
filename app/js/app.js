@@ -1105,7 +1105,7 @@ $(() => {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
       const m = openedMarker;
 
-      // History.pushState({}, 'Editar bicicletário', '/editar');
+      setView('Editar bicicletário', '/editar');
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
@@ -1133,9 +1133,8 @@ $(() => {
       }
 
       // $('#placeDetailsModal').modal('hide');
-      // History.pushState({}, 'bike de boa', '/');
     } else {
-      setView('Novo bicicletário', 'novo');
+      setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
 
       // Queries Google Geocoding service for the position address
@@ -1329,7 +1328,7 @@ $(() => {
     validateReviewForm();
 
     // Display modal
-    // History.pushState({}, 'Nova avaliação', '/avaliar');
+    setView('Nova avaliação', '/avaliar');
     if ($('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
         $('#reviewPanel').modal('show');
@@ -1412,7 +1411,7 @@ $(() => {
     const m = openedMarker;
     let templateData = {};
 
-    // History.pushState({}, 'Sugerir mudança', '/sugestao');
+    setView('Sugerir correção', '/sugestao');
 
     // Render template
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -1479,6 +1478,9 @@ $(() => {
       History.pushState({}, title, view);
     }
 
+    // Force new pageview for Analytics
+    // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
+    ga('set', 'page', view);
     ga('send', 'pageview');
   }
 
@@ -1502,13 +1504,13 @@ $(() => {
     $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
-      setView('', 'nav');
+      setView('', '/nav');
     }));
     
     $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
-      setView('', 'filtros');
+      setView('', '/filtros');
     }));
 
     $('#show-bike-layer').on('change', e => {
@@ -1586,17 +1588,7 @@ $(() => {
       queueUiCallback(updateFilters);
     });
 
-    $('body').on('click', '.modal, .close-modal', e => {
-      // If click wasn't on the close button or in the backdrop, but in any other part of the modal
-      if (e.target != e.currentTarget) {
-        return;
-      }
-
-      const proceed = queueUiCallback.bind(this, () => {
-        // If a details request was under way, aborts the request
-        goHome();
-      });
-
+    $('body').on('click', '.back-button', e => {
       // If was creating a new local
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
@@ -1605,17 +1597,26 @@ $(() => {
             text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
             type: "warning",
             showCancelButton: true,
-            confirmButtonText: "Descartar",
+            confirmButtonText: "Descartar", 
             closeOnConfirm: true,
             allowOutsideClick: false
           },
           () => {
-            proceed();
+            History.back();
           }
         );
       } else {
-        proceed();
+        History.back();
       }
+    });
+
+    $('body').on('click', '.modal, .close-modal', e => {
+      // If click wasn't on the close button or in the backdrop, but in any other part of the modal
+      if (e.target != e.currentTarget) {
+        return;
+      }
+
+      goHome();
     });
 
     // Modal callbacks
@@ -1972,6 +1973,7 @@ $(() => {
     });
 
     // Initialize router
+    // @todo: detach this from onLoad!
     $(window).on('load', () => {
       const isMatch = handleRouting();
       if (!isMatch) {
