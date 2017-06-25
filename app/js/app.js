@@ -764,6 +764,8 @@ $(() => {
     if (isTurningOn) {
       // hideUI();
 
+      map.setOptions({styles: _gmapsCustomStyle_withLabels});
+
       testNewLocalBounds();
       map.addListener('center_changed', () => {
         // console.log('center_changed');
@@ -816,6 +818,8 @@ $(() => {
       // Turning OFF
 
       // showUI();
+
+      map.setOptions({styles: _gmapsCustomStyle});
 
       $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
