@@ -6,13 +6,13 @@
 	 xml:space="preserve">
 <g id="Star_-_Orange">
 </g>
-<circle fill="none" stroke="#82878A" stroke-width="7.0866" stroke-miterlimit="10" cx="48.199" cy="17.199" r="11.378"/>
-<circle fill="none" stroke="#82878A" stroke-width="7.0866" stroke-miterlimit="10" cx="25.443" cy="49.071" r="11.378"/>
-<circle fill="none" stroke="#82878A" stroke-width="7.0866" stroke-miterlimit="10" cx="73.455" cy="80.334" r="11.378"/>
-<line fill="none" stroke="#82878A" stroke-width="7.0866" stroke-linecap="round" stroke-miterlimit="10" x1="62.077" y1="16.083" x2="96.832" y2="16.083"/>
-<line fill="none" stroke="#82878A" stroke-width="7.0866" stroke-linecap="round" stroke-miterlimit="10" x1="36.821" y1="17.199" x2="3.833" y2="17.199"/>
-<line fill="none" stroke="#82878A" stroke-width="7.0866" stroke-linecap="round" stroke-miterlimit="10" x1="11.565" y1="49.071" x2="3.833" y2="49.071"/>
-<line fill="none" stroke="#82878A" stroke-width="7.0866" stroke-linecap="round" stroke-miterlimit="10" x1="36.821" y1="49.071" x2="96.832" y2="49.071"/>
-<line fill="none" stroke="#82878A" stroke-width="7.0866" stroke-linecap="round" stroke-miterlimit="10" x1="85.801" y1="80.334" x2="96.832" y2="80.334"/>
-<line fill="none" stroke="#82878A" stroke-width="7.0866" stroke-linecap="round" stroke-miterlimit="10" x1="60.545" y1="80.334" x2="3.833" y2="80.334"/>
+<circle fill="none" stroke="#82878A" stroke-width="6.942" stroke-miterlimit="10" cx="81.338" cy="47.363" r="11.146"/>
+<circle fill="none" stroke="#82878A" stroke-width="6.942" stroke-miterlimit="10" cx="50.117" cy="25.071" r="11.146"/>
+<circle fill="none" stroke="#82878A" stroke-width="6.942" stroke-miterlimit="10" cx="19.491" cy="72.105" r="11.146"/>
+<line fill="none" stroke="#82878A" stroke-width="6.942" stroke-linecap="round" stroke-miterlimit="10" x1="82.43" y1="60.958" x2="82.43" y2="95.004"/>
+<line fill="none" stroke="#82878A" stroke-width="6.942" stroke-linecap="round" stroke-miterlimit="10" x1="81.337" y1="36.216" x2="81.337" y2="3.902"/>
+<line fill="none" stroke="#82878A" stroke-width="6.942" stroke-linecap="round" stroke-miterlimit="10" x1="50.116" y1="11.475" x2="50.116" y2="3.902"/>
+<line fill="none" stroke="#82878A" stroke-width="6.942" stroke-linecap="round" stroke-miterlimit="10" x1="50.116" y1="36.216" x2="50.116" y2="95.004"/>
+<line fill="none" stroke="#82878A" stroke-width="6.942" stroke-linecap="round" stroke-miterlimit="10" x1="19.491" y1="84.199" x2="19.491" y2="95.004"/>
+<line fill="none" stroke="#82878A" stroke-width="6.942" stroke-linecap="round" stroke-miterlimit="10" x1="19.491" y1="59.458" x2="19.491" y2="3.902"/>
 </svg>
