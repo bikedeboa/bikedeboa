@@ -5,7 +5,6 @@
         <meta charset="UTF-8">
         <title>bike de boa - encontre e avalie bicicletários no RS</title>
         <meta property="og:title" content="bike de boa - encontre e avalie bicicletários no RS"/>
-        <meta property="og:site_name" content="bike de boa - encontre e avalie bicicletários no RS">
       
         <meta name="description" content="Encontre e avalie mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e RS. Acesse o site e aplicativo no seu celular, computador ou tablet. O bike de boa é, e sempre será, totalmente gratuito!">
         <meta property="og:description" content="Encontre e avalie mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e RS. Acesse o site e aplicativo no seu celular, computador ou tablet. O bike de boa é, e sempre será, totalmente gratuito!" />
@@ -14,6 +13,7 @@
         <!-- <link rel="canonical" href="https://www.bikedeboa.com.br" /> -->
         <!-- <meta property="og:url" content="https://www.bikedeboa.com.br"/> -->
         <meta property="fb:app_id" content="1814653185457307"/>
+        <meta property="og:locale" content="pt-br"/>
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://www.bikedeboa.com.br/fb.png"/>
         <meta name="google-site-verification" content="ftQlKcMOfc5iuPkN6xINweO31I0WNRE4s9zDbQT9iTY" />
@@ -58,8 +58,7 @@
 
         <!-- CSS (async) -->
         <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
-        <!-- CSS (sync) -->
-        <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/>
+        <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
 
         <!-- Google Fonts (async) -->
         <link async href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
@@ -71,10 +70,10 @@
         <script async defer src="https://buttons.github.io/buttons.js"></script>
 
         <!-- JS (deferred) --> 
-        <script src="/service-worker-registration.js"></script> 
+        <script defer src="/service-worker-registration.js"></script> 
         <!-- <script defer src="/upup.min.js"></script> -->
         <script defer src="/js/vendors.min.js"></script>
-        <script defer src="/js/app.min.js"></script> 
+        <script defer src="/js/app.min.js"></script>
     </head> 
 
     <body>
@@ -149,7 +148,7 @@
 
         <div id="top-mobile-bar">
           <button class="close-modal"></button>
-          <h1 class="top-mobile-bar-title"></h1>
+          <h1 class="top-mobile-bar-title">Bike de Boa</h1>
         </div>
 
         
@@ -170,15 +169,15 @@
               <ul>
                 <li class="side-nav--animate-in" id="aboutBtn">
                   <img src="/img/icon_info.svg"/>
-                  Sobre o projeto
+                  Sobre o Projeto
                 </li>
                 <li class="side-nav--animate-in" id="faqBtn">
                   <img src="/img/icon_faq.svg"/>
-                  Perguntas frequentes
+                  Perguntas Frequentes
                 </li>
                 <li class="side-nav--animate-in" id="howToInstallBtn">
                   <img src="/img/icon_app.svg"/>
-                  Instalar o app
+                  Instalar o App
                 </li>
                 
                 <hr>
@@ -319,7 +318,7 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title">Sobre o projeto</h1>
+                          <h1 class="modal-title view-name">Sobre o Projeto</h1>
                         </div>
 
                         <div class="modal-body">
@@ -369,7 +368,7 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title">Como instalar o aplicativo</h1>
+                          <h1 class="modal-title view-name">Como instalar o aplicativo</h1>
                         </div>
 
                         <div class="modal-body">
@@ -463,28 +462,12 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title">Perguntas Frequentes</h1>
+                          <h1 class="modal-title view-name">Perguntas Frequentes</h1>
                         </div>
 
                         <div class="modal-body">
                             <article>
                               <div class="panel-group" id="accordion">
-                                <div class="panel">
-                                  <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseOne">
-                                      <h4 class="panel-title">
-                                        O que é o Bike de Boa?
-                                      </h4>
-                                    </a>
-                                  </div>
-                                  <div id="collapseOne" class="panel-collapse collapse in">
-                                    <div class="panel-body">
-                                      <p>
-                                        Veja nossa seção <b>Sobre o projeto</b> pra saber mais de onde o Bike de Boa veio, para onde vai e do que se alimenta.
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
                                 <div class="panel">
                                   <div class="panel-heading">
                                     <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseThree">
@@ -493,13 +476,29 @@
                                       </h4>
                                     </a>
                                   </div>
-                                  <div id="collapseThree" class="panel-collapse collapse">
+                                  <div id="collapseThree" class="panel-collapse collapse in">
                                     <div class="panel-body">
                                       <p>
                                         Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem seus custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso ao sul do Brasil por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
                                       </p>
                                       <p>
                                         Acompanhe novidades como essa e outras na nossa <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="panel">
+                                  <div class="panel-heading">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseOne">
+                                      <h4 class="panel-title">
+                                        O que é o Bike de Boa?
+                                      </h4>
+                                    </a>
+                                  </div>
+                                  <div id="collapseOne" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                      <p>
+                                        Veja nossa seção <b>Sobre o projeto</b> pra saber mais de onde o Bike de Boa veio, para onde vai e do que se alimenta.
                                       </p>
                                     </div>
                                   </div>
@@ -515,10 +514,10 @@
                                   <div id="collapseFour" class="panel-collapse collapse">
                                     <div class="panel-body">
                                       <p>
-                                        Apesar de ser um mapa colaborativo achamos que liberdade demais poderia acabar não ajudando a construir um banco de dados confiável. Todos podem adicionar bicicletários e avaliar os existentes, mas editar informações e deletar bicicletários só é possível para Colaboradores cadastrados (<a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente se voce gostaria de ser um</a>). Porém, se você recém adicionou um novo bicicletário, você tem 24 horas para poder fazer pequenos ajustes nele.
+                                        Todos podem adicionar e avaliar bicicletários, mas editar informações (incluindo deletar) só é possível para os membros da nossa equipe (<a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente se voce gostaria de nos ajudar</a>). Porém, se você recém adicionou um novo bicicletário, você tem 24 horas para poder fazer pequenos ajustes nele.
                                       </p>
                                       <p>
-                                        Lembre que se você reparar algo estranho com algum bicicletário você sempre pode sinalizar isso pra nós clicando em "Sugerir mudança", nos botões do topo da tela de bicicletário.
+                                        Lembre que se você reparar algo estranho com algum bicicletário você sempre pode sinalizar isso pra nós clicando em "Sugerir correção", nos botões do topo da tela de bicicletário.
                                       </p>
                                     </div>
                                   </div>
@@ -710,15 +709,15 @@
                   <div class="modal-dialog vertical-align-center">
                       <div class="modal-content">
                           <div class="modal-header">
-                            <h1 class="modal-title">Sugerir mudança</h1>
+                            <h1 class="modal-title view-name">Sugerir correção</h1>
                           </div>
 
                           <div class="modal-body ">
                               <div id="placeDetails_heading" class="title">
                                   {{#if title}}
-                                    <h1>{{title}}</h1>
+                                    <h2>{{title}}</h2>
                                   {{else}}
-                                    <h1 style="font-style: italic;">Sem título</h1>
+                                    <h2 style="font-style: italic;">Sem título</h2>
                                   {{/if}}
 
                                   <p class="address">
@@ -799,7 +798,7 @@
             {{else}}
               <button id="createRevisionBtn" class="toolbar-item">
                 <img class="toolbar-item-icon" src="/img/icon_edit.svg">
-                <label>Sugerir mudança</label>
+                <label>Sugerir correção</label>
               </button>
             {{/if}}
           </section>
@@ -807,7 +806,7 @@
           <div class="modal-body">
               <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
-                    <h1>{{title}}</h1>
+                    <h1 class="view-name">{{title}}</h1>
                   {{else}}
                     <h1 style="font-style: italic;">Sem título</h1>
                   {{/if}}
@@ -852,7 +851,7 @@
                           Ninguém avaliou este bicicletário ainda.
                         </p> -->
 
-                        <div class="rating-input-container">
+                        <div class="rating-input-container" style="text-align: center;">
                           <h2 style="margin-bottom: 0;">
                             Dê sua nota 
                           </h2>
@@ -1054,7 +1053,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                               <!-- <img id="review_photo" src="/img/bg_header.png"> -->
-                              <h1 class="modal-title">Avaliar bicicletário</h1>
+                              <h1 class="modal-title view-name">Avaliar bicicletário</h1>
                             </div>
 
                             <div class="modal-body">
