@@ -311,11 +311,6 @@ body.position-pin-mode {
     }
 }
 
-.modal {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
 // iOS Fix
 // source: https://github.com/twbs/bootstrap/issues/14839
 .modal {
@@ -927,6 +922,24 @@ a,
   display: none;
 }
 
+.modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    &:before { 
+        content: '✕';
+        color: $gray;
+        position: absolute;
+        top: $GRID_SPACE;
+        right: $GRID_SPACE;
+        font-size: 30px;
+        line-height: 30px;
+        font-weight: lighter;
+        font-family: "Arial";
+        cursor: pointer;
+        pointer-events: none;
+    }
+}
 
 .modal-content {
     border: 0;
@@ -934,19 +947,6 @@ a,
     margin-bottom: 100px;
     @include material-shadow(3);
     // border-radius: 10px; //not working? :(
-
-    &:before { 
-        content: '✕';
-        color: $gray;
-        position: absolute;
-        top: -50px;
-        right: 4px;
-        font-size: 40px;
-        font-weight: lighter;
-        font-family: "Arial";
-        cursor: pointer;
-        pointer-events: none;
-    }
 
     .text-input-wrapper {
         position: relative;
@@ -2323,31 +2323,38 @@ a,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
-  .modal-dialog {
-    margin: 0;
-    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
+  .modal {
+    &:before {
+      content: ''
+    }
+
+    .modal-dialog {
+      margin: 0;
+      background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
+    }
+
+    .modal-content {
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .modal-body {
+      // Explanation on the reason for the string interpolation:
+      //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+      min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
+    }
+
+    .modal-header {
+      display: none;
+    }
+
+    .modal-content {
+      padding-top: $MOBILE_NAVBAR_HEIGHT;
+      margin: 0;
+    }
   }
 
-  .modal-content {
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  .modal-body {
-    // Explanation on the reason for the string interpolation:
-    //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-    min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
-  }
-
-  .modal-header {
-    display: none;
-  }
-
-  .modal-content {
-    padding-top: $MOBILE_NAVBAR_HEIGHT;
-    margin: 0;
-  }
 
   body.modal-open #top-mobile-bar {
     opacity: 1;
@@ -2434,18 +2441,6 @@ a,
       //   top: 0;
       // }
     }
-  }
-
-  .modal-content:before {
-    content: ''
-    // color: $paleWhite;
-    // content: "\e079";
-    // font-family: $bootstrapFont;
-    // font-size: 25px;
-    // position: fixed;
-    // left: 20px;
-    // top: 15px;
-    // right: 0;
   }
 
   #filter-menu {
