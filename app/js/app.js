@@ -1459,14 +1459,33 @@ $(() => {
 
   function setPageTitle(text) {
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar h1').text(text || '');
+    if (!openedMarker) {
+      $('#top-mobile-bar h1').text(text || '');
+    }
 
     // Basic website metatags
     if (!text || text.length == 0) {
       text = 'bike de boa';
     }
-    document.title = text;
+    document.title = text; 
     $('meta[name="og:title"]').attr("content", text);
+
+    // Special metatags for Details View
+    if (openedMarker) {
+      // Open Graph Picture
+      if (openedMarker.photo) {
+        $('meta[name="og:image"]').attr("content", openedMarker.photo);
+      }
+
+      // Custom Open Graph Description
+      if (openedMarker.address) {
+        let desc = 'Bicicletário em ';
+        desc += openedMarker.address;
+        // @todo: improve this description with more contextual data
+
+        $('meta[name="og:title"]').attr("content", desc);
+      }
+    }
   }
 
   function setView(title, view, isReplaceState) {
@@ -1497,6 +1516,15 @@ $(() => {
       });
     } else {
       callback();
+    }
+  }
+
+  function returnToPreviousView() {
+    if (_isDeeplink) {
+      _isDeeplink = false;
+      goHome();
+    } else {
+      History.back();
     }
   }
 
@@ -1602,11 +1630,11 @@ $(() => {
             allowOutsideClick: false
           },
           () => {
-            History.back();
+            returnToPreviousView();
           }
         );
       } else {
-        History.back();
+        returnToPreviousView();
       }
     });
 
@@ -1976,10 +2004,12 @@ $(() => {
     // @todo: detach this from onLoad!
     $(window).on('load', () => {
       const isMatch = handleRouting();
-      if (!isMatch) {
-        goHome();
-      } else {
+      
+      if (isMatch) {
+        _isDeeplink = true;
         $('#map').addClass('mock-map');
+      } else {
+        goHome();
       }
     });
 

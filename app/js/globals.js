@@ -102,5 +102,6 @@ let _activeFilters;
 let _infoWindow;
 let _isOffline;
 let _currentView;
+let _isDeeplink = false;
 
 let templates = {};
