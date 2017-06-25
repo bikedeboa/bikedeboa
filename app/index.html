@@ -363,7 +363,7 @@
         </div>
         
         <!-- How To Install -->
-        <div class="modal fade" id="howToInstallModal" tabindex="-1">
+        <div id="howToInstallModal" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -380,10 +380,10 @@
                                 Selecione abaixo o seu navegador e sistema operacional e siga os passos para adicionar o Bike de Boa na tela inicial do seu celular.
                               </p>
 
-                              <div class="panel-group" id="accordion">
+                              <div id="browsers-accordion" class="panel-group" role="tablist" aria-multiselectable="true">
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapse-chrome">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#browsers-accordion" href="#collapse-chrome">
                                       <h4 class="panel-title">
                                         <img class="browser-icon" src="/img/icon_browser_chrome.png"/>
                                         <span><b>Chrome</b> no Android</span>
@@ -404,7 +404,7 @@
                                 
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapse-firefox">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#browsers-accordion" href="#collapse-firefox">
                                       <h4 class="panel-title">
                                         <img class="browser-icon" src="/img/icon_browser_firefox.png"/>
                                         <span><b>Firefox</b> no Android</span>
@@ -425,7 +425,7 @@
                                 
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapse-safari">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#browsers-accordion" href="#collapse-safari">
                                       <h4 class="panel-title">
                                         <img class="browser-icon" src="/img/icon_browser_safari.png"/>
                                         <span><b>Safari</b> no iPhone</span>
@@ -467,10 +467,10 @@
 
                         <div class="modal-body">
                             <article>
-                              <div class="panel-group" id="accordion">
+                              <div id="faq-accordion" class="panel-group" aria-expanded="true" aria-controls="collapseOne">
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseThree">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseThree">
                                       <h4 class="panel-title">
                                         Quando o Bike de Boa estará disponível na minha cidade/no Brasil inteiro/no mundo?
                                       </h4>
@@ -489,7 +489,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseOne">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseOne">
                                       <h4 class="panel-title">
                                         O que é o Bike de Boa?
                                       </h4>
@@ -505,7 +505,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseFour">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseFour">
                                       <h4 class="panel-title">
                                         Por quê não posso editar as informações dos bicicletários?
                                       </h4>
@@ -524,7 +524,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseFive">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseFive">
                                       <h4 class="panel-title">
                                         Como posso contribuir com o projeto?
                                       </h4>
@@ -547,7 +547,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseSix">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseSix">
                                       <h4 class="panel-title">
                                         E se o Bike de Boa mapeasse também outras coisas do interesse dos ciclistas?
                                       </h4>
@@ -561,7 +561,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseSeven">
+                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseSeven">
                                       <h4 class="panel-title">
                                         Sou dono(a) de estabelecimento comercial que valoriza os ciclistas. Como podemos nos ajudar mutuamente?
                                       </h4>
@@ -573,8 +573,11 @@
                                     </div>
                                   </div>
                                 </div>
-
                               </div>
+
+                              <p>
+                                Não encontrou tua dúvida? Estamos sempre de olho no <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> email</a> ou na nossa <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
+                              </p>
                             </article>
                         </div>
                     </div>
@@ -735,7 +738,7 @@
                                 </p>
 
                                 <p class="disclaimer">
-                                  Para qualquer comentário sobre o site em geral, lembre que estamos sempre de ouvidos abertos no <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span>email</a> ou na nossa <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
+                                  Para qualquer comentário sobre o site em geral, lembre que estamos sempre de ouvidos abertos no <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> email</a> ou na nossa <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
                                 </p>
                               </div>
                           </div>

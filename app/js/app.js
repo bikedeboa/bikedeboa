@@ -1751,6 +1751,16 @@ $(() => {
     $('#howToInstallModal').modal('show');
   }
 
+  function openFaqModal() {
+    $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    $('#faqModal').modal('show');
+
+    $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
+      const questionTitle = $(e.target).parent().find('.panel-title').text();
+      ga('send', 'event', 'FAQ', 'question opened', questionTitle);
+    })
+  }
+
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = true;
@@ -1766,8 +1776,7 @@ $(() => {
         }
         break;
       case 'faq':
-        $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-        $('#faqModal').modal('show');
+        openFaqModal();
         break;
       case 'como-instalar':
         openHowToInstallModal();
