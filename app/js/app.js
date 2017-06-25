@@ -1533,7 +1533,7 @@ $(() => {
 
     $('#loginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
-      setView('Login colaborador', '/login', true);
+      setView('Login Administrador', '/login', true);
       login(true);
     }));
 
