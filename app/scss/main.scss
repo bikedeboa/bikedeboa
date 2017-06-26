@@ -1584,7 +1584,7 @@ a,
     .minimap { 
         min-height: 70px;
         background: $superLightGray;
-        border-radius: 15px;
+        // border-radius: 15px;
     }
 
     .numreviews:before {
@@ -1873,10 +1873,10 @@ a,
   align-items: flex-start;
   margin: 0 0 -10px 0;
   padding-top: 10px;
-  border-bottom: 1px solid #eee;
+  // border-bottom: 1px solid #eee;
 
   hr {
-    border-left: 1px solid #eee;
+    // border-left: 1px solid #eee;
     height: 50px;
     margin: 0;
     border-top: 0;
