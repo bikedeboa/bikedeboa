@@ -1,9 +1,24 @@
 var express = require('express');
 var secure = require('express-force-https');
-var app = express();
 var router = express.Router();
 var path = __dirname + '/';
 var compression = require('compression');
+var exphbs  = require('express-handlebars');
+var fs = require("fs");
+var request = require('request');
+
+// Imported from globals
+function createMapFromArrays(a, b) {var ret = {}; a.forEach( (val, i) => {ret[val] = b[i]; }); return ret; } var STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
+var STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
+var STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+var STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
+var STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
+
+
+var app = express();
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
 
 // Automatically redirects to HTTPS
 app.use(secure);
@@ -38,10 +53,42 @@ router.get('/io',function(req,res){
 });
 
 // SEO server-side rendering test
-router.get('/seo/*',function(req,res) {
+router.get('/b/*',function(req,res) {
   var userAgent = req.headers['user-agent'];
   if (userAgent.startsWith('facebookexternalhit/1.1') || userAgent === 'Facebot' || userAgent.startsWith('Twitterbot')) {
-    res.sendFile(path + 'dist/index_seo.html');
+    console.log(req);
+
+    // url = "/b/1148-cafe-agridoce"
+    var url = req.url;
+    var regex = /\/b\/(\d*)/;
+    // id = "1148"
+    var id = regex.exec(url)[1];
+ 
+    request('https://bdb-api.herokuapp.com/local/' + id, function (error, response, body) {
+      console.log(response.statusCode);
+
+      if (!error && response.statusCode == 200) {
+        var obj = JSON.parse(body);
+
+        console.log(obj);
+
+        var data = {};
+        data.title = obj.text;
+        data.photo = obj.photo;
+        data.address = obj.address;
+        data.access = obj.isPublic ? 'público' : 'privado';
+        data.type = STRUCTURE_CODE_TO_NAME[obj.structureType];
+        data.redirectUrl = url;
+
+        // var pageText = pageBuilder(data); 
+    
+        // res.writeHead(200, {"Context-Type": "text/html"});
+        // res.write(pageText);
+        // res.end();
+
+        res.render('seo', data);
+      }
+    });
   } else {
     res.sendFile(path + 'dist/index.html');
   }
