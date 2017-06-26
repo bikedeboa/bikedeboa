@@ -1484,25 +1484,22 @@ a,
 }
 
 .ghost {
-    display: block;
-    border: 1px solid $darkYellow;
+    padding: 3px 10px;
+    border: 1px solid $gray;
     background-color: #fff;
-    color: $darkYellow;
+    color: $gray;
     margin: 5px auto;
     font-size: 14px;
-    width: 30%;
     border-radius: 5px;
-    vertical-align: middle;
-    min-width: 80px;
-    transition: all 0.2s ease;
-    font-family: $headingFont;
+    vertical-align: bottom;
+    transition: all .2s ease;
 }
 .ghost:hover,
 .ghost:focus,
 .ghost:active {
     color: white;
     border: 1px solid white;
-    background-color: $darkYellow;
+    background-color: $gray;
 }
 
 .modal-footer {
