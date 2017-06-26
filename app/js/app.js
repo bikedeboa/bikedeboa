@@ -1460,10 +1460,10 @@ $(() => {
   }
 
   function setPageTitle(text) {
+    text = text || '';
+
     // Header that imitates native mobile navbar
-    if (!openedMarker) {
-      $('#top-mobile-bar h1').text(text || '');
-    }
+    $('#top-mobile-bar h1').text(openedMarker ? '' : text);
 
     // Basic website metatags
     if (!text || text.length == 0) {
