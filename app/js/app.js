@@ -275,7 +275,8 @@ $(() => {
 
               updateCurrentPosition(position);
 
-              $('#geolocationBtn').css('border', '2px solid #533FB4');
+              $('#geolocationBtn').addClass('active');
+              
               if (map) {
                 _geolocationRadius.setVisible(true);
                 if (markers && markers.length) {
@@ -350,27 +351,16 @@ $(() => {
     }
   }
 
-  function geolocationBtn(controlDiv) {
-    // Set CSS for the control border.
-    var controlUI = document.createElement('div');
+  function geolocationBtn() {
+    let controlDiv = document.createElement('div');
+    let controlUI = document.createElement('div');
     controlUI.id = 'geolocationBtn';
-    controlUI.style.backgroundColor = '#fff';
-    controlUI.style.border = '2px solid #fff';
-    controlUI.style.borderRadius = '50%';
-    // controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-    controlUI.style.cursor = 'pointer';
-    controlUI.style.margin = '0 20px 90px';
-    controlUI.style.width = '50px';
-    controlUI.style.height = '50px';
-    controlUI.style.textAlign = 'center';
-    controlUI.style.boxShadow = '0 0 4px 0 rgba(0, 0, 0, 0.15), 0 2px 2px 0 rgba(0, 0, 0, 0.06';
-
     controlUI.title = 'Onde estou?';
 
     controlDiv.appendChild(controlUI);
 
     // Set CSS for the control interior.
-    var controlText = document.createElement('div');
+    let controlText = document.createElement('div');
     controlText.style.color = '#30bb6a';
     controlText.style.width = '100%';
     controlText.style.paddingTop = '13px';
@@ -385,6 +375,7 @@ $(() => {
       });
     });
 
+    return controlDiv;
   }
 
   function getMarkerById(id) {
@@ -406,7 +397,7 @@ $(() => {
     window._openLocalDetailsCallback = callback;
 
     marker.url = url;
-    History.pushState({}, 'Detalhes do bicicletário', url);
+    setView(marker.text || 'Detalhes do bicicletário', url);
   }
 
   function _openLocalDetails(marker, callback) {
@@ -622,9 +613,17 @@ $(() => {
                 title: m.text,
                 average: m.average,
                 roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average),
-                numReviews: m.reviews,
+                pinColor: getPinColorFromAverage(m.average)
               };
+
+              // Reviews count
+              if (m.reviews === 0) {
+                templateData.numReviews = '';
+              } else if (m.reviews === '1') {
+                templateData.numReviews = '1 avaliação';
+              } else {
+                templateData.numReviews = `${m.reviews} avaliações`;
+              }
 
               if (m.isPublic != null) {
                 templateData.isPublic = m.isPublic === true; 
@@ -765,11 +764,15 @@ $(() => {
     if (isTurningOn) {
       // hideUI();
 
+      map.setOptions({styles: _gmapsCustomStyle_withLabels});
+
       testNewLocalBounds();
       map.addListener('center_changed', () => {
         // console.log('center_changed');
         testNewLocalBounds();
       });
+
+      $('body').addClass('position-pin-mode');
 
       $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
         if (openedMarker) {
@@ -816,8 +819,11 @@ $(() => {
 
       // showUI();
 
+      map.setOptions({styles: _gmapsCustomStyle});
+
       $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
+      $('body').removeClass('position-pin-mode');
       if (map) {
         google.maps.event.clearInstanceListeners(map);
       }
@@ -924,6 +930,7 @@ $(() => {
     // var infowindow = new google.maps.InfoWindow();
     _searchResultMarker = new google.maps.Marker({
       map: map,
+      clickable: false,
       anchorPoint: new google.maps.Point(0, -29)
     });
 
@@ -1098,7 +1105,7 @@ $(() => {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
       const m = openedMarker;
 
-      // History.pushState({}, 'Editar bicicletário', '/editar');
+      setView('Editar bicicletário', '/editar');
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
@@ -1126,9 +1133,8 @@ $(() => {
       }
 
       // $('#placeDetailsModal').modal('hide');
-      // History.pushState({}, 'bike de boa', '/');
     } else {
-      History.pushState({}, 'Novo bicicletário', 'novo');
+      setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
 
       // Queries Google Geocoding service for the position address
@@ -1221,7 +1227,7 @@ $(() => {
     const showModal = () => {
       $('#newPlaceModal').modal('show');
       // We can only set the nav title after the modal has been opened
-      setMobileHeaderTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+      setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
     }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
@@ -1322,7 +1328,7 @@ $(() => {
     validateReviewForm();
 
     // Display modal
-    // History.pushState({}, 'Nova avaliação', '/avaliar');
+    setView('Nova avaliação', '/avaliar');
     if ($('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
         $('#reviewPanel').modal('show');
@@ -1405,7 +1411,7 @@ $(() => {
     const m = openedMarker;
     let templateData = {};
 
-    // History.pushState({}, 'Sugerir mudança', '/sugestao');
+    setView('Sugerir correção', '/sugestao');
 
     // Render template
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -1451,12 +1457,54 @@ $(() => {
     $('#map, #addPlace, .login-display, filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
   }
 
-  function setMobileHeaderTitle(text) {
-    $('#top-mobile-bar h1').text(text || '');
+  function setPageTitle(text) {
+    // Header that imitates native mobile navbar
+    if (!openedMarker) {
+      $('#top-mobile-bar h1').text(text || '');
+    }
+
+    // Basic website metatags
+    if (!text || text.length == 0) {
+      text = 'bike de boa';
+    }
+    document.title = text; 
+    $('meta[name="og:title"]').attr("content", text);
+
+    // Special metatags for Details View
+    if (openedMarker) {
+      // Open Graph Picture
+      if (openedMarker.photo) {
+        $('meta[name="og:image"]').attr("content", openedMarker.photo);
+      }
+
+      // Custom Open Graph Description
+      if (openedMarker.address) {
+        let desc = 'Bicicletário em ';
+        desc += openedMarker.address;
+        // @todo: improve this description with more contextual data
+
+        $('meta[name="og:title"]').attr("content", desc);
+      }
+    }
+  }
+
+  function setView(title, view, isReplaceState) {
+    _currentView = view;
+
+    if (isReplaceState) {
+      History.replaceState({}, title, view);
+    } else {
+      History.pushState({}, title, view);
+    }
+
+    // Force new pageview for Analytics
+    // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
+    ga('set', 'page', view);
+    ga('send', 'pageview');
   }
 
   function goHome() {
-    History.pushState({}, 'bike de boa', '/');
+    setView('bike de boa', '/');
   }
 
   function queueUiCallback(callback) {
@@ -1471,17 +1519,26 @@ $(() => {
     }
   }
 
+  function returnToPreviousView() {
+    if (_isDeeplink) {
+      _isDeeplink = false;
+      goHome();
+    } else {
+      History.back();
+    }
+  }
+
   function _initGlobalCallbacks() {
     $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
-      History.pushState({}, '', 'nav');
+      setView('', '/nav');
     }));
     
     $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
-      History.pushState({}, '', 'filtros');
+      setView('', '/filtros');
     }));
 
     $('#show-bike-layer').on('change', e => {
@@ -1510,26 +1567,26 @@ $(() => {
 
     $('#loginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
-      History.replaceState({}, 'Login colaborador', '/login');
+      setView('Login Administrador', '/login', true);
       login(true);
     }));
 
     $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
-      History.replaceState({}, 'Sobre', '/sobre');
+      setView('Sobre', '/sobre', true);
     }));
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'how-to-install opened');
-      History.replaceState({}, 'Como instalar o app', '/como-instalar');
+      setView('Como instalar o app', '/como-instalar', true);
     }));
 
     $('#faqBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
-      History.replaceState({}, 'Perguntas frequentes', '/faq');
+      setView('Perguntas frequentes', '/faq', true);
     }));
 
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
@@ -1559,17 +1616,7 @@ $(() => {
       queueUiCallback(updateFilters);
     });
 
-    $('body').on('click', '.modal, .close-modal', e => {
-      // If click wasn't on the close button or in the backdrop, but in any other part of the modal
-      if (e.target != e.currentTarget) {
-        return;
-      }
-
-      const proceed = queueUiCallback.bind(this, () => {
-        // If a details request was under way, aborts the request
-        goHome();
-      });
-
+    $('body').on('click', '.back-button', e => {
       // If was creating a new local
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
@@ -1578,17 +1625,26 @@ $(() => {
             text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
             type: "warning",
             showCancelButton: true,
-            confirmButtonText: "Descartar",
+            confirmButtonText: "Descartar", 
             closeOnConfirm: true,
             allowOutsideClick: false
           },
           () => {
-            proceed();
+            returnToPreviousView();
           }
         );
       } else {
-        proceed();
+        returnToPreviousView();
       }
+    });
+
+    $('body').on('click', '.modal, .close-modal', e => {
+      // If click wasn't on the close button or in the backdrop, but in any other part of the modal
+      if (e.target != e.currentTarget) {
+        return;
+      }
+
+      goHome();
     });
 
     // Modal callbacks
@@ -1599,8 +1655,10 @@ $(() => {
       //   .velocity({display: 'table-cell'});
 
       // Set mobile navbar with modal's title
-      const openingModalTitle = $(e.currentTarget).find('.modal-title').text();
-      setMobileHeaderTitle(openingModalTitle || '')
+      const openingModalTitle = $(e.currentTarget).find('.view-name').text();
+      if (openingModalTitle) {
+        setPageTitle(openingModalTitle)
+      }
 
       // Mobile optimizations
       if (_isMobile) {
@@ -1726,6 +1784,16 @@ $(() => {
     $('#howToInstallModal').modal('show');
   }
 
+  function openFaqModal() {
+    $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    $('#faqModal').modal('show');
+
+    $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
+      const questionTitle = $(e.target).parent().find('.panel-title').text();
+      ga('send', 'event', 'FAQ', 'question opened', questionTitle);
+    })
+  }
+
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = true;
@@ -1741,8 +1809,7 @@ $(() => {
         }
         break;
       case 'faq':
-        $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-        $('#faqModal').modal('show');
+        openFaqModal();
         break;
       case 'como-instalar':
         openHowToInstallModal();
@@ -1831,12 +1898,12 @@ $(() => {
       strokeWeight: 5
     });
 
+    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
+
     // Geolocalization button
     if (navigator.geolocation) {
-      let geolocationBtnDiv = document.createElement('div');
-      new geolocationBtn(geolocationBtnDiv, map);
-      geolocationBtnDiv.index = 1;
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationBtnDiv);
+      let btnDiv = new geolocationBtn(map);
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btnDiv);
     }
 
     _geolocationMarker = new google.maps.Marker({
@@ -1872,6 +1939,7 @@ $(() => {
     //   https://developers.google.com/web/updates/2015/10/display-mode
     //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+      $('body').addClass('pwa-installed');
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
 
@@ -1934,12 +2002,15 @@ $(() => {
     });
 
     // Initialize router
+    // @todo: detach this from onLoad!
     $(window).on('load', () => {
       const isMatch = handleRouting();
-      if (!isMatch) {
-        History.replaceState({}, 'bike de boa', '/');
-      } else {
+      
+      if (isMatch) {
+        _isDeeplink = true;
         $('#map').addClass('mock-map');
+      } else {
+        goHome();
       }
     });
 
@@ -1960,7 +2031,7 @@ $(() => {
 
     const sidenavHideCallback = () => {
       // @todo explain me
-      History.replaceState({}, 'bike de boa', '/');
+      setView('bike de boa', '/', true);
     };
 
     _hamburgerMenu = new SideNav(

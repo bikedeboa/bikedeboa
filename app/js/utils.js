@@ -157,7 +157,7 @@ window.setOfflineMode = () => {
   console.log(map);
   if (map) { 
     // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
-    toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
+    // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
   } else {
     $('#reloadBtn').on('click', () => {
       showSpinner('', () => {

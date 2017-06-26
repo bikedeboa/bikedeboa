@@ -321,8 +321,8 @@ BIKE.Database = {
       // user = prompt('Usuário:','');
       swal(
         {
-          title: 'Login colaborador',
-          text: 'Se você não é colaborador ainda e gostaria de ser, <a target="_blank" href="https://www.facebook.com/bikedeboaapp">fale com a gente</a>.',
+          title: 'Login',
+          text: 'Em breve todos poderão criar um login no Bike de Boa, mas por enquanto este login é apenas para administradores.',
           html: true,
           type: 'input',
           showCancelButton: true,
