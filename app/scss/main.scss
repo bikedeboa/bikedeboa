@@ -162,6 +162,12 @@ body.offline {
   }
 }
 
+body.pwa-installed {
+  #howToInstallBtn {
+    display: none;
+  }
+}
+
 body.position-pin-mode { 
     .js-menu-show-hamburger-menu {
         opacity: 0.5;

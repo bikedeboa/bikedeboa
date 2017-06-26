@@ -1939,6 +1939,7 @@ $(() => {
     //   https://developers.google.com/web/updates/2015/10/display-mode
     //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+      $('body').addClass('pwa-installed');
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
 
