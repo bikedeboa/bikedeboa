@@ -407,7 +407,9 @@ $(() => {
       if (!marker._hasDetails) {
         // Request content
         Database.getPlaceDetails(marker.id, () => {
-          openDetailsModal(marker, callback);
+          if (openedMarker && openedMarker.id === marker.id) {
+            openDetailsModal(marker, callback);
+          }
         });
       }
     }
