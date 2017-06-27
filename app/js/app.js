@@ -46,6 +46,8 @@ $(() => {
 
         // Copy share URL to clipboard
         $('#share-url-btn').on('click', e => {
+          ga('send', 'event', 'Local', 'share - copy url to clipboard', ''+openedMarker.id);
+
           copyToClipboard(e.currentTarget);
  
           // Tooltip
