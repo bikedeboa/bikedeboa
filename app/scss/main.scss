@@ -2309,7 +2309,7 @@ a,
     filter: grayscale(100%);
   }
 
-  textarea {
+  #share-url-btn {
     width: 100%;
     text-align: center;
     color: gray;
@@ -2322,9 +2322,13 @@ a,
     transition: background 0.2s ease-out;
     border: 1px solid #ccc;
     border-radius: 4px;
+    white-space: nowrap;
 
-    &:hover {
-      background: $lightestGray;
+    &:hover,
+    &:focus,
+    &:active {
+      background: $green;
+      color: white;
     }
   }
 }

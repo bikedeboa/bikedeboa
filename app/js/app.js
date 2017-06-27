@@ -24,6 +24,40 @@ $(() => {
     return pinColor;
   }
 
+  function openShareDialog() {
+    const shareUrl = window.location.href;
+
+    swal({
+      imageUrl: '/img/icon_share.svg',
+      imageWidth: 80,
+      imageHeight: 80,
+      customClass: 'share-modal',
+      html:
+        `Compartilhe este bicicletário:<br><br>\
+        <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\
+        <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>\ 
+        <br><hr>\
+        ...ou clique para copiar o link:<br><br>\
+        <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="<span class='glyphicon glyphicon-link'></span> Copiado!">${shareUrl}</textarea>`,
+      showConfirmButton: false,
+      onOpen: () => {
+        // Initializes Twitter share button
+        twttr.widgets.load();
+
+        // Copy share URL to clipboard
+        $('#share-url-btn').on('click', e => {
+          copyToClipboard(e.currentTarget);
+ 
+          // Tooltip
+          $('#share-url-btn').tooltip('show');
+          $('#share-url-btn').one('blur mouseout', () => {
+            $('#share-url-btn').tooltip('hide');
+          });
+        });
+      }
+    });
+  }
+
   function openDetailsModal(marker) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
@@ -146,33 +180,8 @@ $(() => {
     });
     $('.shareBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
-
-      swal({
-        title: ' ', 
-        imageUrl: '/img/icon_share.svg',
-        imageWidth: 80,
-        imageHeight: 80,
-        customClass: 'share-modal',
-        html:
-          `Compartilhe este bicicletário:<br><br>\
-          <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(window.location.href)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\
-          <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>\ 
-          <br><hr>\
-          ...ou clique para copiar o link:<br><br>\
-          <textarea id="copy-share-url-btn" onclick="this.focus();this.select();copyToClipboard(this);" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="<span class='glyphicon glyphicon-link'></span> Copiado!">${window.location.href}</textarea>`,
-        showConfirmButton: false,
-        onOpen: () => {
-          twttr.widgets.load();
- 
-          $('#copy-share-url-btn').on('click', () => {
-            $('#copy-share-url-btn').tooltip('show');
-
-            $('#copy-share-url-btn').one('blur mouseout', () => {
-              $('#copy-share-url-btn').tooltip('hide');
-            });
-          });
-        }
-      });
+      
+      openShareDialog();
     });
     $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
