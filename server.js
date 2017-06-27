@@ -116,13 +116,14 @@ router.get('/b/*',function(req,res) {
             data.access = obj.isPublic ? 'público' : 'privado';
             data.type = STRUCTURE_CODE_TO_NAME[obj.structureType];
             
-            // Reconstruct the URL with the correct title
             if (obj.text) {
-              data.canonicalUrl = 'https://www.bikedeboa.com.br/b/' + obj.id + '-' + slugify(obj.text);
-            } else {
-              data.canonicalUrl = url;
+              // Reconstruct the URL with the correct title
+              data.canonicalUrl = 'https://www.bikedeboa.com.br/b/' + obj.id;
+              // if (obj.text) {
+                data.canonicalUrl += '-' + slugify(obj.text);
+              // }
             }
-
+            
             console.log(data.canonicalUrl);
 
             // Render template
