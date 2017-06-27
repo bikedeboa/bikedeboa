@@ -21,7 +21,41 @@ $(() => {
       pinColor = 'gray';
     }
 
-    return pinColor;
+    return pinColor; 
+  }
+
+  function openShareDialog() {
+    const shareUrl = window.location.href; 
+
+    swal({ 
+      imageUrl: '/img/icon_share.svg',
+      imageWidth: 80,
+      imageHeight: 80,
+      customClass: 'share-modal',
+      html:
+        `Compartilhe este bicicletário:<br><br>
+        <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+        <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
+        <br><hr>
+        ...ou clique para copiar o link:<br><br>
+        <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="<span class='glyphicon glyphicon-link'></span> Copiado!">${shareUrl}</textarea>`,
+      showConfirmButton: false,
+      onOpen: () => {
+        // Initializes Twitter share button
+        twttr.widgets.load();
+
+        // Copy share URL to clipboard
+        $('#share-url-btn').on('click', e => {
+          copyToClipboard(e.currentTarget);
+ 
+          // Tooltip
+          $('#share-url-btn').tooltip('show');
+          $('#share-url-btn').one('blur mouseout', () => {
+            $('#share-url-btn').tooltip('hide');
+          });
+        });
+      }
+    });
   }
 
   function openDetailsModal(marker) {
@@ -146,15 +180,8 @@ $(() => {
     });
     $('.shareBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
-
-      swal({
-        title: ' ',
-        text:
-          `Copie e cole o link abaixo para compartilhar este bicicletário:<br><br>\
-          <a href="${window.location.href}">${window.location.href}</a>`, 
-        type: 'info',
-        html: true
-      });
+      
+      openShareDialog();
     });
     $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
@@ -173,6 +200,10 @@ $(() => {
       $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
         // Animate modal content
         // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+
+        // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
+        // Thanks to https://github.com/limonte/sweetalert2/issues/374
+        $(document).off('focusin.modal');
 
         // @todo do this better please
         if (window._openLocalDetailsCallback && typeof window._openLocalDetailsCallback === 'function') {
@@ -423,7 +454,7 @@ $(() => {
 
       filters.push({prop: p, value: v});
     });
-
+ 
     const resultsCount = applyFilters(filters);
     if (filters.length > 0) {
       $('#filter-results-counter').html(resultsCount);
@@ -796,12 +827,11 @@ $(() => {
 
             swal({
               title: 'Ops',
-              text:
+              html:
                 'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
                 <br><br>\
                 <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
               type: 'warning',
-              html: true
             });
           }
         }
@@ -897,15 +927,14 @@ $(() => {
 
         if (updatingMarker) {
           swal('Bicicletário atualizado', 'Valeu pela contribuição!', 'success');
-        } else {
+        } else { 
           swal({
             title: 'Bicicletário criado',
             text: 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
             type: 'success',
-            closeOnConfirm: true,
             allowOutsideClick: false, // because this wouldnt trigger the callback @todo
             allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
-          }, () => {
+          }).then(() => {
             // Clicked OK or dismissed the modal
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
@@ -1252,19 +1281,17 @@ $(() => {
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Deletar",
-        closeOnConfirm: true
-      },
-      () => {
+        confirmButtonColor: '#FF8265'
+      }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
         Database.deletePlace(openedMarker.id, () => {
-          // $('#newPlaceModal').modal('hide');
           goHome();
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
-            swal('Bicicletário deletado', 'Espero que você saiba o que está fazendo.', 'success');
+            swal('Bicicletário deletado', 'Espero que você saiba o que está fazendo. :P', 'error');
           });
         });
       });
@@ -1485,9 +1512,8 @@ $(() => {
 
       // Custom Open Graph Description
       if (openedMarker.address) {
-        let desc = 'Bicicletário em ';
+        let desc = 'Informações e avaliações deste bicicletário na ';
         desc += openedMarker.address;
-        // @todo: improve this description with more contextual data
 
         $('meta[name="og:title"]').attr("content", desc);
       }
@@ -1627,17 +1653,15 @@ $(() => {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-            title: "Descartar?",
-            text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Descartar", 
-            closeOnConfirm: true,
-            allowOutsideClick: false
-          },
-          () => {
-            returnToPreviousView();
-          }
+          text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: '#FF8265',
+          confirmButtonText: "Descartar", 
+          allowOutsideClick: false
+        }).then(() => {
+          returnToPreviousView();
+        }
         );
       } else {
         returnToPreviousView();
@@ -2009,7 +2033,7 @@ $(() => {
 
     // Initialize router
     // @todo: detach this from onLoad!
-    $(window).on('load', () => {
+    _onDataReadyCallback = () => {
       const isMatch = handleRouting();
       
       if (isMatch) {
@@ -2018,7 +2042,7 @@ $(() => {
       } else {
         goHome();
       }
-    });
+    };
 
     // Set up Sweet Alert
     swal.setDefaults({
@@ -2027,7 +2051,7 @@ $(() => {
       cancelButtonText: 'Cancelar',
       allowOutsideClick: true
     });
-
+ 
     // Toastr options
     toastr.options = {
       'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
@@ -2066,7 +2090,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
 
       e.userChoice.then(function(choiceResult) {
-        // console.log(choiceResult.outcome);
+        // console.log(choiceResult.outcome); 
         if(choiceResult.outcome == 'dismissed') {
           // User cancelled home screen install
           ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
@@ -2189,6 +2213,12 @@ $(() => {
 
         // Hide spinner that is initialized visible on CSS
         hideSpinner();
+
+        //
+        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+          _onDataReadyCallback();
+          _onDataReadyCallback = null;
+        }
       });
     }
 

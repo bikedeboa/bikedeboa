@@ -236,14 +236,17 @@ body.position-pin-mode {
     background-color: $black; 
   }
 
-  .tooltip-arrow {
-    border-color: $black;
+  .bottom .tooltip-arrow {
+    border-bottom-color: $black;
+  }
+  .top .tooltip-arrow {
+    border-top-color: $black;
   }
 
   &.in {
     opacity: 1;
   }
-}
+} 
 
 .help-tooltip-trigger {
   cursor: pointer;
@@ -1877,7 +1880,7 @@ a,
   // border-bottom: 1px solid #eee;
 
   hr {
-    // border-left: 1px solid #eee;
+    // border-left: 1px solid #eee; 
     height: 50px;
     margin: 0;
     border-top: 0;
@@ -2299,6 +2302,35 @@ a,
   .infobox--arrow,
   .infobox--caret {
     display: none;
+  }
+}
+
+.share-modal {
+  .swal2-image {
+    filter: grayscale(100%);
+  }
+
+  #share-url-btn {
+    width: 100%;
+    text-align: center;
+    color: gray;
+    resize: none;
+    font-size: 12px;
+    display: inline-block;
+    background: $superLightGray;
+    cursor: pointer;
+    padding: 12px;
+    transition: background 0.2s ease-out;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: $green;
+      color: white;
+    }
   }
 }
 
@@ -3009,11 +3041,11 @@ a,
 }
 
 
-.sweet-alert {
+.swal2-modal {
   padding-left: 5%;
-  padding-right: 5%;
+  padding-right: 5%; 
   font-family: $bodyFont;
-  @include material-shadow(1);
+  @include material-shadow(2);
 
   h2 {
     // font-family: $headingFont;

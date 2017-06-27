@@ -1,5 +1,5 @@
 module.exports = {
-    "env": {
+    "env": { 
       "es6": true,
       "node": true,
       "browser": true
@@ -31,6 +31,7 @@ module.exports = {
         "Handlebars": false,
         "UpUp": false,
         "swal": false,
+        "twttr": true,
         "ga": true, //overriden on localhost
 
         // Constants
@@ -44,7 +45,7 @@ module.exports = {
         "MARKER_ICON_RED": false,
         "MARKER_ICON_GRAY": false,
         "MARKER_ICON_GREEN_MINI": false,
-        "MARKER_ICON_YELLOW_MINI": false,
+        "MARKER_ICON_YELLOW_MINI": false, 
         "MARKER_ICON_RED_MINI": false,
         "MARKER_ICON_GRAY_MINI": false,
         "STRUCTURE_TYPES": false,
@@ -65,6 +66,7 @@ module.exports = {
         "removeAccents": true,
         "slugify": true,
         "autoGrowTextArea": true,
+        "copyToClipboard": true,
 
         // Global variables
         "BIKE": true,
@@ -102,6 +104,13 @@ module.exports = {
         "_gmapsCustomStyleStaticApi": true,
         "_activeFilters": true,
         "_infoWindow": true,
-        "_isTouchDevice": true
+        "_isTouchDevice": true,
+        "_isFacebookBrowser": true,
+        "_activeFilters": true,
+        "_infoWindow": true,
+        "_isOffline": true,
+        "_currentView": true,
+        "_isDeeplink": true,
+        "_onDataReadyCallback": true,
     }
 };

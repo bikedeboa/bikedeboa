@@ -1,0 +1,25 @@
+<!doctype html>
+
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{title}}</title>
+		<meta property="og:title" content="{{title}}">
+      
+        <meta name="description" content="Informações e avaliações deste bicicletário {{#if address}} na {{address}}{{/if}}.">
+		<meta property="og:description" content="Informações e avaliações deste bicicletário {{#if address}} na {{address}}{{/if}}.">
+
+        {{#if photo}}
+			<meta property="og:image" content="{{photo}}">
+		{{else}}
+			<meta property="og:image" content="https://www.bikedeboa.com.br/fb.png">
+		{{/if}}
+        
+        <meta property="fb:app_id" content="1814653185457307"/>
+        <meta name="google-site-verification" content="ftQlKcMOfc5iuPkN6xINweO31I0WNRE4s9zDbQT9iTY"/>
+
+        <!-- Redirect non-robot clients to normal page -->
+        <meta http-equiv="refresh" content="0; url={{redirectUrl}}">
+    </head> 
+
+</html>
