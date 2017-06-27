@@ -933,16 +933,13 @@ a,
     overflow-y: auto;
 
     &:before { 
+        position: fixed;
         content: '✕';
         color: $gray;
-        position: absolute;
         top: $GRID_SPACE;
-        right: $GRID_SPACE;
+        right: $GRID_SPACE*2;
         font-size: 30px;
         line-height: 30px;
-        font-weight: lighter;
-        font-family: "Arial";
-        cursor: pointer;
         pointer-events: none;
     }
 }
@@ -1585,6 +1582,10 @@ a,
         min-height: 70px;
         background: $superLightGray;
         // border-radius: 15px;
+
+        &.close-modal {
+          cursor: pointer;
+        }
     }
 
     .numreviews:before {
