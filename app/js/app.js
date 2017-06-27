@@ -618,6 +618,7 @@ $(() => {
                 pinColor: getPinColorFromAverage(m.average)
               };
 
+              // @todo: encapsulate both the next 2 in one method
               // Reviews count
               if (m.reviews === 0) {
                 templateData.numReviews = '';
@@ -627,6 +628,7 @@ $(() => {
                 templateData.numReviews = `${m.reviews} avaliações`;
               }
 
+              // Structure and access types
               if (m.isPublic != null) {
                 templateData.isPublic = m.isPublic === true; 
               } else {
@@ -638,7 +640,8 @@ $(() => {
 
               const contentString = templates.infoWindowTemplate(templateData);
 
-              if (_isMobile) {
+              if (_isTouchDevice) {
+                // Infobox preview on click
                 _gmarkers[i].addListener('click', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
@@ -662,11 +665,12 @@ $(() => {
                   _infoWindow.close();
                 });
               } else {
-                // Modal
+                // No infobox, directly opens the details modal
                 _gmarkers[i].addListener('click', () => {
                   openLocalDetails(markers[i]);
                 });
 
+                // Infobox preview on hover
                 _gmarkers[i].addListener('mouseover', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
