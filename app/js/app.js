@@ -148,25 +148,31 @@ $(() => {
       ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
 
       swal({
-        title: ' ',
+        title: ' ', 
         imageUrl: '/img/icon_share.svg',
+        imageWidth: 80,
+        imageHeight: 80,
         customClass: 'share-modal',
-        text:
-          `Compartilhe este bicicletário numa rede social:<br><br>\
-          <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(window.location.href)}&layout=button&size=small&mobile_iframe=true&appId=1814653185457307&width=107&height=20" width="107" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\
-          <a target="_blank" href="https://twitter.com/share" class="twitter-share-button"></a>\
+        html:
+          `Compartilhe este bicicletário:<br><br>\
+          <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(window.location.href)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\
+          <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>\ 
           <br><hr>\
-          ...ou simplesmente copie e cole este link:<br><br>\
-          <a target="_blank" href="${window.location.href}">${window.location.href}</a>`,
+          ...ou clique para copiar o link:<br><br>\
+          <textarea id="copy-share-url-btn" onclick="this.focus();this.select();copyToClipboard(this);" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="<span class='glyphicon glyphicon-link'></span> Copiado!">${window.location.href}</textarea>`,
         showConfirmButton: false,
-        html: true
-      });
+        onOpen: () => {
+          twttr.widgets.load();
+ 
+          $('#copy-share-url-btn').on('click', () => {
+            $('#copy-share-url-btn').tooltip('show');
 
-      // Twitter share button
-      // @todo: user onOpen() callback on SweetAlert2 to make sure this works
-      setTimeout( () => {
-        twttr.widgets.load();
-      }, 500); 
+            $('#copy-share-url-btn').one('blur mouseout', () => {
+              $('#copy-share-url-btn').tooltip('hide');
+            });
+          });
+        }
+      });
     });
     $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
@@ -185,6 +191,10 @@ $(() => {
       $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
         // Animate modal content
         // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+
+        // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
+        // Thanks to https://github.com/limonte/sweetalert2/issues/374
+        $(document).off('focusin.modal');
 
         // @todo do this better please
         if (window._openLocalDetailsCallback && typeof window._openLocalDetailsCallback === 'function') {
@@ -804,12 +814,11 @@ $(() => {
 
             swal({
               title: 'Ops',
-              text:
+              html:
                 'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
                 <br><br>\
                 <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
               type: 'warning',
-              html: true
             });
           }
         }
@@ -910,10 +919,9 @@ $(() => {
             title: 'Bicicletário criado',
             text: 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
             type: 'success',
-            closeOnConfirm: true,
             allowOutsideClick: false, // because this wouldnt trigger the callback @todo
             allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
-          }, () => {
+          }).then(() => {
             // Clicked OK or dismissed the modal
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
@@ -1259,10 +1267,8 @@ $(() => {
         text: "Tem certeza disso?",
         type: "warning",
         showCancelButton: true,
-        confirmButtonText: "Deletar",
-        closeOnConfirm: true
-      },
-      () => {
+        confirmButtonText: "Deletar"
+      }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
@@ -1635,17 +1641,16 @@ $(() => {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-            title: "Descartar?",
-            text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Descartar", 
-            closeOnConfirm: true,
-            allowOutsideClick: false
-          },
-          () => {
-            returnToPreviousView();
-          }
+          title: "Descartar?",
+          text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Descartar", 
+          closeOnConfirm: true,
+          allowOutsideClick: false
+        }).then(() => {
+          returnToPreviousView();
+        }
         );
       } else {
         returnToPreviousView();

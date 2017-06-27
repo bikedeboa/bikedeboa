@@ -320,30 +320,25 @@ BIKE.Database = {
 
     if (isUserLogin) {
       // user = prompt('Usuário:','');
-      swal(
-        {
+      swal({
           title: 'Login',
           text: 'Em breve todos poderão criar um login no Bike de Boa, mas por enquanto este login é apenas para administradores.',
-          html: true,
-          type: 'input',
+          input: 'text',
           showCancelButton: true,
-          closeOnConfirm: true,
           inputPlaceholder: "Nome de usuário"
-        },
-        (input) => {
-          if (input) {
-            // if (input === '') {
-            //   swal.showInputError();
-            //   return false;
-            // } else {
-              self._loginPromptCallback(input, isUserLogin, callback);
-              return true;
-            // }
-          } else {
-            return false;
-          }
+      }).then((input) => {
+        if (input) {
+          // if (input === '') {
+          //   swal.showInputError();
+          //   return false;
+          // } else {
+            self._loginPromptCallback(input, isUserLogin, callback);
+            return true;
+          // }
+        } else { 
+          return false;
         }
-      );
+      });
     } else {
       const user = Cookies.get('bikedeboa_user');
       self._loginPromptCallback(user, isUserLogin, callback);

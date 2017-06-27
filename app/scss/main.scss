@@ -236,8 +236,11 @@ body.position-pin-mode {
     background-color: $black; 
   }
 
-  .tooltip-arrow {
-    border-color: $black;
+  .tooltip.bottom .tooltip-arrow {
+    border-bottom-color: $black;
+  }
+  .tooltip.top .tooltip-arrow {
+    border-top-color: $black;
   }
 
   &.in {
@@ -2302,12 +2305,27 @@ a,
 }
 
 .share-modal {
-  .sa-icon.sa-custom {
+  .swal2-image {
     filter: grayscale(100%);
   }
 
-  .sa-button-container {
-    display: none;
+  textarea {
+    width: 100%;
+    text-align: center;
+    color: gray;
+    resize: none;
+    font-size: 12px;
+    display: inline-block;
+    background: $superLightGray;
+    cursor: pointer;
+    padding: 12px;
+    transition: background 0.2s ease-out;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    &:hover {
+      background: $lightestGray;
+    }
   }
 }
 
@@ -3018,11 +3036,11 @@ a,
 }
 
 
-.sweet-alert {
+.swal2-modal {
   padding-left: 5%;
-  padding-right: 5%;
+  padding-right: 5%; 
   font-family: $bodyFont;
-  @include material-shadow(1);
+  @include material-shadow(2);
 
   h2 {
     // font-family: $headingFont;
