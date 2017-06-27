@@ -25,7 +25,7 @@ $(() => {
   }
 
   function openShareDialog() {
-    const shareUrl = window.location.href; 
+    const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
 
     swal({ 
       imageUrl: '/img/icon_share.svg',
@@ -420,12 +420,18 @@ $(() => {
     }
   }
 
-  // Just delegate the action to the route controller
-  function openLocalDetails(marker, callback) {
+  function getMarkerShareUrl(marker) {
     let url = `/b/${marker.id}`;
     if (marker.text) {
       url += `-${slugify(marker.text)}`;
     }
+
+    return url;
+  }
+
+  // Just delegate the action to the route controller
+  function openLocalDetails(marker, callback) {
+    let url = getMarkerShareUrl(marker);
 
     window._openLocalDetailsCallback = callback;
 
