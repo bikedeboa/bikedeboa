@@ -163,9 +163,10 @@ $(() => {
       });
 
       // Twitter share button
+      // @todo: user onOpen() callback on SweetAlert2 to make sure this works
       setTimeout( () => {
         twttr.widgets.load();
-      }, 300); 
+      }, 500); 
     });
     $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
@@ -412,19 +413,13 @@ $(() => {
   }
 
   function _openLocalDetails(marker, callback) {
-    console.log('oi');
     if (marker) {
-      console.log('oi2');
       openDetailsModal(marker, callback);
-      console.log('oi3');
 
       if (!marker._hasDetails) {
         // Request content
-        console.log('oi4');
         Database.getPlaceDetails(marker.id, () => {
-          console.log('oi5');
           if (openedMarker && openedMarker.id === marker.id) {
-            console.log('oi6');
             openDetailsModal(marker, callback);
           }
         });
@@ -440,7 +435,7 @@ $(() => {
 
       filters.push({prop: p, value: v});
     });
-
+ 
     const resultsCount = applyFilters(filters);
     if (filters.length > 0) {
       $('#filter-results-counter').html(resultsCount);
