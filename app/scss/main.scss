@@ -236,17 +236,17 @@ body.position-pin-mode {
     background-color: $black; 
   }
 
-  .tooltip.bottom .tooltip-arrow {
+  .bottom .tooltip-arrow {
     border-bottom-color: $black;
   }
-  .tooltip.top .tooltip-arrow {
+  .top .tooltip-arrow {
     border-top-color: $black;
   }
 
   &.in {
     opacity: 1;
   }
-}
+} 
 
 .help-tooltip-trigger {
   cursor: pointer;

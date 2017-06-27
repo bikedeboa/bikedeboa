@@ -21,23 +21,23 @@ $(() => {
       pinColor = 'gray';
     }
 
-    return pinColor;
+    return pinColor; 
   }
 
   function openShareDialog() {
-    const shareUrl = window.location.href;
+    const shareUrl = window.location.href; 
 
-    swal({
+    swal({ 
       imageUrl: '/img/icon_share.svg',
       imageWidth: 80,
       imageHeight: 80,
       customClass: 'share-modal',
       html:
-        `Compartilhe este bicicletário:<br><br>\
-        <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\
-        <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>\ 
-        <br><hr>\
-        ...ou clique para copiar o link:<br><br>\
+        `Compartilhe este bicicletário:<br><br>
+        <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+        <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
+        <br><hr>
+        ...ou clique para copiar o link:<br><br>
         <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="<span class='glyphicon glyphicon-link'></span> Copiado!">${shareUrl}</textarea>`,
       showConfirmButton: false,
       onOpen: () => {
@@ -923,7 +923,7 @@ $(() => {
 
         if (updatingMarker) {
           swal('Bicicletário atualizado', 'Valeu pela contribuição!', 'success');
-        } else {
+        } else { 
           swal({
             title: 'Bicicletário criado',
             text: 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
@@ -1276,18 +1276,18 @@ $(() => {
         text: "Tem certeza disso?",
         type: "warning",
         showCancelButton: true,
-        confirmButtonText: "Deletar"
+        confirmButtonText: "Deletar",
+        confirmButtonColor: '#FF8265'
       }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
         Database.deletePlace(openedMarker.id, () => {
-          // $('#newPlaceModal').modal('hide');
           goHome();
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
-            swal('Bicicletário deletado', 'Espero que você saiba o que está fazendo.', 'success');
+            swal('Bicicletário deletado', 'Espero que você saiba o que está fazendo. :P', 'error');
           });
         });
       });
@@ -1508,9 +1508,8 @@ $(() => {
 
       // Custom Open Graph Description
       if (openedMarker.address) {
-        let desc = 'Bicicletário em ';
+        let desc = 'Informações e avaliações deste bicicletário na ';
         desc += openedMarker.address;
-        // @todo: improve this description with more contextual data
 
         $('meta[name="og:title"]').attr("content", desc);
       }
@@ -1650,12 +1649,11 @@ $(() => {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-          title: "Descartar?",
           text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
           type: "warning",
           showCancelButton: true,
+          confirmButtonColor: '#FF8265',
           confirmButtonText: "Descartar", 
-          closeOnConfirm: true,
           allowOutsideClick: false
         }).then(() => {
           returnToPreviousView();
@@ -2049,7 +2047,7 @@ $(() => {
       cancelButtonText: 'Cancelar',
       allowOutsideClick: true
     });
-
+ 
     // Toastr options
     toastr.options = {
       'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
@@ -2088,7 +2086,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
 
       e.userChoice.then(function(choiceResult) {
-        // console.log(choiceResult.outcome);
+        // console.log(choiceResult.outcome); 
         if(choiceResult.outcome == 'dismissed') {
           // User cancelled home screen install
           ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
