@@ -2301,6 +2301,16 @@ a,
   }
 }
 
+.share-modal {
+  .sa-icon.sa-custom {
+    filter: grayscale(100%);
+  }
+
+  .sa-button-container {
+    display: none;
+  }
+}
+
 
 
 

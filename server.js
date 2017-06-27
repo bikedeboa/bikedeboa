@@ -52,45 +52,52 @@ router.get('/io',function(req,res){
   res.sendFile(path + 'dist/io.html');
 });
 
-// SEO server-side rendering test
+// SEO server-side rendering Social Network Crawler Bots.
+// Request the API for details of a pin and delivers a simple HTML page with only SEO metatags.
 router.get('/b/*',function(req,res) {
-  var userAgent = req.headers['user-agent'];
-  if (userAgent.startsWith('facebookexternalhit/1.1') || userAgent === 'Facebot' || userAgent.startsWith('Twitterbot')) {
-    console.log(req);
+  // Default fallback response if anything fails
+  function defaultResponse() {
+    res.sendFile(path + 'dist/index.html');
+  }
 
-    // url = "/b/1148-cafe-agridoce"
+  // Test user agent for known social network bots
+  var userAgent = req.headers['user-agent'];
+  if (userAgent && userAgent.startsWith('facebookexternalhit/1.1') || userAgent === 'Facebot' || userAgent.startsWith('Twitterbot')) {
+    // URL is of the format "/b/1148-cafe-agridoce"
     var url = req.url;
     var regex = /\/b\/(\d*)/;
-    // id = "1148"
+    // ID should be just the numerical part of the URL
     var id = regex.exec(url)[1];
- 
-    request('https://bdb-api.herokuapp.com/local/' + id, function (error, response, body) {
-      console.log(response.statusCode);
 
-      if (!error && response.statusCode == 200) {
-        var obj = JSON.parse(body);
+    if (id && id.length > 0) {
+      request('https://bdb-api.herokuapp.com/local/' + id, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          var obj = JSON.parse(body);
 
-        console.log(obj);
+          if (obj) {
+            // Build data to feed the template
+            var data = {};
+            data.title = obj.text;
+            data.photo = obj.photo;
+            data.address = obj.address;
+            data.access = obj.isPublic ? 'público' : 'privado';
+            data.type = STRUCTURE_CODE_TO_NAME[obj.structureType];
+            data.redirectUrl = url;
 
-        var data = {};
-        data.title = obj.text;
-        data.photo = obj.photo;
-        data.address = obj.address;
-        data.access = obj.isPublic ? 'público' : 'privado';
-        data.type = STRUCTURE_CODE_TO_NAME[obj.structureType];
-        data.redirectUrl = url;
-
-        // var pageText = pageBuilder(data); 
-    
-        // res.writeHead(200, {"Context-Type": "text/html"});
-        // res.write(pageText);
-        // res.end();
-
-        res.render('seo', data);
-      }
-    });
+            // Render template
+            res.render('seo', data);
+          } else {
+            defaultResponse();
+          }
+        } else {
+          defaultResponse();
+        }
+      });
+    } else {
+      defaultResponse();
+    }
   } else {
-    res.sendFile(path + 'dist/index.html');
+    defaultResponse();
   }
 });
 

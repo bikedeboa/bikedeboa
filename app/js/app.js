@@ -149,12 +149,23 @@ $(() => {
 
       swal({
         title: ' ',
+        imageUrl: '/img/icon_share.svg',
+        customClass: 'share-modal',
         text:
-          `Copie e cole o link abaixo para compartilhar este bicicletário:<br><br>\
-          <a href="${window.location.href}">${window.location.href}</a>`, 
-        type: 'info',
+          `Compartilhe este bicicletário numa rede social:<br><br>\
+          <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(window.location.href)}&layout=button&size=small&mobile_iframe=true&appId=1814653185457307&width=107&height=20" width="107" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>\
+          <a target="_blank" href="https://twitter.com/share" class="twitter-share-button"></a>\
+          <br><hr>\
+          ...ou simplesmente copie e cole este link:<br><br>\
+          <a target="_blank" href="${window.location.href}">${window.location.href}</a>`,
+        showConfirmButton: false,
         html: true
       });
+
+      // Twitter share button
+      setTimeout( () => {
+        twttr.widgets.load();
+      }, 300); 
     });
     $('.photo-container img').off('click').on('click', e => {
       toggleExpandModalHeader();
@@ -401,13 +412,19 @@ $(() => {
   }
 
   function _openLocalDetails(marker, callback) {
+    console.log('oi');
     if (marker) {
+      console.log('oi2');
       openDetailsModal(marker, callback);
+      console.log('oi3');
 
       if (!marker._hasDetails) {
         // Request content
+        console.log('oi4');
         Database.getPlaceDetails(marker.id, () => {
+          console.log('oi5');
           if (openedMarker && openedMarker.id === marker.id) {
+            console.log('oi6');
             openDetailsModal(marker, callback);
           }
         });
@@ -2005,7 +2022,7 @@ $(() => {
 
     // Initialize router
     // @todo: detach this from onLoad!
-    $(window).on('load', () => {
+    _onDataReadyCallback = () => {
       const isMatch = handleRouting();
       
       if (isMatch) {
@@ -2014,7 +2031,7 @@ $(() => {
       } else {
         goHome();
       }
-    });
+    };
 
     // Set up Sweet Alert
     swal.setDefaults({
@@ -2185,6 +2202,12 @@ $(() => {
 
         // Hide spinner that is initialized visible on CSS
         hideSpinner();
+
+        //
+        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+          _onDataReadyCallback();
+          _onDataReadyCallback = null;
+        }
       });
     }
 
