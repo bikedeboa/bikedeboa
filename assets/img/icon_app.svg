@@ -4,20 +4,25 @@
 	 viewBox="0 0 566.9 566.9" style="enable-background:new 0 0 566.9 566.9;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;stroke:#82878A;stroke-width:43.6404;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-	.st1{fill:none;stroke:#FFFFFF;stroke-width:43.6404;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-	.st2{fill:none;stroke:#82878A;stroke-width:44.1845;stroke-miterlimit:10;}
-	.st3{fill:#82878A;stroke:#82878A;stroke-width:43.6404;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#82878A;stroke-width:44.1845;stroke-miterlimit:10;}
+	.st2{fill:#82878A;stroke:#82878A;stroke-width:43.6404;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#FFFFFF;stroke-width:30;stroke-miterlimit:10;}
+	.st4{display:none;opacity:0.5;}
 </style>
 <g>
 	<path class="st0" d="M428.3,411.7"/>
 	<path class="st0" d="M428.3,355.4v151.8c0,20.7-16.8,37.4-37.4,37.4H172.4c-20.6,0-37.3-16.7-37.3-37.4V59.7
 		c0-20.7,16.7-37.3,37.3-37.3H391c20.6,0,37.4,16.6,37.4,37.3L428.3,355.4"/>
-	<path class="st1" d="M289.5,470.6c0,2.2-1.7,4-3.9,4c-2.1,0-3.9-1.8-3.9-4c0-2.1,1.8-3.9,3.9-3.9
-		C287.8,466.7,289.5,468.5,289.5,470.6z"/>
-	<rect x="229.7" y="195.2" class="st2" width="6.2" height="12.4"/>
-	<rect x="327.5" y="195.2" class="st2" width="6.2" height="12.4"/>
-	<rect x="229.7" y="299.1" class="st2" width="6.2" height="12.4"/>
-	<rect x="143.6" y="480.6" class="st3" width="276" height="35.5"/>
-	<rect x="162.1" y="42.1" class="st3" width="239.1" height="35.5"/>
+	<rect x="229.7" y="195.2" class="st1" width="6.2" height="12.4"/>
+	<rect x="327.5" y="195.2" class="st1" width="6.2" height="12.4"/>
+	<rect x="229.7" y="299.1" class="st1" width="6.2" height="12.4"/>
+	<rect x="143.6" y="465.6" class="st2" width="276" height="56.4"/>
+	<rect x="162.1" y="42.1" class="st2" width="239.1" height="35.5"/>
+	<line class="st3" x1="236" y1="499.4" x2="327.5" y2="499.4"/>
+</g>
+<g id="lZEQO3_1_" class="st4">
+	
+		<image style="display:inline;overflow:visible;" width="240" height="322" id="lZEQO3_2_" xlink:href="B8926CEF08B42F66.png"  transform="matrix(2.0129 0 0 2.1596 40.05 -88.3999)">
+	</image>
 </g>
 </svg>
