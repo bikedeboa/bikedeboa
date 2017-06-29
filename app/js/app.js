@@ -1852,7 +1852,8 @@ $(() => {
           let id = urlBreakdown[2].split('-')[0];
           if (id) {
             id = parseInt(id);
-            _openLocalDetails(getMarkerById(id));
+            _deeplinkMarker = getMarkerById(id);
+            _openLocalDetails(_deeplinkMarker);
           }
         }
         break;
@@ -1877,12 +1878,22 @@ $(() => {
   }
 
   function setupGoogleMaps() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {
+    let initialCenter;
+    if (_isDeeplink && _deeplinkMarker) {
+      initialCenter = {
+        lat: parseFloat(_deeplinkMarker.lat),
+        lng: parseFloat(_deeplinkMarker.lng)
+      }
+    } else {
+      initialCenter = {
         lat: -30.0346,
         lng: -51.2177
-      },
-      zoom: 15,
+      }
+    }
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: initialCenter,
+      zoom: _isDeeplink ? 17 : 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -2056,6 +2067,7 @@ $(() => {
       
       if (isMatch) {
         _isDeeplink = true;
+
         $('#map').addClass('mock-map');
       } else {
         goHome();
