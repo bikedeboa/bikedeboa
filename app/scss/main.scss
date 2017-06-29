@@ -2310,28 +2310,85 @@ a,
     filter: grayscale(100%);
   }
 
-  #share-url-btn {
-    width: 100%;
-    text-align: center;
-    color: gray;
-    resize: none;
-    font-size: 12px;
-    display: inline-block;
+  .share-icons {
+    display: flex;
+    // justify-content: space-around;
+    justify-content: center;
+
+    & > * {
+      margin-right: 6px;
+    }
+
+    .share-email-btn {
+        padding: 5px 11px 8px;
+        background: #828b90;
+        border-radius: 4px;
+        line-height: 0;
+        border: 0;
+        min-width: 0;
+
+        &:hover {
+            background: #333;
+        }
+
+        .glyphicon.glyphicon-envelope {
+            margin-right: 5px;
+        }
+
+        a {
+            color: white;
+            font-size: 13px;
+
+            &,
+            &:hover {
+                text-decoration: none;
+                border: 0;
+            }
+        }
+    }
+  }
+
+  .share-url-container {
+    position: relative;
+
     background: $superLightGray;
-    cursor: pointer;
-    padding: 12px;
     transition: background 0.2s ease-out;
     border: 1px solid #ccc;
     border-radius: 4px;
-    white-space: nowrap;
-
+    padding: 12px 8px;
+    
     &:hover,
     &:focus,
     &:active {
       background: $green;
-      color: white;
+      
+      & > * {
+        color: white;
+      }
+    }
+
+    .share-url-icon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: $lightGray; 
+    }
+
+    textarea {
+        width: 100%;
+        text-align: center;
+        color: $gray;
+        background: transparent;
+        border: 0;
+        resize: none;
+        font-size: 13px;
+        display: inline-block;
+        cursor: pointer;
+        white-space: nowrap;
+        text-indent: 22px;
     }
   }
+
 }
 
 
@@ -2549,10 +2606,16 @@ a,
       color: $gray;
     }
   }
+
+  .share-modal {
+
+    .share-email-btn {
+      .share-email-label {
+        display: none;
+      }
+    }
+  }
 }
-
-
-
 
 
 
