@@ -62,8 +62,8 @@
         <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
 
         <!-- Google Fonts (async) -->
-        <link async href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
-        <!-- <link href="https://fonts.googleapis.com/css?family=Raleway:400,700|Ubuntu:400,700" rel="stylesheet"> -->
+        <!-- <link async href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet"> -->
+        <link href="https://fonts.googleapis.com/css?family=Raleway:400,700|Ubuntu:400,700" rel="stylesheet">
 
         <!-- Google Maps API (deferred) -->
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
@@ -79,8 +79,9 @@
     </head> 
 
     <body>
-        <!-- <div id="map" style="filter: blur(1px);"></div> -->
         <div id="map"></div>
+        
+        <h1 id="logo"> bike de boa </h1>
 
         <div id="locationSearch" class="coolHide">
             <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
@@ -227,7 +228,7 @@
                   <input type="checkbox" id="show-bike-layer">
                   <label for="show-bike-layer">
                     Mostrar ciclovias e ciclofaixas
-                    <span id="ciclovias-help-tooltip" class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" data-title="Dados de ciclovias do <b>EPTC</b>, do <b>Google Maps</b> e do <b>DataPOA</b>. Nos dá um toque se perceber algo de errado! :)"></span>
+                    <span id="ciclovias-help-tooltip" class="glyphicon glyphicon-info-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" data-title="Combinamos os dados de ciclovias da EPTC, do Google Maps e do DataPOA. Nos dá um toque se perceber algo de errado! :)"></span>
                   </label>
               </div>
             </header>
@@ -828,10 +829,6 @@
 
 
               <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}">
-                  {{#if numReviews}}
-                      <span class="numreviews">{{numReviews}}</span>
-                  {{/if}}
-                  
                   <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
                     {{#if average}}
                         <span class="average">{{average}}</span>
@@ -848,7 +845,12 @@
                           <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
                           <label class="full-star" data-value="1" for="placeDetails_star1"></label>
                       </fieldset>
+                      
+                      {{#if numReviews}}
+                        <span class="numreviews">{{numReviews}}</span>
+                      {{/if}}
                     {{/if}}
+
                     
                     {{#unless average}}
                         <!-- <button class="openReviewPanelBtn ghost">AVALIAR</button> -->

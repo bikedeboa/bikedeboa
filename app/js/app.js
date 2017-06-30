@@ -1579,6 +1579,10 @@ $(() => {
   }
 
   function _initGlobalCallbacks() {
+    $('#logo').on('click', () => {
+      goHome();
+    });
+
     $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
@@ -2050,6 +2054,7 @@ $(() => {
         // If map wasn't initialized before (custom routing case)
         if (!map && !_isOffline) {
           $('#map').removeClass('mock-map');
+          $('#logo').removeClass('clickable');
           setupGoogleMaps();
           updateMarkers();
         }
@@ -2068,6 +2073,7 @@ $(() => {
       if (isMatch) {
         _isDeeplink = true;
 
+        $('#logo').addClass('clickable');
         $('#map').addClass('mock-map');
       } else {
         goHome();

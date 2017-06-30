@@ -206,6 +206,31 @@ body.position-pin-mode {
   }
 }
 
+#logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  margin: 0;
+  padding: 0;
+  color: $green;
+  font-size: 22px;
+  text-shadow: 0px 0px 10px white;
+  letter-spacing: -0.02em;
+  font-weight: bold;
+  opacity: 0.6;
+  cursor: default;
+  user-select: none;
+
+  &.clickable {
+    z-index: 9999999;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
 .loading {
     opacity: 0.8;
 
@@ -1296,7 +1321,7 @@ a,
         line-height: 16px;
         color: $gray;
         margin-top: 0px;
-        font-weight: 700;
+        // font-weight: 700;
         /* margin-left: 40px; */
 
         .skeleton-box {
@@ -1387,6 +1412,14 @@ a,
         user-select: none;
         cursor: default;
     }
+
+    // .numreviews {
+    //     display: block;
+    //     margin: $GRID_SPACE/2 0 $GRID_SPACE;
+    //     color: $gray;
+    //     user-select: none;
+    //     cursor: default;
+    // }
 }
 
 .modal-body {
@@ -1591,16 +1624,21 @@ a,
         }
     }
 
-    .numreviews:before {
-        content: '';
-        display: inline-block;
-        width: 14px;
-        height: 17px;
-        background-image: url(/img/icon_user.svg);
-        background-size: 100%;
-        background-repeat: no-repeat;
-        vertical-align: middle;
-        margin-right: 5px;
+    .numreviews {
+      display: block;
+      margin: $GRID_SPACE/2 0 $GRID_SPACE;
+      
+      &:before {
+          content: '';
+          display: inline-block;
+          width: 14px;
+          height: 17px;
+          background-image: url(/img/icon_user.svg);
+          background-size: 100%;
+          background-repeat: no-repeat;
+          vertical-align: middle;
+          margin-right: 5px;
+      }
     }
 
     // .photo-container {
@@ -2004,7 +2042,7 @@ a,
 
       input:checked + label {
         color: #fff!important;
-        font-weight: 700;
+        // font-weight: 700;
         background: $filtersHightlightColor;
       }
      
@@ -2419,6 +2457,10 @@ a,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
+  #logo {
+    display: none;
+  }
+
   .modal {
     &:before {
       content: ''
