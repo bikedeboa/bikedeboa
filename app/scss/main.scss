@@ -2321,7 +2321,7 @@ a,
 
     .share-email-btn {
         padding: 5px 11px 8px;
-        background: #828b90;
+        background: $gray;
         border-radius: 4px;
         line-height: 0;
         border: 0;
@@ -2355,7 +2355,6 @@ a,
     transition: background 0.2s ease-out;
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 12px 8px;
     
     &:hover,
     &:focus,
@@ -2386,6 +2385,7 @@ a,
         cursor: pointer;
         white-space: nowrap;
         text-indent: 22px;
+        padding: 12px 8px;
     }
   }
 
