@@ -8,7 +8,8 @@ BIKE.Database = {
   // API path, without the final slash ('/')
   API_URL: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'https://bdb-test-api.herokuapp.com' : 'https://bdb-api.herokuapp.com',
   // API_URL: 'https://bdb-test-api.herokuapp.com',
-  isAuthenticated: false, 
+  // API_URL: 'http://localhost:3000',
+  isAuthenticated: false,  
   _authToken: '',
   _headers: {},
   _authenticationAttemptsLeft: 3,

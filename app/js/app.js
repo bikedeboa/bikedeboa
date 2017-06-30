@@ -34,11 +34,21 @@ $(() => {
       customClass: 'share-modal',
       html:
         `Compartilhe este bicicletário:<br><br>
-        <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-        <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
-        <br><hr>
+        <div class="share-icons">
+          <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+          <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
+          <button class="share-email-btn">
+            <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
+              <span class="glyphicon glyphicon-envelope"></span><span class="share-email-label">Email</span> 
+            </a>
+          </button>
+        </div>
+        <hr>
         ...ou clique para copiar o link:<br><br>
-        <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="<span class='glyphicon glyphicon-link'></span> Copiado!">${shareUrl}</textarea>`,
+        <div class="share-url-container">
+          <span class="glyphicon glyphicon-link share-url-icon"></span>
+          <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>
+        </div>`,
       showConfirmButton: false,
       onOpen: () => {
         // Initializes Twitter share button
@@ -1842,7 +1852,8 @@ $(() => {
           let id = urlBreakdown[2].split('-')[0];
           if (id) {
             id = parseInt(id);
-            _openLocalDetails(getMarkerById(id));
+            _deeplinkMarker = getMarkerById(id);
+            _openLocalDetails(_deeplinkMarker);
           }
         }
         break;
@@ -1867,12 +1878,22 @@ $(() => {
   }
 
   function setupGoogleMaps() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {
+    let initialCenter;
+    if (_isDeeplink && _deeplinkMarker) {
+      initialCenter = {
+        lat: parseFloat(_deeplinkMarker.lat),
+        lng: parseFloat(_deeplinkMarker.lng)
+      }
+    } else {
+      initialCenter = {
         lat: -30.0346,
         lng: -51.2177
-      },
-      zoom: 15,
+      }
+    }
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: initialCenter,
+      zoom: _isDeeplink ? 17 : 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -2046,6 +2067,7 @@ $(() => {
       
       if (isMatch) {
         _isDeeplink = true;
+
         $('#map').addClass('mock-map');
       } else {
         goHome();
