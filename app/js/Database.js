@@ -7,7 +7,9 @@ BIKE.Database = {
 
   // API path, without the final slash ('/')
   API_URL: (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'https://bdb-test-api.herokuapp.com' : 'https://bdb-api.herokuapp.com',
-  isAuthenticated: false, 
+  // API_URL: 'https://bdb-test-api.herokuapp.com',
+  // API_URL: 'http://localhost:3000',
+  isAuthenticated: false,  
   _authToken: '',
   _headers: {},
   _authenticationAttemptsLeft: 3,
@@ -319,30 +321,25 @@ BIKE.Database = {
 
     if (isUserLogin) {
       // user = prompt('Usuário:','');
-      swal(
-        {
+      swal({
           title: 'Login',
           text: 'Em breve todos poderão criar um login no Bike de Boa, mas por enquanto este login é apenas para administradores.',
-          html: true,
-          type: 'input',
+          input: 'text',
           showCancelButton: true,
-          closeOnConfirm: true,
           inputPlaceholder: "Nome de usuário"
-        },
-        (input) => {
-          if (input) {
-            // if (input === '') {
-            //   swal.showInputError();
-            //   return false;
-            // } else {
-              self._loginPromptCallback(input, isUserLogin, callback);
-              return true;
-            // }
-          } else {
-            return false;
-          }
+      }).then((input) => {
+        if (input) {
+          // if (input === '') {
+          //   swal.showInputError();
+          //   return false;
+          // } else {
+            self._loginPromptCallback(input, isUserLogin, callback);
+            return true;
+          // }
+        } else { 
+          return false;
         }
-      );
+      });
     } else {
       const user = Cookies.get('bikedeboa_user');
       self._loginPromptCallback(user, isUserLogin, callback);

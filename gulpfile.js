@@ -174,7 +174,7 @@ gulp.task('watch', () => {
 
 gulp.task('images', () => {
   return gulp.src('assets/img/**/*')
-    .pipe(imagemin())
+    .pipe(imagemin()) 
     .pipe(gulp.dest('dist/img'));
 });
 
