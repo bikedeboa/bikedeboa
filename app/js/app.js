@@ -1571,7 +1571,7 @@ $(() => {
 
   function returnToPreviousView() {
     if (_isDeeplink) {
-      _isDeeplink = false;
+      // _isDeeplink = false;
       goHome();
     } else {
       History.back();
