@@ -1615,7 +1615,7 @@ a,
     // }
 
     .minimap { 
-        min-height: 70px;
+        min-height: 50px;
         background: $superLightGray;
         // border-radius: 15px;
 
@@ -1628,17 +1628,17 @@ a,
       display: block;
       margin: $GRID_SPACE/2 0 $GRID_SPACE;
       
-      &:before {
-          content: '';
-          display: inline-block;
-          width: 14px;
-          height: 17px;
-          background-image: url(/img/icon_user.svg);
-          background-size: 100%;
-          background-repeat: no-repeat;
-          vertical-align: middle;
-          margin-right: 5px;
-      }
+      // &:before {
+      //     content: '';
+      //     display: inline-block;
+      //     width: 14px;
+      //     height: 17px;
+      //     background-image: url(/img/icon_user.svg);
+      //     background-size: 100%;
+      //     background-repeat: no-repeat;
+      //     vertical-align: middle;
+      //     margin-right: 5px;
+      // }
     }
 
     // .photo-container {
