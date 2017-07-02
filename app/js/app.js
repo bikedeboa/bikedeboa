@@ -62,7 +62,7 @@ $(() => {
  
           // Tooltip
           $('#share-url-btn').tooltip('show');
-          $('#share-url-btn').one('blur mouseout', () => {
+          $('#share-url-btn').one('mouseout', () => {
             $('#share-url-btn').tooltip('hide');
           });
         });
