@@ -4,7 +4,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $green: #30bb6a;
-$darkGreen: #04883A;
+$darkGreen: #00b800;
+$darkerGreen: #04883A;
 $lightGreen: #2cd978;
 $yellowGreen: #e0fb72;
 $greenery: #86af49;
@@ -1017,8 +1018,11 @@ a,
     }
 
     #titleInput {
-        border-radius: 3px;
         border: 2px solid $lighterGray;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: -0.5px; 
+        // border-radius: 3px;
         // font-size: 30px;
 
         &:valid {
@@ -1058,28 +1062,22 @@ a,
 
     .description {
         margin: $GRID_SPACE 10px $GRID_SPACE*2 10px;
-        padding: 10px 20px 20px;
+        padding: $GRID_SPACE $GRID_SPACE*2 $GRID_SPACE;
         /* color: $gray; */
         /* border-top: $separatorBorderStyle; */
         background: $lightestGray;
-        border-radius: 10px;
+        border-radius: 5px;
         color: rgb(100,100,100);
         text-align: left;
 
         h2 {
-            margin-top: 0;
+            margin-top: 0; 
             font-size: 14px;
         }
 
-        textarea {
-            resize: none;
-            // border-radius: 3px;
-            border: 0;
-            margin: 10px 0;
-        }
-
         &.collapsable {
-            max-height: 35px;
+            margin: 0;
+            max-height: 39px;
             overflow: hidden;
             position: relative;
 
@@ -1087,23 +1085,36 @@ a,
 
             h2 {
                 cursor: pointer;
+                
+                &:hover {
+                    text-decoration: underline;
+                }
+
+                &:after {
+                    position: absolute;
+                    top: 10px;
+                    right: $GRID_SPACE;
+                    font-family: $bootstrapFont;
+                    content: "\e252";
+                }
             }
 
-            h2:hover {
-                text-decoration: underline;
+            p {
+                font-size: 12px;
+                margin: $GRID_SPACE*2 0 0;
             }
 
-            h2:after {
-                position: absolute;
-                top: 10px;
-                right: 20px;
-                font-family: $bootstrapFont;
-                content: "\e252";
+            textarea {
+                resize: none;
+                margin: $GRID_SPACE 0;
+                border: 3px solid $lighterGray;
             }
+
         }
 
         &.expanded {
             max-height: 500px;
+
             h2:after {
                 content: "\e253";
             }
@@ -1194,11 +1205,11 @@ a,
 
 #newPlaceModal {
     .modal-body > section {
-        margin: 10px 0 20px;
+        margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
         & > h2 {
           background: $lightestGray;
-          padding: 10px;
+          padding: $GRID_SPACE;
         }
     }
 
@@ -1258,7 +1269,7 @@ a,
           border-radius: 50%;
           @include material-shadow(1);
           
-          transition: all 0.2s ease-out;
+          // transition: all 0.2s ease-out;
 
           &:after {
               content: 'Adicionar foto';
@@ -1446,6 +1457,8 @@ a,
 }
 
 .modal-body {
+    padding: $GRID_SPACE;
+
     hr {
         margin-top: 10px;
         margin-bottom: 10px;
@@ -1477,14 +1490,13 @@ a,
         filter: grayscale(100%);
         opacity: 0.9;
 
-        transition: background-color 0.2s ease-out;
+        // transition: background-color 0.2s ease-out;
 
         .icon-label {
           margin-top: 10px;
           color: $gray;
-          font-weight: 400;
+          font-weight: 700;
           user-select: none;
-          cursor: default;
         }
 
         &:after {
@@ -1514,7 +1526,7 @@ a,
             }
 
             .icon-label {
-              color: $black;
+              color: $green;
               // font-weight: 500;
             }
         }
@@ -1806,7 +1818,7 @@ a,
 }
 
 .btn.btn-action.green {
-    border-bottom: 5px solid green;
+    border-bottom: 3px solid $darkGreen;
 }
 
 .btn.btn-action {
@@ -1847,7 +1859,7 @@ a,
 
     &:disabled {
         background-color: $lightGray;
-        color: #e6e6e6;
+        color: $lighterGray;
     }
 
     &.focus:disabled,
@@ -2324,6 +2336,7 @@ a,
       font-family: $headingFont;
       font-weight: 700;
       font-size: 20px;
+      letter-spacing: -0.5px;
       line-height: normal;
       margin: 0;
       white-space: nowrap;
@@ -2586,7 +2599,7 @@ a,
 
       &:focus,
       &:active {
-         background-color: $darkGreen;
+         background-color: $darkerGreen;
       }
     }
 
@@ -2995,7 +3008,7 @@ a,
     &:focus,
     &:active,
     &:hover {
-        background: $darkGreen;
+        background: $darkerGreen;
     }
 }
 
@@ -3186,7 +3199,7 @@ a,
     min-width: 90px;
     
     &.confirm {
-      border-bottom: 3px solid green;
+      border-bottom: 3px solid $darkGreen;
     }
 
     &:active {
@@ -3196,7 +3209,7 @@ a,
         // compensate for relayout because of changing border size
         margin-bottom: 3px;
     }
-  }
+  } 
 
   .sa-button-container {
     margin-top: 30px; 

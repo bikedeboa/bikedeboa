@@ -650,7 +650,7 @@
 
                             <section>
                               <h2>
-                                Tipo de bicicletário
+                                Tipo de Bicicletário
                                 <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
                               </h2>
 
@@ -685,17 +685,19 @@
                             <section>
                               <div class="description collapsable">
                                   <h2>
-                                      MAIS INFORMAÇÕES (opcional)
+                                      Mais Informações <span style="font-size: 10px;">(opcional)</span>
                                   </h2>
 
-                                  <small>
-                                      <textarea id="descriptionInput"
-                                        maxlength="250"
-                                        type="text"
-                                        class="text-input"
-                                        placeholder="Mais alguma coisa importante? Ex.: horário de funcionamento, como acessar o local, serviços adicionais disponíveis, etc. (máx. 250 caracteres)">
-                                      </textarea>
-                                  </small>
+                                  <p>
+                                    Exemplo: horário de funcionamento, como acessar o local, serviços adicionais disponíveis, etc. (máx. 250 caracteres)
+                                  </p>
+
+                                  <textarea id="descriptionInput"
+                                    maxlength="250"
+                                    type="text"
+                                    class="text-input"
+                                    placeholder="Digite aqui">
+                                  </textarea>
                               </div>
                             </section>
                         </div>
@@ -720,18 +722,6 @@
                           </div>
 
                           <div class="modal-body ">
-                              <div id="placeDetails_heading" class="title">
-                                  {{#if title}}
-                                    <h2>{{title}}</h2>
-                                  {{else}}
-                                    <h2 style="font-style: italic;">Sem título</h2>
-                                  {{/if}}
-
-                                  <p class="address">
-                                      {{address}}
-                                  </p>
-                              </div>
-
                               <div style="margin-top: 20px;">
                                 <p style="color: inherit;">
                                   Tem alguma coisa errada com este bicicletário? Está faltando alguma informação essencial? Algo está desatualizado, ou talvez este bicicletário nem exista mais? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil para nossos amigos ciclistas.
