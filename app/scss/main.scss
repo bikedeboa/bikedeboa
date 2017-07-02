@@ -178,6 +178,10 @@ body.position-pin-mode {
     }
 }
 
+hr {
+  border-top: $separatorBorderStyle;
+}
+
 #offline-overlay {
   display: none;
 
@@ -3134,10 +3138,6 @@ a,
     text-transform: uppercase;
   }
 
-  hr {
-    border-top: $separatorBorderStyle;
-  }
-
   ul {
     margin: 0;
     padding: 0;
@@ -3172,7 +3172,7 @@ a,
   padding-left: 5%;
   padding-right: 5%; 
   font-family: $bodyFont;
-  @include material-shadow(2);
+  @include material-shadow(3);
 
   h2 {
     // font-family: $headingFont;
