@@ -1039,6 +1039,9 @@ a,
     .tagsContainer {
         // border-top: $separatorBorderStyle;
         padding: 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
 
         h2 {
             font-family: $headingFont;
@@ -1786,8 +1789,8 @@ a,
 
     background: $lightestGray;
     border-radius: 25px;
-    margin: 5px 10px 5px 0;
-    color: #333;
+    margin: 6px;
+    color: $black;
 
     .badge {
         margin-left: 2px;
@@ -2543,8 +2546,15 @@ a,
         display: block;
       }
     }
-  }
 
+    .tagsContainer {
+      justify-content: flex-start;
+
+      .tagDisplay {
+        margin: 0 6px 6px 0;
+      }
+    }
+  }
 
   .top-toolbar {
     // justify-content: space-around;
