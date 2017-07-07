@@ -4,10 +4,10 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="283.465px" height="283.465px" viewBox="0 0 283.465 283.465" enable-background="new 0 0 283.465 283.465"
 	 xml:space="preserve">
-<path fill="none" stroke="#82878A" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+<path fill="none" stroke="#333" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 	M155.561,268.53c-70.001,7.633-132.963-42.974-140.603-112.992c-7.602-70.047,42.969-133,112.992-140.603
 	c70.017-7.634,133,42.972,140.614,112.974C276.182,197.943,225.611,260.896,155.561,268.53z"/>
-<line fill="none" stroke="#82878A" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="141.995" y1="130.177" x2="141.995" y2="189.52"/>
-<path fill="#82878A" d="M156.653,95.236c0,8.196-6.604,14.774-14.77,14.774c-7.951,0-14.547-6.578-14.547-14.774
+<line fill="none" stroke="#333" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="141.995" y1="130.177" x2="141.995" y2="189.52"/>
+<path fill="#333" d="M156.653,95.236c0,8.196-6.604,14.774-14.77,14.774c-7.951,0-14.547-6.578-14.547-14.774
 	c0-7.943,6.588-14.555,14.547-14.555C150.05,80.681,156.653,87.292,156.653,95.236z"/>
 </svg>

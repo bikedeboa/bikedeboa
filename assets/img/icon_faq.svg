@@ -7,15 +7,15 @@
 <g>
 	<g>
 		
-			<path fill="none" stroke="#82878A" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+			<path fill="none" stroke="#333" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 			M110.753,224.771h123.528c19.475,0,35.26-13.465,35.26-30.086V52.007c0-16.619-15.785-37.609-35.26-37.609H49.854
 			c-19.475,0-35.258,20.99-35.258,37.609v142.679c0,16.621,15.783,30.086,35.258,30.086v44.521L110.753,224.771z"/>
 	</g>
 	
-		<path fill="none" stroke="#82878A" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		<path fill="none" stroke="#333" stroke-width="25.9677" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 		M112.821,94.147c0-14.944,12.145-27.088,27.087-27.088c14.973,0,27.103,12.145,27.103,27.088c0,14.578-10.047,18.073-19.016,22.484
 		c-7.273,3.519-8.309,9.186-8.087,20.833"/>
-	<path fill="#82878A" d="M154.364,169.305c0,8.055-6.435,14.548-14.541,14.548c-7.83,0-14.355-6.493-14.355-14.548
+	<path fill="#333" d="M154.364,169.305c0,8.055-6.435,14.548-14.541,14.548c-7.83,0-14.355-6.493-14.355-14.548
 		c0-7.831,6.525-14.332,14.355-14.332C147.93,154.973,154.364,161.474,154.364,169.305z"/>
 </g>
 </svg>

@@ -294,7 +294,7 @@ hr {
 }
 
 .social-link {
-  opacity: 0.3;
+  opacity: 0.5;
   transition: opacity 0.2s ease;
   border: 0;
   margin: 0 10px;
@@ -646,7 +646,7 @@ a,
     position: absolute;
     bottom: 0;
     right: 0;
-    margin: 0 $GRID_SPACE $GRID_SPACE*3;
+    margin: 0 $GRID_SPACE $GRID_SPACE*2;
 
     background: linear-gradient(45deg,#30bb6a 0,#2cd978 100%);
     border: 0;
@@ -710,7 +710,6 @@ a,
     background-color: white;
     height: 40px;
     font-family: $bodyFont;
-    font-weight: 700;
     color: $gray;
     @include material-shadow(1);
 
@@ -2008,7 +2007,7 @@ a,
 
     .side-nav__hide {
       color: black;
-      right: 16px;
+      // right: 16px;
       left: auto;
     }
 
@@ -2652,6 +2651,15 @@ a,
     }
   }
 
+  .social-link {
+    opacity: 0.7;
+
+    img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
   // #addPlace {
   //   &.active {
   //       max-width: none;
@@ -3138,8 +3146,10 @@ a,
 }
 
 .side-nav__footer {
-    padding: 16px;
-    background-color: $lightestGray;
+    padding: $GRID_SPACE;
+    display: flex;
+    justify-content: center;
+    // background-color: $lightestGray;
 }
 
 .side-nav__content {
