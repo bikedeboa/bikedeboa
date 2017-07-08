@@ -373,8 +373,9 @@ a,
     border-bottom: 1px dashed;
 
     &:hover {
+      color: $darkBlue;
       text-decoration: none;
-      border-bottom: 1px solid;
+      border-bottom: 2px solid;
     }
 }
 
@@ -562,6 +563,32 @@ a,
         padding: 30px;
         color: white;
     }
+}
+
+#aboutModal {
+  $leading: 16px;
+
+  #about-social-buttons {
+    text-align: center;
+  }
+
+  img {
+    width: 60px;
+    height: auto;
+    margin: $GRID_SPACE auto;
+    display: block;
+  }
+
+  h2 {
+    font-size: $leading*1.618;
+    margin-top: $leading*2;
+    margin-bottom: $leading;
+    text-align: left;
+  }
+
+  h2, p {
+    color: $black;
+  }
 }
 
 #howToInstallModal {
@@ -1045,7 +1072,7 @@ a,
     }
 
     article {
-        padding: 10px 5px;
+        padding: 0 $GRID_SPACE;
     }
 
     .text-input-wrapper {
