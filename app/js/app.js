@@ -333,7 +333,7 @@ $(() => {
                   };
 
                   // Test if user located is inside our bounds
-                  if (!_mapBounds.contains(pos)) {
+                  if (_mapBounds.contains(pos)) {
                     map.panTo(pos);
                     
                     // Set minimum map zoom
