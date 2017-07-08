@@ -589,6 +589,10 @@ a,
   h2, p {
     color: $black;
   }
+
+  p {
+    line-height: 1.5em;
+  }
 }
 
 #howToInstallModal {

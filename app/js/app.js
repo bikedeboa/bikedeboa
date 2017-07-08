@@ -1014,7 +1014,10 @@ $(() => {
 
   function setupAutocomplete() {
     const inputElem = document.getElementById('locationQueryInput');
-    let autocomplete = new google.maps.places.Autocomplete(inputElem);
+    const options = {
+      strictBounds: _mapBounds
+    };
+    let autocomplete = new google.maps.places.Autocomplete(inputElem, options);
     autocomplete.bindTo('bounds', map);
 
     // var infowindow = new google.maps.InfoWindow();
@@ -2080,6 +2083,12 @@ $(() => {
     isDesktopListener.addListener((isDesktopListener) => {
       _isMobile = isDesktopListener.matches;
     });
+
+    if (_isMobile) {
+      $('#locationQueryInput').attr('placeholder','Buscar endereço');
+    } else {
+      $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
+    }
 
 
     // If permission to geolocation was already granted we already center the map
