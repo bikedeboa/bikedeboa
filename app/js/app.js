@@ -28,12 +28,12 @@ $(() => {
     const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
 
     swal({ 
-      imageUrl: '/img/icon_share.svg',
+      imageUrl: _isMobile ? '' : '/img/icon_share.svg',
       imageWidth: 80,
       imageHeight: 80,
       customClass: 'share-modal',
       html:
-        `Compartilhe este bicicletário:<br><br>
+        `Compartilhe este bicicletário<br><br>
         <div class="share-icons">
           <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
           <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
@@ -44,7 +44,7 @@ $(() => {
           </button>
         </div>
         <hr>
-        ...ou clique para copiar o link:<br><br>
+        ...ou clique para copiar o link<br><br>
         <div class="share-url-container">
           <span class="glyphicon glyphicon-link share-url-icon"></span>
           <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>

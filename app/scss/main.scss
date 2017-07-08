@@ -1365,7 +1365,7 @@ a,
           font-size: 30px;
           line-height: normal;
           margin-top: $GRID_SPACE*2;
-          letter-spacing: -0.5px; 
+          letter-spacing: -1px; 
         }
 
         & > .skeleton-box {
@@ -1548,7 +1548,7 @@ a,
     // font-family: $headingFont;
     font-weight: 700;
     color: #fff;
-    border-radius: 10px;
+    border-radius: 25px;
     padding: 3px 10px;
     background-color: $gray; //to be overriden
 }
