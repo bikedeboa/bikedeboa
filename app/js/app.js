@@ -333,7 +333,7 @@ $(() => {
                   };
 
                   // Test if user located is inside our bounds
-                  if (!_mapBounds.contains(pos)) {
+                  if (_mapBounds.contains(pos)) {
                     map.panTo(pos);
                     
                     // Set minimum map zoom
@@ -342,11 +342,11 @@ $(() => {
                     }
                   } else {  
                     ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
-
+          
                     swal({ 
                       customClass: 'coverage-notice-modal',
                       confirmButtonText: 'Continuar usando',
-                      title: 'Aviso de Cobertura',
+                      title: 'Oi! Só uma coisinha',
                       html:
                         `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado. Foi mal.<br>
                         <br>
@@ -371,7 +371,7 @@ $(() => {
                             </div>
                           </div>
                         </div>`,
-                      type: 'info', 
+                      type: 'info'
                     });
                   }
                 }
@@ -977,6 +977,7 @@ $(() => {
 
       Database.getPlaces( () => {
         updateMarkers();
+        
         hideSpinner();
 
         if (updatingMarker) {
@@ -1441,6 +1442,14 @@ $(() => {
     }
   }
 
+  function startConfettis() {
+    window.confettiful = new Confettiful(document.querySelector('.confetti-placeholder'));
+  }
+
+  function stopConfettis() {
+    clearTimeout(window.confettiful.confettiInterval);
+  }
+
   function sendReviewBtnCB() {
     const m = openedMarker;
 
@@ -1475,12 +1484,23 @@ $(() => {
           ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
         }
 
-        swal('Avaliação salva', 'Valeu! Tua avaliação ajuda outros ciclistas a conhecerem melhor este bicicletário.', 'success');
+        hideSpinner();
 
-        // Update markers data
-        Database.getPlaces( () => {
+        swal({ 
+          title: 'Valeu!',
+          html: `Tua contribuição vai ajudar a conhecerem melhor este bicicletário :)`,
+          type: 'success', 
+          onOpen: () => {
+            startConfettis();
+          },
+          onClose: () => {
+            stopConfettis();
+          }
+        });
+
+        // Update marker data
+        Database.getPlaceDetails(m.id, () => {
           updateMarkers();
-          hideSpinner();
         });
       });
     };
