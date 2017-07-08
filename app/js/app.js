@@ -342,13 +342,13 @@ $(() => {
                     }
                   } else {  
                     ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
-
+          
                     swal({ 
                       customClass: 'coverage-notice-modal',
                       confirmButtonText: 'Continuar usando',
-                      title: 'Aviso de Cobertura',
+                      title: 'Oi! Só uma coisinha',
                       html:
-                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado. Foi mal.<br>
+                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
                         <br>
                         <div class="panel-group" aria-controls="coverage-notice-read-more">
                           <div class="panel">
@@ -371,7 +371,7 @@ $(() => {
                             </div>
                           </div>
                         </div>`,
-                      type: 'info', 
+                      type: 'info'
                     });
                   }
 
@@ -904,9 +904,12 @@ $(() => {
             swal({
               title: 'Ops',
               html:
-                'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
-                <br><br>\
-                <small><i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
+                `Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.
+                <br><br>
+                <small>
+                  <i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">
+                  Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i>
+                </small>`,
               type: 'warning',
             });
           }
@@ -999,6 +1002,7 @@ $(() => {
 
       Database.getPlaces( () => {
         updateMarkers();
+        
         hideSpinner();
 
         if (updatingMarker) {
@@ -1035,7 +1039,10 @@ $(() => {
 
   function setupAutocomplete() {
     const inputElem = document.getElementById('locationQueryInput');
-    let autocomplete = new google.maps.places.Autocomplete(inputElem);
+    const options = {
+      strictBounds: _mapBounds
+    };
+    let autocomplete = new google.maps.places.Autocomplete(inputElem, options);
     autocomplete.bindTo('bounds', map);
 
     // var infowindow = new google.maps.InfoWindow();
@@ -1463,6 +1470,14 @@ $(() => {
     }
   }
 
+  function startConfettis() {
+    window.confettiful = new Confettiful(document.querySelector('.confetti-placeholder'));
+  }
+
+  function stopConfettis() {
+    clearTimeout(window.confettiful.confettiInterval);
+  }
+
   function sendReviewBtnCB() {
     const m = openedMarker;
 
@@ -1497,12 +1512,23 @@ $(() => {
           ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
         }
 
-        swal('Avaliação salva', 'Valeu! Tua avaliação ajuda outros ciclistas a conhecerem melhor este bicicletário.', 'success');
+        hideSpinner();
 
-        // Update markers data
-        Database.getPlaces( () => {
+        swal({ 
+          title: 'Valeu!',
+          html: `Tua contribuição vai ajudar a conhecerem melhor este bicicletário :)`,
+          type: 'success', 
+          onOpen: () => {
+            startConfettis();
+          },
+          onClose: () => {
+            stopConfettis();
+          }
+        });
+
+        // Update marker data
+        Database.getPlaceDetails(m.id, () => {
           updateMarkers();
-          hideSpinner();
         });
       });
     };
@@ -2082,6 +2108,12 @@ $(() => {
     isDesktopListener.addListener((isDesktopListener) => {
       _isMobile = isDesktopListener.matches;
     });
+
+    if (_isMobile) {
+      $('#locationQueryInput').attr('placeholder','Buscar endereço');
+    } else {
+      $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
+    }
 
 
     // If permission to geolocation was already granted we already center the map
