@@ -637,8 +637,9 @@ a,
 
   .panel-body {
     font-size: 16px;
-    color: $gray;
-    border-left: 3px solid $lightGray;
+    color: $gray; 
+    border-top: 2px solid $lighterGray;
+    background: $lightestGray
   }
 }
 
@@ -2574,22 +2575,22 @@ a,
         margin: 0 6px 6px 0;
       }
     }
-  }
 
-  .top-toolbar {
-    // justify-content: space-around;
-    // margin: 10px 10px -30px 0;
+    .top-toolbar {
+      // justify-content: space-around;
+      // margin: 10px 10px -30px 0;
 
-    hr {
-      // display: none;
-      height: 60px;
-    }
+      hr {
+        // display: none;
+        height: 60px;
+      }
 
-    .toolbar-item {
-      max-width: 90px;
+      .toolbar-item {
+        max-width: 90px;
 
-      label {
-        font-size: 8px;
+        label {
+          font-size: 8px;
+        }
       }
     }
   }
@@ -2728,12 +2729,21 @@ a,
   }
 
   .share-modal {
-
     .share-email-btn {
       .share-email-label {
         display: none;
       }
     }
+  }
+
+  // Custom Google Autocomplete search results for mobile
+  .pac-container:before {
+      content: 'Resultados apenas no Rio Grande do Sul';
+      padding: 6px 12px;
+      display: block;
+      font-size: 12px;
+      background: #fafafa;
+      color: #b3b3b3;
   }
 }
 

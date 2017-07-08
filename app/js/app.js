@@ -333,7 +333,7 @@ $(() => {
                   };
 
                   // Test if user located is inside our bounds
-                  if (_mapBounds.contains(pos)) {
+                  if (!_mapBounds.contains(pos)) {
                     map.panTo(pos);
                     
                     // Set minimum map zoom
@@ -348,7 +348,7 @@ $(() => {
                       confirmButtonText: 'Continuar usando',
                       title: 'Oi! Só uma coisinha',
                       html:
-                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado. Foi mal.<br>
+                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
                         <br>
                         <div class="panel-group" aria-controls="coverage-notice-read-more">
                           <div class="panel">
@@ -882,9 +882,12 @@ $(() => {
             swal({
               title: 'Ops',
               html:
-                'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
-                <br><br>\
-                <small><i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
+                `Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.
+                <br><br>
+                <small>
+                  <i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">
+                  Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i>
+                </small>`,
               type: 'warning',
             });
           }
