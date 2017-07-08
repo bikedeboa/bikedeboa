@@ -160,6 +160,7 @@
           <nav class="js-side-nav-container side-nav__container">
             <header class="side-nav__header">
               <!-- <span>bike de boa</span> -->
+              <div id="login-container"></div>
               <img alt="" src="/img/banner.svg"/>
             </header>
 
@@ -188,6 +189,12 @@
                   <!-- <span class="glyphicon glyphicon-user"></span> -->
                   Login administrador
                 </li>
+
+                <li class="side-nav--animate-in" id="loginBtn">
+                  <!-- <span class="glyphicon glyphicon-user"></span> -->
+                  <div class="fb-login-button" data-max-rows="1" data-size="medium" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="true" data-onlogin="checkFBLoginState();"></div>
+                </li>
+
 
                 <!-- <li>
                   <span class="glyphicon glyphicon-pencil"></span>
@@ -1231,6 +1238,32 @@
 
           return t;
         }(document, "script", "twitter-wjs"));</script>
+
+
+        <!-- Facebook SDK -->
+        <script>
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId            : '1554610834551808',
+              autoLogAppEvents : true,
+              xfbml            : true,
+              version          : 'v2.8'
+            });
+            
+            FB.AppEvents.logPageView();
+
+            // checkFBLoginState();
+          };
+
+          (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+           }(document, 'script', 'facebook-jssdk'));
+        </script>
+            
 
     </body>
 
