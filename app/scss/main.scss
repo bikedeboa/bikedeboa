@@ -981,10 +981,72 @@ a,
 
 .modal-content {
     border: 0;
+    border-radius: 5px;
+    overflow: hidden;
     margin-top: 50px;
     margin-bottom: 100px;
     @include material-shadow(3);
     // border-radius: 10px; //not working? :(
+
+        label {
+        font-weight: initial;
+    }
+
+    h2 {
+        font-family: $headingFont;
+        font-weight: lighter;
+        font-size: 14px;
+        color: $lightGray;
+        text-align: center;
+        // text-transform: uppercase;
+        user-select: none;
+        cursor: default;
+    }
+
+    p {
+        font-size: 16px;
+        color: $gray;
+    }
+
+    .address {
+        font-size: 14px;
+        line-height: 16px;
+        color: $gray;
+        margin-top: 0px;
+        // font-weight: 700;
+        /* margin-left: 40px; */
+
+        .skeleton-box {
+            width: 100%;
+            height: 30px;
+        }
+    }
+
+    .title {
+        // padding-left: 10px;
+        vertical-align: middle;
+        border-bottom: $separatorBorderStyle;
+        padding-bottom: $GRID_SPACE*2;
+        font-family: $headingFont;
+
+        h1 {
+          font-weight: 700;
+          font-size: 30px;
+          line-height: normal;
+          margin-top: $GRID_SPACE*2;
+          letter-spacing: -1px; 
+        }
+
+        & > .skeleton-box {
+            width: 70%;
+            height: 40px;
+            background: rgba(0,0,0,0.2);
+        }
+    }
+
+    article {
+        padding: 10px 5px;
+    }
 
     .text-input-wrapper {
         position: relative;
@@ -1313,96 +1375,6 @@ a,
           filter: none;
       }
   }
-}
-
-.modal-content {
-    border-radius: 5px;
-    overflow: hidden;
-
-    label {
-        font-weight: initial;
-    }
-
-    h2 {
-        font-family: $headingFont;
-        font-weight: lighter;
-        font-size: 14px;
-        color: $lightGray;
-        text-align: center;
-        // text-transform: uppercase;
-        user-select: none;
-        cursor: default;
-    }
-
-    p {
-        font-size: 16px;
-        color: $gray;
-    }
-
-    .address {
-        font-size: 14px;
-        line-height: 16px;
-        color: $gray;
-        margin-top: 0px;
-        // font-weight: 700;
-        /* margin-left: 40px; */
-
-        .skeleton-box {
-            width: 100%;
-            height: 30px;
-        }
-    }
-
-    .title {
-        // padding-left: 10px;
-        vertical-align: middle;
-        border-bottom: $separatorBorderStyle;
-        padding-bottom: $GRID_SPACE*2;
-        font-family: $headingFont;
-
-        h1 {
-          font-weight: 700;
-          font-size: 30px;
-          line-height: normal;
-          margin-top: $GRID_SPACE*2;
-          letter-spacing: -1px; 
-        }
-
-        & > .skeleton-box {
-            width: 70%;
-            height: 40px;
-            background: rgba(0,0,0,0.2);
-        }
-    }
-
-    // & .title-icon:before {
-    //     content: '';
-    //     display: inline-block;
-    //     width: 22px;
-    //     height: 28px;
-    //     background-size: 100%;
-    //     background-repeat: no-repeat;
-    //     margin-right: 5px;
-    //     vertical-align: text-top;
-    // }
-
-    // & .title-icon.green:before {
-    //     background-image: url(/img/pin_green.svg);
-    // }
-    // & .title-icon.yellow:before {
-    //     background-image: url(/img/pin_yellow.svg);
-    // }
-    // & .title-icon.red:before {
-    //     background-image: url(/img/pin_red.svg);
-    // }
-    // & .title-icon.gray:before {
-    //     background-image: url(/img/pin_gray.svg);
-    // }
-
-    article {
-        padding: 10px 5px;
-    }
-
 }
 
 .review {
@@ -2381,6 +2353,24 @@ a,
   }
 }
 
+.coverage-notice-modal {
+  .swal2-content {
+    text-align: left;
+  }
+
+  .panel {
+    .panel-title {
+      font-size: 18px;
+    }
+    
+    .panel-title {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+}
+
 .share-modal {
   .swal2-image {
     filter: grayscale(100%);
@@ -3206,6 +3196,11 @@ a,
   padding-right: 5%; 
   font-family: $bodyFont;
   @include material-shadow(3);
+
+  .swal2-content {
+    color: #333;
+    font-weight: 400;
+  }
 
   h2 {
     // font-family: $headingFont;

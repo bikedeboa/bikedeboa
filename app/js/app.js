@@ -332,11 +332,47 @@ $(() => {
                     lng: position.coords.longitude
                   };
 
-                  map.panTo(pos);
-                  
-                  // Set minimum map zoom
-                  if (map.getZoom() < 17) {
-                    map.setZoom(17);
+                  // Test if user located is inside our bounds
+                  if (!_mapBounds.contains(pos)) {
+                    map.panTo(pos);
+                    
+                    // Set minimum map zoom
+                    if (map.getZoom() < 17) {
+                      map.setZoom(17);
+                    }
+                  } else {  
+                    ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
+
+                    swal({ 
+                      customClass: 'coverage-notice-modal',
+                      confirmButtonText: 'Continuar usando',
+                      title: 'Aviso de Cobertura',
+                      html:
+                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado. Foi mal.<br>
+                        <br>
+                        <div class="panel-group" aria-controls="coverage-notice-read-more">
+                          <div class="panel">
+                            <div class="panel-heading">
+                              <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
+                                <h4 class="panel-title">
+                                  Leia mais 
+                                </h4>
+                              </a>
+                            </div>
+                            <div id="coverage-notice-read-more" class="panel-collapse collapse">
+                              <div class="panel-body">
+                                <p>
+                                  Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
+                                </p>
+                                <p>
+                                  Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>`,
+                      type: 'info', 
+                    });
                   }
                 }
               }
@@ -848,7 +884,7 @@ $(() => {
               html:
                 'Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.\
                 <br><br>\
-                <small><i>Acompanhe nossa <a target="_blank" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
+                <small><i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i></small>',
               type: 'warning',
             });
           }
@@ -1309,7 +1345,7 @@ $(() => {
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
-            swal('Bicicletário deletado', 'Espero que você saiba o que está fazendo. :P', 'error');
+            swal('Bicicletário deletado', 'Espero que tu saiba o que tá fazendo. :P', 'error');
           });
         });
       });
@@ -1494,7 +1530,7 @@ $(() => {
     Database.sendRevision(revisionObj, revisionId => {
       hideSpinner();
 
-      swal('Sugestão enviada', 'Obrigado por contribuir com o Bike de Boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
+      swal('Sugestão enviada', 'Obrigado por contribuir com o bike de boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
 
       goHome();
     });
@@ -1637,7 +1673,7 @@ $(() => {
       setView('Como instalar o app', '/como-instalar', true);
     }));
 
-    $('#faqBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.open-faq-btn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Perguntas frequentes', '/faq', true);
@@ -1675,7 +1711,7 @@ $(() => {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-          text: "Você estava adicionando um bicicletário. Tem certeza que deseja descartá-lo?",
+          text: "Tu estava adicionando um bicicletário. Tem certeza que quer descartá-lo?",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: '#FF8265',
