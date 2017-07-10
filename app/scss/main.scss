@@ -1082,8 +1082,8 @@ body.modal-open {
     .title {
         // padding-left: 10px;
         vertical-align: middle;
-        border-bottom: $separatorBorderStyle;
-        padding-bottom: $GRID_SPACE*2;
+        // border-bottom: $separatorBorderStyle;
+        // padding-bottom: $GRID_SPACE*2;
         font-family: $headingFont;
 
         h1 {
@@ -1163,7 +1163,7 @@ body.modal-open {
         // border-top: $separatorBorderStyle;
         padding: 0;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         flex-wrap: wrap;
 
         h2 {
@@ -1188,7 +1188,7 @@ body.modal-open {
     }
 
     .description {
-        margin: $GRID_SPACE 10px $GRID_SPACE*2 10px;
+        margin: $GRID_SPACE 0 $GRID_SPACE*2;
         padding: $GRID_SPACE $GRID_SPACE*2 $GRID_SPACE;
         /* color: $gray; */
         /* border-top: $separatorBorderStyle; */
@@ -1672,7 +1672,9 @@ body.modal-open {
 
 #placeDetailsModal {
     .review {
-      margin-top: $GRID_SPACE*2; 
+      margin-top: $GRID_SPACE*2;
+      border-top: $separatorBorderStyle;
+      padding-top: $GRID_SPACE;
 
       .savedRating {
           color: $gray;
@@ -1699,9 +1701,9 @@ body.modal-open {
         // background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
         // min-height: 500px;
 
-        @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
-          min-height: 500px;
-        }
+        // @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
+        //   min-height: 500px;
+        // }
     }
 
     // Elements that are animated when modal opens
