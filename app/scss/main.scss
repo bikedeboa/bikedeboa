@@ -988,7 +988,7 @@ a,
 
   .modal-title {
       font-family: $headingFont;
-      padding: 30px 12px 12px;
+      padding: $GRID_SPACE*3 $GRID_SPACE*3 $GRID_SPACE;
       font-size: 2em;
   }
 }
@@ -1019,7 +1019,8 @@ a,
     // overflow: hidden; //used to round corners, but was clipping tooltips
     margin-top: 50px;
     margin-bottom: 100px;
-    @include material-shadow(3);
+    // @include material-shadow(3);
+    box-shadow: 0 5px 30px rgba(0,0,0,.15);
     // border-radius: 10px; //not working? :(
 
     .modal-header {
@@ -1459,7 +1460,7 @@ a,
 }
 
 .modal-body {
-    padding: $GRID_SPACE;
+    padding: $GRID_SPACE $GRID_SPACE*3;
 
     hr {
         margin-top: 10px;
@@ -1578,6 +1579,9 @@ a,
   text-align: left;
   border: none;
   padding: 0;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  overflow: hidden;
 
   & img {
       width: 25px;
@@ -1794,11 +1798,16 @@ a,
     color: $black;
 
     .tag-count {
-        font-weight: bold;
-        // color: $gray;
+        font-weight: 700;
+        font-size: 12px;
 
         &:before {
-          content: ' · ';
+          // content: ' · ';
+          margin-right: 2px;
+          margin-left: 2px;
+          font-family: 'Glyphicons Halflings';
+          content: "\e008";
+          font-size: 8px;
         }
     }
 }
@@ -1979,6 +1988,7 @@ a,
     background: none;
     color: $green;
     width: 100%;
+    padding: 0;
     // min-width: 110px;
 
     .toolbar-item-icon {
@@ -2529,6 +2539,10 @@ a,
   .modal {
     &:before {
       content: ''
+    }
+
+    .modal-body {
+      padding: $GRID_SPACE;
     }
 
     .modal-dialog {
