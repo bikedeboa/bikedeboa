@@ -267,6 +267,8 @@ hr {
   .tooltip-inner {
     padding: 20px;
     background-color: $black; 
+    font-size: 14px;
+    max-width: 400px;
   }
 
   .bottom .tooltip-arrow {
@@ -288,7 +290,6 @@ hr {
   & + .tooltip {
     .tooltip-inner {
       text-align: left;
-      max-width: 400px;
     }
   }
 }
@@ -446,7 +447,7 @@ a,
         font-size: 14px;
         padding: 0 50px 0 60px;
         // font-weight: lighter;
-        border-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 
         border: none;
@@ -523,7 +524,7 @@ a,
         top: 50px;
         left: 0;
         width: auto;
-        border-radius: 3px;
+        border-radius: 5px;
 
         .glyphicon {
             margin-right: 5px;
@@ -573,9 +574,9 @@ a,
   }
 
   img {
-    width: 60px;
+    width: 60px; 
     height: auto;
-    margin: $GRID_SPACE auto;
+    margin: $GRID_SPACE auto $GRID_SPACE*2;
     display: block;
   }
 
@@ -584,14 +585,11 @@ a,
     margin-top: $leading*2;
     margin-bottom: $leading;
     text-align: left;
+    letter-spacing: -1px;
   }
 
   h2, p {
     color: $black;
-  }
-
-  p {
-    line-height: 1.5em;
   }
 }
 
@@ -614,7 +612,7 @@ a,
   .panel-title {
     font-family: $headingFont;
     color: $black;
-    padding: 15px;
+    padding: $GRID_SPACE;
   }
 
   .panel-heading a {
@@ -623,7 +621,7 @@ a,
       float: right;
       display: inline-block;
       margin-top: 8px;
-      margin-left: 15px;
+      margin-left: $GRID_SPACE; 
       font-family: $bootstrapFont;
       font-weight: 400;
       line-height: 1;
@@ -636,10 +634,14 @@ a,
   }
 
   .panel-body {
-    font-size: 16px;
-    color: $gray; 
     border-top: 2px solid $lighterGray;
-    background: $lightestGray
+    background: $lightestGray;
+    padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE*2;
+
+    p {
+      font-size: 14px;
+      color: $gray;
+    }
   }
 }
 
@@ -1014,30 +1016,19 @@ a,
 .modal-content {
     border: 0;
     border-radius: 5px;
-    overflow: hidden;
+    // overflow: hidden; //used to round corners, but was clipping tooltips
     margin-top: 50px;
     margin-bottom: 100px;
     @include material-shadow(3);
     // border-radius: 10px; //not working? :(
 
-        label {
+    .modal-header {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+    label {
         font-weight: initial;
-    }
-
-    h2 {
-        font-family: $headingFont;
-        font-weight: lighter;
-        font-size: 14px;
-        color: $lightGray;
-        text-align: center;
-        // text-transform: uppercase;
-        user-select: none;
-        cursor: default;
-    }
-
-    p {
-        font-size: 16px;
-        color: $gray;
     }
 
     .address {
@@ -1078,6 +1069,11 @@ a,
 
     article {
         padding: 0 $GRID_SPACE;
+
+        p {
+          font-size: 16px;
+          line-height: 1.7em;
+        }
     }
 
     .text-input-wrapper {
@@ -1115,7 +1111,7 @@ a,
         font-weight: 700;
         font-size: 30px;
         letter-spacing: -0.5px; 
-        // border-radius: 3px;
+        // border-radius: 5px;
         // font-size: 30px;
 
         &:valid {
@@ -1151,6 +1147,7 @@ a,
       h2 {
         margin: 0;
         font-family: $bodyFont;
+        color: $lightGray;
         font-size: 12px;
         font-weight: 700;
       }
@@ -1165,55 +1162,13 @@ a,
         border-radius: 5px;
         color: rgb(100,100,100);
         text-align: left;
+        font-size: 14px;
 
         h2 {
             margin-top: 0; 
-            font-size: 14px;
-        }
-
-        &.collapsable {
-            margin: 0;
-            max-height: 39px;
-            overflow: hidden;
-            position: relative;
-
-            transition: max-height 0.5s ease-in-out;
-
-            h2 {
-                cursor: pointer;
-                
-                &:hover {
-                    text-decoration: underline;
-                }
-
-                &:after {
-                    position: absolute;
-                    top: 10px;
-                    right: $GRID_SPACE;
-                    font-family: $bootstrapFont;
-                    content: "\e252";
-                }
-            }
-
-            p {
-                font-size: 12px;
-                margin: $GRID_SPACE*2 0 0;
-            }
-
-            textarea {
-                resize: none;
-                margin: $GRID_SPACE 0;
-                border: 3px solid $lighterGray;
-            }
-
-        }
-
-        &.expanded {
-            max-height: 500px;
-
-            h2:after {
-                content: "\e253";
-            }
+            font-size: 16px;
+            text-align: center;
+            color: $lightGray;
         }
     }
 }
@@ -1224,8 +1179,16 @@ a,
     position: relative;
     // background-image: url(/img/bg_header.png);
     background: $lightestGray;
-    overflow: visible;
+    // overflow: visible;
     height: 70px;
+
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    overflow: hidden;
+
+    img[src=""] {
+      display: none;
+    }
 
     // transition: max-height 0.5s ease;
 
@@ -1300,12 +1263,17 @@ a,
 }
 
 #newPlaceModal {
-    .modal-body > section {
+    section {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
-        & > h2 {
+        h2 {
           background: $lightestGray;
           padding: $GRID_SPACE;
+          font-family: $headingFont;
+          font-size: 14px; 
+          color: $lightGray;
+          text-align: center;
+          user-select: none;
         }
     }
 
@@ -1360,10 +1328,9 @@ a,
           height: 67px;
           cursor: pointer;
           filter: grayscale(100%);
-          text-shadow: 1px 1px 1px white;
 
           border-radius: 50%;
-          @include material-shadow(1);
+          @include material-shadow(2);
           
           // transition: all 0.2s ease-out;
 
@@ -1406,32 +1373,61 @@ a,
           opacity: 1;
           filter: none;
       }
-  }
+    }
+
+    .description {
+      padding-top: 0;
+
+      &.collapsable {
+          margin: 0;
+          max-height: 39px;
+          overflow: hidden;
+          position: relative;
+
+          transition: max-height 0.5s ease-in-out;
+
+          h2 {
+              background: transparent;
+              
+              &:after {
+                  position: absolute;
+                  top: 10px;
+                  right: $GRID_SPACE;
+                  font-family: $bootstrapFont;
+                  content: "\e252";
+              }
+          }
+
+          p {
+              margin: $GRID_SPACE*2 0 0;
+          }
+
+          textarea {
+              resize: none;
+              margin: $GRID_SPACE 0;
+              border: 3px solid $lighterGray;
+          }
+
+          &:not(.expanded) { 
+            cursor: pointer;
+            
+            &:hover {
+                background: $lighterGray;
+            }
+          }
+      }
+
+      &.expanded {
+          max-height: 500px;
+
+          h2:after {
+              content: "\e253";
+          }
+      }
+    }
 }
 
 .review {
-    text-align: center;
-    margin-top: $GRID_SPACE*2; 
-
-    .savedRating {
-        color: $gray;
-        font-weight: 400;
-        margin-top: 10px;
-        font-size: 14px;
-
-        &:before {
-            content: '';
-            display: inline-block;
-            width: 14px;
-            height: 17px;
-            background-image: url(/img/icon_user.svg);
-            background-size: 100%;
-            background-repeat: no-repeat;
-            vertical-align: middle;
-            margin-right: 5px;
-        }
-    }
-
     .rating-display-container {
       margin: $GRID_SPACE 0;
     }
@@ -1479,7 +1475,6 @@ a,
     }
 
     .custom-radio-group {
-        padding-bottom: 10px;
         max-width: 400px;
         margin: 0 auto;
     }
@@ -1640,6 +1635,30 @@ a,
 
 
 #placeDetailsModal {
+    
+    .review {
+      margin-top: $GRID_SPACE*2; 
+
+      .savedRating {
+          color: $gray;
+          font-weight: 400;
+          margin-top: 10px;
+          font-size: 14px;
+
+          &:before {
+              content: '';
+              display: inline-block;
+              width: 14px;
+              height: 17px;
+              background-image: url(/img/icon_user.svg);
+              background-size: 100%;
+              background-repeat: no-repeat;
+              vertical-align: middle;
+              margin-right: 5px;
+          }
+      }
+    }
+
     .modal-body {
         // padding-top: 25px;
         // background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
@@ -1681,10 +1700,6 @@ a,
       //     margin-right: 5px;
       // }
     }
-
-    // .photo-container {
-    //     overflow: visible;
-    // }
 }
 
 #placeDetails_isPublic img {
@@ -1756,24 +1771,8 @@ a,
 }
 
 #reviewPanel {
-    #sendReviewBtn {
-        margin-top: 30px; 
-    }
-
-    .btn-tag {
-        margin: 8px;
-        padding: 8px 18px;
-        font-size: 16px;
-
-        @media screen and (max-width: 375px) {
-            margin: 6px;
-            padding: 10px 12px;
-            font-size: 14px;
-        }
-    }
-
     .tagsContainer {
-      text-align: center;
+      justify-content: flex-start;
     }
 }
 
@@ -1940,6 +1939,9 @@ a,
 
     textarea {
         min-height: 100px;
+        resize: none;
+        margin: $GRID_SPACE 0;
+        border: 3px solid $lighterGray;
     }
 
     .disclaimer {
@@ -2535,17 +2537,25 @@ a,
       border: 0;
       border-radius: 0;
       box-shadow: none;
-    }
-
-    .modal-body {
+      
       // Explanation on the reason for the string interpolation:
       //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-      min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
+      // min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
+      min-height: 100vh;
     }
 
     .modal-header {
       display: none;
     }
+
+    // Attempt for fixed modal footer
+    // .modal-footer {
+    //   position: absolute; 
+    //   bottom: 0;
+    //   left: 0;
+    //   right: 0;
+    //   z-index: 9999;
+    // }
 
     .modal-content {
       padding-top: $MOBILE_NAVBAR_HEIGHT;
@@ -2557,6 +2567,14 @@ a,
   body.modal-open #top-mobile-bar {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  .tooltip {
+    .tooltip-inner {
+      width: 95vw;
+      font-size: 12px;
+      max-width: none;
+    }
   }
 
   #placeDetailsModal {
@@ -3108,9 +3126,10 @@ a,
     border: none;
     margin: 0;
     padding: 13px;
-    font-size: 19px;
+    font-size: 17px;
     background-color: $green;
-    // color: $gray;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 
     &:focus,
     &:active,

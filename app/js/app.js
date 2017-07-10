@@ -1150,7 +1150,6 @@ $(() => {
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
     templates.reviewPanelTemplate = Handlebars.compile($('#reviewPanelTemplate').html());
     templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
-    templates.messageModalTemplate = Handlebars.compile($('#messageModalTemplate').html());
     templates.revisionModalTemplate = Handlebars.compile($('#revisionModalTemplate').html());
     templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
   }
@@ -1315,9 +1314,9 @@ $(() => {
         swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       }
     });
-    $('.description.collapsable h2').off('click').on('click', e => {
-      $(e.currentTarget).parent().toggleClass('expanded');
-    });
+    $('.description.collapsable').off('click').on('click', e => {
+      $(e.currentTarget).addClass('expanded'); 
+    }); 
 
     // Finally, display the modal
     const showModal = () => {
@@ -2226,39 +2225,6 @@ $(() => {
       Database.getAllTags();
     });
   }
- 
-  // window.showMessage = function(_data) {
-  //   const okCallback = () => {
-  //     $('#messageModal').modal('hide');
-  //   };
-
-  //   let data = {
-  //     messageClasses: _data && _data.type || 'success',
-  //     messageContent: _data && _data.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend scelerisque scelerisque.',
-  //     buttonLabel: _data && _data.buttonLabel ||  'Tá',
-  //   };
-
-  //   switch (data.messageClasses) {
-  //     case 'success':
-  //       data.glyphiconClass = 'glyphicon-ok-sign';
-  //       break;
-  //     case 'warning':
-  //       data.glyphiconClass = 'glyphicon-info-sign';
-  //       break;
-  //     case 'error':
-  //       data.glyphiconClass = 'glyphicon-remove-sign';
-  //       break;
-  //   }
-
-  //   ////////////////////////////////
-  //   // Render handlebars template //
-  //   ////////////////////////////////
-  //   $('#messageModalPlaceholder').html(templates.messageModalTemplate(data));
-
-  //   $('#messageModalOkBtn').on('click', okCallback);
-
-  //   $('#messageModal').modal('show');
-  // };
 
   function localhostOverrides() {
     // if (_isLocalhost) {
