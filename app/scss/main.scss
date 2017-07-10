@@ -1635,7 +1635,6 @@ a,
 
 
 #placeDetailsModal {
-    
     .review {
       margin-top: $GRID_SPACE*2; 
 
@@ -1654,7 +1653,7 @@ a,
               background-size: 100%;
               background-repeat: no-repeat;
               vertical-align: middle;
-              margin-right: 5px;
+              // margin-right: 5px;
           }
       }
     }
@@ -1791,12 +1790,16 @@ a,
 
     background: $lightestGray;
     border-radius: 25px;
-    margin: 6px;
+    margin: 6px 6px 6px 0;
     color: $black;
 
-    .badge {
-        margin-left: 2px;
-        background-color: $gray;
+    .tag-count {
+        font-weight: bold;
+        // color: $gray;
+
+        &:before {
+          content: ' · ';
+        }
     }
 }
 
