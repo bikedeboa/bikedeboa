@@ -571,7 +571,7 @@ a,
 }
 
 #aboutModal {
-  $leading: 16px;
+  $leading: 18px;
 
   #about-social-buttons {
     text-align: center;
@@ -580,20 +580,45 @@ a,
   img {
     width: 60px; 
     height: auto;
-    margin: $GRID_SPACE auto $GRID_SPACE*2;
+    margin: $leading auto $leading*2;
     display: block;
+  }
+
+  p {
+    font-size: $leading;
+    line-height: 1.6em;
+  }
+
+  p.subtitle {
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.7em;
+    letter-spacing: .01em;
+  }
+
+  h1 {
+    font-size: $leading*1.618*2;
+    margin-top: 2em;
+    margin-bottom: .5em;
+    letter-spacing: -0.02em;
   }
 
   h2 {
     font-size: $leading*1.618;
-    margin-top: $leading*2;
-    margin-bottom: $leading;
+    margin-top: 2em;
+    margin-bottom: .5em;
     text-align: left;
-    letter-spacing: -1px;
+    letter-spacing: -0.01em;
   }
 
   h2, p {
     color: $black;
+  }
+
+  .medium-separator {
+    margin: 2em 0;
+    text-align: center;
+    letter-spacing: 1em;
   }
 }
 
@@ -995,6 +1020,7 @@ a,
       padding: $GRID_SPACE*3 $GRID_SPACE*3 $GRID_SPACE;
       font-weight: 700;
       font-size: 2em;
+      letter-spacing: -0.01em;
   }
 }
 
@@ -1012,11 +1038,20 @@ a,
     background: transparent;
     border: 0;
     color: $black;
+
+    h1 {
+      padding: 0;
+    }
   }
 
   .modal-content {
     box-shadow: none;
     background: transparent;
+  }
+
+  article {
+    margin-left: -$GRID_SPACE*3;
+    margin-right: -$GRID_SPACE*3;
   }
 }
 
@@ -1029,7 +1064,8 @@ body.clean-modal-open {
 body.modal-open {
   #close-modal-btn { 
       position: fixed;
-      color: $gray;
+      // color: $gray;
+      color: $black;
       top: $GRID_SPACE;
       right: $GRID_SPACE*2;
       font-size: 30px; 
@@ -1038,11 +1074,11 @@ body.modal-open {
       background: none;
       z-index: 2000;
 
-      transition: color 0.2s ease-out;
+      // transition: color 0.2s ease-out;
 
-      &:hover {
-        color: $black;
-      }
+      // &:hover {
+      //   color: $black;
+      // }
   }
 }
 
@@ -1091,7 +1127,7 @@ body.modal-open {
           font-size: 30px;
           line-height: normal;
           margin-top: $GRID_SPACE*2;
-          letter-spacing: -1px; 
+          letter-spacing: -0.01em; 
         }
 
         & > .skeleton-box {
@@ -1144,7 +1180,7 @@ body.modal-open {
         border: 2px solid $lighterGray;
         font-weight: 700;
         font-size: 30px;
-        letter-spacing: -0.5px; 
+        letter-spacing: -0.01em; 
         // border-radius: 5px;
         // font-size: 30px;
 
@@ -2391,7 +2427,7 @@ body.modal-open {
       font-family: $headingFont;
       font-weight: 700;
       font-size: 20px;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
       white-space: nowrap;
@@ -2570,6 +2606,17 @@ body.modal-open {
     display: none;
   }
 
+  .clean-modal {
+    article {
+      margin-left: inherit;
+      margin-right: inherit;
+    }
+
+    .modal-content {
+      background: white;
+    }
+  }
+
   .modal {
     &:before {
       content: ''
@@ -2611,6 +2658,37 @@ body.modal-open {
     .modal-content {
       padding-top: $MOBILE_NAVBAR_HEIGHT;
       margin: 0;
+    }
+  }
+
+  #aboutModal {
+    $leading: 16px;
+
+    img {
+      margin: $leading auto $leading*2;
+    }
+
+    p {
+      font-size: $leading;
+      line-height: 1.4em;
+    }
+
+    p.subtitle {
+      font-size: 18px;
+      line-height: 1.5em;
+      letter-spacing: .01em;
+    }
+
+    h1 {
+      font-size: $leading*1.618*2;
+      margin-top: 2em;
+      margin-bottom: .5em;
+    }
+
+    h2 {
+      font-size: $leading*1.618;
+      margin-top: 2em;
+      margin-bottom: .5em;
     }
   }
 

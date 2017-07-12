@@ -62,7 +62,23 @@
         <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
 
         <!-- Google Fonts (async) -->
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700" rel="stylesheet">
+        <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet"> -->
+        <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu:400i" rel="stylesheet"> -->
+        <!-- Font Loader -->
+        <script>
+           WebFontConfig = {
+            google: {
+              families: ['Ubuntu:400,400i,700']
+            }
+          };
+
+           (function(d) {
+              var wf = d.createElement('script'), s = d.scripts[0];
+              wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+              wf.async = true;
+              s.parentNode.insertBefore(wf, s);
+           })(document);
+        </script>
 
         <!-- Google Maps API (deferred) -->
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
@@ -333,7 +349,7 @@
                                 <img alt="" src="/img/icon_public.svg"/>
                               </p> -->
 
-                              <p class="medium">
+                              <p class="subtitle">
                                 O quão bom seria poder ir de bicicleta pra onde quiséssemos na cidade? Hoje em dia no Brasil muitos fatores nos impedem diariamente de poder fazer isso. Um dos maiores problemas é a falta de lugares para estacionar a bicicleta com segurança. Ciclistas, estabelecimentos comerciais, governos, ninguém parece saber direito o que significa ter um lugar pra deixar a bicicleta “de boa”.
                               </p>
 
@@ -342,12 +358,12 @@
                                 Nosso principal objetivo é trazer visibilidade pros bicicletários que são oferecidos na cidade, coletando dados e insights que incentivem que mais deles sejam instalados. Mas também queremos educar as pessoas sobre os tipos de bicicletários que existem, qual a forma correta de usá-los e o que faz eles serem seguros ou adequados. Esse conhecimento ajuda a dar mais confiança pros ciclistas, que saberão como estacionar a bike com segurança, e achamos que isso incentiva mais pessoas a pedalarem.
                               </p>
 
-                              <h2>O Quê</h2>
+                              <h2>O quê</h2>
                               <p>
                                 O bike de boa é um site e aplicativo totalmente colaborativo pra mapear os lugares onde dá pra estacionar a bicicleta na cidade. Estes lugares podem tanto ser bicicletários propriamente ditos quanto outros objetos urbanos que foram transformados em estacionamento de bicicleta. No app os pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e órgãos públicos. 
                               </p>
 
-                              <div style="margin: 1em 0; text-align: center;">· · ·</div>
+                              <div class='medium-separator'>...</div>
 
                               <p>
                                 O site já conta com quase 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, onde falou das tecnologias que usamos e sobre o design do sistema. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
@@ -358,9 +374,7 @@
                                 Somos um grupo de amigos, ciclistas urbanos e simpatizantes do ciclismo. Somos desenvolvedores, designers, arquitetos, e o que nos une é a vontade de contribuir com a cultura da bicicleta no Brasil. Alguns até já moraram no exterior, o que lhes deu uma nova visão sobre tudo o que uma cidade poderia ser. O projeto é absolutamente sem fins lucrativos, e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, entrevistando pessoas e tentando divulgar o projeto pra ter o maior alcance possível.
                               </p>
 
-                              <br>
-                              <hr>
-                              <br>
+                              <div class='medium-separator'>...</div>
 
                               <p>
                                 Achou tri? Tem ideias de como melhorar, ou só gostaria de participar disso de alguma maneira? Vamos conversar!
