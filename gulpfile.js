@@ -20,12 +20,17 @@ const mainBowerFiles = require('main-bower-files');
 const filter = require('gulp-filter');
 const flatten = require('gulp-flatten');
 const minifycss = require('gulp-clean-css');
-var path = require('path');
-var swPrecache = require('sw-precache');
-var htmlmin = require('gulp-htmlmin');
+const path = require('path');
+const swPrecache = require('sw-precache');
+const htmlmin = require('gulp-htmlmin');
+const environments = require('gulp-environments');
+const replace = require('gulp-replace');
 
 const BOWER_PATH = './bower_components';
 const DEST_PATH =  'dist';
+
+var development = environments.development;
+var production = environments.production;
 
 
 // // Lint Task
@@ -74,7 +79,7 @@ gulp.task('scripts', () => {
     // .pipe(sourcemaps.write('maps'))
     // .pipe(gulp.dest('dist/js'))
     .pipe(rename('app.min.js'))
-    .pipe(uglify())
+    .pipe(production(uglify()))
     .pipe(sourcemaps.write('maps'))
     .pipe(fileSizes({title: 'app.min.js', gzip: true}))
     .pipe(gulp.dest('dist/js'));
@@ -82,12 +87,14 @@ gulp.task('scripts', () => {
 
 gulp.task('html', () => {
   return gulp.src('app/*.html')
-    .pipe(htmlmin({
+    .pipe(development(replace('manifest.webmanifest', 'manifest-dev.webmanifest')))
+    .pipe(development(replace('/favicons/', '/favicons-dev/')))
+    .pipe(production(htmlmin({
       collapseWhitespace: true,
       removeComments: true,
       minifyJS: true,
       // processScripts: ['text/x-handlebars-template']
-    }))
+    })))
     .pipe(gulp.dest('dist/'));
 });
 
@@ -124,7 +131,7 @@ gulp.task('bower', function() {
   .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
   .pipe(concat('vendors.min.js'))
-  .pipe(uglify())
+  .pipe(production(uglify()))
   // .pipe(rename({
   //   suffix: ".min"
   // }))
@@ -136,7 +143,7 @@ gulp.task('bower', function() {
   .pipe(cssFilter)
   .pipe(concat('vendors.min.css'))
   // .pipe(gulp.dest(DEST_PATH + '/css'))
-  .pipe(minifycss())
+  .pipe(production(minifycss()))
   // .pipe(rename({
   //     suffix: ".min"
   // }))
@@ -175,7 +182,7 @@ gulp.task('watch', () => {
 gulp.task('images', () => {
   return gulp.src('assets/img/**/*')
     .pipe(imagemin()) 
-    .pipe(gulp.dest('dist/img'));
+    .pipe(gulp.dest('dist/img')); 
 });
 
 gulp.task('server', () => {
