@@ -32,6 +32,8 @@ const DEST_PATH =  'dist';
 var development = environments.development;
 var production = environments.production;
 
+console.log('NODE_ENV = ', process.env.NODE_ENV);
+
 
 // // Lint Task
 // gulp.task('lint', () => {
