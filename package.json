@@ -38,6 +38,8 @@
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.0.0",
     "main-bower-files": "^2.5.0",
+    "gulp-environments": "^0.1.2",
+    "gulp-replace": "^0.6.1",
     "request": "^2.81.0",
     "run-sequence": "^1.2.2",
     "sw-precache": "^5.1.1",
@@ -51,8 +53,6 @@
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3",
-    "gulp-environments": "^0.1.2",
-    "gulp-replace": "^0.6.1"
+    "eslint-plugin-react": "^6.10.3"
   }
 }
