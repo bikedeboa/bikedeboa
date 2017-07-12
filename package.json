@@ -46,7 +46,7 @@
     "wiredep": "^4.0.0"
   },
   "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install; gulp build"
+    "postinstall": "./node_modules/bower/bin/bower install; echo NODE_ENV; gulp build" 
   },
   "devDependencies": {
     "eslint": "^3.19.0",
