@@ -847,6 +847,10 @@
 
 
               <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}">
+                  {{#if numReviews}}
+                    <div class="numreviews">{{numReviews}}</div>
+                  {{/if}}
+                  
                   <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
                     {{#if average}}
                         <span class="average">{{average}}</span>
@@ -864,11 +868,9 @@
                           <label class="full-star" data-value="1" for="placeDetails_star1"></label>
                       </fieldset>
                       
-                      <button class="ghost openReviewPanelBtn">Avaliar</button>
-                      
-                      {{#if numReviews}}
-                        <span class="numreviews">{{numReviews}}</span>
-                      {{/if}}
+                      {{#unless savedRating}}
+                        <button class="ghost openReviewPanelBtn">Avaliar</button>
+                      {{/unless}}
                     {{/if}}
 
                     

@@ -37,6 +37,7 @@ $lightestGrey: $lightestGray;
 $bootstrapBackdropColor: $paleWhite;
 $bootstrapBackdropOpacity: 0.8;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
+$greenGradient: linear-gradient(45deg, $green 0%, $lightGreen 100%);
 
 $filtersHightlightColor: $paleBlue;
 
@@ -814,7 +815,7 @@ a,
     margin: auto;
     z-index: 1;
     background: $green;
-    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
+    background: $greenGradient;
     border: none;
     color: white;
     border-radius: 25px;
@@ -1002,7 +1003,7 @@ a,
 #top-mobile-bar,
 .modal-header {
   background: $lightGreen;
-  background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
+  background: $greenGradient;
   color: white;
   padding: 0;
   border-bottom: 1px solid #30bb6a;
@@ -1508,16 +1509,6 @@ body.modal-open {
 }
 
 .rating-display-container {
-    .numreviews {
-        color: $gray;
-        font-size: 14px;
-        font-weight: 100;
-        font-family: $bodyFont;
-        vertical-align: text-top;
-        user-select: none;
-        cursor: default;
-    }
-
     // .numreviews {
     //     display: block;
     //     margin: $GRID_SPACE/2 0 $GRID_SPACE;
@@ -1624,20 +1615,23 @@ body.modal-open {
 .ghost {
     padding: 3px 10px;
     border: 1px solid $gray;
-    background-color: #fff;
     color: $gray;
     margin: 5px auto;
     font-size: 14px;
-    border-radius: 5px;
+    border-radius: 25px;
     vertical-align: bottom;
+    background: transparent;
+
     transition: all .2s ease;
-}
-.ghost:hover,
-.ghost:focus,
-.ghost:active {
-    color: white;
-    border: 1px solid white;
-    background-color: $gray;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: white;
+        border-color: white;
+        // background-color: $gray;
+        background: $greenGradient;
+    }
 }
 
 .modal-footer {
@@ -1708,6 +1702,9 @@ body.modal-open {
       margin-top: $GRID_SPACE*2;
       border-top: $separatorBorderStyle;
       padding-top: $GRID_SPACE;
+      
+      // text-align: center;
+
 
       .savedRating {
           color: $gray;
@@ -1726,6 +1723,28 @@ body.modal-open {
               vertical-align: middle;
               // margin-right: 5px;
           }
+      }
+
+      .numreviews {
+        color: $gray;
+        margin: $GRID_SPACE 0;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        user-select: none;
+        cursor: default;
+        
+        // &:before {
+        //     content: '';
+        //     display: inline-block;
+        //     width: 14px;
+        //     height: 17px;
+        //     background-image: url(/img/icon_user.svg);
+        //     background-size: 100%;
+        //     background-repeat: no-repeat;
+        //     vertical-align: middle;
+        //     margin-right: 5px;
+        // }
       }
     }
 
@@ -1752,23 +1771,6 @@ body.modal-open {
         &.close-modal {
           cursor: pointer;
         }
-    }
-
-    .numreviews {
-      // display: block;
-      margin: $GRID_SPACE/2 0 $GRID_SPACE;
-      
-      // &:before {
-      //     content: '';
-      //     display: inline-block;
-      //     width: 14px;
-      //     height: 17px;
-      //     background-image: url(/img/icon_user.svg);
-      //     background-size: 100%;
-      //     background-repeat: no-repeat;
-      //     vertical-align: middle;
-      //     margin-right: 5px;
-      // }
     }
 }
 
@@ -1867,6 +1869,7 @@ body.modal-open {
     .tag-count {
         font-weight: 700;
         font-size: 12px;
+        opacity: .5;
 
         &:before {
           // content: ' · ';
@@ -2361,7 +2364,6 @@ body.modal-open {
         bottom: 5px;
         right: 13px;
         font-size: 12px;
-        font-weight: 100;
         opacity: 0.8;
       }
 
@@ -2625,7 +2627,7 @@ body.modal-open {
 
     .modal-dialog {
       margin: 0;
-      background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
+      background: $greenGradient;
     }
 
     .modal-content {
@@ -2713,8 +2715,8 @@ body.modal-open {
     .review {
       text-align: left;
 
-      .numreviews {
-        display: block;
+      .ghost {
+        display: none;
       }
     }
 
@@ -2839,7 +2841,6 @@ body.modal-open {
   //       border-radius: 25px;
   //       height: 70px;
   //       bottom: 0;
-  //       font-weight: 100;
 
   //       &:after {
   //           content: 'Cancelar';
@@ -3364,7 +3365,7 @@ body.modal-open {
     font-family: $headingFont;
     height: 200px;
     background: $green;
-    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
+    background: $greenGradient;
     color: #FFF;
     // display: flex;
     // align-items: flex-end;
