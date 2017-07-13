@@ -1064,24 +1064,31 @@ body.clean-modal-open {
   }
 }
 
+
+#close-modal-btn {
+  display: none;
+}
+
 body.modal-open {
   #close-modal-btn { 
-      position: fixed;
-      // color: $gray;
-      color: $black;
-      top: $GRID_SPACE;
-      right: $GRID_SPACE*2;
-      font-size: 30px; 
-      line-height: 30px; 
-      border: 0;
-      background: none;
-      z-index: 2000;
+    display: block;
+    position: fixed;
+    color: $black;
+    top: $GRID_SPACE;
+    right: $GRID_SPACE*2;
+    font-size: 30px; 
+    line-height: 22px;
+    border: 0;
+    background: none;
+    z-index: 2000;
+    padding: 10px;
+    border-radius: 50%;
 
-      // transition: color 0.2s ease-out;
+    // transition: color 0.2s ease-out;
 
-      // &:hover {
-      //   color: $black;
-      // }
+    &:hover {
+      background: $lighterGray;
+    }
   }
 }
 
