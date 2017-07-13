@@ -212,7 +212,12 @@ $(() => {
       $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
         // Animate modal content
         // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+        // if (!templateData.savedRating) {
+        //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
+        // }
 
+        $('body').addClass('details-view');
+ 
         // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
         // Thanks to https://github.com/limonte/sweetalert2/issues/374
         $(document).off('focusin.modal');
@@ -1785,6 +1790,9 @@ $(() => {
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
+      // @todo: not do this everytime
+      $('body').removeClass('details-view');
+
       if (_isMobile) {
         $('#map, #addPlace').removeClass('optimized-hidden');
 
@@ -1882,18 +1890,20 @@ $(() => {
   }
 
   function openHowToInstallModal() {
-    // Tries to guess the user agent to initialize the correspondent accordion item opened
-    const userAgent = window.getBrowserName();
-    switch (userAgent) {
-      case 'Chrome':
-        $('#collapse-chrome').addClass('in');
-        break;
-      case 'Firefox':
-        $('#collapse-firefox').addClass('in');
-        break;
-      case 'Safari':
-        $('#collapse-safari').addClass('in');
-        break;
+    if (_isMobile) {
+      // Tries to guess the user agent to initialize the correspondent accordion item opened
+      const userAgent = window.getBrowserName();
+      switch (userAgent) {
+        case 'Chrome':
+          $('#collapse-chrome').addClass('in');
+          break;
+        case 'Firefox':
+          $('#collapse-firefox').addClass('in');
+          break;
+        case 'Safari':
+          $('#collapse-safari').addClass('in');
+          break;
+      }
     }
 
     // Lazy load gifs when modal is shown

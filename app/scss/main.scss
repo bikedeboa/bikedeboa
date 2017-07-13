@@ -13,11 +13,11 @@ $yellow: #F6C913;
 $darkYellow: #F6C913; 
 $red: #FF8265;
 $strongRed: #FF6541;
-$blue: #533FB4;
-$paleBlue: #705EC7;
-$darkBlue: #3821AA; 
-$lightBlue: #705EC7;
-$lightestBlue: #9688DC;
+$purple: #533FB4;
+$palePurple: #705EC7;
+$darkPurple: #3821AA; 
+$lightPurple: #705EC7;
+$lightestPurple: #9688DC;
 
 // Grays
 $black: #333;
@@ -39,7 +39,7 @@ $bootstrapBackdropOpacity: 0.8;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
 $greenGradient: linear-gradient(45deg, $green 0%, $lightGreen 100%);
 
-$filtersHightlightColor: $paleBlue;
+$filtersHightlightColor: $palePurple;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,6 +55,7 @@ $separatorBorderStyle: 2px dotted #eee;
 
 $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
+$MOBILE_BOTTOMBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
 $GRID_SPACE: 12px;
@@ -373,13 +374,13 @@ body.deeplink {
 
 a,
 .link-like {
-    color: $blue;
+    color: $purple;
     border-bottom: 1px dashed;
 
     &:focus,
     &:active,
     &:hover {
-      color: $darkBlue;
+      color: $darkPurple;
       text-decoration: none; 
       border-bottom: 2px solid;
     }
@@ -712,7 +713,7 @@ a,
     right: 0;
     margin: 0 $GRID_SPACE $GRID_SPACE*2;
 
-    background: linear-gradient(45deg,#30bb6a 0,#2cd978 100%);
+    background: linear-gradient(45deg, $green 0, $lightGreen 100%);
     border: 0;
     border-radius: 50%;
     cursor: pointer;
@@ -733,7 +734,7 @@ a,
     &:hover,
     &:active,
     &:focus {
-        background: linear-gradient(45deg,hsla(145,59%,40%,1) 0,#25cb6d 100%);
+        background: linear-gradient(45deg, hsla(145,59%,40%,1) 0, #25cb6d 100%);
     } 
 
     &.active {
@@ -778,7 +779,7 @@ a,
     @include material-shadow(1);
 
     &.active {
-      border: 2px solid $lightestBlue;
+      border: 2px solid $lightestPurple;
       background-color: $paleWhite;
     }
 
@@ -1006,7 +1007,7 @@ a,
   background: $greenGradient;
   color: white;
   padding: 0;
-  border-bottom: 1px solid #30bb6a;
+  border-bottom: 1px solid  $green;
 }
 
 .modal-header {
@@ -1025,6 +1026,7 @@ a,
   }
 }
 
+#bottom-mobile-bar,
 #top-mobile-bar {
   display: none;
 }
@@ -1727,7 +1729,7 @@ body.modal-open {
 
       .numreviews {
         color: $gray;
-        margin: $GRID_SPACE 0;
+        margin: $GRID_SPACE 0 0 2px;
         font-size: 12px;
         font-weight: 700;
         text-transform: uppercase;
@@ -1817,6 +1819,8 @@ body.modal-open {
 .btn {
     min-width: 42px;
     min-height: 42px;
+
+    border-radius: 5px;
 }
 
 .btn-tag {
@@ -2303,7 +2307,7 @@ body.modal-open {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: $blue;
+      background: $purple;
       z-index: 2;
       text-align: left;
       display: flex;
@@ -2536,8 +2540,8 @@ body.modal-open {
     background: $lightestGray;
     transition: background 0.2s ease-out;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    
+    border-radius: 5px;
+     
     &:hover,
     &:focus,
     &:active {
@@ -2638,7 +2642,16 @@ body.modal-open {
       // Explanation on the reason for the string interpolation:
       //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
       // min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
+
       min-height: 100vh;
+
+      padding-top: $MOBILE_NAVBAR_HEIGHT;
+      padding-bottom: $MOBILE_BOTTOMBAR_HEIGHT;
+      margin: 0;
+    }
+
+    .rating-input-container {
+      display: none;
     }
 
     .modal-header {
@@ -2653,11 +2666,6 @@ body.modal-open {
     //   right: 0;
     //   z-index: 9999;
     // }
-
-    .modal-content {
-      padding-top: $MOBILE_NAVBAR_HEIGHT;
-      margin: 0;
-    }
   }
 
   #aboutModal {
@@ -2696,11 +2704,13 @@ body.modal-open {
     #close-modal-btn {
       display: none;
     }
+  }
 
-    #top-mobile-bar {
-      opacity: 1;
-      pointer-events: auto;
-    }
+  body.details-view #bottom-mobile-bar,
+  body.modal-open #top-mobile-bar {
+    opacity: 1;
+    pointer-events: auto;
+    display: block;
   }
 
   .tooltip {
@@ -2755,7 +2765,6 @@ body.modal-open {
     left: 0;
     right: 0;
     z-index: 9999; //@todo
-    display: block;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -2801,6 +2810,36 @@ body.modal-open {
       //   top: 0;
       // }
     }
+  }
+
+  #bottom-mobile-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+
+      #floating-cta-container {
+        background: white;
+        // border-top: 1px solid $lighterGray;
+      }
+
+      &:before {
+        content: '';
+        width: 100%;
+        height: 20px;
+        display: block;
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+      }
+
+      button {
+        // Explanation on the reason for the string interpolation:
+        //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+        width: calc(100% - #{$GRID_SPACE*2});
+        margin: $GRID_SPACE;
+        font-weight: 700;
+        text-transform: uppercase;
+      } 
   }
 
   #filter-menu {
@@ -3494,7 +3533,7 @@ body.modal-open {
   }
 
   & > .toast-info {
-    background-color: $blue;
+    background-color: $purple;
   }
 
   & > .toast-warning {

@@ -173,6 +173,12 @@
           <h1 class="top-mobile-bar-title"></h1>
         </div>
 
+        <div id="bottom-mobile-bar">
+            <div id="floating-cta-container">
+              <button class="openReviewPanelBtn btn green">Avaliar</button>
+            </div>
+        </div>
+
         
         <!-- Menus -->
 
@@ -790,12 +796,12 @@
             
             <hr>
 
-            <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
+            <!-- <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
               <img alt="" class="toolbar-item-icon" src="/img/review.svg">
               <label>Avaliar</label>
             </button>
 
-            <hr>
+            <hr> -->
 
             <button class="toolbar-item shareBtn" tabindex="0">
               <img alt="" class="toolbar-item-icon" src="/img/icon_share.svg">
@@ -850,7 +856,7 @@
                   {{#if numReviews}}
                     <div class="numreviews">{{numReviews}}</div>
                   {{/if}}
-                  
+
                   <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
                     {{#if average}}
                         <span class="average">{{average}}</span>
@@ -869,7 +875,7 @@
                       </fieldset>
                       
                       {{#unless savedRating}}
-                        <button class="ghost openReviewPanelBtn">Avaliar</button>
+                        <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">Avaliar</button>
                       {{/unless}}
                     {{/if}}
 
