@@ -25,7 +25,8 @@ $(() => {
   }
 
   function openShareDialog() {
-    const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
+    // const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
+    const shareUrl = 'https://www.bikedeboa.com.br' + getMarkerShareUrl(openedMarker);
 
     swal({ 
       imageUrl: _isMobile ? '' : '/img/icon_share.svg',
@@ -206,7 +207,7 @@ $(() => {
     $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
     $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionDialog));
 
-    // Display modal
+    // Display the modal
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
 
@@ -217,7 +218,13 @@ $(() => {
         //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
         // }
 
+        // Global states
         $('body').addClass('details-view');
+        if (previousReview) {
+          $('body').addClass('already-reviewed');
+        } else {
+          $('body').removeClass('already-reviewed');
+        }
  
         // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
         // Thanks to https://github.com/limonte/sweetalert2/issues/374
