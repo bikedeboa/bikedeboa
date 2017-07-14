@@ -764,7 +764,7 @@ $(() => {
                 _gmarkers[i].addListener('mouseover', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
-                  _infoWindow.setContent(contentString);
+                  _infoWindow.setContent(contentString); 
                   _infoWindow.open(map, _gmarkers[i]);
                   _infoWindow.addListener('domready', () => {
                     $('.infobox--img img').off('load').on('load', e => {
@@ -934,7 +934,6 @@ $(() => {
     $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
     $('#geolocationBtnBtn').toggle();
-    // $('#locationSearch').toggleClass('coolHide');
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -943,13 +942,15 @@ $(() => {
   }
 
   function showUI() {
-    $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
+    // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
     // $('#addPlace').velocity('transition.slideUpIn');
+    $('#locationSearch').removeClass('cool-hidden');
   }
 
   function hideUI() {
-    $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
+    // $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
     // $('#addPlace').velocity('transition.slideDownOut');
+    $('#locationSearch').addClass('cool-hidden');
   }
 
   // @todo refactor this, it's fuckin confusing
@@ -1782,6 +1783,8 @@ $(() => {
       if (_isMobile) {
         $('#map, #addPlace').addClass('optimized-hidden');
       } else {
+        hideUI();
+
         if ($(e.currentTarget).hasClass('clean-modal')) {
           $('body').addClass('clean-modal-open');
         }
@@ -1802,6 +1805,8 @@ $(() => {
           map.setCenter(map.getCenter());
         }
       } else {
+        showUI();
+        
         $('body').removeClass('clean-modal-open');
       }
     }); 
@@ -1991,10 +1996,6 @@ $(() => {
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
 
-    // _infoWindow = new google.maps.InfoWindow({
-    //   disableAutoPan: true
-    // });
-
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
       maxWidth: 0,
@@ -2009,11 +2010,17 @@ $(() => {
       // closeBoxMargin: '10px 2px 2px 2px',
       closeBoxURL: '',
       infoBoxClearance: new google.maps.Size(1, 1),
-      isHidden: false,
       pane: 'floatPane',
       enableEventPropagation: false,
     };
     _infoWindow = new InfoBox(myOptions);
+    
+    // Override with custom transition
+    // const oldDraw = _infoWindow.draw; 
+    // _infoWindow.draw = function() {
+    //    oldDraw.apply(this);
+    //    $(_infoWindow.div_).velocity('transition.slideUpIn', {display: 'flex', duration: 250}); 
+    // }
 
     google.maps.event.addListener(map, 'zoom_changed', () => {
       const prevZoomLevel = _mapZoomLevel;
@@ -2071,9 +2078,10 @@ $(() => {
     });
 
     // Finally, enable the basic UI
-    $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-    $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-    $('#map').css('filter', 'none');
+    showUI();
+    // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+    // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+    // $('#map').css('filter', 'none');
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.

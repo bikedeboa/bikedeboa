@@ -420,33 +420,14 @@ a,
     width: 95%;
     height: 48px;
     max-width: 600px;
-    width: calc(100% - 20px);
+    width: calc(100% - 20px); 
 
-    // display: table;
-
-    transition: top 0.5s ease-out, opacity 0.5s ease-out;
-    opacity: 0;
-
-    // &:before {
-    //     position: relative;
-    //     top: 1px;
-    //     display: inline-block;
-    //     font-family: $bootstrapFont;
-    //     font-weight: 400;
-    //     line-height: 1;
-    //     content: "\e003";
-    //     position: absolute;
-    //     font-size: 16px;
-    //     top: 0;
-    //     left: 0;
-    //     /* opacity: 0.5; */
-    //     color: grey;
-    //     padding: 15px;
-    //     // background: $green;
-    //     // color: $lightestGray;
-    //     color: $green;
-    //     // color: $lightGray;
-    // }
+    transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+    
+    &.cool-hidden {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
 
     input {
         width: 100%;
@@ -600,15 +581,15 @@ a,
 
   h1 {
     font-size: $leading*1.618*2;
-    margin-top: 2em;
+    margin-top: 1.5em;
     margin-bottom: .5em;
     letter-spacing: -0.02em;
   }
 
   h2 {
     font-size: $leading*1.618;
-    margin-top: 2em;
-    margin-bottom: .5em;
+    margin-top: 1.5em;
+    margin-bottom: .25em;
     text-align: left;
     letter-spacing: -0.01em;
   }
@@ -1060,7 +1041,7 @@ a,
 
 body.clean-modal-open {
   .modal-backdrop.in {
-    opacity: .95;
+    opacity: .9 ;
   }
 }
 
@@ -1081,7 +1062,8 @@ body.modal-open {
     border: 0;
     background: none;
     z-index: 2000;
-    padding: 10px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
 
     // transition: color 0.2s ease-out;
@@ -1096,11 +1078,9 @@ body.modal-open {
     border: 0;
     border-radius: 5px;
     // overflow: hidden; //used to round corners, but was clipping tooltips
-    margin-top: $GRID_SPACE*4;
+    margin-top: $GRID_SPACE*2;
     margin-bottom: 100px;
-    // @include material-shadow(3);
     box-shadow: 0 5px 30px rgba(0,0,0,.15);
-    // border-radius: 10px; //not working? :(
 
     .modal-header {
       border-top-left-radius: 5px;
@@ -1126,16 +1106,13 @@ body.modal-open {
     }
 
     .title {
-        // padding-left: 10px;
         vertical-align: middle;
-        // border-bottom: $separatorBorderStyle;
-        // padding-bottom: $GRID_SPACE*2;
         font-family: $headingFont;
 
         h1 {
           font-weight: 700;
           font-size: 30px;
-          line-height: normal;
+          line-height: 30px;
           margin-top: $GRID_SPACE*2;
           letter-spacing: -0.01em; 
         }
@@ -1148,8 +1125,6 @@ body.modal-open {
     }
 
     article {
-        // padding: 0 $GRID_SPACE;
-
         p {
           font-size: 16px;
           line-height: 1.7em;
