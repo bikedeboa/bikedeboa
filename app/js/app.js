@@ -1018,10 +1018,11 @@ $(() => {
   function setupAutocomplete() {
     const inputElem = document.getElementById('locationQueryInput');
     const options = {
-      strictBounds: _mapBounds
+      bounds: _mapBounds,
+      strictBounds: true
     };
     let autocomplete = new google.maps.places.Autocomplete(inputElem, options);
-    autocomplete.bindTo('bounds', map);
+    // autocomplete.bindTo('bounds', map);
 
     // var infowindow = new google.maps.InfoWindow();
     _searchResultMarker = new google.maps.Marker({
