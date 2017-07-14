@@ -1061,7 +1061,7 @@ body.modal-open {
     line-height: 22px;
     border: 0;
     background: none;
-    z-index: 2000;
+    z-index: 1052; //under sweetalert dialogs
     width: 46px;
     height: 46px;
     border-radius: 50%;
@@ -1806,42 +1806,64 @@ body.modal-open {
     border-radius: 5px;
 }
 
-.btn-tag {
-    background: $lightestGray;
-    color: #939a9d;
-    border-radius: 10px;
-    margin: 5px 2px;
-
-    &:before {
-        content: '☐';
-        margin-right: 5px;
-        font-family: 'Arial';
+.review-modal {
+    .tagsContainer {
+      max-width: 400px;
+      margin: 24px auto 36px;
     }
 
-    &.active {
-        background: $green;
-        color: white;
+    .btn-tag {
+        background: $lightestGray;
+        color: $black;
+        border-radius: 25px;
+        margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
 
-        &:before {
-            content: '☑';
+        // &:before {
+        //     content: '☐';
+        //     margin-right: 5px;
+        //     font-family: 'Arial';
+        // }
+
+        &.active {
+            background: $green;
+            color: white;
+ 
+            // &:before {
+            //     content: '☑';
+            // }
+
+            &:hover {
+              background: $lightGreen;
+            }
+        } 
+
+        &:hover {
+          background: $lighterGray;
         }
     }
 
-}
+    button.swal2-confirm {
+      width: 100%;
+    }
 
-#reviewPanel {
-    .tagsContainer {
-      justify-content: flex-start;
+    h2 {
+      margin-top: $GRID_SPACE*2;
+      margin-bottom: $GRID_SPACE/2;
+    }
+
+    p.small {
+      font-size: 13px;
+      color: gray;
+      font-style: italic;
     }
 }
 
 
 .tagDisplay {
     display: inline-block;
-    padding: 6px 12px;
+    padding: $GRID_SPACE/2 $GRID_SPACE;
     font-size: 14px;
     font-weight: 400;
-    line-height: 1.42857143;
     text-align: center;
     white-space: nowrap;
     user-select: none;
@@ -1850,7 +1872,7 @@ body.modal-open {
 
     background: $lightestGray;
     border-radius: 25px;
-    margin: 6px 6px 6px 0;
+    margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
     color: $black;
 
     .tag-count {
@@ -2001,9 +2023,9 @@ body.modal-open {
 }
 
 
-#revisionModal {
+.revision-modal {
     p {
-        margin-bottom: 20px;
+        text-align: left;
     }
 
     textarea {
@@ -2011,11 +2033,12 @@ body.modal-open {
         resize: none;
         margin: $GRID_SPACE 0;
         border: 3px solid $lighterGray;
+        width: 100%;
     }
 
     .disclaimer {
-        font-size: 12px;
-        margin: 20px 0 0;
+        font-size: 16px;
+        font-style: italic;
         color: $gray;
     }
 }
@@ -2025,8 +2048,6 @@ body.modal-open {
   justify-content: space-around;
   // justify-content: flex-end;
   align-items: flex-start;
-  margin: 0 0 -$GRID_SPACE 0;
-  padding-top: $GRID_SPACE;
   // border-bottom: 1px solid #eee;
 
   hr {
@@ -2040,13 +2061,14 @@ body.modal-open {
     text-align: center;
     cursor: pointer;
     filter: grayscale(100%);
-    transition: filter 0.2s ease;
     border: 0;
     background: none;
     color: $green;
     width: 100%;
-    padding: 0;
+    padding: $GRID_SPACE/2 0;
     // min-width: 110px;
+    
+    transition: filter 0.2s ease-out, background .2s ease-out;
 
     .toolbar-item-icon {
       width: 30px;
@@ -2070,6 +2092,7 @@ body.modal-open {
     &:hover {
       filter: none;
       text-decoration: none;
+      background: $paleWhite;
     }
   }
 
@@ -2654,15 +2677,6 @@ body.modal-open {
         height: 120px;
       }
     }
-
-    // Attempt for fixed modal footer
-    // .modal-footer {
-    //   position: absolute; 
-    //   bottom: 0;
-    //   left: 0;
-    //   right: 0;
-    //   z-index: 9999;
-    // }
   }
 
   #aboutModal {
@@ -2696,6 +2710,30 @@ body.modal-open {
     }
   }
 
+  .review-modal {
+    p.small {
+      display: none;
+    }
+  }
+
+  .swal2-modal {
+    p {
+      font-size: 16px;
+    }
+
+    button.swal2-confirm {
+      display: block;
+      width: 100%;
+      margin: 6px 0;  
+    }
+
+  }
+  
+  .revision-modal {
+    .disclaimer {
+      display: none;
+    }
+  }
 
   body.modal-open {
     #close-modal-btn {
@@ -2745,7 +2783,7 @@ body.modal-open {
       }
 
       .toolbar-item {
-        max-width: 90px;
+        // max-width: 90px;
 
         label {
           font-size: 8px;
@@ -2766,7 +2804,7 @@ body.modal-open {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 9999; //@todo
+    z-index: 1052; //under sweetalert dialogs
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -2819,7 +2857,7 @@ body.modal-open {
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 9999;
+      z-index: 1052; //under sweetalert dialogs
 
       #floating-cta-container {
         background: white;
@@ -2934,7 +2972,7 @@ body.modal-open {
       padding: 6px 12px;
       display: block;
       font-size: 12px;
-      background: #fafafa;
+      background: $paleWhite;
       color: #b3b3b3;
   }
 }
@@ -3133,7 +3171,7 @@ body.modal-open {
   }
 }
 
-#reviewPanel .rating > label:before {
+.review-modal .rating > label:before {
     margin: 5px 6px;
     width: 40px;
     height: 40px
@@ -3495,26 +3533,27 @@ body.modal-open {
   }
 
   h2 {
-    // font-family: $headingFont;
+    font-family: $headingFont;
     font-size: 24px;
+    font-weight: 700;
   }
 
-  button {
+  button.swal2-confirm {
     border-bottom: 3px solid $gray;
     border-radius: 5px;
     font-weight: 700;  
     min-width: 90px;
     
-    &.confirm {
+    &.swal2-confirm {
       border-bottom: 3px solid $darkGreen;
     }
 
     &:active {
-        outline: 0;
-        border-bottom-width: 0;
-        transform: translateY(3px);
-        // compensate for relayout because of changing border size
-        margin-bottom: 3px;
+      outline: 0;
+      border-bottom-width: 0;
+      transform: translateY(3px);
+      // compensate for relayout because of changing border size
+      margin-bottom: 3px;
     }
   } 
 

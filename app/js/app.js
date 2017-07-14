@@ -50,6 +50,7 @@ $(() => {
           <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>
         </div>`,
       showConfirmButton: false,
+      showCloseButton: true,
       onOpen: () => {
         // Initializes Twitter share button
         twttr.widgets.load();
@@ -184,7 +185,7 @@ $(() => {
     $('.photo-container img').on('load', e => {
       $(e.target).parent().removeClass('loading');
     });
-
+ 
     // Init click callbacks
     // $('#checkinBtn').on('click', sendCheckinBtn);
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
@@ -203,7 +204,7 @@ $(() => {
     });
     $('#editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
     $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
-    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionModal));
+    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionDialog));
 
     // Display modal
     if (!$('#placeDetailsModal').is(':visible')) {
@@ -1154,9 +1155,7 @@ $(() => {
     });
 
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
-    templates.reviewPanelTemplate = Handlebars.compile($('#reviewPanelTemplate').html());
     templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
-    templates.revisionModalTemplate = Handlebars.compile($('#revisionModalTemplate').html());
     templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
   }
 
@@ -1171,15 +1170,6 @@ $(() => {
     // console.log('validating');
 
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', !isOk);
-  }
-
-
-  function validateReviewForm() {
-    const isOk = currentPendingRating;
-
-    // console.log('validating review form');
-
-    $('#sendReviewBtn').prop('disabled', !isOk);
   }
 
   // @todo clean up this mess
@@ -1366,75 +1356,88 @@ $(() => {
 
   function openReviewModal(prepopedRating) {
     const m = openedMarker;
-
-    let templateData = {};
-    templateData.title = m.text;
-    templateData.address = m.address; 
-
     const previousReview = BIKE.Session.getReviewFromSession(m.id);
+    _updatingReview = previousReview;
 
-    // Tags
-    templateData.tagsButtons = tags.map(t => {
+    // Tags toggle buttons
+    let tagsButtons = tags.map(t => {
       const isPrepoped = previousReview && previousReview.tags.find( (i) => {return parseInt(i.id) === t.id;} );
-      // @todo refactor this to use Handlebars' native support for arrays
       return `<button class="btn btn-tag ${isPrepoped ? 'active' : ''}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
-    }).join('');
+    }).join(''); 
 
+    swal({ 
+      // title: 'Avaliar bicicletário',
+      customClass: 'review-modal',
+      html: `
+        <section>
+          <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+              <h2>Dê sua nota</h2>
+              <fieldset class="rating">
+                  <input type="radio" id="star5" name="rating" value="5" />
+                  <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
+                  <input type="radio" id="star4" name="rating" value="4" />
+                  <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
+                  <input type="radio" id="star3" name="rating" value="3" />
+                  <label class="full-star" data-value="3" for="star3" title="Médio"></label>
+                  <input type="radio" id="star2" name="rating" value="2" />
+                  <label class="full-star" data-value="2" for="star2" title="Ruim"></label>
+                  <input type="radio" id="star1" name="rating" value="1" />
+                  <label class="full-star" data-value="1" for="star1" title="Horrivel"></label>
+              </fieldset>
+          </div>
+        </section>
 
-    ////////////////////////////////
-    // Render handlebars template //
-    ////////////////////////////////
-    $('#reviewPanelTemplatePlaceholder').html(templates.reviewPanelTemplate(templateData));
+        <section class="step-2">
+          <h2>
+            Vantagens
+          </h2>
+          <p class="small">Opcional. Selecione quantas achar necessário.</p>
+          <div class="tagsContainer">
+              ${tagsButtons}
+          </div>
+        </section>`,
+      confirmButtonText: "Enviar",
+      confirmButtonClass: 'btn green sendReviewBtn',
+      showCloseButton: true,
+      onOpen: () => {
+        if(!_isTouchDevice) {
+          $('.review-modal .full-star').tooltip({
+            toggle: 'tooltip',
+            placement: 'bottom',
+            'delay': {'show': 0, 'hide': 100}
+          });
+        }
 
+        // Prepopulate rating
+        if (previousReview) {
+          currentPendingRating = previousReview.rating;
+          $('.review-modal input[name=rating]').val([previousReview.rating]);
 
-    // Template is rendered, start jquerying
-    //
-    if(!_isTouchDevice) {
-      $('#reviewPanel .full-star').tooltip({
-        toggle: 'tooltip',
-        placement: 'bottom',
-        'delay': {'show': 0, 'hide': 100}
-      });
-    }
+          ga('send', 'event', 'Review', 'update - pending', ''+m.id);
+        } else if (prepopedRating) {
+          currentPendingRating = prepopedRating;
+          $('.review-modal input[name=rating]').val([prepopedRating]);
+        } else {
+          ga('send', 'event', 'Review', 'create - pending', ''+m.id);
+        }
 
-    // Prepopulate rating
-    if (previousReview) {
-      _updatingReview = true;
-      currentPendingRating = previousReview.rating;
-      $('input[name=rating]').val([previousReview.rating]);
+        // Init callbacks
+        $('.review-modal .rating').off('change').on('change', e => {
+          currentPendingRating = $(e.target).val();
+          validateReviewForm();
+        });
 
-      ga('send', 'event', 'Review', 'update - pending', ''+m.id);
-    } else if (prepopedRating) {
-      currentPendingRating = prepopedRating;
-      $('input[name=rating]').val([prepopedRating]);
-    } else {
-      _updatingReview = false;
-      ga('send', 'event', 'Review', 'create - pending', ''+m.id);
-    }
-
-    // Init callbacks
-    $('#ratingDisplay .full-star').off('click').on('click', e => {
-      openReviewModal($(e.target).data('value'));
-    });
-    $('#reviewPanel .rating').off('change').on('change', e => {
-      currentPendingRating = $(e.target).val();
-      validateReviewForm();
-    });
-    $('#sendReviewBtn').off('click').on('click', () => {
+        validateReviewForm();
+      }
+    }).then(() => {
       sendReviewBtnCB();
     });
+  }
 
-    validateReviewForm();
-
-    // Display modal
-    setView('Nova avaliação', '/avaliar');
-    if ($('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
-        $('#reviewPanel').modal('show');
-      });
-    } else {
-      $('#reviewPanel').modal('show');
-    }
+  function validateReviewForm() {
+    const isOk = currentPendingRating;
+    $('.sendReviewBtn').prop('disabled', !isOk);
+    // $('.review-modal .step-2').velocity('fadeIn');
   }
 
   function toggleExpandModalHeader() {
@@ -1464,7 +1467,7 @@ $(() => {
   function sendReviewBtnCB() {
     const m = openedMarker;
 
-    const activeTagBtns = $('#reviewPanel .tagsContainer .btn.active');
+    const activeTagBtns = $('.review-modal .tagsContainer .btn.active');
     let reviewTags = [];
     for(let i=0; i<activeTagBtns.length; i++) {
       reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
@@ -1485,33 +1488,40 @@ $(() => {
         BIKE.Session.saveOrUpdateReviewCookie(reviewObj);
 
         // Update screen state
-        // $('#reviewPanel').modal('hide');
+        // $('.review-modal').modal('hide');
         // $('#placeDetailsModal').modal('hide');
-        goHome();
-
-        if (_updatingReview) {
-          ga('send', 'event', 'Review', 'update', ''+m.id, parseInt(currentPendingRating));
-        } else {
-          ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
-        }
+        // goHome();
 
         hideSpinner();
+        
+        if (_updatingReview) {
+          ga('send', 'event', 'Review', 'update', ''+m.id, parseInt(currentPendingRating));
 
-        swal({ 
-          title: 'Valeu!',
-          html: `Tua contribuição vai ajudar a conhecerem melhor este bicicletário :)`,
-          type: 'success', 
-          onOpen: () => {
-            startConfettis();
-          },
-          onClose: () => {
-            stopConfettis();
-          }
-        });
+          swal({ 
+            title: 'Valeu!',
+            html: `Tua avaliação foi atualizada.`,
+            type: 'success'
+          });
+        } else {
+          ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
+
+          swal({ 
+            title: 'Valeu!',
+            html: `Tua avaliação é muito importante. Juntos construímos a cidade que queremos ter.`,
+            type: 'success', 
+            onOpen: () => {
+              startConfettis();
+            },
+            onClose: () => {
+              stopConfettis();
+            } 
+          });
+        }
 
         // Update marker data
         Database.getPlaceDetails(m.id, () => {
           updateMarkers();
+          openDetailsModal(m, callback);
         });
       });
     };
@@ -1525,45 +1535,40 @@ $(() => {
     }
   }
 
-  function openRevisionModal() {
-    const m = openedMarker;
-    let templateData = {};
+  function openRevisionDialog() {
+    swal({ 
+      // title: 'Sugerir correção',
+      customClass: 'revision-modal',
+      html:
+        `<p>
+          Este bicicletário está desatualizado ou está faltando uma informação importante? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil. :)
+        </p>
 
-    setView('Sugerir correção', '/sugestao');
+        <p>
+          <textarea id="revisionText" maxlength="250" onload="autoGrowTextArea(this)" 
+          onkeyup="autoGrowTextArea(this)" type="text" class="text-input" placeholder="Sua sugestão"></textarea>
+        </p>
 
-    // Render template
-    templateData.pinColor = getPinColorFromAverage(m.average);
-    templateData.title = m.text;
-    templateData.address = m.address;
-    $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
+        <p class="disclaimer">
+          Para qualquer comentário sobre o site em geral, lembre que estamos sempre de olho no 
+          <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> 
+          email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
+        </p>`,
+      confirmButtonText: "Enviar",
+      showCloseButton: true
+    }).then(() => {
+      showSpinner();
 
-    // Initialize callbacks
-    $('#sendRevisionBtn').off('click').on('click', queueUiCallback.bind(this, sendRevisionBtn));
+      const revisionObj = {
+        placeId: openedMarker.id,
+        content: $('#revisionText').val()
+      };
 
-    // Display modal
-    if ($('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
-        $('#revisionModal').modal('show');
+      Database.sendRevision(revisionObj, revisionId => {
+        hideSpinner();
+        swal('Sugestão enviada', `Obrigado por contribuir com o bike de boa! Sua sugestão será 
+          avaliada pelo nosso time de colaboradores o mais rápido possível.`, 'success');
       });
-    } else {
-      $('#revisionModal').modal('show');
-    }
-  }
-
-  function sendRevisionBtn() {
-    showSpinner();
-
-    const revisionObj = {
-      placeId: openedMarker.id,
-      content: $('#revisionText').val()
-    };
-
-    Database.sendRevision(revisionObj, revisionId => {
-      hideSpinner();
-
-      swal('Sugestão enviada', 'Obrigado por contribuir com o bike de boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
-
-      goHome();
     });
   }
 
@@ -2181,7 +2186,11 @@ $(() => {
     swal.setDefaults({
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
+      confirmButtonColor: '#b3b3b3',
+      confirmButtonClass: 'btn green',
       cancelButtonText: 'Cancelar',
+      cancelButtonClass: 'btn',
+      buttonsStyling: false,
       allowOutsideClick: true
     });
  
