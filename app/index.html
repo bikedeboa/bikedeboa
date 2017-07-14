@@ -811,6 +811,13 @@
 
 
               <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}">
+                  {{#if savedRating}}
+                    <div class="savedRating">
+                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
+                      <button class="ghost openReviewPanelBtn">Editar</button>
+                    </div>
+                  {{/if}}
+
                   {{#if numReviews}}
                     <div class="numreviews">{{numReviews}}</div>
                   {{/if}}
@@ -833,7 +840,7 @@
                       </fieldset>
                       
                       {{#unless savedRating}}
-                        <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">Avaliar</button>
+                        <button id="new-review-btn" class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">Avaliar</button>
                       {{/unless}}
                     {{/if}}
 
@@ -870,12 +877,6 @@
                       <div class="tagsContainer">
                           {{{tags}}}
                       </div>
-                  {{/if}}
-
-                  {{#if savedRating}}
-                    <div class="savedRating">
-                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b><button class="link-button classic-link openReviewPanelBtn">(editar)</button>
-                    </div>
                   {{/if}}
               </section>
 
