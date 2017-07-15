@@ -13,11 +13,11 @@ $yellow: #F6C913;
 $darkYellow: #F6C913; 
 $red: #FF8265;
 $strongRed: #FF6541;
-$purple: #533FB4;
-$palePurple: #705EC7;
-$darkPurple: #3821AA; 
-$lightPurple: #705EC7;
-$lightestPurple: #9688DC;
+$blue: #533FB4;
+$paleBlue: #705EC7;
+$darkBlue: #3821AA; 
+$lightBlue: #705EC7;
+$lightestBlue: #9688DC;
 
 // Grays
 $black: #333;
@@ -37,9 +37,8 @@ $lightestGrey: $lightestGray;
 $bootstrapBackdropColor: $paleWhite;
 $bootstrapBackdropOpacity: 0.8;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
-$greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
 
-$filtersHightlightColor: $palePurple;
+$filtersHightlightColor: $paleBlue;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +54,6 @@ $separatorBorderStyle: 2px dotted #eee;
 
 $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
-$MOBILE_BOTTOMBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
 $GRID_SPACE: 12px;
@@ -372,12 +370,12 @@ hr {
 
 a,
 .link-like {
-    color: $purple;
+    color: $blue;
     border-bottom: 1px dashed;
 
     &:hover {
-      color: $darkPurple;
-      text-decoration: none; 
+      color: $darkBlue;
+      text-decoration: none;
       border-bottom: 2px solid;
     }
 }
@@ -416,14 +414,33 @@ a,
     width: 95%;
     height: 48px;
     max-width: 600px;
-    width: calc(100% - 20px); 
+    width: calc(100% - 20px);
 
-    transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
-    
-    &.cool-hidden {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
+    // display: table;
+
+    transition: top 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0;
+
+    // &:before {
+    //     position: relative;
+    //     top: 1px;
+    //     display: inline-block;
+    //     font-family: $bootstrapFont;
+    //     font-weight: 400;
+    //     line-height: 1;
+    //     content: "\e003";
+    //     position: absolute;
+    //     font-size: 16px;
+    //     top: 0;
+    //     left: 0;
+    //     /* opacity: 0.5; */
+    //     color: grey;
+    //     padding: 15px;
+    //     // background: $green;
+    //     // color: $lightestGray;
+    //     color: $green;
+    //     // color: $lightGray;
+    // }
 
     input {
         width: 100%;
@@ -550,7 +567,7 @@ a,
 }
 
 #aboutModal {
-  $leading: 18px;
+  $leading: 16px;
 
   #about-social-buttons {
     text-align: center;
@@ -559,45 +576,20 @@ a,
   img {
     width: 60px; 
     height: auto;
-    margin: $leading auto $leading*2;
+    margin: $GRID_SPACE auto $GRID_SPACE*2;
     display: block;
-  }
-
-  p {
-    font-size: $leading;
-    line-height: 1.6em;
-  }
-
-  p.subtitle {
-    font-size: 20px;
-    font-style: italic;
-    line-height: 1.7em;
-    letter-spacing: .01em;
-  }
-
-  h1 {
-    font-size: $leading*1.618*2;
-    margin-top: 1.5em;
-    margin-bottom: .5em;
-    letter-spacing: -0.02em;
   }
 
   h2 {
     font-size: $leading*1.618;
-    margin-top: 1.5em;
-    margin-bottom: .25em;
+    margin-top: $leading*2;
+    margin-bottom: $leading;
     text-align: left;
-    letter-spacing: -0.01em;
+    letter-spacing: -1px;
   }
 
   h2, p {
     color: $black;
-  }
-
-  .medium-separator {
-    margin: 2em 0;
-    text-align: center;
-    letter-spacing: 1em;
   }
 }
 
@@ -690,7 +682,7 @@ a,
     right: 0;
     margin: 0 $GRID_SPACE $GRID_SPACE*2;
 
-    background: linear-gradient(45deg, $green 0, $lightGreen 100%);
+    background: linear-gradient(45deg,#30bb6a 0,#2cd978 100%);
     border: 0;
     border-radius: 50%;
     cursor: pointer;
@@ -700,7 +692,7 @@ a,
     @include material-shadow(2);
 
     // transition: background 0.2s ease-out, width 0.5s ease-out;
-    // opacity: 0;
+    opacity: 0;
 
     img {
         width: 22px;
@@ -711,7 +703,7 @@ a,
     &:hover,
     &:active,
     &:focus {
-        background: linear-gradient(45deg, hsla(145,59%,40%,1) 0, #25cb6d 100%);
+        background: linear-gradient(45deg,hsla(145,59%,40%,1) 0,#25cb6d 100%);
     } 
 
     &.active {
@@ -756,7 +748,7 @@ a,
     @include material-shadow(1);
 
     &.active {
-      border: 2px solid $lightestPurple;
+      border: 2px solid $lightestBlue;
       background-color: $paleWhite;
     }
 
@@ -793,7 +785,7 @@ a,
     margin: auto;
     z-index: 1;
     background: $green;
-    background: $greenGradient;
+    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
     border: none;
     color: white;
     border-radius: 25px;
@@ -981,10 +973,10 @@ a,
 #top-mobile-bar,
 .modal-header {
   background: $lightGreen;
-  background: $greenGradient;
+  background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
   color: white;
   padding: 0;
-  border-bottom: 1px solid  $green;
+  border-bottom: 1px solid #30bb6a;
 }
 
 .modal-header {
@@ -998,11 +990,9 @@ a,
       font-family: $headingFont;
       padding: $GRID_SPACE*3 $GRID_SPACE*3 $GRID_SPACE;
       font-size: 2em;
-      letter-spacing: -0.01em;
   }
 }
 
-#bottom-mobile-bar,
 #top-mobile-bar {
   display: none;
 }
@@ -1011,70 +1001,27 @@ a,
     overflow-x: hidden;
     overflow-y: auto;
 
-.clean-modal {
-  .modal-header {
-    background: transparent;
-    border: 0;
-    color: $black;
-
-    h1 {
-      padding: 0;
+    &:before { 
+        position: fixed;
+        content: '✕';
+        color: $gray;
+        top: $GRID_SPACE;
+        right: $GRID_SPACE*2;
+        font-size: 30px;
+        line-height: 30px;
+        pointer-events: none;
     }
-  }
-
-  .modal-content {
-    box-shadow: none;
-    background: transparent;
-  }
-
-  article {
-    margin-left: -$GRID_SPACE*3;
-    margin-right: -$GRID_SPACE*3;
-  }
-}
-
-body.clean-modal-open {
-  .modal-backdrop.in {
-    opacity: .9 ;
-  }
-}
-
-
-#close-modal-btn {
-  display: none;
-}
-
-body.modal-open {
-  #close-modal-btn { 
-    display: block;
-    position: fixed;
-    color: $black;
-    top: $GRID_SPACE;
-    right: $GRID_SPACE*2;
-    font-size: 30px; 
-    line-height: 22px;
-    border: 0;
-    background: none;
-    z-index: 1052; //under sweetalert dialogs
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-
-    // transition: color 0.2s ease-out;
-
-    &:hover {
-      background: $lighterGray;
-    }
-  }
 }
 
 .modal-content {
     border: 0;
     border-radius: 5px;
     // overflow: hidden; //used to round corners, but was clipping tooltips
-    margin-top: $GRID_SPACE*2;
+    margin-top: 50px;
     margin-bottom: 100px;
+    // @include material-shadow(3);
     box-shadow: 0 5px 30px rgba(0,0,0,.15);
+    // border-radius: 10px; //not working? :(
 
     .modal-header {
       border-top-left-radius: 5px;
@@ -1100,15 +1047,18 @@ body.modal-open {
     }
 
     .title {
+        // padding-left: 10px;
         vertical-align: middle;
+        // border-bottom: $separatorBorderStyle;
+        // padding-bottom: $GRID_SPACE*2;
         font-family: $headingFont;
 
         h1 {
           font-weight: 700;
           font-size: 30px;
-          line-height: 30px;
+          line-height: normal;
           margin-top: $GRID_SPACE*2;
-          letter-spacing: -0.01em; 
+          letter-spacing: -1px; 
         }
 
         & > .skeleton-box {
@@ -1119,6 +1069,8 @@ body.modal-open {
     }
 
     article {
+        padding: 0 $GRID_SPACE;
+
         p {
           font-size: 16px;
           line-height: 1.7em;
@@ -1156,11 +1108,10 @@ body.modal-open {
     }
 
     #titleInput {
-        border: 0;
-        border-bottom: 2px solid $lighterGray;
+        border: 2px solid $lighterGray;
         font-weight: 700;
-        // font-size: 30px;
-        letter-spacing: -0.01em; 
+        font-size: 30px;
+        letter-spacing: -0.5px; 
         // border-radius: 5px;
         // font-size: 30px;
 
@@ -1255,9 +1206,9 @@ body.modal-open {
     }
 
     &.hasImage {
-        height: 180px;
-        // min-height: 170px;
-        // max-height: 170px;
+        min-height: 170px;
+        height: 170px;
+        max-height: 170px;
 
         & img {
             object-fit: cover;
@@ -1489,6 +1440,16 @@ body.modal-open {
 }
 
 .rating-display-container {
+    .numreviews {
+        color: $gray;
+        font-size: 14px;
+        font-weight: 100;
+        font-family: $bodyFont;
+        vertical-align: text-top;
+        user-select: none;
+        cursor: default;
+    }
+
     // .numreviews {
     //     display: block;
     //     margin: $GRID_SPACE/2 0 $GRID_SPACE;
@@ -1593,25 +1554,25 @@ body.modal-open {
 }
 
 .ghost {
-    padding: 3px 10px;
-    border: 1px solid $gray;
-    color: $gray;
+    display: block;
+    border: 1px solid $darkYellow;
+    background-color: #fff;
+    color: $darkYellow;
     margin: 5px auto;
     font-size: 14px;
-    border-radius: 25px;
-    vertical-align: bottom;
-    background: transparent;
-
-    transition: color .2s ease;
-    
-    &:hover,
-    &:focus,
-    &:active {
-        color: white;
-        border-color: white;
-        // background-color: $gray;
-        background: $greenGradient;
-    }
+    width: 30%;
+    border-radius: 5px;
+    vertical-align: middle;
+    min-width: 80px;
+    transition: all 0.2s ease;
+    font-family: $headingFont;
+}
+.ghost:hover,
+.ghost:focus,
+.ghost:active {
+    color: white;
+    border: 1px solid white;
+    background-color: $darkYellow;
 }
 
 .modal-footer {
@@ -1682,25 +1643,12 @@ body.modal-open {
       margin-top: $GRID_SPACE*2;
       border-top: $separatorBorderStyle;
       padding-top: $GRID_SPACE;
-      
-      // text-align: center;
 
       .savedRating {
-          text-align: center;
           color: $gray;
           font-weight: 400;
-          margin-top: $GRID_SPACE;
+          margin-top: 10px;
           font-size: 14px;
-          line-height: 14px;
-          background: $paleWhite;
-          padding: $GRID_SPACE/2 0;
-          vertical-align: middle;
-
-          button {
-            font-size: 12px;
-            margin: 0;
-            margin-left: 6px;
-          }
 
           &:before {
               content: '';
@@ -1713,28 +1661,6 @@ body.modal-open {
               vertical-align: middle;
               // margin-right: 5px;
           }
-      }
-
-      .numreviews {
-        color: $gray;
-        margin: $GRID_SPACE 0 0 2px;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        user-select: none;
-        cursor: default;
-        
-        // &:before {
-        //     content: '';
-        //     display: inline-block;
-        //     width: 14px;
-        //     height: 17px;
-        //     background-image: url(/img/icon_user.svg);
-        //     background-size: 100%;
-        //     background-repeat: no-repeat;
-        //     vertical-align: middle;
-        //     margin-right: 5px;
-        // }
       }
     }
 
@@ -1761,6 +1687,23 @@ body.modal-open {
         &.close-modal {
           cursor: pointer;
         }
+    }
+
+    .numreviews {
+      // display: block;
+      margin: $GRID_SPACE/2 0 $GRID_SPACE;
+      
+      // &:before {
+      //     content: '';
+      //     display: inline-block;
+      //     width: 14px;
+      //     height: 17px;
+      //     background-image: url(/img/icon_user.svg);
+      //     background-size: 100%;
+      //     background-repeat: no-repeat;
+      //     vertical-align: middle;
+      //     margin-right: 5px;
+      // }
     }
 }
 
@@ -1807,68 +1750,44 @@ body.modal-open {
 .btn {
     min-width: 42px;
     min-height: 42px;
-
-    border-radius: 5px;
 }
 
-.review-modal {
-    .tagsContainer {
-      max-width: 400px;
-      margin: 24px auto 36px;
+.btn-tag {
+    background: $lightestGray;
+    color: #939a9d;
+    border-radius: 10px;
+    margin: 5px 2px;
+
+    &:before {
+        content: '☐';
+        margin-right: 5px;
+        font-family: 'Arial';
     }
 
-    .btn-tag {
-        background: $lightestGray;
-        color: $black;
-        border-radius: 25px;
-        margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+    &.active {
+        background: $green;
+        color: white;
 
-        // &:before {
-        //     content: '☐';
-        //     margin-right: 5px;
-        //     font-family: 'Arial';
-        // }
-
-        &.active {
-            background: $green;
-            color: white;
- 
-            // &:before {
-            //     content: '☑';
-            // }
-
-            &:hover {
-              background: $lightGreen;
-            }
-        } 
-
-        &:hover {
-          background: $lighterGray;
+        &:before {
+            content: '☑';
         }
     }
 
-    button.swal2-confirm {
-      width: 100%;
-    }
+}
 
-    h2 {
-      margin-top: $GRID_SPACE*2;
-      margin-bottom: $GRID_SPACE/2;
-    }
-
-    p.small {
-      font-size: 13px;
-      color: gray;
-      font-style: italic;
+#reviewPanel {
+    .tagsContainer {
+      justify-content: flex-start;
     }
 }
 
 
 .tagDisplay {
     display: inline-block;
-    padding: $GRID_SPACE/2 $GRID_SPACE;
+    padding: 6px 12px;
     font-size: 14px;
     font-weight: 400;
+    line-height: 1.42857143;
     text-align: center;
     white-space: nowrap;
     user-select: none;
@@ -1877,21 +1796,20 @@ body.modal-open {
 
     background: $lightestGray;
     border-radius: 25px;
-    margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+    margin: 6px 6px 6px 0;
     color: $black;
 
     .tag-count {
         font-weight: 700;
         font-size: 12px;
-        opacity: .5;
 
         &:before {
           // content: ' · ';
-          font-size: 9px;
           margin-right: 2px;
           margin-left: 2px;
           font-family: 'Glyphicons Halflings';
           content: "\e008";
+          font-size: 8px;
         }
     }
 }
@@ -2028,9 +1946,9 @@ body.modal-open {
 }
 
 
-.revision-modal {
+#revisionModal {
     p {
-        text-align: left;
+        margin-bottom: 20px;
     }
 
     textarea {
@@ -2038,12 +1956,11 @@ body.modal-open {
         resize: none;
         margin: $GRID_SPACE 0;
         border: 3px solid $lighterGray;
-        width: 100%;
     }
 
     .disclaimer {
-        font-size: 16px;
-        font-style: italic;
+        font-size: 12px;
+        margin: 20px 0 0;
         color: $gray;
     }
 }
@@ -2053,6 +1970,8 @@ body.modal-open {
   justify-content: space-around;
   // justify-content: flex-end;
   align-items: flex-start;
+  margin: 0 0 -10px 0;
+  padding-top: 10px;
   // border-bottom: 1px solid #eee;
 
   hr {
@@ -2066,14 +1985,13 @@ body.modal-open {
     text-align: center;
     cursor: pointer;
     filter: grayscale(100%);
+    transition: filter 0.2s ease;
     border: 0;
     background: none;
     color: $green;
     width: 100%;
-    padding: $GRID_SPACE/2 0;
+    padding: 0;
     // min-width: 110px;
-    
-    transition: filter 0.2s ease-out, background .2s ease-out;
 
     .toolbar-item-icon {
       width: 30px;
@@ -2097,7 +2015,6 @@ body.modal-open {
     &:hover {
       filter: none;
       text-decoration: none;
-      background: $paleWhite;
     }
   }
 
@@ -2318,7 +2235,7 @@ body.modal-open {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: $purple;
+      background: $blue;
       z-index: 2;
       text-align: left;
       display: flex;
@@ -2379,6 +2296,7 @@ body.modal-open {
         bottom: 5px;
         right: 13px;
         font-size: 12px;
+        font-weight: 100;
         opacity: 0.8;
       }
 
@@ -2441,7 +2359,7 @@ body.modal-open {
       font-family: $headingFont;
       font-weight: 700;
       font-size: 20px;
-      letter-spacing: -0.01em; 
+      letter-spacing: -0.5px;
       line-height: normal;
       margin: 0;
       white-space: nowrap;
@@ -2551,8 +2469,8 @@ body.modal-open {
     background: $lightestGray;
     transition: background 0.2s ease-out;
     border: 1px solid #ccc;
-    border-radius: 5px;
-     
+    border-radius: 4px;
+    
     &:hover,
     &:focus,
     &:active {
@@ -2620,17 +2538,6 @@ body.modal-open {
     display: none;
   }
 
-  .clean-modal {
-    article {
-      margin-left: inherit;
-      margin-right: inherit;
-    }
-
-    .modal-content {
-      background: white;
-    }
-  }
-
   .modal {
     &:before {
       content: ''
@@ -2642,7 +2549,7 @@ body.modal-open {
 
     .modal-dialog {
       margin: 0;
-      background: $greenGradient;
+      background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
     }
 
     .modal-content {
@@ -2653,104 +2560,32 @@ body.modal-open {
       // Explanation on the reason for the string interpolation:
       //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
       // min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
-
       min-height: 100vh;
-
-      padding-top: $MOBILE_NAVBAR_HEIGHT;
-      padding-bottom: 70px;
-      margin: 0;
-    }
-
-    .rating-input-container {
-      display: none;
     }
 
     .modal-header {
       display: none;
     }
 
-    .title {
-      h1 {
-        margin-top: 0;
-      }
-    }
+    // Attempt for fixed modal footer
+    // .modal-footer {
+    //   position: absolute; 
+    //   bottom: 0;
+    //   left: 0;
+    //   right: 0;
+    //   z-index: 9999;
+    // }
 
-    .photo-container {
-      border-radius: 0;
-
-      &.hasImage {
-        height: 120px;
-      }
-    }
-  }
-
-  #aboutModal {
-    $leading: 16px;
-
-    img {
-      margin: $leading auto $leading*2;
-    }
-
-    p {
-      font-size: $leading;
-      line-height: 1.4em;
-    }
-
-    p.subtitle {
-      font-size: 18px;
-      line-height: 1.5em;
-      letter-spacing: .01em;
-    }
-
-    h1 {
-      font-size: $leading*1.618*2;
-      margin-top: 2em;
-      margin-bottom: .5em;
-    }
-
-    h2 {
-      font-size: $leading*1.618;
-      margin-top: 2em;
-      margin-bottom: .5em;
+    .modal-content {
+      padding-top: $MOBILE_NAVBAR_HEIGHT;
+      margin: 0;
     }
   }
 
-  .review-modal {
-    p.small {
-      display: none;
-    }
-  }
 
-  .swal2-modal {
-    p {
-      font-size: 16px;
-    }
-
-    button.swal2-confirm {
-      display: block;
-      width: 100%;
-      margin: 6px 0;  
-    }
-
-  }
-  
-  .revision-modal {
-    .disclaimer {
-      display: none;
-    }
-  }
-
-  body.modal-open {
-    #close-modal-btn {
-      display: none;
-    }
-  }
-
-  body.details-view:not(.already-reviewed) #bottom-mobile-bar,
   body.modal-open #top-mobile-bar {
     opacity: 1;
     pointer-events: auto;
-    display: block;
   }
 
   .tooltip {
@@ -2765,8 +2600,8 @@ body.modal-open {
     .review {
       text-align: left;
 
-      #new-review-btn {
-        display: none;
+      .numreviews {
+        display: block;
       }
     }
 
@@ -2788,15 +2623,10 @@ body.modal-open {
       }
 
       .toolbar-item {
-        // max-width: 90px;
+        max-width: 90px;
 
         label {
           font-size: 8px;
-        }
-
-        .toolbar-item-icon {
-          width: 25px;
-          height: 25px;
         }
       }
     }
@@ -2809,7 +2639,8 @@ body.modal-open {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1052; //under sweetalert dialogs
+    z-index: 9999; //@todo
+    display: block;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -2857,40 +2688,6 @@ body.modal-open {
     }
   }
 
-  #bottom-mobile-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1052; //under sweetalert dialogs
-
-      box-shadow: 0 -20px 30px white;
-
-      #floating-cta-container {
-        background: white;
-        // border-top: 1px solid $lighterGray;
-      }
-
-      // &:before {
-      //   content: '';
-      //   width: 100%;
-      //   height: 50px;
-      //   display: block;
-      //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-      //   pointer-events: none;
-      // }
-
-      button {
-        // Explanation on the reason for the string interpolation:
-        //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-        width: calc(100% - #{$GRID_SPACE*2});
-        margin: $GRID_SPACE;
-        font-weight: 700;
-        text-transform: uppercase;
-        background: $greenGradient;
-      } 
-  }
-
   #filter-menu {
     .side-nav__container {
       // max-width: 250px;
@@ -2929,6 +2726,7 @@ body.modal-open {
   //       border-radius: 25px;
   //       height: 70px;
   //       bottom: 0;
+  //       font-weight: 100;
 
   //       &:after {
   //           content: 'Cancelar';
@@ -2981,7 +2779,7 @@ body.modal-open {
       padding: 6px 12px;
       display: block;
       font-size: 12px;
-      background: $paleWhite;
+      background: #fafafa;
       color: #b3b3b3;
   }
 }
@@ -3180,7 +2978,7 @@ body.modal-open {
   }
 }
 
-.review-modal .rating > label:before {
+#reviewPanel .rating > label:before {
     margin: 5px 6px;
     width: 40px;
     height: 40px
@@ -3453,7 +3251,7 @@ body.modal-open {
     font-family: $headingFont;
     height: 200px;
     background: $green;
-    background: $greenGradient;
+    background: linear-gradient(45deg, $green 0%, $lightGreen 100%);
     color: #FFF;
     // display: flex;
     // align-items: flex-end;
@@ -3542,27 +3340,26 @@ body.modal-open {
   }
 
   h2 {
-    font-family: $headingFont;
+    // font-family: $headingFont;
     font-size: 24px;
-    font-weight: 700;
   }
 
-  button.swal2-confirm {
+  button {
     border-bottom: 3px solid $gray;
     border-radius: 5px;
     font-weight: 700;  
     min-width: 90px;
     
-    &.swal2-confirm {
+    &.confirm {
       border-bottom: 3px solid $darkGreen;
     }
 
     &:active {
-      outline: 0;
-      border-bottom-width: 0;
-      transform: translateY(3px);
-      // compensate for relayout because of changing border size
-      margin-bottom: 3px;
+        outline: 0;
+        border-bottom-width: 0;
+        transform: translateY(3px);
+        // compensate for relayout because of changing border size
+        margin-bottom: 3px;
     }
   } 
 
@@ -3583,7 +3380,7 @@ body.modal-open {
   }
 
   & > .toast-info {
-    background-color: $purple;
+    background-color: $blue;
   }
 
   & > .toast-warning {

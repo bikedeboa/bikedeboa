@@ -25,8 +25,7 @@ $(() => {
   }
 
   function openShareDialog() {
-    // const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
-    const shareUrl = 'https://www.bikedeboa.com.br' + getMarkerShareUrl(openedMarker);
+    const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
 
     swal({ 
       imageUrl: _isMobile ? '' : '/img/icon_share.svg',
@@ -51,7 +50,6 @@ $(() => {
           <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>
         </div>`,
       showConfirmButton: false,
-      showCloseButton: true,
       onOpen: () => {
         // Initializes Twitter share button
         twttr.widgets.load();
@@ -186,7 +184,7 @@ $(() => {
     $('.photo-container img').on('load', e => {
       $(e.target).parent().removeClass('loading');
     });
- 
+
     // Init click callbacks
     // $('#checkinBtn').on('click', sendCheckinBtn);
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
@@ -205,27 +203,16 @@ $(() => {
     });
     $('#editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
     $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
-    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionDialog));
+    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionModal));
 
-    // Display the modal
+    // Display modal
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
 
       $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
         // Animate modal content
         // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
-        // if (!templateData.savedRating) {
-        //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
-        // }
 
-        // Global states
-        $('body').addClass('details-view');
-        if (previousReview) {
-          $('body').addClass('already-reviewed');
-        } else {
-          $('body').removeClass('already-reviewed');
-        }
- 
         // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
         // Thanks to https://github.com/limonte/sweetalert2/issues/374
         $(document).off('focusin.modal');
@@ -772,7 +759,7 @@ $(() => {
                 _gmarkers[i].addListener('mouseover', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
-                  _infoWindow.setContent(contentString); 
+                  _infoWindow.setContent(contentString);
                   _infoWindow.open(map, _gmarkers[i]);
                   _infoWindow.addListener('domready', () => {
                     $('.infobox--img img').off('load').on('load', e => {
@@ -942,6 +929,7 @@ $(() => {
     $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
     $('#geolocationBtnBtn').toggle();
+    // $('#locationSearch').toggleClass('coolHide');
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -950,15 +938,13 @@ $(() => {
   }
 
   function showUI() {
-    // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
+    $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
     // $('#addPlace').velocity('transition.slideUpIn');
-    $('#locationSearch').removeClass('cool-hidden');
   }
 
   function hideUI() {
-    // $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
+    $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
     // $('#addPlace').velocity('transition.slideDownOut');
-    $('#locationSearch').addClass('cool-hidden');
   }
 
   // @todo refactor this, it's fuckin confusing
@@ -1163,7 +1149,9 @@ $(() => {
     });
 
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
+    templates.reviewPanelTemplate = Handlebars.compile($('#reviewPanelTemplate').html());
     templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
+    templates.revisionModalTemplate = Handlebars.compile($('#revisionModalTemplate').html());
     templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
   }
 
@@ -1178,6 +1166,15 @@ $(() => {
     // console.log('validating');
 
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', !isOk);
+  }
+
+
+  function validateReviewForm() {
+    const isOk = currentPendingRating;
+
+    // console.log('validating review form');
+
+    $('#sendReviewBtn').prop('disabled', !isOk);
   }
 
   // @todo clean up this mess
@@ -1364,88 +1361,75 @@ $(() => {
 
   function openReviewModal(prepopedRating) {
     const m = openedMarker;
+
+    let templateData = {};
+    templateData.title = m.text;
+    templateData.address = m.address; 
+
     const previousReview = BIKE.Session.getReviewFromSession(m.id);
-    _updatingReview = previousReview;
 
-    // Tags toggle buttons
-    let tagsButtons = tags.map(t => {
+    // Tags
+    templateData.tagsButtons = tags.map(t => {
       const isPrepoped = previousReview && previousReview.tags.find( (i) => {return parseInt(i.id) === t.id;} );
+      // @todo refactor this to use Handlebars' native support for arrays
       return `<button class="btn btn-tag ${isPrepoped ? 'active' : ''}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
-    }).join(''); 
+    }).join('');
 
-    swal({ 
-      // title: 'Avaliar bicicletário',
-      customClass: 'review-modal',
-      html: `
-        <section>
-          <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-              <h2>Dê sua nota</h2>
-              <fieldset class="rating">
-                  <input type="radio" id="star5" name="rating" value="5" />
-                  <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
-                  <input type="radio" id="star4" name="rating" value="4" />
-                  <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
-                  <input type="radio" id="star3" name="rating" value="3" />
-                  <label class="full-star" data-value="3" for="star3" title="Médio"></label>
-                  <input type="radio" id="star2" name="rating" value="2" />
-                  <label class="full-star" data-value="2" for="star2" title="Ruim"></label>
-                  <input type="radio" id="star1" name="rating" value="1" />
-                  <label class="full-star" data-value="1" for="star1" title="Horrivel"></label>
-              </fieldset>
-          </div>
-        </section>
 
-        <section class="step-2">
-          <h2>
-            Vantagens
-          </h2>
-          <p class="small">Opcional. Selecione quantas achar necessário.</p>
-          <div class="tagsContainer">
-              ${tagsButtons}
-          </div>
-        </section>`,
-      confirmButtonText: "Enviar",
-      confirmButtonClass: 'btn green sendReviewBtn',
-      showCloseButton: true,
-      onOpen: () => {
-        if(!_isTouchDevice) {
-          $('.review-modal .full-star').tooltip({
-            toggle: 'tooltip',
-            placement: 'bottom',
-            'delay': {'show': 0, 'hide': 100}
-          });
-        }
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
+    $('#reviewPanelTemplatePlaceholder').html(templates.reviewPanelTemplate(templateData));
 
-        // Prepopulate rating
-        if (previousReview) {
-          currentPendingRating = previousReview.rating;
-          $('.review-modal input[name=rating]').val([previousReview.rating]);
 
-          ga('send', 'event', 'Review', 'update - pending', ''+m.id);
-        } else if (prepopedRating) {
-          currentPendingRating = prepopedRating;
-          $('.review-modal input[name=rating]').val([prepopedRating]);
-        } else {
-          ga('send', 'event', 'Review', 'create - pending', ''+m.id);
-        }
+    // Template is rendered, start jquerying
+    //
+    if(!_isTouchDevice) {
+      $('#reviewPanel .full-star').tooltip({
+        toggle: 'tooltip',
+        placement: 'bottom',
+        'delay': {'show': 0, 'hide': 100}
+      });
+    }
 
-        // Init callbacks
-        $('.review-modal .rating').off('change').on('change', e => {
-          currentPendingRating = $(e.target).val();
-          validateReviewForm();
-        });
+    // Prepopulate rating
+    if (previousReview) {
+      _updatingReview = true;
+      currentPendingRating = previousReview.rating;
+      $('input[name=rating]').val([previousReview.rating]);
 
-        validateReviewForm();
-      }
-    }).then(() => {
+      ga('send', 'event', 'Review', 'update - pending', ''+m.id);
+    } else if (prepopedRating) {
+      currentPendingRating = prepopedRating;
+      $('input[name=rating]').val([prepopedRating]);
+    } else {
+      _updatingReview = false;
+      ga('send', 'event', 'Review', 'create - pending', ''+m.id);
+    }
+
+    // Init callbacks
+    $('#ratingDisplay .full-star').off('click').on('click', e => {
+      openReviewModal($(e.target).data('value'));
+    });
+    $('#reviewPanel .rating').off('change').on('change', e => {
+      currentPendingRating = $(e.target).val();
+      validateReviewForm();
+    });
+    $('#sendReviewBtn').off('click').on('click', () => {
       sendReviewBtnCB();
     });
-  }
 
-  function validateReviewForm() {
-    const isOk = currentPendingRating;
-    $('.sendReviewBtn').prop('disabled', !isOk);
-    // $('.review-modal .step-2').velocity('fadeIn');
+    validateReviewForm();
+
+    // Display modal
+    setView('Nova avaliação', '/avaliar');
+    if ($('#placeDetailsModal').is(':visible')) {
+      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+        $('#reviewPanel').modal('show');
+      });
+    } else {
+      $('#reviewPanel').modal('show');
+    }
   }
 
   function toggleExpandModalHeader() {
@@ -1475,7 +1459,7 @@ $(() => {
   function sendReviewBtnCB() {
     const m = openedMarker;
 
-    const activeTagBtns = $('.review-modal .tagsContainer .btn.active');
+    const activeTagBtns = $('#reviewPanel .tagsContainer .btn.active');
     let reviewTags = [];
     for(let i=0; i<activeTagBtns.length; i++) {
       reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
@@ -1496,40 +1480,33 @@ $(() => {
         BIKE.Session.saveOrUpdateReviewCookie(reviewObj);
 
         // Update screen state
-        // $('.review-modal').modal('hide');
+        // $('#reviewPanel').modal('hide');
         // $('#placeDetailsModal').modal('hide');
-        // goHome();
+        goHome();
 
-        hideSpinner();
-        
         if (_updatingReview) {
           ga('send', 'event', 'Review', 'update', ''+m.id, parseInt(currentPendingRating));
-
-          swal({ 
-            title: 'Valeu!',
-            html: `Tua avaliação foi atualizada.`,
-            type: 'success'
-          });
         } else {
           ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
-
-          swal({ 
-            title: 'Valeu!',
-            html: `Tua avaliação é muito importante. Juntos construímos a cidade que queremos ter.`,
-            type: 'success', 
-            onOpen: () => {
-              startConfettis();
-            },
-            onClose: () => {
-              stopConfettis();
-            } 
-          });
         }
+
+        hideSpinner();
+
+        swal({ 
+          title: 'Valeu!',
+          html: `Tua contribuição vai ajudar a conhecerem melhor este bicicletário :)`,
+          type: 'success', 
+          onOpen: () => {
+            startConfettis();
+          },
+          onClose: () => {
+            stopConfettis();
+          }
+        });
 
         // Update marker data
         Database.getPlaceDetails(m.id, () => {
           updateMarkers();
-          openDetailsModal(m, callback);
         });
       });
     };
@@ -1543,40 +1520,45 @@ $(() => {
     }
   }
 
-  function openRevisionDialog() {
-    swal({ 
-      // title: 'Sugerir correção',
-      customClass: 'revision-modal',
-      html:
-        `<p>
-          Este bicicletário está desatualizado ou está faltando uma informação importante? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil. :)
-        </p>
+  function openRevisionModal() {
+    const m = openedMarker;
+    let templateData = {};
 
-        <p>
-          <textarea id="revisionText" maxlength="250" onload="autoGrowTextArea(this)" 
-          onkeyup="autoGrowTextArea(this)" type="text" class="text-input" placeholder="Sua sugestão"></textarea>
-        </p>
+    setView('Sugerir correção', '/sugestao');
 
-        <p class="disclaimer">
-          Para qualquer comentário sobre o site em geral, lembre que estamos sempre de olho no 
-          <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> 
-          email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
-        </p>`,
-      confirmButtonText: "Enviar",
-      showCloseButton: true
-    }).then(() => {
-      showSpinner();
+    // Render template
+    templateData.pinColor = getPinColorFromAverage(m.average);
+    templateData.title = m.text;
+    templateData.address = m.address;
+    $('#revisionModalTemplatePlaceholder').html(templates.revisionModalTemplate(templateData));
 
-      const revisionObj = {
-        placeId: openedMarker.id,
-        content: $('#revisionText').val()
-      };
+    // Initialize callbacks
+    $('#sendRevisionBtn').off('click').on('click', queueUiCallback.bind(this, sendRevisionBtn));
 
-      Database.sendRevision(revisionObj, revisionId => {
-        hideSpinner();
-        swal('Sugestão enviada', `Obrigado por contribuir com o bike de boa! Sua sugestão será 
-          avaliada pelo nosso time de colaboradores o mais rápido possível.`, 'success');
+    // Display modal
+    if ($('#placeDetailsModal').is(':visible')) {
+      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
+        $('#revisionModal').modal('show');
       });
+    } else {
+      $('#revisionModal').modal('show');
+    }
+  }
+
+  function sendRevisionBtn() {
+    showSpinner();
+
+    const revisionObj = {
+      placeId: openedMarker.id,
+      content: $('#revisionText').val()
+    };
+
+    Database.sendRevision(revisionObj, revisionId => {
+      hideSpinner();
+
+      swal('Sugestão enviada', 'Obrigado por contribuir com o bike de boa. Sua sugestão será avaliada pelo nosso time de colaboradores o mais rápido possível.', 'success');
+
+      goHome();
     });
   }
 
@@ -1795,19 +1777,10 @@ $(() => {
       // Mobile optimizations
       if (_isMobile) {
         $('#map, #addPlace').addClass('optimized-hidden');
-      } else {
-        hideUI();
-
-        if ($(e.currentTarget).hasClass('clean-modal')) {
-          $('body').addClass('clean-modal-open');
-        }
       }
     });
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
-
-      // @todo: not do this everytime
-      $('body').removeClass('details-view');
 
       if (_isMobile) {
         $('#map, #addPlace').removeClass('optimized-hidden');
@@ -1817,10 +1790,6 @@ $(() => {
           google.maps.event.trigger(map, 'resize');
           map.setCenter(map.getCenter());
         }
-      } else {
-        showUI();
-        
-        $('body').removeClass('clean-modal-open');
       }
     }); 
     
@@ -1908,20 +1877,18 @@ $(() => {
   }
 
   function openHowToInstallModal() {
-    if (_isMobile) {
-      // Tries to guess the user agent to initialize the correspondent accordion item opened
-      const userAgent = window.getBrowserName();
-      switch (userAgent) {
-        case 'Chrome':
-          $('#collapse-chrome').addClass('in');
-          break;
-        case 'Firefox':
-          $('#collapse-firefox').addClass('in');
-          break;
-        case 'Safari':
-          $('#collapse-safari').addClass('in');
-          break;
-      }
+    // Tries to guess the user agent to initialize the correspondent accordion item opened
+    const userAgent = window.getBrowserName();
+    switch (userAgent) {
+      case 'Chrome':
+        $('#collapse-chrome').addClass('in');
+        break;
+      case 'Firefox':
+        $('#collapse-firefox').addClass('in');
+        break;
+      case 'Safari':
+        $('#collapse-safari').addClass('in');
+        break;
     }
 
     // Lazy load gifs when modal is shown
@@ -2006,6 +1973,10 @@ $(() => {
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
 
+    // _infoWindow = new google.maps.InfoWindow({
+    //   disableAutoPan: true
+    // });
+
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
       maxWidth: 0,
@@ -2020,17 +1991,11 @@ $(() => {
       // closeBoxMargin: '10px 2px 2px 2px',
       closeBoxURL: '',
       infoBoxClearance: new google.maps.Size(1, 1),
+      isHidden: false,
       pane: 'floatPane',
       enableEventPropagation: false,
     };
     _infoWindow = new InfoBox(myOptions);
-    
-    // Override with custom transition
-    // const oldDraw = _infoWindow.draw; 
-    // _infoWindow.draw = function() {
-    //    oldDraw.apply(this);
-    //    $(_infoWindow.div_).velocity('transition.slideUpIn', {display: 'flex', duration: 250}); 
-    // }
 
     google.maps.event.addListener(map, 'zoom_changed', () => {
       const prevZoomLevel = _mapZoomLevel;
@@ -2088,10 +2053,9 @@ $(() => {
     });
 
     // Finally, enable the basic UI
-    showUI();
-    // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-    // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-    // $('#map').css('filter', 'none');
+    $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+    $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+    $('#map').css('filter', 'none');
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -2189,11 +2153,7 @@ $(() => {
     swal.setDefaults({
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
-      confirmButtonColor: '#b3b3b3',
-      confirmButtonClass: 'btn green',
       cancelButtonText: 'Cancelar',
-      cancelButtonClass: 'btn',
-      buttonsStyling: false,
       allowOutsideClick: true
     });
  
