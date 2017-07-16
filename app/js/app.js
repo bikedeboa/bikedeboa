@@ -248,7 +248,19 @@ $(() => {
         'delay': {'show': 0, 'hide': 100}
       });
     }
-    $('#placeDetailsModal .help-tooltip-trigger').tooltip();
+    if (!_isMobile) {
+      $('#placeDetailsModal .help-tooltip-trigger').tooltip();
+    } else {
+      $('#placeDetailsModal .help-tooltip-trigger').off('click').on('click', e => {
+        const $target = $(e.currentTarget);
+        
+        swal({
+          customClass: 'tooltip-modal',
+          html: $target.data('title')
+        });
+      });
+    }
+
     $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - pin details public access');
     });
@@ -1987,7 +1999,7 @@ $(() => {
     let initialCenter;
     if (_isDeeplink && _deeplinkMarker) {
       _isDeeplink = false;
-      
+
       initialCenter = {
         lat: parseFloat(_deeplinkMarker.lat),
         lng: parseFloat(_deeplinkMarker.lng)
