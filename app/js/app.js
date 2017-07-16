@@ -316,7 +316,7 @@ $(() => {
 
         const options = {
           enableHighAccuracy: true,
-          timeout: 10000,
+          timeout: 5000,
           maximumAge: 0
         };
 
@@ -878,6 +878,19 @@ $(() => {
       $('body').addClass('position-pin-mode');
 
       $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
+        // Queries Google Geocoding service for the position address
+        const mapCenter = map.getCenter();
+        newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
+        BIKE.geocodeLatLng(
+          newMarkerTemp.lat, newMarkerTemp.lng,
+          (address) => {
+            // console.log('Resolved location address:');
+            // console.log(address);
+            newMarkerTemp.address = address;
+          }, () => {
+          }
+        );
+
         if (openedMarker) {
           // Was editing the marker position, so return to Edit Modal
           const mapCenter = map.getCenter();
@@ -970,9 +983,9 @@ $(() => {
 
     let place = {};
 
-    place.lat = updatingMarker ? updatingMarker.lat : newMarkerTemp.lat;
-    place.lng = updatingMarker ? updatingMarker.lng : newMarkerTemp.lng;
-    if (!updatingMarker && newMarkerTemp.address) {
+    place.lat = newMarkerTemp.lat;
+    place.lng = newMarkerTemp.lng;
+    if (newMarkerTemp.address) {
       place.address = newMarkerTemp.address;
     }
 
@@ -1237,19 +1250,6 @@ $(() => {
     } else {
       setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
-
-      // Queries Google Geocoding service for the position address
-      const mapCenter = map.getCenter();
-      newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-      BIKE.geocodeLatLng(
-        newMarkerTemp.lat, newMarkerTemp.lng,
-        (address) => {
-          console.log('Resolved location address:');
-          console.log(address);
-          newMarkerTemp.address = address;
-        }, () => {
-        }
-      );
 
       $('#newPlaceModal .help-tooltip-trigger').tooltip();
       $('#access-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {

@@ -1519,6 +1519,15 @@ body.modal-open {
     // }
 }
 
+.modal-dialog {
+    margin-top: 60px;
+
+    & img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
 .modal-body {
     padding: $GRID_SPACE $GRID_SPACE*3;
 
