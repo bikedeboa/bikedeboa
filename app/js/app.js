@@ -132,6 +132,7 @@ $(() => {
       templateData.canModify = true;
     } else if (BIKE.Session.getPlaceFromSession(m.id)) {
       templateData.canModify = true;
+      templateData.temporaryPermission = true;
     }
 
     // Route button
@@ -1009,8 +1010,11 @@ $(() => {
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
               openLocalDetails(newMarker, () => {
-                $('.openReviewPanelBtn').tooltip('show');
                 // $('.rating-input-container').velocity('callout.bounce');
+                $('.openReviewPanelBtn').tooltip('show');
+                setTimeout(() => {
+                  $('.openReviewPanelBtn').tooltip('hide');
+                }, 5000);
               });
             }
           });
@@ -1309,9 +1313,11 @@ $(() => {
       if (files && files[0] && files[0].type.match(/image.*/)) {
         showSpinner('Processando imagem...');
 
-        let reader = new FileReader();
-        reader.onload = photoUploadCB;
-        reader.readAsDataURL(self.files[0]);
+        queueUiCallback(() => {
+          let reader = new FileReader();
+          reader.onload = photoUploadCB;
+          reader.readAsDataURL(self.files[0]);
+        });
       } else {
         swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       }

@@ -179,6 +179,11 @@ body.position-pin-mode {
         opacity: 0.5;
         pointer-events: none;
     }
+
+    .header__menu-toggle {
+      background-color: $lightGray;
+      pointer-events: none;
+    }
 }
 
 hr {
@@ -1740,6 +1745,11 @@ body.modal-open {
         //     vertical-align: middle;
         //     margin-right: 5px;
         // }
+      }
+
+      .numreviews + .openReviewPanelBtn {
+        margin-top: 12px;
+        font-style: 16px;
       }
     }
 
