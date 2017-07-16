@@ -1001,10 +1001,13 @@ a,
 #top-mobile-bar,
 .modal-header {
   background: $lightGreen;
-  background: $greenGradient;
   color: white;
   padding: 0;
-  border-bottom: 1px solid  $green;
+  // border-bottom: 1px solid $green;
+}
+
+.modal-header {
+  background: $greenGradient;
 }
 
 .modal-header {
@@ -2091,8 +2094,9 @@ body.modal-open {
 .top-toolbar {
   display: flex;
   justify-content: space-around;
-  // justify-content: flex-end;
   align-items: flex-start;
+  padding-top: $GRID_SPACE/2;
+  // justify-content: flex-end;
   // border-bottom: 1px solid #eee;
 
   hr {

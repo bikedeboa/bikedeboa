@@ -230,9 +230,9 @@ $(() => {
         $(document).off('focusin.modal');
 
         // @todo do this better please
-        if (window._openLocalDetailsCallback && typeof window._openLocalDetailsCallback === 'function') {
-          window._openLocalDetailsCallback();
-          window._openLocalDetailsCallback = undefined;
+        if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
+          window._openLocalCallback();
+          window._openLocalCallback = undefined;
         }
       });
     } else { 
@@ -488,16 +488,16 @@ $(() => {
   }
 
   // Just delegate the action to the route controller
-  function openLocalDetails(marker, callback) {
+  function openLocal(marker, callback) {
     let url = getMarkerShareUrl(marker);
 
-    window._openLocalDetailsCallback = callback;
+    window._openLocalCallback = callback;
 
     marker.url = url;
     setView(marker.text || 'Detalhes do bicicletário', url);
   }
 
-  function _openLocalDetails(marker, callback) {
+  function _openLocal(marker, callback) {
     if (marker) {
       openDetailsModal(marker, callback);
 
@@ -752,7 +752,7 @@ $(() => {
                     });
 
                     $('.infoBox').off('click').on('click', () => {
-                      openLocalDetails(markers[i]);
+                      openLocal(markers[i]);
                       _infoWindow.close();
                     });
                   });
@@ -764,7 +764,7 @@ $(() => {
               } else {
                 // No infobox, directly opens the details modal
                 _gmarkers[i].addListener('click', () => {
-                  openLocalDetails(markers[i]);
+                  openLocal(markers[i]);
                 });
 
                 // Infobox preview on hover
@@ -1022,7 +1022,7 @@ $(() => {
             // Clicked OK or dismissed the modal
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
-              openLocalDetails(newMarker, () => {
+              openLocal(newMarker, () => {
                 // $('.rating-input-container').velocity('callout.bounce');
                 $('.openReviewPanelBtn').tooltip('show');
                 setTimeout(() => {
@@ -1283,7 +1283,7 @@ $(() => {
     if (openedMarker) {
       $('#cancelEditPlaceBtn').off('click').on('click', () => {
         hideAllModals(() => {
-          openLocalDetails(openedMarker);
+          openLocal(openedMarker);
         });
       });
 
@@ -1655,7 +1655,6 @@ $(() => {
 
   function returnToPreviousView() {
     if (_isDeeplink) {
-      // _isDeeplink = false;
       goHome();
     } else {
       History.back();
@@ -1959,7 +1958,7 @@ $(() => {
           if (id) {
             id = parseInt(id);
             _deeplinkMarker = getMarkerById(id);
-            _openLocalDetails(_deeplinkMarker);
+            _openLocal(_deeplinkMarker);
           }
         }
         break;
@@ -1987,6 +1986,8 @@ $(() => {
   function setupGoogleMaps() {
     let initialCenter;
     if (_isDeeplink && _deeplinkMarker) {
+      _isDeeplink = false;
+      
       initialCenter = {
         lat: parseFloat(_deeplinkMarker.lat),
         lng: parseFloat(_deeplinkMarker.lng)
@@ -2000,7 +2001,7 @@ $(() => {
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialCenter,
-      zoom: _isDeeplink ? 17 : 15,
+      zoom: _isDeeplink ? 18 : 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -2112,10 +2113,11 @@ $(() => {
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
 
+    // Got Google Maps, either we're online or the SDK is in cache.
     if (window.google) {
-      // console.log('Got Google, probably we\'re online.');
-      if (window.location.pathname === '/') {
-        setupGoogleMaps();
+      // On Mobile we defer the initialization of the map if we're in deeplink
+      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+        setupGoogleMaps(); 
       }
     } else {
       setOfflineMode();
@@ -2179,7 +2181,6 @@ $(() => {
     });
 
     // Initialize router
-    // @todo: detach this from onLoad!
     _onDataReadyCallback = () => {
       const isMatch = handleRouting();
       
@@ -2189,6 +2190,15 @@ $(() => {
         // $('#logo').addClass('clickable');
         // $('#map').addClass('mock-map');
         $('body').addClass('deeplink');
+
+        // Center the map on pin's position
+        if (map && _deeplinkMarker) {
+          map.setZoom(18);
+          map.setCenter({
+            lat: parseFloat(_deeplinkMarker.lat),
+            lng: parseFloat(_deeplinkMarker.lng)
+          });
+        }
       } else {
         goHome();
       }
