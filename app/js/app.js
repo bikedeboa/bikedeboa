@@ -238,7 +238,7 @@ $(() => {
       });
     } else { 
       // Just fade new detailed content in
-      $('.photo-container, .tagsContainer, .address').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer, #placeDetailsModal .address').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -1581,11 +1581,11 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display, filterBtn').velocity({ opacity: 0 }, { 'display': 'none' });
+    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 0 }, { 'display': 'none' });
   }
 
   function exitLocationSearchMode() {
-    $('#map, #addPlace, .login-display, filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
+    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
   }
 
   function setPageTitle(text) {
@@ -1930,10 +1930,12 @@ $(() => {
     });
 
     $('#howToInstallModal').modal('show');
+
+    $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
   function openFaqModal() {
-    $('.modal-body .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     $('#faqModal').modal('show');
 
     $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
@@ -1965,6 +1967,7 @@ $(() => {
         break;
       case 'sobre':
         $('#aboutModal').modal('show');
+        $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
         break;
       // case 'nav':
       // case 'filtros':
@@ -2158,8 +2161,9 @@ $(() => {
       if (state.title === 'bike de boa') {
         // If map wasn't initialized before (custom routing case)
         if (!map && !_isOffline) {
-          $('#map').removeClass('mock-map');
-          $('#logo').removeClass('clickable');
+          // $('#map').removeClass('mock-map');
+          // $('#logo').removeClass('clickable');
+          $('body').removeClass('deeplink');
           setupGoogleMaps();
           updateMarkers();
         }
@@ -2178,8 +2182,9 @@ $(() => {
       if (isMatch) {
         _isDeeplink = true;
 
-        $('#logo').addClass('clickable');
-        $('#map').addClass('mock-map');
+        // $('#logo').addClass('clickable');
+        // $('#map').addClass('mock-map');
+        $('body').addClass('deeplink');
       } else {
         goHome();
       }

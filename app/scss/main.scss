@@ -217,28 +217,19 @@ hr {
 }
 
 #logo {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  margin: 0;
-  padding: 0;
-  color: $green;
-  font-size: 22px;
-  text-shadow: 0px 0px 10px white;
-  letter-spacing: -0.02em;
-  font-weight: bold;
-  opacity: 0.6;
-  cursor: default;
-  user-select: none;
-
-  &.clickable {
-    z-index: 9999999;
-    cursor: pointer;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    margin: 0;
+    padding: 0;
+    color: $green;
+    font-size: 22px;
+    text-shadow: 0px 0px 10px white;
+    letter-spacing: -0.02em;
+    font-weight: bold;
+    opacity: 0.6;
+    cursor: default;
+    user-select: none;
 }
 
 .loading {
@@ -343,17 +334,28 @@ hr {
     }
 }
 
+body.deeplink {
+    #map {
+        background: url(/img/blank_map_colored.jpg);
+        background-size: cover;
+        background-position: 50% 50%;
+    }
+
+    #logo {
+      z-index: 2000;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+}
+
 #map {
     width: 100vw;
     // height: 100vh;
     height: 100%;
     /*margin-top: 50px;*/
-
-    &.mock-map {
-      background: url(/img/blank_map_colored.jpg);
-      background-size: cover;
-      background-position: 50% 50%;
-    }
 }
 
 // iOS Fix
@@ -375,6 +377,8 @@ a,
     color: $purple;
     border-bottom: 1px dashed;
 
+    &:focus,
+    &:active,
     &:hover {
       color: $darkPurple;
       text-decoration: none; 
@@ -656,14 +660,14 @@ a,
 .tutorial-gif {
   max-width: 260px;
   height: auto;
-  margin: 20px auto 40px auto;
+  margin: $GRID_SPACE*2 auto $GRID_SPACE*4 auto;
   display: block;
   box-shadow: 10px 10px 30px rgba(0,0,0,0.2);
   // box-shadow: 10px 10px 0 #E9BB2B;
 
   min-height: 460px;
   background: $lightGrey;
-}
+} 
 
 #geolocationBtn {
     margin: 0px $GRID_SPACE $GRID_SPACE;
@@ -997,6 +1001,7 @@ a,
   .modal-title {
       font-family: $headingFont;
       padding: $GRID_SPACE*3 $GRID_SPACE*3 $GRID_SPACE;
+      font-weight: 700;
       font-size: 2em;
       letter-spacing: -0.01em;
   }
@@ -1010,6 +1015,7 @@ a,
 .modal {
     overflow-x: hidden;
     overflow-y: auto;
+}
 
 .clean-modal {
   .modal-header {
@@ -1277,6 +1283,10 @@ body.modal-open {
                   opacity: inherit;
                 }
             }
+
+            &:after {
+              content: "\e097";
+            }
         }
 
         & img {
@@ -1304,11 +1314,6 @@ body.modal-open {
             -webkit-font-smoothing: antialiased;
             pointer-events: none;
         }
-    }
-
-
-    &.expanded:after {
-        content: "\e097";
     }
 }
 
