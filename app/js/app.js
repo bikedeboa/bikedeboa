@@ -117,8 +117,8 @@ $(() => {
     }
 
     // Reviews, checkins
-    if (m.reviews === 0) {
-      templateData.numReviews = '';
+    if (m.reviews === '0') {
+      templateData.numReviews = 'Nenhuma avaliação :(';
     } else if (m.reviews === '1') {
       templateData.numReviews = '1 avaliação';
     } else {
@@ -175,8 +175,6 @@ $(() => {
     ////////////////////////////////
     $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
 
-    // Template is rendered, start jquerying
-    $('.numreviews').toggle(m.reviews && m.reviews > 0);
     if (m.average) {
       $('input[name=placeDetails_rating]').val(['' + Math.round(m.average)]);
     } else {
