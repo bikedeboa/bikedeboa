@@ -768,7 +768,7 @@
 
             <hr>
             
-            {{#if canModify }}
+            {{#if canModify}}
               <button id="editPlaceBtn" class="toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Editar</label>
@@ -793,6 +793,13 @@
 
           <div class="modal-body">
               <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
+                  {{#if temporaryPermission}}
+                    <div class="notice"> 
+                      <!-- <img alt="" src="/img/icon_edit.svg"> -->
+                      <span class="glyphicon glyphicon-time"></span> Você ganhou um dia pra editar o que precisar neste bicicletário.
+                    </div>
+                  {{/if}}
+
                   {{#if title}}
                     <h1 class="view-name">{{title}}</h1>
                   {{else}}
