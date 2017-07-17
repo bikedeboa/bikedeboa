@@ -238,10 +238,10 @@ window.testAPI = () => {
     let html = '';
     html += `<img src="${response.picture.data.url}"/>`;
     html += `<span>Bem-vind`;
-    if (!gender) {
+    if (!response.gender) {
       html += 'e';
     } else {
-      html += gender === 'male' ? 'o' : 'a';
+      html += response.gender === 'male' ? 'o' : 'a';
     }
     html += `, ${response.first_name}.</span>`;
     document.getElementById('login-container').innerHTML = html;

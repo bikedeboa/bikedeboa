@@ -401,28 +401,6 @@ $(() => {
                       type: 'info'
                     });
                   }
-
-                  // Test if user located is outside our bounds
-                  // if (!_mapBounds.contains(map.getCenter())) {
-                    swal({ 
-                      html:
-                        `Foi mal, o bike de boa por enquanto só funciona no Rio Grande do Sul.<br>
-                        <br>
-                        <small>
-                          <p>
-                            Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos 
-                            tem seus custos. Esses custos sobem proporcionalmente ao número de acessos, 
-                            por isso fomos obrigados a limitar o uso ao sul do Brasil por enquanto. Se 
-                            tu acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com">
-                            <span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
-                          </p>
-                          <p>
-                            Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo das novidades.
-                          </p>
-                        </small>`,
-                      type: 'warning', 
-                    });
-                  // }
                 }
               }
 
