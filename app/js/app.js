@@ -72,6 +72,20 @@ $(() => {
     });
   }
 
+  function initHelpTooltip(selector) {
+    if (!_isMobile) {
+      $(selector).tooltip();
+    } else {
+      $(selector).off('click').on('click', e => {
+        const $tooltipEl =$(e.currentTarget);
+        swal({
+          customClass: 'tooltip-modal',
+          html: $tooltipEl.data('title')
+        });
+      });
+    }
+  }
+
   function openDetailsModal(marker) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
@@ -248,18 +262,7 @@ $(() => {
         'delay': {'show': 0, 'hide': 100}
       });
     }
-    if (!_isMobile) {
-      $('#placeDetailsModal .help-tooltip-trigger').tooltip();
-    } else {
-      $('#placeDetailsModal .help-tooltip-trigger').off('click').on('click', e => {
-        const $target = $(e.currentTarget);
-        
-        swal({
-          customClass: 'tooltip-modal',
-          html: $target.data('title')
-        });
-      });
-    }
+    initHelpTooltip('#placeDetailsModal .help-tooltip-trigger')
 
     $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - pin details public access');
@@ -1263,7 +1266,8 @@ $(() => {
       setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
 
-      $('#newPlaceModal .help-tooltip-trigger').tooltip();
+      initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
+
       $('#access-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
         ga('send', 'event', 'Misc', 'tooltip - new pin access help');
       });
@@ -2255,7 +2259,8 @@ $(() => {
       }
     );
 
-    $('#filter-menu .help-tooltip-trigger').tooltip();
+    initHelpTooltip('#filter-menu .help-tooltip-trigger');
+
     $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - ciclovias');
     });

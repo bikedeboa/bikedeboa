@@ -266,13 +266,18 @@ hr {
     padding: 20px;
     background-color: $black; 
     font-size: 14px;
-    max-width: 400px;
+    max-width: 600px;
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
   }
 
-  .bottom .tooltip-arrow {
+  &.bottom .tooltip-arrow {
     border-bottom-color: $black;
   }
-  .top .tooltip-arrow {
+  &.top .tooltip-arrow {
     border-top-color: $black;
   }
 
@@ -289,6 +294,10 @@ hr {
     .tooltip-inner {
       text-align: left;
     }
+  }
+
+  &:hover {
+    color: $black;
   }
 }
 
@@ -1340,7 +1349,7 @@ body.modal-open {
     section {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
-        h2 {
+        & > h2 {
           background: $lightestGray;
           padding: $GRID_SPACE;
           font-family: $headingFont;
@@ -1461,6 +1470,7 @@ body.modal-open {
           transition: max-height 0.5s ease-in-out;
 
           h2 {
+              margin-top: 10px;
               background: transparent;
               
               &:after {
@@ -2797,14 +2807,6 @@ body.modal-open {
     display: block;
   }
 
-  .tooltip {
-    .tooltip-inner {
-      width: 95vw;
-      font-size: 12px;
-      max-width: none;
-    }
-  }
-
   #placeDetailsModal {
     .review {
       text-align: left;
@@ -3574,9 +3576,9 @@ body.modal-open {
 }
 
 .tooltip-modal {
-  .swal2-content {
+  p {
     text-align: left;
-    font-style: 14px;
+    font-size: 14px;
   }
 }
 
@@ -3585,6 +3587,10 @@ body.modal-open {
   padding-right: 5%; 
   font-family: $bodyFont;
   @include material-shadow(3);
+
+  .swal2-buttonswrapper {
+    margin-top: 24px;
+  }
 
   .swal2-content {
     color: #333;
