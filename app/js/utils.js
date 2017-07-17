@@ -20,8 +20,10 @@ BIKE.geocodeLatLng = function(lat, lng, successCB, failCB) {
       // console.log('geocoding results', results);
       
       if (results[0]) {
+        const r = results[0].address_components;
+        const address = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`
         if (successCB && typeof successCB === 'function') {
-          successCB(results[0].formatted_address);
+          successCB(address);
         }
       } else {
         console.error('No results found');

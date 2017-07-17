@@ -9,27 +9,19 @@
   "theme_color": "#2cd978",
   "description": "Contribua para a cultura da bicicleta. Descubra e avalie os mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e do Rio Grande do Sul.",
   "icons": [{
-    "src": "/favicons/icon-36x36.png",
-    "sizes": "36x36",
+    "src": "/favicons-dev/favicon-16x16.png?v=m2dAvrr4RB",
+    "sizes": "16x16",
     "type": "image/png"
   }, {
-    "src": "/favicons/icon-48x48.png",
-    "sizes": "48x48",
+    "src": "/favicons-dev/favicon-32x32.png?v=m2dAvrr4RB",
+    "sizes": "32x32",
     "type": "image/png"
   }, {
-    "src": "/favicons/icon-72x72.png",
-    "sizes": "72x72",
-    "type": "image/png"
-  }, {
-    "src": "/favicons/icon-96x96.png",
-    "sizes": "96x96",
-    "type": "image/png"
-  }, {
-    "src": "/favicons/icon-192x192.png",
+    "src": "/favicons-dev/icon-192x192.png?v=m2dAvrr4RB",
     "sizes": "192x192",
     "type": "image/png"
   }, {
-    "src": "/favicons/icon-512x512.png",
+    "src": "/favicons-dev/icon-512x512.png?v=m2dAvrr4RB",
     "sizes": "512x512",
     "type": "image/png"
   }],

@@ -34,18 +34,16 @@
 
         <!-- Favicons -->
         <!-- Thanks https://realfavicongenerator.net/ -->
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-        <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16"> 
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png?v=m2dAvrr4RB">
+        <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png?v=m2dAvrr4RB" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png?v=m2dAvrr4RB" sizes="16x16"> 
         <link rel="manifest" href="/manifest.json">
 
         <!-- Google Analytics & Optimize (MVT Testing)-->
         <style>.async-hide { opacity: 0 !important} </style>
         <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date; h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')}; (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c; })(window,document.documentElement,'async-hide','dataLayer',4000, {'GTM-MCCV34X':true});</script> 
         <script>
-          if (location.hostname !== 'www.bikedeboa.com.br') {
-            ga = function() {};
-          } else {
+          if (location.hostname === 'www.bikedeboa.com.br') {
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -54,6 +52,8 @@
             ga('create', 'UA-19085664-3', 'auto');
             ga('require', 'GTM-MCCV34X');
             ga('send', 'pageview');
+          } else {
+            ga = function() {};            
           }
         </script>
 
@@ -62,7 +62,23 @@
         <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
 
         <!-- Google Fonts (async) -->
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+        <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet"> -->
+        <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu:400i" rel="stylesheet"> -->
+        <!-- Font Loader -->
+        <script>
+           WebFontConfig = {
+            google: {
+              families: ['Ubuntu:400,400i,700']
+            }
+          };
+
+           (function(d) {
+              var wf = d.createElement('script'), s = d.scripts[0];
+              wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+              wf.async = true;
+              s.parentNode.insertBefore(wf, s);
+           })(document);
+        </script>
 
         <!-- Google Maps API (deferred) -->
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
@@ -84,7 +100,7 @@
 
         <div class="confetti-placeholder"></div>
 
-        <div id="locationSearch" class="coolHide">
+        <div id="locationSearch" class="cool-hidden">
             <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
             <!-- <span class="balaca">
               <img alt="" src="/img/bici.svg"/>
@@ -107,8 +123,6 @@
 
         <div id="revisionModalTemplatePlaceholder"></div>
 
-        <div id="reviewPanelTemplatePlaceholder"></div>
-
         <div id="offline-overlay">
           <div class="offline-overlay-content">
             <div class="offline-label"> 
@@ -121,11 +135,11 @@
           </div>
         </div>
 
-        <!-- <button id="addPlace" class="bigRoundedButton coolHide">
+        <!-- <button id="addPlace" class="bigRoundedButton">
             <span role="heading" aria-level="2"><span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO</span>
         </button> -->
  
-        <button id="addPlace" class="coolHide">
+        <button id="addPlace">
             <img alt="Adicionar bicicletário" src="/img/icon_add_pin.svg">
         </button>
 
@@ -138,8 +152,6 @@
           </button>
         </div>
 
-        <div id="reviewPanelTemplatePlaceholder"></div>
-
         <div id="messageModalPlaceholder"></div>
 
         <div id="spinnerOverlay">
@@ -150,9 +162,17 @@
             </div>
         </div>
 
+        <button id="close-modal-btn" class="close-modal">✕</button>
+
         <div id="top-mobile-bar">
           <button class="back-button"></button>
           <h1 class="top-mobile-bar-title"></h1>
+        </div>
+
+        <div id="bottom-mobile-bar">
+            <div id="floating-cta-container">
+              <button class="openReviewPanelBtn btn green">Avaliar</button>
+            </div>
         </div>
 
         
@@ -208,13 +228,13 @@
 
             <footer class="side-nav__footer">
               <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.bikedeboa.com.br%2F&width=280&layout=button_count&action=like&size=small&show_faces=false&share=true&height=46&appId=1814653185457307" width="280" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
-              <a id="facebook-social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp" class="social-link">
+              <a id="facebook-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
                 <img alt="Facebook" src="/img/facebook_logo.svg"/>
               </a>
-              <a id="instagram-social-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/" class="social-link">
+              <a id="instagram-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
                 <img alt="Instagram" src="/img/instagram_logo.svg"/>
               </a>
-              <a id="github-social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa" class="social-link">
+              <a id="github-social-link" class="social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
                 <img alt="GitHub" src="/img/github_logo.svg"/>
               </a>
             </footer>
@@ -236,7 +256,7 @@
                   <input type="checkbox" id="show-bike-layer">
                   <label for="show-bike-layer">
                     Mostrar ciclovias e ciclofaixas
-                    <span id="ciclovias-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" data-title="Combinamos os dados de ciclovias da EPTC, do Google Maps e do DataPOA. Nos dá um toque se perceber algo de errado! :)"></span>
+                    <span id="ciclovias-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" data-title="Combinamos dados de várias fontes pra trazer o estado mais atualizado possível das ciclovias, mas mesmo assim pode não estar super de acordo com a realidade. Nos dá um toque se reparar em algo. :)"></span>
                   </label>
               </div>
             </header>
@@ -324,7 +344,7 @@
         <!-- Views -->
 
         <!-- About -->
-        <div class="modal fade" id="aboutModal" tabindex="-1">
+        <div class="modal fade clean-modal" id="aboutModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -334,11 +354,11 @@
 
                         <div class="modal-body">
                             <article>
-                              <p>
+                              <!-- <p>
                                 <img alt="" src="/img/icon_public.svg"/>
-                              </p>
+                              </p> -->
 
-                              <p>
+                              <p class="subtitle">
                                 O quão bom seria poder ir de bicicleta pra onde quiséssemos na cidade? Hoje em dia no Brasil muitos fatores nos impedem diariamente de poder fazer isso. Um dos maiores problemas é a falta de lugares para estacionar a bicicleta com segurança. Ciclistas, estabelecimentos comerciais, governos, ninguém parece saber direito o que significa ter um lugar pra deixar a bicicleta “de boa”.
                               </p>
 
@@ -352,8 +372,6 @@
                                 O bike de boa é um site e aplicativo totalmente colaborativo pra mapear os lugares onde dá pra estacionar a bicicleta na cidade. Estes lugares podem tanto ser bicicletários propriamente ditos quanto outros objetos urbanos que foram transformados em estacionamento de bicicleta. No app os pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e órgãos públicos. 
                               </p>
 
-                              <div style="margin: 1em 0; text-align: center;">· · ·</div>
-
                               <p>
                                 O site já conta com quase 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, onde falou das tecnologias que usamos e sobre o design do sistema. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
                               </p>
@@ -363,12 +381,10 @@
                                 Somos um grupo de amigos, ciclistas urbanos e simpatizantes do ciclismo. Somos desenvolvedores, designers, arquitetos, e o que nos une é a vontade de contribuir com a cultura da bicicleta no Brasil. Alguns até já moraram no exterior, o que lhes deu uma nova visão sobre tudo o que uma cidade poderia ser. O projeto é absolutamente sem fins lucrativos, e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, entrevistando pessoas e tentando divulgar o projeto pra ter o maior alcance possível.
                               </p>
 
-                              <br>
-                              <hr>
-                              <br>
+                              <div class='medium-separator'>...</div>
 
                               <p>
-                                Achou tri? Tem ideias de como melhorar, ou só gostaria de participar disso de alguma maneira? Vamos conversar!
+                                Achou tri? Tem ideias de como melhorar o site, ou só gostaria de participar disso de alguma maneira? Vamos conversar!
                               </p>
 
                               <br>
@@ -399,7 +415,7 @@
                                 Não temos aplicativo para baixar no Google Play ou na Apple Store, mas ainda assim você pode instalá-lo no seu celular graças às maravilhas da Web moderna!
                               </p>
                               <p>
-                                Selecione abaixo o seu navegador e sistema operacional e siga os passos para adicionar o Bike de Boa na tela inicial do seu celular.
+                                Selecione abaixo o seu navegador e sistema operacional e siga os passos no seu celular.
                               </p>
 
                               <div id="browsers-accordion" class="panel-group" role="tablist" aria-multiselectable="true">
@@ -591,7 +607,7 @@
                                   </div>
                                   <div id="collapseSeven" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                      Nós temos algumas ideias! <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span>Vamos conversar</a>.
+                                      Nós temos algumas ideias! <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> Vamos conversar</a>.
                                     </div>
                                   </div>
                                 </div>
@@ -633,7 +649,7 @@
                         <div class="modal-body text-center">
                             <section>
                               <div class="text-input-wrapper">
-                                  <input required id="titleInput" type="text" class="text-input" placeholder="Digite um título">
+                                  <input required id="titleInput" type="text" class="text-input" placeholder="Nome pro bicicletário">
                               </div>
                             </section>
 
@@ -646,30 +662,8 @@
 
                             <section>
                               <h2>
-                                Acesso
-                                <span id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>PÚBLICO</b><br>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p><b>PRIVADO</b><br>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado."></span>
-                              </h2>
-
-                              <div class="acess-types-group">
-                                  <div data-value="public" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/icon_public.svg"/>
-                                      <div class="icon-label">
-                                        Público
-                                      </div>
-                                  </div>
-                                  <div data-value="private" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/icon_private.svg"/>
-                                      <div class="icon-label">
-                                        Privado
-                                      </div>
-                                  </div>
-                              </div>
-                            </section> 
-
-                            <section>
-                              <h2>
                                 Tipo de Bicicletário
-                                <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
+                                <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
                               </h2>
 
                               <div class="custom-radio-group">
@@ -701,6 +695,30 @@
                             </section>
 
                             <section>
+                              <h2>
+                                Acesso
+                                <span id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Público</h2>
+                                <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
+                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span>
+                              </h2>
+
+                              <div class="acess-types-group">
+                                  <div data-value="public" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_public.svg"/>
+                                      <div class="icon-label">
+                                        Público
+                                      </div>
+                                  </div>
+                                  <div data-value="private" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_private.svg"/>
+                                      <div class="icon-label">
+                                        Privado
+                                      </div>
+                                  </div>
+                              </div>
+                            </section> 
+
+                            <section>
                               <div class="description collapsable">
                                   <h2>
                                       Mais Informações <span style="font-size: 10px;">(opcional)</span>
@@ -729,42 +747,6 @@
             </div>
         </div>
 
-        <!-- New Revision Modal -->
-        <script id="revisionModalTemplate" type="text/x-handlebars-template">
-            <div class="modal fade" id="revisionModal" tabindex="-1">
-              <div class="vertical-alignment-helper">
-                  <div class="modal-dialog vertical-align-center">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title view-name">Sugerir correção</h1>
-                          </div>
-
-                          <div class="modal-body ">
-                              <div style="margin-top: 20px;">
-                                <p style="color: inherit;">
-                                  Tem alguma coisa errada com este bicicletário? Está faltando alguma informação essencial? Algo está desatualizado, ou talvez este bicicletário nem exista mais? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil para nossos amigos ciclistas.
-                                </p>
-
-                                <p>
-                                  <textarea id="revisionText" maxlength="250" onload="autoGrowTextArea(this)" onkeyup="autoGrowTextArea(this)" type="text" class="text-input" placeholder="Sua sugestão"></textarea>
-                                </p>
-
-                                <p class="disclaimer">
-                                  Para qualquer comentário sobre o site em geral, lembre que estamos sempre de olho no <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> email</a> ou nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
-                                </p>
-                              </div>
-                          </div>
-
-                          <div class="modal-footer">
-                              <!-- <button id="" class="btn border btn-footer btn-action btn-secondary">CANCELAR</button> -->
-                              <button id="sendRevisionBtn" class="btn border btn-footer btn-action green">ENVIAR</button>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </script>
-
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
@@ -781,12 +763,12 @@
             
             <hr>
 
-            <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
+            <!-- <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
               <img alt="" class="toolbar-item-icon" src="/img/review.svg">
               <label>Avaliar</label>
             </button>
 
-            <hr>
+            <hr> -->
 
             <button class="toolbar-item shareBtn" tabindex="0">
               <img alt="" class="toolbar-item-icon" src="/img/icon_share.svg">
@@ -795,7 +777,7 @@
 
             <hr>
             
-            {{#if canModify }}
+            {{#if canModify}}
               <button id="editPlaceBtn" class="toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Editar</label>
@@ -820,6 +802,13 @@
 
           <div class="modal-body">
               <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
+                  {{#if temporaryPermission}}
+                    <div class="notice"> 
+                      <!-- <img alt="" src="/img/icon_edit.svg"> -->
+                      <span class="glyphicon glyphicon-time"></span> Você ganhou um dia pra editar o que precisar neste bicicletário.
+                    </div>
+                  {{/if}}
+
                   {{#if title}}
                     <h1 class="view-name">{{title}}</h1>
                   {{else}}
@@ -837,7 +826,22 @@
               </section>
 
 
-              <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}">
+              <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
+                  {{#if savedRating}}
+                    <div class="savedRating">
+                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
+                      <button class="ghost openReviewPanelBtn">Editar</button>
+                    </div>
+                  {{/if}}
+
+                  {{#if numReviews}}
+                    <div class="numreviews">{{numReviews}}</div>
+                  {{/if}}
+
+                  {{#unless average}}
+                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                  {{/unless}}
+
                   <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
                     {{#if average}}
                         <span class="average">{{average}}</span>
@@ -855,17 +859,17 @@
                           <label class="full-star" data-value="1" for="placeDetails_star1"></label>
                       </fieldset>
                       
-                      {{#if numReviews}}
-                        <span class="numreviews">{{numReviews}}</span>
-                      {{/if}}
+                      {{#unless savedRating}}
+                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
+                      {{/unless}}
                     {{/if}}
 
                     
-                    {{#unless average}}
-                        <!-- <button class="openReviewPanelBtn ghost">AVALIAR</button> -->
-                        <!-- <p style="font-style: italic; font-size: 14px;">
+                    <!-- {{#unless average}}
+                        <p style="font-style: italic; font-size: 14px;">
                           Ninguém avaliou este bicicletário ainda.
-                        </p> -->
+                        </p>
+                        <button class="openReviewPanelBtn ghost">Avaliar</button>
 
                         <div class="rating-input-container" style="text-align: center;">
                           <h2 style="margin-bottom: 0;">
@@ -885,7 +889,7 @@
                               <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
                           </fieldset>
                         </div>
-                    {{/unless}}
+                    {{/unless}} -->
 
                   </div>
 
@@ -893,12 +897,6 @@
                       <div class="tagsContainer">
                           {{{tags}}}
                       </div>
-                  {{/if}}
-
-                  {{#if savedRating}}
-                    <div class="savedRating">
-                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b><button class="link-button classic-link openReviewPanelBtn">(editar)</button>
-                    </div>
                   {{/if}}
               </section>
 
@@ -915,13 +913,17 @@
                               <img alt="" src="/img/icon_public.svg"/>
                               <div class="icon-label">
                                 Público
-                                <span id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>BICICLETÁRIO PÚBLICO<br></b> pode ser usado em qualquer horário por qualquer pessoa. Normalmente está em espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não."></span>
+                                <span id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Bicicletário Público</h2>
+                                <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
+                                <p>Normalmente está em espaço público, como calçadas ou parques.</p>
+                                <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></span>
                               </div>
                           {{else}}
                               <img alt="" src="/img/icon_private.svg"/>
                               <div class="icon-label">
                                   Privado
-                                  <span id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>BICICLETÁRIO PRIVADO<br></b> o uso é restrito para clientes, funcionários ou moradores e este acesso é controlado."></span>
+                                  <span id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Bicicletário Privado</h2>
+                                  <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span> 
                               </div> 
                           {{/if}}
                       {{/if}}
@@ -935,22 +937,46 @@
                               {{{structureTypeLabel}}}
 
                               {{#ifCond structureTypeCode '===' 'uinvertido'}}
-                                <span id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>U INVERTIDO</b><br>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.<br>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.<br>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock."></span>
+                                <span id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>U Invertido</h2>
+                                <p>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.</p>
+                                <p>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.</p>
+                                <p>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock.</p>
+                                "></span>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'deroda'}}
-                                <span id="deroda-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>DE RODA</b><br>Pode ter várias formas. O mais comuns são pequenos triângulos ou semi-círculos.<br>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.<br>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.<br>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro."></span>
+                                <span id="deroda-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>De Roda</h2>
+                                <p>Pode ter várias formas. O mais comuns são pequenos triângulos ou semi-círculos.</p>
+                                <p>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.</p>
+                                <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.</p>
+                                <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
+                                "></span>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'trave'}}
-                                <span id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>TRAVE</b><br>Normalmente um poste de luz ou placa de trânsito.<br>Dá pra prender a bicicleta de varias formas, mas o melhor é <b>prender pelo quadro da bicicleta</b> e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste."></span>
+                                <span id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Trave</h2>
+                                <p>Normalmente um poste de luz ou placa de trânsito.</p>
+                                <p>Dá pra prender a bicicleta de varias formas, mas o melhor é <b>prender pelo quadro da bicicleta</b> e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.</p>
+                                "></span>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'suspenso'}}
-                                <span id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>SUSPENSO</b><br>Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede.<br>Cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.<br>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro."></span>
+                                <span id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Suspenso</h2>
+                                <p>Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede.</p>
+                                <p>Cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.</p>
+                                <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
+                                "></span>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'grade'}}
-                                <span id="grade-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>GRADE</b><br>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não.<br>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.<br>Prefira sempre <b>prender pelo quadro da bicicleta<b>."></span>
+                                <span id="grade-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Grade</h2>
+                                <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não.</p>
+                                <p>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda, por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.</p>
+                                <p>Prefira sempre <b>prender pelo quadro da bicicleta<b>.</p>
+                                "></span>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'other'}}
-                                <span id="other-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto bottom" data-title="<b>OUTRO</b><br>Um bicicletário diferentão, ou nem é bicicletário de fato.<br>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.<br>Sempre prenda tua bicicleta pelo quadro e o mais próximo possível desse objeto."></span>
+                                <span id="other-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Outro</h2>
+                                <p>Um bicicletário diferentão, ou nem é bicicletário de fato.</p>
+                                <p>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.</p>
+                                <p>Sempre prenda tua bicicleta pelo quadro e o mais próximo possível desse objeto.</p>
+                                "></span>
                               {{/ifCond}}  
                           {{else}}
                               {{#if isLoggedUser}}
@@ -967,12 +993,10 @@
                   <section class="description">
                       <h2>
                           <!-- <span class="glyphicon glyphicon-info-sign"></span> -->
-                          Mais Informações
+                          <b>+</b> Mais Informações
                       </h2>
 
-                      <small>
-                          {{{description}}}
-                      </small>
+                      {{{description}}}
                   </section>
               {{/if}}
 
@@ -980,26 +1004,24 @@
 
           <div class="modal-footer">
             {{#unless savedRating}}
-              {{#if average}}
-                <section class="rating-input-container">
-                  <h2>
-                    Dê sua nota para este bicicletário
-                  </h2>
+              <section class="rating-input-container">
+                <h2>
+                  Dê sua nota para este bicicletário
+                </h2>
 
-                  <fieldset class="rating rating-big empty">
-                      <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
-                      <label class="full-star" data-value="5" for="placeDetails_star5_input"></label> 
-                      <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-                      <label class="full-star" data-value="4" for="placeDetails_star4_input"></label>
-                      <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-                      <label class="full-star" data-value="3" for="placeDetails_star3_input"></label>
-                      <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-                      <label class="full-star" data-value="2" for="placeDetails_star2_input"></label>
-                      <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
-                      <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                  </fieldset>
-                </section>
-              {{/if}}
+                <fieldset class="rating rating-big empty">
+                    <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+                    <label class="full-star" data-value="5" for="placeDetails_star5_input"></label> 
+                    <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+                    <label class="full-star" data-value="4" for="placeDetails_star4_input"></label>
+                    <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+                    <label class="full-star" data-value="3" for="placeDetails_star3_input"></label>
+                    <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+                    <label class="full-star" data-value="2" for="placeDetails_star2_input"></label>
+                    <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+                    <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                </fieldset>
+              </section>
             {{/unless}}
           </div>
         </script>
@@ -1059,88 +1081,6 @@
                     <a class="btn skeleton-box btn-footer"></a>
                 </div>
             </div> -->
-        </script>
-
-        <!-- Review Modal -->
-        <script id="reviewPanelTemplate" type="text/x-handlebars-template">
-           <div id="reviewPanel" class="modal fade" tabindex="-1">
-                <div class="vertical-alignment-helper">
-                    <div class="modal-dialog vertical-align-center">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                              <!-- <img alt="" id="review_photo" src="/img/bg_header.png"> -->
-                              <h1 class="modal-title view-name">Avaliar bicicletário</h1>
-                            </div>
-
-                            <div class="modal-body">
-                                <!-- <div id="review_title" class="title">
-                                  {{#if title}}
-                                    <h1>{{title}}</h1>
-                                  {{else}}
-                                    <small style="font-style: italic;">Sem título</small>
-                                  {{/if}}
-                                </div> -->
-
-                                <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-                                    <h2>Sua nota</h2>
-                                    <fieldset class="rating">
-                                        <input type="radio" id="star5" name="rating" value="5" />
-                                        <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
-                                        <input type="radio" id="star4" name="rating" value="4" />
-                                        <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
-                                        <input type="radio" id="star3" name="rating" value="3" />
-                                        <label class="full-star" data-value="3" for="star3" title="Médio"></label>
-                                        <input type="radio" id="star2" name="rating" value="2" />
-                                        <label class="full-star" data-value="2" for="star2" title="Ruim"></label>
-                                        <input type="radio" id="star1" name="rating" value="1" />
-                                        <label class="full-star" data-value="1" for="star1" title="Horrivel"></label>
-                                    </fieldset>
-                                </div>
-
-                                <h2>Vantagens</h2>
-                                <div class="tagsContainer">
-                                    {{{tagsButtons}}}
-                                </div>
-
-                                <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR</button>
-                            </div>
-
-                            <!-- <div class="modal-footer"> -->
-                                <!-- <div class="col-half">
-                                  <button id="sendReviewBtn" class="btn border btn-footer btn-action">CANCELAR</button>
-                                </div> -->
-                                <!-- <div class="col-half"> -->
-                                  <!-- <button id="sendReviewBtn" class="btn border btn-footer btn-action green">SALVAR</button> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </script>
-
-        <!-- Message Modal -->
-        <script id="messageModalTemplate" type="text/x-handlebars-template">
-           <div id="messageModal" class="modal {{messageClasses}}" tabindex="-1">
-                <div class="vertical-alignment-helper">
-                    <div class="modal-dialog vertical-align-center">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="message-content">
-                                    <p>
-                                        <span class="glyphicon {{glyphiconClass}}" style="font-size: 60px; color: white;"></span>
-                                    </p>
-                                    {{messageContent}}
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button id="messageModalOkBtn" class="btn border btn-footer">{{buttonLabel}}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </script>
 
         <script id="infoWindowTemplate" type="text/x-handlebars-template">
@@ -1222,7 +1162,7 @@
 
         <!-- Hotjar -->
         <script>
-          if (!(location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+          if (location.hostname === 'www.bikedeboa.com.br') {
             (function(h,o,t,j,a,r){
                 h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                 h._hjSettings={hjid:476334,hjsv:5};
