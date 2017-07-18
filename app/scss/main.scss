@@ -381,6 +381,20 @@ body.deeplink {
 
       &:hover {
         opacity: 1;
+      } 
+    }
+
+    #top-mobile-bar {
+      .back-button {
+        background: url(/img/icon_home.svg) 10px 10px no-repeat;
+        background-size: 30px;
+      }
+
+      #top-mobile-bar-title {
+        text-align: center;
+        font-weight: bold;
+        width: 100%;
+        letter-spacing: -0.02em;
       }
     }
 }
@@ -1330,16 +1344,14 @@ body.modal-open {
             position: absolute;
             top: 10px;
             right: 10px;
-            color: rgba(0,0,0,0.7);
+            color: $black;
             background: rgba(255,255,255,0.8);
             padding: 10px;
             border-radius: 5px;
             font-size: 20px;
             content: "\e096";
             font-family: $bootstrapFont;
-            font-weight: 400;
             line-height: 1;
-            -webkit-font-smoothing: antialiased;
             pointer-events: none;
         }
     }
@@ -2735,6 +2747,13 @@ body.modal-open {
       &.hasImage {
         height: 120px;
       }
+
+      &.hasImage:not(.loading):after {
+        padding: 8px;
+        border-radius: 5px;
+        font-size: 15px;
+      }
+      
     }
   }
 
@@ -2860,7 +2879,7 @@ body.modal-open {
     pointer-events: none;
     transition: opacity 0.2s ease;
 
-    .top-mobile-bar-title { 
+    #top-mobile-bar-title { 
       float: left;
       margin: 0;
       padding: 0;

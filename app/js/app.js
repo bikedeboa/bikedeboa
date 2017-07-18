@@ -1612,7 +1612,7 @@ $(() => {
     text = text || '';
 
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar h1').text(openedMarker ? '' : text);
+    $('#top-mobile-bar-title').text(openedMarker ? '' : text);
 
     // Basic website metatags
     if (!text || text.length == 0) {
@@ -2203,9 +2203,10 @@ $(() => {
       if (isMatch) {
         _isDeeplink = true;
 
-        // $('#logo').addClass('clickable');
+        // $('#logo').addClass('clickable'); 
         // $('#map').addClass('mock-map');
-        $('body').addClass('deeplink');
+        $('body').addClass('deeplink'); 
+        $('#top-mobile-bar-title').text('bike de boa');
 
         // Center the map on pin's position
         if (map && _deeplinkMarker) {
