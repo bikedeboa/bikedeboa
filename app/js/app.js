@@ -1999,11 +1999,9 @@ $(() => {
     return match;
   }
 
-  function setupGoogleMaps() {
+  function setupGoogleMaps(wasDeeplink) {
     let initialCenter;
-    if (_isDeeplink && _deeplinkMarker) {
-      _isDeeplink = false;
-
+    if (wasDeeplink && _deeplinkMarker) {
       initialCenter = {
         lat: parseFloat(_deeplinkMarker.lat),
         lng: parseFloat(_deeplinkMarker.lng)
@@ -2017,7 +2015,7 @@ $(() => {
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialCenter,
-      zoom: _isDeeplink ? 18 : 15,
+      zoom: wasDeeplink ? 18 : 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -2181,13 +2179,16 @@ $(() => {
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
       if (state.title === 'bike de boa') {
-        // If map wasn't initialized before (custom routing case)
         if (!map && !_isOffline) {
+          setupGoogleMaps();
+          updateMarkers();
+        }
+
+        if (_isDeeplink) {
           // $('#map').removeClass('mock-map');
           // $('#logo').removeClass('clickable');
           $('body').removeClass('deeplink');
-          setupGoogleMaps();
-          updateMarkers();
+          _isDeeplink = false;
         }
 
         hideAllModals();
