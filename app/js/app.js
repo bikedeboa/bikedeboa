@@ -72,6 +72,20 @@ $(() => {
     });
   }
 
+  function initHelpTooltip(selector) {
+    if (!_isMobile) {
+      $(selector).tooltip();
+    } else {
+      $(selector).off('click').on('click', e => {
+        const $tooltipEl =$(e.currentTarget);
+        swal({
+          customClass: 'tooltip-modal',
+          html: $tooltipEl.data('title')
+        });
+      });
+    }
+  }
+
   function openDetailsModal(marker) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
@@ -132,6 +146,7 @@ $(() => {
       templateData.canModify = true;
     } else if (BIKE.Session.getPlaceFromSession(m.id)) {
       templateData.canModify = true;
+      templateData.temporaryPermission = true;
     }
 
     // Route button
@@ -229,14 +244,14 @@ $(() => {
         $(document).off('focusin.modal');
 
         // @todo do this better please
-        if (window._openLocalDetailsCallback && typeof window._openLocalDetailsCallback === 'function') {
-          window._openLocalDetailsCallback();
-          window._openLocalDetailsCallback = undefined;
+        if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
+          window._openLocalCallback();
+          window._openLocalCallback = undefined;
         }
       });
     } else { 
       // Just fade new detailed content in
-      $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer, #placeDetailsModal .address').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -247,7 +262,8 @@ $(() => {
         'delay': {'show': 0, 'hide': 100}
       });
     }
-    $('#placeDetailsModal .help-tooltip-trigger').tooltip();
+    initHelpTooltip('#placeDetailsModal .help-tooltip-trigger')
+
     $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - pin details public access');
     });
@@ -315,7 +331,7 @@ $(() => {
 
         const options = {
           enableHighAccuracy: true,
-          timeout: 10000,
+          timeout: 5000,
           maximumAge: 0
         };
 
@@ -487,16 +503,16 @@ $(() => {
   }
 
   // Just delegate the action to the route controller
-  function openLocalDetails(marker, callback) {
+  function openLocal(marker, callback) {
     let url = getMarkerShareUrl(marker);
 
-    window._openLocalDetailsCallback = callback;
+    window._openLocalCallback = callback;
 
     marker.url = url;
     setView(marker.text || 'Detalhes do bicicletário', url);
   }
 
-  function _openLocalDetails(marker, callback) {
+  function _openLocal(marker, callback) {
     if (marker) {
       openDetailsModal(marker, callback);
 
@@ -703,17 +719,18 @@ $(() => {
               }));
 
               // Info window
-              if (m.photo) {
-                m.photo = m.photo.replace('images', 'images/thumbs');
+              let thumbUrl = '';
+              if (m.photo) { 
+                thumbUrl = m.photo.replace('images', 'images/thumbs');
               }
               let templateData = {
-                thumbnailUrl: m.photo,
+                thumbnailUrl: thumbUrl,
                 title: m.text,
                 average: m.average,
                 roundedAverage: m.average && ('' + Math.round(m.average)),
                 pinColor: getPinColorFromAverage(m.average)
               };
-
+ 
               // @todo: encapsulate both the next 2 in one method
               // Reviews count
               if (m.reviews === 0) {
@@ -751,7 +768,7 @@ $(() => {
                     });
 
                     $('.infoBox').off('click').on('click', () => {
-                      openLocalDetails(markers[i]);
+                      openLocal(markers[i]);
                       _infoWindow.close();
                     });
                   });
@@ -763,7 +780,7 @@ $(() => {
               } else {
                 // No infobox, directly opens the details modal
                 _gmarkers[i].addListener('click', () => {
-                  openLocalDetails(markers[i]);
+                  openLocal(markers[i]);
                 });
 
                 // Infobox preview on hover
@@ -877,6 +894,19 @@ $(() => {
       $('body').addClass('position-pin-mode');
 
       $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
+        // Queries Google Geocoding service for the position address
+        const mapCenter = map.getCenter();
+        newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
+        BIKE.geocodeLatLng(
+          newMarkerTemp.lat, newMarkerTemp.lng,
+          (address) => {
+            // console.log('Resolved location address:');
+            // console.log(address);
+            newMarkerTemp.address = address;
+          }, () => {
+          }
+        );
+
         if (openedMarker) {
           // Was editing the marker position, so return to Edit Modal
           const mapCenter = map.getCenter();
@@ -969,9 +999,9 @@ $(() => {
 
     let place = {};
 
-    place.lat = updatingMarker ? updatingMarker.lat : newMarkerTemp.lat;
-    place.lng = updatingMarker ? updatingMarker.lng : newMarkerTemp.lng;
-    if (!updatingMarker && newMarkerTemp.address) {
+    place.lat = newMarkerTemp.lat;
+    place.lng = newMarkerTemp.lng;
+    if (newMarkerTemp.address) {
       place.address = newMarkerTemp.address;
     }
 
@@ -1008,9 +1038,12 @@ $(() => {
             // Clicked OK or dismissed the modal
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
-              openLocalDetails(newMarker, () => {
-                $('.openReviewPanelBtn').tooltip('show');
+              openLocal(newMarker, () => {
                 // $('.rating-input-container').velocity('callout.bounce');
+                $('.openReviewPanelBtn').tooltip('show');
+                setTimeout(() => {
+                  $('.openReviewPanelBtn').tooltip('hide');
+                }, 5000);
               });
             }
           });
@@ -1234,20 +1267,8 @@ $(() => {
       setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
 
-      // Queries Google Geocoding service for the position address
-      const mapCenter = map.getCenter();
-      newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-      BIKE.geocodeLatLng(
-        newMarkerTemp.lat, newMarkerTemp.lng,
-        (address) => {
-          console.log('Resolved location address:');
-          console.log(address);
-          newMarkerTemp.address = address;
-        }, () => {
-        }
-      );
+      initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
 
-      $('#newPlaceModal .help-tooltip-trigger').tooltip();
       $('#access-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
         ga('send', 'event', 'Misc', 'tooltip - new pin access help');
       });
@@ -1279,7 +1300,7 @@ $(() => {
     if (openedMarker) {
       $('#cancelEditPlaceBtn').off('click').on('click', () => {
         hideAllModals(() => {
-          openLocalDetails(openedMarker);
+          openLocal(openedMarker);
         });
       });
 
@@ -1309,9 +1330,11 @@ $(() => {
       if (files && files[0] && files[0].type.match(/image.*/)) {
         showSpinner('Processando imagem...');
 
-        let reader = new FileReader();
-        reader.onload = photoUploadCB;
-        reader.readAsDataURL(self.files[0]);
+        queueUiCallback(() => {
+          let reader = new FileReader();
+          reader.onload = photoUploadCB;
+          reader.readAsDataURL(self.files[0]);
+        });
       } else {
         swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       }
@@ -1513,8 +1536,8 @@ $(() => {
 
           swal({ 
             title: 'Valeu!',
-            html: `Tua avaliação é muito importante. Juntos construímos a cidade que queremos ter.`,
-            type: 'success', 
+            html: `Tua avaliação é muito importante! Juntos construímos a cidade que queremos.`,
+            type: 'success',
             onOpen: () => {
               startConfettis();
             },
@@ -1590,7 +1613,7 @@ $(() => {
     text = text || '';
 
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar h1').text(openedMarker ? '' : text);
+    $('#top-mobile-bar-title').text(openedMarker ? '' : text);
 
     // Basic website metatags
     if (!text || text.length == 0) {
@@ -1649,7 +1672,6 @@ $(() => {
 
   function returnToPreviousView() {
     if (_isDeeplink) {
-      // _isDeeplink = false;
       goHome();
     } else {
       History.back();
@@ -1953,7 +1975,7 @@ $(() => {
           if (id) {
             id = parseInt(id);
             _deeplinkMarker = getMarkerById(id);
-            _openLocalDetails(_deeplinkMarker);
+            _openLocal(_deeplinkMarker);
           }
         }
         break;
@@ -1978,9 +2000,9 @@ $(() => {
     return match;
   }
 
-  function setupGoogleMaps() {
+  function setupGoogleMaps(wasDeeplink) {
     let initialCenter;
-    if (_isDeeplink && _deeplinkMarker) {
+    if (wasDeeplink && _deeplinkMarker) {
       initialCenter = {
         lat: parseFloat(_deeplinkMarker.lat),
         lng: parseFloat(_deeplinkMarker.lng)
@@ -1994,7 +2016,7 @@ $(() => {
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialCenter,
-      zoom: _isDeeplink ? 17 : 15,
+      zoom: wasDeeplink ? 18 : 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -2106,10 +2128,11 @@ $(() => {
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
 
+    // Got Google Maps, either we're online or the SDK is in cache.
     if (window.google) {
-      // console.log('Got Google, probably we\'re online.');
-      if (window.location.pathname === '/') {
-        setupGoogleMaps();
+      // On Mobile we defer the initialization of the map if we're in deeplink
+      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+        setupGoogleMaps(); 
       }
     } else {
       setOfflineMode();
@@ -2157,13 +2180,16 @@ $(() => {
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
       if (state.title === 'bike de boa') {
-        // If map wasn't initialized before (custom routing case)
         if (!map && !_isOffline) {
+          setupGoogleMaps();
+          updateMarkers();
+        }
+
+        if (_isDeeplink) {
           // $('#map').removeClass('mock-map');
           // $('#logo').removeClass('clickable');
           $('body').removeClass('deeplink');
-          setupGoogleMaps();
-          updateMarkers();
+          _isDeeplink = false;
         }
 
         hideAllModals();
@@ -2173,16 +2199,25 @@ $(() => {
     });
 
     // Initialize router
-    // @todo: detach this from onLoad!
     _onDataReadyCallback = () => {
       const isMatch = handleRouting();
       
       if (isMatch) {
         _isDeeplink = true;
 
-        // $('#logo').addClass('clickable');
+        // $('#logo').addClass('clickable'); 
         // $('#map').addClass('mock-map');
-        $('body').addClass('deeplink');
+        $('body').addClass('deeplink'); 
+        $('#top-mobile-bar-title').text('bike de boa');
+
+        // Center the map on pin's position
+        if (map && _deeplinkMarker) {
+          map.setZoom(18);
+          map.setCenter({
+            lat: parseFloat(_deeplinkMarker.lat),
+            lng: parseFloat(_deeplinkMarker.lng)
+          });
+        }
       } else {
         goHome();
       }
@@ -2227,7 +2262,8 @@ $(() => {
       }
     );
 
-    $('#filter-menu .help-tooltip-trigger').tooltip();
+    initHelpTooltip('#filter-menu .help-tooltip-trigger');
+
     $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - ciclovias');
     });

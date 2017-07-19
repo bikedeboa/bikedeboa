@@ -179,10 +179,19 @@ body.position-pin-mode {
         opacity: 0.5;
         pointer-events: none;
     }
+
+    .header__menu-toggle {
+      background-color: $lightGray;
+      pointer-events: none;
+    }
 }
 
 hr {
   border-top: $separatorBorderStyle;
+}
+
+p {
+  margin: 0 0 1em;
 }
 
 #offline-overlay {
@@ -261,13 +270,18 @@ hr {
     padding: 20px;
     background-color: $black; 
     font-size: 14px;
-    max-width: 400px;
+    max-width: 600px;
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
   }
 
-  .bottom .tooltip-arrow {
+  &.bottom .tooltip-arrow {
     border-bottom-color: $black;
   }
-  .top .tooltip-arrow {
+  &.top .tooltip-arrow {
     border-top-color: $black;
   }
 
@@ -284,6 +298,10 @@ hr {
     .tooltip-inner {
       text-align: left;
     }
+  }
+
+  &:hover {
+    color: $black;
   }
 }
 
@@ -328,10 +346,30 @@ hr {
         font-weight: 400;
         line-height: 1;
         -webkit-font-smoothing: antialiased;
-        color: #E9BB2B;
+        color: #E9BB2B; 
         font-size: 12px;
         text-shadow: 0 1px 1px white;
     }
+}
+
+div.notice {
+  // font-weight: bold;
+  font-size: 14px;
+  color: $gray;
+  border: 1px solid $lightGray;
+  padding: $GRID_SPACE;
+  border-radius: 5px;
+  margin-bottom: $GRID_SPACE;
+
+  img { 
+    width: 18px;
+    height: 18px;
+    filter: grayscale(100%);
+  }
+
+  .glyphicon {
+    vertical-align: middle;
+  }
 }
 
 body.deeplink {
@@ -347,6 +385,20 @@ body.deeplink {
 
       &:hover {
         opacity: 1;
+      } 
+    }
+
+    #top-mobile-bar {
+      .back-button {
+        background: url(/img/icon_home.svg) 12px 12px no-repeat;
+        background-size: 25px; 
+      }
+
+      #top-mobile-bar-title {
+        text-align: center;
+        font-weight: bold;
+        width: 100%;
+        letter-spacing: -0.02em;
       }
     }
 }
@@ -573,10 +625,9 @@ a,
   }
 
   p.subtitle {
-    font-size: 20px;
+    font-size: 22px;
     font-style: italic;
-    line-height: 1.7em;
-    letter-spacing: .01em;
+    margin-bottom: 3em;
   }
 
   h1 {
@@ -617,43 +668,45 @@ a,
 }
 
 .panel-group {
-  .panel-heading {
-    padding: 0;
-  }
+  .panel {
+      .panel-heading {
+        padding: 0;
 
-  .panel-title {
-    font-family: $headingFont;
-    color: $black;
-    padding: $GRID_SPACE;
-  }
+        a {
+          .panel-title:before {
+            position: relative;
+            float: right;
+            display: inline-block;
+            margin-top: 8px;
+            margin-left: $GRID_SPACE; 
+            font-family: $bootstrapFont;
+            font-weight: 400;
+            line-height: 1;
+            content: "\e260";
+          }
 
-  .panel-heading a {
-    .panel-title:before {
-      position: relative;
-      float: right;
-      display: inline-block;
-      margin-top: 8px;
-      margin-left: $GRID_SPACE; 
-      font-family: $bootstrapFont;
-      font-weight: 400;
-      line-height: 1;
-      content: "\e260";
-    }
+          &.collapsed .panel-title:before {
+            content: "\e259";
+          }
+        }
+      }
 
-    &.collapsed .panel-title:before {
-      content: "\e259";
-    }
-  }
+      .panel-title {
+        font-family: $headingFont;
+        color: $black;
+        padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE 0; 
+      }
 
-  .panel-body {
-    border-top: 2px solid $lighterGray;
-    background: $lightestGray;
-    padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE*2;
+      .panel-body {
+        border-top: 2px solid $lighterGray;
+        background: $lightestGray;
+        padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE*2;
 
-    p {
-      font-size: 14px;
-      color: $gray;
-    }
+        p {
+          font-size: 14px;
+          color: $gray;
+        }
+      }
   }
 }
 
@@ -969,15 +1022,6 @@ a,
 // }
 
 
-.modal-dialog {
-    margin-top: 60px;
-
-    & img {
-        width: 100%;
-        height: 100%;
-    }
-}
-
 .loading-skeleton {
   animation: pulse 0.5s infinite alternate;
 }
@@ -985,10 +1029,13 @@ a,
 #top-mobile-bar,
 .modal-header {
   background: $lightGreen;
-  background: $greenGradient;
   color: white;
   padding: 0;
-  border-bottom: 1px solid  $green;
+  // border-bottom: 1px solid $green;
+}
+
+.modal-header {
+  background: $greenGradient;
 }
 
 .modal-header {
@@ -1041,7 +1088,7 @@ a,
 
 body.clean-modal-open {
   .modal-backdrop.in {
-    opacity: .9 ;
+    opacity: .93 ;
   }
 }
 
@@ -1127,7 +1174,7 @@ body.modal-open {
     article {
         p {
           font-size: 16px;
-          line-height: 1.7em;
+          line-height: 1.6em;
         }
     }
 
@@ -1302,16 +1349,14 @@ body.modal-open {
             position: absolute;
             top: 10px;
             right: 10px;
-            color: rgba(0,0,0,0.7);
+            color: $black;
             background: rgba(255,255,255,0.8);
             padding: 10px;
             border-radius: 5px;
             font-size: 20px;
             content: "\e096";
             font-family: $bootstrapFont;
-            font-weight: 400;
             line-height: 1;
-            -webkit-font-smoothing: antialiased;
             pointer-events: none;
         }
     }
@@ -1321,7 +1366,7 @@ body.modal-open {
     section {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
-        h2 {
+        & > h2 {
           background: $lightestGray;
           padding: $GRID_SPACE;
           font-family: $headingFont;
@@ -1442,6 +1487,7 @@ body.modal-open {
           transition: max-height 0.5s ease-in-out;
 
           h2 {
+              margin-top: 10px;
               background: transparent;
               
               &:after {
@@ -1503,8 +1549,22 @@ body.modal-open {
     // }
 }
 
+.modal-dialog {
+    margin-top: 60px;
+
+    & img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
 .modal-body {
-    padding: $GRID_SPACE $GRID_SPACE*3;
+    padding: $GRID_SPACE*3 $GRID_SPACE*3;
+
+    img { 
+        width: 100%;
+        height: 100%;
+    }
 
     hr {
         margin-top: 10px;
@@ -1741,10 +1801,15 @@ body.modal-open {
         //     margin-right: 5px;
         // }
       }
+
+      .numreviews + .openReviewPanelBtn {
+        margin-top: 12px;
+        font-style: 16px;
+      }
     }
 
     .modal-body {
-        // padding-top: 25px;
+        padding-top: $GRID_SPACE;
         // background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
         // min-height: 500px;
 
@@ -1930,10 +1995,9 @@ body.modal-open {
 .btn.btn-action {
     $depth: 3px;
 
-    margin: 0 2% 2%;
+    width: 100%;
     border-radius: 5px;
     border-bottom: $depth solid $lighterGray;
-    width: 96%;
     padding: 20px;
 
     &:active {
@@ -2056,8 +2120,9 @@ body.modal-open {
 .top-toolbar {
   display: flex;
   justify-content: space-around;
-  // justify-content: flex-end;
   align-items: flex-start;
+  padding-top: $GRID_SPACE/2;
+  // justify-content: flex-end;
   // border-bottom: 1px solid #eee;
 
   hr {
@@ -2164,7 +2229,7 @@ body.modal-open {
     }
   }
 
-  ul {
+  ul { 
     display: flex;
     flex-wrap: wrap;
 
@@ -2642,7 +2707,7 @@ body.modal-open {
     }
 
     .modal-body {
-      padding: $GRID_SPACE;
+      padding: $GRID_SPACE*2 $GRID_SPACE;
     }
 
     .modal-dialog {
@@ -2686,6 +2751,13 @@ body.modal-open {
       &.hasImage {
         height: 120px;
       }
+
+      &.hasImage:not(.loading):after {
+        padding: 8px;
+        border-radius: 5px;
+        font-size: 15px;
+      }
+      
     }
   }
 
@@ -2758,14 +2830,6 @@ body.modal-open {
     display: block;
   }
 
-  .tooltip {
-    .tooltip-inner {
-      width: 95vw;
-      font-size: 12px;
-      max-width: none;
-    }
-  }
-
   #placeDetailsModal {
     .review {
       text-align: left;
@@ -2819,7 +2883,7 @@ body.modal-open {
     pointer-events: none;
     transition: opacity 0.2s ease;
 
-    .top-mobile-bar-title { 
+    #top-mobile-bar-title { 
       float: left;
       margin: 0;
       padding: 0;
@@ -3413,7 +3477,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   will-change: transform;
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
 }
 
 // .side-nav--animatable .side-nav__container {
@@ -3534,12 +3598,22 @@ body.modal-open {
 
 }
 
+.tooltip-modal {
+  p {
+    text-align: left;
+    font-size: 14px;
+  }
+}
 
 .swal2-modal {
   padding-left: 5%;
   padding-right: 5%; 
   font-family: $bodyFont;
   @include material-shadow(3);
+
+  .swal2-buttonswrapper {
+    margin-top: 24px;
+  }
 
   .swal2-content {
     color: #333;
