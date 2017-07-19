@@ -2707,7 +2707,7 @@ body.modal-open {
     }
 
     .modal-body {
-      padding: $GRID_SPACE;
+      padding: $GRID_SPACE*2 $GRID_SPACE;
     }
 
     .modal-dialog {

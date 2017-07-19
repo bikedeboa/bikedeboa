@@ -719,17 +719,18 @@ $(() => {
               }));
 
               // Info window
-              if (m.photo) {
-                m.photo = m.photo.replace('images', 'images/thumbs');
+              let thumbUrl = '';
+              if (m.photo) { 
+                thumbUrl = m.photo.replace('images', 'images/thumbs');
               }
               let templateData = {
-                thumbnailUrl: m.photo,
+                thumbnailUrl: thumbUrl,
                 title: m.text,
                 average: m.average,
                 roundedAverage: m.average && ('' + Math.round(m.average)),
                 pinColor: getPinColorFromAverage(m.average)
               };
-
+ 
               // @todo: encapsulate both the next 2 in one method
               // Reviews count
               if (m.reviews === 0) {
@@ -1535,8 +1536,8 @@ $(() => {
 
           swal({ 
             title: 'Valeu!',
-            html: `Tua avaliação é muito importante. Juntos construímos a cidade que queremos ter.`,
-            type: 'success', 
+            html: `Tua avaliação é muito importante! Juntos construímos a cidade que queremos.`,
+            type: 'success',
             onOpen: () => {
               startConfettis();
             },
