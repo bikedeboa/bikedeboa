@@ -243,6 +243,20 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
   return earthRadiusKm * c;
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement
+function importScript (sSrc, fOnload) {
+  function loadError (oError) {
+    throw new URIError("The script " + oError.target.src + " is not accessible.");
+  }
+  
+  var oScript = document.createElement("script");
+  oScript.type = "text\/javascript";
+  oScript.onerror = loadError;
+  if (fOnload) { oScript.onload = fOnload; }
+  document.currentScript.parentNode.insertBefore(oScript, document.currentScript);
+  oScript.src = sSrc;
+}
+
 // Confettiful
 // Production ready confetti generator, yo. By Jacob Gunnarsson.
 // https://codepen.io/jacobgunnarsson/pen/pbPwga

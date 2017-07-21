@@ -121,6 +121,10 @@ body {
     background-color: $lightestGray;
 }
 
+body.overflow {
+  overflow-y: scroll;
+}
+
 body.beta #map {
     // border: 5px solid $red;
 
@@ -479,6 +483,7 @@ a,
     &.cool-hidden {
       opacity: 0;
       transform: translateY(-20px);
+      pointer-events: none;
     }
 
     input {
@@ -763,6 +768,11 @@ a,
         width: 22px;
         margin-left: 3px;
         margin-top: 2px;
+    }
+
+    &.cool-hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
     &:hover,
@@ -2471,6 +2481,25 @@ body.modal-open {
         }
       }
   }
+}
+
+.infobox-list {
+  .infobox {
+    $cardHeight: 90px;
+
+    height: $cardHeight;
+    border-bottom: 1px solid $lighterGray;
+    box-shadow: none;
+
+    .infobox--img {
+      width: $cardHeight;
+      height: $cardHeight;
+    }
+
+    .infobox--content {
+      margin-right: 0;
+    }
+  } 
 }
 
 .infobox,

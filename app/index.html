@@ -160,11 +160,7 @@
           </div>
         </div>
 
-        <!-- <button id="addPlace" class="bigRoundedButton">
-            <span role="heading" aria-level="2"><span class="glyphicon glyphicon-plus"></span> ADICIONAR BICICLETÁRIO</span>
-        </button> -->
- 
-        <button id="addPlace">
+        <button id="addPlace" class="cool-hidden">
             <img alt="Adicionar bicicletário" src="/img/icon_add_pin.svg">
         </button>
 
@@ -214,6 +210,13 @@
 
             <div class="side-nav__content">
               <ul>
+                <li class="side-nav--animate-in" id="nearestPlacesBtn">
+                  <img alt="" src="/img/pin_gray.svg"/>
+                  Próximo de mim
+                </li>
+
+                <hr>
+
                 <li class="side-nav--animate-in" id="aboutBtn">
                   <img alt="" src="/img/icon_info.svg"/>
                   Sobre o Projeto
@@ -640,7 +643,7 @@
         </div>
 
         <!-- Nearest places -->
-        <div id="nearestPlacesModal" class="modal fade" tabindex="-1">
+        <div id="nearestPlacesModal" class="modal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -1053,69 +1056,72 @@
             </div>
         </div>
 
+        <!-- Nearest Pins Modal -->
         <script id="nearestPlacesModalTemplate" type="text/x-handlebars-template">
-          {{#each places}}
-            <div class="infobox">
-              <span class="infobox--distance">{{distance}}</span>
+          <div class="infobox-list">
+            {{#each places}}
+              <div class="infobox" data-id="{{id}}">
+                <span class="infobox--distance">{{distance}}</span>
 
-              <div class="infobox--img">
-                {{#if thumbnailUrl}}
-                  <img alt="" src="{{thumbnailUrl}}"/>
-                {{/if}}
-              </div>
-              
-              <div class="infobox--content">
-                {{#if title}}
-                  <h2>{{title}}</h2>
-                {{else}}
-                  <h2 style="font-style: italic;">Sem título</h2>
-                {{/if}}
-
-                <div class="infobox--details">
-                  {{#unless noIsPublicData}}
-                      {{#if isPublic}}
-                          Público
-                      {{else}}
-                          Privado
-                      {{/if}}
-                  {{/unless}}
-                  {{#if structureTypeLabel}}
-                    {{#unless noIsPublicData}}
-                     · 
-                    {{/unless}}
-                    {{{structureTypeLabel}}}
-                  {{/if}} 
-                </div>
-
-                <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-
-                  {{#if average}}
-                    <span class="average">{{average}}</span>
-
-                    <fieldset id="infobox-rating-display" class="rating disabled">
-                      <input disabled type="radio" id="infobox_star5" name="infobox_rating" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
-                      <label class="full-star" data-value="5" for="infobox_star5"></label> 
-                      <input disabled type="radio" id="infobox_star4" name="infobox_rating" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
-                      <label class="full-star" data-value="4" for="infobox_star4"></label>
-                      <input disabled type="radio" id="infobox_star3" name="infobox_rating" value="3" {{#ifCond roundedAverage '===' '3'}} checked {{/ifCond}}/>
-                      <label class="full-star" data-value="3" for="infobox_star3"></label>
-                      <input disabled type="radio" id="infobox_star2" name="infobox_rating" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
-                      <label class="full-star" data-value="2" for="infobox_star2"></label>
-                      <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
-                      <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                    </fieldset> 
-
-                    {{#if numReviews}}
-                      <span class="numreviews">{{numReviews}}</span>
-                    {{/if}}
-                  {{else}}
-                    <!-- <span style="font-style: italic; color: #828b90;">Sem avaliações</span> -->
+                <div class="infobox--img">
+                  {{#if thumbnailUrl}}
+                    <img alt="" src="{{thumbnailUrl}}"/>
                   {{/if}}
-                  
                 </div>
-              </div> 
-            </div>
-          {{/each}}
+                
+                <div class="infobox--content">
+                  {{#if title}}
+                    <h2>{{title}}</h2>
+                  {{else}}
+                    <h2 style="font-style: italic;">Sem título</h2>
+                  {{/if}}
+
+                  <div class="infobox--details">
+                    {{#unless noIsPublicData}}
+                        {{#if isPublic}}
+                            Público
+                        {{else}}
+                            Privado
+                        {{/if}}
+                    {{/unless}}
+                    {{#if structureTypeLabel}}
+                      {{#unless noIsPublicData}}
+                       · 
+                      {{/unless}}
+                      {{{structureTypeLabel}}}
+                    {{/if}} 
+                  </div>
+
+                  <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+
+                    {{#if average}}
+                      <span class="average">{{average}}</span>
+
+                      <fieldset class="rating disabled">
+                        <input disabled type="radio" id="star5-{{id}}" name="infobox_rating-{{id}}" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
+                        <label class="full-star" data-value="5" for="star5-{{id}}"></label> 
+                        <input disabled type="radio" id="star4-{{id}}" name="infobox_rating-{{id}}" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
+                        <label class="full-star" data-value="4" for="star4-{{id}}"></label>
+                        <input disabled type="radio" id="star3-{{id}}" name="infobox_rating-{{id}}" value="3" {{#ifCond roundedAverage '===' '3'}} checked {{/ifCond}}/>
+                        <label class="full-star" data-value="3" for="star3-{{id}}"></label>
+                        <input disabled type="radio" id="star2-{{id}}" name="infobox_rating-{{id}}" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
+                        <label class="full-star" data-value="2" for="star2-{{id}}"></label>
+                        <input disabled type="radio" id="star1-{{id}}" name="infobox_rating-{{id}}" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
+                        <label class="full-star" data-value="1" for="star1-{{id}}"></label>
+                      </fieldset> 
+
+                      {{#if numReviews}}
+                        <span class="numreviews">{{numReviews}}</span>
+                      {{/if}}
+                    {{else}}
+                      <span style="font-style: italic; color: #828b90;">Sem avaliações</span>
+                    {{/if}}
+                    
+                  </div>
+                </div> 
+              </div>
+            {{/each}}
+          </div>
         </script>
 
         <!-- Infowindow content -->
@@ -1158,7 +1164,7 @@
               {{#if average}}
                 <span class="average">{{average}}</span>
 
-                <fieldset id="infobox-rating-display" class="rating disabled">
+                <fieldset class="rating disabled">
                   <input disabled type="radio" id="infobox_star5" name="infobox_rating" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
                   <label class="full-star" data-value="5" for="infobox_star5"></label> 
                   <input disabled type="radio" id="infobox_star4" name="infobox_rating" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
@@ -1168,7 +1174,7 @@
                   <input disabled type="radio" id="infobox_star2" name="infobox_rating" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
                   <label class="full-star" data-value="2" for="infobox_star2"></label>
                   <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
-                  <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                  <label class="full-star" data-value="1" for="infobox_star1"></label>
                 </fieldset> 
 
                 {{#if numReviews}}

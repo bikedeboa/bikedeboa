@@ -290,16 +290,18 @@ $(() => {
     });
   }
 
-  function updateCurrentPosition(position) {
-    const pos = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
+  function updateGeoPosition(newPos) {
+    _userCurrentPosition = { 
+      lat: newPos.coords.latitude,
+      lng: newPos.coords.longitude
     };
-
-    _geolocationMarker.setPosition(pos);
-
-    _geolocationRadius.setCenter(pos);
-    _geolocationRadius.setRadius(position.coords.accuracy);
+    
+    if (map) {
+      _geolocationRadius.setRadius(newPos.coords.accuracy);
+      _geolocationRadius.setCenter(_userCurrentPosition);
+      
+      _geolocationMarker.setPosition(_userCurrentPosition);
+    }
   }
 
   function _geolocate(toCenter, callback, quiet = false) {
@@ -337,13 +339,18 @@ $(() => {
 
               ga('send', 'event', 'Geolocation', 'init', `${position.coords.latitude},${position.coords.longitude}`);
 
-              if (map) {
-                _geolocationInitialized = true;
-                
-                updateCurrentPosition(position);
+              updateGeoPosition(position);
 
-                $('#geolocationBtn').addClass('active');
+              _geolocationInitialized = true;
               
+              $('#geolocationBtn').addClass('active');
+              
+              if (_positionWatcher) {
+                navigator.geolocation.clearWatch(_positionWatcher);
+              }
+              _positionWatcher = navigator.geolocation.watchPosition(updateGeoPosition, null, options);
+
+              if (map) {
                 _geolocationRadius.setVisible(true);
                 if (markers && markers.length) {
                   _geolocationMarker.setZIndex(markers.length);
@@ -354,7 +361,7 @@ $(() => {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                   };
-
+ 
                   // Test if user located is inside our bounds
                   if (_mapBounds.contains(pos)) {
                     map.panTo(pos);
@@ -442,11 +449,6 @@ $(() => {
             },
             options
         );
-
-        if (_positionWatcher) {
-          navigator.geolocation.clearWatch(_positionWatcher);
-        }
-        _positionWatcher = navigator.geolocation.watchPosition(updateCurrentPosition, null, options);
       }
 
 
@@ -988,12 +990,14 @@ $(() => {
     // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
     // $('#addPlace').velocity('transition.slideUpIn');
     $('#locationSearch').removeClass('cool-hidden');
+    $('#addPlace').removeClass('cool-hidden');
   }
 
   function hideUI() {
     // $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
     // $('#addPlace').velocity('transition.slideDownOut');
     $('#locationSearch').addClass('cool-hidden');
+    $('#addPlace').addClass('cool-hidden');
   }
 
   // @todo refactor this, it's fuckin confusing
@@ -1732,6 +1736,13 @@ $(() => {
       login(true);
     }));
 
+    $('#nearestPlacesBtn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      // ga('send', 'event', 'Misc', 'about opened');
+      // setView('Sobre', '/sobre', true);
+      setView('Mais Próximos', '/maisproximos', true);
+    }));
+
     $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
@@ -1971,42 +1982,52 @@ $(() => {
     })
   }
 
-  // function openNearestPlacesModal() {
-  window.openNearestPlacesModal = function() {
+  function openNearestPlacesModal() {
     const MAX_PLACES = 100;
 
-    // Nearest markers
-    for(let i=0; i < markers.length; i++) {
-        const m = markers[i];
+    let markersToShow;
+    if (_userCurrentPosition) {
+      // Use nearest places
+      for(let i=0; i < markers.length; i++) {
+          const m = markers[i];
 
-        m.distance = distanceInKmBetweenEarthCoordinates(
-          _geolocationMarker.getPosition().lat(),
-          _geolocationMarker.getPosition().lng(),
-          m.lat,
-          m.lng);
+          m.distance = distanceInKmBetweenEarthCoordinates(
+            _userCurrentPosition.lat,
+            _userCurrentPosition.lng,
+            m.lat,
+            m.lng);
+      }
+      markersToShow = markers.sort((a, b) => {return a.distance - b.distance;});
+      markersToShow = markersToShow.slice(0, MAX_PLACES);
+    } else {
+      // Best rated places
+      markersToShow = markers.sort((a, b) => {return b.average - a.average;});
+      markersToShow = markersToShow.slice(0, MAX_PLACES);
     }
-    let nearestMarkers = markers.sort((a, b) => {return a.distance - b.distance;});
-    nearestMarkers = nearestMarkers.slice(0, MAX_PLACES);
 
     // Fill up card info
     let cards = [];
-    for(let i=0; i < nearestMarkers.length; i++) {
-        const m = nearestMarkers[i];
+    for(let i=0; i < markersToShow.length; i++) {
+        const m = markersToShow[i];
 
         // Info window
         let templateData = {
+          id: m.id,
           title: m.text,
           average: m.average,
           roundedAverage: m.average && ('' + Math.round(m.average)),
-          pinColor: getPinColorFromAverage(m.average)
+          pinColor: getPinColorFromAverage(m.average) 
         };
 
-        if (m.distance < 1) {
-          templateData.distance = Math.round(m.distance*1000);
-          templateData.distance += 'm';
-        } else {
-          templateData.distance = m.distance.toFixed(2);
-          templateData.distance += 'km';
+        // Distance either in km or m
+        if (m.distance) {
+          if (m.distance < 1) {
+            templateData.distance = Math.round(m.distance*1000);
+            templateData.distance += 'm';
+          } else {
+            templateData.distance = m.distance.toFixed(2);
+            templateData.distance += 'km';
+          }
         }
 
         templateData.thumbnailUrl = m.photo ? m.photo.replace('images', 'images/thumbs') : '';
@@ -2039,10 +2060,18 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({places: cards}));
-    $('#nearestPlacesModal').modal('show');
+    if (_isDeeplink) {
+      $('#map').html(templates.nearestPlacesModalTemplate({places: cards}));
+      $('body').addClass('overflow');
+    } else {
+      $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({places: cards}));
+      $('#nearestPlacesModal').modal('show');
+    }
 
-    setView('Mais próximos', '/maisproximos');
+    $('.infobox').off('click').on('click', e => {
+      const id = $(e.currentTarget).data('id');
+      openLocal(getMarkerById(id));
+    });
   }
 
   function handleRouting() { 
@@ -2050,6 +2079,12 @@ $(() => {
     let match = true;
 
     switch (urlBreakdown[1]) {
+      // case '':
+      case 'maisproximos':
+        hideAllModals(() => {
+          openNearestPlacesModal();
+        });
+        break;
       case 'b':
         if (urlBreakdown[2]) {
           let id = urlBreakdown[2].split('-')[0];
@@ -2081,6 +2116,25 @@ $(() => {
     return match;
   }
 
+  // function setupGoogleMaps(wasDeeplink) {
+  //   var script = document.createElement("script");
+  //   script.type = "text/javascript";
+  //   script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR";
+  //   script.onload = function() {
+  //       setupGoogleMaps2(wasDeeplink);
+  //   };
+  //   $('head').append(script);
+  // }
+
+  // function setupGoogleMaps(wasDeeplink) {
+  //   importScript(
+  //     'https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR',
+  //     () => {
+  //       setupGoogleMaps2(wasDeeplink);
+  //     });
+  // }
+
+  // function setupGoogleMaps2(wasDeeplink) {
   function setupGoogleMaps(wasDeeplink) {
     let initialCenter;
     if (wasDeeplink && _deeplinkMarker) {
@@ -2187,7 +2241,8 @@ $(() => {
       strokeOpacity: '0'
     });
 
-    // Finally, enable the basic UI
+
+    // All set up, enable UI.
     showUI();
     // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
     // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
@@ -2206,13 +2261,17 @@ $(() => {
     }
 
     // Got Google Maps, either we're online or the SDK is in cache.
-    if (window.google) {
-      // On Mobile we defer the initialization of the map if we're in deeplink
-      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-        setupGoogleMaps(); 
-      }
-    } else {
-      setOfflineMode();
+    // if (window.google) {
+    //   // On Mobile we defer the initialization of the map if we're in deeplink
+    //   if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+    //     setupGoogleMaps(); 
+    //   }
+    // } else {
+    //   setOfflineMode();
+    // }
+
+    if (_isMobile) {
+      setView('Mais Próximos', '/maisproximos', true);
     }
 
     const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
@@ -2256,6 +2315,8 @@ $(() => {
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
+      
+      // if it's home
       if (state.title === 'bike de boa') {
         if (!map && !_isOffline) {
           setupGoogleMaps();
@@ -2269,7 +2330,7 @@ $(() => {
           _isDeeplink = false;
         }
 
-        hideAllModals();
+        hideAllModals(); 
       } else {
         handleRouting();
       }

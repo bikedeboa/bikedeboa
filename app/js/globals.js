@@ -84,6 +84,7 @@ let tagToId = {};
 let _gmarkers;
 let _geolocationMarker;
 let _geolocationRadius;
+let _userCurrentPosition;
 let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker;
