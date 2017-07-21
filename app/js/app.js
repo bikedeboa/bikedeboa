@@ -2285,9 +2285,9 @@ $(() => {
     //   setOfflineMode();
     // }
 
-    if (_isMobile) {
-      setView('Mais Próximos', '/maisproximos', true);
-    }
+    // @todo TEMP TEMP TEMP
+    setView('Mais Próximos', '/maisproximos', true);
+    // setupGoogleMaps();
 
     const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
     isMobileListener.addListener((isMobileListener) => {
@@ -2463,14 +2463,14 @@ $(() => {
       // @todo encapsulate this with callback code from getPlaces() (below)
       
       // Hide spinner that is initialized visible on CSS
-      hideSpinner();
+      // hideSpinner();
 
-      updateMarkers();
+      // updateMarkers();
 
-      if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
-        _onDataReadyCallback();
-        _onDataReadyCallback = null;
-      }
+      // if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+      //   _onDataReadyCallback();
+      //   _onDataReadyCallback = null;
+      // }
     } 
 
     if (_isOffline) {
