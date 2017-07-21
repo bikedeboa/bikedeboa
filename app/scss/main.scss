@@ -2473,14 +2473,21 @@ body.modal-open {
   }
 }
 
+.infobox,
 .infoBox {
+  $cardHeight: 75px;
+
+  height: $cardHeight;
+  width: 100vw; //@todo fixme
+
+  display: flex;
+  position: relative;
   background: white;
   @include material-shadow(1);
-  display: flex;
 
   &:active,
   &:focus,
-  &:hover {
+  &:hover { 
     background: $paleWhite; 
   }
 
@@ -2489,8 +2496,8 @@ body.modal-open {
   }
 
   .infobox--img {
-    width: 75px;
-    height: 75px;
+    width: $cardHeight;
+    height: $cardHeight;
     position: relative;
     background: $lightestGrey;
 
@@ -3005,7 +3012,8 @@ body.modal-open {
   //   }
   // }
 
-  .infoBox {
+  .infoBox,
+  .infobox {
     .infobox--content {
       margin-right: 50px;
     }
@@ -3025,6 +3033,7 @@ body.modal-open {
       text-shadow: 1px -2px 3px rgba(0,0,0,.15);
     }
 
+    .infobox--distance,
     .infobox--caret {
       display: block;
 
@@ -3033,6 +3042,10 @@ body.modal-open {
       top: calc(50% - 10px);
       font-size: 20px;
       color: $gray;
+    }
+
+    .infobox--distance {
+      font-size: 12px;
     }
   }
 

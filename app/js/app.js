@@ -296,12 +296,10 @@ $(() => {
       lng: position.coords.longitude
     };
 
-    if (map) {
-      _geolocationMarker.setPosition(pos);
+    _geolocationMarker.setPosition(pos);
 
-      _geolocationRadius.setCenter(pos);
-      _geolocationRadius.setRadius(position.coords.accuracy);
-    }
+    _geolocationRadius.setCenter(pos);
+    _geolocationRadius.setRadius(position.coords.accuracy);
   }
 
   function _geolocate(toCenter, callback, quiet = false) {
@@ -327,8 +325,6 @@ $(() => {
           showSpinner();
         }
 
-        _geolocationInitialized = false;
-
         const options = {
           enableHighAccuracy: true,
           timeout: 5000,
@@ -339,15 +335,15 @@ $(() => {
             position => {
               console.debug(position);
 
-              _geolocationInitialized = true;
-
               ga('send', 'event', 'Geolocation', 'init', `${position.coords.latitude},${position.coords.longitude}`);
 
-              updateCurrentPosition(position);
-
-              $('#geolocationBtn').addClass('active');
-              
               if (map) {
+                _geolocationInitialized = true;
+                
+                updateCurrentPosition(position);
+
+                $('#geolocationBtn').addClass('active');
+              
                 _geolocationRadius.setVisible(true);
                 if (markers && markers.length) {
                   _geolocationMarker.setZIndex(markers.length);
@@ -510,6 +506,21 @@ $(() => {
 
     marker.url = url;
     setView(marker.text || 'Detalhes do bicicletário', url);
+  }
+
+  function _openLocal(marker, callback) {
+    if (marker) {
+      openDetailsModal(marker, callback);
+
+      if (!marker._hasDetails) {
+        // Request content
+        Database.getPlaceDetails(marker.id, () => {
+          if (openedMarker && openedMarker.id === marker.id) {
+            openDetailsModal(marker, callback);
+          }
+        });
+      }
+    }
   }
 
   function _openLocal(marker, callback) {
@@ -712,24 +723,20 @@ $(() => {
                 // label: labelStr && {
                 //   text: labelStr,
                 //   color: 'white',
-                //   fontFamily: 'Roboto'
                 // },
                 zIndex: i, //markers should be ordered by average
                 // opacity: 0.1 + (m.average/5).
               }));
 
               // Info window
-              let thumbUrl = '';
-              if (m.photo) { 
-                thumbUrl = m.photo.replace('images', 'images/thumbs');
-              }
               let templateData = {
-                thumbnailUrl: thumbUrl,
                 title: m.text,
                 average: m.average,
                 roundedAverage: m.average && ('' + Math.round(m.average)),
                 pinColor: getPinColorFromAverage(m.average)
               };
+
+              templateData.thumbnailUrl = m.photo ? m.photo.replace('images', 'images/thumbs') : '';
  
               // @todo: encapsulate both the next 2 in one method
               // Reviews count
@@ -1190,12 +1197,12 @@ $(() => {
         return (v1 || !v2) ? options.fn(this) : options.inverse(this);
       default:
         return options.inverse(this);
-      }
+      } 
     });
-
+ 
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
-    templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
     templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
+    templates.nearestPlacesModalTemplate = Handlebars.compile($('#nearestPlacesModalTemplate').html());
   }
 
   function validateNewPlaceForm() {
@@ -1964,6 +1971,80 @@ $(() => {
     })
   }
 
+  // function openNearestPlacesModal() {
+  window.openNearestPlacesModal = function() {
+    const MAX_PLACES = 100;
+
+    // Nearest markers
+    for(let i=0; i < markers.length; i++) {
+        const m = markers[i];
+
+        m.distance = distanceInKmBetweenEarthCoordinates(
+          _geolocationMarker.getPosition().lat(),
+          _geolocationMarker.getPosition().lng(),
+          m.lat,
+          m.lng);
+    }
+    let nearestMarkers = markers.sort((a, b) => {return a.distance - b.distance;});
+    nearestMarkers = nearestMarkers.slice(0, MAX_PLACES);
+
+    // Fill up card info
+    let cards = [];
+    for(let i=0; i < nearestMarkers.length; i++) {
+        const m = nearestMarkers[i];
+
+        // Info window
+        let templateData = {
+          title: m.text,
+          average: m.average,
+          roundedAverage: m.average && ('' + Math.round(m.average)),
+          pinColor: getPinColorFromAverage(m.average)
+        };
+
+        if (m.distance < 1) {
+          templateData.distance = Math.round(m.distance*1000);
+          templateData.distance += 'm';
+        } else {
+          templateData.distance = m.distance.toFixed(2);
+          templateData.distance += 'km';
+        }
+
+        templateData.thumbnailUrl = m.photo ? m.photo.replace('images', 'images/thumbs') : '';
+
+        // @todo: encapsulate both the next 2 in one method
+        // Reviews count
+        if (m.reviews === 0) {
+          templateData.numReviews = '';
+        } else if (m.reviews === '1') {
+          templateData.numReviews = '1 avaliação';
+        } else {
+          templateData.numReviews = `${m.reviews} avaliações`;
+        }
+
+        // Structure and access types
+        if (m.isPublic != null) {
+          templateData.isPublic = m.isPublic === true; 
+        } else {
+          templateData.noIsPublicData = true;
+        }
+        if (m.structureType) {
+          templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+        }
+
+        cards.push(templateData);
+    }
+
+    // console.log(cards);
+    
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
+    $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({places: cards}));
+    $('#nearestPlacesModal').modal('show');
+
+    setView('Mais próximos', '/maisproximos');
+  }
+
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = true;
@@ -2008,10 +2089,7 @@ $(() => {
         lng: parseFloat(_deeplinkMarker.lng)
       }
     } else {
-      initialCenter = {
-        lat: -30.0346,
-        lng: -51.2177
-      }
+      initialCenter = PORTO_ALEGRE_CENTER_POS;
     }
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -2037,7 +2115,6 @@ $(() => {
       zIndex: null,
       boxStyle: {
         width: `${infoboxWidth}px`,
-        height: '75px', 
         cursor: 'pointer',
       },
       // closeBoxMargin: '10px 2px 2px 2px',

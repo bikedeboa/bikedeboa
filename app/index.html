@@ -93,7 +93,7 @@
         <script defer src="/js/app.min.js"></script>
     </head> 
 
-    <body>
+    <body> 
         <div id="map"></div>
         
         <h1 id="logo"> bike de boa </h1>
@@ -102,7 +102,34 @@
 
         <div id="locationSearch" class="cool-hidden">
             <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
-            <!-- <span class="balaca">
+            <!-- <span class="balaca">let templateData = {
+                title: m.text,
+                average: m.average,
+                roundedAverage: m.average && ('' + Math.round(m.average)),
+                pinColor: getPinColorFromAverage(m.average)
+              };
+
+              templateData.thumbnailUrl = m.photo ? m.photo.replace('images', 'images/thumbs') : '';
+ 
+              // @todo: encapsulate both the next 2 in one method
+              // Reviews count
+              if (m.reviews === 0) {
+                templateData.numReviews = '';
+              } else if (m.reviews === '1') {
+                templateData.numReviews = '1 avaliação';
+              } else {
+                templateData.numReviews = `${m.reviews} avaliações`;
+              }
+
+              // Structure and access types
+              if (m.isPublic != null) {
+                templateData.isPublic = m.isPublic === true; 
+              } else {
+                templateData.noIsPublicData = true;
+              }
+              if (m.structureType) {
+                templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+              }
               <img alt="" src="/img/bici.svg"/>
             </span> -->
             <input id="locationQueryInput" type="search">
@@ -120,8 +147,6 @@
                 </button>
             </span>
         </div>
-
-        <div id="revisionModalTemplatePlaceholder"></div>
 
         <div id="offline-overlay">
           <div class="offline-overlay-content">
@@ -151,8 +176,6 @@
               <img alt="Adicionar aqui" src="/img/pin_bike.svg"/>
           </button>
         </div>
-
-        <div id="messageModalPlaceholder"></div>
 
         <div id="spinnerOverlay">
             <div class="spinnerContainer">
@@ -290,7 +313,7 @@
                     <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
                     <label for="filter_private">Privados</label>
                 </li>
-              </ul>
+              </ul> 
 
               <hr>
 
@@ -616,6 +639,17 @@
             </div>
         </div>
 
+        <!-- Nearest places -->
+        <div id="nearestPlacesModal" class="modal fade" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                      <div id="nearestPlacesModalPlaceholder"></div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
         <!-- Pin Details -->
         <div id="placeDetailsModal" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
@@ -623,119 +657,6 @@
                     <div class="modal-content">
                       <div id="placeDetailsModalTemplatePlaceholder"></div>
                     </div> 
-                </div>
-            </div>
-        </div>
-
-        <!-- New Pin Modal -->
-        <div class="modal fade" id="newPlaceModal" tabindex="-1">
-            <div class="vertical-alignment-helper">
-                <div class="modal-dialog vertical-align-center">
-                    <div class="modal-content">
-                        <div class="photo-container photoInputContainer">
-                            <img alt="" id="photoInputBg"/>
-
-                            <input id="photoInput" type="file" name="photoInput" accept="image/*">
-                            <label for="photoInput"></label>
-                        </div>
-
-                        <div class="modal-body text-center">
-                            <section>
-                              <div class="text-input-wrapper">
-                                  <input required id="titleInput" type="text" class="text-input" placeholder="Nome pro bicicletário">
-                              </div>
-                            </section>
-
-                            <section>
-                              <div class="minimap-container">
-                                <img alt="" class="minimap" src=""/>
-                                <button id="editPlacePositionBtn" class="btn link-button"></button>
-                              </div>
-                            </section>
-
-                            <section>
-                              <h2>
-                                Tipo de Bicicletário
-                                <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
-                              </h2>
-
-                              <div class="custom-radio-group">
-                                  <div data-value="deroda" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/tipo_deroda.svg"/>
-                                      <div class="icon-label">De Roda</div>
-                                  </div>
-                                  <div data-value="uinvertido" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/tipo_uinvertido.svg"/>
-                                      <div class="icon-label">U Invertido</div>
-                                  </div>
-                                  <div data-value="suspenso" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/tipo_suspenso.svg"/>
-                                      <div class="icon-label">Suspenso</div>
-                                  </div>
-                                  <div data-value="grade" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/tipo_grade.svg"/>
-                                      <div class="icon-label">Grade</div>
-                                  </div>
-                                  <div data-value="trave" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/tipo_trave.svg"/>
-                                      <div class="icon-label">Trave</div>
-                                  </div>
-                                  <div data-value="other" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/tipo_other.svg"/>
-                                      <div class="icon-label">Outro</div>
-                                  </div>
-                              </div>
-                            </section>
-
-                            <section>
-                              <h2>
-                                Acesso
-                                <span id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Público</h2>
-                                <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
-                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span>
-                              </h2>
-
-                              <div class="acess-types-group">
-                                  <div data-value="public" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/icon_public.svg"/>
-                                      <div class="icon-label">
-                                        Público
-                                      </div>
-                                  </div>
-                                  <div data-value="private" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/icon_private.svg"/>
-                                      <div class="icon-label">
-                                        Privado
-                                      </div>
-                                  </div>
-                              </div>
-                            </section> 
-
-                            <section>
-                              <div class="description collapsable">
-                                  <h2>
-                                      Mais Informações <span style="font-size: 10px;">(opcional)</span>
-                                  </h2>
-
-                                  <p>
-                                    Exemplo: horário de funcionamento, como acessar o local, serviços adicionais disponíveis, etc. (máx. 250 caracteres)
-                                  </p>
-
-                                  <textarea id="descriptionInput"
-                                    maxlength="250"
-                                    type="text"
-                                    class="text-input"
-                                    placeholder="Digite aqui">
-                                  </textarea>
-                              </div>
-                            </section>
-
-                            <div style="padding: 0 0 16px; text-align: center;">
-                                <button id="saveNewPlaceBtn" class="btn border btn-footer btn-action green">SALVAR</button>
-                                <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1019,63 +940,185 @@
           </div>
         </script>
 
-        <!-- View Details Empty Shell Modal -->
-        <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
-            <div class="photo-container skeleton-box">
-            </div>
+        <!-- New Pin Modal -->
+        <div class="modal fade" id="newPlaceModal" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="photo-container photoInputContainer">
+                            <img alt="" id="photoInputBg"/>
 
-            <div class="modal-body">
-                <div id="placeDetails_heading" class="title">
-                    <h1 class="skeleton-box"></h1>
-                    <p class="address">
-                        <span class="skeleton-box"></span>
-                    </p>
-                    <div class="minimap"></div>
-                </div>
+                            <input id="photoInput" type="file" name="photoInput" accept="image/*">
+                            <label for="photoInput"></label>
+                        </div>
 
-                <div class="review">
-                    <fieldset id="ratingDisplay" class="rating disabled">
-                        <input disabled type="radio" name="placeDetails_rating" value="5" />
-                        <label class="full-star"></label>
+                        <div class="modal-body text-center">
+                            <section>
+                              <div class="text-input-wrapper">
+                                  <input required id="titleInput" type="text" class="text-input" placeholder="Nome pro bicicletário">
+                              </div>
+                            </section>
 
-                        <input disabled type="radio" name="placeDetails_rating" value="4" />
-                        <label class="full-star"></label>
+                            <section>
+                              <div class="minimap-container">
+                                <img alt="" class="minimap" src=""/>
+                                <button id="editPlacePositionBtn" class="btn link-button"></button>
+                              </div>
+                            </section>
 
-                        <input disabled type="radio" name="placeDetails_rating" value="3" />
-                        <label class="full-star"></label>
+                            <section>
+                              <h2>
+                                Tipo de Bicicletário
+                                <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
+                              </h2>
 
-                        <input disabled type="radio" name="placeDetails_rating" value="2" />
-                        <label class="full-star"></label>
+                              <div class="custom-radio-group">
+                                  <div data-value="deroda" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/tipo_deroda.svg"/>
+                                      <div class="icon-label">De Roda</div>
+                                  </div>
+                                  <div data-value="uinvertido" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/tipo_uinvertido.svg"/>
+                                      <div class="icon-label">U Invertido</div>
+                                  </div>
+                                  <div data-value="suspenso" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/tipo_suspenso.svg"/>
+                                      <div class="icon-label">Suspenso</div>
+                                  </div>
+                                  <div data-value="grade" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/tipo_grade.svg"/>
+                                      <div class="icon-label">Grade</div>
+                                  </div>
+                                  <div data-value="trave" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/tipo_trave.svg"/>
+                                      <div class="icon-label">Trave</div>
+                                  </div>
+                                  <div data-value="other" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/tipo_other.svg"/>
+                                      <div class="icon-label">Outro</div>
+                                  </div>
+                              </div>
+                            </section>
 
-                        <input disabled type="radio" name="placeDetails_rating" value="1" />
-                        <label class="full-star"></label>
-                    </fieldset>
-                </div>
+                            <section>
+                              <h2>
+                                Acesso
+                                <span id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Público</h2>
+                                <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
+                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span>
+                              </h2>
 
-                <div class="info clearfix">
-                    <div class="col-half">
-                        <span class="skeleton-box"></span>
-                        <br>
-                        <div class="icon-label skeleton-box"></div>
+                              <div class="acess-types-group">
+                                  <div data-value="public" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_public.svg"/>
+                                      <div class="icon-label">
+                                        Público
+                                      </div>
+                                  </div>
+                                  <div data-value="private" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_private.svg"/>
+                                      <div class="icon-label">
+                                        Privado
+                                      </div>
+                                  </div>
+                              </div>
+                            </section> 
+
+                            <section>
+                              <div class="description collapsable">
+                                  <h2>
+                                      Mais Informações <span style="font-size: 10px;">(opcional)</span>
+                                  </h2>
+
+                                  <p>
+                                    Exemplo: horário de funcionamento, como acessar o local, serviços adicionais disponíveis, etc. (máx. 250 caracteres)
+                                  </p>
+
+                                  <textarea id="descriptionInput"
+                                    maxlength="250"
+                                    type="text"
+                                    class="text-input"
+                                    placeholder="Digite aqui">
+                                  </textarea>
+                              </div>
+                            </section>
+
+                            <div style="padding: 0 0 16px; text-align: center;">
+                                <button id="saveNewPlaceBtn" class="btn border btn-footer btn-action green">SALVAR</button>
+                                <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-half">
-                        <span class="skeleton-box"></span>
-                        <br>
-                        <div class="icon-label skeleton-box"></div>
-                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- <div class="modal-footer">
-                <div class="col-half">
-                    <a class="btn skeleton-box btn-footer"></a>
+        <script id="nearestPlacesModalTemplate" type="text/x-handlebars-template">
+          {{#each places}}
+            <div class="infobox">
+              <span class="infobox--distance">{{distance}}</span>
+
+              <div class="infobox--img">
+                {{#if thumbnailUrl}}
+                  <img alt="" src="{{thumbnailUrl}}"/>
+                {{/if}}
+              </div>
+              
+              <div class="infobox--content">
+                {{#if title}}
+                  <h2>{{title}}</h2>
+                {{else}}
+                  <h2 style="font-style: italic;">Sem título</h2>
+                {{/if}}
+
+                <div class="infobox--details">
+                  {{#unless noIsPublicData}}
+                      {{#if isPublic}}
+                          Público
+                      {{else}}
+                          Privado
+                      {{/if}}
+                  {{/unless}}
+                  {{#if structureTypeLabel}}
+                    {{#unless noIsPublicData}}
+                     · 
+                    {{/unless}}
+                    {{{structureTypeLabel}}}
+                  {{/if}} 
                 </div>
-                <div class="col-half">
-                    <a class="btn skeleton-box btn-footer"></a>
+
+                <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+
+                  {{#if average}}
+                    <span class="average">{{average}}</span>
+
+                    <fieldset id="infobox-rating-display" class="rating disabled">
+                      <input disabled type="radio" id="infobox_star5" name="infobox_rating" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
+                      <label class="full-star" data-value="5" for="infobox_star5"></label> 
+                      <input disabled type="radio" id="infobox_star4" name="infobox_rating" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
+                      <label class="full-star" data-value="4" for="infobox_star4"></label>
+                      <input disabled type="radio" id="infobox_star3" name="infobox_rating" value="3" {{#ifCond roundedAverage '===' '3'}} checked {{/ifCond}}/>
+                      <label class="full-star" data-value="3" for="infobox_star3"></label>
+                      <input disabled type="radio" id="infobox_star2" name="infobox_rating" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
+                      <label class="full-star" data-value="2" for="infobox_star2"></label>
+                      <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
+                      <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                    </fieldset> 
+
+                    {{#if numReviews}}
+                      <span class="numreviews">{{numReviews}}</span>
+                    {{/if}}
+                  {{else}}
+                    <!-- <span style="font-style: italic; color: #828b90;">Sem avaliações</span> -->
+                  {{/if}}
+                  
                 </div>
-            </div> -->
+              </div> 
+            </div>
+          {{/each}}
         </script>
 
+        <!-- Infowindow content -->
         <script id="infoWindowTemplate" type="text/x-handlebars-template">
           <span class="infobox--arrow glyphicon glyphicon-triangle-top"></span>
 

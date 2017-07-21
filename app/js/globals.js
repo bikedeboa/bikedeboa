@@ -48,6 +48,8 @@ const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', '
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
+const PORTO_ALEGRE_CENTER_POS = {lat: -30.0346, lng: -51.2177 };
+
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 const MOBILE_MAX_WIDTH = '414px';
