@@ -2113,31 +2113,42 @@ $(() => {
         break;
     }
 
+    if (match) {
+      _isDeeplink = true;
+
+      // $('#logo').addClass('clickable'); 
+      // $('#map').addClass('mock-map');
+      $('body').addClass('deeplink'); 
+      $('#top-mobile-bar-title').text('bike de boa');
+
+      // Center the map on pin's position
+      if (map && _deeplinkMarker) {
+        map.setZoom(18);
+        map.setCenter({
+          lat: parseFloat(_deeplinkMarker.lat),
+          lng: parseFloat(_deeplinkMarker.lng)
+        });
+      }
+    } else {
+      goHome();
+    }
+
     return match;
   }
 
-  // function setupGoogleMaps(wasDeeplink) {
-  //   var script = document.createElement("script");
-  //   script.type = "text/javascript";
-  //   script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR";
-  //   script.onload = function() {
-  //       setupGoogleMaps2(wasDeeplink);
-  //   };
-  //   $('head').append(script);
-  // }
+  function setupGoogleMaps(callback) {
+    $.getScript(
+      'https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR',
+      () => {
+        setupGoogleMaps2(callback);
+      }
+    );
+  }
 
+  function setupGoogleMaps2(callback) {
   // function setupGoogleMaps(wasDeeplink) {
-  //   importScript(
-  //     'https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR',
-  //     () => {
-  //       setupGoogleMaps2(wasDeeplink);
-  //     });
-  // }
-
-  // function setupGoogleMaps2(wasDeeplink) {
-  function setupGoogleMaps(wasDeeplink) {
     let initialCenter;
-    if (wasDeeplink && _deeplinkMarker) {
+    if (_deeplinkMarker) {
       initialCenter = {
         lat: parseFloat(_deeplinkMarker.lat),
         lng: parseFloat(_deeplinkMarker.lng)
@@ -2148,7 +2159,7 @@ $(() => {
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialCenter,
-      zoom: wasDeeplink ? 18 : 15,
+      zoom: _deeplinkMarker ? 18 : 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -2241,6 +2252,10 @@ $(() => {
       strokeOpacity: '0'
     });
 
+    if (callback && typeof callback === 'function') {
+      callback();
+      callback = null;
+    }
 
     // All set up, enable UI.
     showUI();
@@ -2319,8 +2334,9 @@ $(() => {
       // if it's home
       if (state.title === 'bike de boa') {
         if (!map && !_isOffline) {
-          setupGoogleMaps();
-          updateMarkers();
+          setupGoogleMaps( () => {
+            updateMarkers();
+          });
         }
 
         if (_isDeeplink) {
@@ -2338,27 +2354,7 @@ $(() => {
 
     // Initialize router
     _onDataReadyCallback = () => {
-      const isMatch = handleRouting();
-      
-      if (isMatch) {
-        _isDeeplink = true;
-
-        // $('#logo').addClass('clickable'); 
-        // $('#map').addClass('mock-map');
-        $('body').addClass('deeplink'); 
-        $('#top-mobile-bar-title').text('bike de boa');
-
-        // Center the map on pin's position
-        if (map && _deeplinkMarker) {
-          map.setZoom(18);
-          map.setCenter({
-            lat: parseFloat(_deeplinkMarker.lat),
-            lng: parseFloat(_deeplinkMarker.lng)
-          });
-        }
-      } else {
-        goHome();
-      }
+      handleRouting();
     };
 
     // Set up Sweet Alert
@@ -2463,11 +2459,23 @@ $(() => {
     markers = BIKE.getMarkersFromLocalStorage();
     if (markers && markers.length) {
       console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
-      updateMarkers();
+      
+      // @todo encapsulate this with callback code from getPlaces() (below)
+      
+      // Hide spinner that is initialized visible on CSS
       hideSpinner();
+
+      updateMarkers();
+
+      if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+        _onDataReadyCallback();
+        _onDataReadyCallback = null;
+      }
     } 
 
-    if (!_isOffline) {
+    if (_isOffline) {
+      hideSpinner();
+    } else {
       // Use external service to get user's IP
       $.getJSON('//ipinfo.io/json', data => {
         if (data && data.ip) {
@@ -2485,7 +2493,6 @@ $(() => {
         //     lat: parseFloat(coords[0]),
         //     lng: parseFloat(coords[1])
         //   };
-
         //   map.panTo(pos);
         // }
       });

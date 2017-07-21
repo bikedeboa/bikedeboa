@@ -42,7 +42,8 @@ window.toggleSpinner = () => {
 };
 
 window.showSpinner = function (label, callback) {
-  console.log('showspinner');
+  console.log('show spinner');
+
   if (label) {
     $('#globalSpinnerLabel').html(label);
   }
@@ -54,6 +55,8 @@ window.showSpinner = function (label, callback) {
 };
 
 window.hideSpinner = callback => {
+  console.log('hide spinner');
+
   $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
     $('#globalSpinnerLabel').html('');
 
@@ -241,20 +244,6 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
           Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
   return earthRadiusKm * c;
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement
-function importScript (sSrc, fOnload) {
-  function loadError (oError) {
-    throw new URIError("The script " + oError.target.src + " is not accessible.");
-  }
-  
-  var oScript = document.createElement("script");
-  oScript.type = "text\/javascript";
-  oScript.onerror = loadError;
-  if (fOnload) { oScript.onload = fOnload; }
-  document.currentScript.parentNode.insertBefore(oScript, document.currentScript);
-  oScript.src = sSrc;
 }
 
 // Confettiful
