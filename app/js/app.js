@@ -2076,7 +2076,7 @@ $(() => {
 
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
-    let match = true;
+    let match;
 
     switch (urlBreakdown[1]) {
       // case '':
@@ -2094,6 +2094,8 @@ $(() => {
             _openLocal(_deeplinkMarker);
           }
         }
+
+        match = 'b';
         break;
       case 'faq':
         openFaqModal();
@@ -2109,28 +2111,8 @@ $(() => {
       // case 'filtros':
       //   hideAllModals();
       default:
-        match = false;
+        // match = false;
         break;
-    }
-
-    if (match) {
-      _isDeeplink = true;
-
-      // $('#logo').addClass('clickable'); 
-      // $('#map').addClass('mock-map');
-      $('body').addClass('deeplink'); 
-      $('#top-mobile-bar-title').text('bike de boa');
-
-      // Center the map on pin's position
-      if (map && _deeplinkMarker) {
-        map.setZoom(18);
-        map.setCenter({
-          lat: parseFloat(_deeplinkMarker.lat),
-          lng: parseFloat(_deeplinkMarker.lng)
-        });
-      }
-    } else {
-      goHome();
     }
 
     return match;
@@ -2140,7 +2122,12 @@ $(() => {
     $.getScript(
       'https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR',
       () => {
-        setupGoogleMaps2(callback);
+        $.getScript(
+        '/js/lib/infobox.min.js',
+        () => {
+          setupGoogleMaps2(callback);
+        }
+      );
       }
     );
   }
@@ -2264,6 +2251,28 @@ $(() => {
     // $('#map').css('filter', 'none');
   }
 
+  function initRouting() {
+    const match = handleRouting();
+
+    if (match === 'b') {
+      _isDeeplink = true;
+
+      $('body').addClass('deeplink'); 
+      $('#top-mobile-bar-title').text('bike de boa');
+
+      // Center the map on pin's position
+      if (map && _deeplinkMarker) {
+        map.setZoom(18);
+        map.setCenter({
+          lat: parseFloat(_deeplinkMarker.lat),
+          lng: parseFloat(_deeplinkMarker.lng)
+        });
+      }
+    } else {
+      goHome();
+    }
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
@@ -2276,17 +2285,18 @@ $(() => {
     }
 
     // Got Google Maps, either we're online or the SDK is in cache.
+    // @todo detect better if we're offline
     // if (window.google) {
-    //   // On Mobile we defer the initialization of the map if we're in deeplink
-    //   if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-    //     setupGoogleMaps(); 
-    //   }
+      // On Mobile we defer the initialization of the map if we're in deeplink
+      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+        setupGoogleMaps(); 
+      }
     // } else {
     //   setOfflineMode();
-    // }
+    // } 
 
     // @todo TEMP TEMP TEMP
-    setView('Mais Próximos', '/maisproximos', true);
+    // setView('Mais Próximos', '/maisproximos', true);
     // setupGoogleMaps();
 
     const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
@@ -2327,7 +2337,7 @@ $(() => {
 
     _initTemplates();
 
-    // Bind trigger for history changes
+    // Bind trigger to history changes
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
       
@@ -2354,7 +2364,7 @@ $(() => {
 
     // Initialize router
     _onDataReadyCallback = () => {
-      handleRouting();
+      initRouting();
     };
 
     // Set up Sweet Alert

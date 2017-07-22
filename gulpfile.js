@@ -45,7 +45,7 @@ console.log('NODE_ENV = ', process.env.NODE_ENV);
 // Compile Our Sass
 gulp.task('sass', () => {
     return gulp.src('app/scss/*.scss')
-        .pipe(sourcemaps.init())
+        .pipe(development(sourcemaps.init()))
         .pipe(plumber())
         .pipe(sass())
         .on('error', function(e) {
@@ -56,8 +56,8 @@ gulp.task('sass', () => {
             browsers: ['> 1%']
         }))
         .pipe(concat('main.min.css'))
-        .pipe(minifycss())
-        .pipe(sourcemaps.write('.'))
+        .pipe(production(minifycss()))
+        .pipe(development(sourcemaps.write('.')))
         .pipe(fileSizes({title: 'main.min.css', gzip: true}))
         .pipe(gulp.dest('dist/css'));
 });
@@ -65,29 +65,41 @@ gulp.task('sass', () => {
 // Concatenate & Minify JS
 gulp.task('scripts', () => {
   gulp.src('app/service-worker-registration.js')
+    .pipe(production(uglify()))
+    .pipe(rename({
+      suffix: ".min"
+    }))
     .pipe(gulp.dest('dist/'));
 
+  gulp.src('app/js/lib/*.js')
+    .pipe(development(sourcemaps.init()))
+    .pipe(plumber())
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+    .pipe(rename({
+      suffix: ".min"
+    }))
+    .pipe(production(uglify()))
+    .pipe(development(sourcemaps.write('maps')))
+    .pipe(fileSizes({gzip: true}))
+    .pipe(gulp.dest('dist/js/lib'));
+
   return gulp.src('app/js/*.js')
-    .pipe(sourcemaps.init())
+    .pipe(development(sourcemaps.init()))
     .pipe(plumber())
     .pipe(concat('app.js'))
     .pipe(babel({
       presets: ['es2015']
     }))
-    // .on('error', function(e) {
-    //   console.log(e);
-    //   this.emit('end');
-    // })
-    // .pipe(sourcemaps.write('maps'))
-    // .pipe(gulp.dest('dist/js'))
     .pipe(rename('app.min.js'))
     .pipe(production(uglify()))
-    .pipe(sourcemaps.write('maps'))
+    .pipe(development(sourcemaps.write('maps')))
     .pipe(fileSizes({title: 'app.min.js', gzip: true}))
     .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('html', () => {
+gulp.task('html', () => { 
   return gulp.src('app/*.html')
     .pipe(development(replace('manifest.webmanifest', 'manifest-dev.webmanifest')))
     .pipe(development(replace('/favicons/', '/favicons-dev/')))

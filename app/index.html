@@ -87,7 +87,7 @@
         <script async defer src="https://buttons.github.io/buttons.js"></script>
 
         <!-- JS (deferred) --> 
-        <script defer src="/service-worker-registration.js"></script> 
+        <script defer src="/service-worker-registration.min.js"></script> 
         <!-- <script defer src="/upup.min.js"></script> -->
         <script defer src="/js/vendors.min.js"></script>
         <script defer src="/js/app.min.js"></script>
@@ -212,7 +212,7 @@
               <ul>
                 <li class="side-nav--animate-in" id="nearestPlacesBtn">
                   <img alt="" src="/img/pin_gray.svg"/>
-                  Próximo de mim
+                  Próximo de Mim
                 </li>
 
                 <hr>
@@ -657,7 +657,13 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
-                      <div id="nearestPlacesModalPlaceholder"></div>
+                        <div class="modal-header">
+                          <h1 class="modal-title view-name">Próximo de Mim</h1>
+                        </div>
+
+                        <!-- <div class="modal-body"> -->
+                          <div id="nearestPlacesModalPlaceholder"></div>
+                        <!-- </div> -->
                     </div> 
                 </div>
             </div>

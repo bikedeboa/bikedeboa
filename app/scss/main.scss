@@ -2518,9 +2518,9 @@ body.modal-open {
 .infoBox {
   $cardHeight: 75px;
 
+  // width: 100vw;
   height: $cardHeight;
-  width: 100vw; //@todo fixme
-
+  cursor: pointer;
   display: flex;
   position: relative;
   background: white;
@@ -2594,6 +2594,19 @@ body.modal-open {
     font-family: $bodyFont;
     font-weight: 700;
     text-transform: uppercase;
+  }
+
+  .infobox--distance,
+  .infobox--caret {
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 10px);
+    font-size: 20px;
+    color: $gray;
+  }
+
+  .infobox--distance {
+    font-size: 12px;
   }
 
   .infobox--arrow,
@@ -3046,6 +3059,8 @@ body.modal-open {
 
   .infoBox,
   .infobox {
+    width: 100vw;
+
     .infobox--content {
       margin-right: 50px;
     }
@@ -3065,19 +3080,8 @@ body.modal-open {
       text-shadow: 1px -2px 3px rgba(0,0,0,.15);
     }
 
-    .infobox--distance,
     .infobox--caret {
       display: block;
-
-      position: absolute;
-      right: 20px;
-      top: calc(50% - 10px);
-      font-size: 20px;
-      color: $gray;
-    }
-
-    .infobox--distance {
-      font-size: 12px;
     }
   }
 
@@ -3478,14 +3482,14 @@ body.modal-open {
         content: 'menu';
         font-size: 9px;
         position: absolute;
-        bottom: 4px;
+        bottom: 5px;
         left: 12px;
         text-transform: uppercase;
         font-weight: bold;
       }
 
       .glyphicon-menu-hamburger {
-        top: -2px;
+        top: -4px;
       }
     }
 }
