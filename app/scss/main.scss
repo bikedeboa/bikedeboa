@@ -306,10 +306,9 @@ p {
 }
 
 .social-link {
-  opacity: 0.5;
+  opacity: 0.7;
   transition: opacity 0.2s ease;
   border: 0;
-  margin: 0 10px;
 
   &:hover,
   &:focus {
@@ -319,8 +318,8 @@ p {
   }
 
   img {
-    width: 25px;
-    height: 25px;
+    width: 18px;
+    height: 18px;
   }
 }
 
@@ -609,10 +608,23 @@ a,
   $leading: 18px;
 
   #about-social-buttons {
-    text-align: center;
+    display: flex !important;
+    justify-content: space-around;
   }
 
-  img {
+  .social-link {
+    color: #333;
+    font-size: 18px;
+    text-align: center;
+
+    img {
+      width: 28px;
+      height: 28px;
+      vertical-align: bottom;
+    }
+  }
+
+  .illustration {
     width: 60px; 
     height: auto;
     margin: $leading auto $leading*2;
@@ -2764,7 +2776,7 @@ body.modal-open {
   #aboutModal {
     $leading: 16px;
 
-    img {
+    .illustation {
       margin: $leading auto $leading*2;
     }
 
@@ -2979,15 +2991,6 @@ body.modal-open {
       .glyphicon.glyphicon-chevron-left {
         display: none;
       }
-    }
-  }
-
-  .social-link {
-    opacity: 0.7;
-
-    img {
-      width: 18px;
-      height: 18px;
     }
   }
 
