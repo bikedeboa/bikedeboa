@@ -3566,7 +3566,7 @@ body.modal-open {
 .side-nav__footer {
     padding: $GRID_SPACE;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     // background-color: $lightestGray;
 }
 
