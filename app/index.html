@@ -166,7 +166,7 @@
 
         <div id="top-mobile-bar">
           <button class="back-button"></button>
-          <h1 class="top-mobile-bar-title"></h1>
+          <h1 id="top-mobile-bar-title"></h1>
         </div>
 
         <div id="bottom-mobile-bar">
@@ -252,7 +252,7 @@
             <header class="side-nav__header">
               <h2>Filtrar Bicicletários</h2>
 
-              <div class="side-nav--animate-in setting-checkbox-container">
+              <div class="setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
                   <label for="show-bike-layer">
                     Mostrar ciclovias e ciclofaixas
@@ -263,9 +263,9 @@
 
             <div class="side-nav__content">
 
-              <h3 class="side-nav--animate-in">Avaliações</h3>
+              <h3>Avaliações</h3>
 
-              <ul class="side-nav--animate-in">
+              <ul>
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
                     <label for="filter_rating_good"><img alt="" src="/img/pin_green.png"/> Excelentes</label>
@@ -286,9 +286,9 @@
 
               <hr>
 
-              <h3 class="side-nav--animate-in">Acesso</h3>
+              <h3>Acesso</h3>
 
-              <ul class="side-nav--animate-in">
+              <ul>
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
                     <label for="filter_public">Públicos</label>
@@ -301,9 +301,9 @@
 
               <hr>
 
-              <h3 class="side-nav--animate-in">Tipos de Bicicletário</h3>
+              <h3>Tipos de Bicicletário</h3>
 
-              <ul class="side-nav--animate-in">
+              <ul>
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
                     <label for="filter_structure_deroda">De roda</label>
@@ -355,7 +355,7 @@
                         <div class="modal-body">
                             <article>
                               <!-- <p>
-                                <img alt="" src="/img/icon_public.svg"/>
+                                <img class="illustration" alt="" src="/img/icon_public.svg"/>
                               </p> -->
 
                               <p class="subtitle">
@@ -389,10 +389,20 @@
 
                               <br>
 
-                              <p id="about-social-buttons">
+                              <div id="about-social-buttons">
                                 <!-- Facebook like and share buttons -->
-                                <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbikedeboaapp%2F&width=280&layout=standard&action=like&size=small&show_faces=true&share=true&height=80&appId=1814653185457307" width="280" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-                              </p>
+                                <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbikedeboaapp%2F&width=280&layout=standard&action=like&size=small&show_faces=true&share=true&height=80&appId=1814653185457307" width="280" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
+
+                                <a id="facebook-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                                  <img alt="Facebook" src="/img/facebook_logo.svg"/> Facebook
+                                </a>
+                                <a id="instagram-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                                  <img alt="Instagram" src="/img/instagram_logo.svg"/> Instagram
+                                </a>
+                                <a id="github-social-link" class="social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                                  <img alt="GitHub" src="/img/github_logo.svg"/> Github
+                                </a>
+                              </div>
                             </article>
                         </div>
                     </div>
@@ -736,11 +746,11 @@
                                   </textarea>
                               </div>
                             </section>
-                        </div>
 
-                        <div class="modal-footer" style="padding: 0 0 15px; text-align: center;">
-                              <button id="saveNewPlaceBtn" class="btn border btn-footer btn-action green">SALVAR</button>
-                              <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button>
+                            <div style="padding: 0 0 16px; text-align: center;">
+                                <button id="saveNewPlaceBtn" class="btn border btn-footer btn-action green">SALVAR</button>
+                                <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button>
+                            </div>
                         </div>
                     </div>
                 </div>

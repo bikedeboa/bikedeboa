@@ -22,10 +22,12 @@ function getSimulatedDelay () {
 
 const N_MOCK_PICS = 14;
 
-const MARKER_W = 20;
-const MARKER_H = 24;
-const MARKER_W_MINI = 10;
-const MARKER_H_MINI = 12;
+const MARKER_W = 20*1.3;
+const MARKER_H = 24*1.3;
+const MARKER_W_MINI = 10*1.3;
+const MARKER_H_MINI = 12*1.3;
+const CURRENT_LOCATION_MARKER_W = 20;
+const CURRENT_LOCATION_MARKER_H = 20; 
 const MARKER_ICON_GREEN = '/img/pin_green.svg';
 const MARKER_ICON_YELLOW = '/img/pin_yellow.svg';
 const MARKER_ICON_RED = '/img/pin_red.svg';

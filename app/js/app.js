@@ -251,7 +251,7 @@ $(() => {
       });
     } else { 
       // Just fade new detailed content in
-      $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer, #placeDetailsModal .address').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -719,17 +719,18 @@ $(() => {
               }));
 
               // Info window
-              if (m.photo) {
-                m.photo = m.photo.replace('images', 'images/thumbs');
+              let thumbUrl = '';
+              if (m.photo) { 
+                thumbUrl = m.photo.replace('images', 'images/thumbs');
               }
               let templateData = {
-                thumbnailUrl: m.photo,
+                thumbnailUrl: thumbUrl,
                 title: m.text,
                 average: m.average,
                 roundedAverage: m.average && ('' + Math.round(m.average)),
                 pinColor: getPinColorFromAverage(m.average)
               };
-
+ 
               // @todo: encapsulate both the next 2 in one method
               // Reviews count
               if (m.reviews === 0) {
@@ -1535,8 +1536,8 @@ $(() => {
 
           swal({ 
             title: 'Valeu!',
-            html: `Tua avaliação é muito importante. Juntos construímos a cidade que queremos ter.`,
-            type: 'success', 
+            html: `Tua avaliação é muito importante! Juntos construímos a cidade que queremos.`,
+            type: 'success',
             onOpen: () => {
               startConfettis();
             },
@@ -1612,7 +1613,7 @@ $(() => {
     text = text || '';
 
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar h1').text(openedMarker ? '' : text);
+    $('#top-mobile-bar-title').text(openedMarker ? '' : text);
 
     // Basic website metatags
     if (!text || text.length == 0) {
@@ -1999,11 +2000,9 @@ $(() => {
     return match;
   }
 
-  function setupGoogleMaps() {
+  function setupGoogleMaps(wasDeeplink) {
     let initialCenter;
-    if (_isDeeplink && _deeplinkMarker) {
-      _isDeeplink = false;
-
+    if (wasDeeplink && _deeplinkMarker) {
       initialCenter = {
         lat: parseFloat(_deeplinkMarker.lat),
         lng: parseFloat(_deeplinkMarker.lng)
@@ -2017,7 +2016,7 @@ $(() => {
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialCenter,
-      zoom: _isDeeplink ? 18 : 15,
+      zoom: wasDeeplink ? 18 : 15,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -2096,9 +2095,9 @@ $(() => {
       clickable: false,
       icon: {
         url: '/img/current_position.svg', // url
-        scaledSize: new google.maps.Size(16, 16), // scaled size
+        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(8, 8), // anchor
+        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W/2, CURRENT_LOCATION_MARKER_H/2), // anchor
       }
     });
 
@@ -2181,13 +2180,16 @@ $(() => {
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
       if (state.title === 'bike de boa') {
-        // If map wasn't initialized before (custom routing case)
         if (!map && !_isOffline) {
+          setupGoogleMaps();
+          updateMarkers();
+        }
+
+        if (_isDeeplink) {
           // $('#map').removeClass('mock-map');
           // $('#logo').removeClass('clickable');
           $('body').removeClass('deeplink');
-          setupGoogleMaps();
-          updateMarkers();
+          _isDeeplink = false;
         }
 
         hideAllModals();
@@ -2203,9 +2205,10 @@ $(() => {
       if (isMatch) {
         _isDeeplink = true;
 
-        // $('#logo').addClass('clickable');
+        // $('#logo').addClass('clickable'); 
         // $('#map').addClass('mock-map');
-        $('body').addClass('deeplink');
+        $('body').addClass('deeplink'); 
+        $('#top-mobile-bar-title').text('bike de boa');
 
         // Center the map on pin's position
         if (map && _deeplinkMarker) {
