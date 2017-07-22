@@ -3426,6 +3426,23 @@ body.modal-open {
     &:hover {
         background: $darkerGreen;
     }
+
+    // Not on Mobile
+    @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
+      &:after {
+        content: 'menu';
+        font-size: 9px;
+        position: absolute;
+        bottom: 4px;
+        left: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      .glyphicon-menu-hamburger {
+        top: -2px;
+      }
+    }
 }
 
 .side-nav {
