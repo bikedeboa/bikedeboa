@@ -102,6 +102,21 @@
 
     <body> 
         <div id="map"></div>
+        <div id="list-view"></div>
+        
+        <div id="bottom-navbar">
+          <ul>
+            <li id="nearbyTabBtn">
+              <img alt="" src="/img/icon_nearby.svg"/>
+              <span>Próximo de mim</span>
+            </li>
+            
+            <li id="mapTabBtn">
+              <img alt="" src="/img/icon_map.svg"/>
+              <span>Mapa</span>
+            </li>
+          </ul>
+        </div>
         
         <h1 id="logo"> bike de boa </h1>
 
@@ -230,7 +245,6 @@
                   <span class="glyphicon glyphicon-time"></span>
                   Mais Recentes
                 </li> -->
-
 
                 <hr>
 
@@ -674,6 +688,10 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title view-name"></h1>
+                        </div>
+
                         <div id="nearestPlacesModalPlaceholder"></div>
                     </div> 
                 </div>
@@ -1085,11 +1103,7 @@
 
         <!-- Nearest Pins Modal -->
         <script id="nearestPlacesModalTemplate" type="text/x-handlebars-template">
-          <div class="modal-header">
-            <h1 class="modal-title view-name">{{title}}</h1>
-          </div>
-
-          <div class="infobox-list">
+          <div class="infobox-list"> 
             {{#each places}}
               <div class="infobox" data-id="{{id}}">
                 <span class="infobox--distance">{{distance}}</span>

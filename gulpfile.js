@@ -71,20 +71,6 @@ gulp.task('scripts', () => {
     }))
     .pipe(gulp.dest('dist/'));
 
-  gulp.src('app/js/lib/*.js')
-    .pipe(development(sourcemaps.init()))
-    .pipe(plumber())
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(rename({
-      suffix: ".min"
-    }))
-    .pipe(production(uglify()))
-    .pipe(development(sourcemaps.write('maps')))
-    .pipe(fileSizes({gzip: true}))
-    .pipe(gulp.dest('dist/js/lib'));
-
   return gulp.src('app/js/*.js')
     .pipe(development(sourcemaps.init()))
     .pipe(plumber())
@@ -98,6 +84,22 @@ gulp.task('scripts', () => {
     .pipe(fileSizes({title: 'app.min.js', gzip: true}))
     .pipe(gulp.dest('dist/js'));
 });
+
+gulp.task('libs', () => {
+  return gulp.src('app/js/lib/*.js')
+    .pipe(development(sourcemaps.init()))
+    .pipe(plumber())
+    .pipe(babel({
+      presets: ['es2015']
+    }))
+    .pipe(rename({
+      suffix: ".min"
+    }))
+    .pipe(production(uglify()))
+    .pipe(development(sourcemaps.write('maps')))
+    .pipe(fileSizes({gzip: true}))
+    .pipe(gulp.dest('dist/js/lib'));
+})
 
 gulp.task('html', () => { 
   return gulp.src('app/*.html')
@@ -210,7 +212,7 @@ gulp.task('server', () => {
 gulp.task('clean', del.bind(null, ['dist']));
  
 gulp.task('build', () => {
-  runSequence(['clean'], ['bower', 'bower-fonts', 'html', 'sass', 'scripts'], ['generate-service-worker'], () => {
+  runSequence(['clean'], ['bower', 'bower-fonts', 'html', 'sass', 'scripts', 'libs'], ['generate-service-worker'], () => {
     return gulp.src('dist/**/*').pipe(fileSizes({title: 'total output', gzip: true}));
   });
 });

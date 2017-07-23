@@ -58,6 +58,8 @@ $MOBILE_NAVBAR_HEIGHT: 50px;
 $MOBILE_BOTTOMBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
+$BOTTOM_NAV_HEIGHT: 48px;
+
 $GRID_SPACE: 12px;
 
 
@@ -406,11 +408,23 @@ body.deeplink {
     }
 }
 
+#list-view,
 #map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
     width: 100vw;
     // height: 100vh;
     height: 100%;
     /*margin-top: 50px;*/
+}
+
+#list-view,
+#bottom-navbar {
+    display: none;
 }
 
 // iOS Fix
@@ -1120,6 +1134,8 @@ body.clean-modal-open {
 }
 
 body.modal-open {
+  overflow: hidden;
+
   #close-modal-btn { 
     display: block;
     position: fixed;
@@ -2529,7 +2545,7 @@ body.modal-open {
   &:active,
   &:focus,
   &:hover { 
-    background: $paleWhite; 
+    background: $lightestGrey; 
   }
 
   .numreviews {
@@ -2762,6 +2778,68 @@ body.modal-open {
     }
   }
 
+  #list-view {
+    padding-bottom: $BOTTOM_NAV_HEIGHT;
+  }
+
+  #map {
+    // Explanation on the reason for the string interpolation:
+    //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+    height: calc(100% - #{$MODAL_BODY_MINHEIGHT_PADDING});
+  }
+
+  #bottom-navbar {
+    display: block;
+
+    position: fixed;
+    bottom: 0;
+    height: $BOTTOM_NAV_HEIGHT;
+    width: 100%;
+    background: $lightestGray;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      justify-content: space-around;
+
+      li {
+        height: $BOTTOM_NAV_HEIGHT;
+        width: 100%;
+        opacity: .5;
+        text-align: center;
+        padding: 6px 0;
+
+        transition: opacity 0.2s ease-in-out, background 0.2s ease-in-out;
+   
+        img {
+          width: 20px;
+          height: 20px;
+        }
+        
+        span {
+          // display: none;
+          display: block;
+          font-size: 9px;
+          padding-top: 2px;
+        }
+
+        &.active {
+          background: white;
+          opacity: 1;
+        }
+      }
+
+    }
+  }
+
+  #bestPlacesBtn,
+  #nearestPlacesBtn,
+  #nearestPlacesBtn + hr {
+    display: none;
+  }
+
   .modal {
     &:before {
       content: ''
@@ -2933,12 +3011,12 @@ body.modal-open {
   }
 
   #top-mobile-bar {
-    border: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    border: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     z-index: 1052; //under sweetalert dialogs
     opacity: 0;
     pointer-events: none;
@@ -2988,7 +3066,7 @@ body.modal-open {
   }
 
   #bottom-mobile-bar {
-      position: absolute;
+      position: fixed;
       bottom: 0;
       left: 0;
       right: 0;

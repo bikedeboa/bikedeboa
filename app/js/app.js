@@ -304,20 +304,91 @@ $(() => {
     }
   }
 
-  function geolocate(toCenter = true, callback, quiet = false) {
+  function initMapsGeolocation() {
+    _geolocationMarker = new google.maps.Marker({
+      map: map,
+      clickable: false,
+      icon: {
+        url: '/img/current_position.svg', // url
+        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W/2, CURRENT_LOCATION_MARKER_H/2), // anchor
+      },
+      position: _userCurrentPosition
+    });
+
+    _geolocationRadius = new google.maps.Circle({
+      map: map,
+      clickable: false,
+      fillColor: '#705EC7',
+      fillOpacity: '0.2',
+      strokeColor: 'transparent',
+      strokeOpacity: '0',
+      position: _userCurrentPosition
+    });
+
+    _geolocationRadius.setVisible(true);
+    if (markers && markers.length) {
+      _geolocationMarker.setZIndex(markers.length);
+    }
+
+    // Test if user located is inside our bounds
+    if (_mapBounds.contains(_userCurrentPosition)) {
+      map.panTo(_userCurrentPosition);
+      
+      // Minimum map zoom
+      if (map.getZoom() < 17) {
+        map.setZoom(17);
+      }
+    } else {  
+      ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
+
+      swal({ 
+        customClass: 'coverage-notice-modal',
+        confirmButtonText: 'Continuar usando',
+        title: 'Oi! Só uma coisinha',
+        html:
+          `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
+          <br>
+          <div class="panel-group" aria-controls="coverage-notice-read-more">
+            <div class="panel">
+              <div class="panel-heading">
+                <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
+                  <h4 class="panel-title">
+                    Leia mais 
+                  </h4>
+                </a>
+              </div>
+              <div id="coverage-notice-read-more" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <p>
+                    Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
+                  </p>
+                  <p>
+                    Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>`,
+        type: 'info'
+      });
+    }
+  }
+
+  function geolocate(callback, quiet = false) {
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
         if (map) {
-          const markerPos = _geolocationMarker.getPosition();
-          const pos = {
-            lat: markerPos.lat(),
-            lng: markerPos.lng()
-          };
+          // Geolocation might've been initalized without google maps
+          if (!_geolocationMarker) {
+            initMapsGeolocation();
+          }
 
-          map.panTo(pos);
+          map.panTo(_userCurrentPosition);
           
-          // Set minimum map zoom
+          // Minimum map zoom
           if (map.getZoom() < 17) {
             map.setZoom(17);
           }
@@ -338,7 +409,7 @@ $(() => {
               updateGeoPosition(position);
 
               _geolocationInitialized = true;
-              
+               
               $('#geolocationBtn').addClass('active');
               
               if (_positionWatcher) {
@@ -347,64 +418,7 @@ $(() => {
               _positionWatcher = navigator.geolocation.watchPosition(updateGeoPosition, null, options);
 
               if (map) {
-                _geolocationRadius.setVisible(true);
-                if (markers && markers.length) {
-                  _geolocationMarker.setZIndex(markers.length);
-                }
-
-                if (toCenter) {
-                  const pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  };
- 
-                  // Test if user located is inside our bounds
-                  if (_mapBounds.contains(pos)) {
-                    map.panTo(pos);
-                    
-                    // Set minimum map zoom
-                    if (map.getZoom() < 17) {
-                      map.setZoom(17);
-                    }
-                  } else {  
-                    ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
-          
-                    swal({ 
-                      customClass: 'coverage-notice-modal',
-                      confirmButtonText: 'Continuar usando',
-                      title: 'Oi! Só uma coisinha',
-                      html:
-                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
-                        <br>
-                        <div class="panel-group" aria-controls="coverage-notice-read-more">
-                          <div class="panel">
-                            <div class="panel-heading">
-                              <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
-                                <h4 class="panel-title">
-                                  Leia mais 
-                                </h4>
-                              </a>
-                            </div>
-                            <div id="coverage-notice-read-more" class="panel-collapse collapse">
-                              <div class="panel-body">
-                                <p>
-                                  Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
-                                </p>
-                                <p>
-                                  Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>`,
-                      type: 'info'
-                    });
-                  }
-                }
-              }
-
-              if (callback && typeof callback === 'function') {
-                callback();
+                initMapsGeolocation();
               }
             },
             error => {
@@ -421,7 +435,7 @@ $(() => {
                   } else {
                     swal('Ops', 'Sua localização está desabilitada, ou seu navegador parece não suportar essa função.', 'warning');
                   }
-                  break;
+                  break; 
                 case 2:
                   // POSITION_UNAVAILABLE
                   swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
@@ -447,7 +461,9 @@ $(() => {
         );
       }
 
-
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
     }
   }
 
@@ -471,7 +487,7 @@ $(() => {
     controlUI.addEventListener('click', () => {
       ga('send', 'event', 'Geolocation', 'geolocate button click');
       showSpinner();
-      geolocate(true, () => {
+      geolocate(() => {
         hideSpinner();
       });
     });
@@ -817,7 +833,7 @@ $(() => {
       }
     }
 
-    if (map) {
+    if (_geolocationMarker) {
       _geolocationMarker.setZIndex(markers.length);
     } 
   }
@@ -1066,7 +1082,7 @@ $(() => {
       ga('send', 'event', 'Local', 'create');
       Database.sendPlace(place, callback);
     }
-  }
+  } 
 
   function setupAutocomplete() {
     const inputElem = document.getElementById('locationQueryInput');
@@ -1321,7 +1337,7 @@ $(() => {
           lng: parseFloat(openedMarker.lng)
         });
 
-        // Set minimum map zoom
+        // Minimum map zoom
         if (map.getZoom() < 19) {
           map.setZoom(19);
         }
@@ -1912,6 +1928,49 @@ $(() => {
       toggleClearLocationBtn('hide');
       _searchResultMarker.setVisible(false);
     }));
+
+    if (_isMobile) {
+      $('#nearbyTabBtn').on('click', queueUiCallback.bind(this, () => {
+        $('#bottom-navbar li').removeClass('active');
+        $('#nearbyTabBtn').addClass('active');
+
+        switchToList();
+      }));
+
+      $('#mapTabBtn').on('click', queueUiCallback.bind(this, () => {
+        $('#bottom-navbar li').removeClass('active');
+        $('#mapTabBtn').addClass('active');
+
+        switchToMap();
+      }));
+    }
+  }
+
+  function switchToList() {
+    hideUI();
+    $('#map').hide();
+
+    openNearestPlacesModal();
+  }
+
+  function switchToMap() {
+    function onReady() {
+      $('#list-view').hide();
+      $('#map').show();
+      showUI();
+      // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+      // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+      // $('#map').css('filter', 'none');
+    }
+
+    if (!map && !_isOffline) {
+      setupGoogleMaps( () => {
+        onReady();
+        updateMarkers();
+      });
+    } else {
+      onReady();
+    }
   }
 
   function hideAllModals(callback, keepOpenedMarker) {
@@ -1993,7 +2052,7 @@ $(() => {
     })
   }
 
-  function openNearestPlacesModal(order) {
+  function openNearestPlacesModal(order = 'maisproximos') {
     const MAX_PLACES = 100;
 
     let markersToShow;
@@ -2001,7 +2060,7 @@ $(() => {
       case 'maisproximos':
         if (!_userCurrentPosition) {
           showSpinner();
-          geolocate(true, () => {
+          geolocate(() => {
             hideSpinner();
             openNearestPlacesModal(order);
           });
@@ -2091,12 +2150,14 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    if (_isDeeplink) {
-      $('#map').html(templates.nearestPlacesModalTemplate({
+    if (_isMobile) {
+      $('#list-view').html(templates.nearestPlacesModalTemplate({
         title: order,
         places: cards
       }));
       $('body').addClass('overflow');
+
+      $('#list-view').show();
     } else {
       $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({
         title: order,
@@ -2116,7 +2177,24 @@ $(() => {
     let match;
 
     switch (urlBreakdown[1]) {
-      // case '':
+      case '':
+        // @todo TEMP TEMP TEMP
+        // if (!map && !_isOffline) {
+        //   setupGoogleMaps( () => {
+        //     updateMarkers();
+        //   });
+        // }
+
+        // if (_isDeeplink) {
+        //   // $('#map').removeClass('mock-map');
+        //   // $('#logo').removeClass('clickable');
+        //   $('body').removeClass('deeplink'); 
+        //   _isDeeplink = false;
+        // }
+
+        hideAllModals();
+
+        break;
       case 'maisproximos':
       case 'recentes':
       case 'melhores':
@@ -2258,36 +2336,10 @@ $(() => {
       map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btnDiv);
     }
 
-    _geolocationMarker = new google.maps.Marker({
-      map: map,
-      clickable: false,
-      icon: {
-        url: '/img/current_position.svg', // url
-        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
-        origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W/2, CURRENT_LOCATION_MARKER_H/2), // anchor
-      }
-    });
-
-    _geolocationRadius = new google.maps.Circle({
-      map: map,
-      clickable: false,
-      fillColor: '#705EC7',
-      fillOpacity: '0.2',
-      strokeColor: 'transparent',
-      strokeOpacity: '0'
-    });
-
     if (callback && typeof callback === 'function') {
       callback();
       callback = null;
     }
-
-    // All set up, enable UI.
-    showUI();
-    // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-    // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-    // $('#map').css('filter', 'none');
   }
 
   function initRouting() {
@@ -2327,16 +2379,12 @@ $(() => {
     // @todo detect better if we're offline
     // if (window.google) {
       // On Mobile we defer the initialization of the map if we're in deeplink
-      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-        setupGoogleMaps(); 
-      }
+      // if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+      //   setupGoogleMaps(); 
+      // }
     // } else {
     //   setOfflineMode();
     // } 
-
-    // @todo TEMP TEMP TEMP
-    // setView('Mais Próximos', '/maisproximos', true);
-    // setupGoogleMaps();
 
     const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
     isMobileListener.addListener((isMobileListener) => {
@@ -2379,31 +2427,19 @@ $(() => {
     // Bind trigger to history changes
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
-      
-      // if it's home
-      if (state.title === 'bike de boa') {
-        if (!map && !_isOffline) {
-          setupGoogleMaps( () => {
-            updateMarkers();
-          });
-        }
-
-        if (_isDeeplink) {
-          // $('#map').removeClass('mock-map');
-          // $('#logo').removeClass('clickable');
-          $('body').removeClass('deeplink');
-          _isDeeplink = false;
-        }
-
-        hideAllModals(); 
-      } else {
-        handleRouting();
-      }
+      handleRouting();
     });
 
     // Initialize router
     _onDataReadyCallback = () => {
       initRouting();
+
+      if (_isMobile) {
+        $('#nearbyTabBtn').addClass('active');
+        switchToList();
+      } else {
+        switchToMap();
+      }
     };
 
     // Set up Sweet Alert
