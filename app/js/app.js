@@ -296,7 +296,7 @@ $(() => {
       lng: newPos.coords.longitude
     };
     
-    if (map) {
+    if (map && _geolocationMarker) {
       _geolocationRadius.setRadius(newPos.coords.accuracy);
       _geolocationRadius.setCenter(_userCurrentPosition);
       
@@ -387,14 +387,18 @@ $(() => {
           }
 
           map.panTo(_userCurrentPosition);
-          
+           
           // Minimum map zoom
           if (map.getZoom() < 17) {
             map.setZoom(17);
           }
         }
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
       } else {
-        const options = {
+        const geoOptions = {
           enableHighAccuracy: true,
           timeout: 5000,
           maximumAge: 0
@@ -402,27 +406,24 @@ $(() => {
 
         navigator.geolocation.getCurrentPosition(
             position => {
-              console.debug(position);
-
               ga('send', 'event', 'Geolocation', 'init', `${position.coords.latitude},${position.coords.longitude}`);
 
               updateGeoPosition(position);
+               
+              if (map) {
+                initMapsGeolocation();
+              }
 
               _geolocationInitialized = true;
-               
               $('#geolocationBtn').addClass('active');
               
               if (_positionWatcher) {
                 navigator.geolocation.clearWatch(_positionWatcher);
               }
-              _positionWatcher = navigator.geolocation.watchPosition(updateGeoPosition, null, options);
-
-              if (map) {
-                initMapsGeolocation();
-              }
-
+              _positionWatcher = navigator.geolocation.watchPosition(updateGeoPosition, null, geoOptions);
+ 
               if (callback && typeof callback === 'function') {
-                callback();
+                callback(); 
               }
             },
             error => {
@@ -461,7 +462,7 @@ $(() => {
                 callback();
               }
             },
-            options
+            geoOptions
         );
       }
     }
@@ -1157,7 +1158,7 @@ $(() => {
         let height = img.height;
         if (width > height) {
           if (width > PHOTO_UPLOAD_MAX_W) {
-            height *= PHOTO_UPLOAD_MAX_W / width;
+            height *= PHOTO_UPLOAD_MAX_W / width; 
             width = PHOTO_UPLOAD_MAX_W;
           }
         } else {
@@ -2293,7 +2294,7 @@ $(() => {
       pane: 'floatPane',
       enableEventPropagation: false,
     };
-    _infoWindow = new InfoBox(myOptions);
+    _infoWindow = new InfoBox(myOptions); 
     
     // Override with custom transition
     // const oldDraw = _infoWindow.draw; 
@@ -2335,6 +2336,13 @@ $(() => {
     if (navigator.geolocation) {
       let btnDiv = new geolocationBtn(map);
       map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btnDiv);
+
+      if (_geolocationInitialized) {
+        // Geolocation might've been initalized without google maps
+        if (!_geolocationMarker) {
+          initMapsGeolocation();
+        }
+      }
     }
 
     if (callback && typeof callback === 'function') {
