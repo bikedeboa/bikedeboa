@@ -304,7 +304,7 @@ $(() => {
     }
   }
 
-  function _geolocate(toCenter, callback, quiet = false) {
+  function geolocate(toCenter = true, callback, quiet = false) {
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
@@ -323,10 +323,6 @@ $(() => {
           }
         }
       } else {
-        if (!quiet) {
-          showSpinner();
-        }
-
         const options = {
           enableHighAccuracy: true,
           timeout: 5000,
@@ -474,7 +470,8 @@ $(() => {
     // Setup the click event listeners
     controlUI.addEventListener('click', () => {
       ga('send', 'event', 'Geolocation', 'geolocate button click');
-      _geolocate(true, () => {
+      showSpinner();
+      geolocate(true, () => {
         hideSpinner();
       });
     });
@@ -1743,6 +1740,20 @@ $(() => {
       setView('Mais Próximos', '/maisproximos', true);
     }));
 
+    $('#latestPlacesBtn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      // ga('send', 'event', 'Misc', 'about opened');
+      // setView('Sobre', '/sobre', true);
+      setView('Mais Recentes', '/recentes', true);
+    }));
+
+    $('#bestPlacesBtn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      // ga('send', 'event', 'Misc', 'about opened');
+      // setView('Sobre', '/sobre', true);
+      setView('Mais Bem Avaliados', '/melhores', true);
+    }));
+
     $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
@@ -1982,27 +1993,47 @@ $(() => {
     })
   }
 
-  function openNearestPlacesModal() {
+  function openNearestPlacesModal(order) {
     const MAX_PLACES = 100;
 
     let markersToShow;
-    if (_userCurrentPosition) {
-      // Use nearest places
-      for(let i=0; i < markers.length; i++) {
-          const m = markers[i];
+    switch (order) {
+      case 'maisproximos':
+        if (!_userCurrentPosition) {
+          showSpinner();
+          geolocate(true, () => {
+            hideSpinner();
+            openNearestPlacesModal(order);
+          });
+          return;
+        }
 
-          m.distance = distanceInKmBetweenEarthCoordinates(
-            _userCurrentPosition.lat,
-            _userCurrentPosition.lng,
-            m.lat,
-            m.lng);
-      }
-      markersToShow = markers.sort((a, b) => {return a.distance - b.distance;});
-      markersToShow = markersToShow.slice(0, MAX_PLACES);
-    } else {
-      // Best rated places
-      markersToShow = markers.sort((a, b) => {return b.average - a.average;});
-      markersToShow = markersToShow.slice(0, MAX_PLACES);
+        // Use nearest places
+        for(let i=0; i < markers.length; i++) {
+            const m = markers[i];
+
+            m.distance = distanceInKmBetweenEarthCoordinates(
+              _userCurrentPosition.lat,
+              _userCurrentPosition.lng,
+              m.lat,
+              m.lng);
+        }
+        markersToShow = markers.sort((a, b) => {return a.distance - b.distance;});
+        markersToShow = markersToShow.slice(0, MAX_PLACES);
+        break;
+      case 'recentes':
+        // Most recently updated places
+        // @todo bring this info from getAll endpoint
+        markersToShow = markers.sort((a, b) => {return b.updatedAt - a.updatedAt;});
+        markersToShow = markersToShow.slice(0, MAX_PLACES);
+        break;
+      case 'melhores':
+        // Best rated places
+        markersToShow = markers.sort((a, b) => {
+          return (b.average*1000 + b.reviews*1) - (a.average*1000 + a.reviews*1);
+        });
+        markersToShow = markersToShow.slice(0, MAX_PLACES);
+        break;
     }
 
     // Fill up card info
@@ -2019,8 +2050,8 @@ $(() => {
           pinColor: getPinColorFromAverage(m.average) 
         };
 
-        // Distance either in km or m
-        if (m.distance) {
+        // Show distance to place
+        if (order === 'maisproximos' && m.distance) {
           if (m.distance < 1) {
             templateData.distance = Math.round(m.distance*1000);
             templateData.distance += 'm';
@@ -2061,10 +2092,16 @@ $(() => {
     // Render handlebars template //
     ////////////////////////////////
     if (_isDeeplink) {
-      $('#map').html(templates.nearestPlacesModalTemplate({places: cards}));
+      $('#map').html(templates.nearestPlacesModalTemplate({
+        title: order,
+        places: cards
+      }));
       $('body').addClass('overflow');
     } else {
-      $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({places: cards}));
+      $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({
+        title: order,
+        places: cards
+      }));
       $('#nearestPlacesModal').modal('show');
     }
 
@@ -2081,9 +2118,11 @@ $(() => {
     switch (urlBreakdown[1]) {
       // case '':
       case 'maisproximos':
-        hideAllModals(() => {
-          openNearestPlacesModal();
-        });
+      case 'recentes':
+      case 'melhores':
+        // hideAllModals(() => {
+          openNearestPlacesModal(urlBreakdown[1]);
+        // });
         break;
       case 'b':
         if (urlBreakdown[2]) {
@@ -2321,7 +2360,7 @@ $(() => {
         .then( permission => {
           if (permission.state === 'granted') {
             ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            _geolocate(true, null, true); 
+            geolocate(true, null, true); 
           }
         }
       );

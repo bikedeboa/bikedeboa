@@ -89,12 +89,12 @@
         <!-- JS --> 
         <script src="/service-worker-registration.min.js"></script> 
         <script src="/js/lib/jquery.js"></script> 
-        <script defer async src="/js/lib/bootstrap.js"></script>
-        <script defer async src="/js/lib/handlebars.js"></script>
-        <script defer async src="/js/lib/js.cookie.js"></script>
-        <script defer async src="/js/lib/native.history.js"></script>
-        <script defer async src="/js/lib/sweetalert2.js"></script>
-        <script defer async src="/js/lib/toastr.js"></script>
+        <script defer src="/js/lib/bootstrap.js"></script>
+        <script defer src="/js/lib/handlebars.js"></script>
+        <script defer src="/js/lib/js.cookie.js"></script>
+        <script defer src="/js/lib/native.history.js"></script>
+        <script defer src="/js/lib/sweetalert2.js"></script>
+        <script defer src="/js/lib/toastr.js"></script>
         <script defer src="/js/lib/velocity.js"></script> 
         <script defer src="/js/lib/velocity.ui.js"></script>
         <script defer src="/js/app.min.js"></script>
@@ -217,10 +217,20 @@
 
             <div class="side-nav__content">
               <ul>
+                <li class="side-nav--animate-in" id="bestPlacesBtn">
+                  <span class="glyphicon glyphicon-star-empty"></span>
+                  Mais Bem Avaliados
+                </li>
+                
                 <li class="side-nav--animate-in" id="nearestPlacesBtn">
-                  <img alt="" src="/img/pin_gray.svg"/>
+                  <img alt="" src="/img/icon_nearby.svg"/>
                   Próximo de Mim
                 </li>
+                <!-- <li class="side-nav--animate-in" id="latestPlacesBtn">
+                  <span class="glyphicon glyphicon-time"></span>
+                  Mais Recentes
+                </li> -->
+
 
                 <hr>
 
@@ -664,13 +674,7 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title view-name">Próximo de Mim</h1>
-                        </div>
-
-                        <!-- <div class="modal-body"> -->
-                          <div id="nearestPlacesModalPlaceholder"></div>
-                        <!-- </div> -->
+                        <div id="nearestPlacesModalPlaceholder"></div>
                     </div> 
                 </div>
             </div>
@@ -1081,6 +1085,10 @@
 
         <!-- Nearest Pins Modal -->
         <script id="nearestPlacesModalTemplate" type="text/x-handlebars-template">
+          <div class="modal-header">
+            <h1 class="modal-title view-name">{{title}}</h1>
+          </div>
+
           <div class="infobox-list">
             {{#each places}}
               <div class="infobox" data-id="{{id}}">
