@@ -2224,9 +2224,9 @@ $(() => {
       clickable: false,
       icon: {
         url: '/img/current_position.svg', // url
-        scaledSize: new google.maps.Size(16, 16), // scaled size
+        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(8, 8), // anchor
+        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W/2, CURRENT_LOCATION_MARKER_H/2), // anchor
       }
     });
 

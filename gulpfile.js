@@ -144,13 +144,14 @@ gulp.task('bower', function() {
   // grab vendor js files from bower_components, minify and push in DEST_PATH
   .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
-  .pipe(concat('vendors.min.js'))
+  // .pipe(concat('vendors.min.js'))
+  .pipe(rename({dirname: ''}))
   .pipe(production(uglify()))
   // .pipe(rename({
   //   suffix: ".min"
   // }))
   .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
-  .pipe(gulp.dest(DEST_PATH + '/js/'))
+  .pipe(gulp.dest(DEST_PATH + '/js/lib/'))
   .pipe(jsFilter.restore)
 
   // grab vendor css files from bower_components, minify and push in DEST_PATH
