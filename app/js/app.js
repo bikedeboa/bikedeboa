@@ -420,6 +420,10 @@ $(() => {
               if (map) {
                 initMapsGeolocation();
               }
+
+              if (callback && typeof callback === 'function') {
+                callback();
+              }
             },
             error => {
               ga('send', 'event', 'Geolocation', error.message ? `fail - ${error.message}`: 'fail - no_message');
@@ -459,10 +463,6 @@ $(() => {
             },
             options
         );
-      }
-
-      if (callback && typeof callback === 'function') {
-        callback();
       }
     }
   }
@@ -1931,22 +1931,19 @@ $(() => {
 
     if (_isMobile) {
       $('#nearbyTabBtn').on('click', queueUiCallback.bind(this, () => {
-        $('#bottom-navbar li').removeClass('active');
-        $('#nearbyTabBtn').addClass('active');
-
         switchToList();
       }));
 
       $('#mapTabBtn').on('click', queueUiCallback.bind(this, () => {
-        $('#bottom-navbar li').removeClass('active');
-        $('#mapTabBtn').addClass('active');
-
         switchToMap();
       }));
     }
   }
 
   function switchToList() {
+    $('#bottom-navbar li').removeClass('active');
+    $('#nearbyTabBtn').addClass('active');
+
     hideUI();
     $('#map').hide();
 
@@ -1954,6 +1951,9 @@ $(() => {
   }
 
   function switchToMap() {
+    $('#bottom-navbar li').removeClass('active');
+    $('#mapTabBtn').addClass('active');
+
     function onReady() {
       $('#list-view').hide();
       $('#map').show();
@@ -2059,11 +2059,12 @@ $(() => {
     switch (order) {
       case 'maisproximos':
         if (!_userCurrentPosition) {
-          showSpinner();
-          geolocate(() => {
-            hideSpinner();
-            openNearestPlacesModal(order);
-          });
+          console.error('Cant open nearby places, geolocation was not yet initialized.');
+          // showSpinner();
+          // geolocate(() => {
+          //   hideSpinner();
+          //   openNearestPlacesModal(order);
+          // });
           return;
         }
 
@@ -2408,7 +2409,7 @@ $(() => {
         .then( permission => {
           if (permission.state === 'granted') {
             ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            geolocate(true, null, true); 
+            geolocate(null, true); 
           }
         }
       );
@@ -2434,7 +2435,7 @@ $(() => {
     _onDataReadyCallback = () => {
       initRouting();
 
-      if (_isMobile) {
+      if (_isMobile && _geolocationInitialized) {
         $('#nearbyTabBtn').addClass('active');
         switchToList();
       } else {
