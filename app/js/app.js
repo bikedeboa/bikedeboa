@@ -1731,6 +1731,11 @@ $(() => {
       setView('Sobre', '/sobre', true);
     }));
 
+    $('#socialLoginBtn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      hello('facebook').login({scope: 'email'});
+    })); 
+
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'how-to-install opened');
@@ -2242,11 +2247,11 @@ $(() => {
       'progressBar': false,
     }
 
+    // Sidenav (hamburger and filter menus)
     const sidenavHideCallback = () => {
       // @todo explain me
       setView('bike de boa', '/', true);
     };
-
     _hamburgerMenu = new SideNav(
       'hamburger-menu',
       {
@@ -2261,6 +2266,36 @@ $(() => {
         /*fixed: true*/
       }
     );
+
+    // Hello.js
+    hello.init({
+        facebook: FACEBOOK_CLIENT_ID,
+        // windows: WINDOWS_CLIENT_ID,
+        // google: GOOGLE_CLIENT_ID
+    });
+    hello.on('auth.login', function(auth) {
+      // Save the social token
+      _socialToken = auth.authResponse.access_token;
+
+      // Auth with our own server using the social token
+      // authenticate(auth.network, socialToken).then(function (token) {
+      //     serverToken = token;
+      // });
+
+      // Call user information, for the given network
+      hello(auth.network).api('me').then(function(r) {
+        console.log(r);
+
+        // // Inject it into the container
+        // var label = document.getElementById('profile_' + auth.network);
+        // if (!label) {
+        //   label = document.createElement('div');
+        //   label.id = 'profile_' + auth.network;
+        //   document.getElementById('profile').appendChild(label);
+        // }
+        // label.innerHTML = '<img src="' + r.thumbnail + '" /> Hey ' + r.name;
+      });
+    });
 
     initHelpTooltip('#filter-menu .help-tooltip-trigger');
 

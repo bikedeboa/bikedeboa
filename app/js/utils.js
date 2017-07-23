@@ -230,46 +230,46 @@ function copyToClipboard(elem) {
 
 // Here we run a very simple test of the Graph API after login is
 // successful.  See statusChangeCallback() for when this call is made.
-window.testAPI = () => {
-  console.log('Welcome!  Fetching your information.... ');
-  FB.api('/me', {fields: "id, first_name, picture, gender"}, function(response) {
-    console.log(response);
+// window.testAPI = () => {
+//   console.log('Welcome!  Fetching your information.... ');
+//   FB.api('/me', {fields: "id, first_name, picture, gender"}, function(response) {
+//     console.log(response);
 
-    let html = '';
-    html += `<img src="${response.picture.data.url}"/>`;
-    html += `<span>Bem-vind`;
-    if (!response.gender) {
-      html += 'e';
-    } else {
-      html += response.gender === 'male' ? 'o' : 'a';
-    }
-    html += `, ${response.first_name}.</span>`;
-    document.getElementById('login-container').innerHTML = html;
-  });
-}
+//     let html = '';
+//     html += `<img src="${response.picture.data.url}"/>`;
+//     html += `<span>Bem-vind`;
+//     if (!response.gender) {
+//       html += 'e';
+//     } else {
+//       html += response.gender === 'male' ? 'o' : 'a';
+//     }
+//     html += `, ${response.first_name}.</span>`;
+//     document.getElementById('login-container').innerHTML = html;
+//   });
+// }
 
-// This is called with the results from from FB.getLoginStatus().
-window.statusChangeCallback = response => {
-  console.log('statusChangeCallback');
-  console.log(response);
-  // The response object is returned with a status field that lets the
-  // app know the current login status of the person.
-  // Full docs on the response object can be found in the documentation
-  // for FB.getLoginStatus().
-  if (response.status === 'connected') {
-    // Logged into your app and Facebook.
-    testAPI();
-  } else {
-    // The person is not logged into your app or we are unable to tell.    
-    console.log('not logged in.');
-  }
-}
+// // This is called with the results from from FB.getLoginStatus().
+// window.statusChangeCallback = response => {
+//   console.log('statusChangeCallback');
+//   console.log(response);
+//   // The response object is returned with a status field that lets the
+//   // app know the current login status of the person.
+//   // Full docs on the response object can be found in the documentation
+//   // for FB.getLoginStatus().
+//   if (response.status === 'connected') {
+//     // Logged into your app and Facebook.
+//     testAPI();
+//   } else {
+//     // The person is not logged into your app or we are unable to tell.    
+//     console.log('not logged in.');
+//   }
+// }
 
-window.checkFBLoginState = () => {
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
-}
+// window.checkFBLoginState = () => {
+//   FB.getLoginStatus(function(response) {
+//     statusChangeCallback(response);
+//   });
+// }
 
 
 // Confettiful

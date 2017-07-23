@@ -51,6 +51,7 @@ const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CO
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+const FACEBOOK_CLIENT_ID = '1554610834551808';
 
 const MOBILE_MAX_WIDTH = '414px';
 const DESKTOP_MIN_WIDTH = '414px';
@@ -108,5 +109,6 @@ let _currentView;
 let _isDeeplink = false;
 let _deeplinkMarker;
 let _onDataReadyCallback;
+let _socialToken;
 
 let templates = {};
