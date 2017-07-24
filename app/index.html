@@ -49,7 +49,7 @@
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-            ga('create', 'UA-19085664-3', 'auto');
+            ga('create', 'UA-19085664-3', {'siteSpeedSampleRate': 100});
             ga('require', 'GTM-MCCV34X');
             ga('send', 'pageview');
           } else {
@@ -86,10 +86,17 @@
         <!-- GitHub Buttons -->
         <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-        <!-- JS (deferred) --> 
+        <!-- JS --> 
         <script defer src="/service-worker-registration.js"></script> 
-        <!-- <script defer src="/upup.min.js"></script> -->
-        <script defer src="/js/vendors.min.js"></script>
+        <script defer src="/js/lib/jquery.js"></script> 
+        <script defer src="/js/lib/bootstrap.js"></script>
+        <script defer src="/js/lib/handlebars.js"></script>
+        <script defer src="/js/lib/js.cookie.js"></script>
+        <script defer src="/js/lib/native.history.js"></script>
+        <script defer src="/js/lib/sweetalert2.js"></script>
+        <script defer src="/js/lib/toastr.js"></script> 
+        <script defer src="/js/lib/velocity.js"></script> 
+        <script defer src="/js/lib/velocity.ui.js"></script>
         <script defer src="/js/app.min.js"></script>
     </head> 
 
@@ -348,7 +355,7 @@
                         <div class="modal-body">
                             <article>
                               <!-- <p>
-                                <img alt="" src="/img/icon_public.svg"/>
+                                <img class="illustration" alt="" src="/img/icon_public.svg"/>
                               </p> -->
 
                               <p class="subtitle">
@@ -366,26 +373,36 @@
                               </p>
 
                               <p>
-                                O site já conta com quase 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, onde falou das tecnologias que usamos e sobre o design do sistema. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
+                                O site já conta com quase 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. Além disso fomos destaque em alguns eventos. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, e fomos selecionados para participar do <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura</a>, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
                               </p>
 
-                              <h2>Quem somos</h2>
+                              <h2>Quem somos</h2> 
                               <p>
-                                Somos um grupo de amigos, ciclistas urbanos e simpatizantes do ciclismo. Somos desenvolvedores, designers, arquitetos, e o que nos une é a vontade de contribuir com a cultura da bicicleta no Brasil. Alguns até já moraram no exterior, o que lhes deu uma nova visão sobre tudo o que uma cidade poderia ser. O projeto é absolutamente sem fins lucrativos, e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, entrevistando pessoas e tentando divulgar o projeto pra ter o maior alcance possível.
+                                Somos um pequeno grupo de amigos, ciclistas urbanos e simpatizantes do ciclismo. Somos desenvolvedores, designers, arquitetos, e o que nos une é a vontade de contribuir com a cultura da bicicleta no Brasil. Alguns até já moraram no exterior, o que lhes deu uma nova visão sobre tudo o que uma cidade poderia ser. O projeto é absolutamente sem fins lucrativos, e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, entrevistando pessoas e tentando divulgar o projeto pra ter o maior alcance possível.
                               </p>
 
                               <div class='medium-separator'>...</div>
 
                               <p>
-                                Achou tri? Tem ideias de como melhorar o site, ou só gostaria de participar disso de alguma maneira? Vamos conversar!
+                                Achou tri? Gostaria de participar disso com a gente? Tem algumas sugestões pra melhorar o site? Vamos conversar!
                               </p>
 
                               <br>
 
-                              <p id="about-social-buttons">
+                              <div id="about-social-buttons">
                                 <!-- Facebook like and share buttons -->
-                                <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbikedeboaapp%2F&width=280&layout=standard&action=like&size=small&show_faces=true&share=true&height=80&appId=1814653185457307" width="280" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-                              </p>
+                                <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbikedeboaapp%2F&width=280&layout=standard&action=like&size=small&show_faces=true&share=true&height=80&appId=1814653185457307" width="280" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
+
+                                <a id="facebook-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                                  <img alt="Facebook" src="/img/facebook_logo.svg"/> Facebook
+                                </a>
+                                <a id="instagram-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                                  <img alt="Instagram" src="/img/instagram_logo.svg"/> Instagram
+                                </a>
+                                <a id="github-social-link" class="social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                                  <img alt="GitHub" src="/img/github_logo.svg"/> Github
+                                </a>
+                              </div>
                             </article>
                         </div>
                     </div>

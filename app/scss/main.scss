@@ -306,10 +306,10 @@ p {
 }
 
 .social-link {
-  opacity: 0.5;
+  opacity: 0.7;
   transition: opacity 0.2s ease;
   border: 0;
-  margin: 0 10px;
+  padding: 12px;
 
   &:hover,
   &:focus {
@@ -319,8 +319,8 @@ p {
   }
 
   img {
-    width: 25px;
-    height: 25px;
+    width: 18px;
+    height: 18px;
   }
 }
 
@@ -609,10 +609,23 @@ a,
   $leading: 18px;
 
   #about-social-buttons {
-    text-align: center;
+    display: flex !important;
+    justify-content: space-around;
   }
 
-  img {
+  .social-link {
+    color: #333;
+    font-size: 18px;
+    text-align: center;
+
+    img {
+      width: 28px;
+      height: 28px;
+      vertical-align: bottom;
+    }
+  }
+
+  .illustration {
     width: 60px; 
     height: auto;
     margin: $leading auto $leading*2;
@@ -631,16 +644,16 @@ a,
   }
 
   h1 {
-    font-size: $leading*1.618*2;
+    font-size: $leading*1.5*2;
     margin-top: 1.5em;
     margin-bottom: .5em;
     letter-spacing: -0.02em;
   }
-
+ 
   h2 {
-    font-size: $leading*1.618;
+    font-size: $leading*1.5;
     margin-top: 1.5em;
-    margin-bottom: .25em;
+    margin-bottom: .5em;
     text-align: left;
     letter-spacing: -0.01em;
   }
@@ -2764,7 +2777,7 @@ body.modal-open {
   #aboutModal {
     $leading: 16px;
 
-    img {
+    .illustation {
       margin: $leading auto $leading*2;
     }
 
@@ -2979,15 +2992,6 @@ body.modal-open {
       .glyphicon.glyphicon-chevron-left {
         display: none;
       }
-    }
-  }
-
-  .social-link {
-    opacity: 0.7;
-
-    img {
-      width: 18px;
-      height: 18px;
     }
   }
 
@@ -3426,6 +3430,23 @@ body.modal-open {
     &:hover {
         background: $darkerGreen;
     }
+
+    // Not on Mobile
+    @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
+      &:after {
+        content: 'menu';
+        font-size: 9px;
+        position: absolute;
+        bottom: 4px;
+        left: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      .glyphicon-menu-hamburger {
+        top: -2px;
+      }
+    }
 }
 
 .side-nav {
@@ -3546,7 +3567,7 @@ body.modal-open {
 .side-nav__footer {
     padding: $GRID_SPACE;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     // background-color: $lightestGray;
 }
 
