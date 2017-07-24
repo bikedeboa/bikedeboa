@@ -67,8 +67,10 @@ gulp.task('scripts', () => {
   gulp.src('app/service-worker-registration.js')
     .pipe(gulp.dest('dist/'));
 
-  return gulp.src('app/js/*.js')
-    .pipe(sourcemaps.init())
+  return gulp.src('app/js/*.js') 
+    .pipe(development(sourcemaps.init()))
+    .pipe(production(replace('<DATABASE_URL>', 'https://bdb-api.herokuapp.com')))
+    .pipe(development(replace('<DATABASE_URL>', 'https://bdb-test-api.herokuapp.com')))
     .pipe(plumber())
     .pipe(concat('app.js'))
     .pipe(babel({
