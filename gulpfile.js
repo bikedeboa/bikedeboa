@@ -71,9 +71,11 @@ gulp.task('scripts', () => {
     }))
     .pipe(gulp.dest('dist/'));
 
-  return gulp.src('app/js/*.js')
+  return gulp.src('app/js/*.js') 
     .pipe(development(sourcemaps.init()))
-    .pipe(plumber())
+    .pipe(production(replace('<DATABASE_URL>', 'https://bdb-api.herokuapp.com')))
+    .pipe(development(replace('<DATABASE_URL>', 'https://bdb-test-api.herokuapp.com')))
+    .pipe(plumber()) 
     .pipe(concat('app.js'))
     .pipe(babel({
       presets: ['es2015']
