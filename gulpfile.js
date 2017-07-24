@@ -32,6 +32,8 @@ const DEST_PATH =  'dist';
 var development = environments.development;
 var production = environments.production;
 
+var DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
+
 console.log('NODE_ENV = ', process.env.NODE_ENV);
 
 
@@ -73,8 +75,7 @@ gulp.task('scripts', () => {
 
   return gulp.src('app/js/*.js') 
     .pipe(development(sourcemaps.init()))
-    .pipe(production(replace('<DATABASE_URL>', 'https://bdb-api.herokuapp.com')))
-    .pipe(development(replace('<DATABASE_URL>', 'https://bdb-test-api.herokuapp.com')))
+    .pipe(replace('<DATABASE_URL>', DATABASE_URL))
     .pipe(plumber()) 
     .pipe(concat('app.js'))
     .pipe(babel({
