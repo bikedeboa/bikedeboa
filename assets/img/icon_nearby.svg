@@ -6,20 +6,21 @@
 	 xml:space="preserve">
 <g>
 	
-		<path fill="none" stroke="#333" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		<path fill="none" stroke="#00b800" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 		M488.355,132.73c27.853-28.3,27.853-74.175,0-102.461c-27.827-28.3-72.979-28.3-100.776,0c-27.865,28.287-27.865,74.162,0,102.461
 		l50.401,51.196L488.355,132.73z"/>
 	
-		<path fill="none" stroke="#333" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		<path fill="none" stroke="#00b800" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 		M466.257,78.191c0,15.802-12.821,28.604-28.607,28.604c-15.799,0-28.602-12.803-28.602-28.604c0-15.8,12.803-28.602,28.602-28.602
 		C453.436,49.589,466.257,62.391,466.257,78.191z"/>
 	
-		<path fill="none" stroke="#333" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		<path fill="none" stroke="#00b800" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 		M511.021,148.253c33.683,12.584,55.712,33.464,55.712,57.092c0,38.448-58.319,69.615-130.261,69.615
 		s-130.261-31.167-130.261-69.615c0-24.314,23.328-45.719,58.677-58.168"/>
 	
-		<path fill="none" stroke="#333" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		<path fill="none" stroke="#00b800" stroke-width="17.9984" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 		M481.918,179.831c12.42,6.391,20.175,15.459,20.175,25.516c0,19.353-28.712,35.04-64.13,35.04
 		c-35.417,0-64.129-15.688-64.129-35.04c0-10.276,8.095-19.52,20.991-25.928"/>
 </g>
 </svg>
+ 

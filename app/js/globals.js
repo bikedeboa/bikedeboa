@@ -87,6 +87,7 @@ let _gmarkers;
 let _geolocationMarker;
 let _geolocationRadius;
 let _userCurrentPosition;
+let _wasGeolocationPermissionGranted;
 let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker;

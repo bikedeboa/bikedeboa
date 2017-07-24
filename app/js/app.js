@@ -376,124 +376,97 @@ $(() => {
     }
   }
 
-  function geolocate(callback, quiet = false) {
-    if (navigator.geolocation) {
-      // @todo split both behaviors into different functions
-      if (_geolocationInitialized) {
-        if (map) {
-          // Geolocation might've been initalized without google maps
-          if (!_geolocationMarker) {
-            initMapsGeolocation();
+  function geolocate(quiet = false) {
+    return new Promise( (resolve, reject) => {
+      if (navigator.geolocation) {
+        // @todo split both behaviors into different functions
+        if (_geolocationInitialized) {
+          if (map) {
+            // Geolocation might've been initalized without google maps
+            if (!_geolocationMarker) {
+              initMapsGeolocation();
+            }
+
+            map.panTo(_userCurrentPosition);
+             
+            // Minimum map zoom
+            if (map.getZoom() < 17) {
+              map.setZoom(17);
+            }
           }
 
-          map.panTo(_userCurrentPosition);
-           
-          // Minimum map zoom
-          if (map.getZoom() < 17) {
-            map.setZoom(17);
-          }
-        }
+          resolve(); 
+        } else {
+          const geoOptions = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+          };
 
-        if (callback && typeof callback === 'function') {
-          callback();
+          navigator.geolocation.getCurrentPosition(
+              position => {
+                ga('send', 'event', 'Geolocation', 'init', `${position.coords.latitude},${position.coords.longitude}`);
+
+                updateGeoPosition(position);
+                 
+                if (map) {
+                  initMapsGeolocation();
+                }
+
+                _geolocationInitialized = true;
+                $('#geolocationBtn').addClass('active');
+                
+                if (_positionWatcher) {
+                  navigator.geolocation.clearWatch(_positionWatcher);
+                }
+                _positionWatcher = navigator.geolocation.watchPosition(updateGeoPosition, null, geoOptions);
+   
+                resolve();
+              },
+              error => {
+                ga('send', 'event', 'Geolocation', error.message ? `fail - ${error.message}`: 'fail - no_message');
+
+                console.error('Geolocation failed.', error);
+
+                if (!quiet) {
+                  switch(error.code) {
+                  case 1:
+                    // PERMISSION_DENIED
+                    if (_isFacebookBrowser) {
+                      swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
+                    } else {
+                      swal('Ops', 'Sua localização está desabilitada, ou seu navegador parece não suportar essa função.', 'warning');
+                    }
+                    break; 
+                  case 2:
+                    // POSITION_UNAVAILABLE
+                    swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
+                    break;
+                  case 3:
+                    // TIMEOUT
+                    swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente de novo que deve dar ;)', 'warning');
+                    break;
+                  }
+                }
+
+                // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
+                if(error.message.indexOf('Only secure origins are allowed') == 0) {
+                  // Disable button since it won't work anyway in the current domain.
+                  $('#geolocationBtn').hide();
+                }
+
+                reject(); 
+              },
+              geoOptions
+          );
         }
       } else {
-        const geoOptions = {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        };
+        console.error('Navigator doesnt support geolocation.');
+        swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
 
-        navigator.geolocation.getCurrentPosition(
-            position => {
-              ga('send', 'event', 'Geolocation', 'init', `${position.coords.latitude},${position.coords.longitude}`);
-
-              updateGeoPosition(position);
-               
-              if (map) {
-                initMapsGeolocation();
-              }
-
-              _geolocationInitialized = true;
-              $('#geolocationBtn').addClass('active');
-              
-              if (_positionWatcher) {
-                navigator.geolocation.clearWatch(_positionWatcher);
-              }
-              _positionWatcher = navigator.geolocation.watchPosition(updateGeoPosition, null, geoOptions);
- 
-              if (callback && typeof callback === 'function') {
-                callback(); 
-              }
-            },
-            error => {
-              ga('send', 'event', 'Geolocation', error.message ? `fail - ${error.message}`: 'fail - no_message');
-
-              console.error('Geolocation failed.', error);
-
-              if (!quiet) {
-                switch(error.code) {
-                case 1:
-                  // PERMISSION_DENIED
-                  if (_isFacebookBrowser) {
-                    swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
-                  } else {
-                    swal('Ops', 'Sua localização está desabilitada, ou seu navegador parece não suportar essa função.', 'warning');
-                  }
-                  break; 
-                case 2:
-                  // POSITION_UNAVAILABLE
-                  swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
-                  break;
-                case 3:
-                  // TIMEOUT
-                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente de novo que deve dar ;)', 'warning');
-                  break;
-                }
-              }
-
-              // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
-              if(error.message.indexOf('Only secure origins are allowed') == 0) {
-                // Disable button since it won't work anyway in the current domain.
-                $('#geolocationBtn').hide();
-              }
-
-              if (callback && typeof callback === 'function') {
-                callback();
-              }
-            },
-            geoOptions
-        );
+        reject();
       }
-    }
-  }
-
-  function geolocationBtn() {
-    let controlDiv = document.createElement('div');
-    let controlUI = document.createElement('div');
-    controlUI.id = 'geolocationBtn';
-    controlUI.title = 'Onde estou?';
-
-    controlDiv.appendChild(controlUI);
-
-    // Set CSS for the control interior.
-    let controlText = document.createElement('div');
-    controlText.style.color = '#30bb6a';
-    controlText.style.width = '100%';
-    controlText.style.paddingTop = '13px';
-    controlText.innerHTML = '<img src="/img/geolocation.svg" style="width: 20px;"/>';
-    controlUI.appendChild(controlText);
-
-    // Setup the click event listeners
-    controlUI.addEventListener('click', () => {
-      ga('send', 'event', 'Geolocation', 'geolocate button click');
-      showSpinner();
-      geolocate(() => {
-        hideSpinner();
-      });
     });
-
-    return controlDiv;
   }
 
   function getMarkerById(id) {
@@ -992,7 +965,6 @@ $(() => {
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
-    $('#geolocationBtnBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -1003,8 +975,10 @@ $(() => {
   function showUI() {
     // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
     // $('#addPlace').velocity('transition.slideUpIn');
-    $('#locationSearch').removeClass('cool-hidden');
-    $('#addPlace').removeClass('cool-hidden');
+    // $('#locationSearch').removeClass('cool-hidden');
+    // $('#addPlace').removeClass('cool-hidden');
+    // $('#geolocationBtn').removeClass('cool-hidden');
+    $('.cool-hidden').removeClass('cool-hidden');
   }
 
   function hideUI() {
@@ -1012,6 +986,7 @@ $(() => {
     // $('#addPlace').velocity('transition.slideDownOut');
     $('#locationSearch').addClass('cool-hidden');
     $('#addPlace').addClass('cool-hidden');
+    $('#geolocationBtn').addClass('cool-hidden');
   }
 
   // @todo refactor this, it's fuckin confusing
@@ -1799,6 +1774,11 @@ $(() => {
       toggleLocationInputMode();
     }));
 
+    $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {
+      ga('send', 'event', 'Geolocation', 'geolocate button click');
+      geolocate();
+    }));
+
     $('#clear-filters-btn').on('click', () => {
       $('.filter-checkbox:checked').prop('checked', false);
 
@@ -1948,7 +1928,7 @@ $(() => {
     hideUI();
     $('#map').hide();
 
-    openNearestPlacesModal();
+    openNearbyPlacesModal();
   }
 
   function switchToMap() {
@@ -2053,19 +2033,20 @@ $(() => {
     })
   }
 
-  function openNearestPlacesModal(order = 'maisproximos') {
-    const MAX_PLACES = 100;
+  function openNearbyPlacesModal(order = 'maisproximos') {
+    const MAX_PLACES = 30;
 
     let markersToShow;
     switch (order) {
       case 'maisproximos':
         if (!_userCurrentPosition) {
-          console.error('Cant open nearby places, geolocation was not yet initialized.');
-          // showSpinner();
-          // geolocate(() => {
-          //   hideSpinner();
-          //   openNearestPlacesModal(order);
-          // });
+          showSpinner();
+          geolocate().then(() => { 
+            hideSpinner();
+            openNearbyPlacesModal(order);
+          }).catch(() => {
+            console.error('Cant open nearby places, geolocation failed.');
+          });
           return;
         }
 
@@ -2201,7 +2182,7 @@ $(() => {
       case 'recentes':
       case 'melhores':
         // hideAllModals(() => {
-          openNearestPlacesModal(urlBreakdown[1]);
+          openNearbyPlacesModal(urlBreakdown[1]);
         // });
         break;
       case 'b':
@@ -2330,13 +2311,7 @@ $(() => {
       strokeWeight: 5
     });
 
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
-
-    // Geolocalization button
     if (navigator.geolocation) {
-      let btnDiv = new geolocationBtn(map);
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btnDiv);
-
       if (_geolocationInitialized) {
         // Geolocation might've been initalized without google maps
         if (!_geolocationMarker) {
@@ -2410,12 +2385,12 @@ $(() => {
       $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
     }
 
-
     // If permission to geolocation was already granted we already center the map
-    if (navigator.permissions) {
+    if (navigator.geolocation && navigator.permissions) {
       navigator.permissions.query({'name': 'geolocation'})
         .then( permission => {
           if (permission.state === 'granted') {
+            _wasGeolocationPermissionGranted = true;
             ga('send', 'event', 'Geolocation', 'geolocate on startup');
             geolocate(null, true); 
           }
@@ -2443,7 +2418,7 @@ $(() => {
     _onDataReadyCallback = () => {
       initRouting();
 
-      if (_isMobile && _geolocationInitialized) {
+      if (_isMobile && _wasGeolocationPermissionGranted) {
         $('#nearbyTabBtn').addClass('active');
         switchToList();
       } else {

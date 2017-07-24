@@ -753,32 +753,12 @@ a,
   background: $lightGrey;
 } 
 
-#geolocationBtn {
-    margin: 0px $GRID_SPACE $GRID_SPACE;
-
-    background-color: white;
-    border: 2px solid white;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    filter: grayscale(100%);
-    
-    @include material-shadow(2);
-
-    &.active {
-        filter: none;
-    }
-}
-
+#geolocationBtn,
 #addPlace {
     position: absolute;
     bottom: 0;
     right: 0;
-    margin: 0 $GRID_SPACE $GRID_SPACE*2;
 
-    background: linear-gradient(45deg, $green 0, $lightGreen 100%);
     border: 0;
     border-radius: 50%;
     cursor: pointer;
@@ -787,18 +767,39 @@ a,
     text-align: center;
     @include material-shadow(2);
 
-    // transition: background 0.2s ease-out, width 0.5s ease-out;
-    // opacity: 0;
-
     img {
         width: 22px;
-        margin-left: 3px;
-        margin-top: 2px;
     }
 
     &.cool-hidden {
       opacity: 0;
       pointer-events: none;
+    }
+}
+
+#geolocationBtn {
+    margin: 0px $GRID_SPACE $GRID_SPACE*15;
+
+    background-color: white;
+    border: 2px solid white;
+    filter: grayscale(100%);
+    
+    &.active {
+        filter: none;
+    }
+}
+
+#addPlace {
+    margin: 0 $GRID_SPACE $GRID_SPACE*10; 
+
+    background: linear-gradient(45deg, $green 0, $lightGreen 100%);
+
+    // transition: background 0.2s ease-out, width 0.5s ease-out;
+    // opacity: 0;
+
+    img {
+        margin-left: 3px;
+        margin-top: 2px;
     }
 
     &:hover,
@@ -2805,6 +2806,8 @@ body.modal-open {
       justify-content: space-around;
 
       li {
+        filter: grayscale(100%);
+
         height: $BOTTOM_NAV_HEIGHT;
         width: 100%;
         opacity: .5;
@@ -2826,6 +2829,9 @@ body.modal-open {
         }
 
         &.active {
+          color: $darkGreen;
+          filter: none;
+ 
           background: white;
           opacity: 1;
         }
@@ -3121,19 +3127,13 @@ body.modal-open {
     }
   }
 
-  // #addPlace {
-  //   &.active {
-  //       max-width: none;
-  //       width: 70%;
-  //       border-radius: 25px;
-  //       height: 70px;
-  //       bottom: 0;
+  #geolocationBtn {
+      margin-bottom:$GRID_SPACE*12;
+  }
 
-  //       &:after {
-  //           content: 'Cancelar';
-  //       }
-  //   }
-  // }
+  #addPlace {
+      margin-bottom:$GRID_SPACE*7; 
+  }
 
   .infoBox,
   .infobox {
