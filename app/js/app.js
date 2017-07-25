@@ -2473,11 +2473,11 @@ $(() => {
  
       initRouting();
 
-      // if (_isMobile && (_isOffline || _wasGeolocationPermissionGranted)) {
+      if (_isMobile && (_isOffline || _wasGeolocationPermissionGranted)) {
         switchToList();  
-      // } else { 
-      //   switchToMap();
-      // }
+      } else { 
+        switchToMap();
+      }
     };
 
     // Set up Sweet Alert
