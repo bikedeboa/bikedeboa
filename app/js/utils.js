@@ -155,26 +155,6 @@ window.autoGrowTextArea = function(element) {
   }
 };
 
-window.setOfflineMode = () => {
-  _isOffline = true;
-  $('body').addClass('offline');
-
-  console.log(map);
-  if (map) { 
-    // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
-    // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
-  } else {
-    $('#reloadBtn').on('click', () => {
-      showSpinner('', () => {
-        window.location.reload();
-      });
-    })
-
-    $('#offline-overlay').velocity('transition.fadeIn', {delay: 300, queue: false, display: 'flex'})
-  }
-
-}
-
 // https://stackoverflow.com/questions/22581345/click-button-copy-to-clipboard-using-jquery
 function copyToClipboard(elem) { 
     // create hidden text element, if it doesn't already exist

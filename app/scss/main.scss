@@ -153,18 +153,24 @@ body.offline {
   //   padding-top: 5px;
   // }
 
-  #addPlace,
-  #locationQueryInput,
+  // These are all UI elements that get hidden when user is offline
+  // #about-social-buttons,
+  #addPlace, //temp?
+  #geolocationBtn, //temp?
+  #filterBtn, //temp?
   #howToInstallBtn,
-  #filterBtn,
   #loginBtn,
-  .top-toolbar,
   .rating-input-container,
   .minimap,
-  #about-social-buttons,
-  #hamburger-menu .side-nav__footer,
   #placeDetailsModal .photo-container.hasImage.loading {
     display: none !important;
+  } 
+
+  #locationQueryInput, 
+  #clearLocationQueryBtn,
+  .top-toolbar {
+    opacity: .5;
+    pointer-events: none;
   }
 
   #map {
@@ -172,6 +178,15 @@ body.offline {
     background-size: cover; 
     background-position: 50% 50%;
   }
+
+  #map-offline-overlay {
+    display: flex;
+  }
+
+  // .header__menu-toggle {
+  //   background: transparent;
+  //   color: $black;
+  // }
 }
 
 body.pwa-installed {
@@ -200,7 +215,7 @@ p {
   margin: 0 0 1em;
 }
 
-#offline-overlay {
+#map-offline-overlay {
   display: none;
 
   width: 100%;
@@ -214,20 +229,22 @@ p {
   flex-flow: row wrap;
   align-content: center;
 
-  .offline-overlay-content {
+  .map-offline-overlay-content {
     width: 230px;
     padding: 0 20px;
   }
 
   .offline-label {
     font-size: 20px;
-    color: $gray;
+    color: $black;
     text-align: center;
   }
 
   .btn {
-     width: 100%;
-     margin-top: 20px;
+    width: 100%;
+    margin-top: 24px;
+    background: transparent;
+    border: 2px solid #333;
   }
 }
 
@@ -1012,7 +1029,7 @@ a,
     background-color: $backdropColor;
     width: 100vw;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 9999;
@@ -1021,7 +1038,7 @@ a,
     // display: none;
 
     .spinnerContainer {
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%,-50%);
@@ -1919,6 +1936,8 @@ body.modal-open {
     min-height: 42px;
 
     border-radius: 5px;
+
+    font-weight: bold;
 }
 
 .review-modal {
@@ -2780,14 +2799,16 @@ body.modal-open {
     }
   }
 
-  #list-view {
-    padding-bottom: $BOTTOM_NAV_HEIGHT;
+  #list-view { 
+    .infobox-list {
+      padding-bottom: $BOTTOM_NAV_HEIGHT;
+    }
   }
 
   #map {
     // Explanation on the reason for the string interpolation:
     //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-    height: calc(100% - #{$MODAL_BODY_MINHEIGHT_PADDING});
+    height: calc(100% - #{$BOTTOM_NAV_HEIGHT});
   }
 
   #bottom-navbar {
@@ -2797,7 +2818,9 @@ body.modal-open {
     bottom: 0;
     height: $BOTTOM_NAV_HEIGHT;
     width: 100%;
-    background: $lightestGray;
+    // background: $lightestGray;
+    background: white;
+    border-top: 1px solid $lighterGray;
 
     ul {
       margin: 0;
@@ -2833,7 +2856,7 @@ body.modal-open {
           color: $darkGreen;
           filter: none;
  
-          background: white;
+          // background: white;
           opacity: 1;
         }
       }

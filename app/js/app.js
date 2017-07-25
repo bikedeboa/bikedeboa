@@ -109,7 +109,6 @@ $(() => {
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
-    templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x70' : '1000x100';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
@@ -401,7 +400,7 @@ $(() => {
             enableHighAccuracy: true,
             timeout: 5000,
             maximumAge: 0
-          };
+          }; 
 
           navigator.geolocation.getCurrentPosition(
               position => {
@@ -462,7 +461,10 @@ $(() => {
         }
       } else {
         console.error('Navigator doesnt support geolocation.');
-        swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
+        
+        if (!quiet) {
+          swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
+        }
 
         reject();
       }
@@ -624,20 +626,16 @@ $(() => {
     setMapOnAll(map);
   }
 
-  function formatAverage(avg) {
-    if (avg) {
-      avg = parseFloat(avg);
-      if (avg.toFixed && avg !== Math.round(avg)) {
-        avg = avg.toFixed(1);
-      }
-      avg = '' + avg;
+  function updateMarkers() {
+    if (!map) {
+      return false;
     }
 
-    return avg;
-  }
-
-  function updateMarkers() {
     clearMarkers();
+
+    if (_geolocationMarker) {
+      _geolocationMarker.setZIndex(markers.length);
+    }
 
     // Markers from Database
     if (markers && markers.length > 0) {
@@ -674,142 +672,130 @@ $(() => {
             scale = 0.5 + (m.average/10);
           }
 
-          if (map) {
-            m.icon = {
-              url: iconType, // url
-              scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+          m.icon = {
+            url: iconType, // url
+            scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
+            origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+          };
+
+          m.iconMini = {
+            url: iconTypeMini, // url
+            scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
+            origin: new google.maps.Point(0, 0), // origin
+            anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
+          };
+
+          if (m.lat && m.lng) {
+            // @todo temporarily disabled this because backend still doesnt support flags for these
+            // let labelStr;
+            // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
+            //   labelStr = '?';
+            // }
+
+            _gmarkers.push(new google.maps.Marker({
+              position: {
+                lat: parseFloat(m.lat),
+                lng: parseFloat(m.lng)
+              },
+              map: map,
+              icon: m.icon,
+              // title: m.text,
+              // label: labelStr && {
+              //   text: labelStr,
+              //   color: 'white',
+              // },
+              zIndex: i, //markers should be ordered by average
+              // opacity: 0.1 + (m.average/5).
+            }));
+
+            // Info window
+            let templateData = {
+              title: m.text,
+              average: m.average,
+              roundedAverage: m.average && ('' + Math.round(m.average)),
+              pinColor: getPinColorFromAverage(m.average)
             };
 
-            m.iconMini = {
-              url: iconTypeMini, // url
-              scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
-            };
-          }
+            templateData.thumbnailUrl = m.photo ? m.photo.replace('images', 'images/thumbs') : '';
 
-          // Average might come with crazy floating point value
-          m.average = formatAverage(m.average);
-
-          // @todo temporarily disabled this because backend still doesnt support flags for these
-          // let labelStr;
-          // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
-          //   labelStr = '?';
-          // }
-
-          if (map) {
-            if (m.lat && m.lng) {
-              _gmarkers.push(new google.maps.Marker({
-                position: {
-                  lat: parseFloat(m.lat),
-                  lng: parseFloat(m.lng)
-                },
-                map: map,
-                icon: m.icon,
-                // title: m.text,
-                // label: labelStr && {
-                //   text: labelStr,
-                //   color: 'white',
-                // },
-                zIndex: i, //markers should be ordered by average
-                // opacity: 0.1 + (m.average/5).
-              }));
-
-              // Info window
-              let templateData = {
-                title: m.text,
-                average: m.average,
-                roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average)
-              };
-
-              templateData.thumbnailUrl = m.photo ? m.photo.replace('images', 'images/thumbs') : '';
- 
-              // @todo: encapsulate both the next 2 in one method
-              // Reviews count
-              if (m.reviews === 0) {
-                templateData.numReviews = '';
-              } else if (m.reviews === '1') {
-                templateData.numReviews = '1 avaliação';
-              } else {
-                templateData.numReviews = `${m.reviews} avaliações`;
-              }
-
-              // Structure and access types
-              if (m.isPublic != null) {
-                templateData.isPublic = m.isPublic === true; 
-              } else {
-                templateData.noIsPublicData = true;
-              }
-              if (m.structureType) {
-                templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
-              }
-
-              const contentString = templates.infoWindowTemplate(templateData);
-
-              if (_isTouchDevice) {
-                // Infobox preview on click
-                _gmarkers[i].addListener('click', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  map.panTo(_gmarkers[i].getPosition());
-
-                  _infoWindow.setContent(contentString);
-                  _infoWindow.open(map, _gmarkers[i]);
-                  _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
-
-                    $('.infoBox').off('click').on('click', () => {
-                      openLocal(markers[i]);
-                      _infoWindow.close();
-                    });
-                  });
-                });
-
-                map.addListener('click', () => {
-                  _infoWindow.close();
-                });
-              } else {
-                // No infobox, directly opens the details modal
-                _gmarkers[i].addListener('click', () => {
-                  openLocal(markers[i]);
-                });
-
-                // Infobox preview on hover
-                _gmarkers[i].addListener('mouseover', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  _infoWindow.setContent(contentString); 
-                  _infoWindow.open(map, _gmarkers[i]);
-                  _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
-                  });
-                });
-
-                _gmarkers[i].addListener('mouseout', () => {
-                  _infoWindow.close();
-                });
-              }
+            // @todo: encapsulate both the next 2 in one method
+            // Reviews count
+            if (m.reviews === 0) {
+              templateData.numReviews = '';
+            } else if (m.reviews === '1') {
+              templateData.numReviews = '1 avaliação';
             } else {
-              console.error('error: pin with no latitude/longitude');
+              templateData.numReviews = `${m.reviews} avaliações`;
             }
-          }
 
+            // Structure and access types
+            if (m.isPublic != null) {
+              templateData.isPublic = m.isPublic === true; 
+            } else {
+              templateData.noIsPublicData = true;
+            }
+            if (m.structureType) {
+              templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+            }
+
+            const contentString = templates.infoWindowTemplate(templateData);
+
+            if (_isTouchDevice) {
+              // Infobox preview on click
+              _gmarkers[i].addListener('click', () => {
+                ga('send', 'event', 'Local', 'infobox opened', m.id); 
+
+                map.panTo(_gmarkers[i].getPosition());
+
+                _infoWindow.setContent(contentString);
+                _infoWindow.open(map, _gmarkers[i]);
+                _infoWindow.addListener('domready', () => {
+                  $('.infobox--img img').off('load').on('load', e => {
+                    $(e.target).parent().removeClass('loading');
+                  });
+
+                  $('.infoBox').off('click').on('click', () => {
+                    openLocal(markers[i]);
+                    _infoWindow.close();
+                  });
+                });
+              });
+
+              map.addListener('click', () => {
+                _infoWindow.close();
+              });
+            } else {
+              // No infobox, directly opens the details modal
+              _gmarkers[i].addListener('click', () => {
+                openLocal(markers[i]);
+              });
+
+              // Infobox preview on hover
+              _gmarkers[i].addListener('mouseover', () => {
+                ga('send', 'event', 'Local', 'infobox opened', m.id); 
+
+                _infoWindow.setContent(contentString); 
+                _infoWindow.open(map, _gmarkers[i]);
+                _infoWindow.addListener('domready', () => {
+                  $('.infobox--img img').off('load').on('load', e => {
+                    $(e.target).parent().removeClass('loading');
+                  });
+                });
+              });
+
+              _gmarkers[i].addListener('mouseout', () => {
+                _infoWindow.close();
+              });
+            }
+          } else {
+            console.error('error: pin with no latitude/longitude');
+          }
         } else {
           console.error('marker is weirdly empty on addMarkerToMap()');
         }
       }
     }
-
-    if (_geolocationMarker) {
-      _geolocationMarker.setZIndex(markers.length);
-    } 
   }
 
   // Sets the map on all markers in the array.
@@ -1021,6 +1007,7 @@ $(() => {
       }
 
       Database.getPlaces( () => {
+        // @todo we don't need to update the whole DB in this case
         updateMarkers();
         
         hideSpinner();
@@ -1374,6 +1361,7 @@ $(() => {
         Database.deletePlace(openedMarker.id, () => {
           goHome();
           Database.getPlaces( () => {
+            // @todo we don't need to update the whole DB in this case
             updateMarkers();
             hideSpinner();
             swal('Bicicletário deletado', 'Espero que tu saiba o que tá fazendo. :P', 'error');
@@ -1911,47 +1899,61 @@ $(() => {
     }));
 
     if (_isMobile) {
-      $('#nearbyTabBtn').on('click', queueUiCallback.bind(this, () => {
+      $('#nearbyTabBtn').on('click', () => {
         switchToList();
-      }));
+      });
 
-      $('#mapTabBtn').on('click', queueUiCallback.bind(this, () => {
+      $('#mapTabBtn').on('click', () => {
         switchToMap();
-      }));
+      });
     }
+
+    $('#reloadBtn').on('click', () => {
+      showSpinner('', () => {
+        window.location.reload();
+      });
+    })
   }
 
   function switchToList() {
+    console.log('list mode');
+
     $('#bottom-navbar li').removeClass('active');
     $('#nearbyTabBtn').addClass('active');
 
     hideUI();
     $('#map').hide();
-
-    openNearbyPlacesModal();
+    
+    queueUiCallback( () => {
+      openNearbyPlacesModal();
+    });
   }
 
   function switchToMap() {
+    console.log('map mode'); 
+
+    $('#list-view').hide();
     $('#bottom-navbar li').removeClass('active');
     $('#mapTabBtn').addClass('active');
 
-    function onReady() {
-      $('#list-view').hide();
-      $('#map').show();
-      showUI();
-      // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-      // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-      // $('#map').css('filter', 'none');
-    }
+    queueUiCallback( () => {
+      function onReady() {
+        $('#map').show();
+        showUI();
+        // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+        // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+        // $('#map').css('filter', 'none');
+      }
 
-    if (!map && !_isOffline) {
-      setupGoogleMaps( () => {
+      if (!map && !_isOffline) {
+        setupGoogleMaps( () => {
+          onReady();
+          updateMarkers();
+        });
+      } else {
         onReady();
-        updateMarkers();
-      });
-    } else {
-      onReady();
-    }
+      }
+    });
   }
 
   function hideAllModals(callback, keepOpenedMarker) {
@@ -2040,13 +2042,19 @@ $(() => {
     switch (order) {
       case 'maisproximos':
         if (!_userCurrentPosition) {
-          showSpinner();
-          geolocate().then(() => { 
+          showSpinner('Localizando...');
+          
+          geolocate(true).then(() => {
             hideSpinner();
+            
             openNearbyPlacesModal(order);
           }).catch(() => {
             console.error('Cant open nearby places, geolocation failed.');
-          });
+            
+            hideSpinner();
+            
+            switchToMap();
+          }); 
           return;
         }
 
@@ -2134,13 +2142,19 @@ $(() => {
     // Render handlebars template //
     ////////////////////////////////
     if (_isMobile) {
+      $('body').addClass('overflow');
+      
       $('#list-view').html(templates.nearestPlacesModalTemplate({
         title: order,
         places: cards
       }));
-      $('body').addClass('overflow');
 
       $('#list-view').show();
+
+      // Animate first 10 elements
+      $('#list-view .infobox:nth-child(-n+10)')
+        .css({opacity: 0})
+        .velocity('transition.slideDownIn', { display: 'flex', stagger: STAGGER_FAST });
     } else {
       $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({
         title: order,
@@ -2161,7 +2175,7 @@ $(() => {
 
     switch (urlBreakdown[1]) {
       case '':
-        // @todo TEMP TEMP TEMP
+        // @todo TEMP TEMP TEMP temporarily disabling deeplinks
         // if (!map && !_isOffline) {
         //   setupGoogleMaps( () => {
         //     updateMarkers();
@@ -2169,8 +2183,6 @@ $(() => {
         // }
 
         // if (_isDeeplink) {
-        //   // $('#map').removeClass('mock-map');
-        //   // $('#logo').removeClass('clickable');
         //   $('body').removeClass('deeplink'); 
         //   _isDeeplink = false;
         // }
@@ -2348,8 +2360,40 @@ $(() => {
     }
   }
 
+  function updateOnlineStatus(e) {
+    _isOffline = !navigator.onLine;    
+    $('body').toggleClass('offline', _isOffline);
+
+    // console.log(map);
+    // if (map) { 
+    //   // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
+    //   // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
+    // } else {
+    //   $('#reloadBtn').on('click', () => {
+    //     showSpinner('', () => {
+    //       window.location.reload();
+    //     });
+    //   })
+
+    //   $('#offline-overlay').velocity('transition.fadeIn', {delay: 300, queue: false, display: 'flex'})
+    // }
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
+    // If permission to geolocation was already granted we already center the map
+    if (navigator.geolocation && navigator.permissions) {
+      navigator.permissions.query({'name': 'geolocation'})
+        .then( permission => {
+          if (permission.state === 'granted') {
+            _wasGeolocationPermissionGranted = true;
+            ga('send', 'event', 'Geolocation', 'geolocate on startup');
+            geolocate(true); 
+          }
+        }
+      );
+    }
+
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
     // References:
     //   https://developers.google.com/web/updates/2015/10/display-mode
@@ -2359,16 +2403,10 @@ $(() => {
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
 
-    // Got Google Maps, either we're online or the SDK is in cache.
-    // @todo detect better if we're offline
-    // if (window.google) {
-      // On Mobile we defer the initialization of the map if we're in deeplink
-      // if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-      //   setupGoogleMaps(); 
-      // }
-    // } else {
-    //   setOfflineMode();
-    // } 
+    // Online Status
+    updateOnlineStatus();
+    window.addEventListener('online',  updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
 
     const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
     isMobileListener.addListener((isMobileListener) => {
@@ -2383,19 +2421,6 @@ $(() => {
       $('#locationQueryInput').attr('placeholder','Buscar endereço');
     } else {
       $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
-    }
-
-    // If permission to geolocation was already granted we already center the map
-    if (navigator.geolocation && navigator.permissions) {
-      navigator.permissions.query({'name': 'geolocation'})
-        .then( permission => {
-          if (permission.state === 'granted') {
-            _wasGeolocationPermissionGranted = true;
-            ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            geolocate(null, true); 
-          }
-        }
-      );
     }
 
     // User is within Facebook browser.
@@ -2416,12 +2441,19 @@ $(() => {
 
     // Initialize router
     _onDataReadyCallback = () => {
+      // Hide spinner that is initialized visible on CSS
+      hideSpinner();
+
+      $('#filter-results-counter').html(markers.length);
+      $('#filter-results-total').html(markers.length);
+
+      updateMarkers();
+ 
       initRouting();
 
-      if (_isMobile && _wasGeolocationPermissionGranted) {
-        $('#nearbyTabBtn').addClass('active');
-        switchToList();
-      } else {
+      if (_isMobile && (_isOffline || _wasGeolocationPermissionGranted)) {
+        switchToList();  
+      } else { 
         switchToMap();
       }
     };
@@ -2528,18 +2560,11 @@ $(() => {
     markers = BIKE.getMarkersFromLocalStorage();
     if (markers && markers.length) {
       console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
-      
-      // @todo encapsulate this with callback code from getPlaces() (below)
-      
-      // Hide spinner that is initialized visible on CSS
-      // hideSpinner();
 
-      // updateMarkers();
-
-      // if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
-      //   _onDataReadyCallback();
-      //   _onDataReadyCallback = null;
-      // }
+      if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+        _onDataReadyCallback();
+        _onDataReadyCallback = null;
+      }
     } 
 
     if (_isOffline) {
@@ -2571,15 +2596,6 @@ $(() => {
 
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
-        $('#filter-results-counter').html(markers.length);
-        $('#filter-results-total').html(markers.length);
-
-        updateMarkers();
-
-        // Hide spinner that is initialized visible on CSS
-        hideSpinner();
-
-        //
         if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
           _onDataReadyCallback();
           _onDataReadyCallback = null;

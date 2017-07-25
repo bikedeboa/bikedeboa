@@ -11,7 +11,7 @@ BIKE.Database = {
   isAuthenticated: false,  
   _authToken: '',
   _headers: {},
-  _authenticationAttemptsLeft: 3,
+  _authenticationAttemptsLeft: 5,
  
   _currentIDToAdd: 1306,
 
@@ -303,14 +303,14 @@ BIKE.Database = {
 
         BIKE.Database._authenticationAttemptsLeft--;
         if (BIKE.Database._authenticationAttemptsLeft > 0) {
-          console.error(`Authentication failed, ${BIKE.Database._authenticationAttemptsLeft} attempts left. Trying again in 2s...`);
+          console.error(`Authentication failed, ${BIKE.Database._authenticationAttemptsLeft} attempts left. Trying again...`);
           setTimeout( () => {
-            self.authenticate(isUserLogin, callback);
-          }, 2000);
+            self.authenticate(isUserLogin, callback); 
+          }, 500);
         } else {
           // Permanently failed
           setOfflineMode();
-        }
+        } 
       }
     });
   },
@@ -556,6 +556,18 @@ BIKE.Database = {
   },
 
   getPlaces: function(successCB, failCB, alwaysCB, getFullData = false) {
+    function formatAverage(avg) {
+      if (avg) {
+        avg = parseFloat(avg);
+        if (avg.toFixed && avg !== Math.round(avg)) {
+          avg = avg.toFixed(1);
+        }
+        avg = '' + avg; 
+      }
+
+      return avg;
+    }
+
     const self = this;
 
     console.debug('Getting all places...');
@@ -569,18 +581,16 @@ BIKE.Database = {
 
       markers = data;
 
-      BIKE.saveMarkersToLocalStorage(markers);
-
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
         // Mark that no markers have retrieved their details
         m._hasDetails = false;
 
         // Massage average format
-        if (typeof m.average === 'string') {
-          m.average = parseFloat(m.average);
-        }
+        m.average = formatAverage(m.average);
       };
+
+      BIKE.saveMarkersToLocalStorage(markers); 
 
       if (successCB && typeof successCB === 'function') {
         successCB(markers);

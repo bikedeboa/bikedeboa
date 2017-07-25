@@ -101,7 +101,22 @@
     </head> 
 
     <body> 
-        <div id="map"></div>
+        <div id="map">
+          <div id="map-offline-overlay">
+            <div class="map-offline-overlay-content">
+              <!-- <img alt="" src="/img/icon_offline.svg"/> -->
+
+              <div class="offline-label"> 
+                Você está offline.
+              </div>
+
+              <button id="reloadBtn" class="btn">
+                Recarregar
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div id="list-view"></div>
         
         <div id="bottom-navbar">
@@ -123,43 +138,14 @@
         <div class="confetti-placeholder"></div>
 
         <div id="locationSearch" class="cool-hidden">
-            <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
-            <!-- <span class="balaca">let templateData = {
-                title: m.text,
-                average: m.average,
-                roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average)
-              };
-
-              templateData.thumbnailUrl = m.photo ? m.photo.replace('images', 'images/thumbs') : '';
- 
-              // @todo: encapsulate both the next 2 in one method
-              // Reviews count
-              if (m.reviews === 0) {
-                templateData.numReviews = '';
-              } else if (m.reviews === '1') {
-                templateData.numReviews = '1 avaliação';
-              } else {
-                templateData.numReviews = `${m.reviews} avaliações`;
-              }
-
-              // Structure and access types
-              if (m.isPublic != null) {
-                templateData.isPublic = m.isPublic === true; 
-              } else {
-                templateData.noIsPublicData = true;
-              }
-              if (m.structureType) {
-                templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
-              }
-              <img alt="" src="/img/bici.svg"/>
-            </span> -->
             <input id="locationQueryInput" type="search">
 
             <button id="clearLocationQueryBtn">
               <img alt="" class="search-icon" src="/img/icon_search.svg">
               <span class="clear-icon">✕</span>
             </button>
+
+            <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
 
             <span>
                 <button id="filterBtn" type="button" class="js-menu-show-filter-menu">
@@ -168,18 +154,6 @@
                     <span id="active-filters-counter" class="badge"></span>
                 </button>
             </span>
-        </div>
-
-        <div id="offline-overlay">
-          <div class="offline-overlay-content">
-            <div class="offline-label"> 
-              Você está<b> offline</b>.
-            </div>
-
-            <button id="reloadBtn" class="btn">
-              Recarregar
-            </button>
-          </div>
         </div>
 
         <button id="geolocationBtn" class="cool-hidden">
