@@ -101,13 +101,13 @@ $(() => {
 
     ga('send', 'event', 'Local', 'view', ''+m.id);
 
-    let templateData = {};
-
-    templateData.title = m.text;
-    templateData.address = m.address;
-    templateData.description = m.description;
-
-    // Average
+    let templateData = {
+      title: m.text,
+      address: m.address,
+      description: m.description,
+      average: m.average
+    };
+ 
     templateData.pinColor = getPinColorFromAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x70' : '1000x100';

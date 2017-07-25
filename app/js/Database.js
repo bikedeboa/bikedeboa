@@ -1,5 +1,18 @@
 var BIKE = BIKE || {};
 
+function formatAverage(avg) {
+  if (avg) {
+    avg = parseFloat(avg);
+    if (avg.toFixed && avg !== Math.round(avg)) {
+      avg = avg.toFixed(1);
+    }
+    avg = '' + avg; 
+  }
+
+  return avg;
+}
+
+
 BIKE.Database = {
   ///////////////////
   // G L O B A L S //
@@ -556,18 +569,6 @@ BIKE.Database = {
   },
 
   getPlaces: function(successCB, failCB, alwaysCB, getFullData = false) {
-    function formatAverage(avg) {
-      if (avg) {
-        avg = parseFloat(avg);
-        if (avg.toFixed && avg !== Math.round(avg)) {
-          avg = avg.toFixed(1);
-        }
-        avg = '' + avg; 
-      }
-
-      return avg;
-    }
-
     const self = this;
 
     console.debug('Getting all places...');
@@ -633,6 +634,9 @@ BIKE.Database = {
         if (data) {
           console.debug('Got place detail:');
           console.debug(data);
+
+          // Massage average format
+          data.average = formatAverage(data.average);
 
           // Combine detailed data with what we had
           let updatedMarker = markers.find(m => {return m.id === placeId; });

@@ -162,15 +162,19 @@ body.offline {
   #loginBtn,
   .rating-input-container,
   .minimap,
+  #bottom-mobile-bar,
   #placeDetailsModal .photo-container.hasImage.loading {
     display: none !important;
   } 
 
   #locationQueryInput, 
   #clearLocationQueryBtn,
-  .top-toolbar {
+  .openReviewPanelBtn,
+  #createRevisionBtn,
+  .shareBtn {
     opacity: .5;
     pointer-events: none;
+    filter: grayscale(100%);
   }
 
   #map {
@@ -1951,6 +1955,7 @@ body.modal-open {
         color: $black;
         border-radius: 25px;
         margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+        font-weight: normal;
 
         // &:before {
         //     content: '☐';
