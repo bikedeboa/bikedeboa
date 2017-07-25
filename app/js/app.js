@@ -219,6 +219,59 @@ $(() => {
     $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
     $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionDialog));
 
+    if (_isMobile) {
+      $('#placeDetailsModal .minimap').on('click', () => {
+        const markerPos = {
+          lat: parseFloat(openedMarker.lat),
+          lng: parseFloat(openedMarker.lng)
+        };
+
+        switchToMap().then( () => {
+          // @todo fix me! weird bug with transitions and gmaps forces me to do this, sorry
+          setTimeout( () => {
+            // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
+            google.maps.event.trigger(map, 'resize'); 
+            map.setCenter(markerPos);
+          }, 600);
+        });
+      })
+    } 
+
+    // Tooltips
+    if (!_isTouchDevice) {
+      $('#placeDetailsModal .full-star').tooltip({
+        toggle: 'tooltip',
+        placement: 'bottom',
+        'delay': {'show': 0, 'hide': 100}
+      });
+    }
+    initHelpTooltip('#placeDetailsModal .help-tooltip-trigger')
+
+    $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details public access');
+    });
+    $('#private-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details private access');
+    });
+    $('#uinvertido-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details uinvertido type');
+    });
+    $('#deroda-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details deroda type');
+    });
+    $('#trave-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details trave type');
+    });
+    $('#suspenso-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details suspenso type');
+    });
+    $('#grade-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details grade type');
+    });
+    $('#other-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+      ga('send', 'event', 'Misc', 'tooltip - pin details other type');
+    });
+
     // Display the modal
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
@@ -252,41 +305,6 @@ $(() => {
       // Just fade new detailed content in
       $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
-
-    // Tooltips
-    if(!_isTouchDevice) {
-      $('#placeDetailsModal .full-star').tooltip({
-        toggle: 'tooltip',
-        placement: 'bottom',
-        'delay': {'show': 0, 'hide': 100}
-      });
-    }
-    initHelpTooltip('#placeDetailsModal .help-tooltip-trigger')
-
-    $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details public access');
-    });
-    $('#private-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details private access');
-    });
-    $('#uinvertido-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details uinvertido type');
-    });
-    $('#deroda-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details deroda type');
-    });
-    $('#trave-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details trave type');
-    });
-    $('#suspenso-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details suspenso type');
-    });
-    $('#grade-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details grade type');
-    });
-    $('#other-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details other type');
-    });
   }
 
   function updateGeoPosition(newPos) {
@@ -1916,42 +1934,62 @@ $(() => {
   }
 
   function switchToList() {
-    console.log('list mode');
+    return new Promise( (resolve, reject) => {
+      if (!_currentTab || _currentTab != 'list') {
+        _currentTab = 'list';
+         
+        console.log('list tab');
 
-    $('#bottom-navbar li').removeClass('active');
-    $('#nearbyTabBtn').addClass('active');
+        $('#bottom-navbar li').removeClass('active');
+        $('#nearbyTabBtn').addClass('active');
 
-    hideUI();
-    $('#map').hide();
-    
-    queueUiCallback( () => {
-      openNearbyPlacesModal();
+        $('#map').velocity('fadeOut', {queue: false});
+        hideUI();
+        
+        queueUiCallback( () => {
+          openNearbyPlacesModal();
+          resolve();
+        });
+      } else {
+        resolve();
+      }
     });
   }
 
-  function switchToMap() {
-    console.log('map mode'); 
+  function switchToMap() { 
+    return new Promise( (resolve, reject) => {
+      if (!_currentTab || _currentTab != 'map') {
+        _currentTab = 'map';
+      
+        console.log('map tab'); 
 
-    $('#list-view').hide();
-    $('#bottom-navbar li').removeClass('active');
-    $('#mapTabBtn').addClass('active');
+        $('#list-view').velocity('fadeOut');
+        $('#bottom-navbar li').removeClass('active');
+        $('#mapTabBtn').addClass('active');
 
-    queueUiCallback( () => {
-      function onReady() {
-        $('#map').show();
-        showUI();
-        // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-        // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-        // $('#map').css('filter', 'none');
-      }
+        queueUiCallback( () => {
+          function onReady() {
+            $('#map').velocity('fadeIn', {queue: false});
+            
+            showUI();
+            // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
+            // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
+            // $('#map').css('filter', 'none');
 
-      if (!map && !_isOffline) {
-        setupGoogleMaps( () => {
-          onReady();
-          updateMarkers();
+            resolve();
+          }
+
+          if (!map && !_isOffline) {
+            setupGoogleMaps( () => {
+              onReady();
+              updateMarkers();
+            });
+          } else {
+            onReady();
+          }
         });
       } else {
-        onReady();
+        resolve();
       }
     });
   }
@@ -2036,7 +2074,7 @@ $(() => {
   }
 
   function openNearbyPlacesModal(order = 'maisproximos') {
-    const MAX_PLACES = 30;
+    const MAX_PLACES = 50;
 
     let markersToShow;
     switch (order) {
@@ -2149,7 +2187,7 @@ $(() => {
         places: cards
       }));
 
-      $('#list-view').show();
+      $('#list-view').velocity('fadeIn');
 
       // Animate first 10 elements
       $('#list-view .infobox:nth-child(-n+10)')
@@ -2176,12 +2214,6 @@ $(() => {
     switch (urlBreakdown[1]) {
       case '':
         // @todo TEMP TEMP TEMP temporarily disabling deeplinks
-        // if (!map && !_isOffline) {
-        //   setupGoogleMaps( () => {
-        //     updateMarkers();
-        //   });
-        // }
-
         // if (_isDeeplink) {
         //   $('body').removeClass('deeplink'); 
         //   _isDeeplink = false;
@@ -2363,20 +2395,6 @@ $(() => {
   function updateOnlineStatus(e) {
     _isOffline = !navigator.onLine;    
     $('body').toggleClass('offline', _isOffline);
-
-    // console.log(map);
-    // if (map) { 
-    //   // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
-    //   // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
-    // } else {
-    //   $('#reloadBtn').on('click', () => {
-    //     showSpinner('', () => {
-    //       window.location.reload();
-    //     });
-    //   })
-
-    //   $('#offline-overlay').velocity('transition.fadeIn', {delay: 300, queue: false, display: 'flex'})
-    // }
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -2447,15 +2465,19 @@ $(() => {
       $('#filter-results-counter').html(markers.length);
       $('#filter-results-total').html(markers.length);
 
+      if (_isOffline) {  
+        toastr['info']('Mas fica à vontade, salvamos os bicicletários pra você.', 'Você está offline');
+      }
+
       updateMarkers();
  
       initRouting();
 
-      if (_isMobile && (_isOffline || _wasGeolocationPermissionGranted)) {
+      // if (_isMobile && (_isOffline || _wasGeolocationPermissionGranted)) {
         switchToList();  
-      } else { 
-        switchToMap();
-      }
+      // } else { 
+      //   switchToMap();
+      // }
     };
 
     // Set up Sweet Alert

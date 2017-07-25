@@ -112,5 +112,6 @@ let _currentView;
 let _isDeeplink = false;
 let _deeplinkMarker;
 let _onDataReadyCallback;
+let _currentTab;
 
 let templates = {};

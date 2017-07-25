@@ -2810,6 +2810,13 @@ body.modal-open {
     }
   }
 
+  #toast-container > div {
+    margin: 0;
+    opacity: 1;
+    width: 100% !important;
+    border-radius: 0; 
+  }
+
   #map {
     // Explanation on the reason for the string interpolation:
     //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
@@ -2839,7 +2846,7 @@ body.modal-open {
 
         height: $BOTTOM_NAV_HEIGHT;
         width: 100%;
-        opacity: .5;
+        opacity: .8;
         text-align: center;
         padding: 6px 0;
 
@@ -2855,14 +2862,17 @@ body.modal-open {
           display: block;
           font-size: 9px;
           padding-top: 2px;
+          color: $gray;
         }
 
         &.active {
-          color: $darkGreen;
-          filter: none;
- 
-          // background: white;
           opacity: 1;
+          filter: none;
+          // background: white;
+
+          span {
+            color: $darkGreen;
+          }
         }
       }
 
@@ -3824,7 +3834,7 @@ body.modal-open {
     font-family: $bodyFont;
     opacity: 0.9;
     padding: $GRID_SPACE*2 $GRID_SPACE*2 $GRID_SPACE*2 50px; 
-  }
+  } 
 
   & > .toast-success {
     background-color: $green;
