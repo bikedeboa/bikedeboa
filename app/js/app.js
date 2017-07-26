@@ -870,10 +870,29 @@ $(() => {
     }
   }
 
-  function testNewLocalBounds() {
-    const isWithinBounds = _mapBounds.contains(map.getCenter());
-    $('#newPlaceholder').toggleClass('invalid', !isWithinBounds);
-    return isWithinBounds;
+  function isPosWithinBounds(pos) {
+    const ret = _mapBounds.contains(pos);
+    return ret;
+  }
+
+  function mapCenterChanged() {
+    // Makes sure this doesnt destroy the overall performance by limiting these calculations 
+    //   to not be executed more then 20 times per second (1000ms/50ms = 20x).
+    // (I'm not entirely sure this is needed though, but why not)
+    clearTimeout(_centerChangedTimeout);
+    _centerChangedTimeout = setTimeout( () => {
+      console.log('centerchanged');
+
+      // Check center
+      const isCenterWithinBounds = isPosWithinBounds(map.getCenter());
+      $('#newPlaceholder').toggleClass('invalid', !isCenterWithinBounds);
+
+      // Check visible bounds
+      if (map.getBounds()) {
+        const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
+        $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
+      }
+    }, 50);
   }
 
   function toggleLocationInputMode() {
@@ -881,15 +900,7 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
-      // hideUI();
-
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
-
-      testNewLocalBounds();
-      map.addListener('center_changed', () => {
-        // console.log('center_changed');
-        testNewLocalBounds();
-      });
 
       $('body').addClass('position-pin-mode');
 
@@ -914,7 +925,7 @@ $(() => {
           openedMarker.lng = mapCenter.lng();
           openNewOrEditPlaceModal();
         } else {
-          if (testNewLocalBounds()) {
+          if (isPosWithinBounds(map.getCenter())) {
             openNewOrEditPlaceModal();
           } else {
             const mapCenter = map.getCenter();
@@ -951,16 +962,16 @@ $(() => {
     } else {
       // Turning OFF
 
-      // showUI();
-
       map.setOptions({styles: _gmapsCustomStyle});
 
       $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
-      if (map) {
-        google.maps.event.clearInstanceListeners(map);
-      }
+      
+      // Clear centerChanged event
+      // if (map) {
+      //   google.maps.event.clearInstanceListeners(map);
+      // }
     }
 
     toggleMarkers();
@@ -2028,6 +2039,9 @@ $(() => {
         new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
+
+    mapCenterChanged();
+    map.addListener('center_changed', mapCenterChanged);
 
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {

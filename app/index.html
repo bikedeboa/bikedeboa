@@ -130,14 +130,26 @@
 
         <div id="revisionModalTemplatePlaceholder"></div>
 
-        <div id="offline-overlay">
-          <div class="offline-overlay-content">
-            <div class="offline-label"> 
+        <div id="offline-overlay" class="message-overlay">
+          <div class="message-overlay-content">
+            <div class="message-overlay-label"> 
               Você está<b> offline</b>.
             </div>
 
             <button id="reloadBtn" class="btn">
               Recarregar
+            </button>
+          </div>
+        </div>
+ 
+        <div id="out-of-bounds-overlay" class="message-overlay">
+          <div class="message-overlay-content"> 
+            <div class="message-overlay-label">  
+              Ops, o bike de boa ainda não funciona por aqui.
+            </div>
+
+            <button class="btn open-faq-btn"> 
+              Saiba mais
             </button>
           </div>
         </div>

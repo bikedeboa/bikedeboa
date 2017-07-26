@@ -167,7 +167,7 @@ window.setOfflineMode = () => {
       });
     })
 
-    $('#offline-overlay').velocity('transition.fadeIn', {delay: 300, queue: false, display: 'flex'})
+    $('#offline-overlay').addClass('showThis'); 
   }
 
 }
