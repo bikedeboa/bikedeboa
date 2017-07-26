@@ -113,5 +113,6 @@ let _isDeeplink = false;
 let _deeplinkMarker;
 let _onDataReadyCallback;
 let _currentTab;
+let _centerChangedTimeout;
 
 let templates = {};
