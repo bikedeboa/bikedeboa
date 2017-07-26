@@ -41,6 +41,8 @@ $greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
 
 $filtersHightlightColor: $palePurple;
 
+$coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -440,14 +442,29 @@ body.deeplink {
 }
 
 #map {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-
     width: 100vw;
     // height: 100vh;
     height: 100%;
     /*margin-top: 50px;*/
+
+    transition: opacity 0.5s $coolEaseOut;
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+    }
+}
+
+#map {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+}
+
+#bottom-navbar {
+    display: none;
 }
 
 // iOS Fix
@@ -514,7 +531,7 @@ a,
     max-width: 600px;
     width: calc(100% - 20px); 
 
-    transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+    transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
     
     &.cool-hidden {
       opacity: 0;
@@ -2892,50 +2909,21 @@ body.modal-open {
 
   body.details-view:not(.already-reviewed) #bottom-mobile-bar,
   body.modal-open #top-mobile-bar {
+    visibility: visible;
     opacity: 1;
+    transform: none;
     pointer-events: auto;
+    // transform: translateY(0);
+  } 
+
+  #top-mobile-bar,
+  #bottom-mobile-bar {
     display: block;
-  }
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none; 
 
-  #placeDetailsModal {
-    .review {
-      text-align: left;
-
-      #new-review-btn {
-        display: none;
-      }
-    }
-
-    .tagsContainer {
-      justify-content: flex-start;
-
-      .tagDisplay {
-        margin: 0 6px 6px 0;
-      }
-    }
-
-    .top-toolbar {
-      // justify-content: space-around;
-      // margin: 10px 10px -30px 0;
-
-      hr {
-        // display: none;
-        height: 60px;
-      }
-
-      .toolbar-item {
-        // max-width: 90px;
-
-        label {
-          font-size: 8px;
-        }
-
-        .toolbar-item-icon {
-          width: 25px;
-          height: 25px;
-        }
-      }
-    }
+    transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
   }
 
   #top-mobile-bar {
@@ -2946,9 +2934,6 @@ body.modal-open {
     left: 0;
     right: 0;
     z-index: 1052; //under sweetalert dialogs
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
 
     #top-mobile-bar-title { 
       float: left;
@@ -2993,6 +2978,7 @@ body.modal-open {
     }
   }
 
+
   #bottom-mobile-bar {
       position: fixed;
       bottom: 0;
@@ -3002,6 +2988,8 @@ body.modal-open {
 
       box-shadow: 0 -20px 30px white;
 
+      transform: translateY(20px);
+    
       #floating-cta-container {
         background: white;
         // border-top: 1px solid $lighterGray;
@@ -3025,6 +3013,47 @@ body.modal-open {
         text-transform: uppercase;
         background: $greenGradient;
       } 
+  }
+
+  #placeDetailsModal {
+    .review {
+      text-align: left;
+
+      #new-review-btn {
+        display: none;
+      }
+    }
+
+    .tagsContainer {
+      justify-content: flex-start;
+
+      .tagDisplay {
+        margin: 0 6px 6px 0;
+      }
+    }
+
+    .top-toolbar {
+      // justify-content: space-around;
+      // margin: 10px 10px -30px 0;
+
+      hr {
+        // display: none;
+        height: 60px;
+      }
+
+      .toolbar-item {
+        // max-width: 90px;
+
+        label {
+          font-size: 8px;
+        }
+
+        .toolbar-item-icon {
+          width: 25px;
+          height: 25px;
+        }
+      }
+    }
   }
 
   #filter-menu {
