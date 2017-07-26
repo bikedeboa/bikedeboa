@@ -220,6 +220,12 @@ $(() => {
     $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
     $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionDialog));
 
+    if (previousReview) {
+      $('body').addClass('already-reviewed');
+    } else {
+      $('body').removeClass('already-reviewed');
+    }
+
     // Display the modal
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
@@ -233,11 +239,6 @@ $(() => {
 
         // Global states
         $('body').addClass('details-view');
-        if (previousReview) {
-          $('body').addClass('already-reviewed');
-        } else {
-          $('body').removeClass('already-reviewed');
-        }
  
         // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
         // Thanks to https://github.com/limonte/sweetalert2/issues/374
