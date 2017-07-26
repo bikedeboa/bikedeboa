@@ -228,11 +228,11 @@ $(() => {
 
         switchToMap().then( () => {
           // @todo fix me! weird bug with transitions and gmaps forces me to do this, sorry
-          setTimeout( () => {
+          // setTimeout( () => {
             // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
             google.maps.event.trigger(map, 'resize'); 
             map.setCenter(markerPos);
-          }, 600);
+          // }, 600);
         });
       })
     } 
@@ -450,9 +450,9 @@ $(() => {
                   case 1:
                     // PERMISSION_DENIED
                     if (_isFacebookBrowser) {
-                      swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
+                      swal('Ops', 'Seu navegador parece não suportar essa função, que pena. Que tal tentar denovo no Chrome?', 'warning');
                     } else {
-                      swal('Ops', 'Sua localização está desabilitada, ou seu navegador parece não suportar essa função.', 'warning');
+                      swal('Ops', 'Sua localização parece estar desabilitada, ou seu navegador suporta essa função. Quem sabe tenta dar uma olhada nas configurações do seu dispositivo?', 'warning');
                     }
                     break; 
                   case 2:
@@ -1943,7 +1943,9 @@ $(() => {
         $('#bottom-navbar li').removeClass('active');
         $('#nearbyTabBtn').addClass('active');
 
-        $('#map').velocity('fadeOut', {queue: false});
+        // $('#map').velocity('fadeOut', {queue: false});
+        $('#map').hide();
+
         hideUI();
         
         queueUiCallback( () => {
@@ -1963,13 +1965,16 @@ $(() => {
       
         console.log('map tab'); 
 
-        $('#list-view').velocity('fadeOut');
+        // $('#list-view').velocity('fadeOut');
+        $('#list-view').hide();
+
         $('#bottom-navbar li').removeClass('active');
         $('#mapTabBtn').addClass('active');
 
         queueUiCallback( () => {
           function onReady() {
-            $('#map').velocity('fadeIn', {queue: false});
+            // $('#map').velocity('fadeIn', {queue: false});
+            $('#map').show(); 
             
             showUI();
             // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
@@ -2187,7 +2192,8 @@ $(() => {
         places: cards
       }));
 
-      $('#list-view').velocity('fadeIn');
+      // $('#list-view').velocity('fadeIn');
+      $('#list-view').show();
 
       // Animate first 10 elements
       $('#list-view .infobox:nth-child(-n+10)')
@@ -2213,11 +2219,10 @@ $(() => {
 
     switch (urlBreakdown[1]) {
       case '':
-        // @todo TEMP TEMP TEMP temporarily disabling deeplinks
-        // if (_isDeeplink) {
-        //   $('body').removeClass('deeplink'); 
-        //   _isDeeplink = false;
-        // }
+        if (_isDeeplink) {
+          $('body').removeClass('deeplink'); 
+          _isDeeplink = false;
+        }
 
         hideAllModals();
 
@@ -2377,6 +2382,8 @@ $(() => {
       _isDeeplink = true;
 
       $('body').addClass('deeplink'); 
+
+      // Force branding on mobile topbar
       $('#top-mobile-bar-title').text('bike de boa');
 
       // Center the map on pin's position
