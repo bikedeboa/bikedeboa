@@ -2442,15 +2442,14 @@ $(() => {
   function setup() {
     // If permission to geolocation was already granted we already center the map
     if (navigator.geolocation && navigator.permissions) {
-      navigator.permissions.query({'name': 'geolocation'})
-        .then( permission => {
-          if (permission.state === 'granted') {
-            _wasGeolocationPermissionGranted = true;
-            ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            geolocate(true); 
-          }
+      _geolocationPermissionQuery = navigator.permissions.query({'name': 'geolocation'})
+      _geolocationPermissionQuery.then( permission => {
+        if (permission.state === 'granted') {
+          _wasGeolocationPermissionGranted = true;
+          ga('send', 'event', 'Geolocation', 'geolocate on startup');
+          geolocate(true); 
         }
-      );
+      });
     }
 
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
@@ -2517,8 +2516,20 @@ $(() => {
  
       initRouting();
 
-      if (_isMobile && (_isOffline || _wasGeolocationPermissionGranted)) {
-        switchToList();  
+      // @todo please document this shit
+      if (_isMobile) {
+        // This permission query might take a little longer to answer than all the app initialization
+        if (_geolocationPermissionQuery) {
+          _geolocationPermissionQuery.then( permission => {
+            if (permission.state === 'granted') {
+              switchToList();
+            } else {
+              switchToMap();
+            }
+          });
+        } else {
+          switchToMap();
+        }
       } else { 
         switchToMap();
       }
@@ -2663,7 +2674,7 @@ $(() => {
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
         updateMarkers();
-        
+
         if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
           _onDataReadyCallback();
           _onDataReadyCallback = null;
