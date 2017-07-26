@@ -229,8 +229,6 @@ $(() => {
         switchToMap().then( () => {
           // @todo fix me! weird bug with transitions and gmaps forces me to do this, sorry
           // setTimeout( () => {
-            // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
-            google.maps.event.trigger(map, 'resize'); 
             map.setCenter(markerPos);
           // }, 600);
         });
@@ -990,18 +988,18 @@ $(() => {
   function showUI() {
     // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
     // $('#addPlace').velocity('transition.slideUpIn');
-    // $('#locationSearch').removeClass('cool-hidden');
-    // $('#addPlace').removeClass('cool-hidden');
-    // $('#geolocationBtn').removeClass('cool-hidden');
-    $('.cool-hidden').removeClass('cool-hidden');
+    // $('#locationSearch').removeClass('hidden-ui'); 
+    // $('#addPlace').removeClass('hidden-ui');
+    // $('#geolocationBtn').removeClass('hidden-ui');
+    $('.hidden-ui').removeClass('hidden-ui');
   }
 
   function hideUI() {
     // $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
     // $('#addPlace').velocity('transition.slideDownOut');
-    $('#locationSearch').addClass('cool-hidden');
-    $('#addPlace').addClass('cool-hidden');
-    $('#geolocationBtn').addClass('cool-hidden');
+    $('#locationSearch').addClass('hidden-ui');
+    $('#addPlace').addClass('hidden-ui');
+    $('#geolocationBtn').addClass('hidden-ui');
   }
 
   // @todo refactor this, it's fuckin confusing
@@ -1966,7 +1964,7 @@ $(() => {
         $('#nearbyTabBtn').addClass('active');
 
         // $('#map').velocity('fadeOut', {queue: false});
-        $('#map').hide();
+        $('#map').addClass('hidden');
 
         hideUI();
         
@@ -1988,7 +1986,7 @@ $(() => {
         console.log('map tab'); 
 
         // $('#list-view').velocity('fadeOut');
-        $('#list-view').hide();
+        $('#list-view').addClass('hidden'); 
 
         $('#bottom-navbar li').removeClass('active');
         $('#mapTabBtn').addClass('active');
@@ -1996,12 +1994,15 @@ $(() => {
         queueUiCallback( () => {
           function onReady() {
             // $('#map').velocity('fadeIn', {queue: false});
-            $('#map').show(); 
+            $('#map').removeClass('hidden'); 
             
             showUI();
             // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
             // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
             // $('#map').css('filter', 'none');
+
+            // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
+            google.maps.event.trigger(map, 'resize'); 
 
             resolve();
           }
@@ -2215,7 +2216,7 @@ $(() => {
       }));
 
       // $('#list-view').velocity('fadeIn');
-      $('#list-view').show();
+      $('#list-view').removeClass('hidden');
 
       // Animate first 10 elements
       $('#list-view .infobox:nth-child(-n+10)')

@@ -41,6 +41,8 @@ $greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
 
 $filtersHightlightColor: $palePurple;
 
+$coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -479,9 +481,17 @@ body.deeplink {
     // height: 100vh;
     height: 100%;
     /*margin-top: 50px;*/
+
+    transition: opacity 0.5s $coolEaseOut;
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+    }
 }
 
-#list-view,
 #bottom-navbar {
     display: none;
 }
@@ -552,7 +562,8 @@ a,
 
     transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
     
-    &.cool-hidden {
+    &.hidden-ui {
+      visibility: hidden;
       opacity: 0;
       transform: translateY(-20px);
       pointer-events: none;
@@ -830,7 +841,8 @@ a,
         width: 22px;
     }
 
-    &.cool-hidden {
+    &.hidden-ui {
+      visibility: hidden;
       opacity: 0;
       pointer-events: none;
     }
@@ -3697,7 +3709,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   will-change: transform;
-  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  transition: transform 0.5s $coolEaseOut;
 }
 
 // .side-nav--animatable .side-nav__container {
