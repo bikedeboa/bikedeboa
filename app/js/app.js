@@ -1975,7 +1975,7 @@ $(() => {
         hideUI();
         
         queueUiCallback( () => {
-          openNearbyPlacesModal();
+          openNearbyPlacesModal('melhores');
           resolve();
         });
       } else {
@@ -2153,10 +2153,50 @@ $(() => {
         break;
       case 'melhores':
         // Best rated places
-        markersToShow = markers.sort((a, b) => {
-          return (b.average*1000 + b.reviews*1) - (a.average*1000 + a.reviews*1);
+
+        const minimumVotes = 2;
+        markersToShow = [];
+
+
+        // Calculate mean average overall
+        let markersWithMinRatingsCount = 0;
+        let meanMarkersRating = 0;
+        for(let i=0; i < markers.length; i++) {
+          if (parseFloat(markers[i].reviews) >= minimumVotes) {
+            meanMarkersRating += markers[i].rawAverage;
+            markersWithMinRatingsCount++;
+          }
+        };
+        meanMarkersRating = meanMarkersRating / markersWithMinRatingsCount;
+
+        // Calculates Bayesian Estimates
+        //   WR = (v * R + m * C) / (v + m) 
+        // where:
+        //   R = average for the movie (mean) = (Rating)
+        //   v = number of votes for the movie = (votes)
+        //   m = minimum votes required to be listed in the Top 250 (currently 1300)
+        //   C = the mean vote across the whole report (currently 6.8)
+        for(let i=0; i < markers.length; i++) {
+          const m = markers[i];
+          const nreviews = parseFloat(m.reviews);
+          if (nreviews >= minimumVotes) { 
+            m.bayesianAverage = (nreviews * m.rawAverage) + (minimumVotes * meanMarkersRating) / (nreviews + minimumVotes);
+            markersToShow.push(m);
+
+            // console.log('nreviews', nreviews);
+            // console.log('m.rawAverage', m.rawAverage);
+            // console.log('m.bayesianAverage', m.bayesianAverage);
+          }
+        };
+
+        // Sort by weighted average
+        markersToShow = markersToShow.sort((a, b) => { 
+          return b.bayesianAverage - a.bayesianAverage;
         });
         markersToShow = markersToShow.slice(0, MAX_PLACES);
+
+        console.log(markersToShow);
+
         break;
     }
 

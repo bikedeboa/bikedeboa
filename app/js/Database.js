@@ -587,6 +587,10 @@ BIKE.Database = {
         // Mark that no markers have retrieved their details
         m._hasDetails = false;
 
+        if (m.average) {
+          m.rawAverage = parseFloat(m.average);
+        }
+
         // Massage average format
         m.average = formatAverage(m.average);
       };
