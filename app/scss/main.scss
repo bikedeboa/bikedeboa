@@ -115,6 +115,13 @@ $GRID_SPACE: 12px;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+html {
+    // Fix to jumping scrollbar
+    // Thanks to https://aykevl.nl/2014/09/fix-jumping-scrollbar
+    width: 100vw;
+    overflow-x: hidden;
+}
+
 html, body {
     height: 100%;
 }
@@ -292,7 +299,7 @@ p {
 }
 
 #logo {
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 10px;
     margin: 0;
@@ -471,11 +478,9 @@ body.deeplink {
 
 #list-view,
 #map {
-    position: absolute;
+    position: fixed !important;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
 
     width: 100vw;
     // height: 100vh;
@@ -1170,6 +1175,11 @@ a,
 .modal {
     overflow-x: hidden;
     overflow-y: auto;
+
+    // Make it full screen
+    position: absolute;
+    bottom: auto;
+    // right: auto;
 }
 
 .clean-modal {
@@ -1206,7 +1216,7 @@ body.clean-modal-open {
 }
 
 body.modal-open {
-  overflow: hidden;
+  overflow-y: scroll;
 
   #close-modal-btn { 
     display: block;
@@ -2870,7 +2880,7 @@ body.modal-open {
     // Explanation on the reason for the string interpolation:
     //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
     height: calc(100% - #{$BOTTOM_NAV_HEIGHT});
-  }
+  } 
 
   #bottom-navbar {
     display: block;
@@ -2932,6 +2942,12 @@ body.modal-open {
   #nearestPlacesBtn,
   #nearestPlacesBtn + hr {
     display: none;
+  }
+
+  body.modal-open {
+    #list-view {
+      display: none;
+    }
   }
 
   .modal {

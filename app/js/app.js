@@ -879,7 +879,7 @@ $(() => {
     // (I'm not entirely sure this is needed though, but why not)
     clearTimeout(_centerChangedTimeout);
     _centerChangedTimeout = setTimeout( () => {
-      console.log('centerchanged');
+      // console.log('centerchanged');
 
       // Check center
       const isCenterWithinBounds = isPosWithinBounds(map.getCenter());
