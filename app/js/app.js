@@ -270,36 +270,41 @@ $(() => {
       ga('send', 'event', 'Misc', 'tooltip - pin details other type');
     });
 
-    if (previousReview) {
-      $('body').addClass('already-reviewed');
-    } else {
-      $('body').removeClass('already-reviewed');
-    }
-
     // Display the modal
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
 
-      $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
-        // Animate modal content
-        // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
-        // if (!templateData.savedRating) {
-        //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
-        // }
+      $('#placeDetailsModal')
+        .one('show.bs.modal', () => { 
+          // Global states
+          $('body').addClass('details-view');
+          if (previousReview) {
+            $('body').addClass('already-reviewed');
+          } else {
+            $('body').removeClass('already-reviewed');
+          }
+        })
+        .one('shown.bs.modal', () => { 
+          // Animate modal content
+          // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+          // if (!templateData.savedRating) {
+          //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
+          // }
 
-        // Global states
-        $('body').addClass('details-view');
- 
-        // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
-        // Thanks to https://github.com/limonte/sweetalert2/issues/374
-        $(document).off('focusin.modal');
+          // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
+          // Thanks to https://github.com/limonte/sweetalert2/issues/374
+          $(document).off('focusin.modal');
 
-        // @todo do this better please
-        if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
-          window._openLocalCallback();
-          window._openLocalCallback = undefined;
-        }
-      });
+          // @todo do this better please
+          if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
+            window._openLocalCallback();
+            window._openLocalCallback = undefined;
+          }
+        })
+        .one('hidden.bs.modal', () => {
+          $('body').removeClass('details-view');
+        })
+        .modal('show');
     } else { 
       // Just fade new detailed content in
       $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
@@ -1376,9 +1381,11 @@ $(() => {
       setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
     }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
-        showModal();
-      });
+      $('#placeDetailsModal')
+        .one('hidden.bs.modal', () => { 
+          showModal();
+        })
+        .modal('hide');
     } else {
       showModal();
     }
@@ -1879,9 +1886,6 @@ $(() => {
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
-      // @todo: not do this everytime
-      $('body').removeClass('details-view');
-
       if (_isMobile) {
         $('#map, #addPlace').removeClass('optimized-hidden');
 
@@ -2032,11 +2036,13 @@ $(() => {
     }
 
     if ($visibleModals.length > 0) {
-      $visibleModals.modal('hide').one('hidden.bs.modal', () => { 
-        if (callback && typeof callback === 'function') {
-          callback(); 
-        }
-      });
+      $visibleModals
+        .one('hidden.bs.modal', () => { 
+          if (callback && typeof callback === 'function') {
+            callback(); 
+          }
+        })
+        .modal('hide');
     } else {
       if (callback && typeof callback === 'function') {
         callback();
