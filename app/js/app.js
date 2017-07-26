@@ -2662,6 +2662,8 @@ $(() => {
 
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
+        updateMarkers();
+        
         if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
           _onDataReadyCallback();
           _onDataReadyCallback = null;
