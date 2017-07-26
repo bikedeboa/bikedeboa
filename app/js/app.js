@@ -1059,7 +1059,7 @@ $(() => {
               openLocal(newMarker, () => {
                 // $('.rating-input-container').velocity('callout.bounce');
                 $('.openReviewPanelBtn').tooltip('show');
-                setTimeout(() => {
+                setTimeout(() => { 
                   $('.openReviewPanelBtn').tooltip('hide');
                 }, 5000);
               });
