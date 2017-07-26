@@ -105,10 +105,10 @@ gulp.task('html', () => {
 
 gulp.task('generate-service-worker', function(callback) {
   swPrecache.write(`dist/service-worker.js`, {
-    staticFileGlobs: ['dist/**/*.{js,html,css}', 'dist/**/*.{woff,woff2,ttf}', 'public/**/*.{webmanifest}', 'assets/**/*.{png,jpg,svg}'], 
+    staticFileGlobs: ['dist/**/*.{js,html,css}', 'assets/**/*.{svg,png,jpg}', 'dist/**/*.{ttf}', 'public/**/*.{webmanifest}'], 
     stripPrefixMulti: {
       'dist/': '/', 
-      'assets/': '/',
+      'assets/': '/', 
       'public/': '/'
     },
     // If handleFetch is false (i.e. because this is called from generate-service-worker-dev), then
@@ -164,7 +164,7 @@ gulp.task('bower', function() {
 });
 
 gulp.task('bower-fonts', function() {
-  return gulp.src('./bower_components/**/*.{eot,svg,ttf,woff,woff2}')
+  return gulp.src('./bower_components/**/*.ttf')
     .pipe(flatten())
     .pipe(fileSizes({title: 'bower fonts', gzip: true}))
     .pipe(gulp.dest(DEST_PATH + '/fonts'));
