@@ -2468,8 +2468,11 @@ $(() => {
       _isMobile = isDesktopListener.matches;
     });
 
+    // Super specific mobile stuff
     if (_isMobile) {
       $('#locationQueryInput').attr('placeholder','Buscar endereço');
+
+      $('.modal').removeClass('fade');
     } else {
       $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
     }
