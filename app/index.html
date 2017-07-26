@@ -130,14 +130,26 @@
 
         <div id="revisionModalTemplatePlaceholder"></div>
 
-        <div id="offline-overlay">
-          <div class="offline-overlay-content">
-            <div class="offline-label"> 
+        <div id="offline-overlay" class="message-overlay">
+          <div class="message-overlay-content">
+            <div class="message-overlay-label"> 
               Você está<b> offline</b>.
             </div>
 
             <button id="reloadBtn" class="btn">
               Recarregar
+            </button>
+          </div>
+        </div>
+ 
+        <div id="out-of-bounds-overlay" class="message-overlay">
+          <div class="message-overlay-content"> 
+            <div class="message-overlay-label">  
+              Ops, o bike de boa ainda não funciona por aqui.
+            </div>
+
+            <button class="btn open-faq-btn"> 
+              Saiba mais
             </button>
           </div>
         </div>
@@ -676,7 +688,7 @@
                                 <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
                               </h2>
 
-                              <div class="custom-radio-group">
+                              <div class="custom-radio-group" data-form-step="1">
                                   <div data-value="deroda" class="typeIcon" tab-index="0">
                                       <img alt="" src="/img/tipo_deroda.svg"/>
                                       <div class="icon-label">De Roda</div>
@@ -712,7 +724,7 @@
                                 <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span>
                               </h2>
 
-                              <div class="acess-types-group">
+                              <div class="acess-types-group" data-form-step="2">
                                   <div data-value="public" class="typeIcon" tab-index="0">
                                       <img alt="" src="/img/icon_public.svg"/>
                                       <div class="icon-label">
@@ -849,7 +861,7 @@
                   {{/if}}
 
                   {{#unless average}}
-                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
                   {{/unless}}
 
                   <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
@@ -1171,7 +1183,7 @@
         <!-- External -->
 
         <!-- Hotjar -->
-        <script>
+        <script>  
           if (location.hostname === 'www.bikedeboa.com.br') {
             (function(h,o,t,j,a,r){
                 h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};

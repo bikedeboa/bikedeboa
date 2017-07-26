@@ -224,34 +224,41 @@ $(() => {
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
 
-      $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
-        // Animate modal content
-        // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
-        // if (!templateData.savedRating) {
-        //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
-        // }
+      $('#placeDetailsModal')
+        .one('show.bs.modal', () => { 
+          // Global states
+          $('body').addClass('details-view');
+          if (previousReview) {
+            $('body').addClass('already-reviewed');
+          } else {
+            $('body').removeClass('already-reviewed');
+          }
+        })
+        .one('shown.bs.modal', () => { 
+          // Animate modal content
+          // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+          // if (!templateData.savedRating) {
+          //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
+          // }
 
-        // Global states
-        $('body').addClass('details-view');
-        if (previousReview) {
-          $('body').addClass('already-reviewed');
-        } else {
-          $('body').removeClass('already-reviewed');
-        }
- 
-        // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
-        // Thanks to https://github.com/limonte/sweetalert2/issues/374
-        $(document).off('focusin.modal');
+          // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
+          // Thanks to https://github.com/limonte/sweetalert2/issues/374
+          $(document).off('focusin.modal');
 
-        // @todo do this better please
-        if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
-          window._openLocalCallback();
-          window._openLocalCallback = undefined;
-        }
-      });
+          // @todo do this better please
+          if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
+            window._openLocalCallback();
+            window._openLocalCallback = undefined;
+          }
+        })
+        .one('hidden.bs.modal', () => {
+          $('body').removeClass('details-view');
+        })
+        .modal('show');
     } else { 
       // Just fade new detailed content in
-      $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      // $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('#placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -870,10 +877,29 @@ $(() => {
     }
   }
 
-  function testNewLocalBounds() {
-    const isWithinBounds = _mapBounds.contains(map.getCenter());
-    $('#newPlaceholder').toggleClass('invalid', !isWithinBounds);
-    return isWithinBounds;
+  function isPosWithinBounds(pos) {
+    const ret = _mapBounds.contains(pos);
+    return ret;
+  }
+
+  function mapCenterChanged() {
+    // Makes sure this doesnt destroy the overall performance by limiting these calculations 
+    //   to not be executed more then 20 times per second (1000ms/50ms = 20x).
+    // (I'm not entirely sure this is needed though, but why not)
+    clearTimeout(_centerChangedTimeout);
+    _centerChangedTimeout = setTimeout( () => {
+      // console.log('centerchanged');
+
+      // Check center
+      const isCenterWithinBounds = isPosWithinBounds(map.getCenter());
+      $('#newPlaceholder').toggleClass('invalid', !isCenterWithinBounds);
+
+      // Check visible bounds
+      if (map.getBounds()) {
+        const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
+        $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
+      }
+    }, 50);
   }
 
   function toggleLocationInputMode() {
@@ -881,15 +907,7 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
-      // hideUI();
-
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
-
-      testNewLocalBounds();
-      map.addListener('center_changed', () => {
-        // console.log('center_changed');
-        testNewLocalBounds();
-      });
 
       $('body').addClass('position-pin-mode');
 
@@ -914,7 +932,7 @@ $(() => {
           openedMarker.lng = mapCenter.lng();
           openNewOrEditPlaceModal();
         } else {
-          if (testNewLocalBounds()) {
+          if (isPosWithinBounds(map.getCenter())) {
             openNewOrEditPlaceModal();
           } else {
             const mapCenter = map.getCenter();
@@ -951,16 +969,16 @@ $(() => {
     } else {
       // Turning OFF
 
-      // showUI();
-
       map.setOptions({styles: _gmapsCustomStyle});
 
       $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
-      if (map) {
-        google.maps.event.clearInstanceListeners(map);
-      }
+      
+      // Clear centerChanged event
+      // if (map) {
+      //   google.maps.event.clearInstanceListeners(map);
+      // }
     }
 
     toggleMarkers();
@@ -1041,7 +1059,7 @@ $(() => {
               openLocal(newMarker, () => {
                 // $('.rating-input-container').velocity('callout.bounce');
                 $('.openReviewPanelBtn').tooltip('show');
-                setTimeout(() => {
+                setTimeout(() => { 
                   $('.openReviewPanelBtn').tooltip('hide');
                 }, 5000);
               });
@@ -1281,6 +1299,17 @@ $(() => {
     $('.typeIcon').off('click.radio').on('click.radio', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
+
+      // const currentStep = $(e.currentTarget).parent().data('form-step');
+      // const nextStep = parseInt(currentStep) + 1;
+      // const nextStepEl = $(`[data-form-step="${nextStep}"]`);
+      // $('#newPlaceModal').animate({
+      //   scrollTop: $(`[data-form-step="${2}"]`).offset().top
+      // });
+
+      // $('#newPlaceModal').animate({ 
+      //   scrollTop: $(e.currentTarget).parent().offset().top
+      // });
     });
     // this has to be AFTER the typeIcon click trigger
     $('#newPlaceModal input, #newPlaceModal .typeIcon')
@@ -1350,9 +1379,11 @@ $(() => {
       setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
     }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
-        showModal();
-      });
+      $('#placeDetailsModal')
+        .one('hidden.bs.modal', () => { 
+          showModal();
+        })
+        .modal('hide');
     } else {
       showModal();
     }
@@ -1826,9 +1857,6 @@ $(() => {
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
-      // @todo: not do this everytime
-      $('body').removeClass('details-view');
-
       if (_isMobile) {
         $('#map, #addPlace').removeClass('optimized-hidden');
 
@@ -1894,11 +1922,13 @@ $(() => {
     }
 
     if ($visibleModals.length > 0) {
-      $visibleModals.modal('hide').one('hidden.bs.modal', () => { 
-        if (callback && typeof callback === 'function') {
-          callback(); 
-        }
-      });
+      $visibleModals
+        .one('hidden.bs.modal', () => { 
+          if (callback && typeof callback === 'function') {
+            callback(); 
+          }
+        })
+        .modal('hide');
     } else {
       if (callback && typeof callback === 'function') {
         callback();
@@ -2029,6 +2059,9 @@ $(() => {
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
 
+    mapCenterChanged();
+    map.addListener('center_changed', mapCenterChanged);
+
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
       maxWidth: 0,
@@ -2147,8 +2180,11 @@ $(() => {
       _isMobile = isDesktopListener.matches;
     });
 
+    // Super specific mobile stuff
     if (_isMobile) {
       $('#locationQueryInput').attr('placeholder','Buscar endereço');
+
+      $('.modal').removeClass('fade');
     } else {
       $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
     }

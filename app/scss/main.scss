@@ -41,6 +41,8 @@ $greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
 
 $filtersHightlightColor: $palePurple;
 
+$coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,26 +196,62 @@ p {
   margin: 0 0 1em;
 }
 
-#offline-overlay {
-  display: none;
+#out-of-bounds-overlay {
+  background: rgba(0,0,0,0.2);
+  pointer-events: none; 
 
+  .message-overlay-label {
+    color: white;
+    font-weight: bold;
+  }
+
+  .btn {
+    pointer-events: auto;
+
+    color: $paleWhite;
+
+    background: transparent;
+    border: 2px solid white;
+    text-transform: uppercase; 
+
+    transition: all 0.2s ease-out;
+
+    &:hover {
+      background: $paleWhite;
+      color: $gray;
+      border: 0;
+    }
+  }
+}
+
+.message-overlay {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  // display: flex;
   align-items: center;
   justify-content: center;
   flex-flow: row wrap;
   align-content: center;
+  display: flex;
 
-  .offline-overlay-content {
+  opacity: 0;
+  visibility: hidden;
+
+  transition: opacity 0.5s ease-in-out;
+
+  &.showThis {
+    opacity: 1;
+    visibility: visible;
+  }
+ 
+  .message-overlay-content {
     width: 230px;
     padding: 0 20px;
   }
 
-  .offline-label {
+  .message-overlay-label {
     font-size: 20px;
     color: $gray;
     text-align: center;
@@ -226,7 +264,7 @@ p {
 }
 
 #logo {
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 10px;
     margin: 0;
@@ -356,10 +394,9 @@ div.notice {
   // font-weight: bold;
   font-size: 14px;
   color: $gray;
-  border: 1px solid $lightGray;
   padding: $GRID_SPACE;
-  border-radius: 5px;
   margin-bottom: $GRID_SPACE;
+  background: $paleWhite;
 
   img { 
     width: 18px;
@@ -408,6 +445,25 @@ body.deeplink {
     // height: 100vh;
     height: 100%;
     /*margin-top: 50px;*/
+
+    transition: opacity 0.5s $coolEaseOut;
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+    }
+}
+
+#map {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+}
+
+#bottom-navbar {
+    display: none;
 }
 
 // iOS Fix
@@ -474,7 +530,7 @@ a,
     max-width: 600px;
     width: calc(100% - 20px); 
 
-    transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+    transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
     
     &.cool-hidden {
       opacity: 0;
@@ -1075,6 +1131,11 @@ a,
 .modal {
     overflow-x: hidden;
     overflow-y: auto;
+
+    // Make it full screen
+    position: absolute;
+    bottom: auto;
+    // right: auto;
 }
 
 .clean-modal {
@@ -1111,6 +1172,8 @@ body.clean-modal-open {
 }
 
 body.modal-open {
+  overflow-y: scroll;
+
   #close-modal-btn { 
     display: block;
     position: fixed;
@@ -2714,6 +2777,13 @@ body.modal-open {
     }
   }
 
+
+  body.modal-open {
+    #list-view {
+      display: none;
+    }
+  }
+
   .modal {
     &:before {
       content: ''
@@ -2838,63 +2908,31 @@ body.modal-open {
 
   body.details-view:not(.already-reviewed) #bottom-mobile-bar,
   body.modal-open #top-mobile-bar {
+    visibility: visible;
     opacity: 1;
+    transform: none;
     pointer-events: auto;
+    // transform: translateY(0);
+  } 
+
+  #top-mobile-bar,
+  #bottom-mobile-bar {
     display: block;
-  }
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none; 
 
-  #placeDetailsModal {
-    .review {
-      text-align: left;
-
-      #new-review-btn {
-        display: none;
-      }
-    }
-
-    .tagsContainer {
-      justify-content: flex-start;
-
-      .tagDisplay {
-        margin: 0 6px 6px 0;
-      }
-    }
-
-    .top-toolbar {
-      // justify-content: space-around;
-      // margin: 10px 10px -30px 0;
-
-      hr {
-        // display: none;
-        height: 60px;
-      }
-
-      .toolbar-item {
-        // max-width: 90px;
-
-        label {
-          font-size: 8px;
-        }
-
-        .toolbar-item-icon {
-          width: 25px;
-          height: 25px;
-        }
-      }
-    }
+    transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
   }
 
   #top-mobile-bar {
     border: 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1052; //under sweetalert dialogs
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
 
     #top-mobile-bar-title { 
       float: left;
@@ -2939,8 +2977,9 @@ body.modal-open {
     }
   }
 
+
   #bottom-mobile-bar {
-      position: absolute;
+      position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
@@ -2948,6 +2987,8 @@ body.modal-open {
 
       box-shadow: 0 -20px 30px white;
 
+      transform: translateY(20px);
+    
       #floating-cta-container {
         background: white;
         // border-top: 1px solid $lighterGray;
@@ -2971,6 +3012,47 @@ body.modal-open {
         text-transform: uppercase;
         background: $greenGradient;
       } 
+  }
+
+  #placeDetailsModal {
+    .review {
+      text-align: left;
+
+      #new-review-btn {
+        display: none;
+      }
+    }
+
+    .tagsContainer {
+      justify-content: flex-start;
+
+      .tagDisplay {
+        margin: 0 6px 6px 0;
+      }
+    }
+
+    .top-toolbar {
+      // justify-content: space-around;
+      // margin: 10px 10px -30px 0;
+
+      hr {
+        // display: none;
+        height: 60px;
+      }
+
+      .toolbar-item {
+        // max-width: 90px;
+
+        label {
+          font-size: 8px;
+        }
+
+        .toolbar-item-icon {
+          width: 25px;
+          height: 25px;
+        }
+      }
+    }
   }
 
   #filter-menu {

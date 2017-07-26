@@ -32,6 +32,8 @@ const DEST_PATH =  'dist';
 var development = environments.development;
 var production = environments.production;
 
+var DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
+
 console.log('NODE_ENV = ', process.env.NODE_ENV);
 
 
@@ -67,9 +69,10 @@ gulp.task('scripts', () => {
   gulp.src('app/service-worker-registration.js')
     .pipe(gulp.dest('dist/'));
 
-  return gulp.src('app/js/*.js')
-    .pipe(sourcemaps.init())
-    .pipe(plumber())
+  return gulp.src('app/js/*.js') 
+    .pipe(development(sourcemaps.init()))
+    .pipe(replace('<DATABASE_URL>', DATABASE_URL))
+    .pipe(plumber()) 
     .pipe(concat('app.js'))
     .pipe(babel({
       presets: ['es2015']
@@ -102,10 +105,10 @@ gulp.task('html', () => {
 
 gulp.task('generate-service-worker', function(callback) {
   swPrecache.write(`dist/service-worker.js`, {
-    staticFileGlobs: ['dist/**/*.{js,html,css}', 'dist/**/*.{woff,woff2,ttf}', 'public/**/*.{webmanifest}', 'assets/**/*.{png,jpg,svg}'], 
+    staticFileGlobs: ['dist/**/*.{js,html,css}', 'assets/**/*.{svg,png,jpg}', 'dist/**/*.{ttf}', 'public/**/*.{webmanifest}'], 
     stripPrefixMulti: {
       'dist/': '/', 
-      'assets/': '/',
+      'assets/': '/', 
       'public/': '/'
     },
     // If handleFetch is false (i.e. because this is called from generate-service-worker-dev), then
@@ -161,7 +164,7 @@ gulp.task('bower', function() {
 });
 
 gulp.task('bower-fonts', function() {
-  return gulp.src('./bower_components/**/*.{eot,svg,ttf,woff,woff2}')
+  return gulp.src('./bower_components/**/*.ttf')
     .pipe(flatten())
     .pipe(fileSizes({title: 'bower fonts', gzip: true}))
     .pipe(gulp.dest(DEST_PATH + '/fonts'));
