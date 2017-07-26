@@ -1292,6 +1292,17 @@ $(() => {
     $('.typeIcon').off('click.radio').on('click.radio', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
+
+      // const currentStep = $(e.currentTarget).parent().data('form-step');
+      // const nextStep = parseInt(currentStep) + 1;
+      // const nextStepEl = $(`[data-form-step="${nextStep}"]`);
+      // $('#newPlaceModal').animate({
+      //   scrollTop: $(`[data-form-step="${2}"]`).offset().top
+      // });
+
+      // $('#newPlaceModal').animate({ 
+      //   scrollTop: $(e.currentTarget).parent().offset().top
+      // });
     });
     // this has to be AFTER the typeIcon click trigger
     $('#newPlaceModal input, #newPlaceModal .typeIcon')
