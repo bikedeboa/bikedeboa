@@ -429,10 +429,9 @@ div.notice {
   // font-weight: bold;
   font-size: 14px;
   color: $gray;
-  border: 1px solid $lightGray;
   padding: $GRID_SPACE;
-  border-radius: 5px;
   margin-bottom: $GRID_SPACE;
+  background: $paleWhite;
 
   img { 
     width: 18px;
