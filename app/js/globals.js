@@ -72,8 +72,10 @@ let isDemoMode = false;//
 //                     //
 /////////////////////////
 
-let map;
+
+let _portoAlegrePos = {lat: -30.0346, lng: -51.2177};
 let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+let map;
 let _mapBounds;
 let Database;
 let geocoder;
