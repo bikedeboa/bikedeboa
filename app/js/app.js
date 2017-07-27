@@ -367,47 +367,47 @@ $(() => {
                   };
 
                   // Test if user located is inside our bounds
-                  if (_mapBounds.contains(pos)) {
+                  // if (_mapBounds.contains(pos)) {
                     map.panTo(pos);
                     
                     // Set minimum map zoom
-                    if (map.getZoom() < 17) {
+                    if (map.getZoom() < 17) { 
                       map.setZoom(17);
                     }
-                  } else {  
-                    ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
+                  // } else {  
+                  //   ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
           
-                    swal({ 
-                      customClass: 'coverage-notice-modal',
-                      confirmButtonText: 'Continuar usando',
-                      title: 'Oi! Só uma coisinha',
-                      html:
-                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
-                        <br>
-                        <div class="panel-group" aria-controls="coverage-notice-read-more">
-                          <div class="panel">
-                            <div class="panel-heading">
-                              <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
-                                <h4 class="panel-title">
-                                  Leia mais 
-                                </h4>
-                              </a>
-                            </div>
-                            <div id="coverage-notice-read-more" class="panel-collapse collapse">
-                              <div class="panel-body">
-                                <p>
-                                  Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
-                                </p>
-                                <p>
-                                  Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>`,
-                      type: 'info'
-                    });
-                  }
+                  //   swal({ 
+                  //     customClass: 'coverage-notice-modal',
+                  //     confirmButtonText: 'Continuar usando',
+                  //     title: 'Oi! Só uma coisinha',
+                  //     html:
+                  //       `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
+                  //       <br>
+                  //       <div class="panel-group" aria-controls="coverage-notice-read-more">
+                  //         <div class="panel">
+                  //           <div class="panel-heading">
+                  //             <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
+                  //               <h4 class="panel-title">
+                  //                 Leia mais 
+                  //               </h4>
+                  //             </a>
+                  //           </div>
+                  //           <div id="coverage-notice-read-more" class="panel-collapse collapse">
+                  //             <div class="panel-body">
+                  //               <p>
+                  //                 Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
+                  //               </p>
+                  //               <p>
+                  //                 Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
+                  //               </p>
+                  //             </div>
+                  //           </div>
+                  //         </div>
+                  //       </div>`,
+                  //     type: 'info'
+                  //   });
+                  // }
                 }
               }
 
@@ -1774,6 +1774,11 @@ $(() => {
       setView('Perguntas frequentes', '/faq', true);
     }));
 
+    $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
+      map.setCenter(_portoAlegrePos);
+      map.setZoom(6);
+    }));
+
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // Make sure the new local modal won't think we're editing a local
       if (!$('#addPlace').hasClass('active')) {
@@ -2038,10 +2043,7 @@ $(() => {
         lng: parseFloat(_deeplinkMarker.lng)
       }
     } else {
-      initialCenter = {
-        lat: -30.0346,
-        lng: -51.2177
-      }
+      initialCenter = _portoAlegrePos;
     }
 
     map = new google.maps.Map(document.getElementById('map'), {
