@@ -17,7 +17,20 @@
         <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script> -->
 
         <!-- JS -->
-        <script src="/js/vendors.min.js"></script>
+       <!-- CSS (async) -->
+        <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
+        <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
+
+        <!-- JS --> 
+        <script src="/js/lib/jquery.js"></script> 
+        <script src="/js/lib/bootstrap.js"></script>
+        <script src="/js/lib/handlebars.js"></script>
+        <script src="/js/lib/js.cookie.js"></script>
+        <script src="/js/lib/native.history.js"></script>
+        <script src="/js/lib/sweetalert2.js"></script>
+        <script src="/js/lib/toastr.js"></script> 
+        <script src="/js/lib/velocity.js"></script> 
+        <script src="/js/lib/velocity.ui.js"></script>
         <script src="/js/app.min.js"></script>
 
         <!-- Bootstrap Extended Tables -->
@@ -46,6 +59,7 @@
             font-family: "Roboto", Arial, sans-serif;
             /*margin-top: 100px;*/
             padding: 2%;
+            overflow: auto;
           }
 
           tbody > tr:not(.detail-view) {
