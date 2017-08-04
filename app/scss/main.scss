@@ -42,6 +42,7 @@ $greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
 $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
+$easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,15 +380,18 @@ p {
 
 .social-link {
   opacity: 0.7;
-  transition: opacity 0.2s ease;
   border: 0;
   padding: 12px;
+  backface-visibility: hidden;
+  
+  transition: opacity 0.2s ease, transform 0.2s ease;
 
   &:hover,
   &:focus {
     opacity: 1;
     text-decoration: none;
     border: 0;
+    transform: scale(1.1);
   }
 
   img {
@@ -731,8 +735,8 @@ a,
   }
 
   p.subtitle {
-    font-size: 22px;
-    font-style: italic;
+    font-size: 24px;
+    // font-style: italic;
     margin-bottom: 3em;
   }
 
@@ -2265,12 +2269,18 @@ body.modal-open {
     width: 100%;
     padding: $GRID_SPACE/2 0;
     // min-width: 110px;
+
+    backface-visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease;
     
     transition: filter 0.2s ease-out, background .2s ease-out;
 
     .toolbar-item-icon {
       width: 30px;
       height: 30px;
+
+      transition: transform .3s $easeOutQuart;
+
       &.glyphicon {
         font-size: 20px;
         line-height: 30px; 
@@ -2291,6 +2301,10 @@ body.modal-open {
       filter: none;
       text-decoration: none;
       background: $paleWhite;
+
+      .toolbar-item-icon {
+        transform: scale(1.1);
+      }
     }
   }
 
