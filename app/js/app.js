@@ -2238,6 +2238,11 @@ $(() => {
 
     // Initialize router
     _onDataReadyCallback = () => {
+      if (window.performance) {
+        const timeSincePageLoad = Math.round(performance.now());
+        ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
+      }
+
       const isMatch = handleRouting();
       
       if (isMatch) {
