@@ -57,10 +57,6 @@
           }
         </script>
 
-        <!-- CSS (async) -->
-        <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
-        <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
-
         <!-- Google Fonts (async) -->
         <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet"> -->
         <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu:400i" rel="stylesheet"> -->
@@ -86,6 +82,10 @@
         <!-- GitHub Buttons -->
         <script async defer src="https://buttons.github.io/buttons.js"></script>
 
+        <!-- CSS (async) -->
+        <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
+        <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
+
         <!-- JS --> 
         <script defer src="/service-worker-registration.min.js"></script> 
         <script defer src="/js/lib/jquery.js"></script> 
@@ -101,33 +101,7 @@
     </head> 
 
     <body> 
-        <div id="map">
-          <div id="map-offline-overlay" class="message-overlay">
-            <div class="map-offline-overlay-content">
-              <!-- <img alt="" src="/img/icon_offline.svg"/> -->
-
-              <div class="offline-label"> 
-                Você está offline.
-              </div>
-
-              <button id="reloadBtn" class="btn">
-                Recarregar
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div id="out-of-bounds-overlay" class="message-overlay">
-          <div class="message-overlay-content"> 
-            <div class="message-overlay-label">  
-              Ops, o bike de boa ainda não funciona por aqui.
-            </div>
-
-            <button class="btn open-faq-btn"> 
-              Saiba mais
-            </button>
-          </div>
-        </div>
+        <div id="map"></div>
 
         <div id="list-view"></div>
         
@@ -171,6 +145,36 @@
         <button id="geolocationBtn" class="cool-hidden">
             <img alt="Onde estou?" src="/img/geolocation.svg">
         </button>
+
+        <div id="revisionModalTemplatePlaceholder"></div>
+
+        <div id="offline-overlay" class="message-overlay">
+          <div class="message-overlay-content">
+            <div class="message-overlay-label"> 
+              Você está<b> offline</b>.
+            </div>
+
+            <button id="reloadBtn" class="btn">
+              Recarregar
+            </button>
+          </div>
+        </div>
+ 
+        <div id="out-of-bounds-overlay" class="message-overlay">
+          <div class="message-overlay-content"> 
+            <div class="message-overlay-label">  
+              Ops, por enquanto o bike de boa só funciona no Rio Grande do Sul. 
+            </div> 
+  
+            <button class="btn open-faq-btn">  
+              Saiba mais
+            </button>
+
+            <button class="btn go-to-poa"> 
+              Me leva pra lá
+            </button>
+          </div>
+        </div>
 
         <button id="addPlace" class="cool-hidden">
             <img alt="Adicionar bicicletário" src="/img/icon_add_pin.svg">
@@ -399,7 +403,7 @@
                               </p> -->
 
                               <p class="subtitle">
-                                O quão bom seria poder ir de bicicleta pra onde quiséssemos na cidade? Hoje em dia no Brasil muitos fatores nos impedem diariamente de poder fazer isso. Um dos maiores problemas é a falta de lugares para estacionar a bicicleta com segurança. Ciclistas, estabelecimentos comerciais, governos, ninguém parece saber direito o que significa ter um lugar pra deixar a bicicleta “de boa”.
+                                O quão bom seria poder ir de bicicleta pra onde quiséssemos na cidade? Um dos maiores problemas é a falta de lugares para estacionar a bicicleta com segurança. Ciclistas, estabelecimentos comerciais, governos, ninguém parece saber direito o que significa ter um lugar pra deixar a bicicleta “de boa”.
                               </p>
 
                               <h2>Como</h2>
@@ -663,7 +667,7 @@
                                 </div>
                               </div>
 
-                              <p>
+                              <p style="color: #828b90;margin-top: 48px;">
                                 Não encontrou tua dúvida? Estamos sempre de olho no <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> email</a> ou na nossa <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">página no Facebook</a>.
                               </p>
                             </article>
@@ -791,7 +795,7 @@
                   {{/if}}
 
                   {{#unless average}}
-                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
                   {{/unless}}
 
                   <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>

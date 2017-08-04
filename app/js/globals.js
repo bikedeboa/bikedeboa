@@ -50,8 +50,6 @@ const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', '
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
-const PORTO_ALEGRE_CENTER_POS = {lat: -30.0346, lng: -51.2177 };
-
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 const MOBILE_MAX_WIDTH = '414px';
@@ -74,8 +72,10 @@ let isDemoMode = false;//
 //                     //
 /////////////////////////
 
-let map;
+
+let _portoAlegrePos = {lat: -30.0346, lng: -51.2177};
 let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+let map;
 let _mapBounds;
 let Database;
 let geocoder;
