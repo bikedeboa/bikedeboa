@@ -2471,6 +2471,11 @@ $(() => {
 
     // Initialize router
     _onDataReadyCallback = () => {
+      if (window.performance) {
+        const timeSincePageLoad = Math.round(performance.now());
+        ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
+      }
+      
       // Hide spinner that is initialized visible on CSS
       hideSpinner();
 
