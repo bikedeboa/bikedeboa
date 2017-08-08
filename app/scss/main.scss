@@ -348,10 +348,18 @@ p {
 .social-link {
   opacity: 0.7;
   border: 0;
-  padding: 12px;
+  padding: 16px;
   backface-visibility: hidden;
   
   transition: opacity 0.2s ease, transform 0.2s ease;
+
+  &:first-child {
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
 
   &:hover,
   &:focus {
@@ -3201,9 +3209,11 @@ body.modal-open {
 .confetti-placeholder {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 2000;
   pointer-events: none;
 }
@@ -3662,10 +3672,19 @@ body.modal-open {
 }
 
 .side-nav__footer {
-    padding: $GRID_SPACE;
-    display: flex;
-    justify-content: space-around;
-    // background-color: $lightestGray;
+    padding: 16px;
+
+    .footer-label {
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .social-links-list {
+      display: flex;
+      // justify-content: space-around;
+      // background-color: $lightestGray;
+    }
 }
 
 .side-nav__content {

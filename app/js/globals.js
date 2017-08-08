@@ -111,5 +111,6 @@ let _isDeeplink = false;
 let _deeplinkMarker;
 let _onDataReadyCallback;
 let _centerChangedTimeout;
+let _deferredPWAPrompt;
 
 let templates = {};
