@@ -115,5 +115,6 @@ let _onDataReadyCallback;
 let _currentTab;
 let _centerChangedTimeout;
 let _geolocationPermissionQuery;
+let _deferredPWAPrompt;
 
 let templates = {};
