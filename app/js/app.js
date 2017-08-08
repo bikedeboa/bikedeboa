@@ -1742,15 +1742,15 @@ $(() => {
       }
     });
 
-    $('#facebook-social-link').on('click', () => {
+    $('.facebook-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'facebook hamburger menu link click');
     });
 
-    $('#instagram-social-link').on('click', () => {
+    $('.instagram-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'instagram hamburger menu link click');
     });
 
-    $('#github-social-link').on('click', () => {
+    $('.github-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'github hamburger menu link click');
     });
 
