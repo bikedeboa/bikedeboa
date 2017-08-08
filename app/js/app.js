@@ -1057,6 +1057,8 @@ $(() => {
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
               openLocal(newMarker, () => {
+                promptInstallPopup();
+
                 // $('.rating-input-container').velocity('callout.bounce');
                 $('.openReviewPanelBtn').tooltip('show');
                 setTimeout(() => { 
@@ -1574,6 +1576,8 @@ $(() => {
             },
             onClose: () => {
               stopConfettis();
+
+              promptInstallPopup();
             } 
           });
         }
@@ -1962,31 +1966,64 @@ $(() => {
     map.data.setMap(null);
   }
 
-  function openHowToInstallModal() {
-    if (_isMobile) {
-      // Tries to guess the user agent to initialize the correspondent accordion item opened
-      const userAgent = window.getBrowserName();
-      switch (userAgent) {
-        case 'Chrome':
-          $('#collapse-chrome').addClass('in');
-          break;
-        case 'Firefox':
-          $('#collapse-firefox').addClass('in');
-          break;
-        case 'Safari':
-          $('#collapse-safari').addClass('in');
-          break;
-      }
+  function promptInstallPopup() { 
+    // Deferred prompt handling based on:
+    //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
+    if (_deferredPWAPrompt !== undefined) {
+      // The user has had a postive interaction with our app and Chrome
+      // has tried to prompt previously, so let's show the prompt.
+      _deferredPWAPrompt.prompt(); 
+
+      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
+      e.userChoice.then(function(choiceResult) {
+        // console.log(choiceResult.outcome); 
+        if(choiceResult.outcome == 'dismissed') {
+          // User cancelled home screen install
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+        }
+        else {
+          // User added to home screen
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+        }
+      });
+
+      _deferredPWAPrompt = false;
+
+      return true;
+    } else {
+      return false;
     }
+  }
 
-    // Lazy load gifs when modal is shown
-    $('#howToInstallModal .tutorial-gif').each( (i, v) => {
-      $(v).attr('src', $(v).data('src'));
-    });
+  function openHowToInstallModal() {
+    const hasNativePromptWorked = promptInstallPopup();
 
-    $('#howToInstallModal').modal('show');
+    if (!hasNativePromptWorked) {
+      if (_isMobile) {
+        // Tries to guess the user agent to initialize the correspondent accordion item opened
+        const userAgent = window.getBrowserName();
+        switch (userAgent) {
+          case 'Chrome':
+            $('#collapse-chrome').addClass('in');
+            break;
+          case 'Firefox':
+            $('#collapse-firefox').addClass('in');
+            break;
+          case 'Safari':
+            $('#collapse-safari').addClass('in');
+            break;
+        }
+      }
 
-    $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      // Lazy load gifs when modal is shown
+      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
+        $(v).attr('src', $(v).data('src'));
+      });
+
+      $('#howToInstallModal').modal('show');
+
+      $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
   }
 
   function openFaqModal() {
@@ -2314,19 +2351,12 @@ $(() => {
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
     window.addEventListener('beforeinstallprompt', e => {
-      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
+      e.preventDefault();
+      _deferredPWAPrompt = e;
 
-      e.userChoice.then(function(choiceResult) {
-        // console.log(choiceResult.outcome); 
-        if(choiceResult.outcome == 'dismissed') {
-          // User cancelled home screen install
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
-        }
-        else {
-          // User added to home screen
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
-        }
-      });
+      $('#howToInstallBtn').css({'font-weight': 'bold'});
+
+      return false;
     });
   }
 
