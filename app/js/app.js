@@ -2400,7 +2400,9 @@ $(() => {
       console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
       hideSpinner();
-    } 
+    } else {
+      showSpinner('Carregando bicicletários...');
+    }
 
     if (!_isOffline) {
       // Use external service to get user's IP
