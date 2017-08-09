@@ -1605,11 +1605,11 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 0 }, { 'display': 'none' });
+    $('#map, #addPlace, .login-display, #filterBtn, .header__menu-toggle, #geolocationBtn').velocity({ opacity: 0 }, { 'display': 'none' });
   }
 
   function exitLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
+    $('#map, #addPlace, .login-display, #filterBtn, .header__menu-toggle, #geolocationBtn').velocity({ opacity: 1 }, { 'display': 'block' });
   }
 
   function setPageTitle(text) {
@@ -1890,16 +1890,16 @@ $(() => {
     });
 
     // Location Search Mode control
-    // $('#locationQueryInput').on('focus', e => { 
-    //   if (_isMobile) {
-    //     enterLocationSearchMode();
-    //   }
-    // });
-    // $('#locationQueryInput').on('blur', e => {
-    //   if (_isMobile) {
-    //     exitLocationSearchMode();
-    //   }
-    // });
+    $('#locationQueryInput').on('focus', e => { 
+      if (_isMobile) {
+        enterLocationSearchMode();
+      }
+    });
+    $('#locationQueryInput').on('blur', e => {
+      if (_isMobile) {
+        exitLocationSearchMode();
+      }
+    });
 
     // Location Search
     $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
