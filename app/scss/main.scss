@@ -674,7 +674,43 @@ a,
     }
 }
 
-#aboutModal {
+#guideModal {
+  $offscreenMargin: 100px;
+
+  .guide-img-row {
+    margin-top: 3em;
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  .guide-type-img {
+    width: 300px;
+    height: 300px;
+    padding: 24px;
+    padding-top: 0;
+  }
+
+  section {
+    margin-top: 6em;
+
+    &:nth-child(even) .guide-type-img {
+      float: right;
+      // margin-left: 70px;
+      margin-right: -$offscreenMargin;
+    }
+
+    &:nth-child(odd) .guide-type-img {
+      float: left;
+      margin-left: -$offscreenMargin;
+      // margin-right: 70px;
+    }
+  }
+}
+
+#aboutModal,
+#guideModal {
   $leading: 18px;
 
   #about-social-buttons {
@@ -725,6 +761,7 @@ a,
     margin-bottom: .5em;
     text-align: left;
     letter-spacing: -0.01em;
+    font-weight: bold;
   }
 
   h2, p {

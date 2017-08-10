@@ -1778,6 +1778,12 @@ $(() => {
       setView('Perguntas frequentes', '/faq', true);
     }));
 
+    $('.open-guide-btn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      ga('send', 'event', 'Misc', 'faq opened');
+      setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
+    }));
+
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
       map.setCenter(_portoAlegrePos);
       map.setZoom(6);
@@ -2027,13 +2033,23 @@ $(() => {
   }
 
   function openFaqModal() {
-    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     $('#faqModal').modal('show');
+    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
     $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
       const questionTitle = $(e.target).parent().find('.panel-title').text();
       ga('send', 'event', 'FAQ', 'question opened', questionTitle);
     })
+  }
+
+  function openGuideModal() {
+    $('#guideModal').modal('show');
+    $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+  }
+
+  function openAboutModal() {
+    $('#aboutModal').modal('show');
+    $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
   function handleRouting() { 
@@ -2057,9 +2073,11 @@ $(() => {
       case 'como-instalar':
         openHowToInstallModal();
         break;
+      case 'guia-de-bicicletarios':
+        openGuideModal();
+        break;
       case 'sobre':
-        $('#aboutModal').modal('show');
-        $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+        openAboutModal();
         break;
       // case 'nav':
       // case 'filtros':
