@@ -43,6 +43,7 @@ $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
 $easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
+$spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2241,7 +2242,7 @@ body.modal-open {
       width: 30px;
       height: 30px;
 
-      transition: transform .3s $easeOutQuart;
+      transition: transform .3s $spotifyBounce;
 
       &.glyphicon {
         font-size: 20px;
