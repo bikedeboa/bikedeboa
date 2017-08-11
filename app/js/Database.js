@@ -5,9 +5,9 @@ BIKE.Database = {
   // G L O B A L S //
   ///////////////////
 
-  // API path, without the final slash ('/')
-  // API_URL: (location.hostname === 'www.bikedeboa.com.br' || location.hostname === 'bikedeboa-dev.herokuapp.com') ? 'https://bdb-api.herokuapp.com' : 'https://bdb-test-api.herokuapp.com',
-  API_URL: 'http://localhost:3000',
+  // variable replaced by Gulp
+  API_URL: '<DATABASE_URL>', 
+  // API_URL: 'http://localhost:3000',
   isAuthenticated: false,  
   _authToken: '',
   _headers: {},

@@ -224,34 +224,41 @@ $(() => {
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
 
-      $('#placeDetailsModal').modal('show').one('shown.bs.modal', () => { 
-        // Animate modal content
-        // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
-        // if (!templateData.savedRating) {
-        //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
-        // }
+      $('#placeDetailsModal')
+        .one('show.bs.modal', () => { 
+          // Global states
+          $('body').addClass('details-view');
+          if (previousReview) {
+            $('body').addClass('already-reviewed');
+          } else {
+            $('body').removeClass('already-reviewed');
+          }
+        })
+        .one('shown.bs.modal', () => { 
+          // Animate modal content
+          // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+          // if (!templateData.savedRating) {
+          //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
+          // }
 
-        // Global states
-        $('body').addClass('details-view');
-        if (previousReview) {
-          $('body').addClass('already-reviewed');
-        } else {
-          $('body').removeClass('already-reviewed');
-        }
- 
-        // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
-        // Thanks to https://github.com/limonte/sweetalert2/issues/374
-        $(document).off('focusin.modal');
+          // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
+          // Thanks to https://github.com/limonte/sweetalert2/issues/374
+          $(document).off('focusin.modal');
 
-        // @todo do this better please
-        if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
-          window._openLocalCallback();
-          window._openLocalCallback = undefined;
-        }
-      });
+          // @todo do this better please
+          if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
+            window._openLocalCallback();
+            window._openLocalCallback = undefined;
+          }
+        })
+        .one('hidden.bs.modal', () => {
+          $('body').removeClass('details-view');
+        })
+        .modal('show');
     } else { 
       // Just fade new detailed content in
-      $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      // $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('#placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -360,47 +367,47 @@ $(() => {
                   };
 
                   // Test if user located is inside our bounds
-                  if (_mapBounds.contains(pos)) {
+                  // if (_mapBounds.contains(pos)) {
                     map.panTo(pos);
                     
                     // Set minimum map zoom
-                    if (map.getZoom() < 17) {
+                    if (map.getZoom() < 17) { 
                       map.setZoom(17);
                     }
-                  } else {  
-                    ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
+                  // } else {  
+                  //   ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
           
-                    swal({ 
-                      customClass: 'coverage-notice-modal',
-                      confirmButtonText: 'Continuar usando',
-                      title: 'Oi! Só uma coisinha',
-                      html:
-                        `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
-                        <br>
-                        <div class="panel-group" aria-controls="coverage-notice-read-more">
-                          <div class="panel">
-                            <div class="panel-heading">
-                              <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
-                                <h4 class="panel-title">
-                                  Leia mais 
-                                </h4>
-                              </a>
-                            </div>
-                            <div id="coverage-notice-read-more" class="panel-collapse collapse">
-                              <div class="panel-body">
-                                <p>
-                                  Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
-                                </p>
-                                <p>
-                                  Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>`,
-                      type: 'info'
-                    });
-                  }
+                  //   swal({ 
+                  //     customClass: 'coverage-notice-modal',
+                  //     confirmButtonText: 'Continuar usando',
+                  //     title: 'Oi! Só uma coisinha',
+                  //     html:
+                  //       `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
+                  //       <br>
+                  //       <div class="panel-group" aria-controls="coverage-notice-read-more">
+                  //         <div class="panel">
+                  //           <div class="panel-heading">
+                  //             <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
+                  //               <h4 class="panel-title">
+                  //                 Leia mais 
+                  //               </h4>
+                  //             </a>
+                  //           </div>
+                  //           <div id="coverage-notice-read-more" class="panel-collapse collapse">
+                  //             <div class="panel-body">
+                  //               <p>
+                  //                 Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
+                  //               </p>
+                  //               <p>
+                  //                 Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
+                  //               </p>
+                  //             </div>
+                  //           </div>
+                  //         </div>
+                  //       </div>`,
+                  //     type: 'info'
+                  //   });
+                  // }
                 }
               }
 
@@ -870,10 +877,29 @@ $(() => {
     }
   }
 
-  function testNewLocalBounds() {
-    const isWithinBounds = _mapBounds.contains(map.getCenter());
-    $('#newPlaceholder').toggleClass('invalid', !isWithinBounds);
-    return isWithinBounds;
+  function isPosWithinBounds(pos) {
+    const ret = _mapBounds.contains(pos);
+    return ret;
+  }
+
+  function mapCenterChanged() {
+    // Makes sure this doesnt destroy the overall performance by limiting these calculations 
+    //   to not be executed more then 20 times per second (1000ms/50ms = 20x).
+    // (I'm not entirely sure this is needed though, but why not)
+    clearTimeout(_centerChangedTimeout);
+    _centerChangedTimeout = setTimeout( () => {
+      // console.log('centerchanged');
+
+      // Check center
+      const isCenterWithinBounds = isPosWithinBounds(map.getCenter());
+      $('#newPlaceholder').toggleClass('invalid', !isCenterWithinBounds);
+
+      // Check visible bounds
+      if (map.getBounds()) {
+        const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
+        $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
+      }
+    }, 50);
   }
 
   function toggleLocationInputMode() {
@@ -881,15 +907,7 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
-      // hideUI();
-
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
-
-      testNewLocalBounds();
-      map.addListener('center_changed', () => {
-        // console.log('center_changed');
-        testNewLocalBounds();
-      });
 
       $('body').addClass('position-pin-mode');
 
@@ -914,7 +932,7 @@ $(() => {
           openedMarker.lng = mapCenter.lng();
           openNewOrEditPlaceModal();
         } else {
-          if (testNewLocalBounds()) {
+          if (isPosWithinBounds(map.getCenter())) {
             openNewOrEditPlaceModal();
           } else {
             const mapCenter = map.getCenter();
@@ -951,16 +969,16 @@ $(() => {
     } else {
       // Turning OFF
 
-      // showUI();
-
       map.setOptions({styles: _gmapsCustomStyle});
 
       $('#newPlaceholder').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
-      if (map) {
-        google.maps.event.clearInstanceListeners(map);
-      }
+      
+      // Clear centerChanged event
+      // if (map) {
+      //   google.maps.event.clearInstanceListeners(map);
+      // }
     }
 
     toggleMarkers();
@@ -1039,9 +1057,11 @@ $(() => {
             const newMarker = markers.find( i => i.id === newLocal.id );
             if (newMarker) {
               openLocal(newMarker, () => {
+                promptInstallPopup();
+
                 // $('.rating-input-container').velocity('callout.bounce');
                 $('.openReviewPanelBtn').tooltip('show');
-                setTimeout(() => {
+                setTimeout(() => { 
                   $('.openReviewPanelBtn').tooltip('hide');
                 }, 5000);
               });
@@ -1281,6 +1301,17 @@ $(() => {
     $('.typeIcon').off('click.radio').on('click.radio', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
+
+      // const currentStep = $(e.currentTarget).parent().data('form-step');
+      // const nextStep = parseInt(currentStep) + 1;
+      // const nextStepEl = $(`[data-form-step="${nextStep}"]`);
+      // $('#newPlaceModal').animate({
+      //   scrollTop: $(`[data-form-step="${2}"]`).offset().top
+      // });
+
+      // $('#newPlaceModal').animate({ 
+      //   scrollTop: $(e.currentTarget).parent().offset().top
+      // });
     });
     // this has to be AFTER the typeIcon click trigger
     $('#newPlaceModal input, #newPlaceModal .typeIcon')
@@ -1350,9 +1381,11 @@ $(() => {
       setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
     }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal').modal('hide').one('hidden.bs.modal', () => { 
-        showModal();
-      });
+      $('#placeDetailsModal')
+        .one('hidden.bs.modal', () => { 
+          showModal();
+        })
+        .modal('hide');
     } else {
       showModal();
     }
@@ -1543,6 +1576,8 @@ $(() => {
             },
             onClose: () => {
               stopConfettis();
+
+              promptInstallPopup();
             } 
           });
         }
@@ -1707,15 +1742,15 @@ $(() => {
       }
     });
 
-    $('#facebook-social-link').on('click', () => {
+    $('.facebook-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'facebook hamburger menu link click');
     });
 
-    $('#instagram-social-link').on('click', () => {
+    $('.instagram-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'instagram hamburger menu link click');
     });
 
-    $('#github-social-link').on('click', () => {
+    $('.github-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'github hamburger menu link click');
     });
 
@@ -1746,6 +1781,11 @@ $(() => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Perguntas frequentes', '/faq', true);
+    }));
+
+    $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
+      map.setCenter(_portoAlegrePos);
+      map.setZoom(6);
     }));
 
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
@@ -1831,9 +1871,6 @@ $(() => {
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
-      // @todo: not do this everytime
-      $('body').removeClass('details-view');
-
       if (_isMobile) {
         $('#map, #addPlace').removeClass('optimized-hidden');
 
@@ -1899,11 +1936,13 @@ $(() => {
     }
 
     if ($visibleModals.length > 0) {
-      $visibleModals.modal('hide').one('hidden.bs.modal', () => { 
-        if (callback && typeof callback === 'function') {
-          callback(); 
-        }
-      });
+      $visibleModals
+        .one('hidden.bs.modal', () => { 
+          if (callback && typeof callback === 'function') {
+            callback(); 
+          }
+        })
+        .modal('hide');
     } else {
       if (callback && typeof callback === 'function') {
         callback();
@@ -1932,31 +1971,64 @@ $(() => {
     map.data.setMap(null);
   }
 
-  function openHowToInstallModal() {
-    if (_isMobile) {
-      // Tries to guess the user agent to initialize the correspondent accordion item opened
-      const userAgent = window.getBrowserName();
-      switch (userAgent) {
-        case 'Chrome':
-          $('#collapse-chrome').addClass('in');
-          break;
-        case 'Firefox':
-          $('#collapse-firefox').addClass('in');
-          break;
-        case 'Safari':
-          $('#collapse-safari').addClass('in');
-          break;
-      }
+  function promptInstallPopup() { 
+    // Deferred prompt handling based on:
+    //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
+    if (_deferredPWAPrompt !== undefined) {
+      // The user has had a postive interaction with our app and Chrome
+      // has tried to prompt previously, so let's show the prompt.
+      _deferredPWAPrompt.prompt(); 
+
+      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
+      e.userChoice.then(function(choiceResult) {
+        // console.log(choiceResult.outcome); 
+        if(choiceResult.outcome == 'dismissed') {
+          // User cancelled home screen install
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+        }
+        else {
+          // User added to home screen
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+        }
+      });
+
+      _deferredPWAPrompt = false;
+
+      return true;
+    } else {
+      return false;
     }
+  }
 
-    // Lazy load gifs when modal is shown
-    $('#howToInstallModal .tutorial-gif').each( (i, v) => {
-      $(v).attr('src', $(v).data('src'));
-    });
+  function openHowToInstallModal() {
+    const hasNativePromptWorked = promptInstallPopup();
 
-    $('#howToInstallModal').modal('show');
+    if (!hasNativePromptWorked) {
+      if (_isMobile) {
+        // Tries to guess the user agent to initialize the correspondent accordion item opened
+        const userAgent = window.getBrowserName();
+        switch (userAgent) {
+          case 'Chrome':
+            $('#collapse-chrome').addClass('in');
+            break;
+          case 'Firefox':
+            $('#collapse-firefox').addClass('in');
+            break;
+          case 'Safari':
+            $('#collapse-safari').addClass('in');
+            break;
+        }
+      }
 
-    $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      // Lazy load gifs when modal is shown
+      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
+        $(v).attr('src', $(v).data('src'));
+      });
+
+      $('#howToInstallModal').modal('show');
+
+      $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
   }
 
   function openFaqModal() {
@@ -2013,10 +2085,7 @@ $(() => {
         lng: parseFloat(_deeplinkMarker.lng)
       }
     } else {
-      initialCenter = {
-        lat: -30.0346,
-        lng: -51.2177
-      }
+      initialCenter = _portoAlegrePos;
     }
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -2033,6 +2102,9 @@ $(() => {
         new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
         new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
     );
+
+    mapCenterChanged();
+    map.addListener('center_changed', mapCenterChanged);
 
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
@@ -2152,8 +2224,11 @@ $(() => {
       _isMobile = isDesktopListener.matches;
     });
 
+    // Super specific mobile stuff
     if (_isMobile) {
       $('#locationQueryInput').attr('placeholder','Buscar endereço');
+
+      $('.modal').removeClass('fade');
     } else {
       $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
     }
@@ -2205,6 +2280,11 @@ $(() => {
 
     // Initialize router
     _onDataReadyCallback = () => {
+      if (window.performance) {
+        const timeSincePageLoad = Math.round(performance.now());
+        ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
+      }
+
       const isMatch = handleRouting();
       
       if (isMatch) {
@@ -2274,6 +2354,7 @@ $(() => {
         // google: GOOGLE_CLIENT_ID
     });
     hello.on('auth.login', function(auth) {
+      console.log('auth', auth);
       // Save the social token
       _socialToken = auth.authResponse.access_token;
 
@@ -2283,8 +2364,8 @@ $(() => {
       // });
 
       // Call user information, for the given network
-      hello(auth.network).api('me').then(function(r) {
-        console.log(r);
+      hello(auth.network).api('me').then(function(userInfo) {
+        console.log('userInfo', userInfo);
 
         // // Inject it into the container
         // var label = document.getElementById('profile_' + auth.network);
@@ -2293,7 +2374,7 @@ $(() => {
         //   label.id = 'profile_' + auth.network;
         //   document.getElementById('profile').appendChild(label);
         // }
-        // label.innerHTML = '<img src="' + r.thumbnail + '" /> Hey ' + r.name;
+        // label.innerHTML = '<img src="' + userInfo.thumbnail + '" /> Hey ' + userInfo.name;
       });
     });
 
@@ -2306,19 +2387,12 @@ $(() => {
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
     window.addEventListener('beforeinstallprompt', e => {
-      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
+      e.preventDefault();
+      _deferredPWAPrompt = e;
 
-      e.userChoice.then(function(choiceResult) {
-        // console.log(choiceResult.outcome); 
-        if(choiceResult.outcome == 'dismissed') {
-          // User cancelled home screen install
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
-        }
-        else {
-          // User added to home screen
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
-        }
-      });
+      $('#howToInstallBtn').css({'font-weight': 'bold'});
+
+      return false;
     });
   }
 
@@ -2362,7 +2436,9 @@ $(() => {
       console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
       hideSpinner();
-    } 
+    } else {
+      showSpinner('Carregando bicicletários...');
+    }
 
     if (!_isOffline) {
       // Use external service to get user's IP
