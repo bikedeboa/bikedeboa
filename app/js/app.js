@@ -2367,6 +2367,24 @@ $(() => {
       hello(auth.network).api('me').then(function(userInfo) {
         console.log('userInfo', userInfo);
 
+        BIKE.Database.customAPICall(
+          'post', 'token',
+          {
+            network: 'facebook',
+            socialToken: _socialToken,
+            fullname: userInfo.name,
+            email: userInfo.email
+          },
+          data => {
+            console.log('facebook login all done!');
+            
+            let user = document.createElement('div');
+            user.className = 'logged-user';
+            user.innerHTML = `<img src="${userInfo.thumbnail}"/>`; 
+            document.body.appendChild(user);
+          }
+        );
+
         // // Inject it into the container
         // var label = document.getElementById('profile_' + auth.network);
         // if (!label) {
