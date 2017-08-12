@@ -29,15 +29,18 @@ const replace = require('gulp-replace');
 const BOWER_PATH = './bower_components';
 const DEST_PATH =  'dist';
 
-var development = environments.development;
-var production = environments.production;
-
-var DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
-
-console.log('NODE_ENV = ', process.env.NODE_ENV);
+const development = environments.development;
+const production = environments.production;
+console.log('ENVIRONMENT = ', development() ? 'development' : 'production');
 
 
-// // Lint Task
+const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
+
+const FACEBOOK_CLIENT_ID = development() ? '1554610834551808' : '1814653185457307';
+const GOOGLE_CLIENT_ID = development() ? '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com' : '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com ';
+
+
+// // Lint Task 
 // gulp.task('lint', () => {
 //     return gulp.src('app/js/*.js')
 //         .pipe(jshint())
@@ -72,6 +75,8 @@ gulp.task('scripts', () => {
   return gulp.src('app/js/*.js') 
     .pipe(development(sourcemaps.init()))
     .pipe(replace('<DATABASE_URL>', DATABASE_URL))
+    .pipe(replace('<FACEBOOK_CLIENT_ID>', FACEBOOK_CLIENT_ID))
+    .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
     .pipe(plumber()) 
     .pipe(concat('app.js'))
     .pipe(babel({

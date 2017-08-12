@@ -1032,7 +1032,7 @@ $(() => {
 
     const callback = newLocal => {
       // Save cookie to temporarily enable edit/delete of this local
-      // Having the cookie isn't enought: the request origin IP is matched with the author IP
+      // Having the cookie isn't enough: the request origin IP is matched with the author IP
       //   saved in the database.
       if (!updatingMarker) {
         BIKE.Session.saveOrUpdatePlaceCookie(newLocal.id);
@@ -1766,9 +1766,14 @@ $(() => {
       setView('Sobre', '/sobre', true);
     }));
 
-    $('#socialLoginBtn').on('click', queueUiCallback.bind(this, () => {
+    $('#facebookLoginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       hello('facebook').login({scope: 'email'});
+    })); 
+
+    $('#googleLoginBtn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      hello('google').login({scope: 'email'});
     })); 
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
@@ -2350,8 +2355,8 @@ $(() => {
     // Hello.js
     hello.init({
         facebook: FACEBOOK_CLIENT_ID,
+        google: GOOGLE_CLIENT_ID, 
         // windows: WINDOWS_CLIENT_ID,
-        // google: GOOGLE_CLIENT_ID
     });
     hello.on('auth.login', function(auth) {
       console.log('auth', auth);
@@ -2364,19 +2369,19 @@ $(() => {
       // });
 
       // Call user information, for the given network
-      hello(auth.network).api('me').then(function(userInfo) {
+      hello(auth.network).api('me').then(function(userInfo) { 
         console.log('userInfo', userInfo);
 
         BIKE.Database.customAPICall(
           'post', 'token',
           {
-            network: 'facebook',
+            network: auth.network,
             socialToken: _socialToken,
             fullname: userInfo.name,
             email: userInfo.email
           },
           data => {
-            console.log('facebook login all done!');
+            console.log('social login all done!'); 
             
             let user = document.createElement('div');
             user.className = 'logged-user';
