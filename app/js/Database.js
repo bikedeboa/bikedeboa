@@ -282,7 +282,7 @@ BIKE.Database = {
             // Clean URL
             // History.replaceState({}, 'bike de boa', '/');
 
-            ga('set', 'userId', loggedUser);
+            // ga('set', 'userId', loggedUser);
             ga('send', 'event', 'Login', 'success', user);
           } else {
             loggedUser = null;
@@ -345,11 +345,46 @@ BIKE.Database = {
     }
   },
 
+  socialLogin: function(loginData) {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'post',
+        headers: self._headers,
+        url: self.API_URL + '/token',
+        data: loginData, 
+        success: function(data) { 
+          if (data.token && data.token.length > 0) {
+            // if (user && user !== 'client') {
+              loggedUser = true;
+
+              // ga('set', 'userId', loggedUser);
+              ga('send', 'event', 'Login', 'success', `${loginData.fullname} @ #{loginData.network}`);
+            // }
+
+            // Set headers for future calls
+            self.isAuthenticated = true;
+            self._authToken = data.token;
+            self._headers['x-access-token'] = data.token;
+
+            resolve(data);
+          }
+        },
+        error: function(data) {
+          ga('send', 'event', 'Login', 'fail', `${loginData.fullname} @ #{loginData.network}`);
+
+          reject(data);
+        }
+      });
+    });
+  },
+
   deleteReview: function(reviewId, callback) {
     const self = this;
 
     if (!reviewId) {
-      console.error('ERROR no review ID to delete.')
+      console.error('ERROR no review ID to delete.');
       return;
     }
 
@@ -562,7 +597,7 @@ BIKE.Database = {
 
     $.ajax({
       type: 'get',
-      headers: self._headers,
+      headers: self._headers, 
       url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
     }).done(function(data) {
       console.debug('Retrieved ' + data.length + ' locations from API.');

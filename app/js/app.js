@@ -28,7 +28,7 @@ $(() => {
     // const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
     const shareUrl = 'https://www.bikedeboa.com.br' + getMarkerShareUrl(openedMarker);
 
-    swal({ 
+    swal({  
       imageUrl: _isMobile ? '' : '/img/icon_share.svg',
       imageWidth: 80,
       imageHeight: 80,
@@ -155,7 +155,7 @@ $(() => {
     // Photo
     templateData.photoUrl = m.photo;
 
-    // Is public?
+    // Is public? 
     if (m.isPublic != null) {
       templateData.isPublic = m.isPublic === true;
     } else {
@@ -233,7 +233,7 @@ $(() => {
           } else {
             $('body').removeClass('already-reviewed');
           }
-        })
+        }) 
         .one('shown.bs.modal', () => { 
           // Animate modal content
           // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
@@ -366,48 +366,12 @@ $(() => {
                     lng: position.coords.longitude
                   };
 
-                  // Test if user located is inside our bounds
-                  // if (_mapBounds.contains(pos)) {
-                    map.panTo(pos);
-                    
-                    // Set minimum map zoom
-                    if (map.getZoom() < 17) { 
-                      map.setZoom(17);
-                    }
-                  // } else {  
-                  //   ga('send', 'event', 'Geolocation', 'out of bounds', `${pos.lat}, ${pos.lng}`); 
-          
-                  //   swal({ 
-                  //     customClass: 'coverage-notice-modal',
-                  //     confirmButtonText: 'Continuar usando',
-                  //     title: 'Oi! Só uma coisinha',
-                  //     html:
-                  //       `Percebi que tu parece estar fora do Rio Grande do Sul. Só queria te avisar que o bike de boa por enquanto só mapeia bicicletários neste estado.<br>
-                  //       <br>
-                  //       <div class="panel-group" aria-controls="coverage-notice-read-more">
-                  //         <div class="panel">
-                  //           <div class="panel-heading">
-                  //             <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#coverage-notice-read-more">
-                  //               <h4 class="panel-title">
-                  //                 Leia mais 
-                  //               </h4>
-                  //             </a>
-                  //           </div>
-                  //           <div id="coverage-notice-read-more" class="panel-collapse collapse">
-                  //             <div class="panel-body">
-                  //               <p>
-                  //                 Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> fale com a gente</a>.
-                  //               </p>
-                  //               <p>
-                  //                 Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo de todas novidades.
-                  //               </p>
-                  //             </div>
-                  //           </div>
-                  //         </div>
-                  //       </div>`,
-                  //     type: 'info'
-                  //   });
-                  // }
+                  map.panTo(pos);
+                  
+                  // Set minimum map zoom
+                  if (map.getZoom() < 17) {  
+                    map.setZoom(17);
+                  }
                 }
               }
 
@@ -505,10 +469,10 @@ $(() => {
     if (marker.text) {
       url += `-${slugify(marker.text)}`;
     }
-
+ 
     return url;
-  }
-
+  } 
+ 
   // Just delegate the action to the route controller
   function openLocal(marker, callback) {
     let url = getMarkerShareUrl(marker);
@@ -1561,7 +1525,7 @@ $(() => {
 
           swal({ 
             title: 'Valeu!',
-            html: `Tua avaliação foi atualizada.`,
+            html: 'Tua avaliação foi atualizada.',
             type: 'success'
           });
         } else {
@@ -1569,7 +1533,7 @@ $(() => {
 
           swal({ 
             title: 'Valeu!',
-            html: `Tua avaliação é muito importante! Juntos construímos a cidade que queremos.`,
+            html: 'Tua avaliação é muito importante! Juntos construímos a cidade que queremos.',
             type: 'success',
             onOpen: () => {
               startConfettis();
@@ -1655,13 +1619,13 @@ $(() => {
       text = 'bike de boa';
     }
     document.title = text; 
-    $('meta[name="og:title"]').attr("content", text);
+    $('meta[name="og:title"]').attr('content', text);
 
     // Special metatags for Details View
     if (openedMarker) {
       // Open Graph Picture
       if (openedMarker.photo) {
-        $('meta[name="og:image"]').attr("content", openedMarker.photo);
+        $('meta[name="og:image"]').attr('content', openedMarker.photo);
       }
 
       // Custom Open Graph Description
@@ -1669,7 +1633,7 @@ $(() => {
         let desc = 'Informações e avaliações deste bicicletário na ';
         desc += openedMarker.address;
 
-        $('meta[name="og:title"]').attr("content", desc);
+        $('meta[name="og:title"]').attr('content', desc);
       }
     }
   }
@@ -1733,7 +1697,7 @@ $(() => {
     $('#show-bike-layer').on('change', e => {
       const $target = $(e.currentTarget);
 
-      if ($target.is(":checked")) {
+      if ($target.is(':checked')) {
         ga('send', 'event', 'Filter', 'bike layer - SHOW');
         showBikeLayer();
       } else {
@@ -1766,12 +1730,12 @@ $(() => {
       setView('Sobre', '/sobre', true);
     }));
 
-    $('#facebookLoginBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.facebookLoginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       hello('facebook').login({scope: 'email'});
     })); 
 
-    $('#googleLoginBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.googleLoginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       hello('google').login({scope: 'email'});
     })); 
@@ -1806,7 +1770,7 @@ $(() => {
     $('#clear-filters-btn').on('click', () => {
       $('.filter-checkbox:checked').prop('checked', false);
 
-      ga('send', 'event', 'Filter', `clear filters`);
+      ga('send', 'event', 'Filter', 'clear filters');
       
       updateFilters();
     });
@@ -1815,7 +1779,7 @@ $(() => {
       // ga('send', 'event', 'Misc', 'launched with display=standalone');
       const $target = $(e.currentTarget);
 
-      ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(":checked") ? 'ON' : 'OFF'}`);
+      ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(':checked') ? 'ON' : 'OFF'}`);
 
       queueUiCallback(updateFilters);
     });
@@ -1825,11 +1789,11 @@ $(() => {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-          text: "Tu estava adicionando um bicicletário. Tem certeza que quer descartá-lo?",
-          type: "warning",
+          text: 'Tu estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
+          type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#FF8265',
-          confirmButtonText: "Descartar", 
+          confirmButtonText: 'Descartar', 
           allowOutsideClick: false
         }).then(() => {
           returnToPreviousView();
@@ -1859,7 +1823,7 @@ $(() => {
       // Set mobile navbar with modal's title
       const openingModalTitle = $(e.currentTarget).find('.view-name').text();
       if (openingModalTitle) {
-        setPageTitle(openingModalTitle)
+        setPageTitle(openingModalTitle);
       }
 
       // Mobile optimizations
@@ -2013,15 +1977,15 @@ $(() => {
         // Tries to guess the user agent to initialize the correspondent accordion item opened
         const userAgent = window.getBrowserName();
         switch (userAgent) {
-          case 'Chrome':
-            $('#collapse-chrome').addClass('in');
-            break;
-          case 'Firefox':
-            $('#collapse-firefox').addClass('in');
-            break;
-          case 'Safari':
-            $('#collapse-safari').addClass('in');
-            break;
+        case 'Chrome':
+          $('#collapse-chrome').addClass('in');
+          break;
+        case 'Firefox':
+          $('#collapse-firefox').addClass('in');
+          break;
+        case 'Safari':
+          $('#collapse-safari').addClass('in');
+          break;
         }
       }
 
@@ -2036,14 +2000,14 @@ $(() => {
     }
   }
 
-  function openFaqModal() {
+  function openFaqModal() { 
     $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     $('#faqModal').modal('show');
 
     $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
       const questionTitle = $(e.target).parent().find('.panel-title').text();
       ga('send', 'event', 'FAQ', 'question opened', questionTitle);
-    })
+    });
   }
 
   function handleRouting() { 
@@ -2051,32 +2015,32 @@ $(() => {
     let match = true;
 
     switch (urlBreakdown[1]) {
-      case 'b':
-        if (urlBreakdown[2]) {
-          let id = urlBreakdown[2].split('-')[0];
-          if (id) {
-            id = parseInt(id);
-            _deeplinkMarker = getMarkerById(id);
-            _openLocal(_deeplinkMarker);
-          }
+    case 'b':
+      if (urlBreakdown[2]) {
+        let id = urlBreakdown[2].split('-')[0];
+        if (id) {
+          id = parseInt(id);
+          _deeplinkMarker = getMarkerById(id);
+          _openLocal(_deeplinkMarker);
         }
-        break;
-      case 'faq':
-        openFaqModal();
-        break;
-      case 'como-instalar':
-        openHowToInstallModal();
-        break;
-      case 'sobre':
-        $('#aboutModal').modal('show');
-        $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-        break;
-      // case 'nav':
-      // case 'filtros':
-      //   hideAllModals();
-      default:
-        match = false;
-        break;
+      }
+      break;
+    case 'faq':
+      openFaqModal();
+      break;
+    case 'como-instalar':
+      openHowToInstallModal();
+      break;
+    case 'sobre':
+      $('#aboutModal').modal('show');
+      $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      break;
+    // case 'nav':
+    // case 'filtros':
+    //   hideAllModals();
+    default:
+      match = false;
+      break;
     }
 
     return match;
@@ -2199,6 +2163,30 @@ $(() => {
     // $('#map').css('filter', 'none');
   }
 
+  function onAuthLogin(auth) {
+    console.log('auth', auth);
+    // Save the social token
+    _socialToken = auth.authResponse.access_token;
+
+    // Get user information for the given network
+    hello(auth.network).api('me').then(function(userInfo) { 
+      console.log('userInfo', userInfo);
+
+      Database.socialLogin({
+        network: auth.network,
+        socialToken: _socialToken,
+        fullname: userInfo.name,
+        email: userInfo.email
+      }).then( data => { 
+        console.log('social login all done!'); 
+
+        $('.logged-user img').attr('src', userInfo.thumbnail);         
+      }).catch( error => {
+        console.error('error on social login'); 
+      });
+    });
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
@@ -2220,11 +2208,11 @@ $(() => {
       setOfflineMode();
     }
 
-    const isMobileListener = window.matchMedia("(max-width: ${MOBILE_MAX_WIDTH})");
+    const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
     isMobileListener.addListener((isMobileListener) => {
       _isMobile = isMobileListener.matches;
     });
-    const isDesktopListener = window.matchMedia("(min-width: ${DESKTOP_MIN_WIDTH})");
+    const isDesktopListener = window.matchMedia('(min-width: ${DESKTOP_MIN_WIDTH})');
     isDesktopListener.addListener((isDesktopListener) => {
       _isMobile = isDesktopListener.matches;
     });
@@ -2317,7 +2305,6 @@ $(() => {
     swal.setDefaults({
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
-      confirmButtonColor: '#b3b3b3',
       confirmButtonClass: 'btn green',
       cancelButtonText: 'Cancelar',
       cancelButtonClass: 'btn',
@@ -2330,7 +2317,7 @@ $(() => {
       'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
       'closeButton': false,
       'progressBar': false,
-    }
+    };
 
     // Sidenav (hamburger and filter menus)
     const sidenavHideCallback = () => {
@@ -2358,47 +2345,8 @@ $(() => {
         google: GOOGLE_CLIENT_ID, 
         // windows: WINDOWS_CLIENT_ID,
     });
-    hello.on('auth.login', function(auth) {
-      console.log('auth', auth);
-      // Save the social token
-      _socialToken = auth.authResponse.access_token;
-
-      // Auth with our own server using the social token
-      // authenticate(auth.network, socialToken).then(function (token) {
-      //     serverToken = token;
-      // });
-
-      // Call user information, for the given network
-      hello(auth.network).api('me').then(function(userInfo) { 
-        console.log('userInfo', userInfo);
-
-        BIKE.Database.customAPICall(
-          'post', 'token',
-          {
-            network: auth.network,
-            socialToken: _socialToken,
-            fullname: userInfo.name,
-            email: userInfo.email
-          },
-          data => {
-            console.log('social login all done!'); 
-            
-            let user = document.createElement('div');
-            user.className = 'logged-user';
-            user.innerHTML = `<img src="${userInfo.thumbnail}"/>`; 
-            document.body.appendChild(user);
-          }
-        );
-
-        // // Inject it into the container
-        // var label = document.getElementById('profile_' + auth.network);
-        // if (!label) {
-        //   label = document.createElement('div');
-        //   label.id = 'profile_' + auth.network;
-        //   document.getElementById('profile').appendChild(label);
-        // }
-        // label.innerHTML = '<img src="' + userInfo.thumbnail + '" /> Hey ' + userInfo.name;
-      });
+    hello.on('auth.login', auth => {
+      onAuthLogin(auth);
     });
 
     initHelpTooltip('#filter-menu .help-tooltip-trigger');

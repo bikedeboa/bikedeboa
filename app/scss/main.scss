@@ -531,7 +531,15 @@ a,
   right: 10px;
   top: 10px;
 
+  button {
+    border: 0;
+    background: none;
+    border-radius: 50%;
+  }
+  
   img {
+    background: white;
+
     width: 50px;
     height: 50px;
 
