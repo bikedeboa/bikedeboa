@@ -526,10 +526,24 @@ a,
     }
 }
 
+// Resets to default bootstrap styles
+.dropdown a,
+.dropdown a:hover {
+  color: inherit;
+  border: inherit;
+}
+
 .logged-user {
   position: fixed;
   right: 10px;
   top: 10px;
+
+  transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
+
+  &.cool-hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+  } 
 
   button {
     border: 0;

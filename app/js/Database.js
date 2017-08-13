@@ -1,6 +1,6 @@
-var BIKE = BIKE || {};
+var BDB = BDB || {};
 
-BIKE.Database = {
+BDB.Database = {
   ///////////////////
   // G L O B A L S //
   ///////////////////
@@ -25,20 +25,20 @@ BIKE.Database = {
 
     const reducedEndpoint = logEntry.endpoint.split('bdb-api.herokuapp.com/')[1]
 
-    BIKE.Database._headers.ip_origin = logEntry.ip_origin;
+    BDB.Database._headers.ip_origin = logEntry.ip_origin;
 
     if (logEntry.method==='POST' && reducedEndpoint === 'local') {
-      logEntry.body.idLocal = BIKE.Database._currentIDToAdd;
+      logEntry.body.idLocal = BDB.Database._currentIDToAdd;
       if (!logEntry.body.authorIP) {
-        logEntry.body.authorIP = BIKE.Database._currentIDToAdd;
+        logEntry.body.authorIP = BDB.Database._currentIDToAdd;
       }
     }
 
-    BIKE.Database.customAPICall(logEntry.method, reducedEndpoint, logEntry.body, () => {
+    BDB.Database.customAPICall(logEntry.method, reducedEndpoint, logEntry.body, () => {
       logEntry.redone = true;
 
       if (logEntry.method==='POST' && reducedEndpoint === 'local') {
-        BIKE.Database._currentIDToAdd++;
+        BDB.Database._currentIDToAdd++;
       }
 
       if (cb && typeof cb === 'function') {
@@ -49,7 +49,7 @@ BIKE.Database = {
 
   // @todo Improve this to automatically save to a file.
   _getDatabaseBackupJSON: () => {
-    BIKE.Database.customAPICall('get','local', {}, (data) => {
+    BDB.Database.customAPICall('get','local', {}, (data) => {
       let json = '';
       let fullMarkers = [];
 
@@ -87,7 +87,7 @@ BIKE.Database = {
       const desc = window._hashmap[key];
       if (desc) {
         console.debug(desc);
-        BIKE.Database.customAPICall('PUT', 'local/'+m.id,
+        BDB.Database.customAPICall('PUT', 'local/'+m.id,
           {description: desc},
           () => {this._fillAllDescriptionsRec(index+1);}
         );
@@ -98,7 +98,7 @@ BIKE.Database = {
   },
 
   _fillAllDescriptions: () => {
-    var allMarkers = BIKE.MockedDatabase.allMarkers;
+    var allMarkers = BDB.MockedDatabase.allMarkers;
     window._hashmap = {};
     for(let i=0; i<allMarkers.length; i++) {
       const m = allMarkers[i];
@@ -141,7 +141,7 @@ BIKE.Database = {
         // console.debug(m.address);
         this._fillMarkersAddresses(i+1, onlyIfMissing);
       } else {
-        BIKE.geocodeLatLng(
+        BDB.geocodeLatLng(
           m.lat, m.lng,
           (address) => {
             console.debug(m.lat, m.lng, m.id);
@@ -177,10 +177,10 @@ BIKE.Database = {
 
   _sendAllMarkersToBackend: function(isToMock) {
     const self = this;
-    let allMarkers = BIKE.MockedDatabase.allMarkers;
+    let allMarkers = BDB.MockedDatabase.allMarkers;
 
     if (isToMock) {
-      allMarkers = BIKE.MockedDatabase.mockData(allMarkers);
+      allMarkers = BDB.MockedDatabase.mockData(allMarkers);
     } else if (isToMock !== false) {
       console.error('Please specify if you want to mock content or not.');
       return;
@@ -301,9 +301,9 @@ BIKE.Database = {
       error: function(data) {
         ga('send', 'event', 'Login', 'fail', user);
 
-        BIKE.Database._authenticationAttemptsLeft--;
-        if (BIKE.Database._authenticationAttemptsLeft > 0) {
-          console.error(`Authentication failed, ${BIKE.Database._authenticationAttemptsLeft} attempts left. Trying again in 2s...`);
+        BDB.Database._authenticationAttemptsLeft--;
+        if (BDB.Database._authenticationAttemptsLeft > 0) {
+          console.error(`Authentication failed, ${BDB.Database._authenticationAttemptsLeft} attempts left. Trying again in 2s...`);
           setTimeout( () => {
             self.authenticate(isUserLogin, callback);
           }, 2000);
@@ -604,7 +604,7 @@ BIKE.Database = {
 
       markers = data;
 
-      BIKE.saveMarkersToLocalStorage(markers);
+      BDB.saveMarkersToLocalStorage(markers);
 
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
@@ -667,7 +667,7 @@ BIKE.Database = {
           updatedMarker._hasDetails = true;
 
           // Update offline-stored markers with new state
-          BIKE.saveMarkersToLocalStorage(markers);
+          BDB.saveMarkersToLocalStorage(markers);
 
           if (successCB && typeof successCB === 'function') {
             successCB();

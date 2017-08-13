@@ -69,7 +69,7 @@ module.exports = {
         "copyToClipboard": true,
 
         // Global variables
-        "BIKE": true,
+        "BDB": true,
         "SideNav": true,
         "isDemoMode": true,
         "Database": true,

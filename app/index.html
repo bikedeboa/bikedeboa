@@ -107,7 +107,7 @@
 
         <div class="confetti-placeholder"></div>
 
-        <div id="locationSearch" class="cool-hidden">
+        <div id="locationSearch" class="cool-hide cool-hidden">
             <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
             <!-- <span class="balaca">
               <img alt="" src="/img/bici.svg"/>
@@ -128,17 +128,18 @@
             </span>
         </div>
 
-        <div id="userBtn" class="dropdown logged-user">
-          
+        <div id="userBtn" class="dropdown logged-user cool-hide cool-hidden">
           <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img src="/img/icon_user.svg">
           </button>
 
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+            <li><a href="#" class="openProfileBtn">Perfil</a></li>
+            <li role="separator" class="divider"></li>
             <li><a href="#" class="facebookLoginBtn">Login Facebook</a></li>
             <li><a href="#" class="googleLoginBtn">Login Google</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="#" class="logoutBtn">Logout</a></li>
           </ul>
         </div>
 
@@ -1217,6 +1218,38 @@
 
           </div>
         </script> 
+
+        <!-- User Profile -->
+        <script id="profileModalTemplate" type="text/x-handlebars-template">
+          <div id="profileModal" class="modal fade" tabindex="-1">
+              <div class="vertical-alignment-helper">
+                  <div class="modal-dialog vertical-align-center">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title view-name">Perfil</h1>
+                          </div>
+
+                          {{#if photoUrl}}
+                            <section class="photo-container {{#if photoUrl}}hasImage loading{{/if}}">
+                              <img alt="" src="{{photoUrl}}"/>
+                            </section>
+                          {{/if}}
+
+                          <div class="modal-body">
+                            <h2>Avaliações feitas</h2>
+                            <ul>
+                              {{#each reviews}}
+                                <li>{{placeId}} - {{rating}}</li>
+                              {{else}}
+                                Nenhuma avaliação feita ainda.
+                              {{/each}}
+                            </ul>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </script>
 
 
         <!-- External -->

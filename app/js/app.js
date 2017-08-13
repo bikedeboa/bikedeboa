@@ -142,9 +142,9 @@ $(() => {
     // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
     if (loggedUser) {
-      templateData.isLoggedUser = true;
       templateData.canModify = true;
-    } else if (BIKE.Session.getPlaceFromSession(m.id)) {
+      templateData.isLoggedUser = true;
+    } else if (BDB.User.canEditPlace(m.id)) {
       templateData.canModify = true;
       templateData.temporaryPermission = true;
     }
@@ -179,7 +179,7 @@ $(() => {
     templateData.structureTypeIcon = structureTypeIcon;
 
     // Retrieves a previous review saved in session
-    const previousReview = BIKE.Session.getReviewFromSession(m.id);
+    const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
       templateData.savedRating = previousReview.rating;
     }
@@ -879,7 +879,7 @@ $(() => {
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
         newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-        BIKE.geocodeLatLng(
+        BDB.geocodeLatLng(
           newMarkerTemp.lat, newMarkerTemp.lng,
           (address) => {
             // console.log('Resolved location address:');
@@ -962,13 +962,13 @@ $(() => {
   function showUI() {
     // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
     // $('#addPlace').velocity('transition.slideUpIn');
-    $('#locationSearch').removeClass('cool-hidden');
+    $('.cool-hide').removeClass('cool-hidden');
   }
 
   function hideUI() {
     // $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
     // $('#addPlace').velocity('transition.slideDownOut');
-    $('#locationSearch').addClass('cool-hidden');
+    $('.cool-hide').addClass('cool-hidden');
   }
 
   // @todo refactor this, it's fuckin confusing
@@ -999,7 +999,7 @@ $(() => {
       // Having the cookie isn't enough: the request origin IP is matched with the author IP
       //   saved in the database.
       if (!updatingMarker) {
-        BIKE.Session.saveOrUpdatePlaceCookie(newLocal.id);
+        BDB.User.saveNewPlace(newLocal.id);
       }
 
       Database.getPlaces( () => {
@@ -1180,6 +1180,7 @@ $(() => {
     templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
     templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
     templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
+    templates.profileModalTemplate = Handlebars.compile($('#profileModalTemplate').html());
   }
 
   function validateNewPlaceForm() {
@@ -1382,7 +1383,7 @@ $(() => {
 
   function openReviewModal(prepopedRating) {
     const m = openedMarker;
-    const previousReview = BIKE.Session.getReviewFromSession(m.id);
+    const previousReview = BDB.User.getReviewByPlaceId(m.id);
     _updatingReview = previousReview;
 
     // Tags toggle buttons
@@ -1511,7 +1512,7 @@ $(() => {
       Database.sendReview(reviewObj, (reviewId) => {
         // Update internal state
         reviewObj.databaseId = reviewId;
-        BIKE.Session.saveOrUpdateReviewCookie(reviewObj);
+        BDB.User.saveReview(reviewObj);
 
         // Update screen state
         // $('.review-modal').modal('hide');
@@ -1554,7 +1555,7 @@ $(() => {
       });
     };
 
-    const previousReview = BIKE.Session.getReviewFromSession(m.id);
+    const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
       // Delete previous
       Database.deleteReview(previousReview.databaseId, callback);
@@ -1718,6 +1719,11 @@ $(() => {
       ga('send', 'event', 'Misc', 'github hamburger menu link click');
     });
 
+    $('.openProfileBtn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      setView('Perfil', '/perfil', true);
+    }));
+    
     $('#loginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       setView('Login Administrador', '/login', true);
@@ -1733,6 +1739,12 @@ $(() => {
     $('.facebookLoginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       hello('facebook').login({scope: 'email'});
+    })); 
+
+    $('.logoutBtn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      hello.logout('facebook');
+      // hello.logout('google');
     })); 
 
     $('.googleLoginBtn').on('click', queueUiCallback.bind(this, () => {
@@ -1857,14 +1869,14 @@ $(() => {
     
     $('.promo-banner-container button').on('click', e => {
       $('.promo-banner-container').remove();
-      BIKE.Session.setPromoBannerViewed();
+      BDB.Session.setPromoBannerViewed();
 
       ga('send', 'event', 'Banner', 'promo banner - closed');
     });
 
     $('.promo-banner-container a').on('click', e => {
       $('.promo-banner-container').remove();
-      BIKE.Session.setPromoBannerViewed();
+      BDB.Session.setPromoBannerViewed();
 
       ga('send', 'event', 'Banner', 'promo banner - link click');
     });
@@ -2010,6 +2022,17 @@ $(() => {
     });
   }
 
+  function openProfileModal() { 
+    let templateData = {};
+    templateData.reviews = BDB.User.getReviews();
+
+    $('body').append(templates.profileModalTemplate(templateData));
+    $('#profileModal').modal('show');
+
+    // $('#aboutModal').modal('show');
+    // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+  }
+
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = true;
@@ -2034,6 +2057,9 @@ $(() => {
     case 'sobre':
       $('#aboutModal').modal('show');
       $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      break;
+    case 'perfil':
+      openProfileModal();
       break;
     // case 'nav':
     // case 'filtros':
@@ -2180,7 +2206,7 @@ $(() => {
       }).then( data => { 
         console.log('social login all done!'); 
 
-        $('.logged-user img').attr('src', userInfo.thumbnail);         
+        $('.logged-user img').attr('src', userInfo.thumbnail);
       }).catch( error => {
         console.error('error on social login'); 
       });
@@ -2348,6 +2374,9 @@ $(() => {
     hello.on('auth.login', auth => {
       onAuthLogin(auth);
     });
+    hello.on('auth.logout', () => {
+      $('.logged-user img').attr('src', '/img/icon_user.svg');
+    });
 
     initHelpTooltip('#filter-menu .help-tooltip-trigger');
 
@@ -2394,15 +2423,15 @@ $(() => {
 
   function init() {
     if (isDemoMode) {
-      Database = BIKE.MockedDatabase;
+      Database = BDB.MockedDatabase;
     } else {
-      Database = BIKE.Database;
+      Database = BDB.Database;
     }
 
     localhostOverrides();
 
     // Retrieve markers saved in a past access
-    markers = BIKE.getMarkersFromLocalStorage();
+    markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
       console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
@@ -2456,7 +2485,7 @@ $(() => {
     }
 
     // Promo banner
-    if (!BIKE.Session.getPromoBannerViewed()) {
+    if (!BDB.Session.getPromoBannerViewed()) {
       setTimeout( () => {
         if (_isMobile) {
           $('.promo-banner-container').show();
