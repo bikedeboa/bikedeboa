@@ -1229,17 +1229,27 @@
                             <h1 class="modal-title view-name">Perfil</h1>
                           </div>
 
-                          {{#if photoUrl}}
-                            <section class="photo-container {{#if photoUrl}}hasImage loading{{/if}}">
-                              <img alt="" src="{{photoUrl}}"/>
-                            </section>
+                          {{#if profile}}
+                            {{#if profile.picture}}
+                              <section class="photo-container {{#if profile.picture}}hasImage{{/if}}">
+                                <img alt="" src="{{profile.picture}}"/>
+                              </section> 
+                            {{/if}}
                           {{/if}}
 
                           <div class="modal-body">
+                            {{#if profile}}
+                              <h2>{{profile.name}}</h2>
+                            {{else}}
+                              Deslogado.
+                            {{/if}}
+
+                            <hr>
+
                             <h2>Avaliações feitas</h2>
-                            <ul>
+                            <ul> 
                               {{#each reviews}}
-                                <li>{{placeId}} - {{rating}}</li>
+                                <li>{{placeObj.text}} - nota {{rating}}</li>
                               {{else}}
                                 Nenhuma avaliação feita ainda.
                               {{/each}}

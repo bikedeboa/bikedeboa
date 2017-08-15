@@ -12,6 +12,7 @@ BDB.Database = {
   _authToken: '',
   _headers: {},
   _authenticationAttemptsLeft: 3,
+  _isAuthenticated: false,
  
   _currentIDToAdd: 1306,
 
@@ -273,8 +274,8 @@ BDB.Database = {
           console.debug('API connected.');
 
           if (user && user !== 'client') {
-            // This is the only place that should set 'loggedUser'
             loggedUser = user;
+            self._isAuthenticated = true;
 
             // Save username in session
             Cookies.set('bikedeboa_user', loggedUser, { expires: 7 });
@@ -345,6 +346,30 @@ BDB.Database = {
     }
   },
 
+  getLoggedUserReviews: function() {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'get',
+        headers: self._headers,
+        url: self.API_URL + '/user/reviews',
+        success: function(data) { 
+          const reviews = data.Reviews;
+
+          for(let i=0; i < reviews.length; i++) {
+            reviews[i].placeId = reviews[i].local_id;
+          }
+
+          resolve(data.Reviews);
+        },
+        error: function(error) {
+          reject(error);
+        }
+      });
+    });
+  },
+
   socialLogin: function(loginData) {
     const self = this;
 
@@ -356,12 +381,10 @@ BDB.Database = {
         data: loginData, 
         success: function(data) { 
           if (data.token && data.token.length > 0) {
-            // if (user && user !== 'client') {
-              loggedUser = true;
+            loggedUser = true;
+            self._isAuthenticated = true;
 
-              // ga('set', 'userId', loggedUser);
-              ga('send', 'event', 'Login', 'success', `${loginData.fullname} @ #{loginData.network}`);
-            // }
+            ga('send', 'event', 'Login', 'success', `${loginData.fullname} @ #{loginData.network}`);
 
             // Set headers for future calls
             self.isAuthenticated = true;
@@ -371,10 +394,10 @@ BDB.Database = {
             resolve(data);
           }
         },
-        error: function(data) {
+        error: function(error) {
           ga('send', 'event', 'Login', 'fail', `${loginData.fullname} @ #{loginData.network}`);
 
-          reject(data);
+          reject(error);
         }
       });
     });

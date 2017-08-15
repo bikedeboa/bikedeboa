@@ -25,8 +25,8 @@ $(() => {
   }
 
   function openShareDialog() {
-    // const shareUrl = window.location.origin + getMarkerShareUrl(openedMarker);
-    const shareUrl = 'https://www.bikedeboa.com.br' + getMarkerShareUrl(openedMarker);
+    // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
+    const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
 
     swal({  
       imageUrl: _isMobile ? '' : '/img/icon_share.svg',
@@ -454,28 +454,10 @@ $(() => {
 
     return controlDiv;
   }
-
-  function getMarkerById(id) {
-    if (id && id >= 0) {
-      const res = markers.filter( i => i.id === id );
-      if (res.length > 0) {
-        return res[0];
-      }
-    }
-  }
-
-  function getMarkerShareUrl(marker) {
-    let url = `/b/${marker.id}`;
-    if (marker.text) {
-      url += `-${slugify(marker.text)}`;
-    }
- 
-    return url;
-  } 
  
   // Just delegate the action to the route controller
   function openLocal(marker, callback) {
-    let url = getMarkerShareUrl(marker);
+    let url = BDB.Places.getMarkerShareUrl(marker);
 
     window._openLocalCallback = callback;
 
@@ -2024,7 +2006,8 @@ $(() => {
 
   function openProfileModal() { 
     let templateData = {};
-    templateData.reviews = BDB.User.getReviews();
+    templateData.reviews = BDB.User.reviews;
+    templateData.profile = BDB.User.profile;
 
     $('body').append(templates.profileModalTemplate(templateData));
     $('#profileModal').modal('show');
@@ -2043,7 +2026,7 @@ $(() => {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
-          _deeplinkMarker = getMarkerById(id);
+          _deeplinkMarker = BD.Places.getMarkerById(id);
           _openLocal(_deeplinkMarker);
         }
       }
@@ -2206,9 +2189,11 @@ $(() => {
       }).then( data => { 
         console.log('social login all done!'); 
 
-        $('.logged-user img').attr('src', userInfo.thumbnail);
+        BDB.User.login(userInfo);
+
+        $('.logged-user img').attr('src', BDB.User.profile.thumbnail);
       }).catch( error => {
-        console.error('error on social login'); 
+        console.error('error on social login: ' + error); 
       });
     });
   }
@@ -2305,6 +2290,8 @@ $(() => {
       }
 
       const isMatch = handleRouting();
+
+      BDB.User.init(); 
       
       if (isMatch) {
         _isDeeplink = true;
