@@ -17,14 +17,23 @@ BDB.User = {
 
   init: function () {
     this.fetchReviews();
-    // this.fetchPlaces();
+    this.fetchPlaces();
   },
 
   login: function (userInfo) {
     this.isLoggedIn = true;
     this.profile = userInfo;
+    
     this.fetchReviews();
-    // this.fetchPlaces();
+    this.fetchPlaces();
+  },
+
+  logout: function () {
+    this.isLoggedIn = false;
+    this.profile = null;
+    
+    this.fetchReviews();
+    this.fetchPlaces();
   },
 
   _populateReviewsPlaces: function () {
@@ -37,18 +46,41 @@ BDB.User = {
   },
 
   fetchReviews: function () {
+    this.reviews = [];
+
     if (this.isLoggedIn) {
-      if (!this.reviews) {
-        BDB.Database.getLoggedUserReviews()
-          .then( data => {
-            this.reviews = data;
-            this._populateReviewsPlaces();
-          }
-        );
-      }
+      BDB.Database.getLoggedUserReviews()
+        .then( data => {
+          this.reviews = data;
+          this._populateReviewsPlaces();
+        }
+      );
     } else {
       this.reviews = Cookies.getJSON('bikedeboa_reviews') || [];
       this._populateReviewsPlaces();
+    }
+  },
+
+  fetchPlaces: function () {
+    this.places = [];
+
+    if (this.isLoggedIn) {
+      BDB.Database.getLoggedUserPlaces()
+        .then( data => {
+          this.places = data;
+          // this._populateReviewsPlaces();
+        }
+      );
+    } else {
+      const cookies = Cookies.getJSON();
+      const placesIds = Object.keys(cookies)
+        .filter( i => i.indexOf('bikedeboa_local_') >= 0 )
+        .map( i => i.split('bikedeboa_local_')[1] );
+
+      for(let i=0; i < placesIds.length; i++) { 
+        const id = parseInt(placesIds[i]);
+        this.places.push(BDB.Places.getMarkerById(id));
+      }
     }
   },
 
@@ -100,9 +132,7 @@ BDB.User = {
   },
 
   saveReview: function (reviewObj) {
-    if (this.isLoggedIn) {
-      // BD.Database.persistReview(reviewObj);
-    } else {
+    if (!this.isLoggedIn) {
       this._saveReviewToCookie(reviewObj);
     }
   },
@@ -113,9 +143,7 @@ BDB.User = {
   },
 
   saveNewPlace: function (placeId) {
-    if (this.isLoggedIn) {
-      // BD.Database.persistReview(reviewObj);
-    } else {
+    if (!this.isLoggedIn) {
       this._savePlaceToCookie(placeId);
     }
   },

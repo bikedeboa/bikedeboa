@@ -147,7 +147,7 @@
           
         </div>
 
-        <div id="revisionModalTemplatePlaceholder"></div>
+        <div id="modalPlaceholder"></div>
 
         <div id="offline-overlay" class="message-overlay">
           <div class="message-overlay-content">
@@ -193,8 +193,6 @@
               <img alt="Adicionar aqui" src="/img/pin_bike.svg"/>
           </button>
         </div>
-
-        <div id="messageModalPlaceholder"></div>
 
         <div id="spinnerOverlay">
             <div class="spinnerContainer">
@@ -1239,7 +1237,7 @@
 
                           <div class="modal-body">
                             {{#if profile}}
-                              <h2>{{profile.name}}</h2>
+                              <h1>{{profile.name}}</h1>
                             {{else}}
                               Deslogado.
                             {{/if}}
@@ -1252,6 +1250,17 @@
                                 <li>{{placeObj.text}} - nota {{rating}}</li>
                               {{else}}
                                 Nenhuma avaliação feita ainda.
+                              {{/each}}
+                            </ul>
+
+                            <hr>
+
+                            <h2>Bicicletários criados</h2>
+                            <ul> 
+                              {{#each places}}
+                                <li>{{text}}</li>
+                              {{else}}
+                                Nenhum bicicletario criado ainda.
                               {{/each}}
                             </ul>
                           </div>

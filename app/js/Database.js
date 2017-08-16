@@ -355,13 +355,37 @@ BDB.Database = {
         headers: self._headers,
         url: self.API_URL + '/user/reviews',
         success: function(data) { 
-          const reviews = data.Reviews;
+          let reviews = data.Reviews;
 
           for(let i=0; i < reviews.length; i++) {
             reviews[i].placeId = reviews[i].local_id;
           }
 
-          resolve(data.Reviews);
+          resolve(reviews);
+        },
+        error: function(error) {
+          reject(error);
+        }
+      });
+    });
+  },
+
+  getLoggedUserPlaces: function() {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'get',
+        headers: self._headers,
+        url: self.API_URL + '/user/locals',
+        success: function(data) { 
+          let places = data.Locals;
+
+          // for(let i=0; i < places.length; i++) {
+          //   places[i].placeId = places[i].local_id;
+          // }
+
+          resolve(places);
         },
         error: function(error) {
           reject(error);

@@ -2006,13 +2006,14 @@ $(() => {
 
   function openProfileModal() { 
     let templateData = {};
-    templateData.reviews = BDB.User.reviews;
     templateData.profile = BDB.User.profile;
+    templateData.reviews = BDB.User.reviews;
+    templateData.places = BDB.User.places;
 
-    $('body').append(templates.profileModalTemplate(templateData));
+    $('#modalPlaceholder').html(templates.profileModalTemplate(templateData));
     $('#profileModal').modal('show');
 
-    // $('#aboutModal').modal('show');
+    // $('#aboutModal').modal('show') ;
     // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
@@ -2026,7 +2027,7 @@ $(() => {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
-          _deeplinkMarker = BD.Places.getMarkerById(id);
+          _deeplinkMarker = BDB.Places.getMarkerById(id);
           _openLocal(_deeplinkMarker);
         }
       }
@@ -2362,6 +2363,8 @@ $(() => {
       onAuthLogin(auth);
     });
     hello.on('auth.logout', () => {
+      BDB.User.logout();
+
       $('.logged-user img').attr('src', '/img/icon_user.svg');
     });
 
