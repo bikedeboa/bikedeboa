@@ -103,12 +103,13 @@ BDB.User = {
     }
   },
 
-  canEditPlace: function (placeId) {
-    // const placesArray = Cookies.getJSON('bikedeboa_places') || [];
-    // return placesArray.find( i => i.placeId === placeId );
-    
-    if (placeId) {
-      return Cookies.get('bikedeboa_local_' + placeId);
+  canEditPlace: function (id) {
+    if (id) {
+      if (this.isLoggedIn) {
+        return this.places.find( i => i.id === id );
+      } else {
+        return Cookies.get('bikedeboa_local_' + id);
+      }
     } else {
       return;
     }

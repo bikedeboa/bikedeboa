@@ -1721,8 +1721,6 @@ $(() => {
     $('.facebookLoginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
 
-      $('#userBtn').addClass('loading');
-      
       hello('facebook').login({scope: 'email'});
     })); 
 
@@ -2178,6 +2176,8 @@ $(() => {
 
   function onAuthLogin(auth) {
     console.log('auth', auth);
+    $('#userBtn').addClass('loading');
+    
     // Save the social token
     _socialToken = auth.authResponse.access_token;
 
