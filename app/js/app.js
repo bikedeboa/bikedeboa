@@ -1720,6 +1720,9 @@ $(() => {
 
     $('.facebookLoginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
+
+      $('#userBtn').addClass('loading');
+      
       hello('facebook').login({scope: 'email'});
     })); 
 
@@ -2186,12 +2189,13 @@ $(() => {
         network: auth.network,
         socialToken: _socialToken,
         fullname: userInfo.name,
-        email: userInfo.email
+        email: userInfo.email 
       }).then( data => { 
         console.log('social login all done!'); 
 
         BDB.User.login(userInfo);
 
+        $('#userBtn').removeClass('loading');
         $('.logged-user img').attr('src', BDB.User.profile.thumbnail);
       }).catch( error => {
         console.error('error on social login: ' + error); 

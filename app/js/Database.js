@@ -427,6 +427,21 @@ BDB.Database = {
     });
   },
 
+  importUserReviews: function(reviews) {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'post',
+        headers: self._headers,
+        url: self.API_URL + '/user/import-reviews',
+        data: {reviews: reviews}, 
+        success: resolve,
+        error: reject
+      });
+    });
+  },
+
   deleteReview: function(reviewId, callback) {
     const self = this;
 
@@ -464,6 +479,8 @@ BDB.Database = {
       success: function(data) {
         console.debug('Review update successful.');
 
+        BDB.User.fetchReviews();
+
         if (callback && typeof callback === 'function') {
           callback();
         }
@@ -486,6 +503,8 @@ BDB.Database = {
       success: function(data) {
         console.debug('Review creation successful.');
         console.debug(data);
+
+        BDB.User.fetchReviews();
 
         if (callback && typeof callback === 'function') {
           callback(data.id);
@@ -529,17 +548,19 @@ BDB.Database = {
       headers: self._headers,
       url: self.API_URL + '/local',
       data: place,
-      error: function(e) {
-        defaultFailCallback();
-        console.error(e);
-      },
       success: function(data) {
         console.debug('Addition success!');
         console.debug(data);
 
+        BDB.User.fetchPlaces();
+
         if (callback && typeof callback === 'function') {
           callback(data);
         }
+      },
+      error: function(e) {
+        defaultFailCallback();
+        console.error(e);
       }
     });
   },
@@ -555,16 +576,18 @@ BDB.Database = {
       headers: self._headers,
       url: self.API_URL + '/local/' + placeId,
       data: place,
-      error: function(e) {
-        defaultFailCallback();
-        console.error(e);
-      },
       success: function(data) {
         console.debug('Update successful!');
+
+        BDB.User.fetchPlaces();
 
         if (callback && typeof callback === 'function') {
           callback();
         }
+      },
+      error: function(e) {
+        defaultFailCallback();
+        console.error(e);
       }
     });
   },

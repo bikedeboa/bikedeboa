@@ -21,8 +21,27 @@ BDB.User = {
   },
 
   login: function (userInfo) {
-    this.isLoggedIn = true;
+    const self = this;
+
+    this.isLoggedIn = true; 
     this.profile = userInfo;
+
+    const reviews = this.reviews;
+    if (reviews && reviews.length > 0) {
+      swal({
+        title: 'Avaliações encontradas',
+        text: 'Podemos salvar as avaliações que você tinha feito antes de logar?',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, pode salvar!',
+        cancelButtonText: 'Não vlw',
+      }).then(function () {
+        BDB.Database.importUserReviews(reviews).then(() => {
+          toastr['success'](`${reviews.length} avaliações salvas.`, '');
+          self._deleteReviewsFromCookie();
+        });
+      });
+    }
     
     this.fetchReviews();
     this.fetchPlaces();
@@ -104,14 +123,14 @@ BDB.User = {
   },
 
   _saveReviewToCookie: function (reviewObj) {
-    const reviewsArray = this.getReviews();
+    const reviews = this.reviews;
 
     // Search for previously entered review
     let review;
-    if (reviewsArray && reviewsArray.length > 0) {
-      review = reviewsArray.find( i => i.placeId === reviewObj.placeId );
+    if (reviews && reviews.length > 0) {
+      review = reviews.find( i => i.placeId === reviewObj.placeId );
     }
-
+ 
     if (review) {
       // Update current review
       review.placeId = reviewObj.placeId;
@@ -120,7 +139,7 @@ BDB.User = {
       review.databaseId = reviewObj.databaseId; 
     } else {
       // Push a new one
-      reviewsArray.push({
+      reviews.push({
         placeId: reviewObj.placeId,
         rating: reviewObj.rating,
         tags: reviewObj.tags,
@@ -128,7 +147,11 @@ BDB.User = {
       });
     }
 
-    Cookies.set('bikedeboa_reviews', reviewsArray, { expires: 365 });
+    Cookies.set('bikedeboa_reviews', reviews, { expires: 365 });
+  },
+
+  _deleteReviewsFromCookie: function () {
+    Cookies.remove('bikedeboa_reviews');
   },
 
   saveReview: function (reviewObj) {

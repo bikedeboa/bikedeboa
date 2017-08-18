@@ -1227,40 +1227,41 @@
                             <h1 class="modal-title view-name">Perfil</h1>
                           </div>
 
-                          {{#if profile}}
-                            {{#if profile.picture}}
-                              <section class="photo-container {{#if profile.picture}}hasImage{{/if}}">
-                                <img alt="" src="{{profile.picture}}"/>
-                              </section> 
-                            {{/if}}
-                          {{/if}}
-
                           <div class="modal-body">
                             {{#if profile}}
+                              {{#if profile.picture}}
+                                <section style="
+                                  display: flex;
+                                  justify-content: center;">
+                                  <img alt="" src="{{profile.picture}}" style="
+                                    border-radius: 50%;
+                                    width: 30%";/>
+                                </section> 
+                              {{/if}}
                               <h1>{{profile.name}}</h1>
                             {{else}}
                               Deslogado.
                             {{/if}}
 
-                            <hr>
+                            <!-- <hr> -->
 
                             <h2>Avaliações feitas</h2>
                             <ul> 
                               {{#each reviews}}
-                                <li>{{placeObj.text}} - nota {{rating}}</li>
+                                <li>{{placeObj.text}} (nota {{rating}})</li>
                               {{else}}
                                 Nenhuma avaliação feita ainda.
                               {{/each}}
                             </ul>
 
-                            <hr>
+                            <!-- <hr> -->
 
                             <h2>Bicicletários criados</h2>
                             <ul> 
                               {{#each places}}
                                 <li>{{text}}</li>
                               {{else}}
-                                Nenhum bicicletario criado ainda.
+                                Nenhum bicicletário criado ainda.
                               {{/each}}
                             </ul>
                           </div>

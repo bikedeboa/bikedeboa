@@ -22,7 +22,7 @@ $lightestPurple: #9688DC;
 // Grays
 $black: #333;
 $paleWhite: #fafafa;
-$gray: #828b90;
+$gray: #828b90; 
 $lightGray: #b3b3b3;
 $lighterGray: #e6e6e6;
 $lightestGray: #F3F3F3;
@@ -574,11 +574,11 @@ a,
     left: 0;
     right: 0;
     margin: auto;
-    z-index: 1;
     width: 95%;
     height: 48px;
     max-width: 600px;
     width: calc(100% - 20px); 
+    // z-index: 1;
 
     transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
     
@@ -924,13 +924,12 @@ a,
 #filterBtn {
     float: right;
     border-radius: 25px;
-    padding: 0 15px;
+    padding: 0 15px; 
     margin: 10px 0;
     border: 0;
     background-color: white;
     height: 40px;
     font-family: $bodyFont;
-    color: $gray;
     @include material-shadow(1);
 
     &.active {
@@ -2915,7 +2914,15 @@ body.modal-open {
         border-radius: 5px;
         font-size: 15px;
       }
-      
+    }
+  }
+
+  .logged-user {
+    top: 15px;
+
+    img {
+      width: 45px;
+      height: 45px;
     }
   }
 
