@@ -2599,7 +2599,7 @@ body.modal-open {
   }
 
   .infobox--img {
-    width: 75px;
+    width: 100px;
     height: 75px;
     position: relative;
     background: $lightestGrey;
@@ -3127,7 +3127,7 @@ body.modal-open {
 
   .infoBox {
     .infobox--content {
-      margin-right: 50px;
+      margin-right: 35px;
     }
 
     .infobox--label {
@@ -3149,7 +3149,7 @@ body.modal-open {
       display: block;
 
       position: absolute;
-      right: 20px;
+      right: 12px;
       top: calc(50% - 10px);
       font-size: 20px;
       color: $gray;
