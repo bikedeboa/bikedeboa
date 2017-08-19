@@ -40,7 +40,7 @@ $(() => {
           <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
           <button class="share-email-btn">
             <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
-              <span class="glyphicon glyphicon-envelope"></span><span class="share-email-label">Email</span> 
+              <span class="glyphicon glyphicon-envelope"></span><span class="share-email-label unstyled-link">Email</span> 
             </a>
           </button>
         </div>
