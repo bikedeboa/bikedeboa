@@ -173,7 +173,8 @@ body.offline {
 }
 
 body.pwa-installed {
-  #howToInstallBtn {
+  #howToInstallBtn,
+  #howToInstallBtn + hr {
     display: none;
   }
 }
@@ -499,12 +500,19 @@ a,
     color: $purple;
     border-bottom: 1px dashed;
 
+    // color: $black;
+    // border-bottom: 3px solid $yellow;
+    // box-shadow: inset 0 -4px 0 $yellow;
+    // transition: all 0.2s ease;
+
     &:focus,
     &:active,
     &:hover {
       color: $darkPurple;
       text-decoration: none; 
       border-bottom: 2px solid;
+
+      // background: $yellow;
     }
 }
 
@@ -724,8 +732,8 @@ a,
   h2 {
     color: $green;
     font-size: $leading*2;
-    margin-top: 1.5em;
-    margin-bottom: .5em;
+    margin-top: 2em;
+    margin-bottom: 1em;
     text-align: left;
     letter-spacing: -0.01em;
   }
@@ -3715,8 +3723,8 @@ body.modal-open {
     list-style: none;
 
     .glyphicon {
-      margin-right: 10px;
-      opacity: 0.5;
+      margin-right: 5px;
+      // opacity: 0.5;
     }
 
     li {
@@ -3745,6 +3753,7 @@ body.modal-open {
   }
 }
 
+// Sweet Alert 2 Customization
 .swal2-modal {
   padding-left: 5%;
   padding-right: 5%; 

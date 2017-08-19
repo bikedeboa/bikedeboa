@@ -1778,6 +1778,17 @@ $(() => {
       setView('Perguntas frequentes', '/faq', true);
     }));
 
+    $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      ga('send', 'event', 'Misc', 'contact opened');
+      swal('Contato', '', 'info');
+      swal({
+        title: 'Contato',
+        html:
+          `<a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> bikedeboa@gmail.com</a>`,
+      });
+    }));
+
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
       map.setCenter(_portoAlegrePos);
       map.setZoom(6);
