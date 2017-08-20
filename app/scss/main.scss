@@ -55,7 +55,7 @@ $bodyFont: "Ubuntu", sans-serif;
 $headingFont: 'Raleway', "Ubuntu", sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
-$separatorBorderStyle: 2px dotted #eee;
+$separatorBorderStyle: 2px dotted $lightestGray;
 
 $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
@@ -1822,10 +1822,8 @@ body.modal-open {
 
 
 .info {
-    padding: $GRID_SPACE*2 5%;
+    padding: 0 5%;
     text-align: center;
-    border-top: $separatorBorderStyle;
-    margin: $GRID_SPACE*2 0 0;
 
     .skeleton-box,
     img {
@@ -1867,12 +1865,6 @@ body.modal-open {
 
 #placeDetailsModal {
     .review {
-      margin-top: $GRID_SPACE*2;
-      border-top: $separatorBorderStyle;
-      padding-top: $GRID_SPACE;
-      
-      // text-align: center;
-
       .savedRating {
           text-align: center;
           color: $gray;
@@ -1945,6 +1937,11 @@ body.modal-open {
     // .photo-container, .modal-body > div:not(.tooltip), .modal-footer {
     //     opacity: 0;
     // }
+
+    hr {
+      margin-top: $GRID_SPACE*2;
+      margin-bottom: $GRID_SPACE*2;
+    }
 
     .minimap { 
         min-height: 50px;
@@ -2897,7 +2894,7 @@ body.modal-open {
       border-radius: 0;
 
       &.hasImage {
-        height: 120px;
+        height: 30vh;
       }
 
       &.hasImage:not(.loading):after {
@@ -2978,7 +2975,7 @@ body.modal-open {
     transform: none;
     pointer-events: auto;
     // transform: translateY(0);
-  } 
+  }
 
   #top-mobile-bar,
   #bottom-mobile-bar {
@@ -2987,7 +2984,7 @@ body.modal-open {
     opacity: 0;
     pointer-events: none; 
 
-    transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
+    transition: transform 0.8s $coolEaseOut, opacity 0.4s ease-in-out;
   }
 
   #top-mobile-bar {
@@ -3042,6 +3039,17 @@ body.modal-open {
     }
   }
 
+  body.gradient-topbar {
+    .modal-content {
+      padding-top: 0;
+    }
+
+    #top-mobile-bar {
+      background: linear-gradient(rgba(0,0,0,0.5), transparent);
+      box-shadow: none; 
+    }
+  }
+
 
   #bottom-mobile-bar {
       position: fixed;
@@ -3071,15 +3079,22 @@ body.modal-open {
       button {
         // Explanation on the reason for the string interpolation:
         //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-        width: calc(100% - #{$GRID_SPACE*2});
-        margin: $GRID_SPACE;
+        // width: calc(100% - #{$GRID_SPACE*2});
+        // margin: $GRID_SPACE;
+        width: 100%;
         font-weight: 700;
+        border-radius: 0;
         text-transform: uppercase;
         background: $greenGradient;
       } 
   }
 
   #placeDetailsModal {
+    hr {
+      margin-left: -12px;
+      margin-right: -12px;
+    }
+
     .review {
       text-align: left;
 

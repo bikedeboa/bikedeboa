@@ -233,6 +233,9 @@ $(() => {
           } else {
             $('body').removeClass('already-reviewed');
           }
+          // if (m.photo) {
+          //   $('body').addClass('gradient-topbar');
+          // }
         })
         .one('shown.bs.modal', () => { 
           // Animate modal content
@@ -253,6 +256,7 @@ $(() => {
         })
         .one('hidden.bs.modal', () => {
           $('body').removeClass('details-view');
+          // $('body').removeClass('gradient-topbar');
         })
         .modal('show');
     } else { 
@@ -1571,6 +1575,8 @@ $(() => {
           });
         } else {
           ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
+
+          $('body').addClass('already-reviewed');
 
           swal({ 
             title: 'Valeu!',

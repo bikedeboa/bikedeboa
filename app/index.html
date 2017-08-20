@@ -391,7 +391,7 @@
         <!-- Views -->
 
         <!-- About -->
-        <div class="modal fade clean-modal" id="aboutModal" tabindex="-1">
+        <div class="modal clean-modal" id="aboutModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -814,29 +814,21 @@
               <label>Como chegar</label>
             </a>
             
-            <hr>
-
             <!-- <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
               <img alt="" class="toolbar-item-icon" src="/img/review.svg">
               <label>Avaliar</label>
-            </button>
-
-            <hr> -->
+            </button> -->
 
             <button class="toolbar-item shareBtn" tabindex="0">
               <img alt="" class="toolbar-item-icon" src="/img/icon_share.svg">
               <label>Compartilhar</label>
             </button>
 
-            <hr>
-            
             {{#if canModify}}
               <button id="editPlaceBtn" class="toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Editar</label>
               </button>
-
-              <hr>
 
               <button id="deletePlaceBtn" class="toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
@@ -878,6 +870,7 @@
                   {{/if}}
               </section>
 
+              <hr>
 
               <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
                   {{#if savedRating}}
@@ -952,6 +945,8 @@
                       </div>
                   {{/if}}
               </section>
+
+              <hr>
 
               <section class="info clearfix">
                   <div class="col-half {{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
@@ -1041,6 +1036,8 @@
 
                   <!-- <div>{{numCheckins}}</div> -->
               </section>
+
+              <hr>
 
               {{#if description}}
                   <section class="description">
