@@ -3650,11 +3650,11 @@ body.modal-open {
     position: absolute;
     right: 0;
     transform: translateX(102%);
-  }
-
-  .side-nav__hide {
-    right: 0;
-    left: auto;
+    
+    .side-nav__hide {
+      right: 0;
+      left: auto;
+    }
   }
 }
 
