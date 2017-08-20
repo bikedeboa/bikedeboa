@@ -1771,7 +1771,7 @@ $(() => {
       login(true);
     }));
 
-    $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
       setView('Sobre', '/sobre', true);
@@ -1903,20 +1903,6 @@ $(() => {
       }
     }); 
     
-    $('.promo-banner-container button').on('click', e => {
-      $('.promo-banner-container').remove();
-      BIKE.Session.setPromoBannerViewed();
-
-      ga('send', 'event', 'Banner', 'promo banner - closed');
-    });
-
-    $('.promo-banner-container a').on('click', e => {
-      $('.promo-banner-container').remove();
-      BIKE.Session.setPromoBannerViewed();
-
-      ga('send', 'event', 'Banner', 'promo banner - link click');
-    });
-
     // Location Search Mode control
     // $('#locationQueryInput').on('focus', e => { 
     //   if (_isMobile) {
@@ -2382,6 +2368,36 @@ $(() => {
     });
   }
 
+  function openPromoBanner() {
+    // setTimeout( () => {
+    //   if (_isMobile) {
+    //     $('.welcome-message-container').show();  
+    //   } else {
+    //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
+    //   }
+    // }, 2000); 
+
+    if (_isMobile) {
+      return;
+    }
+    
+    $('.welcome-message-container').show(); 
+
+    $('.welcome-message-container .welcome-message--close').on('click', e => {
+      $('.welcome-message-container').remove();
+      BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - closed');
+    });
+
+    $('.welcome-message-container a').on('click', e => {
+      $('.welcome-message-container').remove();
+      // BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - link click');
+    });
+  }
+
   function handleLoggedUser() {
     // Setup little user label underneath the location search bar
     $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
@@ -2471,15 +2487,10 @@ $(() => {
     }
 
     // Promo banner
-    if (!BIKE.Session.getPromoBannerViewed()) {
-      setTimeout( () => {
-        if (_isMobile) {
-          $('.promo-banner-container').show();
-        } else {
-          $('.promo-banner-container').velocity('fadeIn', { duration: 3000 });
-        }
-      }, 2000); 
-    }
+    // temp: Temporarily disabled
+    // if (!BIKE.Session.getPromoBannerViewed()) {
+    //   openPromoBanner();
+    // }
   }
 
   window.toggleDemoMode = () => {

@@ -2518,60 +2518,40 @@ body.modal-open {
   } */
 }
 
-.promo-banner-container {
+.welcome-message-container {
   // Initializes hidden
   display: none; 
 
-  .promo-banner {
+  .welcome-message {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: $purple;
       z-index: 2;
       text-align: left;
-      display: flex;
+      display: flex; 
       align-items: center;
       align-content: center;
       flex-wrap: wrap;
       color: white;
-      // font-family: $headingFont;
-      font-weight: bold;
+      border-top-right-radius: 5px;
 
-      // Mobile only
-      height: 80px;
-      font-size: 14px;
-      padding: 0 20px;
-      opacity: 0.95;
-   
-      a {
-        color: #fcf562;
-      }
+      height: auto;
+      padding: $GRID_SPACE*2;
+      font-size: 16px;
+      background: $green;
 
       span {
         // font-family: $bodyFont;
         font-weight: normal;
       }
 
-      h2 {
-        font-weight: normal;
-        font-size: inherit;
-        line-height: inherit;
-        margin: 0;
+      a {
+        color: white;
       }
 
-      button {
-        display: inline-block;
-        height: 40px;
-        width: 40px;
-        background: 0 0;
-        border: 0;
-        position: absolute;
-        top: 0;
-        right: 0;
-
-        &:hover {
-          background: rgba(0,0,0,0.1);
-        }
+      h1, h2 {
+        font-weight: bold;
+        letter-spacing: -0.02em;
       }
 
       img {
@@ -2590,17 +2570,39 @@ body.modal-open {
         opacity: 0.8;
       }
 
+      .welcome-message--close {
+        display: inline-block;
+        height: 40px;
+        width: 40px;
+        background: 0 0;
+        border: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        &:hover {
+          background: rgba(0,0,0,0.1);
+        }
+      }
+
+      .welcome-message--content {
+        opacity: .9;
+        padding-right: $GRID_SPACE*6;
+        font-weight: normal;
+        font-size: 14px;
+      }
+
+      .welcome-message--footer {
+        margin-top: 1em;
+        font-size: 18px;
+      }
+
+
       // Desktop version
       @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
         & {
-          height: 130px;
-          padding: 0 50px 0 80px;
-          font-size: 16px;
-          max-width: 440px;
-          // left: calc(50% - 220px);
+          max-width: 600px;
           left: 0;
-          height: 90px;
-          background: rgba(50, 155, 206, 0.9);
           opacity: 1;
         }
 
