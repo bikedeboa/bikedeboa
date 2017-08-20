@@ -1412,6 +1412,7 @@ body.modal-open {
     // transition: max-height 0.5s ease;
 
     &.photoInputContainer {
+        border: 3px dotted $lightGrey;
         height: 130px;
     }
 
@@ -1479,17 +1480,18 @@ body.modal-open {
 }
 
 #newPlaceModal {
+    .modal-body {
+      padding-top: 0;
+    }
+
     section {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
-        & > h2 {
-          background: $lightestGray;
+        h2 {
           padding: $GRID_SPACE;
-          font-family: $headingFont;
-          font-size: 14px; 
-          color: $lightGray;
-          text-align: center;
+          font-size: 22px; 
           user-select: none;
+          font-weight: bold;
         }
     }
 
@@ -1596,22 +1598,22 @@ body.modal-open {
 
       &.collapsable {
           margin: 0;
-          max-height: 39px;
+          max-height: 49px;
           overflow: hidden;
           position: relative;
 
           transition: max-height 0.5s ease-in-out;
 
           h2 {
-              margin-top: 10px;
-              background: transparent;
+              padding-left: 0;
+              color: $black;
+              text-align: left;
               
               &:after {
-                  position: absolute;
-                  top: 10px;
-                  right: $GRID_SPACE;
+                  float: right;
                   font-family: $bootstrapFont;
                   content: "\e252";
+                  font-size: 14px;
               }
           }
 
@@ -1688,6 +1690,8 @@ body.modal-open {
     }
 
     .acess-types-group {
+      text-align: center;
+      
       .typeIcon {
         width: 32%;
         margin: 0 6%;
@@ -1707,7 +1711,7 @@ body.modal-open {
         cursor: pointer;
         vertical-align: middle;
         border-radius: 15px;
-        padding: 10px 3% 40px;
+        padding: $GRID_SPACE 3%;
         position: relative;
         filter: grayscale(100%);
         opacity: 0.9;
@@ -1715,22 +1719,11 @@ body.modal-open {
         // transition: background-color 0.2s ease-out;
 
         .icon-label {
-          margin-top: 10px;
+          text-align: center;
+          margin-top: $GRID_SPACE;
           color: $gray;
           font-weight: 700;
           user-select: none;
-        }
-
-        &:after {
-          background-image: url(/img/radio.svg);
-          width: 18px;
-          height: 18px;
-          transition: background-image .2s ease-in-out;
-          content: '';
-          position: absolute;
-          left: calc(50% - 11px);
-          bottom: 10px;
-          background-size: 100%;
         }
 
         img {
@@ -1739,17 +1732,20 @@ body.modal-open {
         }
 
         &.active {
-            // background-color: hsla(120,90%,88%,1);
             filter: none;
             opacity: 1;
 
-            &:after {
-              background-image: url(/img/radio_checked.svg);
-            }
+            // &:after {
+            //   background-image: url(/img/radio_checked.svg);
+            // }
 
             .icon-label {
               color: $green;
-              // font-weight: 500;
+              // Explanation on the reason for the string interpolation:
+              //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+              margin-top: calc(#{$GRID_SPACE} - 2px);
+              border: 1px solid;
+              border-radius: 25px;
             }
         }
 
@@ -1757,6 +1753,18 @@ body.modal-open {
             background-color: hsla(120,90%,95%,1);
             opacity: 1;
         }
+
+        // &:after {
+        //   background-image: url(/img/radio.svg);
+        //   width: 18px;
+        //   height: 18px;
+        //   transition: background-image .2s ease-in-out;
+        //   content: '';
+        //   position: absolute;
+        //   left: calc(50% - 11px);
+        //   bottom: 10px;
+        //   background-size: 100%;
+        // }
     }
 }
 
