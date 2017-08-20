@@ -1376,16 +1376,21 @@ $(() => {
 
     // Finally, display the modal
     const showModal = () => {
-      $('#newPlaceModal').modal('show');
       // We can only set the nav title after the modal has been opened
       setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+
+      $('#newPlaceModal')
+        .one('shown.bs.modal', () => {
+          $('#titleInput').focus();
+        })
+        .modal('show');
     }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal')
         .one('hidden.bs.modal', () => { 
           showModal();
         })
-        .modal('hide');
+        .modal('hide'); 
     } else {
       showModal();
     }

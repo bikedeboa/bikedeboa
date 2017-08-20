@@ -1610,7 +1610,6 @@ body.modal-open {
               text-align: left;
               
               &:after {
-                  float: right;
                   font-family: $bootstrapFont;
                   content: "\e252";
                   font-size: 14px;
@@ -1691,7 +1690,7 @@ body.modal-open {
 
     .acess-types-group {
       text-align: center;
-      
+
       .typeIcon {
         width: 32%;
         margin: 0 6%;
