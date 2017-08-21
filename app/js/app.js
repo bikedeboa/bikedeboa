@@ -2241,9 +2241,9 @@ $(() => {
       $('#list-view').removeClass('hidden');
 
       // Animate first 10 elements
-      $('#list-view .infobox:nth-child(-n+10)')
-        .css({opacity: 0})
-        .velocity('transition.slideDownIn', { display: 'flex', stagger: STAGGER_FAST });
+      // $('#list-view .infobox:nth-child(-n+10)')
+      //   .css({opacity: 0})
+      //   .velocity('transition.slideDownIn', { display: 'flex', stagger: STAGGER_FAST });
     } else {
       $('#nearestPlacesModalPlaceholder').html(templates.nearestPlacesModalTemplate({
         title: order,
@@ -2260,9 +2260,9 @@ $(() => {
 
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
-    let match;
+    let match = urlBreakdown[1];
 
-    switch (urlBreakdown[1]) {
+    switch (match) {
       case '':
         if (_isDeeplink) {
           $('body').removeClass('deeplink'); 
@@ -2288,8 +2288,6 @@ $(() => {
             _openLocal(_deeplinkMarker);
           }
         }
-
-        match = 'b';
         break;
       case 'faq':
         openFaqModal();
@@ -2305,7 +2303,7 @@ $(() => {
       // case 'filtros':
       //   hideAllModals();
       default:
-        // match = false;
+        match = false;
         break;
     }
 
@@ -2426,7 +2424,7 @@ $(() => {
   function initRouting() {
     const match = handleRouting();
 
-    if (match === 'b') {
+    if (match) {
       _isDeeplink = true;
 
       $('body').addClass('deeplink'); 
