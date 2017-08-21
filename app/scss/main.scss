@@ -2946,9 +2946,9 @@ body.modal-open {
     bottom: 0;
     height: $BOTTOM_NAV_HEIGHT;
     width: 100%;
-    // background: $lightestGray;
     background: white;
-    border-top: 1px solid $lighterGray;
+    // background: $lightestGray;
+    // border-top: 1px solid $lighterGray;
 
     ul {
       margin: 0;
@@ -2965,8 +2965,9 @@ body.modal-open {
         opacity: .8;
         text-align: center;
         padding: 6px 0;
+        border-top: 2px solid $lighterGray;
 
-        transition: opacity 0.2s ease-in-out, background 0.2s ease-in-out;
+        transition: opacity 0.3s ease-out, border-color 0.3s ease-out, background 0.3s ease-out;
    
         img {
           width: 20px;
@@ -2984,7 +2985,7 @@ body.modal-open {
         &.active {
           opacity: 1;
           filter: none;
-          // background: white;
+          border-top: 2px solid $green;
 
           span {
             color: $darkGreen;
