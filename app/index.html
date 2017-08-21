@@ -6,9 +6,9 @@
         <title>bike de boa - encontre e avalie bicicletários no RS</title>
         <meta property="og:title" content="bike de boa - encontre e avalie bicicletários no RS"/>
       
-        <meta name="description" content="Contribua para a cultura da bicicleta. Descubra e avalie os mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e do Rio Grande do Sul.">
+        <meta name="description" content="Vá de bici e descubra onde deixar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo. Disponível em todo RS.">
         
-        <meta property="og:description" content="Contribua para a cultura da bicicleta. Descubra e avalie os mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e do Rio Grande do Sul." />
+        <meta property="og:description" content="Vá de bici e descubra onde deixar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo. Disponível em todo RS." />
 
         <meta name="keywords" content="mapa bicicleta bici biciletario seguranca estacionamento estacionar deixar prender ulock colaborativo vadebici massa critica porto alegre rs ">
         <!-- <link rel="canonical" href="https://www.bikedeboa.com.br" /> -->
@@ -208,23 +208,55 @@
               <button class="openReviewPanelBtn btn green">Avaliar</button>
             </div>
         </div>
+ 
+        <div class="welcome-message-container">
+          <div class="welcome-message">
+            <button class="welcome-message--close">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            
+            <!-- <img src="/img/bike.svg">  -->
+            
+            <h1>
+              bike de boa
+            </h1>
+
+            <div class="welcome-message--content">
+              <p>
+                Este é um mapa colaborativo de lugares pra prender a bicicleta, onde as cores representam as notas que as pessoas deram. Contribua com a cultura da bicicleta e ajude avaliando os bicicletários e adicionando novos.
+              </p>
+
+              <p>
+                O bike de boa é feito com <span class="glyphicon glyphicon-heart"></span> por voluntários e sempre será totalmente gratuito e colaborativo.
+              </p>
+            </div>
+            
+            <div class="welcome-message--footer">
+              <a rel="noopener" href="#" class="openAboutBtn">Saiba mais</a>
+            </div>
+            
+            <!-- <aside>Aberto até 20/04</aside> -->
+          </div>
+        </div>
 
         
         <!-- Menus -->
 
         <aside id="hamburger-menu" class="js-side-nav side-nav">
           <nav class="js-side-nav-container side-nav__container">
-            <header class="side-nav__header">
-              <!-- <span>bike de boa</span> -->
-              <img alt="" src="/img/banner.svg"/>
-            </header>
-
             <button class="js-menu-hide side-nav__hide">
               <span class="glyphicon glyphicon-remove"></span>
             </button>
 
             <div class="side-nav__content">
               <ul>
+                <li class="side-nav--animate-in" id="howToInstallBtn">
+                  <img alt="" src="/img/icon_app.svg"/>
+                  Instalar o App
+                </li>
+
+                <hr>
+
                 <li class="side-nav--animate-in" id="bestPlacesBtn">
                   <span class="glyphicon glyphicon-star-empty"></span>
                   Mais Bem Avaliados
@@ -241,25 +273,25 @@
 
                 <hr>
 
-                <li class="side-nav--animate-in" id="aboutBtn">
+                <li class="side-nav--animate-in openAboutBtn">
                   <img alt="" src="/img/icon_info.svg"/>
                   Sobre o Projeto
                 </li>
+
                 <li class="open-faq-btn side-nav--animate-in">
                   <img alt="" src="/img/icon_faq.svg"/>
                   Perguntas Frequentes
                 </li>
-
-                <li class="side-nav--animate-in" id="howToInstallBtn">
-                  <img alt="" src="/img/icon_app.svg"/>
-                  Instalar o App
-                </li>
                 
-                <hr>
+                <hr> 
                 
                 <li class="side-nav--animate-in" id="loginBtn">
                   <!-- <span class="glyphicon glyphicon-user"></span> -->
                   Login administrador
+                </li>
+
+                <li class="contact-btn side-nav--animate-in">
+                  Contato
                 </li>
 
                 <!-- <li>
@@ -273,18 +305,20 @@
             <footer class="side-nav__footer side-nav--animate-in">  
               <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.bikedeboa.com.br%2F&width=280&layout=button_count&action=like&size=small&show_faces=false&share=true&height=46&appId=1814653185457307" width="280" height="46" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
 
+              <!-- <img class="illustration" alt="" src="/img/art1.svg"/> -->
+
               <div class="footer-label">
                 Segue a gente
               </div>
 
               <div class="social-links-list">
-                <a class="facebook-social-link social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                <a class="facebook-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
                   <img alt="Facebook" src="/img/facebook_logo.svg"/>
                 </a>
-                <a class="instagram-social-link social-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                <a class="instagram-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
                   <img alt="Instagram" src="/img/instagram_logo.svg"/>
                 </a>
-                <a class="github-social-link social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                <a class="github-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
                   <img alt="GitHub" src="/img/github_logo.svg"/>
                 </a>
               </div>
@@ -395,7 +429,7 @@
         <!-- Views -->
 
         <!-- About -->
-        <div class="modal fade clean-modal" id="aboutModal" tabindex="-1">
+        <div class="modal clean-modal" id="aboutModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -405,24 +439,24 @@
 
                         <div class="modal-body">
                             <article>
-                              <!-- <p>
-                                <img class="illustration" alt="" src="/img/icon_public.svg"/>
-                              </p> -->
+                              <p>
+                                <img class="illustration" alt="" src="/img/art1.svg"/>
+                              </p>
 
                               <p class="subtitle">
                                 O quão bom seria poder ir de bicicleta pra onde quiséssemos na cidade? Um dos maiores problemas é a falta de lugares para estacionar a bicicleta com segurança. Ciclistas, estabelecimentos comerciais, governos, ninguém parece saber direito o que significa ter um lugar pra deixar a bicicleta “de boa”.
                               </p>
 
                               <p>
-                                Nosso principal objetivo é trazer visibilidade pros bicicletários que são oferecidos na cidade, coletando dados e insights que incentivem que mais deles sejam instalados. Mas também queremos educar as pessoas sobre os tipos de bicicletários que existem, qual a forma correta de usá-los e o que faz eles serem seguros ou adequados. Esse conhecimento ajuda a dar mais confiança pros ciclistas, que saberão como estacionar a bike com segurança, e achamos que isso incentiva mais pessoas a pedalarem.
+                                Com o bike de boa queremos incentivar que mais estabelcimentos instalem bicicletários, e ajudar a dar visibilidade para os que já existem. Também trazemos informações sobre os diferentes tipos de bicicletários, qual a forma correta de usá-los e o que faz eles serem mais ou menos seguros e adequados. Acreditamos que esse conhecimento ajuda a dar mais confiança pras pessoas saírem de bike.
                               </p>
 
                               <p>
-                                O bike de boa é um site e aplicativo totalmente colaborativo pra mapear os lugares onde dá pra estacionar a bicicleta na cidade. Estes lugares podem tanto ser bicicletários propriamente ditos quanto outros objetos urbanos que foram transformados em estacionamento de bicicleta. No app os pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e órgãos públicos. 
+                                O bike de boa é um site e aplicativo totalmente colaborativo pra mapear os lugares onde dá pra estacionar a bicicleta na cidade. No app os pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e órgãos públicos. Tanto o app quanto nossos dados são livres, o que significa que qualquer pessoa pode contribuir com ele ou reutilizá-lo como quiser.
                               </p>
 
                               <p>
-                                O site já conta com quase 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. Além disso fomos destaque em alguns eventos. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, e fomos selecionados para participar do <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura</a>, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
+                                O site já conta com mais 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. Além disso fomos destaque em alguns eventos. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, e fomos selecionados para participar do <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura</a>, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
                               </p>
 
                               <h2>Quem somos</h2> 
@@ -442,13 +476,13 @@
                                 <!-- Facebook like and share buttons -->
                                 <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbikedeboaapp%2F&width=280&layout=standard&action=like&size=small&show_faces=true&share=true&height=80&appId=1814653185457307" width="280" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
 
-                                <a id="facebook-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                                <a id="facebook-social-link" class="social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
                                   <img alt="Facebook" src="/img/facebook_logo.svg"/> Facebook
                                 </a>
-                                <a id="instagram-social-link" class="social-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                                <a id="instagram-social-link" class="social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
                                   <img alt="Instagram" src="/img/instagram_logo.svg"/> Instagram
                                 </a>
-                                <a id="github-social-link" class="social-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                                <a id="github-social-link" class="social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
                                   <img alt="GitHub" src="/img/github_logo.svg"/> Github
                                 </a>
                               </div>
@@ -477,7 +511,7 @@
                               <div id="browsers-accordion" class="panel-group" role="tablist" aria-multiselectable="true">
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#browsers-accordion" href="#collapse-chrome">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#browsers-accordion" href="#collapse-chrome">
                                       <h4 class="panel-title">
                                         <img alt="" class="browser-icon" src="/img/icon_browser_chrome.png"/>
                                         <span><b>Chrome</b> no Android</span>
@@ -498,7 +532,7 @@
                                 
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#browsers-accordion" href="#collapse-firefox">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#browsers-accordion" href="#collapse-firefox">
                                       <h4 class="panel-title">
                                         <img alt="" class="browser-icon" src="/img/icon_browser_firefox.png"/>
                                         <span><b>Firefox</b> no Android</span>
@@ -519,7 +553,7 @@
                                 
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#browsers-accordion" href="#collapse-safari">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#browsers-accordion" href="#collapse-safari">
                                       <h4 class="panel-title">
                                         <img alt="" class="browser-icon" src="/img/icon_browser_safari.png"/>
                                         <span><b>Safari</b> no iPhone</span>
@@ -564,7 +598,7 @@
                               <div id="faq-accordion" class="panel-group" aria-expanded="true" aria-controls="collapseOne">
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseThree">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseThree">
                                       <h4 class="panel-title">
                                         Quando o Bike de Boa estará disponível na minha cidade/no Brasil inteiro/no mundo?
                                       </h4>
@@ -583,7 +617,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseOne">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseOne">
                                       <h4 class="panel-title">
                                         O que é o Bike de Boa?
                                       </h4>
@@ -599,7 +633,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseFour">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseFour">
                                       <h4 class="panel-title">
                                         Por quê não posso editar as informações dos bicicletários?
                                       </h4>
@@ -618,7 +652,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseFive">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseFive">
                                       <h4 class="panel-title">
                                         Como posso contribuir com o projeto?
                                       </h4>
@@ -641,7 +675,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseSix">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseSix">
                                       <h4 class="panel-title">
                                         E se o Bike de Boa mapeasse também outras coisas do interesse dos ciclistas?
                                       </h4>
@@ -655,7 +689,7 @@
                                 </div>
                                 <div class="panel">
                                   <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed" data-parent="#faq-accordion" href="#collapseSeven">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseSeven">
                                       <h4 class="panel-title">
                                         Sou dono(a) de estabelecimento comercial que valoriza os ciclistas. Como podemos nos ajudar mutuamente?
                                       </h4>
@@ -714,34 +748,26 @@
           {{/if}}
 
           <section class="top-toolbar">
-            <a href="{{{gmapsRedirectUrl}}}" target="_blank" rel="noopener" class="toolbar-item directionsBtn">
+            <a href="{{{gmapsRedirectUrl}}}" target="_blank" rel="noopener" class="toolbar-item directionsBtn unstyled-link">
               <img alt="" class="toolbar-item-icon" src="/img/route.svg">
               <label>Como chegar</label>
             </a>
             
-            <hr>
-
             <!-- <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
               <img alt="" class="toolbar-item-icon" src="/img/review.svg">
               <label>Avaliar</label>
-            </button>
-
-            <hr> -->
+            </button> -->
 
             <button class="toolbar-item shareBtn" tabindex="0">
               <img alt="" class="toolbar-item-icon" src="/img/icon_share.svg">
               <label>Compartilhar</label>
             </button>
 
-            <hr>
-            
             {{#if canModify}}
               <button id="editPlaceBtn" class="toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Editar</label>
               </button>
-
-              <hr>
 
               <button id="deletePlaceBtn" class="toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
@@ -783,6 +809,7 @@
                   {{/if}}
               </section>
 
+              <hr>
 
               <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
                   {{#if savedRating}}
@@ -857,6 +884,8 @@
                       </div>
                   {{/if}}
               </section>
+
+              <hr>
 
               <section class="info clearfix">
                   <div class="col-half {{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
@@ -947,6 +976,8 @@
                   <!-- <div>{{numCheckins}}</div> -->
               </section>
 
+              <hr>
+
               {{#if description}}
                   <section class="description">
                       <h2>
@@ -996,10 +1027,11 @@
                             <label for="photoInput"></label>
                         </div>
 
-                        <div class="modal-body text-center">
+                        <div class="modal-body">
                             <section>
+                              <h2>Dê um nome pro bicicletário</h2>
                               <div class="text-input-wrapper">
-                                  <input required id="titleInput" type="text" class="text-input" placeholder="Nome pro bicicletário">
+                                  <input required id="titleInput" type="text" class="text-input" placeholder="">
                               </div>
                             </section>
 
@@ -1013,10 +1045,10 @@
                             <section>
                               <h2>
                                 Tipo de Bicicletário
-                                <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
+                                <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
                               </h2>
 
-                              <div class="custom-radio-group">
+                              <div class="custom-radio-group" data-form-step="1">
                                   <div data-value="deroda" class="typeIcon" tab-index="0">
                                       <img alt="" src="/img/tipo_deroda.svg"/>
                                       <div class="icon-label">De Roda</div>
@@ -1047,12 +1079,12 @@
                             <section>
                               <h2>
                                 Acesso
-                                <span id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" style="float: right;" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Público</h2>
+                                <span id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Público</h2>
                                 <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
                                 <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span>
                               </h2>
 
-                              <div class="acess-types-group">
+                              <div class="acess-types-group" data-form-step="2">
                                   <div data-value="public" class="typeIcon" tab-index="0">
                                       <img alt="" src="/img/icon_public.svg"/>
                                       <div class="icon-label">
@@ -1092,6 +1124,7 @@
                                 <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
