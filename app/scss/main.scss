@@ -43,6 +43,7 @@ $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
 $easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
+$spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +55,7 @@ $bodyFont: "Ubuntu", sans-serif;
 $headingFont: 'Raleway', "Ubuntu", sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
-$separatorBorderStyle: 2px dotted #eee;
+$separatorBorderStyle: 2px dotted $lightestGray;
 
 $MOBILE_MAX_WIDTH: 414px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
@@ -172,7 +173,8 @@ body.offline {
 }
 
 body.pwa-installed {
-  #howToInstallBtn {
+  #howToInstallBtn,
+  #howToInstallBtn + hr {
     display: none;
   }
 }
@@ -495,16 +497,32 @@ body.deeplink {
 
 a,
 .link-like {
-    color: $purple;
-    border-bottom: 1px dashed;
+    color: $black;
+    border-bottom: 3px solid $yellow;
+    box-shadow: inset 0 -4px 0 $yellow;
+    transition: all 0.2s ease;
 
     &:focus,
     &:active,
     &:hover {
-      color: $darkPurple;
+      color: $black;
       text-decoration: none; 
-      border-bottom: 2px solid;
+
+      background: $yellow;
     }
+}
+
+#map a,
+a.unstyled-link {
+  border-bottom: inherit;
+  box-shadow: inherit;
+  // transition: inherit;
+
+  &:focus,
+  &:active,
+  &:hover {
+    background: inherit;
+  }
 }
 
 .link-button {
@@ -695,9 +713,9 @@ a,
   }
 
   .illustration {
-    width: 60px; 
-    height: auto;
-    margin: $leading auto $leading*2;
+    // width: 60px; 
+    // height: auto;
+    margin: 0 auto;
     display: block;
   }
 
@@ -713,6 +731,7 @@ a,
   }
 
   h1 {
+    color: $green;
     font-size: $leading*1.5*2;
     margin-top: 1.5em;
     margin-bottom: .5em;
@@ -720,15 +739,17 @@ a,
   }
  
   h2 {
-    font-size: $leading*1.5;
-    margin-top: 1.5em;
-    margin-bottom: .5em;
+    color: $green;
+    font-weight: bold;
+    font-size: $leading*2;
+    margin-top: 2em;
+    margin-bottom: 1em;
     text-align: left;
     letter-spacing: -0.01em;
   }
 
   h2, p {
-    color: $black;
+    // color: $black;
   }
 
   .medium-separator {
@@ -750,6 +771,8 @@ a,
 }
 
 .panel-group {
+  margin-bottom: $GRID_SPACE*2;
+
   .panel {
       .panel-heading {
         padding: 0;
@@ -759,8 +782,6 @@ a,
             position: relative;
             float: right;
             display: inline-block;
-            margin-top: 8px;
-            margin-left: $GRID_SPACE; 
             font-family: $bootstrapFont;
             font-weight: 400;
             line-height: 1;
@@ -776,7 +797,13 @@ a,
       .panel-title {
         font-family: $headingFont;
         color: $black;
-        padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE 0; 
+        padding: $GRID_SPACE*3 $GRID_SPACE;
+
+        transition: background 0.2s ease-out;
+
+        &:hover {
+          background: $paleWhite;
+        }
       }
 
       .panel-body {
@@ -1385,6 +1412,7 @@ body.modal-open {
     // transition: max-height 0.5s ease;
 
     &.photoInputContainer {
+        border: 3px dotted $lightGrey;
         height: 130px;
     }
 
@@ -1452,17 +1480,18 @@ body.modal-open {
 }
 
 #newPlaceModal {
+    .modal-body {
+      padding-top: 0;
+    }
+
     section {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
-        & > h2 {
-          background: $lightestGray;
+        h2 {
           padding: $GRID_SPACE;
-          font-family: $headingFont;
-          font-size: 14px; 
-          color: $lightGray;
-          text-align: center;
+          font-size: 22px; 
           user-select: none;
+          font-weight: bold;
         }
     }
 
@@ -1569,22 +1598,21 @@ body.modal-open {
 
       &.collapsable {
           margin: 0;
-          max-height: 39px;
+          max-height: 49px;
           overflow: hidden;
           position: relative;
 
           transition: max-height 0.5s ease-in-out;
 
           h2 {
-              margin-top: 10px;
-              background: transparent;
+              padding-left: 0;
+              color: $black;
+              text-align: left;
               
               &:after {
-                  position: absolute;
-                  top: 10px;
-                  right: $GRID_SPACE;
                   font-family: $bootstrapFont;
                   content: "\e252";
+                  font-size: 14px;
               }
           }
 
@@ -1619,7 +1647,7 @@ body.modal-open {
 
 .review {
     .rating-display-container {
-      margin: $GRID_SPACE 0;
+      margin: $GRID_SPACE 0 0 0;
     }
 
     img {
@@ -1661,6 +1689,8 @@ body.modal-open {
     }
 
     .acess-types-group {
+      text-align: center;
+
       .typeIcon {
         width: 32%;
         margin: 0 6%;
@@ -1680,7 +1710,7 @@ body.modal-open {
         cursor: pointer;
         vertical-align: middle;
         border-radius: 15px;
-        padding: 10px 3% 40px;
+        padding: $GRID_SPACE 3%;
         position: relative;
         filter: grayscale(100%);
         opacity: 0.9;
@@ -1688,22 +1718,11 @@ body.modal-open {
         // transition: background-color 0.2s ease-out;
 
         .icon-label {
-          margin-top: 10px;
+          text-align: center;
+          margin-top: $GRID_SPACE;
           color: $gray;
           font-weight: 700;
           user-select: none;
-        }
-
-        &:after {
-          background-image: url(/img/radio.svg);
-          width: 18px;
-          height: 18px;
-          transition: background-image .2s ease-in-out;
-          content: '';
-          position: absolute;
-          left: calc(50% - 11px);
-          bottom: 10px;
-          background-size: 100%;
         }
 
         img {
@@ -1712,17 +1731,20 @@ body.modal-open {
         }
 
         &.active {
-            // background-color: hsla(120,90%,88%,1);
             filter: none;
             opacity: 1;
 
-            &:after {
-              background-image: url(/img/radio_checked.svg);
-            }
+            // &:after {
+            //   background-image: url(/img/radio_checked.svg);
+            // }
 
             .icon-label {
               color: $green;
-              // font-weight: 500;
+              // Explanation on the reason for the string interpolation:
+              //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+              margin-top: calc(#{$GRID_SPACE} - 2px);
+              border: 1px solid;
+              border-radius: 25px;
             }
         }
 
@@ -1730,12 +1752,24 @@ body.modal-open {
             background-color: hsla(120,90%,95%,1);
             opacity: 1;
         }
+
+        // &:after {
+        //   background-image: url(/img/radio.svg);
+        //   width: 18px;
+        //   height: 18px;
+        //   transition: background-image .2s ease-in-out;
+        //   content: '';
+        //   position: absolute;
+        //   left: calc(50% - 11px);
+        //   bottom: 10px;
+        //   background-size: 100%;
+        // }
     }
 }
 
 
 .average {
-    font-size: 30px;
+    font-size: 24px;
     // vertical-align: bottom;
     vertical-align: middle;
     // font-family: $headingFont;
@@ -1751,7 +1785,7 @@ body.modal-open {
     border: 1px solid $gray;
     color: $gray;
     margin: 5px auto;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 25px;
     vertical-align: bottom;
     background: transparent;
@@ -1788,10 +1822,8 @@ body.modal-open {
 
 
 .info {
-    padding: $GRID_SPACE*2 5%;
+    padding: 0 5%;
     text-align: center;
-    border-top: $separatorBorderStyle;
-    margin: $GRID_SPACE*2 0 0;
 
     .skeleton-box,
     img {
@@ -1833,12 +1865,6 @@ body.modal-open {
 
 #placeDetailsModal {
     .review {
-      margin-top: $GRID_SPACE*2;
-      border-top: $separatorBorderStyle;
-      padding-top: $GRID_SPACE;
-      
-      // text-align: center;
-
       .savedRating {
           text-align: center;
           color: $gray;
@@ -1911,6 +1937,11 @@ body.modal-open {
     // .photo-container, .modal-body > div:not(.tooltip), .modal-footer {
     //     opacity: 0;
     // }
+
+    hr {
+      margin-top: $GRID_SPACE*2;
+      margin-bottom: $GRID_SPACE*2;
+    }
 
     .minimap { 
         min-height: 50px;
@@ -2241,7 +2272,7 @@ body.modal-open {
       width: 30px;
       height: 30px;
 
-      transition: transform .3s $easeOutQuart;
+      transition: transform .35s $spotifyBounce;
 
       &.glyphicon {
         font-size: 20px;
@@ -2273,6 +2304,14 @@ body.modal-open {
 }
 
 #hamburger-menu {
+  .side-nav__footer {
+    margin-left: 56px;
+  }
+  
+  .side-nav__content {
+    margin: 56px 0 0 56px;
+  }
+
   @media screen and (max-height: 512px) {
     .side-nav__header {
       display: none;
@@ -2479,60 +2518,40 @@ body.modal-open {
   } */
 }
 
-.promo-banner-container {
+.welcome-message-container {
   // Initializes hidden
   display: none; 
 
-  .promo-banner {
+  .welcome-message {
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: $purple;
       z-index: 2;
       text-align: left;
-      display: flex;
+      display: flex; 
       align-items: center;
       align-content: center;
       flex-wrap: wrap;
       color: white;
-      // font-family: $headingFont;
-      font-weight: bold;
+      border-top-right-radius: 5px;
 
-      // Mobile only
-      height: 80px;
-      font-size: 14px;
-      padding: 0 20px;
-      opacity: 0.95;
-   
-      a {
-        color: #fcf562;
-      }
+      height: auto;
+      padding: $GRID_SPACE*2;
+      font-size: 16px;
+      background: $green;
 
       span {
         // font-family: $bodyFont;
         font-weight: normal;
       }
 
-      h2 {
-        font-weight: normal;
-        font-size: inherit;
-        line-height: inherit;
-        margin: 0;
+      a {
+        color: white;
       }
 
-      button {
-        display: inline-block;
-        height: 40px;
-        width: 40px;
-        background: 0 0;
-        border: 0;
-        position: absolute;
-        top: 0;
-        right: 0;
-
-        &:hover {
-          background: rgba(0,0,0,0.1);
-        }
+      h1, h2 {
+        font-weight: bold;
+        letter-spacing: -0.02em;
       }
 
       img {
@@ -2551,17 +2570,39 @@ body.modal-open {
         opacity: 0.8;
       }
 
+      .welcome-message--close {
+        display: inline-block;
+        height: 40px;
+        width: 40px;
+        background: 0 0;
+        border: 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        &:hover {
+          background: rgba(0,0,0,0.1);
+        }
+      }
+
+      .welcome-message--content {
+        opacity: .9;
+        padding-right: $GRID_SPACE*6;
+        font-weight: normal;
+        font-size: 14px;
+      }
+
+      .welcome-message--footer {
+        margin-top: 1em;
+        font-size: 18px;
+      }
+
+
       // Desktop version
       @media screen and (min-width: $MOBILE_MAX_WIDTH+1) {
         & {
-          height: 130px;
-          padding: 0 50px 0 80px;
-          font-size: 16px;
-          max-width: 440px;
-          // left: calc(50% - 220px);
+          max-width: 600px;
           left: 0;
-          height: 90px;
-          background: rgba(50, 155, 206, 0.9);
           opacity: 1;
         }
 
@@ -2588,7 +2629,7 @@ body.modal-open {
   }
 
   .infobox--img {
-    width: 75px;
+    width: 100px;
     height: 75px;
     position: relative;
     background: $lightestGrey;
@@ -2855,7 +2896,7 @@ body.modal-open {
       border-radius: 0;
 
       &.hasImage {
-        height: 120px;
+        height: 30vh;
       }
 
       &.hasImage:not(.loading):after {
@@ -2936,7 +2977,7 @@ body.modal-open {
     transform: none;
     pointer-events: auto;
     // transform: translateY(0);
-  } 
+  }
 
   #top-mobile-bar,
   #bottom-mobile-bar {
@@ -2945,7 +2986,7 @@ body.modal-open {
     opacity: 0;
     pointer-events: none; 
 
-    transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
+    transition: transform 0.8s $coolEaseOut, opacity 0.4s ease-in-out;
   }
 
   #top-mobile-bar {
@@ -3000,6 +3041,17 @@ body.modal-open {
     }
   }
 
+  body.gradient-topbar {
+    .modal-content {
+      padding-top: 0;
+    }
+
+    #top-mobile-bar {
+      background: linear-gradient(rgba(0,0,0,0.5), transparent);
+      box-shadow: none; 
+    }
+  }
+
 
   #bottom-mobile-bar {
       position: fixed;
@@ -3029,15 +3081,22 @@ body.modal-open {
       button {
         // Explanation on the reason for the string interpolation:
         //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-        width: calc(100% - #{$GRID_SPACE*2});
-        margin: $GRID_SPACE;
+        // width: calc(100% - #{$GRID_SPACE*2});
+        // margin: $GRID_SPACE;
+        width: 100%;
         font-weight: 700;
+        border-radius: 0;
         text-transform: uppercase;
         background: $greenGradient;
       } 
   }
 
   #placeDetailsModal {
+    hr {
+      margin-left: -12px;
+      margin-right: -12px;
+    }
+
     .review {
       text-align: left;
 
@@ -3114,9 +3173,16 @@ body.modal-open {
   //   }
   // }
 
+  #hamburger-menu {
+    .side-nav__footer,
+    .side-nav__content {
+      margin-left: 0;
+    }
+  }
+
   .infoBox {
     .infobox--content {
-      margin-right: 50px;
+      margin-right: 35px;
     }
 
     .infobox--label {
@@ -3138,7 +3204,7 @@ body.modal-open {
       display: block;
 
       position: absolute;
-      right: 20px;
+      right: 12px;
       top: calc(50% - 10px);
       font-size: 20px;
       color: $gray;
@@ -3259,14 +3325,14 @@ body.modal-open {
 .rating {
   & > label:before {
     margin: 0 2px;
-    font-size: 30px;
+    font-size: 34px;
     // font-family: FontAwesome;
     font-family: $bootstrapFont;
     content: "\e006";
     display: inline-block;
     background-repeat: no-repeat;
-    width: 30px;
-    height: 30px;
+    // width: 30px;
+    // height: 30px;
     transition: color 0.2s ease, text-shadow 0.2s ease,;
 
     // content: '';
@@ -3544,14 +3610,14 @@ body.modal-open {
         content: 'menu';
         font-size: 9px;
         position: absolute;
-        bottom: 4px;
-        left: 12px;
+        bottom: 6px;
+        left: 11px;
         text-transform: uppercase;
         font-weight: bold;
       }
 
-      .glyphicon-menu-hamburger {
-        top: -2px;
+      .glyphicon-menu-hamburger { 
+        top: -4px;
       }
     }
 }
@@ -3565,6 +3631,20 @@ body.modal-open {
   height: 100%;
   overflow: hidden;
   pointer-events: none;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity 0.3s ease-in-out;
+  }
 }
 
 .side-nav-inverted {
@@ -3572,26 +3652,12 @@ body.modal-open {
     position: absolute;
     right: 0;
     transform: translateX(102%);
+    
+    .side-nav__hide {
+      right: 0;
+      left: auto;
+    }
   }
-
-  .side-nav__hide {
-    right: 0;
-    left: auto;
-  }
-}
-
-.side-nav::before {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity 0.3s ease-in-out;
 }
 
 .side-nav__container {
@@ -3606,6 +3672,116 @@ body.modal-open {
   flex-direction: column;
   will-change: transform;
   transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+
+  .side-nav__hide {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: $black;
+    padding: 0;
+    margin: 0;
+
+    &:hover {
+      background: rgba(0,0,0,0.1);
+    }
+  }
+
+  .side-nav__header {
+      font-family: $headingFont;
+      height: 200px;
+      background: $green;
+      background: $greenGradient;
+      color: #FFF;
+      // display: flex;
+      // align-items: flex-end;
+      padding: 16px;
+      font-size: 30px;
+
+      img {
+          width: 100%;
+          height: 100%;
+          padding: 8% 5% 3%;
+          opacity: .9;
+
+          transition: opacity 0.5s ease-out;
+
+          &:hover {
+              opacity: 1;
+          }
+      }
+  }
+
+  .side-nav__footer {
+      padding: 16px;
+
+      // .footer-label {
+      //   text-transform: uppercase;
+      //   font-size: 12px;
+      //   font-weight: bold;
+      // }
+
+      .social-links-list {
+        display: flex;
+        // justify-content: space-around;
+        // background-color: $lightestGray;
+      }
+  }
+
+  .side-nav__content {
+    flex: 1;
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 18px;
+
+    h3 {
+      padding: 10px;
+      font-weight: lighter;
+      font-size: 14px;
+      color: $lightGray;
+      user-select: none;
+      padding: 10px 0 0 16px;
+      text-transform: uppercase;
+    }
+
+    hr {
+      margin-left: 16px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      .glyphicon {
+        margin-right: 5px;
+        // opacity: 0.5;
+      }
+
+      li {
+        height: 48px;
+        line-height: 48px;
+        padding: 0 16px;
+        cursor: pointer;
+
+        img {
+          height: 1em;
+          margin-right: 5px;
+        }
+      }
+
+      li:hover {
+        background: #CCC;
+      }
+    }
+  }
 }
 
 // .side-nav--animatable .side-nav__container {
@@ -3628,113 +3804,6 @@ body.modal-open {
   pointer-events: auto;
 }
 
-.side-nav__hide {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 56px;
-  height: 56px;
-  font-size: 20px;
-  background: none;
-  border: none;
-  color: #FFF;
-  padding: 0;
-  margin: 0;
-
-  &:hover {
-    background: rgba(0,0,0,0.1);
-  }
-}
-
-.side-nav__header {
-    font-family: $headingFont;
-    height: 200px;
-    background: $green;
-    background: $greenGradient;
-    color: #FFF;
-    // display: flex;
-    // align-items: flex-end;
-    padding: 16px;
-    font-size: 30px;
-
-    img {
-        width: 100%;
-        height: 100%;
-        padding: 8% 5% 3%;
-        opacity: .9;
-
-        transition: opacity 0.5s ease-out;
-
-        &:hover {
-            opacity: 1;
-        }
-    }
-}
-
-.side-nav__footer {
-    padding: 16px;
-
-    .footer-label {
-      text-transform: uppercase;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .social-links-list {
-      display: flex;
-      // justify-content: space-around;
-      // background-color: $lightestGray;
-    }
-}
-
-.side-nav__content {
-  flex: 1;
-  padding: 0;
-  margin: 12px 0 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  font-size: 18px;
-
-  h3 {
-    padding: 10px;
-    font-weight: lighter;
-    font-size: 14px;
-    color: $lightGray;
-    user-select: none;
-    padding: 10px 0 0 16px;
-    text-transform: uppercase;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    .glyphicon {
-      margin-right: 10px;
-      opacity: 0.5;
-    }
-
-    li {
-      height: 48px;
-      line-height: 48px;
-      padding: 0 16px;
-      cursor: pointer;
-
-      img {
-        height: 1em;
-        margin-right: 5px;
-      }
-    }
-
-    li:hover {
-      background: #CCC;
-    }
-  }
-
-}
-
 .tooltip-modal {
   p {
     text-align: left;
@@ -3742,6 +3811,7 @@ body.modal-open {
   }
 }
 
+// Sweet Alert 2 Customization
 .swal2-modal {
   padding-left: 5%;
   padding-right: 5%; 
