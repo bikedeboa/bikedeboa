@@ -2664,8 +2664,14 @@ body.modal-open {
     $cardHeight: 90px;
 
     height: $cardHeight;
-    border-bottom: 1px solid $lighterGray;
+    // border-bottom: 1px solid $lighterGray;
+    margin-bottom: 2px;
     box-shadow: none;
+
+    .infobox--img {
+      width: 100px;
+      height: $cardHeight;
+    }
 
     .infobox--content {
       margin-right: 0;
