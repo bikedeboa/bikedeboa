@@ -2265,13 +2265,14 @@ $(() => {
     switch (match) {
       case '':
         if (_isDeeplink) {
+          // User clicked to go home for the first time
           $('body').removeClass('deeplink'); 
           _isDeeplink = false;
         }
 
         hideAllModals();
 
-        break;
+        break; 
       case 'maisproximos':
       case 'recentes':
       case 'melhores':
@@ -2310,6 +2311,7 @@ $(() => {
     return match;
   }
 
+  // Dynamically inject Google Map's lib
   function setupGoogleMaps(callback) {
     $.getScript(
       'https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR',
@@ -2317,14 +2319,15 @@ $(() => {
         $.getScript(
         '/js/lib/infobox.min.js',
         () => {
-          setupGoogleMaps2(callback);
+          initGoogleMaps(callback);
         }
       );
       }
     );
   }
 
-  function setupGoogleMaps2(callback) {
+  // Lib injected, initialize it
+  function initGoogleMaps(callback) {
   // function setupGoogleMaps(wasDeeplink) {
     let initialCenter;
     if (_deeplinkMarker) {
@@ -2712,6 +2715,8 @@ $(() => {
 
       // Authenticate to be ready for next calls
       login();
+
+      // handleRouting();
 
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
