@@ -2046,9 +2046,9 @@ $(() => {
 
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
-    let match = true;
+    let match = urlBreakdown[1];
 
-    switch (urlBreakdown[1]) {
+    switch (match) {
       case 'b':
         if (urlBreakdown[2]) {
           let id = urlBreakdown[2].split('-')[0];
@@ -2467,6 +2467,8 @@ $(() => {
 
       // Authenticate to be ready for next calls
       login();
+
+      // handleRouting();
 
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
