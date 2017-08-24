@@ -745,9 +745,9 @@ a,
   }
 
   .illustration {
-    width: 60px; 
-    height: auto;
-    margin: $leading auto $leading*2;
+    // width: 60px; 
+    // height: auto;
+    margin: 0 auto;
     display: block;
   }
 
@@ -763,6 +763,7 @@ a,
   }
 
   h1 {
+    color: $green;
     font-size: $leading*1.5*2;
     margin-top: 1.5em;
     margin-bottom: .5em;
@@ -771,6 +772,7 @@ a,
   }
  
   h2 {
+    color: $green;
     font-size: $leading*2;
     margin-top: 1.5em;
     margin-bottom: .5em;
@@ -780,7 +782,7 @@ a,
   }
 
   h2, p {
-    color: $black;
+    // color: $black;
   }
 
   .medium-separator {
@@ -1673,7 +1675,7 @@ body.modal-open {
 
 .review {
     .rating-display-container {
-      margin: $GRID_SPACE 0;
+      margin: $GRID_SPACE 0 0 0;
     }
 
     img {
@@ -1789,7 +1791,7 @@ body.modal-open {
 
 
 .average {
-    font-size: 30px;
+    font-size: 24px;
     // vertical-align: bottom;
     vertical-align: middle;
     // font-family: $headingFont;
@@ -1805,7 +1807,7 @@ body.modal-open {
     border: 1px solid $gray;
     color: $gray;
     margin: 5px auto;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 25px;
     vertical-align: bottom;
     background: transparent;
@@ -2295,7 +2297,7 @@ body.modal-open {
       width: 30px;
       height: 30px;
 
-      transition: transform .3s $spotifyBounce;
+      transition: transform .35s $spotifyBounce;
 
       &.glyphicon {
         font-size: 20px;
@@ -3313,14 +3315,14 @@ body.modal-open {
 .rating {
   & > label:before {
     margin: 0 2px;
-    font-size: 30px;
+    font-size: 34px;
     // font-family: FontAwesome;
     font-family: $bootstrapFont;
     content: "\e006";
     display: inline-block;
     background-repeat: no-repeat;
-    width: 30px;
-    height: 30px;
+    // width: 30px;
+    // height: 30px;
     transition: color 0.2s ease, text-shadow 0.2s ease,;
 
     // content: '';
