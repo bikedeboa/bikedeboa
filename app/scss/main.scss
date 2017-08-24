@@ -698,16 +698,21 @@ a.unstyled-link {
   .guide-img-row {
     margin-top: 3em;
     display: flex;
-    margin-left: -300px;
-    margin-right: -300px;
+    // margin-left: -300px;
+    // margin-right: -300px;
     justify-content: center;
 
     img {
       // border-radius: 50%;
       opacity: .8;
-      width: 300px;
-      height: 300px;
+      width: 200px;
+      height: 200px;
       margin: 0 6px;
+      object-fit: cover;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
@@ -2992,6 +2997,20 @@ body.modal-open {
     }
   }
 
+  #guideModal {
+    .guide-img-row {
+      justify-content: left;
+      width: calc(100vw - #{$GRID_SPACE*2});
+      overflow: auto;
+
+      img {
+        // Shows half of the third photo
+        width: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
+        height: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
+      }
+    }
+  }
+
   .review-modal {
     p.small {
       display: none;
@@ -3306,6 +3325,23 @@ body.modal-open {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+.featherlight {
+  .featherlight-content {
+    // width: 100%;
+    // height: 100%;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+
+    // img {
+    //   object-fit: contain;
+    //   width: 100%;
+    //   height: 100%;
+    // }
+  }
+}
 
 @keyframes confetti-slow {
   0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }

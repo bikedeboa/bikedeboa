@@ -1599,7 +1599,7 @@ $(() => {
           openDetailsModal(m, callback);
         });
       });
-    };
+    }; 
 
     const previousReview = BIKE.Session.getReviewFromSession(m.id);
     if (previousReview) {
@@ -1793,6 +1793,7 @@ $(() => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
+    }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
