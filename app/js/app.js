@@ -40,7 +40,7 @@ $(() => {
           <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
           <button class="share-email-btn">
             <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
-              <span class="glyphicon glyphicon-envelope"></span><span class="share-email-label">Email</span> 
+              <span class="glyphicon glyphicon-envelope"></span><span class="share-email-label unstyled-link">Email</span> 
             </a>
           </button>
         </div>
@@ -233,6 +233,9 @@ $(() => {
           } else {
             $('body').removeClass('already-reviewed');
           }
+          // if (m.photo) {
+          //   $('body').addClass('gradient-topbar');
+          // }
         })
         .one('shown.bs.modal', () => { 
           // Animate modal content
@@ -253,6 +256,7 @@ $(() => {
         })
         .one('hidden.bs.modal', () => {
           $('body').removeClass('details-view');
+          // $('body').removeClass('gradient-topbar');
         })
         .modal('show');
     } else { 
@@ -1376,16 +1380,21 @@ $(() => {
 
     // Finally, display the modal
     const showModal = () => {
-      $('#newPlaceModal').modal('show');
       // We can only set the nav title after the modal has been opened
       setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+
+      $('#newPlaceModal')
+        .one('shown.bs.modal', () => {
+          $('#titleInput').focus();
+        })
+        .modal('show');
     }
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal')
         .one('hidden.bs.modal', () => { 
           showModal();
         })
-        .modal('hide');
+        .modal('hide'); 
     } else {
       showModal();
     }
@@ -1566,6 +1575,8 @@ $(() => {
           });
         } else {
           ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
+
+          $('body').addClass('already-reviewed');
 
           swal({ 
             title: 'Valeu!',
@@ -1760,7 +1771,7 @@ $(() => {
       login(true);
     }));
 
-    $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
       setView('Sobre', '/sobre', true);
@@ -1782,6 +1793,16 @@ $(() => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
+
+    $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      ga('send', 'event', 'Misc', 'contact opened');
+      swal('Contato', '', 'info');
+      swal({
+        title: 'Contato',
+        html:
+          `<a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> bikedeboa@gmail.com</a>`,
+      });
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
@@ -1887,20 +1908,6 @@ $(() => {
       }
     }); 
     
-    $('.promo-banner-container button').on('click', e => {
-      $('.promo-banner-container').remove();
-      BIKE.Session.setPromoBannerViewed();
-
-      ga('send', 'event', 'Banner', 'promo banner - closed');
-    });
-
-    $('.promo-banner-container a').on('click', e => {
-      $('.promo-banner-container').remove();
-      BIKE.Session.setPromoBannerViewed();
-
-      ga('send', 'event', 'Banner', 'promo banner - link click');
-    });
-
     // Location Search Mode control
     // $('#locationQueryInput').on('focus', e => { 
     //   if (_isMobile) {
@@ -2054,9 +2061,9 @@ $(() => {
 
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
-    let match = true;
+    let match = urlBreakdown[1];
 
-    switch (urlBreakdown[1]) {
+    switch (match) {
       case 'b':
         if (urlBreakdown[2]) {
           let id = urlBreakdown[2].split('-')[0];
@@ -2378,6 +2385,36 @@ $(() => {
     });
   }
 
+  function openPromoBanner() {
+    // setTimeout( () => {
+    //   if (_isMobile) {
+    //     $('.welcome-message-container').show();  
+    //   } else {
+    //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
+    //   }
+    // }, 2000); 
+
+    if (_isMobile) {
+      return;
+    }
+    
+    $('.welcome-message-container').show(); 
+
+    $('.welcome-message-container .welcome-message--close').on('click', e => {
+      $('.welcome-message-container').remove();
+      BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - closed');
+    });
+
+    $('.welcome-message-container a').on('click', e => {
+      $('.welcome-message-container').remove();
+      // BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - link click');
+    });
+  }
+
   function handleLoggedUser() {
     // Setup little user label underneath the location search bar
     $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
@@ -2448,6 +2485,8 @@ $(() => {
       // Authenticate to be ready for next calls
       login();
 
+      // handleRouting();
+
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
@@ -2467,15 +2506,10 @@ $(() => {
     }
 
     // Promo banner
-    if (!BIKE.Session.getPromoBannerViewed()) {
-      setTimeout( () => {
-        if (_isMobile) {
-          $('.promo-banner-container').show();
-        } else {
-          $('.promo-banner-container').velocity('fadeIn', { duration: 3000 });
-        }
-      }, 2000); 
-    }
+    // temp: Temporarily disabled
+    // if (!BIKE.Session.getPromoBannerViewed()) {
+    //   openPromoBanner();
+    // }
   }
 
   window.toggleDemoMode = () => {
