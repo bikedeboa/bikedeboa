@@ -728,6 +728,29 @@ a.unstyled-link {
     text-align: center;
   }
 
+  .guide-references-list {
+    font-size: 18px;
+    list-style: none;
+    padding: 0;
+    margin-top: -1em;
+
+    li {
+      margin-bottom: 0.5em; 
+
+      .glyphicon-share {
+        font-size: 12px;
+      }
+
+      .references-label { 
+        color: $gray;
+        display: block;
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+
   section {
     margin-top: 6em;
 
