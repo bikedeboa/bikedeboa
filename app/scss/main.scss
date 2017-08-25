@@ -3364,6 +3364,24 @@ body.modal-open {
     //   height: 100%;
     // }
   }
+
+  // Mimics our modal close button
+  .featherlight-close-icon {
+    position: fixed;
+    color: white;
+    top: 12px;
+    right: 24px;
+    font-size: 30px;
+    background: 0 0;
+    z-index: 1052;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+
+    &:hover {
+      background: rgba(230,230,230,0.1);
+    }
+  }
 }
 
 @keyframes confetti-slow {
