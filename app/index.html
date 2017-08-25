@@ -1078,8 +1078,8 @@
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
-            <section class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
-              <img alt="" src="{{photoUrl}}"/>
+            <section class="photo-container hasImage loading {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
+              <a href="#" class="unstyled-link" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}"/></a>
             </section>
           {{/if}}
 

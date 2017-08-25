@@ -197,7 +197,7 @@ $(() => {
     }
 
     $('.photo-container img').on('load', e => {
-      $(e.target).parent().removeClass('loading');
+      $(e.target).parent().parent().removeClass('loading');
     });
  
     // Init click callbacks
@@ -1514,7 +1514,7 @@ $(() => {
   function toggleExpandModalHeader() {
     ga('send', 'event', 'Local', 'photo click', ''+openedMarker.id);
 
-    $('.photo-container').toggleClass('expanded');
+    // $('.photo-container').toggleClass('expanded');
   }
 
   function toggleClearLocationBtn(stateStr) {
