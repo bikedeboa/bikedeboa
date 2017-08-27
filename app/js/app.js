@@ -1723,7 +1723,7 @@ $(() => {
       login(true);
     }));
 
-    $('#aboutBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
       setView('Sobre', '/sobre', true);
@@ -1872,20 +1872,6 @@ $(() => {
       }
     }); 
     
-    $('.promo-banner-container button').on('click', e => {
-      $('.promo-banner-container').remove();
-      BDB.Session.setPromoBannerViewed();
-
-      ga('send', 'event', 'Banner', 'promo banner - closed');
-    });
-
-    $('.promo-banner-container a').on('click', e => {
-      $('.promo-banner-container').remove();
-      BDB.Session.setPromoBannerViewed();
-
-      ga('send', 'event', 'Banner', 'promo banner - link click');
-    });
-
     // Location Search Mode control
     // $('#locationQueryInput').on('focus', e => { 
     //   if (_isMobile) {
@@ -2042,7 +2028,7 @@ $(() => {
 
   function handleRouting() { 
     const urlBreakdown = window.location.pathname.split('/');
-    let match = true;
+    let match = urlBreakdown[1];
 
     switch (urlBreakdown[1]) {
     case 'b':
@@ -2252,7 +2238,7 @@ $(() => {
     });
     const isDesktopListener = window.matchMedia('(min-width: ${DESKTOP_MIN_WIDTH})');
     isDesktopListener.addListener((isDesktopListener) => {
-      _isMobile = isDesktopListener.matches;
+      _isDesktop = isDesktopListener.matches;
     });
 
     // Super specific mobile stuff
@@ -2412,6 +2398,36 @@ $(() => {
     });
   }
 
+  function openPromoBanner() {
+    // setTimeout( () => {
+    //   if (_isMobile) {
+    //     $('.welcome-message-container').show();  
+    //   } else {
+    //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
+    //   }
+    // }, 2000); 
+
+    if (_isMobile) {
+      return;
+    }
+    
+    $('.welcome-message-container').show(); 
+
+    $('.welcome-message-container .welcome-message--close').on('click', e => {
+      $('.welcome-message-container').remove();
+      BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - closed');
+    });
+
+    $('.welcome-message-container a').on('click', e => {
+      $('.welcome-message-container').remove();
+      // BIKE.Session.setPromoBannerViewed();
+
+      ga('send', 'event', 'Banner', 'promo banner - link click');
+    });
+  }
+
   function handleLoggedUser() {
     // Setup little user label underneath the location search bar
     $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
@@ -2482,6 +2498,8 @@ $(() => {
       // Authenticate to be ready for next calls
       login();
 
+      // handleRouting();
+
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
@@ -2501,15 +2519,10 @@ $(() => {
     }
 
     // Promo banner
-    if (!BDB.Session.getPromoBannerViewed()) {
-      setTimeout( () => {
-        if (_isMobile) {
-          $('.promo-banner-container').show();
-        } else {
-          $('.promo-banner-container').velocity('fadeIn', { duration: 3000 });
-        }
-      }, 2000); 
-    }
+    // temp: Temporarily disabled
+    // if (!BIKE.Session.getPromoBannerViewed()) {
+    //   openPromoBanner();
+    // }
   }
 
   window.toggleDemoMode = () => {
