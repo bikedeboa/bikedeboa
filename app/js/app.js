@@ -2224,7 +2224,7 @@ $(() => {
     });
     const isDesktopListener = window.matchMedia("(min-width: ${DESKTOP_MIN_WIDTH})");
     isDesktopListener.addListener((isDesktopListener) => {
-      _isMobile = isDesktopListener.matches;
+      _isDesktop = isDesktopListener.matches;
     });
 
     // Super specific mobile stuff
