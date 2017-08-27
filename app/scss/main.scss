@@ -2509,6 +2509,16 @@ body.modal-open {
       line-height: 1em;
   }
 
+  // Custom Google Autocomplete search results for mobile
+  &:before {
+      content: 'Resultados apenas no Rio Grande do Sul';
+      padding: 6px 12px;
+      display: block;
+      font-size: 12px;
+      background: $paleWhite;
+      color: #b3b3b3;
+  }
+
   /* Overrides marker */
   /* .pac-icon {
       background-image: url(/img/pin_gray.png) !important;
@@ -3217,16 +3227,6 @@ body.modal-open {
         display: none;
       }
     }
-  }
-
-  // Custom Google Autocomplete search results for mobile
-  .pac-container:before {
-      content: 'Resultados apenas no Rio Grande do Sul';
-      padding: 6px 12px;
-      display: block;
-      font-size: 12px;
-      background: $paleWhite;
-      color: #b3b3b3;
   }
 }
 
