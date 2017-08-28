@@ -308,6 +308,10 @@ p {
   font-family: $bodyFont;
   z-index: 20;
 
+  a {
+    color: white;
+  }
+
   .tooltip-inner {
     padding: 20px;
     background-color: $black; 
