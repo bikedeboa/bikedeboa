@@ -197,7 +197,7 @@ $(() => {
     }
 
     $('.photo-container img').on('load', e => {
-      $(e.target).parent().removeClass('loading');
+      $(e.target).parent().parent().removeClass('loading');
     });
  
     // Init click callbacks
@@ -1466,7 +1466,7 @@ $(() => {
   function toggleExpandModalHeader() {
     ga('send', 'event', 'Local', 'photo click', ''+openedMarker.id);
 
-    $('.photo-container').toggleClass('expanded');
+    // $('.photo-container').toggleClass('expanded');
   }
 
   function toggleClearLocationBtn(stateStr) {
@@ -1551,7 +1551,7 @@ $(() => {
           openDetailsModal(m, callback);
         });
       });
-    };
+    }; 
 
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
@@ -1778,6 +1778,12 @@ $(() => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Perguntas frequentes', '/faq', true);
+    }));
+
+    $('.open-guide-btn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      ga('send', 'event', 'Misc', 'faq opened');
+      setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
@@ -2028,6 +2034,7 @@ $(() => {
   function openFaqModal() { 
     $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     $('#faqModal').modal('show');
+    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
     $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
       const questionTitle = $(e.target).parent().find('.panel-title').text();
@@ -2046,6 +2053,16 @@ $(() => {
 
     // $('#aboutModal').modal('show') ;
     // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+  }
+
+  function openGuideModal() {
+    $('#guideModal').modal('show');
+    $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+  }
+
+  function openAboutModal() {
+    $('#aboutModal').modal('show');
+    $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
   function handleRouting() { 
@@ -2068,6 +2085,9 @@ $(() => {
       break;
     case 'como-instalar':
       openHowToInstallModal();
+      break;
+    case 'guia-de-bicicletarios':
+      openGuideModal();
       break;
     case 'sobre':
       $('#aboutModal').modal('show');
@@ -2361,6 +2381,14 @@ $(() => {
       buttonsStyling: false,
       allowOutsideClick: true
     });
+
+    // Featherlight - photo lightbox lib
+    // Extension to show the img alt tag as a caption within the image
+    $.featherlight.prototype.afterContent = function() { 
+      var caption = this.$currentTarget.find('img').attr('alt');
+      this.$instance.find('.caption').remove();
+      $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+    };
  
     // Toastr options
     toastr.options = {
