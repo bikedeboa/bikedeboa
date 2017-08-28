@@ -17,6 +17,4 @@ BDB.Session = {
   getPromoBannerViewed: () => {
     return Cookies.get('bikedeboa_promobanner_questionario');
   }
-
-
 };

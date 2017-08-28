@@ -551,6 +551,19 @@ a.unstyled-link {
   border: inherit;
 }
 
+.dropdown-menu {
+  button {
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: 0 0;
+
+    &:hover {
+      background: $lightestGray;
+    }
+  }
+}
+
 .logged-user {
   position: fixed;
   right: 10px;
@@ -563,7 +576,7 @@ a.unstyled-link {
     transform: translateY(-20px);
   } 
 
-  button {
+  & > button {
     border: 0;
     background: none;
     border-radius: 50%;
@@ -2043,10 +2056,14 @@ body.modal-open {
 // }
 
 .btn {
-    min-width: 42px;
+    min-width: 42px; 
     min-height: 42px;
 
     border-radius: 5px;
+ 
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
 
 .review-modal {
@@ -2085,7 +2102,8 @@ body.modal-open {
         }
     }
 
-    button.swal2-confirm {
+    .swal2-cancel,
+    .swal2-confirm {
       width: 100%;
     }
 
@@ -2146,14 +2164,15 @@ body.modal-open {
 
 .btn.green {
     background-color: $lightGreen;
+    border-color: $darkGreen;
     color: rgb(250,250,250);
-}
-
-.btn.green:hover:not([disabled]),
-.btn.green:focus:not([disabled]),
-.btn.green.active:not([disabled]) {
-    color: white;
-    background-color: $green;
+    
+    &:hover:not([disabled]),
+    &:focus:not([disabled]),
+    &.active:not([disabled]) {
+        color: white;
+        background-color: $green;
+    }
 }
 
 .btn.btn-action.green {
@@ -2169,11 +2188,11 @@ body.modal-open {
     padding: 20px;
 
     &:active {
-        outline: 0;
+        outline: 0; 
         border-bottom-width: ($depth - 3px);
-        transform: translateY(3px);
-        // compensate for relayout because of changing border size
-        margin-bottom: calc(2% + 3px);
+        // transform: translateY(3px);
+        // // compensate for relayout because of changing border size
+        // margin-bottom: calc(2% + 3px);
     }
 
     &:disabled {
@@ -3016,7 +3035,8 @@ body.modal-open {
       font-size: 16px;
     }
 
-    button.swal2-confirm {
+    .swal2-cancel,
+    .swal2-confirm {
       display: block;
       width: 100%;
       margin: 6px 0;  
@@ -3883,30 +3903,32 @@ body.modal-open {
     font-weight: 400;
   }
 
-  h2 {
-    font-family: $headingFont;
-    font-size: 24px;
-    font-weight: 700;
+  .swal2-title {
+    color: $black;
   }
 
-  button.swal2-confirm {
-    border-bottom: 3px solid $gray;
+  button + button {
+    margin-left: 12px;
+  }
+
+  .swal2-cancel {
+    background: $lighterGrey;
+    border-color: $gray
+  }
+
+  .swal2-cancel,
+  .swal2-confirm {
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
     border-radius: 5px;
     font-weight: 700;  
     min-width: 90px;
     
-    &.swal2-confirm {
-      border-bottom: 3px solid $darkGreen;
-    }
-
     &:active {
       outline: 0;
       border-bottom-width: 0;
-      transform: translateY(3px);
-      // compensate for relayout because of changing border size
-      margin-bottom: 3px;
     }
-  } 
+  }
 
   .sa-button-container {
     margin-top: 30px; 

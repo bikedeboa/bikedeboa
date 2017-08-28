@@ -2377,7 +2377,7 @@ $(() => {
     hello.on('auth.logout', () => {
       BDB.User.logout();
 
-      $('.logged-user img').attr('src', '/img/icon_user.svg');
+      $('.logged-user img').attr('src', '/img/icon_user_big.svg');
     });
 
     initHelpTooltip('#filter-menu .help-tooltip-trigger');

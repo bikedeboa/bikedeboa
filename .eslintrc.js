@@ -32,6 +32,7 @@ module.exports = {
         "UpUp": false,
         "swal": false,
         "twttr": true,
+        "toastr": true,
         "ga": true, //overriden on localhost
 
         // Constants

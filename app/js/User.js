@@ -26,20 +26,35 @@ BDB.User = {
     this.isLoggedIn = true; 
     this.profile = userInfo;
 
-    const reviews = this.reviews;
-    if (reviews && reviews.length > 0) {
+    const reviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
+    const places = this.places && this.places.length > 0 ? this.places : null;
+    const reviewsStr = reviews ? `<b>${reviews.length} avaliações</b>` : ''; 
+    const placesStr = places ? `<b>${places.length} bicicletários</b>` : ''; 
+    const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
+
+    if (reviews || places) {
       swal({
-        title: 'Avaliações encontradas',
-        text: 'Podemos salvar as avaliações que você tinha feito antes de logar?',
-        type: 'question',
+        title: 'Bem-vindo(a)!',
+        html: `Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir! Deseja salvá-los no histórico do seu perfil?`,
+        // type: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Sim, pode salvar!',
-        cancelButtonText: 'Não vlw',
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não, apagar histórico',
       }).then(function () {
-        BDB.Database.importUserReviews(reviews).then(() => {
-          toastr['success'](`${reviews.length} avaliações salvas.`, '');
-          self._deleteReviewsFromCookie();
+        BDB.Database.importUserPlaces(places).then(() => {
+          toastr['success'](`${places.length} bicicletários salvos.`, '');
+          self._deletePlacesFromCookies();
+
+          BDB.Database.importUserReviews(reviews).then(() => {
+            toastr['success'](`${reviews.length} avaliações salvas.`, '');
+            self._deleteReviewsFromCookies();
+          });
         });
+      }).catch(dismiss => {
+        if (dismiss === 'cancel') {
+          self._deletePlacesFromCookies();
+          self._deleteReviewsFromCookies(); 
+        }
       });
     }
     
@@ -151,8 +166,14 @@ BDB.User = {
     Cookies.set('bikedeboa_reviews', reviews, { expires: 365 });
   },
 
-  _deleteReviewsFromCookie: function () {
+  _deleteReviewsFromCookies: function () {
     Cookies.remove('bikedeboa_reviews');
+  },
+
+  _deletePlacesFromCookies: function () {
+    for(let i=0; i < this.places.length; i++) { 
+      Cookies.remove(`bikedeboa_local_${this.places[i].id}`);
+    }
   },
 
   saveReview: function (reviewObj) {
@@ -163,12 +184,14 @@ BDB.User = {
 
   _savePlaceToCookie(placeId) {
     // User has 24 hours to edit that pin
-    Cookies.set('bikedeboa_local_' + placeId, { expires: 1 });
+    Cookies.set(`bikedeboa_local_${placeId}`, { expires: 1 });
   },
 
   saveNewPlace: function (placeId) {
     if (!this.isLoggedIn) {
       this._savePlaceToCookie(placeId);
     }
+
+    this.fetchPlaces();
   },
 };

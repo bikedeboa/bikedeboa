@@ -322,11 +322,11 @@ BDB.Database = {
     if (isUserLogin) {
       // user = prompt('Usuário:','');
       swal({
-          title: 'Login',
-          text: 'Em breve todos poderão criar um login no Bike de Boa, mas por enquanto este login é apenas para administradores.',
-          input: 'text',
-          showCancelButton: true,
-          inputPlaceholder: "Nome de usuário"
+        title: 'Login',
+        text: 'Em breve todos poderão criar um login no Bike de Boa, mas por enquanto este login é apenas para administradores.',
+        input: 'text',
+        showCancelButton: true,
+        inputPlaceholder: 'Nome de usuário'
       }).then((input) => {
         if (input) {
           // if (input === '') {
@@ -431,14 +431,51 @@ BDB.Database = {
     const self = this;
 
     return new Promise((resolve, reject) => {
-      $.ajax({
-        type: 'post',
-        headers: self._headers,
-        url: self.API_URL + '/user/import-reviews',
-        data: {reviews: reviews}, 
-        success: resolve,
-        error: reject
-      });
+      if (!reviews || !BDB.User.isLoggedIn) {
+        reject();
+      }
+
+      if (reviews.length > 0) {
+        ga('send', 'event', 'Login', 'import reviews', `${BDB.User.profile.name} imported ${reviews.length} reviews`);
+
+        $.ajax({
+          type: 'post',
+          headers: self._headers,
+          url: self.API_URL + '/user/import-reviews',
+          data: {reviews: reviews}, 
+          success: resolve,
+          error: reject
+        });
+      } else {
+        resolve('No data to import.');
+      }
+    });
+  },
+
+  importUserPlaces: function(places) {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      const placesIds = places.map( p => { return {id: p.id}; } );
+
+      if (!places || !BDB.User.isLoggedIn) {
+        reject();
+      }
+
+      if (places.length > 0) {
+        ga('send', 'event', 'Login', 'import places', `${BDB.User.profile.name} imported ${places.length} places`);
+
+        $.ajax({
+          type: 'post',
+          headers: self._headers,
+          url: self.API_URL + '/user/import-locals',
+          data: {locals: placesIds}, 
+          success: resolve,
+          error: reject
+        });
+      } else {
+        resolve('No data to import.');
+      }
     });
   },
 
