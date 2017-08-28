@@ -94,7 +94,7 @@ let openedMarker;
 let newMarkerTemp = {};
 let currentPendingRating;
 let _uploadingPhotoBlob;
-let loggedUser;
+// let loggedUser;
 let _searchResultMarker;
 let _abortedDetailsRequest;
 let _positionWatcher;

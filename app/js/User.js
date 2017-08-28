@@ -8,6 +8,7 @@ BDB.User = {
   reviews: undefined,
   places: undefined,
   profile: undefined,
+  isAdmin: undefined,
   isLoggedIn: false,
 
 
@@ -20,11 +21,17 @@ BDB.User = {
     this.fetchPlaces();
   },
 
-  login: function (userInfo) {
+  login: function (socialProfile) {
     const self = this;
 
-    this.isLoggedIn = true; 
-    this.profile = userInfo;
+    if (this.isLoggedIn) {
+      console.log('Already logged in!');
+      return;
+    }
+
+    this.isLoggedIn = true;
+    this.profile = socialProfile;
+    this.isAdmin = this.profile === 'admin';
 
     const reviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
     const places = this.places && this.places.length > 0 ? this.places : null;
@@ -64,7 +71,10 @@ BDB.User = {
 
   logout: function () {
     this.isLoggedIn = false;
+    this.isAdmin = null;
     this.profile = null;
+
+    BDB.Database.logoutUser();
     
     this.fetchReviews();
     this.fetchPlaces();
@@ -118,7 +128,7 @@ BDB.User = {
     }
   },
 
-  canEditPlace: function (id) {
+  checkEditPermission: function (id) {
     if (id) {
       if (this.isLoggedIn) {
         return this.places.find( i => i.id === id );

@@ -253,97 +253,54 @@ BDB.Database = {
     });
   },
 
-  _loginPromptCallback(user, isUserLogin, callback) {
-    const self = this;
-    let pw;
+  logoutUser: function() {
+    this.isAuthenticated = false;
+    this._authToken = null;
+    this._headers['x-access-token'] = null;
 
-    if (user && user !== 'client') {
-      pw = 'abcd123';
-    }
+    this.authenticate();
+  },
+
+  authenticate: function(callback) {
+    const self = this;
 
     $.ajax({
       type: 'post',
       headers: self._headers,
       url: self.API_URL + '/token',
       data: {
-        username: user || 'client',
-        password: pw || 'deboanalagoa'
+        username: 'client',
+        password: 'deboanalagoa'
       },
       success: function(data) {
         if (data.token && data.token.length > 0) {
           console.debug('API connected.');
 
-          if (user && user !== 'client') {
-            loggedUser = user;
-            self._isAuthenticated = true;
-
-            // Save username in session
-            Cookies.set('bikedeboa_user', loggedUser, { expires: 7 });
-
-            // Clean URL
-            // History.replaceState({}, 'bike de boa', '/');
-
-            // ga('set', 'userId', loggedUser);
-            ga('send', 'event', 'Login', 'success', user);
-          } else {
-            loggedUser = null;
-          }
-
-          // Set headers for future calls
+          // Set headers for future calls 
           self.isAuthenticated = true;
           self._authToken = data.token;
           self._headers['x-access-token'] = data.token;
 
           if (callback && typeof callback === 'function') {
-            callback(loggedUser);
+            callback();
           }
         }
       },
       error: function(data) {
-        ga('send', 'event', 'Login', 'fail', user);
+        ga('send', 'event', 'Login', 'client authentication fail');
 
         BDB.Database._authenticationAttemptsLeft--;
         if (BDB.Database._authenticationAttemptsLeft > 0) {
           console.error(`Authentication failed, ${BDB.Database._authenticationAttemptsLeft} attempts left. Trying again in 2s...`);
           setTimeout( () => {
-            self.authenticate(isUserLogin, callback);
+            self.authenticate(callback);
           }, 2000);
         } else {
           // Permanently failed
-          setOfflineMode();
+          // setOfflineMode();
         }
       }
     });
-  },
-
-  authenticate: function(isUserLogin, callback) {
-    const self = this;
-
-    if (isUserLogin) {
-      // user = prompt('Usuário:','');
-      swal({
-        title: 'Login',
-        text: 'Em breve todos poderão criar um login no Bike de Boa, mas por enquanto este login é apenas para administradores.',
-        input: 'text',
-        showCancelButton: true,
-        inputPlaceholder: 'Nome de usuário'
-      }).then((input) => {
-        if (input) {
-          // if (input === '') {
-          //   swal.showInputError();
-          //   return false;
-          // } else {
-            self._loginPromptCallback(input, isUserLogin, callback);
-            return true;
-          // }
-        } else { 
-          return false;
-        }
-      });
-    } else {
-      const user = Cookies.get('bikedeboa_user');
-      self._loginPromptCallback(user, isUserLogin, callback);
-    }
   },
 
   getLoggedUserReviews: function() {
@@ -405,8 +362,7 @@ BDB.Database = {
         data: loginData, 
         success: function(data) { 
           if (data.token && data.token.length > 0) {
-            loggedUser = true;
-            self._isAuthenticated = true;
+            // loggedUser = true;
 
             ga('send', 'event', 'Login', 'success', `${loginData.fullname} @ #{loginData.network}`);
 

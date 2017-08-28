@@ -135,7 +135,7 @@
 
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
             <li>
-              <button class="openProfileBtn">Perfil</button>
+              <button class="openProfileBtn">Histórico</button>
             </li>
             
             <li role="separator" class="divider"> </li>
@@ -153,10 +153,6 @@
               <button class="logoutBtn">Logout</button>
             </li>
           </ul>
-        </div>
-
-        <div id="userBtn" class="logged-user">
-          
         </div>
 
         <div id="modalPlaceholder"></div>
@@ -287,17 +283,9 @@
 
                 <hr>
                 
-                <li class="side-nav--animate-in" id="loginBtn">
-                  <!-- <span class="glyphicon glyphicon-user"></span> -->
-                  Login administrador
-                </li>
-
-                <li class="side-nav--animate-in socialLoginBtn facebookLoginBtn">
-                  Login Facebook
-                </li>
-
-                <li class="side-nav--animate-in socialLoginBtn googleLoginBtn">
-                  Login Google
+                <li class="side-nav--animate-in login-btn">
+                  <img src="/img/icon_user.svg">
+                  Login 
                 </li>
 
                 <!-- <li class="side-nav--animate-in" id="loginBtn">
@@ -305,6 +293,7 @@
                 </li> -->
 
                 <li class="contact-btn side-nav--animate-in">
+                  <span class="glyphicon glyphicon-envelope"></span>
                   Contato
                 </li>
 
@@ -855,7 +844,7 @@
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
-            <section class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
+            <section class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
               <img alt="" src="{{photoUrl}}"/>
             </section>
           {{/if}}
@@ -886,7 +875,7 @@
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
                 <label>Excluir</label>
               </button>
-              <!-- {{#unless isLoggedUser}}
+              <!-- {{#unless isAdmin}}
                 <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
               {{/unless}} -->
             {{else}}
@@ -898,7 +887,7 @@
           </section>
 
           <div class="modal-body">
-              <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isLoggedUser '&&!' title}} missing-info {{/ifCond}}">
+              <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
                   {{#if temporaryPermission}}
                     <div class="notice"> 
                       <!-- <img alt="" src="/img/icon_edit.svg"> -->
@@ -924,7 +913,7 @@
 
               <hr>
 
-              <section class="review {{#ifCond isLoggedUser '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
+              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
                   {{#if savedRating}}
                     <div class="savedRating">
                       Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
@@ -1001,9 +990,9 @@
               <hr>
 
               <section class="info clearfix">
-                  <div class="col-half {{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
+                  <div class="col-half {{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
                       {{#if noIsPublicData}}
-                          {{#if isLoggedUser}}
+                          {{#if isAdmin}}
                             <div class="icon-label">
                                 <small>Sem informação sobre restrição de acesso</small>
                             </div>
@@ -1028,7 +1017,7 @@
                           {{/if}}
                       {{/if}}
                   </div>
-                  <div class="col-half {{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
+                  <div class="col-half {{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
                       {{#if structureTypeIcon}}
                           <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                       {{/if}}
@@ -1079,7 +1068,7 @@
                                 "></span>
                               {{/ifCond}}  
                           {{else}}
-                              {{#if isLoggedUser}}
+                              {{#if isAdmin}}
                                 <small>Sem informação sobre tipo de bicicletário</small>
                               {{/if}}
                           {{/if}}
@@ -1266,7 +1255,7 @@
                   <div class="modal-dialog vertical-align-center">
                       <div class="modal-content">
                           <div class="modal-header">
-                            <h1 class="modal-title view-name">Perfil</h1>
+                            <h1 class="modal-title view-name">Histórico</h1>
                           </div>
 
                           <div class="modal-body">
@@ -1282,7 +1271,17 @@
                               {{/if}}
                               <h1>{{profile.name}}</h1>
                             {{else}}
-                              Deslogado.
+                              <div>
+                                Você está <b>deslogado</b>. Fazendo login você guarda todas contribuições que já fez no mapa e consegue facilmente acessá-las e acompanhar como elas estão ajudando.
+                              </div>
+                              
+                              <button class="socialLoginBtn btn green facebookLoginBtn">
+                                Facebook
+                              </button>
+
+                              <button class="socialLoginBtn btn green googleLoginBtn">
+                                Google
+                              </button>
                             {{/if}}
 
                             <!-- <hr> -->

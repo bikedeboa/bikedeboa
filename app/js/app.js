@@ -141,10 +141,10 @@ $(() => {
     
     // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
-    if (loggedUser) {
+    if (BDB.User.isAdmin) {
       templateData.canModify = true;
       templateData.isLoggedUser = true;
-    } else if (BDB.User.canEditPlace(m.id)) {
+    } else if (BDB.User.checkEditPermission(m.id)) {
       templateData.canModify = true;
       templateData.temporaryPermission = true;
     }
@@ -462,11 +462,16 @@ $(() => {
   // Just delegate the action to the route controller
   function openLocal(marker, callback) {
     let url = BDB.Places.getMarkerShareUrl(marker);
-
+ 
     window._openLocalCallback = callback;
 
     marker.url = url;
     setView(marker.text || 'Detalhes do bicicletário', url);
+  }
+
+  function openLocalById(id, callback) {
+    const place = BDB.Places.getMarkerById(id, callback);
+    this.openLocal(place, callback);
   }
 
   function _openLocal(marker, callback) {
@@ -652,7 +657,7 @@ $(() => {
 
           // @todo temporarily disabled this because backend still doesnt support flags for these
           // let labelStr;
-          // if (loggedUser && (!m.photo || !m.structureType || m.isPublic == null)) {
+          // if (BDB.User.isAdmin && (!m.photo || !m.structureType || m.isPublic == null)) {
           //   labelStr = '?';
           // }
 
@@ -1714,15 +1719,32 @@ $(() => {
 
     $('.openProfileBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
-      setView('Perfil', '/perfil', true);
+      setView('Histórico', '/historico', true);
     }));
-    
-    $('#loginBtn').on('click', queueUiCallback.bind(this, () => {
+ 
+    $('.login-btn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       setView('Login Administrador', '/login', true);
-      login(true);
-    }));
+      // login(true);
 
+      swal({ 
+        title: 'Login',
+        html: `
+          <button class="socialLoginBtn facebookLoginBtn">
+            Facebook
+          </button>
+
+          <button class="socialLoginBtn googleLoginBtn">
+            Google
+          </button>
+          `,
+        showCloseButton: true,
+        onOpen: () => {
+          // ...
+        }
+      }); 
+    }));
+    
     $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about opened');
@@ -2051,7 +2073,7 @@ $(() => {
       $('#aboutModal').modal('show');
       $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       break;
-    case 'perfil':
+    case 'historico':
       openProfileModal();
       break;
     // case 'nav':
@@ -2182,7 +2204,7 @@ $(() => {
     // $('#map').css('filter', 'none');
   }
 
-  function onAuthLogin(auth) {
+  function onSocialLogin(auth) {
     console.log('auth', auth);
     $('#userBtn').addClass('loading');
     
@@ -2200,6 +2222,8 @@ $(() => {
         email: userInfo.email 
       }).then( data => { 
         console.log('social login all done!'); 
+
+        userInfo.role = data.role;
 
         BDB.User.login(userInfo);
 
@@ -2372,7 +2396,7 @@ $(() => {
         // windows: WINDOWS_CLIENT_ID,
     });
     hello.on('auth.login', auth => {
-      onAuthLogin(auth);
+      onSocialLogin(auth);
     });
     hello.on('auth.logout', () => {
       BDB.User.logout();
@@ -2427,22 +2451,9 @@ $(() => {
       ga('send', 'event', 'Banner', 'promo banner - link click');
     });
   }
-
-  function handleLoggedUser() {
-    // Setup little user label underneath the location search bar
-    $('#locationSearch').append('<span class="login-display logged"><span class="glyphicon glyphicon-user"></span>'+loggedUser+'<button>✕</button></span>');
-    $('.login-display button').off('click').on('click', () => {
-      Cookies.remove('bikedeboa_user');
-      window.location.reload();
-    });
-  }
-
-  function login(isUserLogin = false) {
-    Database.authenticate(isUserLogin, () => {
-      if (loggedUser) {
-        handleLoggedUser();
-      }
-
+ 
+  function login() {
+    Database.authenticate(() => {
       Database.getAllTags();
     });
   }
