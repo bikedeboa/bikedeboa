@@ -74,7 +74,9 @@ $(() => {
 
   function initHelpTooltip(selector) {
     if (!_isMobile) {
-      $(selector).tooltip();
+      $(selector).tooltip({
+        trigger: 'focus'
+      }); 
     } else {
       $(selector).off('click').on('click', e => {
         const $tooltipEl =$(e.currentTarget);
@@ -269,7 +271,7 @@ $(() => {
     if(!_isTouchDevice) {
       $('#placeDetailsModal .full-star').tooltip({
         toggle: 'tooltip',
-        placement: 'bottom',
+        placement: 'bottom', 
         'delay': {'show': 0, 'hide': 100}
       });
     }
