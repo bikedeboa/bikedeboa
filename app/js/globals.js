@@ -52,8 +52,8 @@ const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NA
 
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
-const MOBILE_MAX_WIDTH = '415px'; 
-const DESKTOP_MIN_WIDTH = '415px';
+const MOBILE_MAX_WIDTH = '430px'; 
+const DESKTOP_MIN_WIDTH = '430px';
 let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH})`).matches;
 let _isDesktop = window.matchMedia && window.matchMedia(`(min-width: ${DESKTOP_MIN_WIDTH})`).matches;
 

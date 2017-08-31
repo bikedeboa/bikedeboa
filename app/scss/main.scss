@@ -57,7 +57,7 @@ $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
 
-$MOBILE_MAX_WIDTH: 415px;
+$MOBILE_MAX_WIDTH: 430px;
 $MOBILE_NAVBAR_HEIGHT: 50px;
 $MOBILE_BOTTOMBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
@@ -2956,6 +2956,7 @@ body.modal-open {
   }
 
   .swal2-modal {
+    .swal2-content,
     p {
       font-size: 16px;
     }
@@ -3822,15 +3823,18 @@ body.modal-open {
     margin-top: 24px;
   }
 
+  .swal2-content,
+  .swal2-title {
+    color: $black;
+  }
+  
   .swal2-content {
-    color: #333;
-    font-weight: 400;
+    font-weight: normal;
+    text-align: left;    
   }
 
-  h2 {
+  .swal2-title {
     font-family: $headingFont;
-    font-size: 24px;
-    font-weight: 700;
   }
 
   button.swal2-confirm {
