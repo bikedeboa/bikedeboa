@@ -468,7 +468,7 @@
             return;
           }
 
-          BIKE.Database.customAPICall('get','user', null, data => {
+          BDB.Database.customAPICall('get','user', null, data => {
             users = data;
 
             $('#headingUsers').html(`<span class="text-muted">(${data.length} carregados)</span>`);
@@ -509,7 +509,7 @@
             return;
           }
 
-          BIKE.Database.customAPICall('get','revision', null, data => {
+          BDB.Database.customAPICall('get','revision', null, data => {
             revisions = data;
 
             $('#headingRevisions').html(`Sugestões de Correção <span class="text-muted">(${data.length})</span>`);
@@ -547,7 +547,7 @@
         window.logTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BIKE.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
                 updateRevisionTable(true);
               });
             }
@@ -557,7 +557,7 @@
         window.localsTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BIKE.Database.customAPICall('delete', `local/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `local/${row.id}`, null, () => {
                 updateLocalsTable(true);
               });
             }
@@ -577,7 +577,7 @@
             return;
           }
 
-          BIKE.Database.customAPICall('get','log', null, data => {
+          BDB.Database.customAPICall('get','log', null, data => {
             log = data;
 
             $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`);
@@ -695,7 +695,7 @@
         // Initializations //
         /////////////////////
 
-        Database = BIKE.Database;
+        Database = BDB.Database;
 
         // Admin-only Globals
         let users;
@@ -749,7 +749,7 @@
           // Send the updated data through the API
           if (dataToUpdate) {
             console.log('updating:', dataToUpdate);
-            BIKE.Database.customAPICall('put', `user/${userId}`, dataToUpdate);
+            BDB.Database.customAPICall('put', `user/${userId}`, dataToUpdate);
           }
         }
 
@@ -769,7 +769,7 @@
           // Send the updated data through the API
           if (dataToUpdate) {
             console.log('updating:', dataToUpdate);
-            BIKE.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
+            BDB.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
           }
         }
 

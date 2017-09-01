@@ -38,11 +38,19 @@ BDB.User = {
     const reviewsStr = reviews ? `<b>${reviews.length} avaliações</b>` : ''; 
     const placesStr = places ? `<b>${places.length} bicicletários</b>` : ''; 
     const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
+    let message, title;
+    if (socialProfile.isNewUser) {
+      title = 'Bem-vindo(a)!';
+      message = `Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir! Deseja salvá-los no histórico do seu perfil?`;
+    } else {
+      title = 'Oi denovo!';
+      message = `Você tinha criado ${dynamicStr} enquanto não estava logado. Deseja salvá-los no histórico do seu perfil?`;
+    }
 
     if (reviews || places) {
       swal({
-        title: 'Bem-vindo(a)!',
-        html: `Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir! Deseja salvá-los no histórico do seu perfil?`,
+        title: title,
+        html: message,
         // type: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sim',

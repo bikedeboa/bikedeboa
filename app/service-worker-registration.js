@@ -42,10 +42,10 @@ if ('serviceWorker' in navigator) {
                 // It's the perfect time to display a "New content is available; please refresh."
                 // message in the page's interface.
                 console.log('[Service Worker] New or updated content is available.');
-                
-                if (window.toastr) {
-                  toastr['success']('O webapp foi atualizado automaticamente.');
-                }
+                 
+                // if (window.toastr) {
+                //   toastr['success']('O webapp foi atualizado automaticamente.');
+                // }
               } else {
                 // At this point, everything has been precached.
                 // It's the perfect time to display a "Content is cached for offline use." message.

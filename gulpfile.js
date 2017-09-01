@@ -38,7 +38,8 @@ const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp
 
 const FACEBOOK_CLIENT_ID = development() ? '1554610834551808' : '1814653185457307';
 const GOOGLE_CLIENT_ID = development() ? '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com' : '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com ';
-const GOOGLE_MAPS_ID = development() ? 'AIzaSyD1dNf2iN1XS0wx17MTf2lPTbPg8UIJqfA' : 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+// const GOOGLE_MAPS_ID = development() ? 'AIzaSyD1dNf2iN1XS0wx17MTf2lPTbPg8UIJqfA' : 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+const GOOGLE_MAPS_ID = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 // // Lint Task 
 // gulp.task('lint', () => {
@@ -77,7 +78,6 @@ gulp.task('scripts', () => {
     .pipe(replace('<DATABASE_URL>', DATABASE_URL))
     .pipe(replace('<FACEBOOK_CLIENT_ID>', FACEBOOK_CLIENT_ID))
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
-    .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(plumber()) 
     .pipe(concat('app.js'))
     .pipe(babel({
@@ -100,6 +100,7 @@ gulp.task('html', () => {
   return gulp.src('app/*.html')
     .pipe(development(replace('manifest.webmanifest', 'manifest-dev.webmanifest')))
     .pipe(development(replace('/favicons/', '/favicons-dev/')))
+    .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(production(htmlmin({
       collapseWhitespace: true,
       removeComments: true,

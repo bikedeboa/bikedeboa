@@ -1762,7 +1762,7 @@ $(() => {
     $('.logoutBtn').on('click', () => {
       _hamburgerMenu.hide();
       hello.logout('facebook');
-      // hello.logout('google');
+      hello.logout('google');
     });
 
     $('.googleLoginBtn').on('click', () => {
@@ -2261,14 +2261,15 @@ $(() => {
         fullname: userInfo.name,
         email: userInfo.email 
       }).then( data => { 
-        console.log('social login all done!'); 
+        console.log('social login successful'); 
 
         userInfo.role = data.role;
+        userInfo.isNewUser = data.isNewUser;
 
         BDB.User.login(userInfo);
 
         $('#userBtn').removeClass('loading');
-        $('.logged-user img').attr('src', BDB.User.profile.thumbnail);
+        $('#userBtn img').attr('src', BDB.User.profile.thumbnail);
       }).catch( error => {
         console.error('error on social login: ' + error); 
       });
@@ -2449,7 +2450,7 @@ $(() => {
     hello.on('auth.logout', () => {
       BDB.User.logout();
 
-      $('.logged-user img').attr('src', '/img/icon_user_big.svg');
+      $('#userBtn img').attr('src', '/img/icon_user_big.svg');
     });
 
     initHelpTooltip('#filter-menu .help-tooltip-trigger');
