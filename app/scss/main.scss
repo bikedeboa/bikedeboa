@@ -3130,6 +3130,7 @@ body.modal-open {
   }
 
   .swal2-modal {
+    .swal2-content,
     p {
       font-size: 16px;
     }
@@ -4049,9 +4050,14 @@ body.modal-open {
     margin-top: 24px;
   }
 
+  .swal2-content,
+  .swal2-title {
+    color: $black;
+  }
+  
   .swal2-content {
-    color: #333;
-    font-weight: 400;
+    font-weight: normal;
+    text-align: left;    
   }
 
   .swal2-title {

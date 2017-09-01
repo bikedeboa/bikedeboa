@@ -1786,11 +1786,28 @@ $(() => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
+
+    $('.open-aboutdata-btn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      ga('send', 'event', 'Misc', 'about data opened');
+      
+      swal('Dados', '', 'info');
+      swal({
+        title: 'Dados',
+        html:
+          ` <br>
+            Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos <b>dados também são abertos</b>!<br>
+            Enquanto trabalhamos em uma forma mais acessível de baixar nossos dados, acesse nossa <a href="https://github.com/dennerevaldt/bikedeboa-api">documentação da API</a> para saber como ter acesso completo a ela se você é desenvolvedor.<br>
+            <br>
+            <i>Se você já tem um mapeamento de <b>bicicletários, paraciclos e lugares amigos do ciclista</b> na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
+          `,
+      });
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'contact opened');
+      
       swal('Contato', '', 'info');
       swal({
         title: 'Contato',
