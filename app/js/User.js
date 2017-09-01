@@ -59,10 +59,12 @@ BDB.User = {
         BDB.Database.importUserPlaces(places).then(() => {
           toastr['success'](`${places.length} bicicletários salvos.`, '');
           self._deletePlacesFromCookies();
+          self.fetchPlaces();
 
           BDB.Database.importUserReviews(reviews).then(() => {
             toastr['success'](`${reviews.length} avaliações salvas.`, '');
             self._deleteReviewsFromCookies();
+            self.fetchReviews();
           });
         });
       }).catch(dismiss => {

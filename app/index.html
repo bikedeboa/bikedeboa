@@ -120,9 +120,6 @@
 
         <div id="locationSearch" class="cool-hide cool-hidden">
             <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
-            <!-- <span class="balaca">
-              <img alt="" src="/img/bici.svg"/>
-            </span> -->
             <input id="locationQueryInput" type="search">
 
             <button id="clearLocationQueryBtn">
@@ -1470,7 +1467,6 @@
             </div>
 
             <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-
               {{#if average}}
                 <span class="average">{{average}}</span>
 
@@ -1493,7 +1489,6 @@
               {{else}}
                 <!-- <span style="font-style: italic; color: #828b90;">Sem avaliações</span> -->
               {{/if}}
-              
             </div>
 
             <!-- <div class="infobox--label">
@@ -1521,37 +1516,65 @@
 
                           <div class="modal-body">
                             {{#if profile}} 
-                              {{#if profile.picture}}
-                                <section style="
-                                  display: flex;
-                                  justify-content: center;">
-                                  <img alt="" src="{{profile.picture}}" style="
-                                    border-radius: 50%;
-                                    width: 30%";/>
-                                </section> 
-                              {{/if}}
-                              <h1>{{profile.name}}</h1>
+                              <h1>
+                                Oi {{#if profile.picture}}<img alt="" src="{{profile.picture}}">{{/if}} <b>{{profile.name}}</b>
+                              </h1>
                             {{/if}}
+
+                            <p>
+                              Estas são as contribuições que você já fez pro Bike de Boa.
+                            </p>
 
                             <!-- <hr> -->
 
-                            <h2>Avaliações feitas</h2>
+                            <h2>Avaliações</h2>
                             <ul> 
                               {{#each reviews}}
-                                <li>{{placeObj.text}} (nota {{rating}})</li>
+                                <li>
+                                  <button class="go-to-place-btn" data-id="{{placeObj.id}}">
+                                    <span class="go-to-place-btn--title">{{placeObj.text}}</span>
+                                    <span class="go-to-place-btn--rating average" data-color="{{color}}">{{rating}}</span> 
+                                    <!-- <div class="rating-display-container rating-display-mini" data-color={{pinColor}}>
+                                      <span class="average">{{rating}}</span>
+
+                                      <fieldset id="infobox-rating-display" class="rating disabled">
+                                        <input disabled type="radio" id="infobox_star5" name="infobox_rating" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
+                                        <label class="full-star" data-value="5" for="infobox_star5"></label> 
+                                        <input disabled type="radio" id="infobox_star4" name="infobox_rating" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
+                                        <label class="full-star" data-value="4" for="infobox_star4"></label>
+                                        <input disabled type="radio" id="infobox_star3" name="infobox_rating" value="3" {{#ifCond roundedAverage '===' '3'}} checked {{/ifCond}}/>
+                                        <label class="full-star" data-value="3" for="infobox_star3"></label>
+                                        <input disabled type="radio" id="infobox_star2" name="infobox_rating" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
+                                        <label class="full-star" data-value="2" for="infobox_star2"></label>
+                                        <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
+                                        <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                                      </fieldset> 
+                                    </div> -->
+                                    <span class="go-to-place-btn--daysago">
+                                      <span class="glyphicon glyphicon-time"></span> {{createdDaysAgo}} dias atrás
+                                    </span> 
+                                  </button>
+                                </li>
                               {{else}}
-                                Nenhuma avaliação feita ainda.
+                                <i>Nenhuma avaliação feita ainda.</i>
                               {{/each}}
                             </ul>
 
                             <!-- <hr> -->
 
-                            <h2>Bicicletários criados</h2>
+                            <h2>Bicicletários</h2>
                             <ul> 
                               {{#each places}}
-                                <li>{{text}}</li>
+                                <li>
+                                  <button class="go-to-place-btn" data-id="{{id}}">
+                                    <span class="go-to-place-btn--title">{{text}}</span>
+                                    <span class="go-to-place-btn--daysago">
+                                      <span class="glyphicon glyphicon-time"></span> {{createdDaysAgo}} dias atrás
+                                    </span> 
+                                  </button>
+                                </li>
                               {{else}}
-                                Nenhum bicicletário criado ainda.
+                                <i>Nenhum bicicletário criado ainda.</i>
                               {{/each}}
                             </ul>
 

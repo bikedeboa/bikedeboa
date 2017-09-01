@@ -678,16 +678,6 @@ a.unstyled-link {
         // border-bottom: 3px solid $green;
     }
 
-    .balaca {
-        position: absolute;
-        width: 48px;
-        height: 48px;
-        padding: 12px;
-        font-size: 20px;
-        color: $gray;
-        // background-color: white;
-    }
-
     #clearLocationQueryBtn {
       position: absolute;
       top: 0px;
@@ -863,6 +853,60 @@ a.unstyled-link {
     //   margin-left: -$offscreenMargin;
     //   // margin-right: 70px;
     // }
+  }
+}
+
+#profileModal {
+  h1 {
+    img {
+      border-radius: 50%;
+      vertical-align: bottom;
+      height: 41px;
+      width: 41px;
+    }
+
+  }
+
+  h2 {
+    padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE 0;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  .go-to-place-btn {
+    border: 0;
+    background: 0;
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 0.5em;
+    text-align: left;
+
+    .go-to-place-btn--title {
+      font-family: $headingFont;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.01em; 
+      line-height: normal;
+      margin: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .go-to-place-btn--rating {
+      // display: block;
+      font-size: inherit;
+    }
+
+    .go-to-place-btn--daysago {
+      display: block;
+      color: gray;
+      font-size: 12px;
+    }
   }
 }
 
@@ -2295,6 +2339,8 @@ body.modal-open {
 
 
 .review-modal {
+    text-align: center;
+    
     .tagsContainer {
       max-width: 400px;
       margin: 24px auto 36px;
@@ -2457,13 +2503,6 @@ body.modal-open {
 
 .light {
     font-weight: lighter;
-}
-
-.balaca {
-    img {
-        width: 100%;
-        padding: 2px;
-    }
 }
 
 /*#locationSearch, .bigRoundedButton {
@@ -3781,13 +3820,16 @@ body.modal-open {
     cursor: pointer;
 }
 
-.rating-display-container[data-color="green"] .average {
+.rating-display-container[data-color="green"] .average,
+.average[data-color="green"] {
   background-color: $green;
 }
-.rating-display-container[data-color="yellow"] .average {
+.rating-display-container[data-color="yellow"] .average,
+.average[data-color="yellow"] {
   background-color: $yellow;
 }
-.rating-display-container[data-color="red"] .average {
+.rating-display-container[data-color="red"] .average,
+.average[data-color="red"] {
   background-color: $red;
 }
 

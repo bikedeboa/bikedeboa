@@ -3,6 +3,10 @@
 
 $(() => {
   function getPinColorFromAverage(average) {
+    if (typeof average === 'string') {
+      average = parseFloat(average);
+    }
+
     let pinColor;
 
     if (average) {
@@ -1383,12 +1387,26 @@ $(() => {
   function openReviewModal(prepopedRating) {
     const m = openedMarker;
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
+
+    if (!previousReview) {
+      console.error(`ERROR couldnt find previous review for ${m.id}`);
+      return;
+    }
+    
     _updatingReview = previousReview;
+    const tagsUsed = previousReview.tags;
 
     // Tags toggle buttons
     let tagsButtons = tags.map(t => {
-      const isPrepoped = previousReview && previousReview.tags.find( (i) => {return parseInt(i.id) === t.id;} );
-      return `<button class="btn btn-tag ${isPrepoped ? 'active' : ''}" data-toggle="button" data-value="${t.id}">${t.name}</button>`;
+      const isPrepoped = tagsUsed && tagsUsed.find( i => parseInt(i.id) === t.id );
+      return `
+        <button  
+            class="btn btn-tag ${isPrepoped ? 'active' : ''}"
+            data-toggle="button"
+            data-value="${t.id}">
+          ${t.name}
+        </button>
+      `;
     }).join(''); 
 
     swal({ 
@@ -1810,10 +1828,7 @@ $(() => {
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
-        openLoginDialog(true).then( () => {
-          // Try again
-          // $('#addPlace').click();
-        });
+        openLoginDialog(true);
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
@@ -2056,13 +2071,54 @@ $(() => {
   }
 
   function openProfileModal() { 
+    function createdAtToDaysAgo(createdAtStr) {
+      const createdAtDate = Date.parse(createdAtStr);
+      const msAgo = Date.now() - createdAtDate;
+      return Math.floor(msAgo/(1000*60*60*24));
+    }
+
     let templateData = {};
     templateData.profile = BDB.User.profile;
     templateData.reviews = BDB.User.reviews;
     templateData.places = BDB.User.places;
 
+    // Massage reviews list
+    if (templateData.reviews) {
+      for(let i=0; i < templateData.reviews.length; i++) {
+        let r = templateData.reviews[i];
+        
+        // Created X days ago
+        if (r.createdAt) {
+          r.createdDaysAgo = createdAtToDaysAgo(r.createdAt) 
+        }
+
+        r.color = getPinColorFromAverage(r.rating);
+      }
+    }
+
+    // Massage places list
+    if (templateData.places) {
+      for(let i=0; i < templateData.places.length; i++) {
+        let p = templateData.places[i];
+        // Created X days ago
+        if (p.createdAt) {
+          p.createdDaysAgo = createdAtToDaysAgo(p.createdAt)
+        }
+      }
+    }
+
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
     $('#modalPlaceholder').html(templates.profileModalTemplate(templateData));
     $('#profileModal').modal('show');
+
+    $('.go-to-place-btn').off('click').on('click', e => {
+      const $target = $(e.currentTarget);
+      const id = $target.data('id');
+      const place = BDB.Places.getMarkerById(id);
+      openLocal(place);
+    })
 
     // $('#aboutModal').modal('show') ;
     // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
@@ -2262,7 +2318,7 @@ $(() => {
       body = `
         <p>
           Você precisa estar logado pra fazer isso. Esta é a melhor forma de garantirmos a qualidade do mapeamento. :)
-        </p> 
+        </p>
       `;
     }
 
@@ -2285,6 +2341,17 @@ $(() => {
             Google
           </button>
         </div>
+
+        <br>
+
+        <p style="
+          font-style: italic;
+          font-size: 12px;
+          text-align: center;
+          max-width: 300px;
+          margin: 0 auto;">
+          Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
+        </p>
         `,
       showCloseButton: true,
       showConfirmButton: false,
@@ -2297,6 +2364,11 @@ $(() => {
   function onSocialLogin(auth) {
     console.log('auth', auth);
     $('#userBtn').addClass('loading');
+
+    if (window._isLoginDialogOpened) {
+      swal.close(); 
+      window._isLoginDialogOpened = false;
+    }
 
     // Save the social token
     _socialToken = auth.authResponse.access_token;
@@ -2319,12 +2391,6 @@ $(() => {
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         
-        if (window._isLoginDialogOpened) {
-          // Not just close, but "confirm" to trigger the dialog Promise
-          swal.clickConfirm();
-          window._isLoginDialogOpened = false;
-        }
-
         userInfo.role = data.role;
         userInfo.isNewUser = data.isNewUser;
         BDB.User.login(userInfo);
