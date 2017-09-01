@@ -556,6 +556,8 @@ a.unstyled-link {
 }
 
 .dropdown-menu {
+  padding: $GRID_SPACE;
+
   button {
     width: 100%;
     text-align: left;
@@ -570,7 +572,7 @@ a.unstyled-link {
 
 #userBtn {
   position: fixed;
-  right: 10px;
+  right: $GRID_SPACE;
   top: 10px;
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
@@ -582,6 +584,7 @@ a.unstyled-link {
 
   & > button {
     border: 0;
+    padding: 0;
     background: none;
     border-radius: 50%;
   
@@ -1048,7 +1051,7 @@ a.unstyled-link {
 #filterBtn {
     float: right;
     border-radius: 25px;
-    padding: 0 15px; 
+    padding: 0 15px;
     margin: 10px 0;
     border: 0;
     background-color: white;
@@ -1059,6 +1062,10 @@ a.unstyled-link {
     &.active {
       border: 2px solid $lightestPurple;
       background-color: $paleWhite;
+
+      img {
+        margin-left: -2px;
+      }
     }
 
     img {
@@ -1070,6 +1077,29 @@ a.unstyled-link {
     #active-filters-counter.badge {
       background-color: $filtersHightlightColor;
     }
+}
+
+#filterBtn {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  font-size: 0;
+  @include material-shadow(2);
+  
+  margin: 0px $GRID_SPACE $GRID_SPACE;
+  // position: absolute;
+  // bottom: 150px;
+  // right: $GRID_SPACE;
+
+  .badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+
+  img {
+    margin: 0;
+  }
 }
 
 .navbar {
@@ -1802,7 +1832,7 @@ body.modal-open {
 }
 
 .modal-dialog {
-    margin-top: 60px;
+    margin-top: $GRID_SPACE*2;
 
     & img {
         width: 100%;
@@ -3143,14 +3173,51 @@ body.modal-open {
     }
   }
 
-  #userBtn {
-    top: 15px;
-
-    img {
-      width: 45px;
-      height: 45px;
+  #locationSearch {
+    #locationQueryInput { 
+      padding: 0 110px 0 60px; 
+    }
+    #clearLocationQueryBtn {
+      right: 50px;
     }
   }
+
+  #userBtn {
+    border-left: 1px solid $lighterGray;
+
+    & > button {
+        img {
+        border: 0;
+        box-shadow: none; 
+        width: 20px; 
+        height: 20px;
+        margin: 15px;
+      }
+    }
+  }
+
+  // #filterBtn {
+  //   width: 50px;
+  //   height: 50px;
+  //   padding: 0;
+  //   font-size: 0;
+  //   @include material-shadow(2);
+    
+  //   margin: 0px $GRID_SPACE $GRID_SPACE;
+  //   // position: absolute;
+  //   // bottom: 150px;
+  //   // right: $GRID_SPACE;
+
+  //   .badge {
+  //     position: absolute;
+  //     bottom: 0;
+  //     right: 0;
+  //   }
+
+  //   img {
+  //     margin: 0;
+  //   }
+  // }
 
   #aboutModal {
     $leading: 16px;

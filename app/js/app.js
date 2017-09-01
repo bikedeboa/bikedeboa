@@ -275,7 +275,7 @@ $(() => {
         'delay': {'show': 0, 'hide': 100}
       });
     }
-    initHelpTooltip('#placeDetailsModal .help-tooltip-trigger')
+    initHelpTooltip('#placeDetailsModal .help-tooltip-trigger');
 
     $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - pin details public access');
@@ -439,6 +439,7 @@ $(() => {
     let controlUI = document.createElement('div');
     controlUI.id = 'geolocationBtn';
     controlUI.title = 'Onde estou?';
+    controlUI.className = 'caption-tooltip'; 
 
     controlDiv.appendChild(controlUI);
 
@@ -2208,6 +2209,19 @@ $(() => {
       let btnDiv = new geolocationBtn(map);
       map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btnDiv);
     }
+
+    // if (_isMobile) {
+      const filterBtnEl = document.getElementById('filterBtn');
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
+    // }
+
+    // Especial tooltips for map UI buttons that have only an icon
+    $('.caption-tooltip').tooltip({
+      toggle: 'tooltip', 
+      trigger: 'hover',
+      placement: 'left', 
+      'delay': {'show': 0, 'hide': 0}
+    });
 
     _geolocationMarker = new google.maps.Marker({
       map: map,
