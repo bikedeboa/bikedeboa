@@ -151,7 +151,7 @@ $(() => {
       templateData.temporaryPermission = true;
     }
 
-    // Route button
+    // Route button 
     templateData.gmapsRedirectUrl = `https://www.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
 
     // Photo
@@ -1767,8 +1767,8 @@ $(() => {
 
     $('.googleLoginBtn').on('click', () => {
       _hamburgerMenu.hide();
-      hello('google').login({scope: 'email'});
-    }); 
+      hello('google').login({scope: 'email'}); 
+    });
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
@@ -1786,6 +1786,7 @@ $(() => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
+    }));
 
     $('.open-aboutdata-btn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
