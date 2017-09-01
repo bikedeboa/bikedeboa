@@ -334,9 +334,9 @@ $(() => {
           }
         }
       } else {
-        if (!quiet) {
-          showSpinner();
-        }
+        // if (!quiet) {
+          $('#geolocationBtn').addClass('loading');
+        // }
 
         _geolocationInitialized = false;
 
@@ -488,7 +488,7 @@ $(() => {
     controlUI.addEventListener('click', () => {
       ga('send', 'event', 'Geolocation', 'geolocate button click');
       _geolocate(true, () => {
-        hideSpinner();
+        $('#geolocationBtn').removeClass('loading');
       });
     });
 
@@ -2042,7 +2042,7 @@ $(() => {
       }
 
       // Lazy load gifs when modal is shown
-      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
+      $('#hogwToInstallModal .tutorial-gif').each( (i, v) => {
         $(v).attr('src', $(v).data('src'));
       });
 
