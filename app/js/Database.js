@@ -6,8 +6,8 @@ BDB.Database = {
   ///////////////////
 
   // variable replaced by Gulp
-  API_URL: '<DATABASE_URL>', 
-  // API_URL: 'http://localhost:3000', 
+  // API_URL: '<DATABASE_URL>', 
+  API_URL: 'http://localhost:3000', 
   isAuthenticated: false,  
   _authToken: '',
   _headers: {},
@@ -20,7 +20,7 @@ BDB.Database = {
   ///////////////////
   // M E T H O D S //
   ///////////////////
-
+ 
   _redoLogEntry: (logEntry, cb) => {
     console.debug('redoing log entry', logEntry);
 

@@ -78,7 +78,7 @@
 
 
         <!-- Google Maps API (deferred) -->
-        <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
+        <script defer src="https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR" type="text/javascript"></script>
 
 
         <!-- GitHub Buttons -->
@@ -1545,7 +1545,7 @@
                           </div>
 
                           <div class="modal-body">
-                            {{#if profile}}
+                            {{#if profile}} 
                               {{#if profile.picture}}
                                 <section style="
                                   display: flex;
@@ -1556,18 +1556,6 @@
                                 </section> 
                               {{/if}}
                               <h1>{{profile.name}}</h1>
-                            {{else}}
-                              <div>
-                                Você está <b>deslogado</b>. Fazendo login você guarda todas contribuições que já fez no mapa e consegue facilmente acessá-las e acompanhar como elas estão ajudando.
-                              </div>
-                              
-                              <button class="socialLoginBtn btn green facebookLoginBtn">
-                                Facebook
-                              </button>
-
-                              <button class="socialLoginBtn btn green googleLoginBtn">
-                                Google
-                              </button>
                             {{/if}}
 
                             <!-- <hr> -->
@@ -1591,6 +1579,22 @@
                                 Nenhum bicicletário criado ainda.
                               {{/each}}
                             </ul>
+
+                            {{#unless profile}}
+                                <hr>
+
+                                <div>
+                                  Você está <b>deslogado</b>. Fazendo login você guarda todas contribuições que já fez no mapa e consegue facilmente acessá-las e acompanhar como elas estão ajudando.
+                                </div>
+                                
+                                <button class="customLoginBtn facebookLoginBtn">
+                                  Facebook
+                                </button>
+
+                                <button class="customLoginBtn googleLoginBtn">
+                                  Google
+                                </button>
+                            {{/unless}}
                           </div>
                       </div>
                   </div>
