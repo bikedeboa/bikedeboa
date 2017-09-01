@@ -1753,22 +1753,22 @@ $(() => {
       setView('Sobre', '/sobre', true);
     }));
 
-    $('.facebookLoginBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.facebookLoginBtn').on('click', () => {
       _hamburgerMenu.hide();
 
       hello('facebook').login({scope: 'email'});
-    })); 
+    }); 
 
-    $('.logoutBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.logoutBtn').on('click', () => {
       _hamburgerMenu.hide();
       hello.logout('facebook');
       // hello.logout('google');
-    })); 
+    });
 
-    $('.googleLoginBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.googleLoginBtn').on('click', () => {
       _hamburgerMenu.hide();
       hello('google').login({scope: 'email'});
-    })); 
+    }); 
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
