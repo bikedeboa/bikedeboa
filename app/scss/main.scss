@@ -865,21 +865,26 @@ a.unstyled-link {
       width: 41px;
     }
 
-  }
+  } 
 
   h2 {
     padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE 0;
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 14px;
+    color: $lightGray;
+    user-select: none;
+    text-transform: uppercase;
+    margin-top: 2em;
   }
 
   ul {
     list-style: none;
+    padding: 0;
   }
 
   .go-to-place-btn {
     border: 0;
     background: 0;
+    padding: 0;
     color: #333;
     font-size: 18px;
     margin-bottom: 0.5em;
@@ -2850,7 +2855,7 @@ body.modal-open {
       display: block;
       font-size: 12px;
       background: $paleWhite;
-      color: #b3b3b3;
+      color: $lightGray;
   }
 
   /* Overrides marker */
@@ -4279,7 +4284,9 @@ body.modal-open {
   
   .swal2-content {
     font-weight: normal;
-    text-align: left;    
+
+    // Should be set individually
+    // text-align: left;    
   }
 
   .swal2-title {

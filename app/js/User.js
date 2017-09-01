@@ -172,14 +172,14 @@ BDB.User = {
       review.placeId = reviewObj.placeId;
       review.rating = reviewObj.rating;
       review.tags = reviewObj.tags;
-      review.databaseId = reviewObj.databaseId; 
+      review.id = reviewObj.id; 
     } else {
       // Push a new one
       reviews.push({
         placeId: reviewObj.placeId,
         rating: reviewObj.rating,
         tags: reviewObj.tags,
-        databaseId: reviewObj.databaseId
+        id: reviewObj.id
       });
     }
 

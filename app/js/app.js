@@ -1528,7 +1528,6 @@ $(() => {
     const callback = () => {
       Database.sendReview(reviewObj, (reviewId) => {
         // Update internal state
-        reviewObj.databaseId = reviewId;
         BDB.User.saveReview(reviewObj);
 
         // Update screen state
@@ -1577,7 +1576,7 @@ $(() => {
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
       // Delete previous
-      Database.deleteReview(previousReview.databaseId, callback);
+      Database.deleteReview(previousReview.id, callback);
     } else {
       callback();
     }
@@ -2094,6 +2093,8 @@ $(() => {
 
         r.color = getPinColorFromAverage(r.rating);
       }
+
+      templateData.reviews.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
     }
 
     // Massage places list
@@ -2105,6 +2106,8 @@ $(() => {
           p.createdDaysAgo = createdAtToDaysAgo(p.createdAt)
         }
       }
+      
+      templateData.places.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
     }
 
     ////////////////////////////////
@@ -2117,7 +2120,10 @@ $(() => {
       const $target = $(e.currentTarget);
       const id = $target.data('id');
       const place = BDB.Places.getMarkerById(id);
-      openLocal(place);
+
+      $('#profileModal').modal('hide').one('hidden.bs.modal', () => {
+        openLocal(place);
+      })
     })
 
     // $('#aboutModal').modal('show') ;
