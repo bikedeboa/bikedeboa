@@ -2204,6 +2204,10 @@ $(() => {
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
 
+    $('#filterBtn').show();
+    $('#addPlace').show(); 
+
+
     // Geolocalization button
     if (navigator.geolocation) {
       let btnDiv = new geolocationBtn(map);
@@ -2264,6 +2268,8 @@ $(() => {
     return swal({ 
       title: 'Login',
       html: `
+        <br>
+
         ${body}
 
         <div>

@@ -566,17 +566,47 @@ a.unstyled-link {
 }
 
 .dropdown-menu {
-  padding: $GRID_SPACE;
+  $dropdown-border-color: $lighterGrey;
+  padding: $GRID_SPACE/2 0;
+  border: 1px solid $dropdown-border-color;
 
-  button {
-    width: 100%;
-    text-align: left;
-    border: 0;
-    background: 0 0;
+  li {
+    margin: $GRID_SPACE/2 0;
 
-    &:hover {
-      background: $lightestGray;
+    button {
+      padding: $GRID_SPACE/2 $GRID_SPACE*2;
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: 0 0;
+
+      &:hover {
+        background: $lightestGray;
+      }
     }
+  }
+
+  &:before {
+    position: absolute;
+    top: -10px;
+    right: 14px;
+    display: inline-block;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid $dropdown-border-color;
+    border-left: 10px solid transparent;
+    border-bottom-color: $dropdown-border-color;
+    content: '';
+  }
+
+  &:after {
+    position: absolute; 
+    top: -8px;
+    right: 14px;
+    display: inline-block;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+    border-left: 10px solid transparent;
+    content: '';
   }
 }
 
