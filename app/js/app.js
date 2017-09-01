@@ -2220,12 +2220,14 @@ $(() => {
     // }
 
     // Especial tooltips for map UI buttons that have only an icon
-    $('.caption-tooltip').tooltip({
-      toggle: 'tooltip', 
-      trigger: 'hover',
-      placement: 'left', 
-      'delay': {'show': 0, 'hide': 0}
-    });
+    if(!_isTouchDevice) {
+      $('.caption-tooltip').tooltip({
+        toggle: 'tooltip', 
+        trigger: 'hover',
+        placement: 'left', 
+        'delay': {'show': 0, 'hide': 0}
+      });
+    }
 
     _geolocationMarker = new google.maps.Marker({
       map: map,
