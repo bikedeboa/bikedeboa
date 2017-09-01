@@ -594,7 +594,10 @@ a.unstyled-link {
       @include material-shadow(1);
     }
   }
-  
+}
+
+.logoutBtn {
+  display: none;
 }
 
 #locationQueryBtn {

@@ -1724,27 +1724,12 @@ $(() => {
       setView('Histórico', '/historico', true);
     }));
  
-    $('.login-btn').on('click', queueUiCallback.bind(this, () => {
+    $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
-      setView('Login Administrador', '/login', true);
+      // setView('Login Administrador', '/login', true);
       // login(true);
 
-      swal({ 
-        title: 'Login',
-        html: `
-          <button class="socialLoginBtn facebookLoginBtn">
-            Facebook
-          </button>
-
-          <button class="socialLoginBtn googleLoginBtn">
-            Google
-          </button>
-          `,
-        showCloseButton: true,
-        onOpen: () => {
-          // ...
-        }
-      }); 
+      openLoginDialog();
     }));
     
     $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
@@ -1753,22 +1738,21 @@ $(() => {
       setView('Sobre', '/sobre', true);
     }));
 
-    $('.facebookLoginBtn').on('click', () => {
+    $('body').on('click', '.facebookLoginBtn', () => {
       _hamburgerMenu.hide();
-
       hello('facebook').login({scope: 'email'});
     }); 
 
-    $('.logoutBtn').on('click', () => {
-      _hamburgerMenu.hide();
-      hello.logout('facebook');
-      hello.logout('google');
-    });
-
-    $('.googleLoginBtn').on('click', () => {
+    $('body').on('click', '.googleLoginBtn', () => {
       _hamburgerMenu.hide();
       hello('google').login({scope: 'email'}); 
     });
+
+    $('body').on('click', '.logoutBtn', () => { 
+      _hamburgerMenu.hide();
+      hello.logout('facebook');
+      hello.logout('google');
+    }); 
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
@@ -1823,13 +1807,21 @@ $(() => {
     }));
 
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
-      // Make sure the new local modal won't think we're editing a local
-      if (!$('#addPlace').hasClass('active')) {
-        openedMarker = null;
-      }
+      // This is only available to logged users
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true).then( () => {
+          // Try again
+          // $('#addPlace').click();
+        });
+      } else {
+        // Make sure the new local modal won't think we're editing a local
+        if (!$('#addPlace').hasClass('active')) {
+          openedMarker = null;
+        }
 
-      ga('send', 'event', 'Local', 'toggle create pin mode');
-      toggleLocationInputMode();
+        ga('send', 'event', 'Local', 'toggle create pin mode');
+        toggleLocationInputMode();
+      }
     }));
 
     $('#clear-filters-btn').on('click', () => {
@@ -2244,10 +2236,46 @@ $(() => {
     // $('#map').css('filter', 'none');
   }
 
+  function openLoginDialog(showDisclaimer = false) {
+    let body = '';
+    if (showDisclaimer) {
+      body = `
+        <p>
+          Você precisa estar logado pra fazer isso. Esta é a melhor forma de garantirmos a qualidade do mapeamento. :)
+        </p> 
+      `;
+    }
+
+    // Returns the dialog promise
+    return swal({ 
+      title: 'Login',
+      html: `
+        ${body}
+
+        <div>
+          <button class="customLoginBtn facebookLoginBtn">
+            Facebook
+          </button>
+        </div>
+
+        <div>
+          <button class="customLoginBtn googleLoginBtn">
+            Google
+          </button>
+        </div>
+        `,
+      showCloseButton: true,
+      showConfirmButton: false,
+      onOpen: () => {
+        window._isLoginDialogOpened = true;
+      }
+    }); 
+  }
+
   function onSocialLogin(auth) {
     console.log('auth', auth);
     $('#userBtn').addClass('loading');
-    
+
     // Save the social token
     _socialToken = auth.authResponse.access_token;
 
@@ -2263,17 +2291,35 @@ $(() => {
       }).then( data => { 
         console.log('social login successful'); 
 
+        // UI
+        $('#userBtn').removeClass('loading');
+        $('#userBtn img').attr('src', userInfo.thumbnail);
+        $('.logoutBtn').show(); 
+        $('.loginBtn').hide();
+        
+        if (window._isLoginDialogOpened) {
+          // Not just close, but "confirm" to trigger the dialog Promise
+          swal.clickConfirm();
+          window._isLoginDialogOpened = false;
+        }
+
         userInfo.role = data.role;
         userInfo.isNewUser = data.isNewUser;
-
         BDB.User.login(userInfo);
-
-        $('#userBtn').removeClass('loading');
-        $('#userBtn img').attr('src', BDB.User.profile.thumbnail);
       }).catch( error => {
-        console.error('error on social login: ' + error); 
+        console.error('Error on social login', error); 
+        swal('Ops', 'Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!', 'warning');
       });
     });
+  }
+
+  function onSocialLogout() {
+    BDB.User.logout();
+
+    // UI
+    $('#userBtn img').attr('src', '/img/icon_user_big.svg');
+    $('.logoutBtn').hide();
+    $('.loginBtn').show();
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -2448,9 +2494,7 @@ $(() => {
       onSocialLogin(auth);
     });
     hello.on('auth.logout', () => {
-      BDB.User.logout();
-
-      $('#userBtn img').attr('src', '/img/icon_user_big.svg');
+      onSocialLogout();
     });
 
     initHelpTooltip('#filter-menu .help-tooltip-trigger');
