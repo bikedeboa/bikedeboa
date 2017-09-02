@@ -321,7 +321,7 @@ $(() => {
     }
   }
 
-  function _geolocate(toCenter, callback, quiet = false) {
+  function geolocate(toCenter, callback, quiet = false) {
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
@@ -340,9 +340,9 @@ $(() => {
           }
         }
       } else {
-        // if (!quiet) {
+        if (!quiet) {
           $('#geolocationBtn').addClass('loading');
-        // }
+        }
 
         _geolocationInitialized = false;
 
@@ -438,33 +438,33 @@ $(() => {
     }
   }
 
-  function geolocationBtn() {
-    let controlDiv = document.createElement('div');
-    let controlUI = document.createElement('div');
-    controlUI.id = 'geolocationBtn';
-    controlUI.title = 'Onde estou?';
-    controlUI.className = 'caption-tooltip'; 
+  // function geolocationBtn() {
+  //   let controlDiv = document.createElement('div');
+  //   let controlUI = document.createElement('div');
+  //   controlUI.id = 'geolocationBtn';
+  //   controlUI.title = 'Onde estou?';
+  //   controlUI.className = 'caption-tooltip'; 
 
-    controlDiv.appendChild(controlUI);
+  //   controlDiv.appendChild(controlUI);
 
-    // Set CSS for the control interior.
-    let controlText = document.createElement('div');
-    controlText.style.color = '#30bb6a';
-    controlText.style.width = '100%';
-    controlText.style.paddingTop = '13px';
-    controlText.innerHTML = '<img src="/img/geolocation.svg" style="width: 20px;"/>';
-    controlUI.appendChild(controlText);
+  //   // Set CSS for the control interior.
+  //   let controlText = document.createElement('div');
+  //   controlText.style.color = '#30bb6a';
+  //   controlText.style.width = '100%';
+  //   controlText.style.paddingTop = '13px';
+  //   controlText.innerHTML = '<img src="/img/geolocation.svg" style="width: 20px;"/>';
+  //   controlUI.appendChild(controlText);
 
-    // Setup the click event listeners
-    controlUI.addEventListener('click', () => {
-      ga('send', 'event', 'Geolocation', 'geolocate button click');
-      _geolocate(true, () => {
-        $('#geolocationBtn').removeClass('loading');
-      });
-    });
+  //   // Setup the click event listeners
+  //   controlUI.addEventListener('click', () => {
+  //     ga('send', 'event', 'Geolocation', 'geolocate button click');
+  //     geolocate(true, () => {
+  //       $('#geolocationBtn').removeClass('loading');
+  //     });
+  //   });
 
-    return controlDiv;
-  }
+  //   return controlDiv;
+  // }
  
   // Just delegate the action to the route controller
   function openLocal(marker, callback) {
@@ -1824,6 +1824,13 @@ $(() => {
       map.setZoom(6);
     }));
 
+    $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {
+      ga('send', 'event', 'Geolocation', 'geolocate button click');
+      geolocate(true, () => {
+        $('#geolocationBtn').removeClass('loading');
+      });
+    }));
+
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
@@ -2199,8 +2206,22 @@ $(() => {
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
-      zoomControl: _isDesktop,
       styles: _gmapsCustomStyle,
+      mapTypeControl: false,
+      // mapTypeControl: _isDesktop,
+      // mapTypeControlOptions: {
+      //     style: google.maps.MapTypeControlStyle.DROPDOWN_MENU, 
+      //     position: google.maps.ControlPosition.RIGHT_CENTER
+      // },
+      zoomControl: _isDesktop,
+      zoomControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_CENTER
+      },
+      // streetViewControl: _isDesktop,
+      // streetViewControlOptions: {
+      //     position: google.maps.ControlPosition.RIGHT_CENTER
+      // },
+      // fullscreenControl: true
     });
 
     _mapBounds = new google.maps.LatLngBounds(
@@ -2266,14 +2287,16 @@ $(() => {
 
     map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
 
+    // These were initialized hidden in CSS
+    $('#geolocationBtn').show();
     $('#filterBtn').show();
     $('#addPlace').show(); 
 
 
     // Geolocalization button
     if (navigator.geolocation) {
-      let btnDiv = new geolocationBtn(map);
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btnDiv);
+      const btn = document.getElementById('geolocationBtn');
+      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
     }
 
     // if (_isMobile) {
@@ -2462,7 +2485,7 @@ $(() => {
         .then( permission => {
           if (permission.state === 'granted') {
             ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            _geolocate(true, null, true); 
+            geolocate(true, null, true); 
           }
         }
       );

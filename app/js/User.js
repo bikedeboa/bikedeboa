@@ -39,14 +39,14 @@ BDB.User = {
     const placesStr = places ? `<b>${places.length} bicicletários</b>` : ''; 
     const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
     let message, title;
-    if (socialProfile.isNewUser) {
+    if (socialProfile.isNewUser) { 
       title = 'Bem-vindo(a)!';
       message = `Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir! Deseja salvá-los no histórico do seu perfil?`;
     } else {
-      title = 'Oi denovo!';
+      title = 'Oi de novo!';
       message = `Você tinha criado ${dynamicStr} enquanto não estava logado. Deseja salvá-los no histórico do seu perfil?`;
     }
-
+ 
     if (reviews || places) {
       swal({
         title: title,

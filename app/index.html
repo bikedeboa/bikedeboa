@@ -114,12 +114,14 @@
     <body>
         <div id="map"></div>
         
-        <h1 id="logo">bike de boa</h1>
+        <h1 id="logo" class="js-menu-show-hamburger-menu">bike de boa</h1>
 
         <div class="confetti-placeholder"></div>
 
         <div id="locationSearch" class="cool-hide cool-hidden">
-            <button class="js-menu-show-hamburger-menu header__menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+            <button class="js-menu-show-hamburger-menu header__menu-toggle">
+              <img src="/img/icon_hamburger.svg">
+            </button>
             <input id="locationQueryInput" type="search">
 
             <button id="clearLocationQueryBtn">
@@ -189,6 +191,12 @@
         <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip" style="display: none;">
             <img alt="" src="/img/icon_add_pin.svg">
         </button>
+
+        <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
+          <div>
+            <img src="/img/geolocation.svg">
+          </div>
+        </div>
 
         <div id="newPlaceholderContainer">
           <!-- <span id="newPlaceholderShadow"></span> -->
@@ -567,7 +575,7 @@
 
                                   <div>
                                     <p>
-                                      Pode ter várias formas. o mais comuns são pequenos triângulos ou semi-círculos. A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis. Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.
+                                      Pode ter várias formas. Os mais comuns são pequenos triângulos ou semi-círculos. A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis. Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.
                                     </p>
                                   </div>
                                 </div>
@@ -590,9 +598,6 @@
                                   <div>
                                     <p>
                                       Normalmente um poste de luz ou placa de trânsito.
-                                    </p>
-                                    <p>
-                                      Como pender: dá pra prender a bicicleta de várias formas, mas o melhor é prender pelo quadro da bicicleta e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.
                                     </p>
                                   </div>
                                 </div>
@@ -1287,7 +1292,7 @@
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'deroda'}}
                                 <a id="deroda-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>De Roda</h2>
-                                <p>Pode ter várias formas. O mais comuns são pequenos triângulos ou semi-círculos.</p>
+                                <p>Pode ter várias formas. Os mais comuns são pequenos triângulos ou semi-círculos.</p>
                                 <p>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.</p>
                                 <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.</p>
                                 <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>

@@ -190,10 +190,10 @@ body.pwa-installed {
 }
 
 body.position-pin-mode { 
-    .js-menu-show-hamburger-menu {
-        opacity: 0.5;
-        pointer-events: none;
-    }
+    // .js-menu-show-hamburger-menu {
+    //     opacity: 0.5;
+    //     pointer-events: none;
+    // }
 
     .header__menu-toggle {
       background-color: $lightGray;
@@ -279,17 +279,18 @@ p {
 
 #logo {
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 21px;
+    left: 62px;
+    text-shadow: 1px 1px px white;
+    // top: 10px;
+    // left: 10px;
     margin: 0;
     padding: 0;
     color: $green;
     font-size: 22px;
-    text-shadow: 0px 0px 10px white;
     letter-spacing: -0.02em;
     font-weight: bold;
-    opacity: 0.6;
-    cursor: default;
+    // opacity: 0.6;
     user-select: none;
 }
 
@@ -445,7 +446,7 @@ body.deeplink {
         background-position: 50% 50%;
     }
 
-    #logo {
+    #logo { 
       z-index: 2000;
       cursor: pointer;
 
@@ -655,7 +656,7 @@ a.unstyled-link {
     margin: auto;
     width: 95%;
     height: 48px;
-    max-width: 600px;
+    max-width: 400px;
     width: calc(100% - 20px); 
     // z-index: 1;
 
@@ -727,32 +728,12 @@ a.unstyled-link {
       }
     }
 
-    .login-display {
-        display: block;
-        background-color: rgba(0,0,0,0.2);
-        color: $lightestGray;
-        padding: 5px;
-        font-family: $headingFont;
-        font-weight: 700;
-        position: absolute;
-        top: 50px;
+    // Desktop
+    @media screen and (min-width: $MOBILE_MAX_WIDTH) {
+      #clearLocationQueryBtn {
+        right: inherit;
         left: 0;
-        width: auto;
-        border-radius: 5px;
-
-        .glyphicon {
-            margin-right: 5px;
-        }
-
-        button {
-            border: none;
-            background: transparent;
-        }
-
-        &.logged {
-            background-color: #eedc12;
-            color: white;
-        }
+      }
     }
 }
 
@@ -1060,7 +1041,12 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
+    // Initializes hidden
+    display: none; 
+
     margin: 0px $GRID_SPACE $GRID_SPACE;
+
+    padding: 13px;
 
     background-color: white;
     border: 2px solid white;
@@ -1076,13 +1062,17 @@ a.unstyled-link {
     &.active {
         filter: none;
     }
+
+    img {
+      width: 20px;
+    }
 }
 
 #addPlace {
     position: absolute;
     bottom: 0;
     right: 0;
-    margin: 0 $GRID_SPACE $GRID_SPACE*2;
+    margin: 0 $GRID_SPACE $GRID_SPACE;
 
     background: linear-gradient(45deg, $green 0, $lightGreen 100%);
     border: 0;
@@ -1138,6 +1128,9 @@ a.unstyled-link {
 }
 
 #filterBtn {
+    // Initializes hidden
+    display: none;
+
     float: right;
     border-radius: 25px;
     padding: 0 15px;
@@ -3266,7 +3259,16 @@ body.modal-open {
   }
 
   #userBtn {
-    border-left: 1px solid $lighterGray;
+    // border-left: 1px solid $lighterGray;
+    &:before {
+        background: $lightGray;
+        width: 0.5px; 
+        height: 50%;
+        content: '';
+        left: 0;
+        position: absolute;
+        margin-top: 25%;
+    }
 
     & > button {
         img {
@@ -4038,6 +4040,10 @@ body.modal-open {
 //   padding: 0 16px;
 // }
 
+.js-menu-show-hamburger-menu {
+  cursor: pointer;
+}
+
 .header__menu-toggle {
     position: absolute;
     top: 0;
@@ -4047,33 +4053,41 @@ body.modal-open {
     color: white;
     border: none;
     margin: 0;
-    padding: 13px;
-    font-size: 17px;
-    background-color: $green;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    padding: 12px;
+    // font-size: 17px;
+    // background-color: $green;
+    // border-top-left-radius: 5px;
+    // border-bottom-left-radius: 5px;
 
-    &:focus,
-    &:active,
-    &:hover {
-        background: $darkerGreen;
-    }
+    border-radius: 50%;
+    background: transparent;
+    color: $green;
+    text-shadow: 1px 1px 2px #fff;
 
-    // Not on Mobile
+    // &:focus,
+    // &:active,
+    // &:hover {
+    //     background: $darkerGreen;
+    // }
+
+    // Desktop
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
-      &:after {
-        content: 'menu';
-        font-size: 9px;
-        position: absolute;
-        bottom: 6px;
-        left: 11px;
-        text-transform: uppercase;
-        font-weight: bold;
-      }
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      // &:after {
+      //   content: 'menu';
+      //   font-size: 9px;
+      //   position: absolute;
+      //   bottom: 6px;
+      //   left: 11px;
+      //   text-transform: uppercase;
+      //   font-weight: bold;
+      // }
 
-      .glyphicon-menu-hamburger { 
-        top: -4px;
-      }
+      // .glyphicon-menu-hamburger { 
+      //   top: -4px;
+      // }
     }
 }
 
