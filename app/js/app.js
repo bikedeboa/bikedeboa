@@ -796,7 +796,6 @@ $(() => {
 
   // Removes the markers from the map, but keeps them in the array.
   function hideMarkers () {
-    areMarkersHidden = true;
     if (_gmarkers && Array.isArray(_gmarkers)) {
       for (let i = 0; i < _gmarkers.length; i++) {
         _gmarkers[i].setOptions({clickable: false, opacity: 0.3});
@@ -806,7 +805,6 @@ $(() => {
 
   // Shows any markers currently in the array.
   function showMarkers () {
-    areMarkersHidden = false;
     if (_gmarkers && Array.isArray(_gmarkers)) {
       for (let i = 0; i < _gmarkers.length; i++) {
         _gmarkers[i].setOptions({clickable: true, opacity: 1});
@@ -815,6 +813,7 @@ $(() => {
   }
 
   // Switches all marker icons to the full or the mini scale
+  // scale := 'mini' | 'full'
   function setMarkersIcon (scale) {
     if (_gmarkers && Array.isArray(_gmarkers)) {
       let m;
@@ -833,9 +832,13 @@ $(() => {
 
   function toggleMarkers() {
     if (areMarkersHidden) {
-      showMarkers();
+      // showMarkers();
+      setMarkersIcon('full');
+      areMarkersHidden = false;
     } else {
-      hideMarkers();
+      // hideMarkers();
+      setMarkersIcon('mini'); 
+      areMarkersHidden = true;
     }
   }
 
@@ -869,9 +872,10 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
-      map.setOptions({styles: _gmapsCustomStyle_withLabels});
-
       $('body').addClass('position-pin-mode');
+      
+      // Change Maps style that shows Points of Interest
+      map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
       $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
         // Queries Google Geocoding service for the position address
@@ -884,6 +888,7 @@ $(() => {
             // console.log(address);
             newMarkerTemp.address = address;
           }, () => {
+            // nothing here.
           }
         );
 
@@ -903,7 +908,7 @@ $(() => {
             swal({
               title: 'Ops',
               html:
-                `Foi mal, por enquanto ainda não dá pra adicionar bicicletários nesta região.
+                `Foi mal, o bike de boa ainda não chegou aqui!
                 <br><br>
                 <small>
                   <i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">

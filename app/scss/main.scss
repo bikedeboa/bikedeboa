@@ -195,8 +195,10 @@ body.position-pin-mode {
     //     pointer-events: none;
     // }
 
-    .header__menu-toggle {
-      background-color: $lightGray;
+    .js-menu-show-hamburger-menu,
+    #userBtn {
+      // background-color: $lightGray;
+      opacity: 0.5;
       pointer-events: none;
     }
 }
@@ -281,13 +283,13 @@ p {
     position: fixed;
     top: 21px;
     left: 62px;
-    text-shadow: 1px 1px px white;
+    text-shadow: 1px 1px 1px white;
     // top: 10px;
     // left: 10px;
     margin: 0;
     padding: 0;
     color: $green;
-    font-size: 22px;
+    font-size: 24px;
     letter-spacing: -0.02em;
     font-weight: bold;
     // opacity: 0.6;
@@ -446,14 +448,14 @@ body.deeplink {
         background-position: 50% 50%;
     }
 
-    #logo { 
-      z-index: 2000;
-      cursor: pointer;
+    // #logo { 
+    //   z-index: 2000;
+    //   cursor: pointer;
 
-      &:hover {
-        opacity: 1;
-      } 
-    }
+    //   &:hover {
+    //     opacity: 1;
+    //   } 
+    // }
 
     #top-mobile-bar {
       .back-button {
@@ -1672,7 +1674,8 @@ body.modal-open {
     }
 
     &.hasImage {
-        height: 180px;
+        // height: 180px;
+        height: 60vh;
         // min-height: 170px;
         // max-height: 170px;
 
@@ -1683,22 +1686,22 @@ body.modal-open {
     }
 
     &.hasImage:not(.loading) {
-        &.expanded {
-            max-height: 800px;
-            height: auto;
+        // &.expanded {
+        //     max-height: 800px;
+        //     height: auto;
 
-            img {
-                cursor: zoom-out;
+        //     img {
+        //         cursor: zoom-out;
 
-                &:hover {
-                  opacity: inherit;
-                }
-            }
+        //         &:hover {
+        //           opacity: inherit;
+        //         }
+        //     }
 
-            &:after {
-              content: "\e097";
-            }
-        }
+        //     &:after {
+        //       content: "\e097";
+        //     }
+        // }
 
         & img {
             cursor: zoom-in;
@@ -1709,20 +1712,20 @@ body.modal-open {
             }
         }
 
-        &:after {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: $black;
-            background: rgba(255,255,255,0.8);
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 20px;
-            content: "\e096";
-            font-family: $bootstrapFont;
-            line-height: 1;
-            pointer-events: none;
-        }
+        // &:after {
+        //     position: absolute;
+        //     top: 10px;
+        //     right: 10px;
+        //     color: $black;
+        //     background: rgba(255,255,255,0.8);
+        //     padding: 10px;
+        //     border-radius: 5px;
+        //     font-size: 20px;
+        //     content: "\e096";
+        //     font-family: $bootstrapFont;
+        //     line-height: 1;
+        //     pointer-events: none;
+        // }
     }
 }
 
@@ -1789,22 +1792,22 @@ body.modal-open {
           transform: translate(-50%,-50%);
           background: url(/img/icon_photo.svg);
           background-size: 100%;
-          width: 67px;
-          height: 67px;
+          width: 50px;
+          height: 42px;
+          background-repeat: no-repeat;
+          margin: 0;
           cursor: pointer;
           filter: grayscale(100%);
 
-          border-radius: 50%;
-          @include shadow(2);
-          
           // transition: all 0.2s ease-out;
 
           &:after {
               content: 'Adicionar foto';
-              position: absolute;
-              top: 26px;
-              left: 135px;
-              width: 120px;
+              position: relative;
+              top: 12px;
+              left: 118px;
+              width: 130px;
+              display: block;
               transform: translate(-50%);
               font-weight: 700;
               text-transform: uppercase;
@@ -4053,7 +4056,7 @@ body.modal-open {
     color: white;
     border: none;
     margin: 0;
-    padding: 12px;
+    padding: 13px;
     // font-size: 17px;
     // background-color: $green;
     // border-top-left-radius: 5px;
