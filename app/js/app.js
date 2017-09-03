@@ -74,7 +74,9 @@ $(() => {
 
   function initHelpTooltip(selector) {
     if (!_isMobile) {
-      $(selector).tooltip();
+      $(selector).tooltip({
+        trigger: 'focus'
+      }); 
     } else {
       $(selector).off('click').on('click', e => {
         const $tooltipEl =$(e.currentTarget);
@@ -203,7 +205,7 @@ $(() => {
     }
 
     $('.photo-container img').on('load', e => {
-      $(e.target).parent().removeClass('loading');
+      $(e.target).parent().parent().removeClass('loading');
     });
  
     // Init click callbacks
@@ -275,7 +277,7 @@ $(() => {
     if(!_isTouchDevice) {
       $('#placeDetailsModal .full-star').tooltip({
         toggle: 'tooltip',
-        placement: 'bottom',
+        placement: 'bottom', 
         'delay': {'show': 0, 'hide': 100}
       });
     }
@@ -1530,7 +1532,7 @@ $(() => {
   function toggleExpandModalHeader() {
     ga('send', 'event', 'Local', 'photo click', ''+openedMarker.id);
 
-    $('.photo-container').toggleClass('expanded');
+    // $('.photo-container').toggleClass('expanded');
   }
 
   function toggleClearLocationBtn(stateStr) {
@@ -1615,7 +1617,7 @@ $(() => {
           openDetailsModal(m, callback);
         });
       });
-    };
+    }; 
 
     const previousReview = BIKE.Session.getReviewFromSession(m.id);
     if (previousReview) {
@@ -1820,6 +1822,11 @@ $(() => {
             <i>Se você já tem um mapeamento de <b>bicicletários, paraciclos e lugares amigos do ciclista</b> na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
           `,
       });
+      
+    $('.open-guide-btn').on('click', queueUiCallback.bind(this, () => {
+      _hamburgerMenu.hide();
+      ga('send', 'event', 'Misc', 'faq opened');
+      setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
@@ -2069,13 +2076,23 @@ $(() => {
   }
 
   function openFaqModal() {
-    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     $('#faqModal').modal('show');
+    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
     $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
       const questionTitle = $(e.target).parent().find('.panel-title').text();
       ga('send', 'event', 'FAQ', 'question opened', questionTitle);
     })
+  }
+
+  function openGuideModal() {
+    $('#guideModal').modal('show');
+    $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+  }
+
+  function openAboutModal() {
+    $('#aboutModal').modal('show');
+    $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
   function handleRouting() { 
@@ -2099,9 +2116,11 @@ $(() => {
       case 'como-instalar':
         openHowToInstallModal();
         break;
+      case 'guia-de-bicicletarios':
+        openGuideModal();
+        break;
       case 'sobre':
-        $('#aboutModal').modal('show');
-        $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+        openAboutModal();
         break;
       // case 'nav':
       // case 'filtros':
@@ -2356,6 +2375,14 @@ $(() => {
       buttonsStyling: false,
       allowOutsideClick: true
     });
+
+    // Featherlight - photo lightbox lib
+    // Extension to show the img alt tag as a caption within the image
+    $.featherlight.prototype.afterContent = function() { 
+      var caption = this.$currentTarget.find('img').attr('alt');
+      this.$instance.find('.caption').remove();
+      $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+    };
  
     // Toastr options
     toastr.options = {

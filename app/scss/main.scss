@@ -308,6 +308,10 @@ p {
   font-family: $bodyFont;
   z-index: 20;
 
+  a {
+    color: white;
+  }
+
   .tooltip-inner {
     padding: 20px;
     background-color: $black; 
@@ -692,7 +696,84 @@ a.unstyled-link {
     }
 }
 
-#aboutModal {
+#guideModal {
+  $offscreenMargin: 100px;
+
+  .guide-img-row {
+    margin-top: 3em;
+    display: flex;
+    // margin-left: -300px;
+    // margin-right: -300px;
+    justify-content: center;
+
+    img {
+      // border-radius: 50%;
+      opacity: .8;
+      width: 200px;
+      height: 200px;
+      margin: 0 6px;
+      object-fit: cover;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .guide-type-img {
+    // height: 300px;
+    width: 200px;
+    max-height: 200px;
+    padding: 24px;
+    padding-top: 0;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .guide-references-list {
+    font-size: 18px;
+    list-style: none;
+    padding: 0;
+    margin-top: -1em;
+
+    li {
+      margin-bottom: 0.5em; 
+
+      .glyphicon-share {
+        font-size: 12px;
+      }
+
+      .references-label { 
+        color: $gray;
+        display: block;
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  section {
+    margin-top: 6em;
+
+    // &:nth-child(even) .guide-type-img {
+    //   float: right;
+    //   // margin-left: 70px;
+    //   margin-right: -$offscreenMargin;
+    // }
+
+    // &:nth-child(odd) .guide-type-img {
+    //   float: left;
+    //   margin-left: -$offscreenMargin;
+    //   // margin-right: 70px;
+    // }
+  }
+}
+
+#aboutModal,
+#guideModal {
   $leading: 18px;
 
   #about-social-buttons {
@@ -736,6 +817,7 @@ a.unstyled-link {
     margin-top: 1.5em;
     margin-bottom: .5em;
     letter-spacing: -0.02em;
+    color: $green;
   }
  
   h2 {
@@ -746,6 +828,7 @@ a.unstyled-link {
     margin-bottom: 1em;
     text-align: left;
     letter-spacing: -0.01em;
+    font-weight: bold;
   }
 
   h2, p {
@@ -756,6 +839,8 @@ a.unstyled-link {
     margin: 2em 0;
     text-align: center;
     letter-spacing: 1em;
+    font-weight: bold;
+    font-size: 20px;
   }
 }
 
@@ -2958,6 +3043,20 @@ body.modal-open {
     }
   }
 
+  #guideModal {
+    .guide-img-row {
+      justify-content: left;
+      width: calc(100vw - #{$GRID_SPACE*2});
+      overflow: auto;
+
+      img {
+        // Shows half of the third photo
+        width: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
+        height: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
+      }
+    }
+  }
+
   .review-modal {
     p.small {
       display: none;
@@ -3263,6 +3362,58 @@ body.modal-open {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+.featherlight {
+  &:last-of-type {
+    background: rgba(255,255,255,.95); 
+  }
+
+  .featherlight-content {
+    // width: 100%;
+    // height: 100%;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+
+    // img {
+    //   object-fit: contain;
+    //   width: 100%;
+    //   height: 100%;
+    // }
+
+    .featherlight-caption {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background: rgba(255,255,255,.9);
+      padding: 6px;
+      text-align: center;
+      right: 0;
+      word-wrap: break-word;
+      font-size: 12px;
+    }
+  }
+
+  // Mimics our modal close button
+  .featherlight-close-icon {
+    position: fixed;
+    color: $black;
+    top: 12px;
+    right: 24px;
+    font-size: 30px;
+    background: 0 0;
+    z-index: 1052;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    text-shadow: 0 0 3px white;
+
+    &:hover {
+      background: $lighterGray;
+    }
+  }
+}
 
 @keyframes confetti-slow {
   0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }

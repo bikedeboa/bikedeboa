@@ -39,9 +39,11 @@
         <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png?v=m2dAvrr4RB" sizes="16x16"> 
         <link rel="manifest" href="/manifest.json">
 
-        <!-- Google Optimize (MVT Testing) -->
+        <!-- Goog
+        le Optimize (MVT Testing) -->
         <!-- <style>.async-hide { opacity: 0 !important} </style>
         <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date; h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')}; (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c; })(window,document.documentElement,'async-hide','dataLayer',4000, {'GTM-MCCV34X':true});</script>  -->
+
 
         <!-- Google Analytics --> 
         <script>
@@ -74,15 +76,21 @@
            })(document);
         </script>
 
+
         <!-- Google Maps API (deferred) -->
         <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script>
+
 
         <!-- GitHub Buttons -->
         <script defer async src="https://buttons.github.io/buttons.js"></script>
 
+
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/lib/featherlight.min.css"/> 
+        
         <link rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
+
 
         <!-- JS --> 
         <script defer src="/js/lib/jquery.js"></script> 
@@ -94,15 +102,18 @@
         <script defer src="/js/lib/toastr.js"></script> 
         <script defer src="/js/lib/velocity.js"></script> 
         <script defer src="/js/lib/velocity.ui.js"></script>
+        <script defer src="/lib/featherlight.min.js"></script>
+        
         <script defer src="/js/app.min.js"></script>
 
+        <!-- Service Worker -->
         <script defer async src="/service-worker-registration.js"></script> 
     </head> 
 
     <body>
         <div id="map"></div>
         
-        <h1 id="logo"> bike de boa </h1>
+        <h1 id="logo">bike de boa</h1>
 
         <div class="confetti-placeholder"></div>
 
@@ -238,6 +249,13 @@
 
             <div class="side-nav__content">
               <ul>
+                <li class="open-guide-btn side-nav--animate-in">
+                  <img alt="" src="/img/icon_guide.svg"/>
+                  Guia de Bicicletários 
+                </li>
+
+                <hr>
+
                 <li class="side-nav--animate-in" id="howToInstallBtn">
                   <img alt="" src="/img/icon_app.svg"/>
                   Instalar o App
@@ -318,7 +336,7 @@
                   <input type="checkbox" id="show-bike-layer">
                   <label for="show-bike-layer">
                     Mostrar ciclovias e ciclofaixas
-                    <span id="ciclovias-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" data-title="Combinamos dados de várias fontes pra trazer o estado mais atualizado possível das ciclovias, mas mesmo assim pode não estar super de acordo com a realidade. Nos dá um toque se reparar em algo. :)"></span>
+                    <a id="ciclovias-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto top" role="button" tabindex="0" data-title="Combinamos dados de várias fontes pra trazer o estado mais atualizado possível das ciclovias, mas mesmo assim pode não estar super de acordo com a realidade. Nos dá um toque se reparar em algo. :)"></a>
                   </label>
               </div>
             </header>
@@ -463,6 +481,263 @@
                                   <img alt="GitHub" src="/img/github_logo.svg"/> Github
                                 </a>
                               </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Guide -->
+        <div class="modal clean-modal" id="guideModal" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title view-name">Guia de Bicicletários</h1>
+                        </div>
+
+                        <div class="modal-body">
+                            <article>
+                              <p>
+                                Saber como estacionar a bicicleta na cidade é <b>essencial e pode ser bem fácil</b> :) A gente reuniu aqui algumas dicas básicas sobre bicicletários que fazem toda a diferença para a tua bicicleta ficar de boa.
+                              </p>
+
+                              <p>
+                                Independente do bicicletário, lembre sempre usar uma <b>boa trava</b> e prender a bicicleta <b>pelo quadro, não apenas pela roda</b>. Vale muito a pena investir em um bom cadeado, e os melhores normalmente são os do tipo "u-lock".
+                              </p>
+
+                              <div class="center">
+                                <img class="guide-type-img" alt="" src="/img/icon_guide_lock.svg"/>
+                              </div>
+
+                              <p>
+                                Os tipos de bicicletário deste guia são os que a nossa equipe de pesquisa encontrou pela cidade. Cada um tem um nível de <b>segurança e praticidade diferentes</b>, por isso é importante entendê-los e começar a reparar nesses detalhes quando for estacionar a bike.
+                              </p>
+
+                              <section>
+                                <h2>U Invertido</h2>
+
+                                <div>
+                                  <div class="center">
+                                    <img class="guide-type-img" alt="" src="/img/icon_guide_uinvertido.svg"/>
+                                  </div>
+
+                                  <div>
+                                    <p>
+                                      Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão. É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava ulock.
+                                    </p>
+                                    <p>
+                                      <i>Como prender</i>: dá pra prender a bicicleta de várias formas, mas prefira sempre prender pelo quadro da bicicleta.
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div class="guide-img-row">
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/936.jpeg"> <img alt="Casa de Cultura Mário Quintana" src="https://s3.amazonaws.com/bikedeboa/images/936.jpeg"/> </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/920.jpeg"> <img alt="Shopping Total" src="https://s3.amazonaws.com/bikedeboa/images/920.jpeg"/> </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1069.jpeg"> <img alt="Zaffari da Fernando Machado" src="https://s3.amazonaws.com/bikedeboa/images/1069.jpeg"/> </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1000.jpeg"> <img alt="Chalé da Praça" src="https://s3.amazonaws.com/bikedeboa/images/1000.jpeg"/> </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1537.jpeg"> <img alt="Parque da Usina do Gasômetro" src="https://s3.amazonaws.com/bikedeboa/images/1537.jpeg"/> </a>
+                                </div>
+                              </section>
+
+                              <section>
+                                <h2>De Roda</h2>
+
+                                <div>
+                                  <div class="center">
+                                    <img class="guide-type-img" alt="" src="/img/icon_guide_deroda.svg"/>
+                                  </div>
+
+                                  <div>
+                                    <p>
+                                      Pode ter várias formas. o mais comuns são pequenos triângulos ou semi-círculos. A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis. Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.
+                                    </p>
+                                    <p>
+                                      <i>Como prender</i>: a menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div class="guide-img-row">
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1167.jpeg"> <img alt="Confeitaria Bom Gosto" src="https://s3.amazonaws.com/bikedeboa/images/1167.jpeg"/> </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1023.jpeg"> <img alt="Parque Redenção - perto do guarda parques" src="https://s3.amazonaws.com/bikedeboa/images/1023.jpeg"/> </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1532.jpeg"> <img alt="Bar Opinião" src="https://s3.amazonaws.com/bikedeboa/images/1532.jpeg"/> </a>
+                                </div>
+                              </section>
+
+                              <section>
+                                <h2>Trave</h2>
+
+                                <div>
+                                  <div class="center">
+                                    <img class="guide-type-img" alt="" src="/img/icon_guide_trave.svg"/>
+                                  </div>
+
+                                  <div>
+                                    <p>
+                                      Normalmente um poste de luz ou placa de trânsito.
+                                    </p>
+                                    <p>
+                                      Como pender: dá pra prender a bicicleta de várias formas, mas o melhor é prender pelo quadro da bicicleta e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div class="guide-img-row">
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1155.jpeg"> <img alt="Donna Laura" src="https://s3.amazonaws.com/bikedeboa/images/1155.jpeg"/> </a>
+                                </div>
+                              </section>
+
+                              <section>
+                                <h2>Suspenso</h2>
+
+                                <div>
+                                  <div class="center">
+                                    <img class="guide-type-img" alt="" src="/img/icon_guide_suspenso.svg"/>
+                                  </div>
+
+                                  <div>
+                                    <p>
+                                      Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede. Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.
+                                    </p>
+                                    <p>
+                                      <i>Como prender</i>: cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div class="guide-img-row"> 
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1552.jpeg">
+                                    <img alt="Casa de Pelotas" src="https://s3.amazonaws.com/bikedeboa/images/1552.jpeg"/>
+                                  </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1274.jpeg">
+                                    <img alt="Grêmio Náutico Gaúcho" src="https://s3.amazonaws.com/bikedeboa/images/1274.jpeg"/>
+                                  </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://www.bike-palast.com/out/pictures/master/product/2/img_2102.jpg">
+                                    <img alt="cyclehoop.com" src="https://www.bike-palast.com/out/pictures/master/product/2/img_2102.jpg"/>
+                                  </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="http://ameribike.com/wp-content/uploads/2013/04/ultra-space-saver-sq-large.jpg"> <img alt="ameribike.com" src="http://ameribike.com/wp-content/uploads/2013/04/ultra-space-saver-sq-large.jpg"/>
+                                  </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="http://www.cyclehoop.com/wp-content/uploads/2012/11/Semi-Vertical-Shelter2.jpg"> <img alt="cyclehoop.com" src="http://www.cyclehoop.com/wp-content/uploads/2012/11/Semi-Vertical-Shelter2.jpg"/>
+                                  </a>
+                                </div>
+                              </section>
+
+                              <section>
+                                <h2>Grade</h2>
+
+                                <div>
+                                  <div class="center">
+                                    <img class="guide-type-img" alt="" src="/img/icon_guide_grade.svg"/>
+                                  </div>
+
+                                  <div>
+                                    <p>
+                                      Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não. Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda por exemplo. 
+                                    </p>
+                                    <p>
+                                      <i>Como prender</i>: dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade. Prefira sempre prender pelo quadro da bicicleta.
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div class="guide-img-row">
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1239.jpeg">
+                                    <img alt="MM Lanches" src="https://s3.amazonaws.com/bikedeboa/images/1239.jpeg"/> </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1052.jpeg">
+                                    <img alt="Bade Cafés Especiais" src="https://s3.amazonaws.com/bikedeboa/images/1052.jpeg"/> </a>
+                                </div>
+                              </section>
+
+                              <section>
+                                <h2>Outro</h2>
+
+                                <div>
+                                  <div class="center">
+                                    <img class="guide-type-img" alt="" src="/img/icon_guide_outro.svg"/>
+                                  </div>
+
+                                  <div>
+                                    <p>
+                                      Alguns bicicletários são diferentões e não se encaixam em nenhuma categoria. Alguns nem foram feitos pra serem bicicletários de fato. Lembre de verificar a foto e as avaliações de outros usuários, e na hora dê uma boa olhada pra conferir a qualidade da estrutura e se está bem fixado.
+                                    </p>
+                                    <p>
+                                      <i>Como prender</i>: sempre prenda tua bicicleta pelo quadro e o mais próximo possível do objeto.
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div class="guide-img-row">
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/963.jpeg">
+                                    <img alt="Café Bonobo" src="https://s3.amazonaws.com/bikedeboa/images/963.jpeg"/>
+                                  </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1342.jpeg">
+                                    <img alt="Lends Club" src="https://s3.amazonaws.com/bikedeboa/images/1342.jpeg"/>
+                                  </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://farm4.staticflickr.com/3810/13380602893_9a636de5ed_z_d.jpg">
+                                    <img alt="https://www.flickr.com/photos/vastateparksstaff/" src="https://farm4.staticflickr.com/3810/13380602893_9a636de5ed_z_d.jpg"/>
+                                  </a>
+                                  <a href="#" class="unstyled-link" data-featherlight="https://www.dero.com/wp-content/uploads/12017506_10153655293281514_16987265631355852_o1.jpg">
+                                    <img alt="dero.com" src="https://www.dero.com/wp-content/uploads/12017506_10153655293281514_16987265631355852_o1.jpg"/>
+                                  </a>
+                                </div>
+                              </section>
+
+                              <br><br><br><br>
+                              <div class='medium-separator'>...</div>
+
+                              <h2>
+                                Sobre
+                              </h2>
+
+                              <p>
+                                Este guia é baseado no nosso dia-a-dia como ciclistas e nos excelentes materiais que várias cidades do mundo têm produzido com recomendações de profissionais da área.
+                              </p>
+                              <p>
+                                Estas foram algumas de nossas principais referências:
+                              </p>
+
+                              <ul class="guide-references-list">
+                                <li>
+                                  <a href="http://www.uniaodeciclistas.org.br/biblioteca/guia-estacionamentos/">Guia Boas Práticas Bicicletários
+                                  <span class="glyphicon glyphicon-share"></span>
+                                  <span class="references-label">União de Ciclistas do Brasil</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="https://www.sfmta.com/getting-around/bicycling/keep-your-bike-safe">Keep Your Bike Safe (When You're Not There)
+                                  <span class="glyphicon glyphicon-share"></span>
+                                  <span class="references-label">SFMTA - San Francisco Municipal Transportation Agency, São Francisco (EUA)</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="http://content.tfl.gov.uk/Workplace-Cycle-Parking-Guide.pdf">Workplace Cycle Parking Guide
+                                  <span class="glyphicon glyphicon-share"></span>
+                                  <span class="references-label">Transport for London, Inglaterra</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="http://www.bikesense.org/pdfs/bikeparkingmanuals/bicycleparkingguidelinesmay08.pdf">Guidelines for the Design and Management of Bicycle Parking Facilities
+                                  <span class="glyphicon glyphicon-share"></span>
+                                  <span class="references-label">Toronto, Canadá</span>
+                                  </a>
+                                </li> 
+                                <li>
+                                  <a href="https://www1.toronto.ca/city_of_toronto/transportation_services/cycling/files/pdf/bicycle_parking_guide.pdf">A Guide for Business Owners & Cyclists in the City of Toronto
+                                  <span class="glyphicon glyphicon-share"></span>
+                                  <span class="references-label">Toronto, Canadá</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="https://www.dero.com/bike-parking-guide/">Bike Parking Guide
+                                  <span class="glyphicon glyphicon-share"></span>
+                                  <span class="references-label">Dero, Nova Iorque (EUA)</span>
+                                  </a>
+                                </li>
+                              </ul>
+
                             </article>
                         </div>
                     </div>
@@ -731,7 +1006,7 @@
                             <section>
                               <h2>
                                 Tipo de Bicicletário
-                                <span id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></span>
+                                <a id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></a>
                               </h2>
 
                               <div class="custom-radio-group" data-form-step="1">
@@ -790,9 +1065,9 @@
                             <section>
                               <h2>
                                 Acesso
-                                <span id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Público</h2>
+                                <a id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<h2>Público</h2>
                                 <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
-                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span>
+                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a>
                               </h2>
 
                               <div class="acess-types-group" data-form-step="2">
@@ -843,8 +1118,8 @@
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
-            <section class="photo-container {{#if photoUrl}}hasImage loading{{/if}} {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
-              <img alt="" src="{{photoUrl}}"/>
+            <section class="photo-container hasImage loading {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
+              <a href="#" class="unstyled-link" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}"/></a>
             </section>
           {{/if}}
 
@@ -1001,17 +1276,17 @@
                               <img alt="" src="/img/icon_public.svg"/>
                               <div class="icon-label">
                                 Público
-                                <span id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Bicicletário Público</h2>
+                                <a id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Público</h2>
                                 <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
                                 <p>Normalmente está em espaço público, como calçadas ou parques.</p>
-                                <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></span>
+                                <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></a>
                               </div>
                           {{else}}
                               <img alt="" src="/img/icon_private.svg"/>
                               <div class="icon-label">
                                   Privado
-                                  <span id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Bicicletário Privado</h2>
-                                  <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></span> 
+                                  <a id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Privado</h2>
+                                  <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a> 
                               </div> 
                           {{/if}}
                       {{/if}}
@@ -1026,46 +1301,52 @@
                               {{{structureTypeLabel}}}
 
                               {{#ifCond structureTypeCode '===' 'uinvertido'}}
-                                <span id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>U Invertido</h2>
+                                <a id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>U Invertido</h2>
                                 <p>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.</p>
                                 <p>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.</p>
                                 <p>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock.</p>
-                                "></span>
+                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'deroda'}}
-                                <span id="deroda-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>De Roda</h2>
+                                <a id="deroda-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>De Roda</h2>
                                 <p>Pode ter várias formas. O mais comuns são pequenos triângulos ou semi-círculos.</p>
                                 <p>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.</p>
                                 <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.</p>
                                 <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
-                                "></span>
+                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'trave'}}
-                                <span id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Trave</h2>
+                                <a id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Trave</h2>
                                 <p>Normalmente um poste de luz ou placa de trânsito.</p>
                                 <p>Dá pra prender a bicicleta de varias formas, mas o melhor é <b>prender pelo quadro da bicicleta</b> e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.</p>
-                                "></span>
+                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                "></a> 
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'suspenso'}}
-                                <span id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Suspenso</h2>
+                                <a id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Suspenso</h2>
                                 <p>Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede.</p>
                                 <p>Cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.</p>
                                 <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
-                                "></span>
+                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'grade'}}
-                                <span id="grade-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Grade</h2>
+                                <a id="grade-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Grade</h2>
                                 <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não.</p>
                                 <p>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda, por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.</p>
                                 <p>Prefira sempre <b>prender pelo quadro da bicicleta<b>.</p>
-                                "></span>
+                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'other'}}
-                                <span id="other-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Outro</h2>
+                                <a id="other-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Outro</h2>
                                 <p>Um bicicletário diferentão, ou nem é bicicletário de fato.</p>
                                 <p>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.</p>
                                 <p>Sempre prenda tua bicicleta pelo quadro e o mais próximo possível desse objeto.</p>
-                                "></span>
+                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                "></a>
                               {{/ifCond}}  
                           {{else}}
                               {{#if isLoggedUser}}
