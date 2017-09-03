@@ -281,19 +281,24 @@ p {
 
 #logo {
     position: fixed;
-    top: 21px;
+    top: 10px;
     left: 62px;
     text-shadow: 1px 1px 1px white;
     // top: 10px;
     // left: 10px;
     margin: 0;
     padding: 0;
-    color: $green;
-    font-size: 24px;
-    letter-spacing: -0.02em;
-    font-weight: bold;
+    // color: $green;
+    // user-select: none;
+    // font-size: 24px;
+    // letter-spacing: -0.02em;
+    // font-weight: bold;
     // opacity: 0.6;
-    user-select: none;
+
+    img {
+      height: 20px;
+      width: auto;
+    }
 }
 
 .loading {
@@ -672,7 +677,7 @@ a.unstyled-link {
     input {
         width: 100%;
         font-size: 14px;
-        padding: 0 50px 0 60px;
+        padding: 0 $GRID_SPACE 0 60px;
         // font-weight: lighter;
         border-radius: 5px;
         @include shadow(1);
