@@ -645,6 +645,12 @@ a.unstyled-link {
       @include shadow(1);
     }
   }
+
+  &.admin {
+    & > button img {
+      border-color: gold;
+    }
+  }
 }
 
 .logoutBtn {

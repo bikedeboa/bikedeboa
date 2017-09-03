@@ -1142,7 +1142,7 @@
         <!-- View Details Modal -->
         <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
-            <section class="photo-container hasImage loading {{#ifCond isLoggedUser '&&!' photoUrl}} missing-info {{/ifCond}}">
+            <section class="photo-container hasImage loading {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
               <a href="#" class="unstyled-link" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}"/></a>
             </section>
           {{/if}}
@@ -1186,13 +1186,6 @@
 
           <div class="modal-body">
               <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
-                  {{#if temporaryPermission}}
-                    <div class="notice"> 
-                      <!-- <img alt="" src="/img/icon_edit.svg"> -->
-                      <span class="glyphicon glyphicon-time"></span> Você ganhou um dia pra editar o que precisar neste bicicletário.
-                    </div>
-                  {{/if}}
-
                   {{#if title}}
                     <h1 class="view-name">{{title}}</h1>
                   {{else}}
@@ -1290,7 +1283,7 @@
 
               <section class="info">
                   {{#unless noIsPublicData}}
-                      <div class="{{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
+                      <div class="{{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
                         {{#if isPublic}}
                             <img alt="" src="/img/icon_public.svg"/>
                             <div class="icon-label">
@@ -1320,7 +1313,7 @@
                   {{/unless}}
 
                   {{#if structureTypeLabel}}
-                    <div class="{{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
+                    <div class="{{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
                         {{#if structureTypeIcon}}
                             <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                         {{/if}}
@@ -1387,7 +1380,7 @@
 
 
                   {{#unless noIsCoveredData}}
-                    <div class="{{#ifCond isLoggedUser '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                    <div class="{{#ifCond isAdmin '&&' noIsCoveredData}} missing-info {{/ifCond}}">
                       {{#if isCovered}}
                           <img alt="" src="/img/icon_covered.svg"/>
                           <div class="icon-label">
@@ -1401,7 +1394,7 @@
                       {{/if}}
                     </div>
                   {{else}}
-                    {{#if isLoggedUser}}
+                    {{#if isAdmin}}
                       <div>
                         <div class="icon-label">
                             <small>Sem informação sobre cobertura</small>

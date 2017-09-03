@@ -142,14 +142,13 @@ BDB.User = {
   },
 
   checkEditPermission: function (id) {
-    if (id) {
-      if (this.isLoggedIn) {
-        return this.places.find( i => i.id === id );
-      } else {
-        return Cookies.get('bikedeboa_local_' + id);
-      }
+    if (id && this.isLoggedIn) {
+      return this.places.find( i => i.id === id );
+      
+      // Old permission check based on Cookies
+      // return Cookies.get('bikedeboa_local_' + id);
     } else {
-      return;
+      return false;
     }
   },
 

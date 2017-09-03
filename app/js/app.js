@@ -148,12 +148,14 @@ $(() => {
     // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
     if (BDB.User.isAdmin) {
+      templateData.isAdmin = true;
       templateData.canModify = true;
-      templateData.isLoggedUser = true;
-    } else if (BDB.User.checkEditPermission(m.id)) {
-      templateData.canModify = true;
-      templateData.temporaryPermission = true;
+    } else {
+      if (BDB.User.checkEditPermission(m.id)) {
+        templateData.canModify = true;
+      }
     }
+
 
     // Route button 
     templateData.gmapsRedirectUrl = `https://www.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
@@ -2439,6 +2441,9 @@ $(() => {
         $('#userBtn img').attr('src', userInfo.thumbnail);
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
+        if (data.role === 'admin') {
+          $('#userBtn').addClass('admin');
+        }
         
         userInfo.role = data.role;
         userInfo.isNewUser = data.isNewUser;
