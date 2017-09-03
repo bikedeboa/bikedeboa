@@ -1824,7 +1824,7 @@ $(() => {
             Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos <b>dados também são abertos</b>!<br>
             Enquanto trabalhamos em uma forma mais acessível de baixar nossos dados, acesse nossa <a href="https://github.com/dennerevaldt/bikedeboa-api">documentação da API</a> para saber como ter acesso completo a ela se você é desenvolvedor.<br>
             <br>
-            <i>Se você já tem um mapeamento de <b>bicicletários, paraciclos e lugares amigos do ciclista</b> na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
+            <i>Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
           `,
       });
     }));
