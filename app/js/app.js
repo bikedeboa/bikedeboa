@@ -728,7 +728,7 @@ $(() => {
               if (m.isCovered != null) { 
                 attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
               }
-              templateData.attrs = attrs.join(' · ');
+              templateData.attrs = attrs.join(' · '); 
 
               const contentString = templates.infoWindowTemplate(templateData);
 
@@ -1315,14 +1315,14 @@ $(() => {
     // Edit only buttons
     if (openedMarker) {
       $('#cancelEditPlaceBtn').off('click').on('click', () => {
-        hideAllModals(() => {
+        hideAllModals().then(() => {
           openLocal(openedMarker);
         });
       });
 
       $('#editPlacePositionBtn').off('click').on('click', () => {
         // Ask to keep opened marker temporarily
-        hideAllModals(null, true);
+        hideAllModals(true);
         
         map.setCenter({
           lat: parseFloat(openedMarker.lat),
@@ -1409,12 +1409,6 @@ $(() => {
   function openReviewModal(prepopedRating) {
     const m = openedMarker;
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
-
-    if (!previousReview) {
-      console.error(`ERROR couldnt find previous review for ${m.id}`);
-      return;
-    }
-    
     _updatingReview = previousReview;
     const tagsUsed = previousReview.tags;
 
@@ -1473,7 +1467,7 @@ $(() => {
             'delay': {'show': 0, 'hide': 100}
           });
         }
-
+ 
         // Prepopulate rating
         if (previousReview) {
           currentPendingRating = previousReview.rating;
@@ -1682,16 +1676,18 @@ $(() => {
   function setView(title, view, isReplaceState) {
     _currentView = view;
 
-    if (isReplaceState) {
-      History.replaceState({}, title, view);
-    } else {
-      History.pushState({}, title, view);
-    }
+    // hideAllModals().then(() => {
+      if (isReplaceState) {
+        History.replaceState({}, title, view);
+      } else {
+        History.pushState({}, title, view);
+      }
 
-    // Force new pageview for Analytics
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
-    ga('set', 'page', view);
-    ga('send', 'pageview');
+      // Force new pageview for Analytics
+      // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
+      ga('set', 'page', view);
+      ga('send', 'pageview');
+    // });
   }
 
   function goHome() {
@@ -1806,13 +1802,14 @@ $(() => {
       setView('Perguntas frequentes', '/faq', true);
     }));
 
-    $('.open-guide-btn').on('click', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+    $('body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Misc', 'faq opened');
-      setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
+      hideAllModals().then(() => {
+        setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
+      });
     }));
-
-    $('.open-aboutdata-btn').on('click', queueUiCallback.bind(this, () => {
+ 
+    $('body').on('click', '.open-aboutdata-btn', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about data opened');
       
@@ -1984,31 +1981,27 @@ $(() => {
     }));
   }
 
-  function hideAllModals(callback, keepOpenedMarker) {
-    const $visibleModals = $('.modal').filter(':visible');
+  function hideAllModals(keepOpenedMarker) {
+    return new Promise( (resolve, reject) => {
+      const $visibleModals = $('.modal').filter(':visible');
 
-    // @todo explain this hack plz
-    if (!keepOpenedMarker) {
-      openedMarker = null;
-    }
-
-    if ($visibleModals.length > 0) {
-      $visibleModals
-        .one('hidden.bs.modal', () => { 
-          if (callback && typeof callback === 'function') {
-            callback(); 
-          }
-        })
-        .modal('hide');
-    } else {
-      if (callback && typeof callback === 'function') {
-        callback();
+      // @todo explain this hack plz
+      if (!keepOpenedMarker) {
+        openedMarker = null;
       }
-    }
 
-    // Close any sidenavs
-    _hamburgerMenu.hide({dontMessWithState: false});
-    _filterMenu.hide({dontMessWithState: false});
+      if ($visibleModals.length > 0) {
+        $visibleModals
+          .one('hidden.bs.modal', resolve)
+          .modal('hide');
+      } else {
+        resolve();
+      }
+
+      // Close any sidenavs
+      _hamburgerMenu.hide({dontMessWithState: false});
+      _filterMenu.hide({dontMessWithState: false});
+    });
   }
 
   function showBikeLayer() {
@@ -2113,12 +2106,14 @@ $(() => {
 
     // Massage reviews list
     if (templateData.reviews) {
+      templateData.nreviews = templateData.reviews.length;
+
       for(let i=0; i < templateData.reviews.length; i++) {
         let r = templateData.reviews[i];
         
         // Created X days ago
         if (r.createdAt) {
-          r.createdDaysAgo = createdAtToDaysAgo(r.createdAt) 
+          r.createdDaysAgo = createdAtToDaysAgo(r.createdAt);
         }
 
         r.color = getPinColorFromAverage(r.rating);
@@ -2129,11 +2124,13 @@ $(() => {
 
     // Massage places list
     if (templateData.places) {
+      templateData.nplaces = templateData.places.length;
+
       for(let i=0; i < templateData.places.length; i++) {
         let p = templateData.places[i];
         // Created X days ago
         if (p.createdAt) {
-          p.createdDaysAgo = createdAtToDaysAgo(p.createdAt)
+          p.createdDaysAgo = createdAtToDaysAgo(p.createdAt);
         }
       }
       
@@ -2153,8 +2150,8 @@ $(() => {
 
       $('#profileModal').modal('hide').one('hidden.bs.modal', () => {
         openLocal(place);
-      })
-    })
+      });
+    });
 
     // $('#aboutModal').modal('show') ;
     // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });

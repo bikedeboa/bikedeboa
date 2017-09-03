@@ -3357,7 +3357,7 @@ body.modal-open {
   #guideModal {
     .guide-img-row {
       justify-content: left;
-      width: calc(100vw - #{$GRID_SPACE*2});
+      width: calc(100vw - #{$GRID_SPACE});
       overflow: auto;
 
       img {

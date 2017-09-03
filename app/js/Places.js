@@ -23,9 +23,10 @@ BDB.Places = {
       if (res.length > 0) {
         return res[0];
       }
-    } else {
-      console.error('Error on getMarkerById: ID is not valid');
     }
+
+    console.error('Error on getMarkerById: ID is not valid');
+    return null;
   },
 
   getMarkerShareUrl: function (marker) {

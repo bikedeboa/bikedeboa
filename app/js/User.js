@@ -133,7 +133,10 @@ BDB.User = {
 
       for(let i=0; i < placesIds.length; i++) { 
         const id = parseInt(placesIds[i]);
-        this.places.push(BDB.Places.getMarkerById(id));
+        const marker = BDB.Places.getMarkerById(id);
+        if (marker) {
+          this.places.push(marker);
+        }
       }
     }
   },

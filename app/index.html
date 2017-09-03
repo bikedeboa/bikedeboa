@@ -1197,8 +1197,9 @@
                   {{#if title}}
                     <h1 class="view-name">{{title}}</h1>
                   {{else}}
-                    <h1 style="font-style: italic;">Sem título</h1>
+                    <h1 style="font-style: italic;">Sem nome</h1>
                   {{/if}}
+
                   <p class="address">
                       {{address}}
                   </p>
@@ -1289,40 +1290,42 @@
               <hr>
 
               <section class="info">
-                  <div class="{{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
-                      {{#if noIsPublicData}}
-                          {{#if isAdmin}}
+                  {{#unless noIsPublicData}}
+                      <div class="{{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
+                        {{#if isPublic}}
+                            <img alt="" src="/img/icon_public.svg"/>
                             <div class="icon-label">
-                                <small>Sem informação sobre restrição de acesso</small>
+                              Público
+                              <a id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Público</h2>
+                              <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
+                              <p>Normalmente está em espaço público, como calçadas ou parques.</p>
+                              <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></a>
                             </div>
-                          {{/if}}
-                      {{else}}
-                          {{#if isPublic}}
-                              <img alt="" src="/img/icon_public.svg"/>
-                              <div class="icon-label">
-                                Público
-                                <a id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Público</h2>
-                                <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
-                                <p>Normalmente está em espaço público, como calçadas ou parques.</p>
-                                <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></a>
-                              </div>
-                          {{else}}
-                              <img alt="" src="/img/icon_private.svg"/>
-                              <div class="icon-label">
-                                  Privado
-                                  <a id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Privado</h2>
-                                  <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a> 
-                              </div> 
-                          {{/if}}
-                      {{/if}}
-                  </div>
+                        {{else}}
+                            <img alt="" src="/img/icon_private.svg"/>
+                            <div class="icon-label">
+                                Privado
+                                <a id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Privado</h2>
+                                <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a> 
+                            </div> 
+                        {{/if}}
+                      </div>
+                  {{else}}
+                    {{#if isAdmin}}
+                      <div>
+                        <div class="icon-label">
+                          <small>Sem informação sobre restrição de acesso</small>
+                        </div>
+                      </div>
+                    {{/if}}
+                  {{/unless}}
 
-                  <div class="{{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
-                      {{#if structureTypeIcon}}
-                          <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
-                      {{/if}}
-                      <div class="icon-label" id="placeDetails_structureType">
-                          {{#if structureTypeLabel}}
+                  {{#if structureTypeLabel}}
+                    <div class="{{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
+                        {{#if structureTypeIcon}}
+                            <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
+                        {{/if}}
+                        <div class="icon-label" id="placeDetails_structureType">
                               {{{structureTypeLabel}}}
 
                               {{#ifCond structureTypeCode '===' 'uinvertido'}}
@@ -1330,7 +1333,7 @@
                                 <p>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.</p>
                                 <p>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.</p>
                                 <p>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock.</p>
-                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'deroda'}}
@@ -1339,14 +1342,14 @@
                                 <p>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.</p>
                                 <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.</p>
                                 <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
-                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'trave'}}
                                 <a id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Trave</h2>
                                 <p>Normalmente um poste de luz ou placa de trânsito.</p>
                                 <p>Dá pra prender a bicicleta de varias formas, mas o melhor é <b>prender pelo quadro da bicicleta</b> e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.</p>
-                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
                                 "></a> 
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'suspenso'}}
@@ -1354,7 +1357,7 @@
                                 <p>Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede.</p>
                                 <p>Cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.</p>
                                 <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
-                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'grade'}}
@@ -1362,7 +1365,7 @@
                                 <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não.</p>
                                 <p>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda, por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.</p>
                                 <p>Prefira sempre <b>prender pelo quadro da bicicleta<b>.</p>
-                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'other'}}
@@ -1370,38 +1373,43 @@
                                 <p>Um bicicletário diferentão, ou nem é bicicletário de fato.</p>
                                 <p>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.</p>
                                 <p>Sempre prenda tua bicicleta pelo quadro e o mais próximo possível desse objeto.</p>
-                                <p><a href='/guia-de-bicicletarios'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
                                 "></a>
                               {{/ifCond}}  
-                          {{else}}
-                              {{#if isAdmin}}
-                                <small>Sem informação sobre tipo de bicicletário</small>
-                              {{/if}}
-                          {{/if}}
-                      </div>
-                  </div>
-
-                  <div class="{{#ifCond isLoggedUser '&&' noIsCoveredData}} missing-info {{/ifCond}}">
-                      {{#if noIsCoveredData}}
-                          {{#if isLoggedUser}}
-                            <div class="icon-label">
-                                <small>Sem informação sobre cobertura</small>
-                            </div>
-                          {{/if}}
-                      {{else}}
-                          {{#if isCovered}}
-                              <img alt="" src="/img/icon_covered.svg"/>
-                              <div class="icon-label">
-                                Coberto
-                              </div>
-                          {{else}}
-                              <img alt="" src="/img/icon_uncovered.svg"/>
-                              <div class="icon-label">
-                                Não coberto
-                              </div> 
-                          {{/if}}
+                        </div>
+                    </div>
+                  {{else}}
+                    <div>
+                      {{#if isAdmin}}
+                        <small>Sem informação sobre tipo de bicicletário</small>
                       {{/if}}
-                  </div>
+                    </div>
+                  {{/if}}
+
+
+                  {{#unless noIsCoveredData}}
+                    <div class="{{#ifCond isLoggedUser '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                      {{#if isCovered}}
+                          <img alt="" src="/img/icon_covered.svg"/>
+                          <div class="icon-label">
+                            Coberto
+                          </div>
+                      {{else}}
+                          <img alt="" src="/img/icon_uncovered.svg"/>
+                          <div class="icon-label">
+                            Não coberto
+                          </div> 
+                      {{/if}}
+                    </div>
+                  {{else}}
+                    {{#if isLoggedUser}}
+                      <div>
+                        <div class="icon-label">
+                            <small>Sem informação sobre cobertura</small>
+                        </div>
+                      </div>
+                    {{/if}}
+                  {{/unless}}
 
                   <!-- <div>{{numCheckins}}</div> -->
               </section>
@@ -1585,7 +1593,7 @@
 
                             <!-- <hr> -->
 
-                            <h2>Avaliações</h2>
+                            <h2>Avaliações {{#if nreviews}} ({{nreviews}}) {{/if}}</h2>
                             <ul> 
                               {{#each reviews}}
                                 <li>
@@ -1620,7 +1628,7 @@
 
                             <!-- <hr> -->
 
-                            <h2>Bicicletários</h2>
+                            <h2>Bicicletários {{#if nplaces}} ({{nplaces}}) {{/if}}</h2>
                             <ul> 
                               {{#each places}}
                                 <li>
