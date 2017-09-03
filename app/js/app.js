@@ -1412,11 +1412,10 @@ $(() => {
     const m = openedMarker;
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     _updatingReview = previousReview;
-    const tagsUsed = previousReview.tags;
 
     // Tags toggle buttons
     let tagsButtons = tags.map(t => {
-      const isPrepoped = tagsUsed && tagsUsed.find( i => parseInt(i.id) === t.id );
+      const isPrepoped = previousReview && previousReview.tags.find( i => parseInt(i.id) === t.id );
       return `
         <button  
             class="btn btn-tag ${isPrepoped ? 'active' : ''}"
