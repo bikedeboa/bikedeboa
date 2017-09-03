@@ -1910,14 +1910,16 @@ body.modal-open {
 
 
 .info {
-    padding: 0 5%;
+    // padding: 0 5%;
     text-align: center;
+    display: flex;
+    justify-content: space-around;
 
     .skeleton-box,
     img {
         margin: 0 5px;
         display: inline-block;
-        width: 60%;
+        width: 60px;
         max-width: 100px;
         height: auto;
         filter: grayscale(100%);

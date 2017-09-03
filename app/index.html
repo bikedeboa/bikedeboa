@@ -1263,8 +1263,8 @@
 
               <hr>
 
-              <section class="info clearfix">
-                  <div class="col-third {{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
+              <section class="info">
+                  <div class="{{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
                       {{#if noIsPublicData}}
                           {{#if isLoggedUser}}
                             <div class="icon-label">
@@ -1292,7 +1292,7 @@
                       {{/if}}
                   </div>
 
-                  <div class="col-third {{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
+                  <div class="{{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
                       {{#if structureTypeIcon}}
                           <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                       {{/if}}
@@ -1356,7 +1356,7 @@
                       </div>
                   </div>
 
-                  <div class="col-third {{#ifCond isLoggedUser '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                  <div class="{{#ifCond isLoggedUser '&&' noIsCoveredData}} missing-info {{/ifCond}}">
                       {{#if noIsCoveredData}}
                           {{#if isLoggedUser}}
                             <div class="icon-label">

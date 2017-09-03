@@ -182,7 +182,7 @@ $(() => {
     }
     if (m.structureType) {
       templateData.structureTypeCode = m.structureType;
-      templateData.structureTypeLabel = 'Bicicletário ' + STRUCTURE_CODE_TO_NAME[m.structureType];
+      templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
     }
     templateData.structureTypeIcon = structureTypeIcon;
 
