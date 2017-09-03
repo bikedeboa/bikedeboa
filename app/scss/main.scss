@@ -1495,6 +1495,17 @@ body.modal-open {
         }
     }
 
+    .covered-group,
+    .acess-types-group {
+      text-align: center;
+
+      .typeIcon {
+        width: 32%;
+        margin: 0 6%;
+        max-width: 128px;
+      }
+    }
+
     .photo-container:before {
         display: none;
     }
@@ -1688,16 +1699,6 @@ body.modal-open {
         margin-bottom: 10px;
     }
 
-    .acess-types-group {
-      text-align: center;
-
-      .typeIcon {
-        width: 32%;
-        margin: 0 6%;
-        max-width: 128px;
-      }
-    }
-
     .custom-radio-group {
         max-width: 400px;
         margin: 0 auto;
@@ -1722,7 +1723,8 @@ body.modal-open {
           margin-top: $GRID_SPACE;
           color: $gray;
           font-weight: 700;
-          user-select: none;
+          user-select: none; 
+          margin-bottom: 2px;
         }
 
         img {
@@ -1743,7 +1745,8 @@ body.modal-open {
               // Explanation on the reason for the string interpolation:
               //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
               margin-top: calc(#{$GRID_SPACE} - 2px);
-              border: 1px solid;
+              margin-bottom: 0;
+              border: 2px solid;
               border-radius: 25px;
             }
         }
@@ -2088,6 +2091,12 @@ body.modal-open {
 
 .col-half {
     width: 50%;
+    border: none;
+    float: left;
+}
+
+.col-third {
+    width: 33%;
     border: none;
     float: left;
 }

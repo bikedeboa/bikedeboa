@@ -162,6 +162,12 @@ $(() => {
       templateData.noIsPublicData = true;
     }
 
+    if (m.isCovered != null) {
+      templateData.isCovered = m.isCovered === true;
+    } else {
+      templateData.noIsCoveredData = true;
+    }
+
     // Structure type
     let structureTypeIcon;
     switch (m.structureType) {
@@ -752,15 +758,18 @@ $(() => {
                 templateData.numReviews = `${m.reviews} avaliações`;
               }
 
-              // Structure and access types
+              // Attributes
+              const attrs = [];
               if (m.isPublic != null) {
-                templateData.isPublic = m.isPublic === true; 
-              } else {
-                templateData.noIsPublicData = true;
+                attrs.push(m.isPublic ? 'Público' : 'Privado');
               }
               if (m.structureType) {
-                templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+                attrs.push(STRUCTURE_CODE_TO_NAME[m.structureType]);
               }
+              if (m.isCovered != null) { 
+                attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
+              }
+              templateData.attrs = attrs.join(' · ');
 
               const contentString = templates.infoWindowTemplate(templateData);
 
@@ -1030,6 +1039,7 @@ $(() => {
     place.text = $('#newPlaceModal #titleInput').val();
     // place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
     place.isPublic = $('#newPlaceModal .acess-types-group .active').data('value') === 'public';
+    place.isCovered = $('#newPlaceModal .covered-group .active').data('value') === 'covered';
     place.structureType = $('#newPlaceModal .custom-radio-group .active').data('value');
     place.photo = _uploadingPhotoBlob;
     place.description = $('#newPlaceModal #descriptionInput').val();
@@ -1228,6 +1238,7 @@ $(() => {
       textOk &&
       // $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val() &&
       $('#newPlaceModal .acess-types-group .active').data('value') &&
+      $('#newPlaceModal .covered-group .active').data('value') &&
       $('#newPlaceModal .custom-radio-group .active').data('value');
 
     // console.log('validating');
@@ -1266,7 +1277,12 @@ $(() => {
       $('#newPlaceModal #titleInput').val(m.text);
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal .custom-radio-group [data-value="${m.structureType}"]`).addClass('active');
-      $(`#newPlaceModal .acess-types-group [data-value="${m.isPublic ? 'public' : 'private'}"]`).addClass('active');
+      if (m.isPublic != null) {
+        $(`#newPlaceModal .acess-types-group [data-value="${m.isPublic ? 'public' : 'private'}"]`).addClass('active');
+      }
+      if (m.isCovered != null) { 
+        $(`#newPlaceModal .covered-group [data-value="${m.isCovered ? 'covered' : 'uncovered'}"]`).addClass('active');
+      }
       // $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
       $('#newPlaceModal #descriptionInput').val(m.description);
