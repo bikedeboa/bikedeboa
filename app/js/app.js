@@ -15,7 +15,7 @@ $(() => {
       } else if (average >= 3.5) {
         pinColor = 'green';
       } else {
-        pinColor = 'gray';
+        pinColor = 'gray'; 
       }
     } else {
       pinColor = 'gray';
@@ -1822,7 +1822,8 @@ $(() => {
             <i>Se você já tem um mapeamento de <b>bicicletários, paraciclos e lugares amigos do ciclista</b> na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
           `,
       });
-      
+    }));
+
     $('.open-guide-btn').on('click', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'faq opened');
@@ -1926,6 +1927,7 @@ $(() => {
         }
       }
     });
+
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
