@@ -438,7 +438,21 @@
                     <label for="filter_structure_other">Outros</label>
                 </li>
               </ul>
+              
+              <h3>Cobertura</h3>
+
+              <ul>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
+                    <label for="filter_covered">Coberto</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
+                    <label for="filter_uncovered">Não coberto</label>
+                </li>
+              </ul>
             </div>
+
 
             <footer>
               <div id="filter-results-counter-container">
@@ -1050,6 +1064,31 @@
 
                             <section>
                               <h2>
+                                Cobertura
+                                <!-- <a id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<h2>Público</h2>
+                                <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
+                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"> --></a>
+                              </h2>
+
+                              <div class="covered-group" data-form-step="2">
+                                  <div data-value="covered" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_covered.svg"/>
+                                      <div class="icon-label">
+                                        Coberto
+                                      </div>
+                                  </div>
+                                  <div data-value="uncovered" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_uncovered.svg"/>
+                                      <div class="icon-label">
+                                        Não coberto
+                                      </div>
+                                  </div>
+                              </div>
+                            </section> 
+                            </section>
+
+                            <section>
+                              <h2>
                                 Acesso
                                 <a id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<h2>Público</h2>
                                 <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
@@ -1249,8 +1288,8 @@
 
               <hr>
 
-              <section class="info clearfix">
-                  <div class="col-half {{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
+              <section class="info">
+                  <div class="{{#ifCond isLoggedUser '&&' noIsPublicData}} missing-info {{/ifCond}}">
                       {{#if noIsPublicData}}
                           {{#if isAdmin}}
                             <div class="icon-label">
@@ -1277,7 +1316,8 @@
                           {{/if}}
                       {{/if}}
                   </div>
-                  <div class="col-half {{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
+
+                  <div class="{{#ifCond isLoggedUser '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
                       {{#if structureTypeIcon}}
                           <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                       {{/if}}
@@ -1339,6 +1379,28 @@
                               {{/if}}
                           {{/if}}
                       </div>
+                  </div>
+
+                  <div class="{{#ifCond isLoggedUser '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                      {{#if noIsCoveredData}}
+                          {{#if isLoggedUser}}
+                            <div class="icon-label">
+                                <small>Sem informação sobre cobertura</small>
+                            </div>
+                          {{/if}}
+                      {{else}}
+                          {{#if isCovered}}
+                              <img alt="" src="/img/icon_covered.svg"/>
+                              <div class="icon-label">
+                                Coberto
+                              </div>
+                          {{else}}
+                              <img alt="" src="/img/icon_uncovered.svg"/>
+                              <div class="icon-label">
+                                Não coberto
+                              </div> 
+                          {{/if}}
+                      {{/if}}
                   </div>
 
                   <!-- <div>{{numCheckins}}</div> -->
@@ -1459,19 +1521,7 @@
             {{/if}}
 
             <div class="infobox--details">
-              {{#unless noIsPublicData}}
-                  {{#if isPublic}}
-                      Público
-                  {{else}}
-                      Privado
-                  {{/if}}
-              {{/unless}}
-              {{#if structureTypeLabel}}
-                {{#unless noIsPublicData}}
-                 · 
-                {{/unless}}
-                {{{structureTypeLabel}}}
-              {{/if}}
+              {{{attrs}}}
             </div>
 
             <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
