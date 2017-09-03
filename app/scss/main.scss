@@ -2879,15 +2879,15 @@ body.modal-open {
       z-index: 2;
       text-align: left;
       display: flex; 
-      align-items: center;
-      align-content: center;
+      // align-items: center;
+      // align-content: center;
       flex-wrap: wrap;
       color: white;
       border-top-right-radius: 5px;
 
       height: auto;
-      padding: $GRID_SPACE*2;
-      font-size: 16px;
+      padding: $GRID_SPACE*2 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE;
+      // font-size: 16px;
       background: $green;
 
       span {
@@ -2936,8 +2936,8 @@ body.modal-open {
       }
 
       .welcome-message--content {
-        opacity: .9;
-        padding-right: $GRID_SPACE*6;
+        // opacity: .9;
+        // padding-right: $GRID_SPACE*6;
         font-weight: normal;
         font-size: 14px;
       }
@@ -2951,7 +2951,7 @@ body.modal-open {
       // Desktop version
       @media screen and (min-width: $MOBILE_MAX_WIDTH) {
         & {
-          max-width: 600px;
+          max-width: 400px;
           left: 0;
           opacity: 1;
         }

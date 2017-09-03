@@ -2637,7 +2637,7 @@ $(() => {
     });
   }
 
-  function openPromoBanner() {
+  function openPromoBanner() { 
     // setTimeout( () => {
     //   if (_isMobile) {
     //     $('.welcome-message-container').show();  
