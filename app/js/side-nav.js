@@ -79,7 +79,7 @@ class SideNav {
     if (!this.options.fixed) {
       this.sideNavEl.addEventListener('click', this._hide);
     }
-    // this.sideNavContainerEl.addEventListener('click', this.blockClicks);
+    this.sideNavContainerEl.addEventListener('click', this.blockClicks);
 
     this.sideNavEl.addEventListener('touchstart', this.onTouchStart, this.applyPassive());
     this.sideNavEl.addEventListener('touchmove', this.onTouchMove, this.applyPassive());

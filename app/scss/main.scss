@@ -1787,6 +1787,8 @@ body.modal-open {
     .photo-container img {
         // opacity: 0.8;
         object-fit: contain;
+        width: 100%;
+        height: 100%;
     }
 
     .minimap-container {
@@ -1804,7 +1806,7 @@ body.modal-open {
           border-radius: 50%;
           opacity: .8;
           filter: grayscale(100%);
-          @include shadow(1);
+          @include shadow(2);
 
           transition: all 0.2s ease-out;
 
@@ -1812,6 +1814,10 @@ body.modal-open {
             filter: none;
             opacity: 1
           }
+        }
+
+        .minimap {
+          width: 100%;
         }
     }
 
@@ -1864,6 +1870,7 @@ body.modal-open {
             left: auto;
             width: 40px;
             height: 40px;
+            border-radius: 50%;
 
             &:after {
               display: none;
@@ -2696,7 +2703,7 @@ body.modal-open {
 }
 
 #filter-menu {
-  h3:first-child {
+  h3 {
     margin-top: 0;
   }
 
@@ -2792,7 +2799,28 @@ body.modal-open {
 
   #clear-filters-btn {
     opacity: 0;
-    color: $gray;
+    
+    position: absolute;
+    right: 50px;
+    top: 0;
+    width: 56px;
+    height: 56px;
+    font-size: 15px;
+    line-height: 12px;
+    background: 0 0;
+    border: none;
+    color: #333;
+    padding: 0;
+    margin: 0;
+
+    &:after {
+      content: 'Limpar';
+      display: block;
+      font-family: Ubuntu,sans-serif;
+      font-size: 12px;
+      margin-top: 5px;
+      color: gray;
+    }
   }
 
   #filter-results-counter-container {
@@ -2831,14 +2859,14 @@ body.modal-open {
       display: none;
     }
     
-    .side-nav__header {
-      // padding-top: 30px;
-      // padding-bottom: 0;
+    // .side-nav__header {
+    //   // padding-top: 30px;
+    //   // padding-bottom: 0;
 
-      h2 {
-        display: none;
-      }
-    }
+    //   h2 {
+    //     display: none;
+    //   }
+    // }
 
     .side-nav__hide {
       color: black;
@@ -4085,9 +4113,9 @@ body.modal-open {
 }
 
 .header__menu-toggle {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
+    top: 10px;
+    left: 10px;
     width: 48px;
     height: 48px;
     color: white;
@@ -4112,9 +4140,6 @@ body.modal-open {
 
     // Desktop
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
-      position: fixed;
-      top: 10px;
-      left: 10px;
       // &:after {
       //   content: 'menu';
       //   font-size: 9px;
@@ -4282,7 +4307,7 @@ body.modal-open {
 
         img {
           height: 1em;
-          width: 1em;
+          max-width: 1em;
           margin-right: 5px;
         }
       }

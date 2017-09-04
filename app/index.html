@@ -122,9 +122,6 @@
         <div class="confetti-placeholder"></div>
 
         <div id="locationSearch" class="cool-hide cool-hidden">
-            <button class="js-menu-show-hamburger-menu header__menu-toggle">
-              <img src="/img/icon_hamburger.svg">
-            </button>
             <input id="locationQueryInput" type="search">
 
             <button id="clearLocationQueryBtn">
@@ -132,6 +129,10 @@
               <span class="clear-icon">✕</span>
             </button>
         </div>
+
+        <button class="js-menu-show-hamburger-menu header__menu-toggle">
+          <img src="/img/icon_hamburger.svg">
+        </button>
 
         <div id="userBtn" class="dropdown cool-hide cool-hidden">
           <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -350,7 +351,9 @@
 
         <aside id="filter-menu" class="js-side-nav side-nav side-nav-inverted side-nav-fixed">
           <nav class="js-side-nav-container side-nav__container">
-            <button id="clear-filters-btn" class="link-button">Limpar filtros</button>
+            <button id="clear-filters-btn" class="link-button">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
 
             <button class="js-menu-hide side-nav__hide">
               <span class="glyphicon glyphicon-ok"></span>
@@ -359,13 +362,13 @@
             <header class="side-nav__header">
               <h2>Filtrar Bicicletários</h2>
 
-              <div class="setting-checkbox-container">
+              <!-- <div class="setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
                   <label for="show-bike-layer">
                     Mostrar ciclovias e ciclofaixas
                     <a id="ciclovias-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto top" role="button" tabindex="0" data-title="Combinamos dados de várias fontes pra trazer o estado mais atualizado possível das ciclovias, mas mesmo assim pode não estar super de acordo com a realidade. Nos dá um toque se reparar em algo. :)"></a>
                   </label>
-              </div>
+              </div> -->
             </header>
 
             <div class="side-nav__content">

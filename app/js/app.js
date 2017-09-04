@@ -1807,14 +1807,16 @@ $(() => {
       setView('Perguntas frequentes', '/faq', true);
     }));
 
-    $('body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
+    // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
+    $('.js-side-nav-container, body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Misc', 'faq opened');
       hideAll().then(() => {
         setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
       });
     }));
- 
-    $('body').on('click', '.open-aboutdata-btn', queueUiCallback.bind(this, () => {
+
+    // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
+    $('.js-side-nav-container, body').on('click', '.open-aboutdata-btn', queueUiCallback.bind(this, () => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about data opened');
       
