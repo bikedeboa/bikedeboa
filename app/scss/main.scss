@@ -3305,12 +3305,12 @@ body.modal-open {
     }
 
     & > button {
-        img {
-        border: 0;
-        box-shadow: none; 
-        width: 20px; 
-        height: 20px;
-        margin: 15px;
+        .avatar {
+          border: 0;
+          box-shadow: none; 
+          width: 20px; 
+          height: 20px;
+          margin: 15px;
       }
     }
   }
