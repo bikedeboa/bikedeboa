@@ -317,6 +317,7 @@ BDB.Database = {
           for(let i=0; i < reviews.length; i++) {
             reviews[i].placeId = reviews[i].local_id;
             reviews[i].tags = reviews[i].Tags;
+            reviews[i].databaseId = reviews[i].id;
           }
 
           resolve(reviews);
@@ -393,8 +394,6 @@ BDB.Database = {
       }
 
       if (reviews.length > 0) {
-        ga('send', 'event', 'Login', 'import reviews', `${BDB.User.profile.name} imported ${reviews.length} reviews`);
-
         $.ajax({
           type: 'post',
           headers: self._headers,
@@ -413,15 +412,13 @@ BDB.Database = {
     const self = this;
 
     return new Promise((resolve, reject) => {
-      const placesIds = places.map( p => { return {id: p.id}; } );
-
       if (!places || !BDB.User.isLoggedIn) {
         reject();
       }
+      
+      const placesIds = places.map( p => { return {id: p.id}; } );
 
       if (places.length > 0) {
-        ga('send', 'event', 'Login', 'import places', `${BDB.User.profile.name} imported ${places.length} places`);
-
         $.ajax({
           type: 'post',
           headers: self._headers,

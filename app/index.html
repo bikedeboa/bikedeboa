@@ -1577,7 +1577,12 @@
                             {{#if profile}} 
                               <h1>
                                 Oi {{#if profile.picture}}<img alt="" src="{{profile.picture}}">{{/if}} <b>{{profile.name}}</b>
-                              </h1>
+                              </h1> 
+                              {{#if isAdmin}}
+                                <p>
+                                  Uhul! Você é <b>admin</b>.
+                                </p>
+                              {{/if}}
                             {{/if}}
 
                             <p>

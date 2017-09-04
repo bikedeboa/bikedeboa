@@ -1438,16 +1438,11 @@ $(() => {
           <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
               <h2>Dê sua nota</h2>
               <fieldset class="rating">
-                  <input type="radio" id="star5" name="rating" value="5" />
-                  <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
-                  <input type="radio" id="star4" name="rating" value="4" />
-                  <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
-                  <input type="radio" id="star3" name="rating" value="3" />
-                  <label class="full-star" data-value="3" for="star3" title="Médio"></label>
-                  <input type="radio" id="star2" name="rating" value="2" />
-                  <label class="full-star" data-value="2" for="star2" title="Ruim"></label>
-                  <input type="radio" id="star1" name="rating" value="1" />
-                  <label class="full-star" data-value="1" for="star1" title="Horrivel"></label>
+                  <input type="radio" id="star5" name="rating" value="5" /> <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
+                  <input type="radio" id="star4" name="rating" value="4" /> <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
+                  <input type="radio" id="star3" name="rating" value="3" /> <label class="full-star" data-value="3" for="star3" title="Médio"></label>
+                  <input type="radio" id="star2" name="rating" value="2" /> <label class="full-star" data-value="2" for="star2" title="Ruim"></label>
+                  <input type="radio" id="star1" name="rating" value="1" /> <label class="full-star" data-value="1" for="star1" title="Horrivel"></label>
               </fieldset>
           </div>
         </section>
@@ -1464,6 +1459,7 @@ $(() => {
       confirmButtonText: "Enviar",
       confirmButtonClass: 'btn green sendReviewBtn',
       showCloseButton: true,
+      showLoaderOnConfirm: true,
       onOpen: () => {
         if(!_isTouchDevice) {
           $('.review-modal .full-star').tooltip({
@@ -1493,9 +1489,38 @@ $(() => {
         });
 
         validateReviewForm();
+      },
+      preConfirm: sendReviewBtnCB
+    }).then( () => {
+      // hideSpinner();
+      if (_updatingReview) {
+        ga('send', 'event', 'Review', 'update', ''+m.id, parseInt(currentPendingRating));
+
+        toastr['success']('Avaliação atualizada.'); 
+      } else {
+        ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
+
+        $('body').addClass('already-reviewed');
+
+        swal({ 
+          title: 'Valeu!',
+          html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
+          type: 'success',
+          onOpen: () => {
+            startConfettis();
+          },
+          onClose: () => {
+            stopConfettis();
+            promptInstallPopup();
+          } 
+        });
       }
-    }).then(() => {
-      sendReviewBtnCB();
+
+      // Update marker data
+      Database.getPlaceDetails(m.id, () => {
+        updateMarkers();
+        openDetailsModal(m);
+      });
     });
   }
 
@@ -1530,77 +1555,40 @@ $(() => {
   }
 
   function sendReviewBtnCB() {
-    const m = openedMarker;
+    return new Promise(function (resolve, reject) {
+      const m = openedMarker;
 
-    const activeTagBtns = $('.review-modal .tagsContainer .btn.active');
-    let reviewTags = [];
-    for(let i=0; i<activeTagBtns.length; i++) {
-      reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
-    }
+      const activeTagBtns = $('.review-modal .tagsContainer .btn.active');
+      let reviewTags = [];
+      for(let i=0; i<activeTagBtns.length; i++) {
+        reviewTags.push( {id: ''+activeTagBtns.eq(i).data('value')} );
+      }
 
-    showSpinner();
+      // showSpinner();
 
-    const reviewObj = {
-      placeId: m.id,
-      rating: currentPendingRating,
-      tags: reviewTags
-    };
+      const reviewObj = {
+        placeId: m.id,
+        rating: currentPendingRating,
+        tags: reviewTags
+      };
 
-    const callback = () => {
-      Database.sendReview(reviewObj, (reviewId) => {
-        // Update internal state
-        BDB.User.saveReview(reviewObj);
+      const callback = () => {
+        Database.sendReview(reviewObj, reviewId => {
+          reviewObj.databaseId = reviewId;
+          BDB.User.saveReview(reviewObj);
 
-        // Update screen state
-        // $('.review-modal').modal('hide');
-        // $('#placeDetailsModal').modal('hide');
-        // goHome();
-
-        hideSpinner();
-        
-        if (_updatingReview) {
-          ga('send', 'event', 'Review', 'update', ''+m.id, parseInt(currentPendingRating));
-
-          swal({ 
-            title: 'Valeu!',
-            html: 'Sua avaliação foi atualizada.',
-            type: 'success'
-          });
-        } else {
-          ga('send', 'event', 'Review', 'create', ''+m.id, parseInt(currentPendingRating));
-
-          $('body').addClass('already-reviewed');
-
-          swal({ 
-            title: 'Valeu!',
-            html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
-            type: 'success',
-            onOpen: () => {
-              startConfettis();
-            },
-            onClose: () => {
-              stopConfettis();
-
-              promptInstallPopup();
-            } 
-          });
-        }
-
-        // Update marker data
-        Database.getPlaceDetails(m.id, () => {
-          updateMarkers();
-          openDetailsModal(m, callback);
+          resolve();
         });
-      });
-    }; 
+      }; 
 
-    const previousReview = BDB.User.getReviewByPlaceId(m.id);
-    if (previousReview) {
-      // Delete previous
-      Database.deleteReview(previousReview.id, callback);
-    } else {
-      callback();
-    }
+      const previousReview = BDB.User.getReviewByPlaceId(m.id);
+      if (previousReview) {
+        // Delete previous
+        Database.deleteReview(previousReview.databaseId, callback);
+      } else {
+        callback();
+      }
+    });
   }
 
   function openRevisionDialog() {
@@ -2119,6 +2107,7 @@ $(() => {
 
     let templateData = {};
     templateData.profile = BDB.User.profile;
+    templateData.isAdmin = BDB.User.isAdmin;
     templateData.reviews = BDB.User.reviews;
     templateData.places = BDB.User.places;
 
@@ -2459,10 +2448,14 @@ $(() => {
         $('.loginBtn').hide();
         if (data.role === 'admin') {
           $('#userBtn').addClass('admin');
+          userInfo.isAdmin = true;
+        } else {
+          userInfo.isAdmin = false;
         }
         
         userInfo.role = data.role;
         userInfo.isNewUser = data.isNewUser;
+        
         BDB.User.login(userInfo);
       }).catch( error => {
         console.error('Error on social login', error); 
@@ -2476,6 +2469,7 @@ $(() => {
 
     // UI
     $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
+    $('#userBtn').removeClass('admin');
     $('.logoutBtn').hide();
     $('.loginBtn').show();
   }

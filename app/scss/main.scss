@@ -301,7 +301,8 @@ p {
     }
 }
 
-.loading {
+.loading,
+.featherlight-loading {
     opacity: 0.8;
 
     // Thanks https://stephanwagner.me/only-css-loading-spinner
@@ -658,8 +659,9 @@ a.unstyled-link {
   }
 
   &.admin {
-    & > button img {
+    .avatar {
       border-color: gold;
+      box-shadow: 0 0px 5px gold;
     }
   }
 }
@@ -694,7 +696,7 @@ a.unstyled-link {
     input {
         width: 100%;
         font-size: 14px;
-        padding: 0 $GRID_SPACE 0 60px;
+        padding: 0 $GRID_SPACE 0 50px;
         // font-weight: lighter;
         border-radius: 5px;
         @include shadow(1);
@@ -1698,7 +1700,8 @@ body.modal-open {
 
     &.hasImage { 
         // height: 180px;
-        height: 60vh;
+        max-height: 60vh;
+        height: auto;
         // min-height: 170px;
         // max-height: 170px;
 
@@ -4346,7 +4349,7 @@ body.modal-open {
   }
 }
 
-// Sweet Alert 2 Customization
+// Sweet Alert 2 Customizations
 .swal2-modal {
   padding-left: 5%;
   padding-right: 5%; 
@@ -4401,11 +4404,13 @@ body.modal-open {
   }
 }
 
+// toastr.js Customizations
 #toast-container {
   & > div {
     font-family: $bodyFont;
-    opacity: 0.9;
+    opacity: 0.95;
     padding: $GRID_SPACE*2 $GRID_SPACE*2 $GRID_SPACE*2 50px; 
+    font-weight: bold;
   }
 
   & > .toast-success {

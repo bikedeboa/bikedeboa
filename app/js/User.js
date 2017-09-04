@@ -21,7 +21,7 @@ BDB.User = {
     this.fetchPlaces();
   },
 
-  login: function (socialProfile) {
+  login: function (userInfo) {
     const self = this;
 
     if (this.isLoggedIn) {
@@ -30,16 +30,16 @@ BDB.User = {
     }
 
     this.isLoggedIn = true;
-    this.profile = socialProfile;
-    this.isAdmin = this.profile === 'admin';
+    this.profile = userInfo;
+    this.isAdmin = userInfo.isAdmin;
 
-    const reviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
-    const places = this.places && this.places.length > 0 ? this.places : null;
-    const reviewsStr = reviews ? `<b>${reviews.length} avaliações</b>` : ''; 
-    const placesStr = places ? `<b>${places.length} bicicletários</b>` : ''; 
+    const prevReviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
+    const prevPlaces = this.places && this.places.length > 0 ? this.places : null;
+    const reviewsStr = prevReviews ? `<b>${prevReviews.length} avaliações</b>` : ''; 
+    const placesStr = prevPlaces ? `<b>${prevPlaces.length} bicicletários</b>` : ''; 
     const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
     let message, title;
-    if (socialProfile.isNewUser) { 
+    if (userInfo.isNewUser) { 
       title = 'Bem-vindo(a)!';
       message = `Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir! Deseja salvá-los no histórico do seu perfil?`;
     } else {
@@ -47,7 +47,7 @@ BDB.User = {
       message = `Você tinha criado ${dynamicStr} enquanto não estava logado. Deseja salvá-los no histórico do seu perfil?`;
     }
  
-    if (reviews || places) {
+    if (prevReviews || prevPlaces) {
       swal({
         title: title,
         html: message,
@@ -55,24 +55,45 @@ BDB.User = {
         showCancelButton: true,
         confirmButtonText: 'Sim',
         cancelButtonText: 'Não, apagar histórico',
-      }).then(function () {
-        BDB.Database.importUserPlaces(places).then(() => {
-          toastr['success'](`${places.length} bicicletários salvos.`, '');
-          self._deletePlacesFromCookies();
-          self.fetchPlaces();
+      })
+        .then(() => {
+          if (prevPlaces) {
+            BDB.Database.importUserPlaces(prevPlaces)
+              .then(() => {
+                ga('send', 'event', 'Login', 'import places', `${this.profile.name} imported ${prevPlaces.length} places`);
+                
+                toastr['success'](`${prevPlaces.length} bicicletários salvos.`, '');
 
-          BDB.Database.importUserReviews(reviews).then(() => {
-            toastr['success'](`${reviews.length} avaliações salvas.`, '');
-            self._deleteReviewsFromCookies();
-            self.fetchReviews();
-          });
+                self._deletePlacesFromCookies();
+                self.fetchPlaces();
+              }).catch( err => {
+                ga('send', 'event', 'Login', 'import places FAIL', `${this.profile.name} failed to import ${prevPlaces.length} places`);
+
+                toastr.warning('Alguma coisa deu errado e não foi possível importar seus bicicletários agora :/ Tente novamente mais tarde.')
+              });
+          }
+
+          if (prevReviews) {
+            BDB.Database.importUserReviews(prevReviews)
+              .then(() => {
+                ga('send', 'event', 'Login', 'import reviews', `${this.profile.name} imported ${prevReviews.length} reviews`);
+                
+                toastr['success'](`${prevReviews.length} avaliações salvas.`, '');
+
+                self._deleteReviewsFromCookies();
+                self.fetchReviews();
+              }).catch( err => {
+                ga('send', 'event', 'Login', 'import reviews FAIL', `${this.profile.name} failed to import ${prevReviews.length} reviews`);
+
+                toastr.warning('Alguma coisa deu errado e não foi possível importar suas avaliações agora :/ Tente novamente mais tarde.')
+              });
+          }
+        }).catch(dismiss => {
+          if (dismiss === 'cancel') {
+            self._deletePlacesFromCookies();
+            self._deleteReviewsFromCookies(); 
+          }
         });
-      }).catch(dismiss => {
-        if (dismiss === 'cancel') {
-          self._deletePlacesFromCookies();
-          self._deleteReviewsFromCookies(); 
-        }
-      });
     }
     
     this.fetchReviews();
@@ -153,35 +174,36 @@ BDB.User = {
   },
 
   getReviewByPlaceId: function (placeId) {
-    if (!this.reviews) {
-      return;
-    } else {
+    if (this.reviews) {
       return this.reviews.find( i => i.placeId === placeId );
+    } else {
+      return;
     }
   },
 
   _saveReviewToCookie: function (reviewObj) {
     const reviews = this.reviews;
 
-    // Search for previously entered review
-    let review;
+    // Search for previously saved review
+    let prevReview;
     if (reviews && reviews.length > 0) {
-      review = reviews.find( i => i.placeId === reviewObj.placeId );
+      prevReview = reviews.find( i => i.placeId === reviewObj.placeId );
     }
  
-    if (review) {
-      // Update current review
-      review.placeId = reviewObj.placeId;
-      review.rating = reviewObj.rating;
-      review.tags = reviewObj.tags;
-      review.id = reviewObj.id; 
+    if (prevReview) {
+      // Update prevReview cookie
+      prevReview.placeId = reviewObj.placeId;
+      prevReview.rating = reviewObj.rating;
+      prevReview.tags = reviewObj.tags;
+      prevReview.id = reviewObj.id;
+      prevReview.databaseId = reviewObj.databaseId;
     } else {
       // Push a new one
       reviews.push({
         placeId: reviewObj.placeId,
         rating: reviewObj.rating,
         tags: reviewObj.tags,
-        id: reviewObj.id
+        databaseId: reviewObj.databaseId
       });
     }
 
