@@ -44,7 +44,7 @@ $(() => {
           <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
           <button class="share-email-btn">
             <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
-              <span class="glyphicon glyphicon-envelope"></span><span class="share-email-label unstyled-link">Email</span> 
+              <img src="/img/icon_mail.svg" class="icon-mail"/><span class="share-email-label unstyled-link">Email</span> 
             </a>
           </button>
         </div>
@@ -1615,7 +1615,7 @@ $(() => {
 
         <p class="disclaimer">
           Para qualquer comentário sobre o site em geral, lembre que estamos sempre de olho no 
-          <a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> 
+          <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> 
           email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
         </p>`,
       confirmButtonText: "Enviar",
@@ -1814,15 +1814,17 @@ $(() => {
       _hamburgerMenu.hide();
       ga('send', 'event', 'Misc', 'about data opened');
       
-      swal('Dados', '', 'info');
       swal({
         title: 'Dados',
+        customClass: 'share-modal',
         html:
-          ` <br>
-            Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos <b>dados também são abertos</b>!<br>
-            Enquanto trabalhamos em uma forma mais acessível de baixar nossos dados, acesse nossa <a href="https://github.com/dennerevaldt/bikedeboa-api">documentação da API</a> para saber como ter acesso completo a ela se você é desenvolvedor.<br>
-            <br>
-            <i>Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
+          ` <div style="text-align: left;">
+              <br> 
+              Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos dados também são abertos!<br>
+              Enquanto trabalhamos em uma forma mais acessível de baixar nossos dados, acesse nossa <a href="https://github.com/dennerevaldt/bikedeboa-api">documentação da API</a> para saber como ter acesso completo a ela se você é desenvolvedor.<br>
+              <br>
+              <i>Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
+            </div>
           `,
       });
     }));
@@ -1835,7 +1837,7 @@ $(() => {
       swal({
         title: 'Contato',
         html:
-          `<a href="mailto:bikedeboa@gmail.com"><span class="glyphicon glyphicon-envelope"></span> bikedeboa@gmail.com</a>`,
+          `<a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com</a>`,
       });
     }));
 
@@ -2437,7 +2439,7 @@ $(() => {
 
         // UI
         $('#userBtn').removeClass('loading');
-        $('#userBtn img').attr('src', userInfo.thumbnail);
+        $('#userBtn .avatar').attr('src', userInfo.thumbnail);
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         if (data.role === 'admin') {
