@@ -1415,7 +1415,11 @@ $(() => {
 
     // Tags toggle buttons
     let tagsButtons = tags.map(t => {
-      const isPrepoped = previousReview && previousReview.tags.find( i => parseInt(i.id) === t.id );
+      let isPrepoped = false;
+      if (previousReview && previousReview.tags && previousReview.tags.length > 0) {
+        isPrepoped = previousReview.tags.find( i => parseInt(i.id) === t.id );
+      }
+
       return `
         <button  
             class="btn btn-tag ${isPrepoped ? 'active' : ''}"
@@ -2460,7 +2464,7 @@ $(() => {
     BDB.User.logout();
 
     // UI
-    $('#userBtn img').attr('src', '/img/icon_user_big.svg');
+    $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
     $('.logoutBtn').hide();
     $('.loginBtn').show();
   }

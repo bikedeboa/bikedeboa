@@ -1696,13 +1696,14 @@ body.modal-open {
       border-bottom-right-radius: 0;
     }
 
-    &.hasImage {
+    &.hasImage { 
         // height: 180px;
         height: 60vh;
         // min-height: 170px;
         // max-height: 170px;
 
         & img {
+            width: 100%;
             object-fit: cover;
             // object-fit: contain;
         }
@@ -2115,7 +2116,7 @@ body.modal-open {
     img {
         margin: 0 5px;
         display: inline-block;
-        width: 60px;
+        width: 80px;
         max-width: 100px;
         height: auto;
         filter: grayscale(100%);
@@ -3385,6 +3386,12 @@ body.modal-open {
   .review-modal {
     p.small {
       display: none;
+    }
+  }
+
+  .info {
+    img {
+      width: 60px;
     }
   }
 

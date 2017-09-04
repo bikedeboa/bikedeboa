@@ -316,6 +316,7 @@ BDB.Database = {
 
           for(let i=0; i < reviews.length; i++) {
             reviews[i].placeId = reviews[i].local_id;
+            reviews[i].tags = reviews[i].Tags;
           }
 
           resolve(reviews);
