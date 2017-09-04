@@ -2636,12 +2636,14 @@ $(() => {
         facebook: FACEBOOK_CLIENT_ID,
         google: GOOGLE_CLIENT_ID, 
         // windows: WINDOWS_CLIENT_ID,
+    },{
+      redirect_uri: window.location.origin
     });
     hello.on('auth.login', auth => {
       onSocialLogin(auth);
     });
     hello.on('auth.logout', () => {
-      onSocialLogout();
+      onSocialLogout(); 
     });
 
     initHelpTooltip('#filter-menu .help-tooltip-trigger');
