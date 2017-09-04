@@ -1028,7 +1028,7 @@ $(() => {
         } else { 
           swal({
             title: 'Bicicletário criado',
-            text: 'Valeu! Tua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
+            text: 'Valeu! Sua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
             type: 'success',
             allowOutsideClick: false, // because this wouldnt trigger the callback @todo
             allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
@@ -1563,7 +1563,7 @@ $(() => {
 
           swal({ 
             title: 'Valeu!',
-            html: 'Tua avaliação foi atualizada.',
+            html: 'Sua avaliação foi atualizada.',
             type: 'success'
           });
         } else {
@@ -1573,7 +1573,7 @@ $(() => {
 
           swal({ 
             title: 'Valeu!',
-            html: 'Tua avaliação é muito importante! Juntos construímos a cidade que queremos.',
+            html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
             type: 'success',
             onOpen: () => {
               startConfettis();
@@ -1827,7 +1827,7 @@ $(() => {
               Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos dados também são abertos!<br>
               Enquanto trabalhamos em uma forma mais acessível de baixar nossos dados, acesse nossa <a href="https://github.com/dennerevaldt/bikedeboa-api">documentação da API</a> para saber como ter acesso completo a ela se você é desenvolvedor.<br>
               <br>
-              <i>Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for teu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
+              <i>Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for seu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
             </div>
           `,
       });
