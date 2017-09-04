@@ -1317,14 +1317,14 @@ $(() => {
     // Edit only buttons
     if (openedMarker) {
       $('#cancelEditPlaceBtn').off('click').on('click', () => {
-        hideAllModals().then(() => {
+        hideAll().then(() => {
           openLocal(openedMarker);
         });
       });
 
       $('#editPlacePositionBtn').off('click').on('click', () => {
         // Ask to keep opened marker temporarily
-        hideAllModals(true);
+        hideAll(true);
         
         map.setCenter({
           lat: parseFloat(openedMarker.lat),
@@ -1681,7 +1681,7 @@ $(() => {
   function setView(title, view, isReplaceState) {
     _currentView = view;
 
-    // hideAllModals().then(() => {
+    // hideAll().then(() => {
       if (isReplaceState) {
         History.replaceState({}, title, view);
       } else {
@@ -1809,7 +1809,7 @@ $(() => {
 
     $('body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Misc', 'faq opened');
-      hideAllModals().then(() => {
+      hideAll().then(() => {
         setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
       });
     }));
@@ -1960,6 +1960,11 @@ $(() => {
         $('body').removeClass('clean-modal-open');
       }
     }); 
+
+    // Any click to a lightbox picture
+    // $('body').on('click', '[data-featherlight]', e => {
+    //   setView('Foto', 'foto');
+    // }); 
     
     // Location Search Mode control
     // $('#locationQueryInput').on('focus', e => { 
@@ -1988,15 +1993,23 @@ $(() => {
     }));
   }
 
-  function hideAllModals(keepOpenedMarker) {
+  function hideAll(keepOpenedMarker) {
     return new Promise( (resolve, reject) => {
-      const $visibleModals = $('.modal').filter(':visible');
+      // Close any sidenavs
+      _hamburgerMenu.hide({dontMessWithState: false});
+      _filterMenu.hide({dontMessWithState: false});
+
+      const openLightbox = $.featherlight.current();
+      if (openLightbox) {
+        openLightbox.close();
+      }
 
       // @todo explain this hack plz
       if (!keepOpenedMarker) {
         openedMarker = null;
       }
 
+      const $visibleModals = $('.modal').filter(':visible');
       if ($visibleModals.length > 0) {
         $visibleModals
           .one('hidden.bs.modal', resolve)
@@ -2004,10 +2017,6 @@ $(() => {
       } else {
         resolve();
       }
-
-      // Close any sidenavs
-      _hamburgerMenu.hide({dontMessWithState: false});
-      _filterMenu.hide({dontMessWithState: false});
     });
   }
 
@@ -2207,7 +2216,7 @@ $(() => {
       break;
     // case 'nav':
     // case 'filtros':
-    //   hideAllModals();
+    //   hideAll();
     default:
       match = false;
       break;
@@ -2547,7 +2556,7 @@ $(() => {
           _isDeeplink = false;
         }
 
-        hideAllModals();
+        hideAll();
       } else {
         handleRouting();
       }
