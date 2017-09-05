@@ -1193,10 +1193,10 @@ $(() => {
       }
     });
 
-    templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
-    templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
-    templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
-    templates.profileModalTemplate = Handlebars.compile($('#profileModalTemplate').html());
+    // templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
+    // templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
+    // templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
+    // templates.profileModalTemplate = Handlebars.compile($('#profileModalTemplate').html());
   }
 
   function validateNewPlaceForm() {
@@ -1752,12 +1752,12 @@ $(() => {
     });
 
     $('.openProfileBtn').on('click', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+      hideAll();
       setView('Histórico', '/historico', true);
     }));
  
     $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+      hideAll();
       // setView('Login Administrador', '/login', true);
       // login(true);
 
@@ -1765,35 +1765,37 @@ $(() => {
     }));
     
     $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+      hideAll();
       ga('send', 'event', 'Misc', 'about opened');
       setView('Sobre', '/sobre', true);
     }));
 
     $('body').on('click', '.facebookLoginBtn', () => {
-      _hamburgerMenu.hide();
+      hideAll();
       hello('facebook').login({scope: 'email'});
     }); 
 
     $('body').on('click', '.googleLoginBtn', () => {
-      _hamburgerMenu.hide();
+      hideAll();
       hello('google').login({scope: 'email'}); 
     });
 
     $('body').on('click', '.logoutBtn', () => { 
-      _hamburgerMenu.hide();
+      hideAll();
       hello.logout('facebook');
       hello.logout('google');
     }); 
 
     $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+      hideAll();
+
       ga('send', 'event', 'Misc', 'how-to-install opened');
       setView('Como instalar o app', '/como-instalar', true);
     }));
 
     $('.open-faq-btn').on('click', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+      hideAll();
+
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Perguntas frequentes', '/faq', true);
     }));
@@ -1808,7 +1810,8 @@ $(() => {
 
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-aboutdata-btn', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+      hideAll();
+
       ga('send', 'event', 'Misc', 'about data opened');
       
       swal({
@@ -1827,7 +1830,8 @@ $(() => {
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
-      _hamburgerMenu.hide();
+      hideAll();
+
       ga('send', 'event', 'Misc', 'contact opened');
       
       swal('Contato', '', 'info');
@@ -1989,8 +1993,10 @@ $(() => {
   function hideAll(keepOpenedMarker) {
     return new Promise( (resolve, reject) => {
       // Close any sidenavs
-      _hamburgerMenu.hide({dontMessWithState: false});
-      _filterMenu.hide({dontMessWithState: false});
+      if (_hamburgerMenu && _filterMenu) {
+        _hamburgerMenu.hide({dontMessWithState: false});
+        _filterMenu.hide({dontMessWithState: false});
+      }
 
       const openLightbox = $.featherlight.current();
       if (openLightbox) {
@@ -2468,6 +2474,8 @@ $(() => {
         userInfo.isNewUser = data.isNewUser;
         
         BDB.User.login(userInfo);
+
+        document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {
         console.error('Error on social login', error); 
         swal('Ops', 'Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!', 'warning');
@@ -2484,6 +2492,8 @@ $(() => {
     $('.logoutBtn').hide();
     $('.loginBtn').show();
     $('.openProfileBtn, .openProfileDivider').hide();
+
+    document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -2633,20 +2643,24 @@ $(() => {
       // @todo explain me
       setView('bike de boa', '/', true);
     };
-    _hamburgerMenu = new SideNav(
-      'hamburger-menu',
-      {
-        hideCallback: sidenavHideCallback
-      }
-    );
-    _filterMenu = new SideNav(
-      'filter-menu',
-      {
-        inverted: true,
-        hideCallback: sidenavHideCallback
-        /*fixed: true*/
-      }
-    );
+    try {
+      _hamburgerMenu = new SideNav(
+        'hamburger-menu',
+        {
+          hideCallback: sidenavHideCallback
+        }
+      );
+      _filterMenu = new SideNav(
+        'filter-menu',
+        {
+          inverted: true,
+          hideCallback: sidenavHideCallback
+          /*fixed: true*/
+        }
+      );
+    } catch (err) {
+      _hamburgerMenu = _filterMenu = null;
+    };
 
     // Hello.js
     hello.init({
