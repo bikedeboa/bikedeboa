@@ -2167,7 +2167,12 @@ $(() => {
   function openGuideModal() {
     $('#guideModal').modal('show');
     $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-  }
+
+    // Lazy load gifs when modal is shown
+    $('#guideModal .guide-img-row img').each( (i, v) => {
+      $(v).attr('src', $(v).data('src'));
+    });
+  } 
 
   function openAboutModal() {
     $('#aboutModal').modal('show');
