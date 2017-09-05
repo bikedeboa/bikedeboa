@@ -376,7 +376,6 @@
             <div class="side-nav__content">
 
               <h3>Avaliações</h3>
-
               <ul>
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
@@ -399,22 +398,20 @@
               <hr>
 
               <h3>Cobertura</h3>
-                <ul>
-                  <li>
-                      <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
-                      <label for="filter_covered">Coberto</label>
-                  </li>
-                  <li>
-                      <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
-                      <label for="filter_uncovered">Não coberto</label>
-                  </li>
-                </ul>
-              </div>
+              <ul>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
+                    <label for="filter_covered">Coberto</label>
+                </li>
+                <li>
+                    <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
+                    <label for="filter_uncovered">Não coberto</label>
+                </li>
+              </ul>
 
               <hr>
-
+              
               <h3>Acesso</h3>
-
               <ul>
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
@@ -429,7 +426,6 @@
               <hr>
 
               <h3>Tipos de Bicicletário</h3>
-
               <ul>
                 <li>
                     <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
@@ -456,7 +452,7 @@
                     <label for="filter_structure_other">Outros</label>
                 </li>
               </ul>
-
+            </div>
 
             <footer>
               <div id="filter-results-counter-container">
@@ -1331,7 +1327,7 @@
                       </div>
                     {{/if}}
                   {{/unless}}
-                  
+
                   {{#unless noIsPublicData}}
                       <div class="{{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
                         {{#if isPublic}}
