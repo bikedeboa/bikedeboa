@@ -41,7 +41,10 @@ BDB.User = {
     let message, title;
     if (userInfo.isNewUser) { 
       title = 'Bem-vindo(a)!';
-      message = `Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir! Deseja salvá-los no histórico do seu perfil?`;
+      message = `
+        Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir!<br>
+        Deseja salvá-los no histórico do seu perfil?
+      `;
     } else {
       title = 'Oi de novo!';
       message = `Você tinha criado ${dynamicStr} enquanto não estava logado. Deseja salvá-los no histórico do seu perfil?`;

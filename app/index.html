@@ -1601,7 +1601,7 @@
                           <div class="modal-body">
                             {{#if profile}} 
                               <h1>
-                                Oi {{#if profile.picture}}<img alt="" src="{{profile.picture}}">{{/if}} <b>{{profile.name}}</b>
+                                {{#if profile.picture}} Oi <img alt="" src="{{profile.picture}}">{{/if}} <b>{{profile.first_name}}</b> :)
                               </h1> 
                               {{#if isAdmin}}
                                 <p>
