@@ -51,6 +51,8 @@ const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CO
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+const FACEBOOK_CLIENT_ID = '<FACEBOOK_CLIENT_ID>';
+const GOOGLE_CLIENT_ID = '<GOOGLE_CLIENT_ID>';
 
 const MOBILE_MAX_WIDTH = '430px'; 
 const DESKTOP_MIN_WIDTH = '430px';
@@ -71,7 +73,7 @@ let isDemoMode = false;//
 //                     //
 //                     //
 /////////////////////////
-
+ 
 
 let _portoAlegrePos = {lat: -30.0346, lng: -51.2177};
 let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
@@ -92,7 +94,7 @@ let openedMarker;
 let newMarkerTemp = {};
 let currentPendingRating;
 let _uploadingPhotoBlob;
-let loggedUser;
+// let loggedUser;
 let _searchResultMarker;
 let _abortedDetailsRequest;
 let _positionWatcher;
@@ -110,6 +112,7 @@ let _currentView;
 let _isDeeplink = false;
 let _deeplinkMarker;
 let _onDataReadyCallback;
+let _socialToken;
 let _centerChangedTimeout;
 let _deferredPWAPrompt;
 

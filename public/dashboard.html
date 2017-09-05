@@ -5,10 +5,6 @@
         <meta charset="UTF-8">
         <title>admin</title>
 
-        <!-- CSS -->
-        <link rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
-        <!-- <link rel="stylesheet" type="text/css" href="/css/main.css"/> -->
-
         <!-- Google Fonts (async) -->
         <link async href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
         <link async href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -16,8 +12,7 @@
         <!-- Google Maps API -->
         <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script> -->
 
-        <!-- JS -->
-       <!-- CSS (async) -->
+        <!-- CSS (async) -->
         <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
         <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
 
@@ -28,6 +23,7 @@
         <script src="/js/lib/js.cookie.js"></script>
         <script src="/js/lib/native.history.js"></script>
         <script src="/js/lib/sweetalert2.js"></script>
+        <script src="/js/lib/hello.all.js"></script>
         <script src="/js/lib/toastr.js"></script> 
         <script src="/js/lib/velocity.js"></script> 
         <script src="/js/lib/velocity.ui.js"></script>
@@ -472,7 +468,7 @@
             return;
           }
 
-          BIKE.Database.customAPICall('get','user', null, data => {
+          BDB.Database.customAPICall('get','user', null, data => {
             users = data;
 
             $('#headingUsers').html(`<span class="text-muted">(${data.length} carregados)</span>`);
@@ -513,7 +509,7 @@
             return;
           }
 
-          BIKE.Database.customAPICall('get','revision', null, data => {
+          BDB.Database.customAPICall('get','revision', null, data => {
             revisions = data;
 
             $('#headingRevisions').html(`Sugestões de Correção <span class="text-muted">(${data.length})</span>`);
@@ -551,7 +547,7 @@
         window.logTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BIKE.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
                 updateRevisionTable(true);
               });
             }
@@ -561,7 +557,7 @@
         window.localsTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BIKE.Database.customAPICall('delete', `local/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `local/${row.id}`, null, () => {
                 updateLocalsTable(true);
               });
             }
@@ -581,7 +577,7 @@
             return;
           }
 
-          BIKE.Database.customAPICall('get','log', null, data => {
+          BDB.Database.customAPICall('get','log', null, data => {
             log = data;
 
             $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`);
@@ -699,7 +695,7 @@
         // Initializations //
         /////////////////////
 
-        Database = BIKE.Database;
+        Database = BDB.Database;
 
         // Admin-only Globals
         let users;
@@ -753,7 +749,7 @@
           // Send the updated data through the API
           if (dataToUpdate) {
             console.log('updating:', dataToUpdate);
-            BIKE.Database.customAPICall('put', `user/${userId}`, dataToUpdate);
+            BDB.Database.customAPICall('put', `user/${userId}`, dataToUpdate);
           }
         }
 
@@ -773,7 +769,7 @@
           // Send the updated data through the API
           if (dataToUpdate) {
             console.log('updating:', dataToUpdate);
-            BIKE.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
+            BDB.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
           }
         }
 

@@ -2,33 +2,22 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="268.458px" height="268.46px" viewBox="0 0 268.458 268.46" enable-background="new 0 0 268.458 268.46"
+	 width="211.698px" height="178.064px" viewBox="0 0 211.698 178.064" enable-background="new 0 0 211.698 178.064"
 	 xml:space="preserve">
 <g>
-	<g>
-		<g>
-			<path fill="#47B970" d="M268.458,134.23c0,74.133-60.096,134.229-134.228,134.229c-55.416,0-102.994-33.585-123.484-81.524
-				C3.828,170.759,0,152.941,0,134.23C0,60.096,60.095,0,134.23,0C208.362,0,268.458,60.096,268.458,134.23z"/>
-		</g>
-	</g>
-	<g>
-		<g>
-			
-				<polygon fill="none" stroke="#FFFFFF" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="204.0945,14.1732" points="
-				59.294,92.184 126.978,91.836 126.795,72.805 167.397,72.805 167.213,91.49 205.091,91.49 205.091,178.949 59.294,178.949 			"/>
-			
-				<path fill="none" stroke="#FFFFFF" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="198.4252,14.1732" d="
-				M177.111,134.36c0,15.901-12.89,28.792-28.79,28.792c-15.896,0-28.787-12.891-28.787-28.792
-				c0-15.899,12.891-28.788,28.787-28.788C164.222,105.572,177.111,118.461,177.111,134.36z"/>
-			
-				<path fill="none" stroke="#FFFFFF" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="198.4252,14.1732" d="
-				M165.879,134.36c0,9.698-7.86,17.56-17.558,17.56c-9.691,0-17.555-7.861-17.555-17.56c0-9.694,7.863-17.555,17.555-17.555
-				C158.019,116.806,165.879,124.666,165.879,134.36z"/>
-			
-				<line fill="none" stroke="#FFFFFF" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="198.4252,14.1732" x1="90.21" y1="106.457" x2="90.21" y2="166.718"/>
-			
-				<circle fill="#FFFFFF" stroke="#FFFFFF" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="198.4252,14.1732" cx="107.011" cy="106.07" r="4.033"/>
-		</g>
-	</g>
+	
+		<polyline fill="none" stroke="#30bb6a" stroke-width="13.2555" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		141.423,148.901 6.609,148.901 6.609,6.73 183.358,6.73 183.358,103.156 	"/>
+	
+		<polyline fill="none" stroke="#30bb6a" stroke-width="13.2555" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		6.609,102.103 58.041,59.7 107.507,108.456 143.547,81.955 183.358,104.928 	"/>
+	
+		<path fill="none" stroke="#30bb6a" stroke-width="13.2555" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+		M127.513,47.678c0,9.849-7.992,17.841-17.84,17.841c-9.857,0-17.842-7.992-17.842-17.841c0-9.848,7.984-17.824,17.842-17.824
+		C119.521,29.854,127.513,37.83,127.513,47.678z"/>
+	
+		<line fill="none" stroke="#30bb6a" stroke-width="13.2555" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="183.358" y1="126.848" x2="183.358" y2="171.356"/>
+	
+		<line fill="none" stroke="#30bb6a" stroke-width="13.2555" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="161.571" y1="148.901" x2="205.028" y2="148.901"/>
 </g>
 </svg>
