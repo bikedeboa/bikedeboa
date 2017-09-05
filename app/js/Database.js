@@ -366,7 +366,10 @@ BDB.Database = {
           if (data.token && data.token.length > 0) {
             // loggedUser = true;
 
-            ga('send', 'event', 'Login', 'success', `${loginData.fullname} @ #{loginData.network}`);
+            ga('send', 'event', 'Login', 'social login success', `${loginData.fullname} @ ${loginData.network}`);
+            if (data.isNewUser) {
+              ga('send', 'event', 'Login', 'new user created', `${loginData.fullname} @ ${loginData.network}`);
+            }
 
             // Set headers for future calls
             self.isAuthenticated = true;
@@ -377,7 +380,7 @@ BDB.Database = {
           }
         },
         error: function(error) {
-          ga('send', 'event', 'Login', 'fail', `${loginData.fullname} @ #{loginData.network}`);
+          ga('send', 'event', 'Login', 'social login FAIL', `${loginData.fullname} @ ${loginData.network}`);
 
           reject(error);
         }
