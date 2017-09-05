@@ -393,12 +393,14 @@ BDB.Database = {
         reject();
       }
 
+      const reviewsIds = reviews.map( r => { return {databaseId: r.databaseId}; });
+ 
       if (reviews.length > 0) {
         $.ajax({
           type: 'post',
           headers: self._headers,
           url: self.API_URL + '/user/import-reviews',
-          data: {reviews: reviews}, 
+          data: {reviews: reviewsIds}, 
           success: resolve,
           error: reject
         });
@@ -676,7 +678,7 @@ BDB.Database = {
         if (typeof m.average === 'string') {
           m.average = parseFloat(m.average);
         }
-      };
+      }
 
       if (successCB && typeof successCB === 'function') {
         successCB(markers);
