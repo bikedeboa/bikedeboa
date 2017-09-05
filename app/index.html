@@ -398,6 +398,21 @@
 
               <hr>
 
+              <h3>Cobertura</h3>
+                <ul>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
+                      <label for="filter_covered">Coberto</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
+                      <label for="filter_uncovered">Não coberto</label>
+                  </li>
+                </ul>
+              </div>
+
+              <hr>
+
               <h3>Acesso</h3>
 
               <ul>
@@ -441,20 +456,6 @@
                     <label for="filter_structure_other">Outros</label>
                 </li>
               </ul>
-              
-              <h3>Cobertura</h3>
-
-              <ul>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
-                    <label for="filter_covered">Coberto</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
-                    <label for="filter_uncovered">Não coberto</label>
-                </li>
-              </ul>
-            </div>
 
 
             <footer>
@@ -1055,8 +1056,32 @@
 
                             <section>
                               <h2>
+                                Cobertura
+                                <!-- <a id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<h2>Público</h2>
+                                <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
+                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"> --></a>
+                              </h2>
+
+                              <div class="covered-group" data-form-step="2">
+                                  <div data-value="covered" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_covered.svg"/>
+                                      <div class="icon-label">
+                                        Coberto
+                                      </div>
+                                  </div>
+                                  <div data-value="uncovered" class="typeIcon" tab-index="0">
+                                      <img alt="" src="/img/icon_uncovered.svg"/>
+                                      <div class="icon-label">
+                                        Não coberto
+                                      </div>
+                                  </div>
+                              </div>
+                            </section>
+
+                            <section>
+                              <h2>
                                 Tipo de Bicicletário
-                                <a id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></a>
+                                <a id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></a>
                               </h2>
 
                               <div class="custom-radio-group" data-form-step="1">
@@ -1089,33 +1114,8 @@
 
                             <section>
                               <h2>
-                                Cobertura
-                                <!-- <a id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<h2>Público</h2>
-                                <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
-                                <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"> --></a>
-                              </h2>
-
-                              <div class="covered-group" data-form-step="2">
-                                  <div data-value="covered" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/icon_covered.svg"/>
-                                      <div class="icon-label">
-                                        Coberto
-                                      </div>
-                                  </div>
-                                  <div data-value="uncovered" class="typeIcon" tab-index="0">
-                                      <img alt="" src="/img/icon_uncovered.svg"/>
-                                      <div class="icon-label">
-                                        Não coberto
-                                      </div>
-                                  </div>
-                              </div>
-                            </section> 
-                            </section>
-
-                            <section>
-                              <h2>
                                 Acesso
-                                <a id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<h2>Público</h2>
+                                <a id="access-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<h2>Público</h2>
                                 <p>Pode ser usado em qualquer horário por qualquer pessoa. Normalmente está no espaço público, como calçadas ou parques. Pode ter sido instalado por um estabelecimento comercial ou não.</p>
                                 <h2>Privado</h2><p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a>
                               </h2>
@@ -1308,6 +1308,30 @@
               <hr>
 
               <section class="info">
+                  {{#unless noIsCoveredData}}
+                    <div class="{{#ifCond isAdmin '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                      {{#if isCovered}}
+                          <img alt="" src="/img/icon_covered.svg"/>
+                          <div class="icon-label">
+                            Coberto
+                          </div>
+                      {{else}}
+                          <img alt="" src="/img/icon_uncovered.svg"/>
+                          <div class="icon-label">
+                            Não coberto
+                          </div> 
+                      {{/if}}
+                    </div>
+                  {{else}}
+                    {{#if isAdmin}}
+                      <div>
+                        <div class="icon-label">
+                            <small>Sem informação sobre cobertura</small>
+                        </div>
+                      </div>
+                    {{/if}}
+                  {{/unless}}
+                  
                   {{#unless noIsPublicData}}
                       <div class="{{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
                         {{#if isPublic}}
@@ -1317,7 +1341,7 @@
                               <a id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Público</h2>
                               <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
                               <p>Normalmente está em espaço público, como calçadas ou parques.</p>
-                              <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></a>
+                              <p>Pode ter sido instalado por um estabelecimento começarrcial ou não.</p>"></a>
                             </div>
                         {{else}}
                             <img alt="" src="/img/icon_private.svg"/>
@@ -1347,7 +1371,7 @@
                               {{{structureTypeLabel}}}
 
                               {{#ifCond structureTypeCode '===' 'uinvertido'}}
-                                <a id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>U Invertido</h2>
+                                <a id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>U Invertido</h2>
                                 <p>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.</p>
                                 <p>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.</p>
                                 <p>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock.</p>
@@ -1403,33 +1427,6 @@
                       {{/if}}
                     </div>
                   {{/if}}
-
-
-                  {{#unless noIsCoveredData}}
-                    <div class="{{#ifCond isAdmin '&&' noIsCoveredData}} missing-info {{/ifCond}}">
-                      {{#if isCovered}}
-                          <img alt="" src="/img/icon_covered.svg"/>
-                          <div class="icon-label">
-                            Coberto
-                          </div>
-                      {{else}}
-                          <img alt="" src="/img/icon_uncovered.svg"/>
-                          <div class="icon-label">
-                            Não coberto
-                          </div> 
-                      {{/if}}
-                    </div>
-                  {{else}}
-                    {{#if isAdmin}}
-                      <div>
-                        <div class="icon-label">
-                            <small>Sem informação sobre cobertura</small>
-                        </div>
-                      </div>
-                    {{/if}}
-                  {{/unless}}
-
-                  <!-- <div>{{numCheckins}}</div> -->
               </section>
 
               <hr>
@@ -1596,12 +1593,12 @@
                       <div class="modal-content">
                           <div class="modal-header">
                             <h1 class="modal-title view-name">Contribuições</h1>
-                          </div>
+                          </div> 
 
                           <div class="modal-body">
                             {{#if profile}} 
                               <h1>
-                                {{#if profile.picture}} Oi <img alt="" src="{{profile.picture}}">{{/if}} <b>{{profile.first_name}}</b> :)
+                                {{#if profile.picture}}<img alt="" src="{{profile.picture}}">{{/if}} Oi <b>{{profile.first_name}}</b> :)
                               </h1> 
                               {{#if isAdmin}}
                                 <p>
