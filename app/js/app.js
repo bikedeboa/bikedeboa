@@ -2230,7 +2230,7 @@ $(() => {
       initialCenter = {
         lat: parseFloat(_deeplinkMarker.lat),
         lng: parseFloat(_deeplinkMarker.lng)
-      }
+      };
     } else {
       initialCenter = _portoAlegrePos;
     }
@@ -2698,14 +2698,14 @@ $(() => {
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
       $('.welcome-message-container').remove();
-      BIKE.Session.setPromoBannerViewed();
+      BDB.Session.setPromoBannerViewed(); 
 
       ga('send', 'event', 'Banner', 'promo banner - closed');
     });
 
     $('.welcome-message-container a').on('click', e => {
       $('.welcome-message-container').remove();
-      // BIKE.Session.setPromoBannerViewed();
+      // BDB.Session.setPromoBannerViewed();
 
       ga('send', 'event', 'Banner', 'promo banner - link click');
     });
@@ -2790,7 +2790,7 @@ $(() => {
 
     // Promo banner
     // temp: Temporarily disabled
-    // if (!BIKE.Session.getPromoBannerViewed()) {
+    // if (!BDB.Session.getPromoBannerViewed()) {
     //   openPromoBanner();
     // }
   }

@@ -277,7 +277,7 @@
               <ul>
                 <li class="open-guide-btn side-nav--animate-in">
                   <img alt="" src="/img/icon_guide.svg"/>
-                  Guia de Bicicletários 
+                  Guia de Bicicletários <span class="badge">novo</span>
                 </li>
 
                 <hr>
@@ -306,7 +306,7 @@
                 
                 <li class="side-nav--animate-in loginBtn">
                   <img src="/img/icon_user.svg">
-                  Login 
+                  Login <span class="badge">novo</span>
                 </li>
 
                 <!-- <li class="side-nav--animate-in logoutBtn">
@@ -375,83 +375,92 @@
 
             <div class="side-nav__content">
 
-              <h3>Avaliações</h3>
-              <ul>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
-                    <label for="filter_rating_good"><img alt="" src="/img/pin_green.png"/> Excelentes</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_medium" data-prop="rating" data-value="medium">
-                    <label for="filter_rating_medium"><img alt="" src="/img/pin_yellow.png"/> Médios</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_bad" data-prop="rating" data-value="bad">
-                    <label for="filter_rating_bad"><img alt="" src="/img/pin_red.png"/> Ruins</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_rating_none" data-prop="rating" data-value="none">
-                    <label for="filter_rating_none"><img alt="" src="/img/pin_gray.png"/> Sem avaliação</label>
-                </li>
-              </ul>
-
-              <hr>
-
-              <h3>Cobertura</h3>
-              <ul>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
-                    <label for="filter_covered">Coberto</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
-                    <label for="filter_uncovered">Não coberto</label>
-                </li>
-              </ul>
+              <div>
+                <h3>Avaliações</h3>
+                <ul>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
+                      <label for="filter_rating_good"><img alt="" src="/img/pin_green.png"/> Excelentes</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_rating_medium" data-prop="rating" data-value="medium">
+                      <label for="filter_rating_medium"><img alt="" src="/img/pin_yellow.png"/> Médios</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_rating_bad" data-prop="rating" data-value="bad">
+                      <label for="filter_rating_bad"><img alt="" src="/img/pin_red.png"/> Ruins</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_rating_none" data-prop="rating" data-value="none">
+                      <label for="filter_rating_none"><img alt="" src="/img/pin_gray.png"/> Sem avaliação</label>
+                  </li>
+                </ul>
+              </div>
 
               <hr>
               
-              <h3>Acesso</h3>
-              <ul>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
-                    <label for="filter_public">Públicos</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
-                    <label for="filter_private">Privados</label>
-                </li>
-              </ul>
+              <div>
+                <h3>Acesso</h3>
+                <ul>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
+                      <label for="filter_public">Públicos</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
+                      <label for="filter_private">Privados</label>
+                  </li>
+                </ul>
+              </div>
 
               <hr>
 
-              <h3>Tipos de Bicicletário</h3>
-              <ul>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
-                    <label for="filter_structure_deroda">De roda</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_uinvertido" data-prop="structureType" data-value="uinvertido">
-                    <label for="filter_structure_uinvertido">U Invertido</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_suspenso" data-prop="structureType" data-value="suspenso">
-                    <label for="filter_structure_suspenso">Suspenso</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_grade" data-prop="structureType" data-value="grade">
-                    <label for="filter_structure_grade">Grade</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_trave" data-prop="structureType" data-value="trave">
-                    <label for="filter_structure_trave">Trave</label>
-                </li>
-                <li>
-                    <input type="checkbox" class="filter-checkbox" id="filter_structure_other" data-prop="structureType" data-value="other">
-                    <label for="filter_structure_other">Outros</label>
-                </li>
-              </ul>
+              <div>
+                <h3>Tipos de Bicicletário</h3>
+                <ul>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
+                      <label for="filter_structure_deroda">De roda</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_structure_uinvertido" data-prop="structureType" data-value="uinvertido">
+                      <label for="filter_structure_uinvertido">U Invertido</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_structure_suspenso" data-prop="structureType" data-value="suspenso">
+                      <label for="filter_structure_suspenso">Suspenso</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_structure_grade" data-prop="structureType" data-value="grade">
+                      <label for="filter_structure_grade">Grade</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_structure_trave" data-prop="structureType" data-value="trave">
+                      <label for="filter_structure_trave">Trave</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_structure_other" data-prop="structureType" data-value="other">
+                      <label for="filter_structure_other">Outros</label>
+                  </li>
+                </ul>
+              </div>
+
+              <hr>
+
+              <div>
+                <h3>Cobertura</h3>
+                <ul>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
+                      <label for="filter_covered">Coberto</label>
+                  </li>
+                  <li>
+                      <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
+                      <label for="filter_uncovered">Não coberto</label>
+                  </li>
+                </ul>
+              </div>
+              
             </div>
 
             <footer>
@@ -1077,7 +1086,8 @@
                             <section>
                               <h2>
                                 Tipo de Bicicletário
-                                <a id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor."></a>
+                                <a id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<p>Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor.</p>
+                                <p>Saiba mais no <a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>"></a>
                               </h2>
 
                               <div class="custom-radio-group" data-form-step="1">

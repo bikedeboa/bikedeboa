@@ -35,29 +35,38 @@ BDB.User = {
 
     const prevReviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
     const prevPlaces = this.places && this.places.length > 0 ? this.places : null;
-    const reviewsStr = prevReviews ? `<b>${prevReviews.length} avaliações</b>` : ''; 
-    const placesStr = prevPlaces ? `<b>${prevPlaces.length} bicicletários</b>` : ''; 
+    
+    let reviewsStr = '';
+    if (prevReviews) {
+      reviewsStr = `<b>${prevReviews.length} ${prevReviews.length === 1 ? 'avaliação' : 'avaliações'}</b>`; 
+    }
+    let placesStr = ''; 
+    if (prevPlaces) {
+      placesStr = `<b>${prevPlaces.length} ${prevPlaces.length === 1 ? 'bicicletário' : 'bicicletários'}</b>`; 
+    } 
+    
     const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
     let message, title;
     if (userInfo.isNewUser) { 
-      title = 'Bem-vindo(a)!';
+      title = 'Bem-vindo(a)'; 
       message = `
-        Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir!<br>
-        Deseja salvá-los no histórico do seu perfil?
-      `;
+        Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir. :) Eles serão automaticamente salvos nas suas contribuições.
+      `; 
     } else {
-      title = 'Oi de novo!';
-      message = `Você tinha criado ${dynamicStr} enquanto não estava logado. Deseja salvá-los no histórico do seu perfil?`;
+      title = 'Oi de novo';
+      message = `
+        Você tinha criado ${dynamicStr} enquanto não estava logado. Massa! Eles serão automaticamente salvos nas suas contribuições.
+      `;
     }
  
     if (prevReviews || prevPlaces) {
-      swal({
+      swal({ 
         title: title,
         html: message,
         // type: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sim',
-        cancelButtonText: 'Não, apagar histórico',
+        // showCancelButton: true,
+        // confirmButtonText: 'Sim',
+        // cancelButtonText: 'Não, apagar histórico',
       })
         .then(() => {
           if (prevPlaces) {
@@ -92,10 +101,10 @@ BDB.User = {
               });
           }
         }).catch(dismiss => {
-          if (dismiss === 'cancel') {
-            self._deletePlacesFromCookies();
-            self._deleteReviewsFromCookies(); 
-          }
+          // if (dismiss === 'cancel') {
+          //   self._deletePlacesFromCookies();
+          //   self._deleteReviewsFromCookies(); 
+          // }
         });
     }
     
