@@ -2449,6 +2449,7 @@ $(() => {
         // UI
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', userInfo.thumbnail);
+        $('.openProfileBtn, .openProfileDivider').show();
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         if (data.role === 'admin') {
@@ -2477,6 +2478,7 @@ $(() => {
     $('#userBtn').removeClass('admin');
     $('.logoutBtn').hide();
     $('.loginBtn').show();
+    $('.openProfileBtn, .openProfileDivider').hide();
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.

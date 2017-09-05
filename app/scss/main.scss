@@ -642,6 +642,12 @@ a.unstyled-link {
     transform: translateY(-20px);
   } 
 
+  // Initializes hidden
+  .openProfileBtn,  
+  .openProfileDivider {
+    display: none;
+  }
+
   & > button {
     border: 0;
     padding: 0;
