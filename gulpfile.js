@@ -33,7 +33,7 @@ const DEST_PATH =  'dist';
 // Environment specific variables
 const development = environments.development;
 const production = environments.production;
-const facebookEnv = process.env.FACEBOOK_ENV || 'development';
+const facebookEnv = process.env.FACEBOOK_ENV || 'localhost';
 
 console.log('NODE_ENV =', development() ? 'development' : 'production');
 console.log('FACEBOOK_ENV =', facebookEnv);
@@ -43,8 +43,9 @@ const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.c
 
 const FACEBOOK_IDS = {
   production: '1814653185457307',
-  beta: '116937842287717',
-  development: '1554610834551808'
+  beta: '1554610834551808',
+  development: '116937842287717', 
+  localhost: '478533412529512'
 };
 const GOOGLE_PROD = '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com';
 const GOOGLE_DEV = '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com';
