@@ -2373,23 +2373,25 @@ $(() => {
     // $('#map').css('filter', 'none');
   }
 
-  function openLoginDialog(showDisclaimer = false) {
-    let body = '';
-    if (showDisclaimer) {
-      body = `
-        <p>
-          Você precisa estar logado pra fazer isso. Esta é a melhor forma de garantirmos a qualidade do mapeamento. :)
-        </p>
-      `;
-    }
+  function openLoginDialog(showPermissionDisclaimer = false) {
+    // let permissionDisclaimer = '';
+    // if (showPermissionDisclaimer) {
+    //   permissionDisclaimer = `
+    //     <p>
+    //       Você precisa estar logado pra fazer isso. Esta é a melhor forma de garantirmos a qualidade do mapeamento. :)
+    //     </p>
+    //   `;
+    // }
 
     // Returns the dialog promise
     return swal({ 
-      title: 'Login',
+      title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
       html: `
-        <br>
-
-        ${body}
+        <br> 
+ 
+        <p>
+          Fazendo login você pode acessar todas contribuições que já fez e adicionar novos bicicletários no mapa.
+        </p>
 
         <div>
           <button class="customLoginBtn facebookLoginBtn">
