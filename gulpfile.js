@@ -33,18 +33,24 @@ const DEST_PATH =  'dist';
 // Environment specific variables
 const development = environments.development;
 const production = environments.production;
-console.log('ENVIRONMENT = ', development() ? 'development' : 'production');
+const facebookEnv = process.env.FACEBOOK_ENV || 'development';
 
+console.log('NODE_ENV =', development() ? 'development' : 'production');
+console.log('FACEBOOK_ENV =', facebookEnv);
+ 
 const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
 const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.com';
 
-const FACEBOOK_PROD = '1814653185457307';
-const FACEBOOK_DEV = '1554610834551808';
+const FACEBOOK_IDS = {
+  production: '1814653185457307',
+  beta: '116937842287717',
+  development: '1554610834551808'
+};
 const GOOGLE_PROD = '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com';
 const GOOGLE_DEV = '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com';
 const GOOGLE_MAPS_PROD = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
-const FACEBOOK_CLIENT_ID = isProdDatabase ? FACEBOOK_PROD : FACEBOOK_DEV;
+const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[facebookEnv];
 const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
 const GOOGLE_MAPS_ID = GOOGLE_MAPS_PROD;
 // const GOOGLE_MAPS_ID = development() ? 'AIzaSyD1dNf2iN1XS0wx17MTf2lPTbPg8UIJqfA' : 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
