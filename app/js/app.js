@@ -1193,10 +1193,26 @@ $(() => {
       }
     });
 
-    // templates.placeDetailsModalTemplate = Handlebars.compile($('#placeDetailsModalTemplate').html());
-    // templates.placeDetailsModalLoadingTemplate = Handlebars.compile($('#placeDetailsModalLoadingTemplate').html());
-    // templates.infoWindowTemplate = Handlebars.compile($('#infoWindowTemplate').html());
-    // templates.profileModalTemplate = Handlebars.compile($('#profileModalTemplate').html());
+    let placeDetailsModalTemplate = $('#placeDetailsModalTemplate').html();
+    if (placeDetailsModalTemplate) {
+      templates.placeDetailsModalTemplate = Handlebars.compile(placeDetailsModalTemplate);
+    }
+    
+    let placeDetailsModalLoadingTemplate = $('#placeDetailsModalLoadingTemplate').html();
+    if (placeDetailsModalLoadingTemplate) {
+      templates.placeDetailsModalLoadingTemplate = Handlebars.compile(placeDetailsModalLoadingTemplate);
+    }
+    
+    let infoWindowTemplate = $('#infoWindowTemplate').html();
+    if (infoWindowTemplate) {
+      templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
+    }
+    
+    let profileModalTemplate = $('#profileModalTemplate').html();
+    if (profileModalTemplate) {
+      templates.profileModalTemplate = Handlebars.compile(profileModalTemplate);
+    }
+    
   }
 
   function validateNewPlaceForm() {
