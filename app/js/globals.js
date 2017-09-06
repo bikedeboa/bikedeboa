@@ -75,8 +75,21 @@ let isDemoMode = false;//
 /////////////////////////
  
 
+// "Main Brazil" Bounding Box
+//   [lat, long]
+// SW [[-34.0526594796, -61.3037107971],
+// SE [-34.0526594796, -34.3652340941],
+// NE [0.1757808338, -34.3652340941],
+// NW [0.1757808338, -61.3037107971]]]
+
+// Rio Grande do Sul Bounding Box
+// let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+
+// "Main Brazil"
+let _mapBoundsCoords = {sw: {lat:'-34.0526594796', lng:'-61.3037107971'}, ne: {lat: '0.1757808338', lng:'-34.3652340941'}};
+
 let _portoAlegrePos = {lat: -30.0346, lng: -51.2177};
-let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+
 let map;
 let _mapBounds;
 let Database;
