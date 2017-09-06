@@ -1062,6 +1062,7 @@ $(() => {
 
   function setupAutocomplete() {
     const inputElem = document.getElementById('locationQueryInput');
+    // Limits the search to the our bounding box
     const options = {
       bounds: _mapBounds,
       strictBounds: true
@@ -1769,7 +1770,7 @@ $(() => {
 
     $('.openProfileBtn').on('click', queueUiCallback.bind(this, () => {
       hideAll();
-      setView('Histórico', '/historico', true);
+      setView('Contribuições', '/contribuicoes', true);
     }));
  
     $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
@@ -2232,7 +2233,7 @@ $(() => {
       $('#aboutModal').modal('show');
       $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
       break;
-    case 'historico':
+    case 'contribuicoes':
       openProfileModal();
       break;
     // case 'nav':
@@ -2548,7 +2549,7 @@ $(() => {
 
       $('.modal').removeClass('fade');
     } else {
-      $('#locationQueryInput').attr('placeholder','Buscar endereço no Rio Grande do Sul'); 
+      $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
     }
 
 

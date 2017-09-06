@@ -187,22 +187,6 @@
         </div>
       </div> -->
 
-      <div id="userBtn" class="dropdown">
-        <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img class="avatar" src="/img/icon_user_big.svg">
-        </button>
-
-        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-          <li>
-            <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
-          </li>
-          
-          <li>
-            <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
-          </li>
-        </ul>
-      </div>
-
       <!-- <nav class="navbar navbar-default navbar-fixed-top">
         <ul class="nav navbar-nav navbar-right">
           <li>
@@ -264,7 +248,6 @@
               data-classes="table table-no-bordered"
               data-striped="true"
               data-search="true"
-              data-show-refresh="true"
               data-show-toggle="true"
               data-show-columns="true"
               data-show-export="true"
@@ -320,6 +303,22 @@
           </div>
         </div>
       </section>
+
+      <div id="userBtn" class="dropdown">
+        <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="avatar" src="/img/icon_user_big.svg">
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+          <li>
+            <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
+          </li>
+          
+          <li>
+            <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
+          </li>
+        </ul>
+      </div>
 
       <script>
         // Generic function to display in textual form all the properties of a table entry
@@ -424,6 +423,12 @@
               } else if (m.isPublic === false) {
                 m.isPublic = 0;
               }
+
+              if (m.isCovered === true) {
+                m.isCovered = 1;
+              } else if (m.isCovered === false) {
+                m.isCovered = 0;
+              }
             });
 
             $('#localsTable').bootstrapTable({
@@ -438,12 +443,10 @@
                   field: 'id', title: 'ID', sortable: true, class: 'col-id',
                 },
                 {
-                  field: 'text', title: 'Titulo', sortable: true, class: 'col-title',
-                    editable: BDB.User.isAdmin
+                  field: 'text', title: 'Titulo', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'address', title: 'Endereço', sortable: true, class: 'col-address',
-                    editable: BDB.User.isAdmin, 'editable-type': 'textarea'
+                  field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
                   field: 'lat', title: 'lat', sortable: true, visible: false,
@@ -452,12 +455,13 @@
                   field: 'lng', title: 'lng', sortable: true, visible: false,
                 },
                 {
-                  field: 'isPublic', title: 'Público?', sortable: true,
-                    editable: BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
+                  field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
                 },
                 {
-                  field: 'structureType', title: 'Tipo', sortable: true,
-                    editable: BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
+                  field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]"
+                },
+                {
+                  field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
                   field: 'average', title: 'Média', sortable: true, visible: true,
@@ -469,15 +473,13 @@
                   field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
                 },
                 {
-                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description',
-                    editable: BDB.User.isAdmin, 'editable-type': 'textarea'
+                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
-                  field: 'photo', title: 'Foto', sortable: true,
-                    editable: BDB.User.isAdmin 
+                  field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: BDB.User.isAdmin
+                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin
                 }
               ],
               data: markers,
@@ -499,22 +501,25 @@
             $('#usersTable').bootstrapTable({
               columns: [
                 {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id',
                 },
                 {
-                  field: 'username', title: 'Usuário', sortable: true, class: 'col-title',
+                  field: 'username', title: 'Usuário', sortable: true, class: 'col-title', visible: false
                 },
                 {
-                  field: 'fullname', title: 'Nome completo', sortable: true, editable: BDB.User.isAdmin
+                  field: 'fullname', title: 'Nome completo', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'role', title: 'Cargo', sortable: true, editable: BDB.User.isAdmin
+                  field: 'role', title: 'Cargo', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: BDB.User.isAdmin
+                  field: 'email', title: 'Email', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'google_id', title: 'ID Google', sortable: true, editable: BDB.User.isAdmin
+                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin
+                },
+                {
+                  field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
                   field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
@@ -680,13 +685,14 @@
 
           Database.authenticate(() => {
             updateLocalsTable();
-
             hideSpinner();
           });
         }
 
         document.addEventListener('bikedeboa.login', function(e) {
           if (BDB.User.isAdmin) {
+            // Force table refresh
+            $('#localsTable').bootstrapTable('destroy');
             updateLocalsTable();
 
             Database.getAllTags();
@@ -736,15 +742,6 @@
           }
         });
 
-        $('#login').on('click', e => {
-          login();
-        });
-
-        $('body').on('click', '#logOff', e => {
-          logOff();
-        });
-
-
         $('body').on('click', 'tbody tr td', e => {
           if (e.target == e.currentTarget) {
             console.log('details');
@@ -768,7 +765,7 @@
           const localId = row.id;
           let dataToUpdate = {};
 
-          if (field === 'isPublic') {
+          if (field === 'isPublic' || 'isCovered') {
             row[field] = row[field]==='1' ? true : false;
           } else if (field === 'photo') {
             row['photoUrl'] = row[field];
