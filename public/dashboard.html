@@ -443,10 +443,10 @@
             $('#localsTable').bootstrapTable({
               columns: [
                 { 
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false,
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter',
                 },
                 {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
                 },
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id',
