@@ -28,8 +28,7 @@ class SideNav {
         !this.hideButtonEl ||
         !this.sideNavEl ||
         !this.sideNavContainerEl) {
-      console.error('Something went wrong when initializing sidenav ' + id);
-      return;
+      throw Error('Something went wrong when initializing sidenav ' + id);
     }
 
     // Control whether the container's children can be focused

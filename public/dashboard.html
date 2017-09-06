@@ -27,6 +27,8 @@
         <script src="/js/lib/toastr.js"></script> 
         <script src="/js/lib/velocity.js"></script> 
         <script src="/js/lib/velocity.ui.js"></script>
+        <script src="/js/lib/hello.all.js"></script>
+        <script src="/lib/featherlight.min.js"></script>
         <script src="/js/app.min.js"></script>
 
         <!-- Bootstrap Extended Tables -->
@@ -123,6 +125,11 @@
             max-height: 600px;
           }
 
+          a {
+            background: none;
+            box-shadow: none;
+            border-bottom: none;
+          }
 
           .dashboard-panel {
             max-height: 70vh;
@@ -158,26 +165,42 @@
           }
 
           .restricted-access {
-            display: none;
+            display: none !important;
           }
 
         </style>
     </head>
 
     <body>
-      <div id="loginWrapper" style="float: right;">
+      <!-- <div id="loginWrapper" style="float: right;">
         <button id="login" type="button" class="btn btn-lg btn-default" >
           <span class="glyphicon glyphicon-user"></span> Login
         </button>
 
         <div id="logged" class="btn-group">
           <button class="btn btn-default btn-lg btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-user"></span> <span id="loggedUser"></span> <span class="caret"></span>
+            <span class="glyphicon glyphicon-user"></span> <span id="BDB.User.isAdmin"></span> <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
             <li><a id="logOff" href="#">Log off</a></li>
           </ul>
         </div>
+      </div> -->
+
+      <div id="userBtn" class="dropdown">
+        <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="avatar" src="/img/icon_user_big.svg">
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+          <li>
+            <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
+          </li>
+          
+          <li>
+            <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
+          </li>
+        </ul>
       </div>
 
       <!-- <nav class="navbar navbar-default navbar-fixed-top">
@@ -315,18 +338,18 @@
 
           $.each(row, function (key, value) {
             switch (key) {
-              case 'updatedAt':
-              case 'createdAt':
-                html += '<span><b>' + key + ':</b> ' + timestampColFormatter(value) + '</span><br>';
-                break;
-              case 'body':
-                html += '<span><b>' + key + ':</b> ' + jsonColFormatter(value) + '</span><br>';
-                break;
-              case 'photo':
-                break;
-              default:
-                html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
-                break;
+            case 'updatedAt':
+            case 'createdAt':
+              html += '<span><b>' + key + ':</b> ' + timestampColFormatter(value) + '</span><br>';
+              break;
+            case 'body':
+              html += '<span><b>' + key + ':</b> ' + jsonColFormatter(value) + '</span><br>';
+              break;
+            case 'photo':
+              break;
+            default:
+              html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
+              break;
             }
           });
 
@@ -380,9 +403,9 @@
             markers = null;
           }
 
-          if (markers) {
-            return;
-          }
+          // if (markers) {
+          //   return;
+          // }
 
           $('#headingBikes').html('Carregando bicicletários...');
             
@@ -416,11 +439,11 @@
                 },
                 {
                   field: 'text', title: 'Titulo', sortable: true, class: 'col-title',
-                    editable: loggedUser && true
+                    editable: BDB.User.isAdmin
                 },
                 {
                   field: 'address', title: 'Endereço', sortable: true, class: 'col-address',
-                    editable: loggedUser && true, 'editable-type': 'textarea'
+                    editable: BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
                   field: 'lat', title: 'lat', sortable: true, visible: false,
@@ -430,11 +453,11 @@
                 },
                 {
                   field: 'isPublic', title: 'Público?', sortable: true,
-                    editable: loggedUser && true, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
+                    editable: BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
                 },
                 {
                   field: 'structureType', title: 'Tipo', sortable: true,
-                    editable: loggedUser && true, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
+                    editable: BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
                   field: 'average', title: 'Média', sortable: true, visible: true,
@@ -447,14 +470,14 @@
                 },
                 {
                   field: 'description', title: 'Descrição', sortable: true, class: 'col-description',
-                    editable: loggedUser && true, 'editable-type': 'textarea'
+                    editable: BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
                   field: 'photo', title: 'Foto', sortable: true,
-                    editable: loggedUser && true 
+                    editable: BDB.User.isAdmin 
                 },
                 {
-                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: loggedUser
+                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: BDB.User.isAdmin
                 }
               ],
               data: markers,
@@ -482,10 +505,16 @@
                   field: 'username', title: 'Usuário', sortable: true, class: 'col-title',
                 },
                 {
-                  field: 'fullname', title: 'Nome completo', sortable: true, editable: loggedUser && true
+                  field: 'fullname', title: 'Nome completo', sortable: true, editable: BDB.User.isAdmin
                 },
                 {
-                  field: 'role', title: 'Cargo', sortable: true, editable: loggedUser && true, 'editable-type': 'select', 'editable-source': "[{'value': 'admin', 'text': 'Admin'}, {'value': 'colaborator', 'text': 'Colaborador'}, {'value': 'client', 'text': 'Cliente'} ]"
+                  field: 'role', title: 'Cargo', sortable: true, editable: BDB.User.isAdmin
+                },
+                {
+                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: BDB.User.isAdmin
+                },
+                {
+                  field: 'google_id', title: 'ID Google', sortable: true, editable: BDB.User.isAdmin
                 },
                 {
                   field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
@@ -646,56 +675,38 @@
           }, true);
         }
 
-        function handleLoggedUser() {
-          if (loggedUser) {
-            $('#login').hide();
-            $('#logged').show();
-            $('#loggedUser').html(loggedUser);
-            $('.restricted-access').show();
-          }
-        }
-
-        function login() {
-          Database.authenticate(true, () => {
-            if (loggedUser) {
-              window.location.reload();
-            }
-          });
-        }
-
-        function logOff() {
-          Cookies.remove('bikedeboa_user');
-          window.location.reload();
-        }
-
         function init() {
           showSpinner();
 
-          Database.authenticate(false, () => {
-            if (loggedUser) {
-              handleLoggedUser();
-
-              Database.getAllTags();
-
-              updateRevisionTable();
-
-              updateLocalsTable();
-            } else {
-              $('.restricted-access').remove();
-
-              login();
-            }
+          Database.authenticate(() => {
+            updateLocalsTable();
 
             hideSpinner();
           });
         }
+
+        document.addEventListener('bikedeboa.login', function(e) {
+          if (BDB.User.isAdmin) {
+            updateLocalsTable();
+
+            Database.getAllTags();
+
+            updateRevisionTable(); 
+
+            $('.restricted-access').removeClass('restricted-access');
+          }
+        });
+
+        document.addEventListener('bikedeboa.logout', function(e) {
+          document.location.reload();
+        });
 
 
         /////////////////////
         // Initializations //
         /////////////////////
 
-        Database = BDB.Database;
+        Database = BDB.Database; 
 
         // Admin-only Globals
         let users;
