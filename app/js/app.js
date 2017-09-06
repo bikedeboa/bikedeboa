@@ -1197,22 +1197,22 @@ $(() => {
     if (placeDetailsModalTemplate) {
       templates.placeDetailsModalTemplate = Handlebars.compile(placeDetailsModalTemplate);
     }
-    
+
     let placeDetailsModalLoadingTemplate = $('#placeDetailsModalLoadingTemplate').html();
     if (placeDetailsModalLoadingTemplate) {
       templates.placeDetailsModalLoadingTemplate = Handlebars.compile(placeDetailsModalLoadingTemplate);
     }
-    
+
     let infoWindowTemplate = $('#infoWindowTemplate').html();
     if (infoWindowTemplate) {
       templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
     }
-    
+
     let profileModalTemplate = $('#profileModalTemplate').html();
     if (profileModalTemplate) {
       templates.profileModalTemplate = Handlebars.compile(profileModalTemplate);
     }
-    
+
   }
 
   function validateNewPlaceForm() {
@@ -2102,7 +2102,7 @@ $(() => {
       }
 
       // Lazy load gifs when modal is shown
-      $('#hogwToInstallModal .tutorial-gif').each( (i, v) => {
+      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
         $(v).attr('src', $(v).data('src'));
       });
 
