@@ -87,10 +87,12 @@ BDB.User = {
 
           if (prevReviews) {
             BDB.Database.importUserReviews(prevReviews)
-              .then(() => {
+              .then(data => {
                 ga('send', 'event', 'Login', 'import reviews', `${this.profile.name} imported ${prevReviews.length} reviews`);
                 
-                toastr['success'](`${prevReviews.length} avaliações salvas.`, '');
+                if (data.numImports && data.numImports > 0) {
+                  toastr['success'](`${data.numImports} avaliações salvas.`, '');
+                }
 
                 self._deleteReviewsFromCookies();
                 self.fetchReviews();
