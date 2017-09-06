@@ -194,29 +194,18 @@
         </ul>
       </nav> -->
 
-      <section class="restricted-access">
-          <h2>
-            <i class="fa fa-lightbulb-o"></i>
-            <span id="headingRevisions">Carregando sugestões...</span>
-          </h2>
-
-          <table
-            id="revisionsTable"
-            data-classes="table table-no-bordered"
-            data-search="true"
-            data-show-toggle="true"
-            data-show-columns="true"
-            data-show-footer="false"
-            data-sticky-header="true">
-          </table>
-      </section>
-
       <section>
         <ul class="nav nav-tabs nav-pills nav-justified" role="tablist">
           <li role="presentation" class="active">
             <a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">
               <i class="fa fa-bicycle"></i>
               Bicicletarios
+            </a>
+          </li>
+          <li role="presentation" class="restricted-access">
+            <a href="#sugestoes" aria-controls="sugestoes" role="tab" data-toggle="tab">
+              <i class="fa fa-comments"></i>
+              Sugestoes
             </a>
           </li>
           <li role="presentation" class="restricted-access">
@@ -258,6 +247,26 @@
               data-sticky-header="true">
             </table>
 
+          </div>
+
+
+          <!-- Tabela de Sugestoes das pessoas -->
+
+          <div role="tabpanel" class="tab-pane fade" id="sugestoes" class="restricted-access">
+            <h2>
+              <i class="fa fa-lightbulb-o"></i>
+              <span id="headingRevisions">Carregando sugestões...</span>
+            </h2>
+
+            <table
+              id="revisionsTable"
+              data-classes="table table-no-bordered"
+              data-search="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-show-footer="false"
+              data-sticky-header="true">
+            </table>
           </div>
 
 
@@ -616,34 +625,6 @@
 
             $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`);
 
-            // let html = '<table style="width: 100%;">';
-            // html += '<thead>';
-            // html += '<tr>';
-            // html += '<th>updatedAt</th>';
-            // html += '<th>createdAt</th>';
-            // html += '<th>user</th>';
-            // html += '<th>ip_origin</th>';
-            // html += '<th>role</th>';
-            // html += '<th>endpoint</th>';
-            // html += '<th>id</th>';
-            // html += '<th>body</th>';
-            // html += '</tr>';
-            // html += '</thead><tbody>';
-            // log.forEach( i => {
-            //   html += '<tr>';
-            //   html += `<td>${timestampColFormatter(i.updatedAt)}</td>`;
-            //   html += `<td>${timestampColFormatter(i.createdAt)}</td>`;
-            //   html += `<td>${i.user}</td>`;
-            //   html += `<td>${i.ip_origin}</td>`;
-            //   html += `<td>${i.role}</td>`;
-            //   html += `<td>${endpointNameColFormatter(i.endpoint)}</td>`;
-            //   html += `<td>${i.id}</td>`;
-            //   html += `<td>${jsonColFormatter(i.body)}</td>`;
-            //   html += '</tr>';
-            // });
-            // html += '</tbody></table>';
-            // $('#logTable').html(html);
-
             $('#logTable').bootstrapTable({
               columns: [
                 {
@@ -697,8 +678,6 @@
 
             Database.getAllTags();
 
-            updateRevisionTable(); 
-
             $('.restricted-access').removeClass('restricted-access');
           }
         });
@@ -733,6 +712,9 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
           const tabName = e.target.getAttribute('aria-controls');
           switch (tabName) {
+          case 'sugestoes':
+            updateRevisionTable();
+            break;
           case 'log':
             updateLogTable();
             break;
