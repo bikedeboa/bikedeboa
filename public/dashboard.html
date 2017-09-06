@@ -248,7 +248,6 @@
               data-classes="table table-no-bordered"
               data-striped="true"
               data-search="true"
-              data-show-refresh="true"
               data-show-toggle="true"
               data-show-columns="true"
               data-show-export="true"
@@ -444,10 +443,10 @@
                   field: 'id', title: 'ID', sortable: true, class: 'col-id',
                 },
                 {
-                  field: 'text', title: 'Titulo', sortable: true, class: 'col-title', editable: BDB.User.isAdmin
+                  field: 'text', title: 'Titulo', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: BDB.User.isAdmin, 'editable-type': 'textarea'
+                  field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
                   field: 'lat', title: 'lat', sortable: true, visible: false,
@@ -456,13 +455,13 @@
                   field: 'lng', title: 'lng', sortable: true, visible: false,
                 },
                 {
-                  field: 'isPublic', title: 'Público?', sortable: true, editable: BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
+                  field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
                 },
                 {
-                  field: 'isCovered', title: 'Coberto?', sortable: true, editable: BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]"
+                  field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]"
                 },
                 {
-                  field: 'structureType', title: 'Tipo', sortable: true, editable: BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
+                  field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
                   field: 'average', title: 'Média', sortable: true, visible: true,
@@ -474,13 +473,13 @@
                   field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
                 },
                 {
-                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: BDB.User.isAdmin, 'editable-type': 'textarea'
+                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
-                  field: 'photo', title: 'Foto', sortable: true, editable: BDB.User.isAdmin
+                  field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: BDB.User.isAdmin
+                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin
                 }
               ],
               data: markers,
@@ -502,22 +501,25 @@
             $('#usersTable').bootstrapTable({
               columns: [
                 {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id',
                 },
                 {
-                  field: 'username', title: 'Usuário', sortable: true, class: 'col-title',
+                  field: 'username', title: 'Usuário', sortable: true, class: 'col-title', visible: false
                 },
                 {
-                  field: 'fullname', title: 'Nome completo', sortable: true, editable: BDB.User.isAdmin
+                  field: 'fullname', title: 'Nome completo', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'role', title: 'Cargo', sortable: true, editable: BDB.User.isAdmin
+                  field: 'role', title: 'Cargo', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: BDB.User.isAdmin
+                  field: 'email', title: 'Email', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'google_id', title: 'ID Google', sortable: true, editable: BDB.User.isAdmin
+                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin
+                },
+                {
+                  field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
                   field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
@@ -689,6 +691,8 @@
 
         document.addEventListener('bikedeboa.login', function(e) {
           if (BDB.User.isAdmin) {
+            // Force table refresh
+            $('#localsTable').bootstrapTable('destroy');
             updateLocalsTable();
 
             Database.getAllTags();
