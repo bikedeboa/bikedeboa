@@ -1681,7 +1681,7 @@ $(() => {
         let desc = 'Informações e avaliações deste bicicletário na ';
         desc += openedMarker.address;
 
-        $('meta[name="og:title"]').attr('content', desc);
+        $('meta[name="og:title"]').attr('content', desc); 
       }
     }
   }
@@ -2495,7 +2495,9 @@ $(() => {
         document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {
         console.error('Error on social login', error); 
-        swal('Ops', 'Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!', 'warning');
+        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!'); 
+
+        $('#userBtn').removeClass('loading');
       });
     });
   }
@@ -2688,7 +2690,18 @@ $(() => {
       redirect_uri: window.location.origin
     });
     hello.on('auth.login', auth => {
-      onSocialLogin(auth);
+      // Hack to fix what I think is the bug that was causing duplicate user entries
+      if (!_loginMutexBlocked) {
+        onSocialLogin(auth);
+        _loginMutexBlocked = true;
+        setTimeout(() => { 
+          _loginMutexBlocked = false;
+        }, 1500);
+      } else {
+        // block! 
+        console.log('login called again in 1500ms window!');
+        ga('send', 'event', 'Login', 'mutex-blocked: login called again in a 1500ms window');
+      }
     });
     hello.on('auth.logout', () => {
       onSocialLogout(); 
