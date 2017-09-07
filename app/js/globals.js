@@ -128,5 +128,6 @@ let _onDataReadyCallback;
 let _socialToken;
 let _centerChangedTimeout;
 let _deferredPWAPrompt;
+let _loginMutexBlocked;
 
 let templates = {};
