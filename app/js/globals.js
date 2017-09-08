@@ -104,7 +104,7 @@ let _geolocationRadius;
 let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker;
-let newMarkerTemp = {};
+let _newMarkerTemp;
 let currentPendingRating;
 let _uploadingPhotoBlob;
 // let loggedUser;

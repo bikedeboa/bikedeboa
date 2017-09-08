@@ -892,13 +892,15 @@ $(() => {
       $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
-        newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
+        
+        // Saves this position for later
+        _newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
         BDB.geocodeLatLng(
-          newMarkerTemp.lat, newMarkerTemp.lng,
+          _newMarkerTemp.lat, _newMarkerTemp.lng,
           (address) => {
             // console.log('Resolved location address:');
             // console.log(address);
-            newMarkerTemp.address = address;
+            _newMarkerTemp.address = address;
           }, () => {
             // nothing here.
           }
@@ -996,12 +998,18 @@ $(() => {
 
     let place = {};
 
-    place.lat = newMarkerTemp.lat;
-    place.lng = newMarkerTemp.lng;
-    if (newMarkerTemp.address) {
-      place.address = newMarkerTemp.address;
+    // If we were editing this place's position
+    if (_newMarkerTemp) {
+      place.lat = _newMarkerTemp.lat;
+      place.lng = _newMarkerTemp.lng;
+      if (_newMarkerTemp.address) {
+        place.address = _newMarkerTemp.address;
+      }
+      _newMarkerTemp = null;
     }
 
+    // Reset form fields
+    // @todo replace this to use a rendered template
     place.text = $('#newPlaceModal #titleInput').val();
     // place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
     place.isPublic = $('#newPlaceModal .acess-types-group .active').data('value') === 'public';
@@ -1010,12 +1018,9 @@ $(() => {
     place.photo = _uploadingPhotoBlob;
     place.description = $('#newPlaceModal #descriptionInput').val();
 
-    const callback = newLocal => {
-      // Save cookie to temporarily enable edit/delete of this local
-      // Having the cookie isn't enough: the request origin IP is matched with the author IP
-      //   saved in the database.
+    const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
-        BDB.User.saveNewPlace(newLocal.id);
+        BDB.User.saveNewPlace(newPlace.id);
       }
 
       Database.getPlaces( () => {
@@ -1034,10 +1039,10 @@ $(() => {
             allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
           }).then(() => {
             // Clicked OK or dismissed the modal
-            const newMarker = markers.find( i => i.id === newLocal.id );
+            const newMarker = markers.find( i => i.id === newPlace.id );
             if (newMarker) {
               openLocal(newMarker, () => {
-                promptInstallPopup();
+                promptPWAInstallPopup();
 
                 // $('.rating-input-container').velocity('callout.bounce');
                 $('.openReviewPanelBtn').tooltip('show');
@@ -1053,10 +1058,10 @@ $(() => {
 
     if (updatingMarker) {
       ga('send', 'event', 'Local', 'update', ''+updatingMarker.id);
-      Database.updatePlace(updatingMarker.id, place, callback);
+      Database.updatePlace(updatingMarker.id, place, onPlaceSaved);
     } else {
       ga('send', 'event', 'Local', 'create');
-      Database.sendPlace(place, callback);
+      Database.sendPlace(place, onPlaceSaved);
     }
   }
 
@@ -1531,7 +1536,7 @@ $(() => {
           },
           onClose: () => {
             stopConfettis();
-            promptInstallPopup();
+            promptPWAInstallPopup();
           } 
         });
       }
@@ -2040,7 +2045,7 @@ $(() => {
     map.data.setMap(null);
   }
 
-  function promptInstallPopup() { 
+  function promptPWAInstallPopup() { 
     // Deferred prompt handling based on:
     //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
     if (_deferredPWAPrompt !== undefined) {
@@ -2070,7 +2075,7 @@ $(() => {
   }
 
   function openHowToInstallModal() {
-    const hasNativePromptWorked = promptInstallPopup();
+    const hasNativePromptWorked = promptPWAInstallPopup(); 
 
     if (!hasNativePromptWorked) {
       if (_isMobile) {
