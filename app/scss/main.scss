@@ -578,6 +578,12 @@ a.unstyled-link {
   height: 14px;
 }
 
+.svg-icon {
+  height: 1em;
+  max-width: 1em;  
+}
+
+
 .dropdown-menu {
   $dropdown-border-color: $lighterGrey;
   padding: $GRID_SPACE/2 0;
@@ -599,6 +605,13 @@ a.unstyled-link {
       text-align: left;
       border: 0;
       background: 0 0;
+
+      &:disabled,
+      &.disabled {
+        opacity: .5;
+        pointer-events: none;
+        filter: grayscale(100%);
+      }
 
       &:hover {
         background: $lightestGray;
@@ -636,17 +649,11 @@ a.unstyled-link {
   top: 10px;
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
-
+ 
   &.cool-hidden {
     opacity: 0;
     transform: translateY(-20px);
   } 
-
-  // Initializes hidden
-  .openProfileBtn,  
-  .openProfileDivider {
-    display: none;
-  }
 
   & > button {
     border: 0;
@@ -926,6 +933,20 @@ a.unstyled-link {
       display: block;
       color: gray;
       font-size: 12px;
+    }
+  }
+}
+
+#dataModal {
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  section {
+    p {
+      margin-left: 31px;
+      color: $gray;
     }
   }
 }
@@ -3416,6 +3437,7 @@ body.modal-open {
       justify-content: left;
       width: calc(100vw - #{$GRID_SPACE});
       overflow: auto;
+      margin-right: -$GRID_SPACE;
 
       img {
         // Shows half of the third photo

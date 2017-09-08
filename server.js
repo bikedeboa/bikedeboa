@@ -85,6 +85,11 @@ router.get('/io',function(req,res){
   res.sendFile(path + 'dist/io.html');
 });
 
+// Our data Dashboard
+router.get('/dados',function(req,res) {
+  res.sendFile(path + 'dist/dashboard.html');
+});
+
 // SEO server-side rendering Social Network Crawler Bots.
 // Request the API for details of a pin and delivers a simple HTML page with only SEO metatags.
 router.get('/b/*',function(req,res) {
@@ -142,6 +147,7 @@ router.get('/b/*',function(req,res) {
     defaultResponse();
   }
 });
+
 
 // Home
 router.get('/*',function(req,res) {

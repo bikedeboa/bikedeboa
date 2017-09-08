@@ -56,8 +56,17 @@
           body {
             font-family: "Roboto", Arial, sans-serif;
             /*margin-top: 100px;*/
-            padding: 2%;
+            padding: 24px;
             overflow: auto;
+            padding-top: 120px;
+          }
+
+          #logo {
+            left: 24px;
+          }
+
+          #userBtn {
+            right: 24px;
           }
 
           tbody > tr:not(.detail-view) {
@@ -75,9 +84,9 @@
           td,
           td a.editable-pre-wrapped {
             max-width: 100px;
-            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
+            /*white-space: nowrap;*/
+            /*text-overflow: ellipsis;*/
           }
 
           td.col-fulltext {
@@ -142,10 +151,10 @@
           }
 
           section {
-            padding: 50px;
-            margin: 70px 0 0;
-            background-color: rgba(0,0,0,0.02);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            margin: 30px 0 0;
+            /*padding: 50px;*/
+            /*background-color: rgba(0,0,0,0.02);*/
+            /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
           }
 
           section + section {
@@ -329,6 +338,11 @@
         </ul>
       </div>
 
+      <h1 id="logo" class="">
+        <!-- bike de boa -->
+        <a href="/"><img src="/img/logo.svg" alt="bike de boa"/></a>
+      </h1>
+
       <script>
         // Generic function to display in textual form all the properties of a table entry
         function detailFormatter(index, row) {
@@ -387,6 +401,16 @@
 
         function timestampColFormatter(value) {
           return value && new Date(value).toLocaleString('pt-BR');
+        }
+        
+        function booleanColFormatter(value) {
+          if (value === 0) {
+            return 'não';
+          } else if (value === 1) {
+            return 'sim';
+          } else {
+            return '-';
+          }
         }
 
         function endpointNameColFormatter(value) {
@@ -449,10 +473,10 @@
                   field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
                 },
                 {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id',
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'text', title: 'Titulo', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
+                  field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
                 },
                 {
                   field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
@@ -464,28 +488,28 @@
                   field: 'lng', title: 'lng', sortable: true, visible: false,
                 },
                 {
-                  field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]"
+                  field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]",
                 },
                 {
-                  field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]"
+                  field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]",
                 },
                 {
                   field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
-                  field: 'average', title: 'Média', sortable: true, visible: true,
+                  field: 'reviews', title: 'Nº Avaliações', sortable: true, class: 'col-reviews'
                 },
                 {
-                  field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
+                  field: 'average', title: 'Média', sortable: true, visible: true,
                 },
                 {
                   field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
                 },
                 {
-                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
+                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
                 },
                 {
-                  field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin
+                  field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin
                 },
                 {
                   field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin

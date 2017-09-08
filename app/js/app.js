@@ -1024,7 +1024,7 @@ $(() => {
         hideSpinner();
 
         if (updatingMarker) {
-          swal('Bicicletário atualizado', 'Valeu pela contribuição!', 'success');
+          toastr['success']('Bicicletário atualizado.'); 
         } else { 
           swal({
             title: 'Bicicletário criado',
@@ -1830,20 +1830,7 @@ $(() => {
       hideAll();
 
       ga('send', 'event', 'Misc', 'about data opened');
-      
-      swal({
-        title: 'Dados',
-        customClass: 'share-modal',
-        html:
-          ` <div style="text-align: left;">
-              <br> 
-              Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos dados também são abertos!<br>
-              Enquanto trabalhamos em uma forma mais acessível de baixar nossos dados, acesse nossa <a href="https://github.com/dennerevaldt/bikedeboa-api">documentação da API</a> para saber como ter acesso completo a ela se você é desenvolvedor.<br>
-              <br>
-              <i>Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade nós adoraríamos conversar contigo e encontrar uma maneira de colaborar. Se for seu caso, <a href="mailto:bikedeboa@gmail.com">fala com a gente</a> :)</i>
-            </div>
-          `,
-      });
+      setView('Sobre nossos dados', '/sobre-nossos-dados', true);
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
@@ -2114,7 +2101,6 @@ $(() => {
   }
 
   function openFaqModal() { 
-    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     $('#faqModal').modal('show');
     $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
@@ -2199,6 +2185,11 @@ $(() => {
       $(v).attr('src', $(v).data('src'));
     });
   } 
+ 
+  function openDataModal() {
+    $('#dataModal').modal('show');
+    $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+  } 
 
   function openAboutModal() {
     $('#aboutModal').modal('show');
@@ -2232,6 +2223,9 @@ $(() => {
     case 'sobre':
       $('#aboutModal').modal('show');
       $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      break;
+    case 'sobre-nossos-dados':
+      openDataModal();
       break;
     case 'contribuicoes':
       openProfileModal();
@@ -2477,7 +2471,8 @@ $(() => {
         // UI
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', userInfo.thumbnail);
-        $('.openProfileBtn, .openProfileDivider').show();
+        // $('.openProfileBtn, .openProfileDivider').show();
+        $('.openProfileBtn').attr('disabled', false);
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         if (data.role === 'admin') {
@@ -2510,7 +2505,7 @@ $(() => {
     $('#userBtn').removeClass('admin');
     $('.logoutBtn').hide();
     $('.loginBtn').show();
-    $('.openProfileBtn, .openProfileDivider').hide();
+    $('.openProfileBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
