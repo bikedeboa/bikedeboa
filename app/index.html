@@ -141,8 +141,8 @@
 
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
             <li>
-              <button class="openProfileBtn">
-                <img src="/img/icon_list.svg""> Contribuições
+              <button class="openProfileBtn disabled">
+                <img src="/img/icon_list.svg"> Contribuições
               </button>
             </li>
             
@@ -294,7 +294,7 @@
 
                 <li class="open-aboutdata-btn side-nav--animate-in">
                   <img alt="" src="/img/icon_table.svg"/>
-                  Dados
+                  Dados <span class="badge">novo</span>
                 </li>
                 
                 <li class="side-nav--animate-in" id="howToInstallBtn">
@@ -645,7 +645,7 @@
 
                                   <div>
                                     <p>
-                                      Normalmente um poste de luz ou placa de trânsito.
+                                      Normalmente um poste de luz ou placa de trânsito. Alguns problemas comuns são deixar uma folga e a trava correr no poste derrubando a bicicleta no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima dele.
                                     </p>
                                   </div>
                                 </div>
@@ -815,6 +815,58 @@
             </div>
         </div>
         
+        <!-- Data Modal -->
+        <div id="dataModal" class="modal fade" tabindex="-1">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title view-name">Sobre nossos dados</h1>
+                        </div>
+
+                        <div class="modal-body">
+                            <article>
+                                <p>
+                                  Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos dados também são abertos.
+                                </p>
+
+                                <section>
+                                  <h2>
+                                    <img alt="" src="/img/icon_table.svg" class="svg-icon" style="padding: 3px;"/>
+                                    <a target="_blank" rel="noopener" href="/dados">Tabela de Dados</a>
+                                  </h2>
+                                  <p>
+                                    Nossos dados brutos em forma de tabela. Super fácil de explorar, filtrar, e fazer download em vários formatos como Excel, CSV, XML e JSON.
+                                  </p>
+                                </section>
+
+                                <section>
+                                  <h2>
+                                    <img alt="" src="/img/icon_code.svg" class="svg-icon"/>
+                                    <a target="_blank" rel="noopener" href="https://github.com/dennerevaldt/bikedeboa-api">API</a>
+                                  </h2>
+                                  <p>
+                                    A API que alimenta este site está aberta para consultas e contribuições. Acesse o link para conferir a documentação.
+                                  </p>
+                                </section>
+
+                                <section>
+                                  <h2>
+                                    <img alt="" src="/img/icon_upload.svg" class="svg-icon"/>
+                                    Importar Dados
+                                  </h2>
+                                  <p>
+                                    Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade? Adoraríamos saber e quem sabe trazer eles pra dentro também! Se for seu caso, <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fala com a gente</a> :)
+                                  </p>
+                                </section>
+
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- How To Install -->
         <div id="howToInstallModal" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
