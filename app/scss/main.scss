@@ -2939,14 +2939,14 @@ body.modal-open {
   }
 
   // Custom Google Autocomplete search results for mobile
-  &:before {
-      content: 'Resultados apenas no Rio Grande do Sul';
-      padding: 6px 12px;
-      display: block;
-      font-size: 12px;
-      background: $paleWhite;
-      color: $lightGray;
-  }
+  // &:before {
+  //     content: 'Resultados apenas no Rio Grande do Sul';
+  //     padding: 6px 12px;
+  //     display: block;
+  //     font-size: 12px;
+  //     background: $paleWhite;
+  //     color: $lightGray;
+  // }
 
   /* Overrides marker */
   /* .pac-icon {
