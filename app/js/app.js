@@ -1694,11 +1694,16 @@ $(() => {
   function setView(title, view, isReplaceState) {
     _currentView = view;
 
+    let data = {};
+    if (title === 'bike de boa') {
+      data.isHome = true;
+    }
+
     // hideAll().then(() => {
       if (isReplaceState) {
-        History.replaceState({}, title, view);
+        History.replaceState(data, title, view);
       } else {
-        History.pushState({}, title, view);
+        History.pushState(data, title, view);
       }
 
       // Force new pageview for Analytics
@@ -2580,7 +2585,16 @@ $(() => {
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
-      if (state.title === 'bike de boa') {
+
+      if (_isFeatherlightOpen) {
+        const openLightbox = $.featherlight.current();
+        if (openLightbox) {
+          openLightbox.close();
+        }
+        _isFeatherlightOpen = false;
+      }
+
+      if (state.data && state.data.isHome) {
         if (!map && !_isOffline) {
           setupGoogleMaps();
           updateMarkers();
@@ -2591,7 +2605,7 @@ $(() => {
           // $('#logo').removeClass('clickable');
           $('body').removeClass('deeplink');
           _isDeeplink = false;
-        }
+        } 
 
         hideAll();
       } else {
@@ -2648,6 +2662,10 @@ $(() => {
       var caption = this.$currentTarget.find('img').attr('alt');
       this.$instance.find('.caption').remove();
       $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+    };
+    $.featherlight.prototype.beforeOpen = function() { 
+      History.pushState(null, null, 'foto');
+      _isFeatherlightOpen = true; 
     };
  
     // Toastr options
