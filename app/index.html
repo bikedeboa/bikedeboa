@@ -196,6 +196,7 @@
  
         <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip" style="display: none;">
             <img alt="" src="/img/icon_add_pin.svg">
+            <span>Adicionar bicicletário</span>
         </button>
 
         <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
@@ -476,7 +477,7 @@
         <!-- Views -->
 
         <!-- About -->
-        <div class="modal clean-modal" id="aboutModal" tabindex="-1">
+        <div data-keyboard="false" class="modal clean-modal" id="aboutModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -555,7 +556,7 @@
         </div>
         
         <!-- Guide -->
-        <div class="modal clean-modal" id="guideModal" tabindex="-1">
+        <div data-keyboard="false" class="modal clean-modal" id="guideModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -773,7 +774,7 @@
                               <ul class="guide-references-list">
                                 <li>
                                   <a target="_blank" rel="noopener" href="http://www.uniaodeciclistas.org.br/biblioteca/guia-estacionamentos/">Boas Práticas para Instalação de Estacionamento de Bicicletas
-                                  <span class="references-label">União de Ciclistas do Brasil</span>
+                                  <span class="references-label">União de Ciclistas do Brasil (UCB)</span>
                                   </a>
                                 </li>
                                 <li>
@@ -816,7 +817,7 @@
         </div>
         
         <!-- Data Modal -->
-        <div id="dataModal" class="modal fade" tabindex="-1">
+        <div id="dataModal" data-keyboard="false" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -856,7 +857,7 @@
                                     Importar Dados
                                   </h2>
                                   <p>
-                                    Se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade? Adoraríamos saber e quem sabe trazer eles pra dentro também! Se for seu caso, <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fala com a gente</a> :)
+                                    Você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade? Adoraríamos conhecê-los também e contribuir! Se for seu caso, <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fala com a gente</a> :)
                                   </p>
                                 </section>
 
@@ -868,7 +869,7 @@
         </div>
 
         <!-- How To Install -->
-        <div id="howToInstallModal" class="modal fade" tabindex="-1">
+        <div id="howToInstallModal" data-keyboard="false" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -959,7 +960,7 @@
         </div>
 
         <!-- FAQ -->
-        <div class="modal fade" id="faqModal" tabindex="-1">
+        <div data-keyboard="false" class="modal fade" id="faqModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -974,17 +975,20 @@
                                   <div class="panel-heading">
                                     <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseThree">
                                       <h4 class="panel-title">
-                                        Quando o Bike de Boa estará disponível na minha cidade/no Brasil inteiro/no mundo?
+                                        Quando o Bike de Boa estará disponível na minha cidade?
                                       </h4>
                                     </a>
                                   </div>
                                   <div id="collapseThree" class="panel-collapse collapse in">
                                     <div class="panel-body">
                                       <p>
-                                        Não ganhamos nada com o site, mas pagar os servidores em que o hospedamos tem custos. Esses custos sobem proporcionalmente ao número de acessos, por isso fomos obrigados a limitar o uso por enquanto. Se você acha que pode nos ajudar com isso <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fale com a gente</a>.
+                                        O Bike de Boa já pode ser usado em qualquer parte do Brasil :D
                                       </p>
                                       <p>
-                                        Fica à vontade também pra curtir nosso <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a> pra ficar sabendo das novidades.
+                                        Não ganhamos nem queremos ganhar nada com o site, mas temos custos básicos de manutenção. Esses custos sobem proporcionalmente ao número de acessos. Então se você quiser nos ajudar entra no nosso <a href="https://apoia.se/bikedeboa">projeto no Apoia.se</a> e seja um colaborador. Você pode doar a partir de R$1,00 por mês e é facinho de se cadastrar.
+                                      </p>
+                                      <p>
+                                        E se você conhece outros mapeamentos de bicicletários, paraciclos e lugares amigos do ciclista na sua cidade, adoraríamos contribuir! Se for seu caso, <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fala com a gente</a>.
                                       </p>
                                     </div>
                                   </div>
@@ -1000,26 +1004,7 @@
                                   <div id="collapseOne" class="panel-collapse collapse">
                                     <div class="panel-body">
                                       <p>
-                                        Veja nossa seção <b>Sobre o projeto</b> pra saber mais de onde o Bike de Boa veio, para onde vai e do que se alimenta.
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="panel">
-                                  <div class="panel-heading">
-                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseFour">
-                                      <h4 class="panel-title">
-                                        Por quê não posso editar as informações dos bicicletários?
-                                      </h4>
-                                    </a>
-                                  </div>
-                                  <div id="collapseFour" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                      <p>
-                                        Todos podem adicionar e avaliar bicicletários, mas editar informações (incluindo deletar) só é possível para os membros da nossa equipe (<a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fale com a gente se voce gostaria de nos ajudar</a>). Porém, se você recém adicionou um novo bicicletário, você tem 24 horas para poder fazer pequenos ajustes nele.
-                                      </p>
-                                      <p>
-                                        Lembre que se você reparar algo estranho com algum bicicletário você sempre pode sinalizar isso pra nós clicando em "Sugerir correção", nos botões do topo da tela de bicicletário.
+                                        Veja nossa seção <a href="#" class="openAboutBtn">Sobre o Projeto</a> pra saber mais de onde o Bike de Boa veio, para onde vai e do que se alimenta.
                                       </p>
                                     </div>
                                   </div>
@@ -1034,16 +1019,33 @@
                                   </div>
                                   <div id="collapseFive" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                      <p>
-                                        Se você se encaixa em um ou mais desses perfis <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fale com a gente</a>.
-                                      </p>
                                       <div>
                                         <ul>
-                                          <li>Se você se interessa pelo tema e está cheia(o) de ideias temos um grupo de discussão no Slack onde compartilhamos e debatemos todas elas, sua participação seria muito bem vinda.</li>
+                                          <li>Você pode nos ajudar com os custos de manutenção nos pagando um cafezinho por mês! Acessa o nosso <a href="https://apoia.se/bikedeboa">projeto no Apoia.se</a></li>
+                                          <li>Se você se interessa pelo tema e está cheia(o) de ideias temos um grupo de discussão onde compartilhamos e debatemos todas elas, sua participação seria muito bem vinda!</li>
                                           <li>Se é ciclista ou tá sempre por aí você pode ser um Colaborador e nos ajudar corrigindo e complementando nosso banco de dados.</li>
                                           <li>Se você é desenvolvedor web (<a target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">front-end</a> ou <a target="_blank" rel="noopener" href="https://github.com/dennerevaldt/bikedeboa-api">back-end</a>) deve ser super simples contribuir nos nossos repositórios no Github (e se não for, a culpa é nossa!).</li>
                                         </ul>
                                       </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="panel">
+                                  <div class="panel-heading">
+                                    <a role="button" data-toggle="collapse" class="collapsed unstyled-link" data-parent="#faq-accordion" href="#collapseFour">
+                                      <h4 class="panel-title">
+                                        Por quê não posso editar as informações dos bicicletários?
+                                      </h4>
+                                    </a>
+                                  </div>
+                                  <div id="collapseFour" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                      <p>
+                                        Todos podem adicionar e avaliar bicicletários, mas editar informações (incluindo deletar) só é possível para os membros da nossa equipe (<a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> fale com a gente se voce gostaria de nos ajudar</a>).
+                                      </p>
+                                      <p>
+                                        Lembre que se você reparar algo estranho com algum bicicletário você sempre pode sinalizar isso pra nós clicando em "Sugerir correção", nos botões do topo da tela de bicicletário.
+                                      </p>
                                     </div>
                                   </div>
                                 </div>
@@ -1088,7 +1090,7 @@
         </div>
 
         <!-- Pin Details -->
-        <div id="placeDetailsModal" class="modal fade" tabindex="-1">
+        <div id="placeDetailsModal" data-keyboard="false" class="modal fade" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -1099,7 +1101,7 @@
         </div>
 
         <!-- New Pin Modal -->
-        <div class="modal fade" id="newPlaceModal" tabindex="-1">
+        <div data-keyboard="false" class="modal fade" id="newPlaceModal" tabindex="-1">
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
@@ -1659,7 +1661,7 @@
 
         <!-- User Profile -->
         <script id="profileModalTemplate" type="text/x-handlebars-template">
-          <div id="profileModal" class="modal fade" tabindex="-1">
+          <div id="profileModal" data-keyboard="false" class="modal fade" tabindex="-1">
               <div class="vertical-alignment-helper">
                   <div class="modal-dialog vertical-align-center">
                       <div class="modal-content">

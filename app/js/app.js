@@ -232,7 +232,15 @@ $(() => {
     });
     $('#editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
     $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
-    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionDialog));
+    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+      if (!BDB.User.isLoggedIn) {
+        // @todo fix to not need to close the modal
+        hideAll();
+        openLoginDialog(true);
+      } else {
+        openRevisionDialog();
+      }
+    }));
 
     // Display the modal
     if (!$('#placeDetailsModal').is(':visible')) {
@@ -2667,6 +2675,7 @@ $(() => {
       History.pushState(null, null, 'foto');
       _isFeatherlightOpen = true; 
     };
+    $.featherlight.defaults.closeOnEsc = false;
  
     // Toastr options
     toastr.options = {
