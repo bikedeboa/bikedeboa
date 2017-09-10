@@ -116,6 +116,10 @@ $GRID_SPACE: 12px;
     //     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
     // }
 }
+ 
+@mixin roundedCorners {
+  border-radius: 5px;
+}
 
 
 
@@ -711,7 +715,7 @@ a.unstyled-link {
         font-size: 14px;
         padding: 0 $GRID_SPACE 0 50px;
         // font-weight: lighter;
-        border-radius: 5px;
+        @include roundedCorners;
         @include shadow(1);
 
         border: none;
@@ -1131,12 +1135,19 @@ a.unstyled-link {
 
     background: linear-gradient(45deg, $green 0, $lightGreen 100%);
     border: 0;
-    border-radius: 50%;
+    // border-radius: 50%;
     cursor: pointer;
     width: 50px;
     height: 50px;
     text-align: center;
     @include shadow(2);
+
+    border-radius: 25px;
+    white-space: nowrap;
+    padding: 13px;
+    text-align: left;
+    overflow: hidden;
+    transition: width .5s $coolEaseOut;
 
     // transition: background 0.2s ease-out, width 0.5s ease-out;
     // opacity: 0;
@@ -1145,6 +1156,19 @@ a.unstyled-link {
         width: 22px;
         margin-left: 3px;
         margin-top: 2px;
+    }
+
+    // &:hover,
+    &.expanded {
+      width: 220px;
+    }
+
+    span {
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      margin-left: 10px;
+      vertical-align: sub;
     }
 
     &:hover,
@@ -1541,7 +1565,7 @@ body.modal-open {
 
 .modal-content {
     border: 0;
-    border-radius: 5px;
+    @include roundedCorners;
     // overflow: hidden; //used to round corners, but was clipping tooltips
     margin-top: $GRID_SPACE*2;
     margin-bottom: 100px;
@@ -1632,7 +1656,7 @@ body.modal-open {
         font-weight: 700;
         // font-size: 30px;
         letter-spacing: -0.01em; 
-        // border-radius: 5px;
+        // @include roundedCorners;
         // font-size: 30px;
 
         &:valid {
@@ -1680,7 +1704,7 @@ body.modal-open {
         /* color: $gray; */
         /* border-top: $separatorBorderStyle; */
         background: $lightestGray;
-        border-radius: 5px;
+        @include roundedCorners;
         color: rgb(100,100,100);
         text-align: left;
         font-size: 14px;
@@ -1774,7 +1798,7 @@ body.modal-open {
         //     color: $black;
         //     background: rgba(255,255,255,0.8);
         //     padding: 10px;
-        //     border-radius: 5px;
+        //     @include roundedCorners;
         //     font-size: 20px;
         //     content: "\e096";
         //     font-family: $bootstrapFont;
@@ -2324,7 +2348,7 @@ body.modal-open {
     min-width: 42px; 
     min-height: 42px;
 
-    border-radius: 5px;
+    @include roundedCorners;
  
     border-top: none;
     border-left: none;
@@ -2527,7 +2551,7 @@ body.modal-open {
     $depth: 3px;
 
     width: 100%;
-    border-radius: 5px;
+    @include roundedCorners;
     border-bottom: $depth solid $lighterGray;
     padding: 20px;
 
@@ -3200,7 +3224,7 @@ body.modal-open {
     background: $lightestGray;
     transition: background 0.2s ease-out;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    @include roundedCorners;
      
     &:hover,
     &:focus,
@@ -3340,7 +3364,7 @@ body.modal-open {
 
       &.hasImage:not(.loading):after {
         padding: 8px;
-        border-radius: 5px;
+        @include roundedCorners;
         font-size: 15px;
       }
     }
@@ -3585,6 +3609,17 @@ body.modal-open {
         // border-top: 1px solid $lighterGray;
       }
 
+      button {
+        // Explanation on the reason for the string interpolation:
+        //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+        width: calc(100% - #{$GRID_SPACE});
+        margin: $GRID_SPACE/2;
+        font-weight: 700;
+        @include roundedCorners;
+        text-transform: uppercase;
+        background: $greenGradient;
+      } 
+
       // &:before {
       //   content: '';
       //   width: 100%;
@@ -3593,18 +3628,6 @@ body.modal-open {
       //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
       //   pointer-events: none;
       // }
-
-      button {
-        // Explanation on the reason for the string interpolation:
-        //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-        // width: calc(100% - #{$GRID_SPACE*2});
-        // margin: $GRID_SPACE;
-        width: 100%;
-        font-weight: 700;
-        border-radius: 0;
-        text-transform: uppercase;
-        background: $greenGradient;
-      } 
   }
 
   #placeDetailsModal {
@@ -4422,7 +4445,7 @@ body.modal-open {
   .swal2-confirm {
     border-bottom-width: 3px;
     border-bottom-style: solid;
-    border-radius: 5px;
+    @include roundedCorners;
     font-weight: 700;  
     min-width: 90px;
     

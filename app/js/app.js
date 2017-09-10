@@ -232,7 +232,15 @@ $(() => {
     });
     $('#editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
     $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
-    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, openRevisionDialog));
+    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+      if (!BDB.User.isLoggedIn) {
+        // @todo fix to not need to close the modal
+        hideAll();
+        openLoginDialog(true);
+      } else {
+        openRevisionDialog();
+      }
+    }));
 
     // Display the modal
     if (!$('#placeDetailsModal').is(':visible')) {
@@ -1694,11 +1702,16 @@ $(() => {
   function setView(title, view, isReplaceState) {
     _currentView = view;
 
+    let data = {};
+    if (title === 'bike de boa') {
+      data.isHome = true;
+    }
+
     // hideAll().then(() => {
       if (isReplaceState) {
-        History.replaceState({}, title, view);
+        History.replaceState(data, title, view);
       } else {
-        History.pushState({}, title, view);
+        History.pushState(data, title, view);
       }
 
       // Force new pageview for Analytics
@@ -2580,7 +2593,16 @@ $(() => {
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
-      if (state.title === 'bike de boa') {
+
+      if (_isFeatherlightOpen) {
+        const openLightbox = $.featherlight.current();
+        if (openLightbox) {
+          openLightbox.close();
+        }
+        _isFeatherlightOpen = false;
+      }
+
+      if (state.data && state.data.isHome) {
         if (!map && !_isOffline) {
           setupGoogleMaps();
           updateMarkers();
@@ -2591,7 +2613,7 @@ $(() => {
           // $('#logo').removeClass('clickable');
           $('body').removeClass('deeplink');
           _isDeeplink = false;
-        }
+        } 
 
         hideAll();
       } else {
@@ -2649,6 +2671,11 @@ $(() => {
       this.$instance.find('.caption').remove();
       $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
     };
+    $.featherlight.prototype.beforeOpen = function() { 
+      History.pushState(null, null, 'foto');
+      _isFeatherlightOpen = true; 
+    };
+    $.featherlight.defaults.closeOnEsc = false;
  
     // Toastr options
     toastr.options = {
