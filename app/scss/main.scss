@@ -51,8 +51,8 @@ $spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
 // Typography //////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$bodyFont: "Ubuntu", sans-serif;
-$headingFont: 'Raleway', "Ubuntu", sans-serif;
+$bodyFont: "CoreSansRounded", sans-serif;
+$headingFont: 'CoreSansRounded', sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
@@ -63,6 +63,77 @@ $MOBILE_BOTTOMBAR_HEIGHT: 50px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
 $GRID_SPACE: 12px;
+
+// @font-face {
+//   font-family: "CoreSans";
+//   font-weight: normal;
+//   src: url('/fonts/CoreSansG-Regular.ttf');
+// }
+
+// @font-face {
+//   font-family: "CoreSans";
+//   font-weight: normal;
+//   font-style: italic;
+//   src: url('/fonts/CoreSansG-Italic.ttf');
+// }
+
+// @font-face {
+//   font-family: "CoreSans"; 
+//   font-weight: bold;
+//   src: url('/fonts/CoreSansG-Bold.ttf');
+// }
+
+// // @font-face {
+// //   font-family: "CoreSansRounded";
+// //   font-weight: normal;
+// //   src: url('/fonts/CoreSansGRounded-Medium.ttf');
+// // }
+
+// @font-face {
+//   font-family: "CoreSansRounded";
+//   font-weight: bold;
+//   src: url('/fonts/CoreSansGRounded-ExtraBold.ttf');
+// }
+
+
+@font-face {
+  font-family: "CoreSans";
+  font-weight: normal;
+  src: url('/fonts/Fontspring-DEMO-coresansc45.otf');
+}
+
+@font-face {
+  font-family: "CoreSans";
+  font-weight: normal;
+  font-style: italic;
+  src: url('/fonts/Fontspring-DEMO-coresansc45it.otf');
+}
+
+@font-face {
+  font-family: "CoreSans"; 
+  font-weight: bold;
+  src: url('/fonts/Fontspring-DEMO-coresansc65.otf');
+}
+
+@font-face {
+  font-family: "CoreSansRounded";
+  font-weight: normal;
+  font-style: italic;
+  src: url('/fonts/Fontspring-DEMO-coresanscr45it.otf');
+}
+
+
+@font-face {
+  font-family: "CoreSansRounded";
+  font-weight: normal;
+  src: url('/fonts/Fontspring-DEMO-coresanscr45.otf');
+}
+
+@font-face {
+  font-family: "CoreSansRounded";
+  font-weight: bold;
+  src: url('/fonts/Fontspring-DEMO-coresanscr65.otf');
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,16 +358,19 @@ p {
     position: fixed;
     top: 10px;
     left: 62px;
-    text-shadow: 1px 1px 1px white;
+    // text-shadow: 1px 1px 1px white;
     // top: 10px;
     // left: 10px;
     margin: 0;
     padding: 0;
-    // color: $green;
-    // user-select: none;
-    // font-size: 24px;
-    // letter-spacing: -0.02em;
-    // font-weight: bold;
+    
+    margin-top: 10px;
+    color: $green;
+    user-select: none;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    font-weight: bold;
+    font-family: $headingFont;
     // opacity: 0.6;
 
     img {
@@ -2875,7 +2949,7 @@ body.modal-open {
     &:after {
       content: 'Limpar';
       display: block;
-      font-family: Ubuntu,sans-serif;
+      font-family: $headingFont;
       font-size: 12px;
       margin-top: 5px;
       color: gray;
