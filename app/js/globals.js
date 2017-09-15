@@ -88,13 +88,17 @@ let isDemoMode = false;//
 // "Main Brazil"
 let _mapBoundsCoords = {sw: {lat:'-34.0526594796', lng:'-61.3037107971'}, ne: {lat: '0.1757808338', lng:'-34.3652340941'}};
 
+// (south,west,north,east)
+let _overpassQLBoundingBox = '-34.0526594796,-61.3037107971,0.1757808338,-34.3652340941';
+
+
 let _portoAlegrePos = {lat: -30.0346, lng: -51.2177};
 
 let map;
 let _mapBounds;
 let Database;
 let geocoder;
-let markers;
+let markers = [];
 let tags;
 let idToTag = {};
 let tagToId = {};

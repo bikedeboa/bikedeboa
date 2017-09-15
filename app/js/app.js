@@ -885,6 +885,14 @@ $(() => {
     return ret;
   }
 
+  function mapBoundsChanged() {
+    console.log('map bounds changed');
+
+    BDB.OSM.getPlaces( () => {
+      updateMarkers();
+    });
+  }
+  
   function mapCenterChanged() {
     // Makes sure this doesnt destroy the overall performance by limiting these calculations 
     //   to not be executed more then 20 times per second (1000ms/50ms = 20x).
@@ -2316,6 +2324,8 @@ $(() => {
 
     mapCenterChanged();
     map.addListener('center_changed', mapCenterChanged);
+    // map.addListener('bounds_changed', mapBoundsChanged);
+    // map.addListener('dragend', mapBoundsChanged);
 
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
@@ -2343,6 +2353,7 @@ $(() => {
     //    $(_infoWindow.div_).velocity('transition.slideUpIn', {display: 'flex', duration: 250}); 
     // }
 
+    // Toggle between pins and little dots depending on map zoom
     google.maps.event.addListener(map, 'zoom_changed', () => {
       const prevZoomLevel = _mapZoomLevel;
 
@@ -2350,7 +2361,7 @@ $(() => {
 
       if (prevZoomLevel !== _mapZoomLevel) {
         if (!_activeFilters) {
-          setMarkersIcon(_mapZoomLevel);
+          setMarkersIcon(_mapZoomLevel); 
         }
       }
     });
@@ -2818,13 +2829,13 @@ $(() => {
     localhostOverrides();
 
     // Retrieve markers saved in a past access
-    markers = BDB.getMarkersFromLocalStorage();
+    // markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
       console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
       hideSpinner();
     } else {
-      showSpinner('Carregando bicicletários...');
+      showSpinner('Carregando bicicletários do OSM...');
     }
 
     if (!_isOffline) {
@@ -2855,8 +2866,8 @@ $(() => {
 
       // handleRouting();
 
-      // This is the only request allowed to be unauthenticated
-      Database.getPlaces( () => {
+      // Database.getPlaces( () => { 
+      BDB.OSM.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
         $('#filter-results-total').html(markers.length);
 
