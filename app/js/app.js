@@ -1463,22 +1463,19 @@ $(() => {
 
     // Tags toggle buttons
     let tagsButtons = tags.map(t => {
-      // @todo TEMP: while I haven't deleted this tag type
-      if (t.name !== 'Coberto') {
-        let isPrepoped = false;
-        if (previousReview && previousReview.tags && previousReview.tags.length > 0) {
-          isPrepoped = previousReview.tags.find( i => parseInt(i.id) === t.id );
-        }
-
-        return `
-          <button  
-              class="btn btn-tag ${isPrepoped ? 'active' : ''}"
-              data-toggle="button"
-              data-value="${t.id}">
-            ${t.name}
-          </button>
-        `;
+      let isPrepoped = false;
+      if (previousReview && previousReview.tags && previousReview.tags.length > 0) {
+        isPrepoped = previousReview.tags.find( i => parseInt(i.id) === t.id );
       }
+
+      return `
+        <button  
+            class="btn btn-tag ${isPrepoped ? 'active' : ''}"
+            data-toggle="button"
+            data-value="${t.id}">
+          ${t.name}
+        </button>
+      `;
     }).join(''); 
 
     swal({ 
@@ -2769,7 +2766,7 @@ $(() => {
     });
   }
 
-  function openPromoBanner() { 
+  function openWelcomeMessage() { 
     // setTimeout( () => {
     //   if (_isMobile) {
     //     $('.welcome-message-container').show();  
@@ -2876,10 +2873,8 @@ $(() => {
       });
     }
 
-    // Promo banner
-    // temp: Temporarily disabled
-    // if (!BDB.Session.getPromoBannerViewed()) {
-    //   openPromoBanner();
+    // if (!BDB.Session.hasUserSeenWelcomeMessage()) {
+    //   openWelcomeMessage();
     // }
   }
 
