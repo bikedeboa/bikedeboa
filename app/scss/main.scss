@@ -1414,8 +1414,8 @@ a.unstyled-link {
     left: 0;
     z-index: 9999;
 
-    // Leave it visible by default so it's the first thing rendered in the screen
-    // display: none;
+    // DONT leave it visible by default so it's NOT the first thing rendered in the screen
+    display: none;
 
     .spinnerContainer {
       position: absolute;
@@ -3785,7 +3785,8 @@ body.modal-open {
 
 .featherlight {
   &:last-of-type {
-    background: rgba(255,255,255,.95); 
+    // background: rgba(255,255,255,.95); 
+    background: white;
   }
 
   .featherlight-content {

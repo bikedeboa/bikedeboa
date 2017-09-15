@@ -126,7 +126,7 @@ gulp.task('generate-service-worker', function(callback) {
   swPrecache.write(`dist/service-worker.js`, {
     staticFileGlobs: [
       'dist/**/*.{js,css}',
-      'dist/404.html',
+      'dist/*.html', 
     // 'assets/**/*.{svg,png,jpg}',
       // 'dist/**/*.{ttf,woff,woff2}',
       '/fonts/glyphicons-halflings-regular.ttf',
