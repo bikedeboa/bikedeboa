@@ -3,7 +3,7 @@
   "short_name": "bike de boa",
   "start_url": ".",
   "lang": "pt-br",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#04883A",
   "theme_color": "#2cd978",
