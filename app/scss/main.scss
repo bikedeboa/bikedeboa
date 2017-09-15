@@ -1100,8 +1100,9 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
-    // Initializes hidden
-    display: none; 
+    position: fixed;
+    bottom: 76px;
+    right: 0px;
 
     margin: 0px $GRID_SPACE $GRID_SPACE;
 
@@ -1128,9 +1129,9 @@ a.unstyled-link {
 }
 
 #addPlace {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    position: fixed;
+    bottom: 14px;
+    right: 0px;
     margin: 0 $GRID_SPACE $GRID_SPACE;
 
     background: linear-gradient(45deg, $green 0, $lightGreen 100%);
@@ -1207,10 +1208,10 @@ a.unstyled-link {
 }
 
 #filterBtn {
-    // Initializes hidden
-    display: none;
+    position: fixed;
+    bottom: 138px;
+    right: 0px;
 
-    float: right;
     border-radius: 25px;
     padding: 0 15px;
     margin: 10px 0;

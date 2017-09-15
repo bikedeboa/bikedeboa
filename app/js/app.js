@@ -2373,24 +2373,23 @@ $(() => {
       strokeWeight: 5
     });
 
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
+    // map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
+
+    // // Geolocalization button
+    // if (navigator.geolocation) {
+    //   const btn = document.getElementById('geolocationBtn');
+    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
+    // }
+
+    // // if (_isMobile) {
+    //   const filterBtnEl = document.getElementById('filterBtn');
+    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
+    // // }
 
     // These were initialized hidden in CSS
-    $('#geolocationBtn').show();
-    $('#filterBtn').show();
-    $('#addPlace').show(); 
-
-
-    // Geolocalization button
-    if (navigator.geolocation) {
-      const btn = document.getElementById('geolocationBtn');
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
-    }
-
-    // if (_isMobile) {
-      const filterBtnEl = document.getElementById('filterBtn');
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
-    // }
+    // $('#geolocationBtn').show();
+    // $('#filterBtn').show();
+    // $('#addPlace').show(); 
 
     // Especial tooltips for map UI buttons that have only an icon
     if(!_isTouchDevice) {
