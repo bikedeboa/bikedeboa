@@ -2287,6 +2287,43 @@ body.modal-open {
     //     opacity: 0;
     // }
 
+    .tagDisplayContainer {
+      width: calc(33% - #{$GRID_SPACE});      
+      display: inline-block;
+    }
+
+    .tagDisplay {
+        display: inline-block;
+        padding: $GRID_SPACE/2 $GRID_SPACE;
+        font-size: 14px;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        user-select: none;
+        cursor: default;
+        border: 1px solid transparent;
+
+        background: $lightestGray;
+        border-radius: 25px;
+        margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+        color: $black;
+
+        .tag-count {
+            font-weight: 700;
+            font-size: 12px;
+            opacity: .5;
+
+            &:before {
+              // content: ' · ';
+              font-size: 9px;
+              margin-right: 2px;
+              margin-left: 2px;
+              font-family: 'Glyphicons Halflings';
+              content: "\e008";
+            }
+        }
+    }
+
     hr {
       margin-top: $GRID_SPACE*2;
       margin-bottom: $GRID_SPACE*2;
@@ -2432,6 +2469,7 @@ body.modal-open {
     .tagsContainer {
       max-width: 400px;
       margin: 24px auto 36px;
+      text-align: left;
     }
 
     .btn-tag {
@@ -2439,6 +2477,7 @@ body.modal-open {
         color: $black;
         border-radius: 25px;
         margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+        width: calc(33% - #{$GRID_SPACE}); 
 
         // &:before {
         //     content: '☐';
@@ -2478,39 +2517,6 @@ body.modal-open {
       font-size: 13px;
       color: gray;
       font-style: italic;
-    }
-}
-
-
-.tagDisplay {
-    display: inline-block;
-    padding: $GRID_SPACE/2 $GRID_SPACE;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    user-select: none;
-    cursor: default;
-    border: 1px solid transparent;
-
-    background: $lightestGray;
-    border-radius: 25px;
-    margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-    color: $black;
-
-    .tag-count {
-        font-weight: 700;
-        font-size: 12px;
-        opacity: .5;
-
-        &:before {
-          // content: ' · ';
-          font-size: 9px;
-          margin-right: 2px;
-          margin-left: 2px;
-          font-family: 'Glyphicons Halflings';
-          content: "\e008";
-        }
     }
 }
 
@@ -3475,6 +3481,10 @@ body.modal-open {
     p.small {
       display: none;
     }
+
+    .btn-tag {
+      width: calc(50% - #{$GRID_SPACE});
+    }
   }
 
   .info {
@@ -3634,6 +3644,10 @@ body.modal-open {
     hr {
       margin-left: -12px;
       margin-right: -12px;
+    }
+
+    .tagDisplayContainer {
+      width: calc(50% - #{$GRID_SPACE});      
     }
 
     .review {
