@@ -52,7 +52,7 @@ $spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $bodyFont: "Ubuntu", sans-serif;
-$headingFont: 'Raleway', "Ubuntu", sans-serif;
+$headingFont: 'Ubuntu', sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
@@ -285,18 +285,21 @@ p {
 
 #logo {
     position: fixed;
-    top: 10px;
+    top: 8px;
     left: 62px;
-    text-shadow: 1px 1px 1px white;
+    // text-shadow: 1px 1px 1px white;
     // top: 10px;
     // left: 10px;
     margin: 0;
     padding: 0;
-    // color: $green;
-    // user-select: none;
-    // font-size: 24px;
-    // letter-spacing: -0.02em;
-    // font-weight: bold;
+    
+    margin-top: 10px;
+    color: $green;
+    user-select: none;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    font-weight: bold;
+    font-family: $headingFont;
     // opacity: 0.6;
 
     img {
@@ -1100,8 +1103,9 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
-    // Initializes hidden
-    display: none; 
+    position: fixed;
+    bottom: 76px;
+    right: 0px;
 
     margin: 0px $GRID_SPACE $GRID_SPACE;
 
@@ -1128,9 +1132,9 @@ a.unstyled-link {
 }
 
 #addPlace {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    position: fixed;
+    bottom: 14px;
+    right: 0px;
     margin: 0 $GRID_SPACE $GRID_SPACE;
 
     background: linear-gradient(45deg, $green 0, $lightGreen 100%);
@@ -1207,10 +1211,10 @@ a.unstyled-link {
 }
 
 #filterBtn {
-    // Initializes hidden
-    display: none;
+    position: fixed;
+    bottom: 138px;
+    right: 0px;
 
-    float: right;
     border-radius: 25px;
     padding: 0 15px;
     margin: 10px 0;
@@ -1414,8 +1418,8 @@ a.unstyled-link {
     left: 0;
     z-index: 9999;
 
-    // Leave it visible by default so it's the first thing rendered in the screen
-    // display: none;
+    // DONT leave it visible by default so it's NOT the first thing rendered in the screen
+    display: none;
 
     .spinnerContainer {
       position: absolute;
@@ -2287,6 +2291,43 @@ body.modal-open {
     //     opacity: 0;
     // }
 
+    .tagDisplayContainer {
+      width: calc(33% - #{$GRID_SPACE});      
+      display: inline-block;
+    }
+
+    .tagDisplay {
+        display: inline-block;
+        padding: $GRID_SPACE/2 $GRID_SPACE;
+        font-size: 14px;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        user-select: none;
+        cursor: default;
+        border: 1px solid transparent;
+
+        background: $lightestGray;
+        border-radius: 25px;
+        margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+        color: $black;
+
+        .tag-count {
+            font-weight: 700;
+            font-size: 12px;
+            opacity: .5;
+
+            &:before {
+              // content: ' · ';
+              font-size: 9px;
+              margin-right: 2px;
+              margin-left: 2px;
+              font-family: 'Glyphicons Halflings';
+              content: "\e008";
+            }
+        }
+    }
+
     hr {
       margin-top: $GRID_SPACE*2;
       margin-bottom: $GRID_SPACE*2;
@@ -2432,6 +2473,7 @@ body.modal-open {
     .tagsContainer {
       max-width: 400px;
       margin: 24px auto 36px;
+      text-align: left;
     }
 
     .btn-tag {
@@ -2439,6 +2481,7 @@ body.modal-open {
         color: $black;
         border-radius: 25px;
         margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+        width: calc(33% - #{$GRID_SPACE}); 
 
         // &:before {
         //     content: '☐';
@@ -2478,39 +2521,6 @@ body.modal-open {
       font-size: 13px;
       color: gray;
       font-style: italic;
-    }
-}
-
-
-.tagDisplay {
-    display: inline-block;
-    padding: $GRID_SPACE/2 $GRID_SPACE;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    user-select: none;
-    cursor: default;
-    border: 1px solid transparent;
-
-    background: $lightestGray;
-    border-radius: 25px;
-    margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-    color: $black;
-
-    .tag-count {
-        font-weight: 700;
-        font-size: 12px;
-        opacity: .5;
-
-        &:before {
-          // content: ' · ';
-          font-size: 9px;
-          margin-right: 2px;
-          margin-left: 2px;
-          font-family: 'Glyphicons Halflings';
-          content: "\e008";
-        }
     }
 }
 
@@ -2875,7 +2885,7 @@ body.modal-open {
     &:after {
       content: 'Limpar';
       display: block;
-      font-family: Ubuntu,sans-serif;
+      font-family: $bodyFont;
       font-size: 12px;
       margin-top: 5px;
       color: gray;
@@ -3475,6 +3485,10 @@ body.modal-open {
     p.small {
       display: none;
     }
+
+    .btn-tag {
+      width: calc(50% - #{$GRID_SPACE});
+    }
   }
 
   .info {
@@ -3636,6 +3650,10 @@ body.modal-open {
       margin-right: -12px;
     }
 
+    .tagDisplayContainer {
+      width: calc(50% - #{$GRID_SPACE});      
+    }
+
     .review {
       text-align: left;
 
@@ -3785,7 +3803,8 @@ body.modal-open {
 
 .featherlight {
   &:last-of-type {
-    background: rgba(255,255,255,.95); 
+    // background: rgba(255,255,255,.95); 
+    background: white;
   }
 
   .featherlight-content {

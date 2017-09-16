@@ -125,13 +125,31 @@ $(() => {
       const MAX_TAG_COUNT = m.reviews;
       const MIN_TAG_OPACITY = 0.2;
 
-      templateData.tags = m.tags
+      let allTags = [];
+      tags.forEach( t => {
+        const found = m.tags.find( el => el.name === t.name );
+        if (found) {
+          allTags.push(found);
+        } else {
+          allTags.push({name: t.name, count: 0});
+        }
+      });
+
+      // templateData.tags = m.tags
+      templateData.tags = allTags 
         .sort((a, b) => {return b.count - a.count;})
         .map(t => {
           // Tag opacity is proportional to count
           // @todo refactor this to take into account Handlebars native support for arrays
           const opacity = t.count/MAX_TAG_COUNT + MIN_TAG_OPACITY;
-          return t.count > 0 ? `<span class="tagDisplay" style="opacity: ${opacity}">${t.name} <span class="tag-count">${t.count}</span></span>` : '';
+          // return t.count > 0 ? `<span class="tagDisplay" style="opacity: ${opacity}">${t.name} <span class="tag-count">${t.count}</span></span>` : '';
+          return `
+            <span class="tagDisplayContainer">
+              <span class="tagDisplay" style="opacity: ${opacity}">
+                ${t.name} <span class="tag-count">${t.count}</span>
+              </span>
+            </span>
+          `;
         })
         .join('');
     }
@@ -1445,22 +1463,19 @@ $(() => {
 
     // Tags toggle buttons
     let tagsButtons = tags.map(t => {
-      // @todo TEMP: while I haven't deleted this tag type
-      if (t.name !== 'Coberto') {
-        let isPrepoped = false;
-        if (previousReview && previousReview.tags && previousReview.tags.length > 0) {
-          isPrepoped = previousReview.tags.find( i => parseInt(i.id) === t.id );
-        }
-
-        return `
-          <button  
-              class="btn btn-tag ${isPrepoped ? 'active' : ''}"
-              data-toggle="button"
-              data-value="${t.id}">
-            ${t.name}
-          </button>
-        `;
+      let isPrepoped = false;
+      if (previousReview && previousReview.tags && previousReview.tags.length > 0) {
+        isPrepoped = previousReview.tags.find( i => parseInt(i.id) === t.id );
       }
+
+      return `
+        <button  
+            class="btn btn-tag ${isPrepoped ? 'active' : ''}"
+            data-toggle="button"
+            data-value="${t.id}">
+          ${t.name}
+        </button>
+      `;
     }).join(''); 
 
     swal({ 
@@ -2355,24 +2370,23 @@ $(() => {
       strokeWeight: 5
     });
 
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
+    // map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
+
+    // // Geolocalization button
+    // if (navigator.geolocation) {
+    //   const btn = document.getElementById('geolocationBtn');
+    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
+    // }
+
+    // // if (_isMobile) {
+    //   const filterBtnEl = document.getElementById('filterBtn');
+    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
+    // // }
 
     // These were initialized hidden in CSS
-    $('#geolocationBtn').show();
-    $('#filterBtn').show();
-    $('#addPlace').show(); 
-
-
-    // Geolocalization button
-    if (navigator.geolocation) {
-      const btn = document.getElementById('geolocationBtn');
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
-    }
-
-    // if (_isMobile) {
-      const filterBtnEl = document.getElementById('filterBtn');
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
-    // }
+    // $('#geolocationBtn').show();
+    // $('#filterBtn').show();
+    // $('#addPlace').show(); 
 
     // Especial tooltips for map UI buttons that have only an icon
     if(!_isTouchDevice) {
@@ -2752,7 +2766,7 @@ $(() => {
     });
   }
 
-  function openPromoBanner() { 
+  function openWelcomeMessage() { 
     // setTimeout( () => {
     //   if (_isMobile) {
     //     $('.welcome-message-container').show();  
@@ -2859,10 +2873,8 @@ $(() => {
       });
     }
 
-    // Promo banner
-    // temp: Temporarily disabled
-    // if (!BDB.Session.getPromoBannerViewed()) {
-    //   openPromoBanner();
+    // if (!BDB.Session.hasUserSeenWelcomeMessage()) {
+    //   openWelcomeMessage();
     // }
   }
 
