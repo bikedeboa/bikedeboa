@@ -1288,9 +1288,9 @@
           <div class="modal-body">
               <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
-                    <h1 class="view-name">{{title}}</h1>
+                    <h1 class="view-name">{{{title}}}</h1>
                   {{else}}
-                    <h1 style="font-style: italic;">Sem nome</h1>
+                    <h1 style="font-style: italic; color: #b3b3b3;">Sem nome</h1>
                   {{/if}}
 
                   <p class="address">
@@ -1585,9 +1585,9 @@
           
           <div class="infobox--content">
             {{#if title}}
-              <h2>{{title}}</h2>
+              <h2>{{{title}}}</h2>
             {{else}}
-              <h2 style="font-style: italic;">Sem título</h2>
+              <h2 style="font-style: italic; color: #b3b3b3;">Sem nome</h2>
             {{/if}}
 
             <div class="infobox--details">

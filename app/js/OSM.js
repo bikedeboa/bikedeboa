@@ -40,6 +40,9 @@ BDB.OSM = {
       ret.reviews = 0;
       ret.description = tags.description || '';
 
+      // @todo reverse geocode this
+      // ret.address
+
       // https://wiki.openstreetmap.org/wiki/Key:access
       if (tags.access) {
         switch(tags.access) {
@@ -87,8 +90,8 @@ BDB.OSM = {
         if (tags.operator) {
           ret.description += '<br><b>Operado por</b>: ' + tags.operator;
         }
-      } else {
-        ret.text = tags.operator;
+      } else if (tags.operator) {
+        ret.text = `${tags.operator} <small>(operador)</small>`;
       }
 
       if (tags.capacity) {
@@ -140,6 +143,7 @@ BDB.OSM = {
           console.debug('No mapping for covered=' + tags.covered);
         }
       }
+
 
       if (tags.opening_hours) {
         ret.description += '<br><b>Horário de funcionamento:</b> ' + tags.opening_hours;
