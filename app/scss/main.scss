@@ -285,18 +285,21 @@ p {
 
 #logo {
     position: fixed;
-    top: 10px;
+    top: 8px;
     left: 62px;
-    text-shadow: 1px 1px 1px white;
+    // text-shadow: 1px 1px 1px white;
     // top: 10px;
     // left: 10px;
     margin: 0;
     padding: 0;
-    // color: $green;
-    // user-select: none;
-    // font-size: 24px;
-    // letter-spacing: -0.02em;
-    // font-weight: bold;
+    
+    margin-top: 10px;
+    color: $green;
+    user-select: none;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    font-weight: bold;
+    font-family: $headingFont;
     // opacity: 0.6;
 
     img {
@@ -2882,7 +2885,7 @@ body.modal-open {
     &:after {
       content: 'Limpar';
       display: block;
-      font-family: Ubuntu,sans-serif;
+      font-family: $bodyFont;
       font-size: 12px;
       margin-top: 5px;
       color: gray;
