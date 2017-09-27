@@ -123,7 +123,7 @@ $(() => {
     // Tags
     if (m.tags && m.tags.length > 0) {
       const MAX_TAG_COUNT = m.reviews;
-      const MIN_TAG_OPACITY = 0.2;
+      const MIN_TAG_OPACITY = 0.3;
 
       let allTags = [];
       tags.forEach( t => {

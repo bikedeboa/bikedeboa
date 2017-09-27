@@ -186,8 +186,10 @@ class SideNav {
   }
 
   hide () {
-    this.sideNavEl.classList.add('side-nav--animatable');
-    this.sideNavEl.classList.remove('side-nav--visible');
-    this.sideNavEl.addEventListener('transitionend', this.onTransitionEnd);
+    if (this.sideNavEl.classList.contains('side-nav--visible')) {
+      this.sideNavEl.classList.add('side-nav--animatable');
+      this.sideNavEl.classList.remove('side-nav--visible');
+      this.sideNavEl.addEventListener('transitionend', this.onTransitionEnd);
+    }
   }
 }

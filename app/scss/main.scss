@@ -51,8 +51,8 @@ $spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
 // Typography //////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$bodyFont: "Ubuntu", sans-serif;
-$headingFont: 'Ubuntu', sans-serif;
+$bodyFont: "Quicksand", sans-serif;
+$headingFont: 'Quicksand', sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
@@ -1608,6 +1608,10 @@ body.modal-open {
           line-height: 30px;
           margin-top: $GRID_SPACE*2;
           letter-spacing: -0.01em; 
+
+          span {
+
+          }
         }
 
         & > .skeleton-box {
@@ -4283,7 +4287,6 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   will-change: transform;
-  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
 
   .side-nav__hide {
     position: absolute;
@@ -4397,13 +4400,15 @@ body.modal-open {
   }
 }
 
-// .side-nav--animatable .side-nav__container {
-//   transition: transform 0.2s ease-in-out;
-// }
+.side-nav--animatable .side-nav__container {
+  // transition: transform 0.2s ease-in-out;
+  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+}
 
-// .side-nav--visible.side-nav--animatable .side-nav__container {
-//   transition: transform 0.3s ease-in-out;
-// }
+.side-nav--visible.side-nav--animatable .side-nav__container {
+  // transition: transform 0.3s ease-in-out;
+  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+}
 
 .side-nav--visible::before {
   opacity: 1;
