@@ -2028,10 +2028,9 @@ body.modal-open {
 .modal-body {
     padding: $GRID_SPACE*3 $GRID_SPACE*3;
 
-    // img { 
-    //     width: 100%;
-    //     height: 100%;
-    // }
+    img { 
+        max-width: 100%;
+    }
 
     hr {
         margin-top: 10px;
@@ -3481,6 +3480,7 @@ body.modal-open {
         // Shows half of the third photo
         width: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
         height: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
+        max-width: none;
       }
     }
   }
