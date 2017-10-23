@@ -967,6 +967,21 @@ a.unstyled-link {
     justify-content: space-around;
   }
 
+  .about-collaborators {
+    font-weight: bold;
+    font-size: 18px;
+    ul {
+      padding-left: 1em;
+      padding-top: .5em;
+      list-style: none;
+      columns: 2;
+
+      li {
+          line-height: 2em;
+      }
+    }
+  }
+
   .social-link {
     color: #333;
     font-size: 18px;
