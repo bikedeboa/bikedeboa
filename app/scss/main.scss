@@ -3415,24 +3415,24 @@ body.modal-open {
 
   #locationSearch {
     #locationQueryInput { 
-      padding: 0 110px 0 60px; 
+      padding: 0 90px 0 60px; 
     }
     #clearLocationQueryBtn {
-      right: 50px;
+      right: 40px;
     }
   }
 
   #userBtn {
     // border-left: 1px solid $lighterGray;
-    &:before {
-        background: $lightGray;
-        width: 0.5px; 
-        height: 50%;
-        content: '';
-        left: 0;
-        position: absolute;
-        margin-top: 25%;
-    }
+    // &:before {
+    //     background: $lightGray;
+    //     width: 0.5px; 
+    //     height: 50%;
+    //     content: '';
+    //     left: 0;
+    //     position: absolute;
+    //     margin-top: 25%;
+    // }
 
     & > button {
         .avatar {
