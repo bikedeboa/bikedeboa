@@ -2423,14 +2423,14 @@ body.modal-open {
   width: 13em;
 
   position: relative;
-  padding: 0 15px 0 46px;
   border: none;
-  text-align: left;
-  line-height: 34px;
+  height: $GRID_SPACE*4;
   white-space: nowrap;
-  border-radius: 0.2em;
   font-size: 16px;
   color: #FFF;
+  text-align: center;
+  @include roundedCorners;
+  font-weight: bold;
   
   &:before {
     content: "";
@@ -2438,7 +2438,7 @@ body.modal-open {
     position: absolute;
     top: 0;
     left: 0;
-    width: 34px;
+    width: $GRID_SPACE*4;
     height: 100%;
   }
   &:focus {
@@ -2450,19 +2450,18 @@ body.modal-open {
  
   /* Facebook */
   &.facebookLoginBtn {
-    background-color: #4C69BA;
+    background-color: #4267b2;
     /*font-family: "Helvetica neue", Helvetica Neue, Helvetica, Arial, sans-serif;*/
     text-shadow: 0 -1px 0 #354C8C;
     
     &:before {
-      border-right: #364e92 1px solid;
-      background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_facebook.png') 6px 6px no-repeat;
+      background: url('/img/facebook_logo_white.svg') $GRID_SPACE $GRID_SPACE no-repeat;
+      background-size: $GRID_SPACE*2;
     }
     
     &:hover,
     &:focus {
       background-color: #5B7BD5;
-      background-image: linear-gradient(#5B7BD5, #4864B1);
     }
   }
 
@@ -2470,16 +2469,18 @@ body.modal-open {
   /* Google */
   &.googleLoginBtn {
     /*font-family: "Roboto", Roboto, arial, sans-serif;*/
-    background: #DD4B39;
+    background: white;
+    border: 1px solid $gray;
+    color: $black;
 
     &:before {
-      border-right: #BB3F30 1px solid;
-      background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png') 6px 6px no-repeat;
+      background: url('/img/icon_google.png') $GRID_SPACE $GRID_SPACE no-repeat;
+      background-size: $GRID_SPACE*2;
     }
 
     &:hover,
     &:focus {
-      background: #E74B37;
+      background: $lightestGray;
     }
   }
 }
@@ -4447,8 +4448,7 @@ body.modal-open {
 // Sweet Alert 2 Customizations
 
 .swal2-modal {
-  padding-left: 5%;
-  padding-right: 5%; 
+  padding: 5% !important;
   font-family: $bodyFont;
   @include shadow(3);
 
