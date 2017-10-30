@@ -115,6 +115,14 @@
 
     <body>
         <div id="map"></div>
+
+        <div id="spinnerOverlay">
+            <div class="spinnerContainer">
+                <img alt="Carregando..." src="/img/spinner.svg"/>
+
+                <p id="globalSpinnerLabel"> </p>
+            </div>
+        </div>
         
         <h1 id="logo" class="js-menu-show-hamburger-menu">
           bike de boa
@@ -216,14 +224,6 @@
           </button>
         </div>
 
-        <div id="spinnerOverlay">
-            <div class="spinnerContainer">
-                <img alt="Carregando..." src="/img/spinner.svg"/>
-
-                <p id="globalSpinnerLabel"> </p>
-            </div>
-        </div>
-
         <button id="close-modal-btn" class="close-modal">✕</button>
 
         <div id="top-mobile-bar">
@@ -251,7 +251,7 @@
 
             <div class="welcome-message--content">
               <p>
-                Chega de não ter onde estacionar a bike de boa! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando novos.
+                Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando novos.
               </p>
 
               <p>
@@ -527,11 +527,18 @@
                               </p>
 
                               <p>
-                                Quer nos ajudar? <a href="https://apoia.se/bikedeboa">Apoie o projeto no Apoia.se!</a>. Você pode ajudar com a partir de R$1,00 por mês - e sério, isso já significa muito pra gente! :)
+                                Quer nos ajudar? Agora temos um <a href="https://apoia.se/bikedeboa">projeto no Apoia.se!</a> Você pode ajudar com a partir de R$1,00 por mês - e sério, isso já significa muito pra gente! :)
+                              </p>
+
+                              <p style="text-align: center;">
+                                <button class="ghost" style="margin: 24px 0; border-radius: 25px; padding: 12px 36px; font-size: 22px; ">Apoie a gente ›</button>
+                              </p>
+
+                              <p>
+                                Um MUITO OBRIGADO do fundo do coração a nossos apoiadorxs:
                               </p>
 
                               <div class="about-collaborators">
-                                Um MUITO OBRIGADO do fundo do coração a nossos apoiadorxs:
                                 <ul>
                                   <li>Cristiano Medeiros Dalbem</li>
                                   <li>Eduardo Vernier</li>

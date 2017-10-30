@@ -2843,6 +2843,21 @@ $(() => {
         // }
       });
 
+      // Hit Google Geolocation to get user's position without GPS
+      // $.ajax({
+      //   url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
+      //   type: 'POST'
+      // }).done(data => {
+      //   if (data && data.location) {
+      //     const pos = data.location;
+      //     ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
+      //     map.panTo(data.location);
+      //   } else {
+      //     console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
+      //     ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
+      //   }
+      // });
+
       // Authenticate to be ready for next calls
       login();
 
@@ -2867,7 +2882,7 @@ $(() => {
     }
 
     // if (!BDB.Session.hasUserSeenWelcomeMessage()) {
-    //   openWelcomeMessage();
+      // openWelcomeMessage();
     // }
   }
 

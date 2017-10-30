@@ -969,16 +969,22 @@ a.unstyled-link {
   }
 
   .about-collaborators {
-    font-weight: bold;
     font-size: 18px;
+    background: #F3F3F3;
+    padding: 24px;
+    margin: auto;
+
     ul {
-      padding-left: 1em;
-      padding-top: .5em;
       list-style: none;
-      columns: 2;
+      padding: 0;
+      margin: 0;
 
       li {
-          line-height: 2em;
+        line-height: 1em;
+      }
+
+      li + li {
+        margin-top: .5em;
       }
     }
   }
@@ -1432,7 +1438,7 @@ a.unstyled-link {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 9999;
+    // z-index: 9999;
 
     // DONT leave it visible by default so it's NOT the first thing rendered in the screen
     display: none;
@@ -1447,8 +1453,8 @@ a.unstyled-link {
 
       img {
           animation: spin 3s linear infinite;
-          width: 90px;
-          height: 90px;
+          width: $GRID_SPACE*6;
+          height: $GRID_SPACE*6;
       }
 
       p {
@@ -2151,13 +2157,13 @@ body.modal-open {
 }
 
 .ghost {
-    padding: 3px 10px;
-    border: 1px solid $gray;
-    color: $gray;
+    padding: 5px 10px;
+    border: 1px solid $black;
+    color: $black;
     margin: 5px auto;
     font-size: 16px;
     border-radius: 25px;
-    vertical-align: bottom;
+    vertical-align: middle;
     background: transparent;
 
     transition: color .2s ease;
@@ -3029,7 +3035,7 @@ body.modal-open {
       border-top-right-radius: 5px;
 
       height: auto;
-      padding: $GRID_SPACE*2 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE;
+      padding: $GRID_SPACE*2 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
       // font-size: 16px;
       background: $green;
 
@@ -4410,7 +4416,7 @@ body.modal-open {
       }
 
       li:hover {
-        background: #lighterGray;
+        background: $lighterGray;
       }
     }
   }
