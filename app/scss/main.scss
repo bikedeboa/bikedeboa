@@ -825,6 +825,7 @@ a.unstyled-link {
       margin: 0 6px;
       object-fit: cover;
       background: $lighterGray;
+      max-width: none;
 
       &:hover {
         opacity: 1;
@@ -3496,7 +3497,6 @@ body.modal-open {
         // Shows half of the third photo
         width: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
         height: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
-        max-width: none;
       }
     }
   }
