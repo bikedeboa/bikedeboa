@@ -2771,21 +2771,24 @@ $(() => {
     if (_isMobile) {
       return;
     }
+
+    ga('send', 'event', 'Misc', 'welcome message - show');
     
     $('.welcome-message-container').show(); 
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
-      $('.welcome-message-container').remove();
+      $('.welcome-message-container').velocity('fadeOut'); 
+      // $('.welcome-message-container').remove();
       BDB.Session.setPromoBannerViewed(); 
 
-      ga('send', 'event', 'Banner', 'promo banner - closed');
+      ga('send', 'event', 'Misc', 'welcome message - closed');
     });
 
     $('.welcome-message-container a').on('click', e => {
       $('.welcome-message-container').remove();
-      // BDB.Session.setPromoBannerViewed();
+      // BDB.Session.setPromoBannerViewed(); 
 
-      ga('send', 'event', 'Banner', 'promo banner - link click');
+      ga('send', 'event', 'Misc', 'welcome message - link click');
     });
   }
  
@@ -2881,10 +2884,10 @@ $(() => {
       });
     }
 
-    // if (!BDB.Session.hasUserSeenWelcomeMessage()) {
-      // openWelcomeMessage();
-    // }
-  }
+    if (!BDB.Session.hasUserSeenWelcomeMessage()) {
+      openWelcomeMessage();
+    }
+  } 
 
   window.toggleDemoMode = () => {
     showSpinner();

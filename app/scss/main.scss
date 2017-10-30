@@ -1049,6 +1049,7 @@ a.unstyled-link {
     letter-spacing: 1em;
     font-weight: bold;
     font-size: 20px;
+    user-select: none;
   }
 }
 
@@ -3023,21 +3024,25 @@ body.modal-open {
 
   .welcome-message {
       position: fixed;
-      bottom: 0;
+      top: 0;
       width: 100%;
-      z-index: 2;
+      // z-index: 2;
       text-align: left;
       display: flex; 
       // align-items: center;
       // align-content: center;
       flex-wrap: wrap;
-      color: white;
       border-top-right-radius: 5px;
 
       height: auto;
       padding: $GRID_SPACE*2 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
       // font-size: 16px;
-      background: $green;
+      
+      // background: $green;
+      // color: white;
+      
+      color: $gray;
+      background: white;
 
       span {
         // font-family: $bodyFont;
@@ -3045,12 +3050,14 @@ body.modal-open {
       }
 
       a {
-        color: white;
+        color: $gray;
       }
 
       h1, h2 {
         font-weight: bold;
         letter-spacing: -0.02em;
+        color: $black;
+        opacity: 0;
       }
 
       img {
@@ -3408,24 +3415,24 @@ body.modal-open {
 
   #locationSearch {
     #locationQueryInput { 
-      padding: 0 110px 0 60px; 
+      padding: 0 90px 0 60px; 
     }
     #clearLocationQueryBtn {
-      right: 50px;
+      right: 40px;
     }
   }
 
   #userBtn {
     // border-left: 1px solid $lighterGray;
-    &:before {
-        background: $lightGray;
-        width: 0.5px; 
-        height: 50%;
-        content: '';
-        left: 0;
-        position: absolute;
-        margin-top: 25%;
-    }
+    // &:before {
+    //     background: $lightGray;
+    //     width: 0.5px; 
+    //     height: 50%;
+    //     content: '';
+    //     left: 0;
+    //     position: absolute;
+    //     margin-top: 25%;
+    // }
 
     & > button {
         .avatar {
