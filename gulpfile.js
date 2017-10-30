@@ -49,11 +49,11 @@ const FACEBOOK_IDS = {
 };
 const GOOGLE_PROD = '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com';
 const GOOGLE_DEV = '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com';
-const GOOGLE_MAPS_PROD = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[facebookEnv];
 const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
-const GOOGLE_MAPS_ID = GOOGLE_MAPS_PROD;
+const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
 // const GOOGLE_MAPS_ID = development() ? 'AIzaSyD1dNf2iN1XS0wx17MTf2lPTbPg8UIJqfA' : 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 
@@ -88,6 +88,7 @@ gulp.task('scripts', () => {
     .pipe(replace('<DATABASE_URL>', DATABASE_URL))
     .pipe(replace('<FACEBOOK_CLIENT_ID>', FACEBOOK_CLIENT_ID))
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
+    .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(plumber()) 
     .pipe(concat('app.js'))
     .pipe(babel({

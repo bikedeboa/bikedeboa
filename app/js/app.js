@@ -1112,6 +1112,8 @@ $(() => {
     autocomplete.addListener('place_changed', () => {
       // infowindow.close();
       _searchResultMarker.setVisible(false);
+      _searchResultMarker.setAnimation(null);
+
       const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
@@ -1135,21 +1137,12 @@ $(() => {
       //   scaledSize: new google.maps.Size(35, 35)
       // }));
 
-      _searchResultMarker.setPosition(place.geometry.location);
-      _searchResultMarker.setVisible(true);
+      // Show temporary result marker
+      // _searchResultMarker.setPosition(place.geometry.location);
+      // _searchResultMarker.setVisible(true);
+      // _searchResultMarker.setAnimation(google.maps.Animation.DROP);
 
       ga('send', 'event', 'Search', 'location', place.formatted_address); 
-
-      // var address = '';
-      // if (place.address_components) {
-      //   address = [
-      //               (place.address_components[0] && place.address_components[0].short_name || ''),
-      //               (place.address_components[1] && place.address_components[1].short_name || ''),
-      //               (place.address_components[2] && place.address_components[2].short_name || '')
-      //   ].join(' ');
-      // }
-      // infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-      // infowindow.open(map, marker);
     });
   }
 
@@ -2850,6 +2843,21 @@ $(() => {
         // }
       });
 
+      // Hit Google Geolocation to get user's position without GPS
+      // $.ajax({
+      //   url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
+      //   type: 'POST'
+      // }).done(data => {
+      //   if (data && data.location) {
+      //     const pos = data.location;
+      //     ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
+      //     map.panTo(data.location);
+      //   } else {
+      //     console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
+      //     ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
+      //   }
+      // });
+
       // Authenticate to be ready for next calls
       login();
 
@@ -2874,7 +2882,7 @@ $(() => {
     }
 
     // if (!BDB.Session.hasUserSeenWelcomeMessage()) {
-    //   openWelcomeMessage();
+      // openWelcomeMessage();
     // }
   }
 
