@@ -2775,7 +2775,8 @@ $(() => {
     $('.welcome-message-container').show(); 
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
-      $('.welcome-message-container').remove();
+      $('.welcome-message-container').velocity('fadeOut'); 
+      // $('.welcome-message-container').remove();
       BDB.Session.setPromoBannerViewed(); 
 
       ga('send', 'event', 'Banner', 'promo banner - closed');
@@ -2783,7 +2784,7 @@ $(() => {
 
     $('.welcome-message-container a').on('click', e => {
       $('.welcome-message-container').remove();
-      // BDB.Session.setPromoBannerViewed();
+      // BDB.Session.setPromoBannerViewed(); 
 
       ga('send', 'event', 'Banner', 'promo banner - link click');
     });
@@ -2882,7 +2883,7 @@ $(() => {
     }
 
     // if (!BDB.Session.hasUserSeenWelcomeMessage()) {
-      // openWelcomeMessage();
+    //   openWelcomeMessage();
     // }
   }
 
