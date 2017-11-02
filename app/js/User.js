@@ -21,7 +21,7 @@ BDB.User = {
     this.fetchPlaces();
   },
 
-  login: function (userInfo) {
+  login: function (profile) {
     const self = this;
 
     if (this.isLoggedIn) {
@@ -30,8 +30,8 @@ BDB.User = {
     }
 
     this.isLoggedIn = true;
-    this.profile = userInfo;
-    this.isAdmin = userInfo.isAdmin;
+    this.profile = profile;
+    this.isAdmin = profile.isAdmin;
 
     const prevReviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
     const prevPlaces = this.places && this.places.length > 0 ? this.places : null;
@@ -47,7 +47,7 @@ BDB.User = {
     
     const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
     let message, title;
-    if (userInfo.isNewUser) { 
+    if (this.profile.isNewUser) { 
       title = 'Bem-vindo(a)'; 
       message = `
         Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir. :) Eles serão automaticamente salvos nas suas contribuições.

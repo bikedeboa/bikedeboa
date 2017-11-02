@@ -516,7 +516,7 @@
                               </p>
 
                               <p> 
-                                Achou tri? Gostaria de participar disso com a gente? Tem algumas sugestões pra melhorar o site? Vamos conversar, estamos totalmente abertos a novos colaboradores e ideias!
+                                Curtiu? Gostaria de participar disso com a gente? Tem algumas sugestões pra melhorar o site? Vamos conversar, estamos totalmente abertos a novos colaboradores e ideias!
                               </p>
 
                               <h2>Como apoiar</h2> 
@@ -1320,90 +1320,7 @@
                       {{address}}
                   </p>
 
-                  {{#if mapStaticImg}}
-                    <div>
-                      <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
-                    </div>
-                  {{/if}}
               </section>
-
-              <hr>
-
-              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
-                  {{#if savedRating}}
-                    <div class="savedRating">
-                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
-                      <button class="ghost openReviewPanelBtn">Editar</button>
-                    </div>
-                  {{/if}}
-
-                  {{#if numReviews}}
-                    <div class="numreviews">{{numReviews}}</div>
-                  {{/if}}
-
-                  {{#unless average}}
-                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
-                  {{/unless}}
-
-                  <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-                    {{#if average}}
-                        <span class="average">{{average}}</span>
-
-                        <fieldset id="ratingDisplay" class="rating disabled">
-                          <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                          <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
-                          <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                          <label class="full-star" data-value="4" for="placeDetails_star4"></label>
-                          <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                          <label class="full-star" data-value="3" for="placeDetails_star3"></label>
-                          <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                          <label class="full-star" data-value="2" for="placeDetails_star2"></label>
-                          <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                          <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                      </fieldset>
-                      
-                      {{#unless savedRating}}
-                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
-                      {{/unless}}
-                    {{/if}}
-
-                    
-                    <!-- {{#unless average}}
-                        <p style="font-style: italic; font-size: 14px;">
-                          Ninguém avaliou este bicicletário ainda.
-                        </p>
-                        <button class="openReviewPanelBtn ghost">Avaliar</button>
-
-                        <div class="rating-input-container" style="text-align: center;">
-                          <h2 style="margin-bottom: 0;">
-                            Dê sua nota 
-                          </h2>
-
-                          <fieldset class="rating rating-big empty">
-                              <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
-                              <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
-                              <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
-                              <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
-                              <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
-                              <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
-                              <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
-                          </fieldset>
-                        </div>
-                    {{/unless}} -->
-
-                  </div>
-
-                  {{#if tags}}
-                      <div class="tagsContainer">
-                          {{{tags}}}
-                      </div>
-                  {{/if}}
-              </section>
-
-              <hr>
 
               <section class="info">
                   {{#unless noIsCoveredData}}
@@ -1529,6 +1446,82 @@
 
               <hr>
 
+              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
+                  {{#if savedRating}}
+                    <div class="savedRating">
+                      <img src="{{userThumbUrl}}"/> Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
+                      <button class="ghost openReviewPanelBtn">Editar</button>
+                    </div>
+                  {{/if}}
+
+                  {{#if numReviews}}
+                    <div class="numreviews">{{numReviews}}</div>
+                  {{/if}}
+
+                  {{#unless average}}
+                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                  {{/unless}}
+
+                  <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+                    {{#if average}}
+                        <span class="average">{{average}}</span>
+
+                        <fieldset id="ratingDisplay" class="rating disabled">
+                          <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                          <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
+                          <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                          <label class="full-star" data-value="4" for="placeDetails_star4"></label>
+                          <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                          <label class="full-star" data-value="3" for="placeDetails_star3"></label>
+                          <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                          <label class="full-star" data-value="2" for="placeDetails_star2"></label>
+                          <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                          <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                      </fieldset>
+                      
+                      {{#unless savedRating}}
+                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
+                      {{/unless}}
+                    {{/if}}
+
+                    
+                    <!-- {{#unless average}}
+                        <p style="font-style: italic; font-size: 14px;">
+                          Ninguém avaliou este bicicletário ainda.
+                        </p>
+                        <button class="openReviewPanelBtn ghost">Avaliar</button>
+
+                        <div class="rating-input-container" style="text-align: center;">
+                          <h2 style="margin-bottom: 0;">
+                            Dê sua nota 
+                          </h2>
+
+                          <fieldset class="rating rating-big empty">
+                              <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+                              <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
+                              <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
+                              <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
+                              <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
+                              <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+                              <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
+                          </fieldset>
+                        </div>
+                    {{/unless}} -->
+
+                  </div>
+
+                  {{#if tags}}
+                      <div class="tagsContainer">
+                          {{{tags}}}
+                      </div>
+                  {{/if}}
+              </section>
+
+              <hr>
+
               {{#if description}}
                   <section class="description">
                       <h2>
@@ -1537,6 +1530,14 @@
                       </h2>
 
                       {{{description}}}
+                  </section>
+              {{/if}}
+
+              {{#if mapStaticImg}}
+                  <section class="minimap-container">
+                      <div>
+                        <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
+                      </div>
                   </section>
               {{/if}}
 

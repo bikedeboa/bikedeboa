@@ -117,7 +117,7 @@ $(() => {
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
-    const staticImgDimensions = _isMobile ? '400x70' : '1000x100';
+    const staticImgDimensions = _isMobile ? '400x70' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
@@ -214,6 +214,7 @@ $(() => {
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
       templateData.savedRating = previousReview.rating;
+      templateData.userThumbUrl = BDB.User.profile.thumbnail;
     }
 
 
@@ -2482,35 +2483,35 @@ $(() => {
     _socialToken = auth.authResponse.access_token;
 
     // Get user information for the given network
-    hello(auth.network).api('me').then(function(userInfo) { 
-      console.log('userInfo', userInfo);
+    hello(auth.network).api('me').then(function(profile) { 
+      console.log('profile', profile);
 
       Database.socialLogin({
         network: auth.network,
         socialToken: _socialToken,
-        fullname: userInfo.name,
-        email: userInfo.email 
+        fullname: profile.name,
+        email: profile.email 
       }).then( data => { 
         console.log('social login successful'); 
 
         // UI
         $('#userBtn').removeClass('loading');
-        $('#userBtn .avatar').attr('src', userInfo.thumbnail);
+        $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openProfileBtn, .openProfileDivider').show();
         $('.openProfileBtn').attr('disabled', false);
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         if (data.role === 'admin') {
           $('#userBtn').addClass('admin');
-          userInfo.isAdmin = true;
+          profile.isAdmin = true;
         } else {
-          userInfo.isAdmin = false;
+          profile.isAdmin = false;
         }
         
-        userInfo.role = data.role;
-        userInfo.isNewUser = data.isNewUser;
+        profile.role = data.role;
+        profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(userInfo);
+        BDB.User.login(profile);
 
         document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {

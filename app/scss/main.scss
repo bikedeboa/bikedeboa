@@ -1212,6 +1212,8 @@ a.unstyled-link {
         background: $black;
         width: auto;
         border-radius: 25px;
+        left: 50%;
+        transform: translateX(-50%);
 
         // transition: background 0.5s ease-out, width 0.5s ease-out;
 
@@ -2265,16 +2267,13 @@ body.modal-open {
             margin-left: 6px;
           }
 
-          &:before {
-              content: '';
-              display: inline-block;
-              width: 14px;
-              height: 17px;
-              background-image: url(/img/icon_user.svg);
-              background-size: 100%;
-              background-repeat: no-repeat;
-              vertical-align: middle;
-              // margin-right: 5px;
+          img {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            vertical-align: middle;
+            border-radius: 50%;
+            margin-right: 3px;
           }
       }
 
@@ -2329,6 +2328,7 @@ body.modal-open {
     .tagDisplay {
         display: inline-block;
         padding: $GRID_SPACE/2 $GRID_SPACE;
+        width: 100%;
         font-size: 14px;
         font-weight: 400;
         text-align: center;
@@ -2363,15 +2363,20 @@ body.modal-open {
       margin-bottom: $GRID_SPACE*2;
     }
 
-    .minimap { 
-        width: 100%;
-        min-height: 50px;
-        background: $lightestGray;
-        // border-radius: 15px;
+    .minimap-container {
+      margin-left: -$GRID_SPACE*3;
+      margin-right: -$GRID_SPACE*3;
 
-        &.close-modal {
-          cursor: pointer;
-        }
+      .minimap { 
+          width: 100%;
+          min-height: 50px;
+          background: $lightestGray;
+          // border-radius: 15px;
+
+          &.close-modal {
+            cursor: pointer;
+          }
+      }
     }
 }
 
@@ -3128,6 +3133,7 @@ body.modal-open {
   background: white;
   @include shadow(1);
   display: flex;
+  margin-top: $GRID_SPACE*2;
 
   &:active,
   &:focus,
