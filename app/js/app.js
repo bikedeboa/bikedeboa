@@ -2777,16 +2777,16 @@ $(() => {
     $('.welcome-message-container').show(); 
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
-      $('.welcome-message-container').velocity('fadeOut'); 
+      $('.welcome-message-container').velocity('transition.slideUpOut'); 
       // $('.welcome-message-container').remove();
-      BDB.Session.setPromoBannerViewed(); 
+      BDB.Session.setWelcomeMessageViewed(); 
 
       ga('send', 'event', 'Misc', 'welcome message - closed');
     });
 
     $('.welcome-message-container a').on('click', e => {
-      $('.welcome-message-container').remove();
-      // BDB.Session.setPromoBannerViewed(); 
+      // $('.welcome-message-container').remove();
+      // BDB.Session.setWelcomeMessageViewed(); 
 
       ga('send', 'event', 'Misc', 'welcome message - link click');
     });

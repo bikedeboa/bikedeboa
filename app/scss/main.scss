@@ -723,6 +723,10 @@ a.unstyled-link {
 
         border: none;
         // border-bottom: 3px solid $green;
+
+        &::-webkit-input-placeholder {
+          color: $lightGray;
+        }
     }
 
     #clearLocationQueryBtn {
@@ -3032,7 +3036,8 @@ body.modal-open {
       // align-items: center;
       // align-content: center;
       flex-wrap: wrap;
-      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      box-shadow: 0 5px 30px rgba(0,0,0,.15);
 
       height: auto;
       padding: $GRID_SPACE*2 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
