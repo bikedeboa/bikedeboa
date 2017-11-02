@@ -186,9 +186,9 @@ body.offline {
   }
 }
 
+body.webview-app,
 body.pwa-installed {
-  #howToInstallBtn,
-  #howToInstallBtn + hr {
+  #howToInstallBtn {
     display: none;
   }
 }

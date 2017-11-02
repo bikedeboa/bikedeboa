@@ -2546,6 +2546,12 @@ $(() => {
       ga('send', 'event', 'Misc', 'launched with display=standalone');
     }
 
+    // Check if it's the Native App version
+    if (window.navigator.userAgent.indexOf('BikeDeBoaApp') > 0) {
+      $('body').addClass('webview-app');
+      ga('send', 'event', 'Misc', 'launched from native app'); 
+    }
+
     // Got Google Maps, either we're online or the SDK is in cache.
     if (window.google) {
       // On Mobile we defer the initialization of the map if we're in deeplink

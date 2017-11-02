@@ -2,7 +2,7 @@
   "name": "bikedeboa",
   "main": "server.js",
   "engines": {
-    "node": ">=5.4.0"
+    "node": "8.6.0"
   },
   "dependencies": {
     "babel-core": "^6.4.0",
