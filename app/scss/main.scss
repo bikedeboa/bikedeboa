@@ -3040,7 +3040,7 @@ body.modal-open {
       box-shadow: 0 5px 30px rgba(0,0,0,.15);
 
       height: auto;
-      padding: $GRID_SPACE*2 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
+      padding: 5em $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
       // font-size: 16px;
       
       // background: $green;
@@ -3104,8 +3104,8 @@ body.modal-open {
       }
 
       .welcome-message--footer {
-        margin-top: 1em;
-        font-size: 18px;
+        // margin-top: 1em;
+        // font-size: 18px;
       }
 
 
