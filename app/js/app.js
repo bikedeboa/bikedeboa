@@ -2472,6 +2472,7 @@ $(() => {
 
   function onSocialLogin(auth) {
     console.log('auth', auth);
+
     $('#userBtn').addClass('loading');
 
     if (window._isLoginDialogOpened) {
@@ -2492,7 +2493,9 @@ $(() => {
         fullname: profile.name,
         email: profile.email 
       }).then( data => { 
-        console.log('social login successful'); 
+        console.log('social login successful');
+
+        promptPWAInstallPopup();
 
         // UI
         $('#userBtn').removeClass('loading');
