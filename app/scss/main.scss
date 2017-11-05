@@ -2209,6 +2209,7 @@ body.modal-open {
     text-align: center;
     display: flex;
     justify-content: space-around;
+    margin-top: $GRID_SPACE*2;
 
     .skeleton-box,
     img {
