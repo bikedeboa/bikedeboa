@@ -117,7 +117,7 @@ $(() => {
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
-    const staticImgDimensions = _isMobile ? '400x70' : '1000x100';
+    const staticImgDimensions = _isMobile ? '400x70' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
@@ -214,6 +214,7 @@ $(() => {
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
       templateData.savedRating = previousReview.rating;
+      templateData.userThumbUrl = BDB.User.profile.thumbnail;
     }
 
 
@@ -356,6 +357,25 @@ $(() => {
   }
 
   function geolocate(toCenter, callback, quiet = false) {
+    // Hit Google Geolocation to get user's position without GPS
+    $.ajax({
+      url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
+      type: 'POST'
+    }).done(data => {
+      if (data && data.location) {
+        const pos = data.location;
+        ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
+        
+        if (map) {
+          map.panTo(data.location);
+        }
+      } else {
+        console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
+        ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
+      }
+    });
+
+    // Geolocation with GPS
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
@@ -382,7 +402,7 @@ $(() => {
 
         const options = {
           enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 10000,
           maximumAge: 0
         };
 
@@ -433,18 +453,18 @@ $(() => {
                 case 1:
                   // PERMISSION_DENIED
                   if (_isFacebookBrowser) {
-                    swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
+                    toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
                   } else {
-                    swal('Ops', 'Sua localização está desabilitada, ou seu navegador parece não suportar essa função.', 'warning');
+                    toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
                   }
                   break;
                 case 2:
                   // POSITION_UNAVAILABLE
-                  swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
+                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS.');
                   break;
                 case 3:
                   // TIMEOUT
-                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente de novo que deve dar ;)', 'warning');
+                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS. Quem sabe tenta denovo? ;)');
                   break;
                 }
               }
@@ -1120,6 +1140,8 @@ $(() => {
     autocomplete.addListener('place_changed', () => {
       // infowindow.close();
       _searchResultMarker.setVisible(false);
+      _searchResultMarker.setAnimation(null);
+
       const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
@@ -1143,21 +1165,12 @@ $(() => {
       //   scaledSize: new google.maps.Size(35, 35)
       // }));
 
-      _searchResultMarker.setPosition(place.geometry.location);
-      _searchResultMarker.setVisible(true);
+      // Show temporary result marker
+      // _searchResultMarker.setPosition(place.geometry.location);
+      // _searchResultMarker.setVisible(true);
+      // _searchResultMarker.setAnimation(google.maps.Animation.DROP);
 
       ga('send', 'event', 'Search', 'location', place.formatted_address); 
-
-      // var address = '';
-      // if (place.address_components) {
-      //   address = [
-      //               (place.address_components[0] && place.address_components[0].short_name || ''),
-      //               (place.address_components[1] && place.address_components[1].short_name || ''),
-      //               (place.address_components[2] && place.address_components[2].short_name || '')
-      //   ].join(' ');
-      // }
-      // infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-      // infowindow.open(map, marker);
     });
   }
 
@@ -1409,9 +1422,9 @@ $(() => {
           reader.onload = photoUploadCB;
           reader.readAsDataURL(self.files[0]);
         });
-      } else {
-        swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
-      }
+      }// else {
+      //   swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
+      // }
     });
     $('.description.collapsable').off('click').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
@@ -1457,7 +1470,7 @@ $(() => {
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
-            swal('Bicicletário deletado', 'Espero que tu saiba o que tá fazendo. :P', 'error');
+            toastr['success']('Bicicletário deletado.');
           });
         });
       });
@@ -1936,7 +1949,7 @@ $(() => {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-          text: 'Tu estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
+          text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#FF8265',
@@ -2225,6 +2238,18 @@ $(() => {
     $('#guideModal .guide-img-row img').each( (i, v) => {
       $(v).attr('src', $(v).data('src'));
     });
+
+    $('#guideModal .close-and-filter').off('click').on('click', function() {
+      const p = $(this).data('prop');
+      const v = $(this).data('value'); 
+
+      // Mark corresponding filter checkbox
+      $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked',true);
+      updateFilters();
+
+      // Close modal
+      goHome();
+    });
   } 
  
   function openDataModal() {
@@ -2237,7 +2262,7 @@ $(() => {
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
-  function handleRouting() { 
+  function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
 
@@ -2248,7 +2273,13 @@ $(() => {
         if (id) {
           id = parseInt(id);
           _deeplinkMarker = BDB.Places.getMarkerById(id);
-          _openLocal(_deeplinkMarker);
+
+          if (_deeplinkMarker) {
+            _openLocal(_deeplinkMarker);
+          } else {
+            _routePendingData = true;
+          }
+
         }
       }
       break;
@@ -2275,8 +2306,25 @@ $(() => {
     // case 'filtros':
     //   hideAll();
     default:
-      match = false;
+      match = false; 
       break;
+    }
+
+    if (match && initialRouting) {
+      _isDeeplink = true;
+
+      // $('#map').addClass('mock-map');
+      $('body').addClass('deeplink'); 
+      $('#top-mobile-bar-title').text('bike de boa');
+
+      // Center the map on pin's position
+      if (map && _deeplinkMarker) {
+        map.setZoom(18);
+        map.setCenter({
+          lat: parseFloat(_deeplinkMarker.lat),
+          lng: parseFloat(_deeplinkMarker.lng)
+        });
+      }
     }
 
     return match;
@@ -2489,6 +2537,7 @@ $(() => {
 
   function onSocialLogin(auth) {
     console.log('auth', auth);
+
     $('#userBtn').addClass('loading');
 
     if (window._isLoginDialogOpened) {
@@ -2500,40 +2549,42 @@ $(() => {
     _socialToken = auth.authResponse.access_token;
 
     // Get user information for the given network
-    hello(auth.network).api('me').then(function(userInfo) { 
-      console.log('userInfo', userInfo);
+    hello(auth.network).api('me').then(function(profile) { 
+      console.log('profile', profile);
 
       Database.socialLogin({
         network: auth.network,
         socialToken: _socialToken,
-        fullname: userInfo.name,
-        email: userInfo.email 
+        fullname: profile.name,
+        email: profile.email 
       }).then( data => { 
-        console.log('social login successful'); 
+        console.log('social login successful');
+
+        promptPWAInstallPopup();
 
         // UI
         $('#userBtn').removeClass('loading');
-        $('#userBtn .avatar').attr('src', userInfo.thumbnail);
+        $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openProfileBtn, .openProfileDivider').show();
         $('.openProfileBtn').attr('disabled', false);
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         if (data.role === 'admin') {
           $('#userBtn').addClass('admin');
-          userInfo.isAdmin = true;
+          profile.isAdmin = true;
         } else {
-          userInfo.isAdmin = false;
+          profile.isAdmin = false;
         }
         
-        userInfo.role = data.role;
-        userInfo.isNewUser = data.isNewUser;
+        profile.role = data.role;
+        profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(userInfo);
+        BDB.User.login(profile);
 
         document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {
         console.error('Error on social login', error); 
-        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!'); 
+        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!');
 
         $('#userBtn').removeClass('loading');
       });
@@ -2562,6 +2613,12 @@ $(() => {
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       $('body').addClass('pwa-installed');
       ga('send', 'event', 'Misc', 'launched with display=standalone');
+    }
+
+    // Check if it's the Native App version
+    if (window.navigator.userAgent.indexOf('BikeDeBoaApp') > 0) {
+      $('body').addClass('webview-app');
+      ga('send', 'event', 'Misc', 'launched from native app'); 
     }
 
     // Got Google Maps, either we're online or the SDK is in cache.
@@ -2653,29 +2710,11 @@ $(() => {
         ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
       }
 
-      const isMatch = handleRouting();
-
-      BDB.User.init(); 
-      
-      if (isMatch) {
-        _isDeeplink = true;
-
-        // $('#logo').addClass('clickable'); 
-        // $('#map').addClass('mock-map');
-        $('body').addClass('deeplink'); 
-        $('#top-mobile-bar-title').text('bike de boa');
-
-        // Center the map on pin's position
-        if (map && _deeplinkMarker) {
-          map.setZoom(18);
-          map.setCenter({
-            lat: parseFloat(_deeplinkMarker.lat),
-            lng: parseFloat(_deeplinkMarker.lng)
-          });
-        }
-      } else {
-        goHome();
+      if (_routePendingData) {
+        handleRouting();
       }
+
+      BDB.User.init();       
     };
 
     // Set up Sweet Alert
@@ -2789,21 +2828,24 @@ $(() => {
     if (_isMobile) {
       return;
     }
+
+    ga('send', 'event', 'Misc', 'welcome message - show');
     
     $('.welcome-message-container').show(); 
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
-      $('.welcome-message-container').remove();
-      BDB.Session.setPromoBannerViewed(); 
+      $('.welcome-message-container').velocity('transition.slideUpOut'); 
+      // $('.welcome-message-container').remove();
+      BDB.Session.setWelcomeMessageViewed(); 
 
-      ga('send', 'event', 'Banner', 'promo banner - closed');
+      ga('send', 'event', 'Misc', 'welcome message - closed');
     });
 
     $('.welcome-message-container a').on('click', e => {
-      $('.welcome-message-container').remove();
-      // BDB.Session.setPromoBannerViewed();
+      // $('.welcome-message-container').remove();
+      // BDB.Session.setWelcomeMessageViewed(); 
 
-      ga('send', 'event', 'Banner', 'promo banner - link click');
+      ga('send', 'event', 'Misc', 'welcome message - link click');
     });
   }
  
@@ -2864,7 +2906,7 @@ $(() => {
       // Authenticate to be ready for next calls
       login();
 
-      // handleRouting();
+      handleRouting(true);
 
       // Database.getPlaces( () => { 
       BDB.OSM.getPlaces( () => {
@@ -2881,13 +2923,13 @@ $(() => {
           _onDataReadyCallback();
           _onDataReadyCallback = null;
         }
-      });
+      }); 
     }
 
-    // if (!BDB.Session.hasUserSeenWelcomeMessage()) {
-    //   openWelcomeMessage();
-    // }
-  }
+    if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
+      openWelcomeMessage();
+    }
+  } 
 
   window.toggleDemoMode = () => {
     showSpinner();

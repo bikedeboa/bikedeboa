@@ -64,7 +64,7 @@
         <script>
            WebFontConfig = {
             google: {
-              families: ['Quicksand:500,500i,700'] 
+              families: ['Quicksand:500,500i,700']
               // families: ['Ubuntu:400,400i,700']
               // families: ['Poppins:400,400i,700']
             }
@@ -115,13 +115,14 @@
 
     <body>
         <div id="map"></div>
-        
-        <h1 id="logo" class="js-menu-show-hamburger-menu">
-          bike de boa
-          <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
-        </h1>
 
-        <div class="confetti-placeholder"></div>
+        <div id="spinnerOverlay">
+            <div class="spinnerContainer">
+                <img alt="Carregando..." src="/img/spinner.svg"/>
+
+                <p id="globalSpinnerLabel"> </p>
+            </div>
+        </div>
 
         <div id="locationSearch" class="cool-hide">
             <input id="locationQueryInput" type="search">
@@ -132,9 +133,44 @@
             </button>
         </div>
 
+        <div class="welcome-message-container">
+          <div class="welcome-message">
+            <button class="welcome-message--close">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            
+            <!-- <img src="/img/bike.svg">  -->
+            
+            <!-- <h1> bike de boa </h1> -->
+
+            <div class="welcome-message--content">
+              <p>
+                Oie! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando novos!
+              </p>
+
+              <p>
+                O bike de boa é feito com <span class="glyphicon glyphicon-heart"></span> por voluntários e sempre será totalmente gratuito e colaborativo.
+              </p>
+            </div>
+            
+            <div class="welcome-message--footer">
+              <a rel="noopener" href="#" class="openAboutBtn">Saiba mais</a>
+            </div>
+            
+            <!-- <aside>Aberto até 20/04</aside> -->
+          </div>
+        </div>
+        
+        <h1 id="logo" class="js-menu-show-hamburger-menu">
+          bike de boa
+          <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
+        </h1>
+
         <button class="js-menu-show-hamburger-menu header__menu-toggle">
           <img src="/img/icon_hamburger.svg">
         </button>
+
+        <div class="confetti-placeholder"></div>
 
         <div id="userBtn" class="dropdown cool-hide">
           <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -216,14 +252,6 @@
           </button>
         </div>
 
-        <div id="spinnerOverlay">
-            <div class="spinnerContainer">
-                <img alt="Carregando..." src="/img/spinner.svg"/>
-
-                <p id="globalSpinnerLabel"> </p>
-            </div>
-        </div>
-
         <button id="close-modal-btn" class="close-modal">✕</button>
 
         <div id="top-mobile-bar">
@@ -237,36 +265,6 @@
             </div>
         </div>
  
-        <div class="welcome-message-container">
-          <div class="welcome-message">
-            <button class="welcome-message--close">
-              <span class="glyphicon glyphicon-remove"></span>
-            </button>
-            
-            <!-- <img src="/img/bike.svg">  -->
-            
-            <h1>
-              bike de boa
-            </h1>
-
-            <div class="welcome-message--content">
-              <p>
-                Chega de não ter onde estacionar a bike de boa! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando novos.
-              </p>
-
-              <p>
-                O bike de boa é feito com <span class="glyphicon glyphicon-heart"></span> por voluntários e sempre será totalmente gratuito e colaborativo.
-              </p>
-            </div>
-            
-            <div class="welcome-message--footer">
-              <a rel="noopener" href="#" class="openAboutBtn">Saiba mais</a>
-            </div>
-            
-            <!-- <aside>Aberto até 20/04</aside> -->
-          </div>
-        </div>
-
         
         <!-- Menus -->
 
@@ -278,12 +276,6 @@
 
             <div class="side-nav__content">
               <ul>
-                <li class="open-guide-btn side-nav--animate-in">
-                  <img alt="" src="/img/icon_guide.svg"/>
-                  Guia de Bicicletários <span class="badge">novo</span>
-                </li>
-
-                <hr>
 
                 <li class="side-nav--animate-in openAboutBtn">
                   <img alt="" src="/img/icon_info.svg"/>
@@ -297,7 +289,7 @@
 
                 <li class="open-aboutdata-btn side-nav--animate-in">
                   <img alt="" src="/img/icon_table.svg"/>
-                  Dados <span class="badge">novo</span>
+                  Dados
                 </li>
                 
                 <li class="side-nav--animate-in" id="howToInstallBtn">
@@ -306,10 +298,17 @@
                 </li>
 
                 <hr> 
+
+                <li class="open-guide-btn side-nav--animate-in">
+                  <img alt="" src="/img/icon_guide.svg"/>
+                  Guia de Bicicletários
+                </li>
+
+                <hr>
                 
                 <li class="side-nav--animate-in loginBtn">
                   <img src="/img/icon_user.svg">
-                  Login <span class="badge">novo</span>
+                  Login
                 </li>
 
                 <!-- <li class="side-nav--animate-in logoutBtn">
@@ -498,15 +497,15 @@
                               </p>
 
                               <p>
-                                Com o bike de boa queremos incentivar que mais estabelecimentos instalem bicicletários, e ajudar a dar visibilidade para os que já existem. Também trazemos informações sobre os diferentes tipos de bicicletários, qual a forma correta de usá-los e o que faz eles serem mais ou menos seguros e adequados. Acreditamos que esse conhecimento ajuda a dar mais confiança pras pessoas saírem de bike.
+                                Com o bike de boa queremos incentivar que mais estabelecimentos instalem bicicletários, e ajudar a dar visibilidade para os que já existem. Também trazemos informações sobre os diferentes tipos de bicicletários, qual a forma correta de usá-los e o que faz eles serem mais ou menos seguros e adequados. Acreditamos fortemente que essas informações ajudam a dar mais confiança pras pessoas saírem mais de bike na cidade.
                               </p>
 
                               <p>
-                                O bike de boa é um site e aplicativo totalmente colaborativo pra mapear os lugares onde dá pra estacionar a bicicleta na cidade. No app os pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e órgãos públicos. Tanto o app quanto nossos dados são livres, o que significa que qualquer pessoa pode contribuir com ele ou reutilizá-lo como quiser.
+                                O bike de boa é um site, acessível no celular, computador ou tablet, que mapeia de forma colaborativa lugares pra estacionar a bicicleta na cidade. Nele esses pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e prefeituras. Tanto o código do site quanto nossos dados são livres, o que significa que qualquer pessoa pode contribuir com ele ou reutilizá-lo como quiser.
                               </p>
 
                               <p>
-                                O site já conta com mais 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. Além disso fomos destaque em alguns eventos. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, e fomos selecionados para participar do <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura</a>, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
+                                O site já conta com mais 500 bicicletários em Porto Alegre e outras cidades do Brasil, e estes são visualizados em média 2000 por mês. Também já fomos destaque em alguns eventos: palestramos no <a href="/io">Google IO Extended</a> em Porto ALegre, e fomos selecionados pra apresentar no <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura 2017</a>, em Recife, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
                               </p>
 
                               
@@ -517,23 +516,46 @@
                               </p>
 
                               <p> 
-                                Achou tri? Gostaria de participar disso com a gente? Tem algumas sugestões pra melhorar o site? Vamos conversar, estamos totalmente abertos a novos colaboradores e ideias!
+                                Curtiu? Gostaria de participar disso com a gente? Tem algumas sugestões pra melhorar o site? Vamos conversar, estamos totalmente abertos a novos colaboradores e ideias!
                               </p>
 
                               <h2>Como apoiar</h2> 
                               
                               <p>
-                                O bike de boa é absolutamente sem fins lucrativos, e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, entrevistando pessoas e divulgando o projeto visando o maior alcance possível.
+                                O bike de boa é absolutamente sem fins lucrativos e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, estudando pra entender melhor nossos usuários e divulgando o projeto.
                               </p>
 
                               <p>
-                                Quer nos ajudar? Paga um cafezinho pra nós pela <a href="https://apoia.se/bikedeboa">página bike de boa no Apoia.se</a>.
+                                Quer nos ajudar? Agora temos um <a href="https://apoia.se/bikedeboa">projeto no Apoia.se!</a> Você pode ajudar com a partir de 1 real por mês - e sério, isso já significa muito pra gente! :)
                               </p>
 
+                              <p style="text-align: center;">
+                                <button class="ghost" style="margin: 24px 0; border-radius: 25px; padding: 12px 36px; font-size: 22px; ">Apoie a gente ›</button>
+                              </p>
+
+                              <p>
+                                Um MUITO OBRIGADO do fundo do coração a nossos apoiadorxs:
+                              </p>
+
+                              <div class="about-collaborators">
+                                <ul>
+                                  <li>Cristiano Medeiros Dalbem</li>
+                                  <li>Eduardo Vernier</li>
+                                  <li>Francisco Cenzi de Ré</li>
+                                  <li>Hannah Kny</li>
+                                </ul>
+                              </div>
+
+
+                              <br>
+                              
                               <div class='medium-separator'>...</div>
 
+                              <br>
+
+
                               <p>
-                                Segue a gente nas redes sociais
+                                Segue a gente nas redes sociais :)
                               </p>
 
                               <div id="about-social-buttons">
@@ -598,6 +620,10 @@
                                     </p>
                                   </div>
                                 </div>
+                                
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="uinvertido">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
 
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/936.jpeg"> <img alt="Casa de Cultura Mário Quintana" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/936.jpeg"/> </a>
@@ -627,6 +653,10 @@
                                   </div>
                                 </div>
 
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="deroda">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
+
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1167.jpeg"> <img alt="Confeitaria Bom Gosto" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/1167.jpeg"/> </a>
                                   
@@ -653,6 +683,10 @@
                                   </div>
                                 </div>
 
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="trave">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
+
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1155.jpeg"> <img alt="Donna Laura" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/1155.jpeg"/> </a>
                                   
@@ -676,6 +710,10 @@
                                     </p>
                                   </div>
                                 </div>
+
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="suspenso">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
 
                                 <div class="guide-img-row"> 
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1552.jpeg">
@@ -713,6 +751,10 @@
                                   </div>
                                 </div>
 
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="grade">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
+
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1239.jpeg">
                                     <img alt="MM Lanches" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/1239.jpeg"/> </a>
@@ -739,6 +781,10 @@
                                     </p>
                                   </div>
                                 </div>
+
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="other">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
 
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/963.jpeg">
@@ -839,7 +885,7 @@
                                     <a target="_blank" rel="noopener" href="/dados">Tabela de Dados</a>
                                   </h2>
                                   <p>
-                                    Nossos dados brutos em forma de tabela. Super fácil de explorar, filtrar, e fazer download em vários formatos como Excel, CSV, XML e JSON.
+                                    Nossos dados brutos em forma de tabela. Explore, filtre, e faça download em vários formatos como Excel, CSV, XML e JSON.
                                   </p>
                                 </section>
 
@@ -849,7 +895,7 @@
                                     <a target="_blank" rel="noopener" href="https://github.com/dennerevaldt/bikedeboa-api">API</a>
                                   </h2>
                                   <p>
-                                    A API que alimenta este site está aberta para consultas e contribuições. Acesse o link para conferir a documentação.
+                                    A API que alimenta este site. Acesse o link para conferir a documentação.
                                   </p>
                                 </section>
 
@@ -1297,63 +1343,7 @@
                   <p class="address">
                       {{address}}
                   </p>
-
-                  {{#if mapStaticImg}}
-                    <div>
-                      <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
-                    </div>
-                  {{/if}}
               </section>
-
-              <!-- <hr>
-
-              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
-                  {{#if savedRating}}
-                    <div class="savedRating">
-                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
-                      <button class="ghost openReviewPanelBtn">Editar</button>
-                    </div>
-                  {{/if}}
-
-                  {{#if numReviews}}
-                    <div class="numreviews">{{numReviews}}</div>
-                  {{/if}}
-
-                  {{#unless average}}
-                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
-                  {{/unless}}
-
-                  <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-                    {{#if average}}
-                        <span class="average">{{average}}</span>
-
-                        <fieldset id="ratingDisplay" class="rating disabled">
-                          <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                          <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
-                          <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                          <label class="full-star" data-value="4" for="placeDetails_star4"></label>
-                          <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                          <label class="full-star" data-value="3" for="placeDetails_star3"></label>
-                          <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                          <label class="full-star" data-value="2" for="placeDetails_star2"></label>
-                          <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                          <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                      </fieldset>
-                      
-                      {{#unless savedRating}}
-                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
-                      {{/unless}}
-                    {{/if}}
-                  </div>
-
-                  {{#if tags}}
-                      <div class="tagsContainer">
-                          {{{tags}}}
-                      </div>
-                  {{/if}}
-              </section> -->
-
-              <hr>
 
               <section class="info">
                   {{#unless noIsCoveredData}}
@@ -1479,6 +1469,82 @@
 
               <hr>
 
+              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
+                  {{#if savedRating}}
+                    <div class="savedRating">
+                      <img src="{{userThumbUrl}}"/> Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
+                      <button class="ghost openReviewPanelBtn">Editar</button>
+                    </div>
+                  {{/if}}
+
+                  {{#if numReviews}}
+                    <div class="numreviews">{{numReviews}}</div>
+                  {{/if}}
+
+                  {{#unless average}}
+                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                  {{/unless}}
+
+                  <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+                    {{#if average}}
+                        <span class="average">{{average}}</span>
+
+                        <fieldset id="ratingDisplay" class="rating disabled">
+                          <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                          <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
+                          <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                          <label class="full-star" data-value="4" for="placeDetails_star4"></label>
+                          <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                          <label class="full-star" data-value="3" for="placeDetails_star3"></label>
+                          <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                          <label class="full-star" data-value="2" for="placeDetails_star2"></label>
+                          <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                          <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                      </fieldset>
+                      
+                      {{#unless savedRating}}
+                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
+                      {{/unless}}
+                    {{/if}}
+
+                    
+                    <!-- {{#unless average}}
+                        <p style="font-style: italic; font-size: 14px;">
+                          Ninguém avaliou este bicicletário ainda.
+                        </p>
+                        <button class="openReviewPanelBtn ghost">Avaliar</button>
+
+                        <div class="rating-input-container" style="text-align: center;">
+                          <h2 style="margin-bottom: 0;">
+                            Dê sua nota 
+                          </h2>
+
+                          <fieldset class="rating rating-big empty">
+                              <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+                              <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
+                              <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
+                              <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
+                              <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
+                              <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+                              <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
+                          </fieldset>
+                        </div>
+                    {{/unless}} -->
+
+                  </div>
+
+                  {{#if tags}}
+                      <div class="tagsContainer">
+                          {{{tags}}}
+                      </div>
+                  {{/if}}
+              </section>
+
+              <hr>
+
               {{#if description}}
                   <section class="description">
                       <h2>
@@ -1487,6 +1553,14 @@
                       </h2>
 
                       {{{description}}}
+                  </section>
+              {{/if}}
+
+              {{#if mapStaticImg}}
+                  <section class="minimap-container">
+                      <div>
+                        <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
+                      </div>
                   </section>
               {{/if}}
 
@@ -1576,7 +1650,7 @@
         <script id="infoWindowTemplate" type="text/x-handlebars-template">
           <span class="infobox--arrow glyphicon glyphicon-triangle-top"></span>
 
-          <span class="infobox--caret glyphicon glyphicon-chevron-right "></span>
+          <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
 
           {{#if thumbnailUrl}}
             <div class="infobox--img loading">

@@ -10,11 +10,6 @@ BDB.Session = {
   // M E T H O D S //
   ///////////////////
 
-  isFirstAccessEver: function() {
-    const hasAnalyticsCookies = !!Cookies.get('_ga');
-    return hasAnalyticsCookies;
-  },
-
   setPromoBannerViewed: function() {
     Cookies.set('bikedeboa_promobanner_questionario', 'true', { expires: 365 }); 
   },
@@ -23,7 +18,13 @@ BDB.Session = {
     return Cookies.get('bikedeboa_promobanner_questionario');
   },
 
+  setWelcomeMessageViewed: function() {
+    Cookies.set('bikedeboa__has_seen_welcome_message', 'true'); 
+  },
+
   hasUserSeenWelcomeMessage: function() {
-    return this.isFirstAccessEver();
+    const hasSeenWelcomeMessage = !!Cookies.get('bikedeboa__has_seen_welcome_message');
+
+    return hasSeenWelcomeMessage;
   }
 };

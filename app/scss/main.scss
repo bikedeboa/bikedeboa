@@ -186,9 +186,9 @@ body.offline {
   }
 }
 
+body.webview-app,
 body.pwa-installed {
-  #howToInstallBtn,
-  #howToInstallBtn + hr {
+  #howToInstallBtn {
     display: none;
   }
 }
@@ -723,6 +723,10 @@ a.unstyled-link {
 
         border: none;
         // border-bottom: 3px solid $green;
+
+        &::-webkit-input-placeholder {
+          color: $lightGray;
+        }
     }
 
     #clearLocationQueryBtn {
@@ -810,12 +814,27 @@ a.unstyled-link {
 #guideModal {
   $offscreenMargin: 100px;
 
+  .close-and-filter {
+    text-align: right;
+    width: 100%;
+    // float: right;
+    padding: 0;
+  }
+
   .guide-img-row {
     margin-top: 3em;
     display: flex;
     // margin-left: -300px;
     // margin-right: -300px;
     justify-content: center;
+
+    & > a:first-child img {
+      margin-left: 0;
+    }
+
+    & > a:last-child img {
+      margin-right: 0;
+    }
 
     img {
       // border-radius: 50%;
@@ -825,6 +844,7 @@ a.unstyled-link {
       margin: 0 6px;
       object-fit: cover;
       background: $lighterGray;
+      max-width: none;
 
       &:hover {
         opacity: 1;
@@ -967,6 +987,27 @@ a.unstyled-link {
     justify-content: space-around;
   }
 
+  .about-collaborators {
+    font-size: 18px;
+    background: #F3F3F3;
+    padding: 24px;
+    margin: auto;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        line-height: 1em;
+      }
+
+      li + li {
+        margin-top: .5em;
+      }
+    }
+  }
+
   .social-link {
     color: #333;
     font-size: 18px;
@@ -1027,6 +1068,7 @@ a.unstyled-link {
     letter-spacing: 1em;
     font-weight: bold;
     font-size: 20px;
+    user-select: none;
   }
 }
 
@@ -1185,6 +1227,8 @@ a.unstyled-link {
         background: $black;
         width: auto;
         border-radius: 25px;
+        left: 50%;
+        transform: translateX(-50%);
 
         // transition: background 0.5s ease-out, width 0.5s ease-out;
 
@@ -1416,7 +1460,7 @@ a.unstyled-link {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 9999;
+    // z-index: 9999;
 
     // DONT leave it visible by default so it's NOT the first thing rendered in the screen
     display: none;
@@ -1431,8 +1475,8 @@ a.unstyled-link {
 
       img {
           animation: spin 3s linear infinite;
-          width: 90px;
-          height: 90px;
+          width: $GRID_SPACE*6;
+          height: $GRID_SPACE*6;
       }
 
       p {
@@ -2028,10 +2072,9 @@ body.modal-open {
 .modal-body {
     padding: $GRID_SPACE*3 $GRID_SPACE*3;
 
-    // img { 
-    //     width: 100%;
-    //     height: 100%;
-    // }
+    img { 
+        max-width: 100%;
+    }
 
     hr {
         margin-top: 10px;
@@ -2136,13 +2179,13 @@ body.modal-open {
 }
 
 .ghost {
-    padding: 3px 10px;
-    border: 1px solid $gray;
-    color: $gray;
+    padding: 5px 10px;
+    border: 1px solid $black;
+    color: $black;
     margin: 5px auto;
     font-size: 16px;
     border-radius: 25px;
-    vertical-align: bottom;
+    vertical-align: middle;
     background: transparent;
 
     transition: color .2s ease;
@@ -2181,6 +2224,7 @@ body.modal-open {
     text-align: center;
     display: flex;
     justify-content: space-around;
+    margin-top: $GRID_SPACE*2;
 
     .skeleton-box,
     img {
@@ -2239,16 +2283,13 @@ body.modal-open {
             margin-left: 6px;
           }
 
-          &:before {
-              content: '';
-              display: inline-block;
-              width: 14px;
-              height: 17px;
-              background-image: url(/img/icon_user.svg);
-              background-size: 100%;
-              background-repeat: no-repeat;
-              vertical-align: middle;
-              // margin-right: 5px;
+          img {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            vertical-align: middle;
+            border-radius: 50%;
+            margin-right: 3px;
           }
       }
 
@@ -2303,6 +2344,7 @@ body.modal-open {
     .tagDisplay {
         display: inline-block;
         padding: $GRID_SPACE/2 $GRID_SPACE;
+        width: 100%;
         font-size: 14px;
         font-weight: 400;
         text-align: center;
@@ -2337,15 +2379,20 @@ body.modal-open {
       margin-bottom: $GRID_SPACE*2;
     }
 
-    .minimap { 
-        width: 100%;
-        min-height: 50px;
-        background: $lightestGray;
-        // border-radius: 15px;
+    .minimap-container {
+      margin-left: -$GRID_SPACE*3;
+      margin-right: -$GRID_SPACE*3;
 
-        &.close-modal {
-          cursor: pointer;
-        }
+      .minimap { 
+          width: 100%;
+          min-height: 50px;
+          background: $lightestGray;
+          // border-radius: 15px;
+
+          &.close-modal {
+            cursor: pointer;
+          }
+      }
     }
 }
 
@@ -2409,14 +2456,14 @@ body.modal-open {
   width: 13em;
 
   position: relative;
-  padding: 0 15px 0 46px;
   border: none;
-  text-align: left;
-  line-height: 34px;
+  height: $GRID_SPACE*4;
   white-space: nowrap;
-  border-radius: 0.2em;
   font-size: 16px;
   color: #FFF;
+  text-align: center;
+  @include roundedCorners;
+  font-weight: bold;
   
   &:before {
     content: "";
@@ -2424,7 +2471,7 @@ body.modal-open {
     position: absolute;
     top: 0;
     left: 0;
-    width: 34px;
+    width: $GRID_SPACE*4;
     height: 100%;
   }
   &:focus {
@@ -2436,19 +2483,18 @@ body.modal-open {
  
   /* Facebook */
   &.facebookLoginBtn {
-    background-color: #4C69BA;
+    background-color: #4267b2;
     /*font-family: "Helvetica neue", Helvetica Neue, Helvetica, Arial, sans-serif;*/
     text-shadow: 0 -1px 0 #354C8C;
     
     &:before {
-      border-right: #364e92 1px solid;
-      background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_facebook.png') 6px 6px no-repeat;
+      background: url('/img/facebook_logo_white.svg') $GRID_SPACE $GRID_SPACE no-repeat;
+      background-size: $GRID_SPACE*2;
     }
     
     &:hover,
     &:focus {
       background-color: #5B7BD5;
-      background-image: linear-gradient(#5B7BD5, #4864B1);
     }
   }
 
@@ -2456,16 +2502,18 @@ body.modal-open {
   /* Google */
   &.googleLoginBtn {
     /*font-family: "Roboto", Roboto, arial, sans-serif;*/
-    background: #DD4B39;
+    background: white;
+    border: 1px solid $gray;
+    color: $black;
 
     &:before {
-      border-right: #BB3F30 1px solid;
-      background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_google.png') 6px 6px no-repeat;
+      background: url('/img/icon_google.png') $GRID_SPACE $GRID_SPACE no-repeat;
+      background-size: $GRID_SPACE*2;
     }
 
     &:hover,
     &:focus {
-      background: #E74B37;
+      background: $lightestGray;
     }
   }
 }
@@ -2783,6 +2831,7 @@ body.modal-open {
   .side-nav__header {
     height: auto;
     background: none;
+    padding-left: 16px;
   }
 
   .side-nav__container {
@@ -2977,14 +3026,14 @@ body.modal-open {
   }
 
   // Custom Google Autocomplete search results for mobile
-  &:before {
-      content: 'Resultados apenas no Rio Grande do Sul';
-      padding: 6px 12px;
-      display: block;
-      font-size: 12px;
-      background: $paleWhite;
-      color: $lightGray;
-  }
+  // &:before {
+  //     content: 'Resultados apenas no Rio Grande do Sul';
+  //     padding: 6px 12px;
+  //     display: block;
+  //     font-size: 12px;
+  //     background: $paleWhite;
+  //     color: $lightGray;
+  // }
 
   /* Overrides marker */
   /* .pac-icon {
@@ -3001,21 +3050,26 @@ body.modal-open {
 
   .welcome-message {
       position: fixed;
-      bottom: 0;
+      top: 0;
       width: 100%;
-      z-index: 2;
+      // z-index: 2;
       text-align: left;
       display: flex; 
       // align-items: center;
       // align-content: center;
       flex-wrap: wrap;
-      color: white;
-      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      box-shadow: 0 5px 30px rgba(0,0,0,.15);
 
       height: auto;
-      padding: $GRID_SPACE*2 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE;
+      padding: 5em $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
       // font-size: 16px;
-      background: $green;
+      
+      // background: $green;
+      // color: white;
+      
+      color: $gray;
+      background: white;
 
       span {
         // font-family: $bodyFont;
@@ -3023,12 +3077,14 @@ body.modal-open {
       }
 
       a {
-        color: white;
+        color: $gray;
       }
 
       h1, h2 {
         font-weight: bold;
         letter-spacing: -0.02em;
+        color: $black;
+        opacity: 0;
       }
 
       img {
@@ -3070,8 +3126,8 @@ body.modal-open {
       }
 
       .welcome-message--footer {
-        margin-top: 1em;
-        font-size: 18px;
+        // margin-top: 1em;
+        // font-size: 18px;
       }
 
 
@@ -3094,6 +3150,7 @@ body.modal-open {
   background: white;
   @include shadow(1);
   display: flex;
+  margin-top: $GRID_SPACE*2;
 
   &:active,
   &:focus,
@@ -3237,7 +3294,7 @@ body.modal-open {
 
     background: $lightestGray;
     transition: background 0.2s ease-out;
-    border: 1px solid #ccc;
+    border: 1px solid $gray;
     @include roundedCorners;
      
     &:hover,
@@ -3386,24 +3443,24 @@ body.modal-open {
 
   #locationSearch {
     #locationQueryInput { 
-      padding: 0 110px 0 60px; 
+      padding: 0 90px 0 60px; 
     }
     #clearLocationQueryBtn {
-      right: 50px;
+      right: 40px;
     }
   }
 
   #userBtn {
     // border-left: 1px solid $lighterGray;
-    &:before {
-        background: $lightGray;
-        width: 0.5px; 
-        height: 50%;
-        content: '';
-        left: 0;
-        position: absolute;
-        margin-top: 25%;
-    }
+    // &:before {
+    //     background: $lightGray;
+    //     width: 0.5px; 
+    //     height: 50%;
+    //     content: '';
+    //     left: 0;
+    //     position: absolute;
+    //     margin-top: 25%;
+    // }
 
     & > button {
         .avatar {
@@ -3473,14 +3530,15 @@ body.modal-open {
   #guideModal {
     .guide-img-row {
       justify-content: left;
-      width: calc(100vw - #{$GRID_SPACE});
+      width: calc(100vw);
       overflow: auto;
       margin-right: -$GRID_SPACE;
+      margin-left: -$GRID_SPACE;
 
       img {
         // Shows half of the third photo
-        width: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
-        height: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
+        width: calc((100vw - #{$GRID_SPACE*2}) / 2.5);
+        height: calc((100vw - #{$GRID_SPACE*2}) / 2.5);
       }
     }
   }
@@ -4394,7 +4452,7 @@ body.modal-open {
       }
 
       li:hover {
-        background: #CCC;
+        background: $lighterGray;
       }
     }
   }
@@ -4432,8 +4490,7 @@ body.modal-open {
 // Sweet Alert 2 Customizations
 
 .swal2-modal {
-  padding-left: 5%;
-  padding-right: 5%; 
+  padding: 5% !important;
   font-family: $bodyFont;
   @include shadow(3);
 

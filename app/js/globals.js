@@ -134,5 +134,6 @@ let _centerChangedTimeout;
 let _deferredPWAPrompt;
 let _loginMutexBlocked;
 let _isFeatherlightOpen;
+let _routePendingData;
 
 let templates = {};
