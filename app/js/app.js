@@ -357,6 +357,22 @@ $(() => {
   }
 
   function geolocate(toCenter, callback, quiet = false) {
+    // Hit Google Geolocation to get user's position without GPS
+    $.ajax({
+      url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
+      type: 'POST'
+    }).done(data => {
+      if (data && data.location) {
+        const pos = data.location;
+        ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
+        map.panTo(data.location);
+      } else {
+        console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
+        ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
+      }
+    });
+
+    // Geolocation with GPS
     if (navigator.geolocation) {
       // @todo split both behaviors into different functions
       if (_geolocationInitialized) {
@@ -383,7 +399,7 @@ $(() => {
 
         const options = {
           enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 10000,
           maximumAge: 0
         };
 
@@ -434,18 +450,18 @@ $(() => {
                 case 1:
                   // PERMISSION_DENIED
                   if (_isFacebookBrowser) {
-                    swal('Ops', 'Seu navegador parece não suportar essa função, que pena.', 'warning');
+                    toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
                   } else {
-                    swal('Ops', 'Sua localização está desabilitada, ou seu navegador parece não suportar essa função.', 'warning');
+                    toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
                   }
                   break;
                 case 2:
                   // POSITION_UNAVAILABLE
-                  swal('Ops', 'A geolocalização parece não estar funcionando. Já verificou se o GPS está ligado?', 'warning');
+                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS.');
                   break;
                 case 3:
                   // TIMEOUT
-                  swal('Ops', 'A geolocalização do seu dispositivo parece não estar funcionando agora. Mas tente de novo que deve dar ;)', 'warning');
+                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS. Quem sabe tenta denovo? ;)');
                   break;
                 }
               }
@@ -1395,9 +1411,9 @@ $(() => {
           reader.onload = photoUploadCB;
           reader.readAsDataURL(self.files[0]);
         });
-      } else {
-        swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
-      }
+      }// else {
+      //   swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
+      // }
     });
     $('.description.collapsable').off('click').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
@@ -1443,7 +1459,7 @@ $(() => {
           Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
-            swal('Bicicletário deletado', 'Espero que tu saiba o que tá fazendo. :P', 'error');
+            toastr['success']('Bicicletário deletado.');
           });
         });
       });
@@ -1922,7 +1938,7 @@ $(() => {
       // @todo Do this check better
       if (_isMobile && History.getState().title === 'Novo bicicletário') {
         swal({
-          text: 'Tu estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
+          text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#FF8265',
@@ -2519,7 +2535,7 @@ $(() => {
         document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {
         console.error('Error on social login', error); 
-        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!'); 
+        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!');
 
         $('#userBtn').removeClass('loading');
       });
@@ -2855,21 +2871,6 @@ $(() => {
         //   map.panTo(pos);
         // }
       });
-
-      // Hit Google Geolocation to get user's position without GPS
-      // $.ajax({
-      //   url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
-      //   type: 'POST'
-      // }).done(data => {
-      //   if (data && data.location) {
-      //     const pos = data.location;
-      //     ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
-      //     map.panTo(data.location);
-      //   } else {
-      //     console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
-      //     ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
-      //   }
-      // });
 
       // Authenticate to be ready for next calls
       login();
