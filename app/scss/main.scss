@@ -455,11 +455,11 @@ div.notice {
 }
 
 body.deeplink {
-    #map {
-        background: url(/img/blank_map_colored.jpg);
-        background-size: cover;
-        background-position: 50% 50%;
-    }
+    // #map {
+    //     background: url(/img/blank_map_colored.jpg);
+    //     background-size: cover;
+    //     background-position: 50% 50%;
+    // }
 
     // #logo { 
     //   z-index: 2000;
@@ -470,19 +470,19 @@ body.deeplink {
     //   } 
     // }
 
-    #top-mobile-bar {
-      .back-button {
-        background: url(/img/icon_home.svg) 12px 12px no-repeat;
-        background-size: 25px; 
-      }
+    // #top-mobile-bar {
+    //   .back-button {
+    //     background: url(/img/icon_home.svg) 12px 12px no-repeat;
+    //     background-size: 25px; 
+    //   }
 
-      #top-mobile-bar-title {
-        text-align: center;
-        font-weight: bold;
-        width: 100%;
-        letter-spacing: -0.02em;
-      }
-    }
+    //   #top-mobile-bar-title {
+    //     text-align: center;
+    //     font-weight: bold;
+    //     width: 100%;
+    //     letter-spacing: -0.02em;
+    //   }
+    // }
 }
 
 #map {

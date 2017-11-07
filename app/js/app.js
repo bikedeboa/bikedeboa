@@ -2239,12 +2239,13 @@ $(() => {
       const p = $(this).data('prop');
       const v = $(this).data('value'); 
 
-      // Mark corresponding filter checkbox
-      $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked',true);
-      updateFilters();
-
       // Close modal
       goHome();
+
+      // Mark corresponding filter checkbox
+      $('.filter-checkbox').prop('checked', false);
+      $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked', true);
+      updateFilters();
     });
   } 
  
@@ -2310,8 +2311,8 @@ $(() => {
       _isDeeplink = true;
 
       // $('#map').addClass('mock-map');
+      // $('#top-mobile-bar-title').text('bike de boa');
       $('body').addClass('deeplink'); 
-      $('#top-mobile-bar-title').text('bike de boa');
 
       // Center the map on pin's position
       if (map && _deeplinkMarker) {
