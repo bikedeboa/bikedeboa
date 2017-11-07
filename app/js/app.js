@@ -365,7 +365,10 @@ $(() => {
       if (data && data.location) {
         const pos = data.location;
         ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
-        map.panTo(data.location);
+        
+        if (map) {
+          map.panTo(data.location);
+        }
       } else {
         console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
         ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
@@ -2227,6 +2230,18 @@ $(() => {
     $('#guideModal .guide-img-row img').each( (i, v) => {
       $(v).attr('src', $(v).data('src'));
     });
+
+    $('#guideModal .close-and-filter').off('click').on('click', function() {
+      const p = $(this).data('prop');
+      const v = $(this).data('value'); 
+
+      // Mark corresponding filter checkbox
+      $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked',true);
+      updateFilters();
+
+      // Close modal
+      goHome();
+    });
   } 
  
   function openDataModal() {
@@ -2239,7 +2254,7 @@ $(() => {
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
-  function handleRouting() { 
+  function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
 
@@ -2250,7 +2265,13 @@ $(() => {
         if (id) {
           id = parseInt(id);
           _deeplinkMarker = BDB.Places.getMarkerById(id);
-          _openLocal(_deeplinkMarker);
+
+          if (_deeplinkMarker) {
+            _openLocal(_deeplinkMarker);
+          } else {
+            _routePendingData = true;
+          }
+
         }
       }
       break;
@@ -2277,8 +2298,25 @@ $(() => {
     // case 'filtros':
     //   hideAll();
     default:
-      match = false;
+      match = false; 
       break;
+    }
+
+    if (match && initialRouting) {
+      _isDeeplink = true;
+
+      // $('#map').addClass('mock-map');
+      $('body').addClass('deeplink'); 
+      $('#top-mobile-bar-title').text('bike de boa');
+
+      // Center the map on pin's position
+      if (map && _deeplinkMarker) {
+        map.setZoom(18);
+        map.setCenter({
+          lat: parseFloat(_deeplinkMarker.lat),
+          lng: parseFloat(_deeplinkMarker.lng)
+        });
+      }
     }
 
     return match;
@@ -2661,29 +2699,11 @@ $(() => {
         ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
       }
 
-      const isMatch = handleRouting();
-
-      BDB.User.init(); 
-      
-      if (isMatch) {
-        _isDeeplink = true;
-
-        // $('#logo').addClass('clickable'); 
-        // $('#map').addClass('mock-map');
-        $('body').addClass('deeplink'); 
-        $('#top-mobile-bar-title').text('bike de boa');
-
-        // Center the map on pin's position
-        if (map && _deeplinkMarker) {
-          map.setZoom(18);
-          map.setCenter({
-            lat: parseFloat(_deeplinkMarker.lat),
-            lng: parseFloat(_deeplinkMarker.lng)
-          });
-        }
-      } else {
-        goHome();
+      if (_routePendingData) {
+        handleRouting();
       }
+
+      BDB.User.init();       
     };
 
     // Set up Sweet Alert
@@ -2875,7 +2895,7 @@ $(() => {
       // Authenticate to be ready for next calls
       login();
 
-      // handleRouting();
+      handleRouting(true);
 
       // This is the only request allowed to be unauthenticated
       Database.getPlaces( () => {
@@ -2892,10 +2912,10 @@ $(() => {
           _onDataReadyCallback();
           _onDataReadyCallback = null;
         }
-      });
+      }); 
     }
 
-    if (!BDB.Session.hasUserSeenWelcomeMessage()) {
+    if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
       openWelcomeMessage();
     }
   } 
