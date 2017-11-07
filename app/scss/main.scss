@@ -455,11 +455,11 @@ div.notice {
 }
 
 body.deeplink {
-    #map {
-        background: url(/img/blank_map_colored.jpg);
-        background-size: cover;
-        background-position: 50% 50%;
-    }
+    // #map {
+    //     background: url(/img/blank_map_colored.jpg);
+    //     background-size: cover;
+    //     background-position: 50% 50%;
+    // }
 
     // #logo { 
     //   z-index: 2000;
@@ -470,19 +470,19 @@ body.deeplink {
     //   } 
     // }
 
-    #top-mobile-bar {
-      .back-button {
-        background: url(/img/icon_home.svg) 12px 12px no-repeat;
-        background-size: 25px; 
-      }
+    // #top-mobile-bar {
+    //   .back-button {
+    //     background: url(/img/icon_home.svg) 12px 12px no-repeat;
+    //     background-size: 25px; 
+    //   }
 
-      #top-mobile-bar-title {
-        text-align: center;
-        font-weight: bold;
-        width: 100%;
-        letter-spacing: -0.02em;
-      }
-    }
+    //   #top-mobile-bar-title {
+    //     text-align: center;
+    //     font-weight: bold;
+    //     width: 100%;
+    //     letter-spacing: -0.02em;
+    //   }
+    // }
 }
 
 #map {
@@ -814,12 +814,27 @@ a.unstyled-link {
 #guideModal {
   $offscreenMargin: 100px;
 
+  .close-and-filter {
+    text-align: right;
+    width: 100%;
+    // float: right;
+    padding: 0;
+  }
+
   .guide-img-row {
     margin-top: 3em;
     display: flex;
     // margin-left: -300px;
     // margin-right: -300px;
     justify-content: center;
+
+    & > a:first-child img {
+      margin-left: 0;
+    }
+
+    & > a:last-child img {
+      margin-right: 0;
+    }
 
     img {
       // border-radius: 50%;
@@ -2816,6 +2831,7 @@ body.modal-open {
   .side-nav__header {
     height: auto;
     background: none;
+    padding-left: 16px;
   }
 
   .side-nav__container {
@@ -3514,14 +3530,15 @@ body.modal-open {
   #guideModal {
     .guide-img-row {
       justify-content: left;
-      width: calc(100vw - #{$GRID_SPACE});
+      width: calc(100vw);
       overflow: auto;
       margin-right: -$GRID_SPACE;
+      margin-left: -$GRID_SPACE;
 
       img {
         // Shows half of the third photo
-        width: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
-        height: calc((100vw - #{$GRID_SPACE*3}) / 2.5);
+        width: calc((100vw - #{$GRID_SPACE*2}) / 2.5);
+        height: calc((100vw - #{$GRID_SPACE*2}) / 2.5);
       }
     }
   }
