@@ -150,8 +150,12 @@ BDB.OSM = {
       }
 
       if (tags.website) {
-        ret.description += '<br><b>Website:</b> ' + tags.website;
+        ret.description += '<br><b>Website:</b> ' + tags.website; 
       }
+
+      // 
+      // Debug mode
+      ret.description += '<br><br> <small style="color: gray;">' + JSON.stringify(tags).split(',"').join(',<br>"') + '</small>';
     }
 
     return ret;
