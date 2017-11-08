@@ -360,7 +360,11 @@ $(() => {
     // Hit Google Geolocation to get user's position without GPS
     // This might not be precise, but it's faster and more reliable than the GPS, so it's a good fallback.
     if (!_geolocationInitialized) {
-      // Documentaiton: https://developers.google.com/maps/documentation/geolocation/intro?hl=en
+      if (!quiet) {
+        $('#geolocationBtn').addClass('loading');
+      }
+
+      // API docs: https://developers.google.com/maps/documentation/geolocation/intro?hl=en
       $.ajax({
         url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
         type: 'POST'
@@ -371,6 +375,8 @@ $(() => {
           
           if (map) {
             map.panTo(data.location);
+
+            $('#geolocationBtn').removeClass('loading');
           }
         } else {
           console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
@@ -464,11 +470,11 @@ $(() => {
                   break;
                 case 2:
                   // POSITION_UNAVAILABLE
-                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS.');
+                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
                   break;
                 case 3:
                   // TIMEOUT
-                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS. Quem sabe tenta denovo? ;)');
+                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
                   break;
                 }
               }
@@ -1952,11 +1958,13 @@ $(() => {
           confirmButtonText: 'Descartar', 
           allowOutsideClick: false
         }).then(() => {
-          returnToPreviousView();
+          // returnToPreviousView();
+          goHome();
         }
         );
       } else {
-        returnToPreviousView();
+        // returnToPreviousView();
+        goHome();
       }
     });
 
