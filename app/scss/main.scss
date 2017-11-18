@@ -1858,6 +1858,7 @@ body.modal-open {
 
         h2 {
           padding: $GRID_SPACE;
+          padding-left: 0;
           font-size: 22px; 
           user-select: none;
           font-weight: bold;
@@ -1914,6 +1915,18 @@ body.modal-open {
         .minimap {
           width: 100%;
         }
+    }
+
+    .photoInputDisclaimer {
+      text-align: center;
+      display: block;
+      position: absolute;
+      opacity: 0.3;
+      font-size: 12px;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
     }
 
     #photoInput {
@@ -2034,7 +2047,7 @@ body.modal-open {
 
 .review {
     .rating-display-container {
-      margin: $GRID_SPACE 0 0 0;
+      margin: $GRID_SPACE 0 $GRID_SPACE/2 0;
     }
 
     img {
@@ -2331,18 +2344,18 @@ body.modal-open {
 
     .tagDisplay {
         display: inline-block;
-        padding: $GRID_SPACE/2 $GRID_SPACE;
+        padding: $GRID_SPACE/2 $GRID_SPACE $GRID_SPACE/2 0;
         width: 100%;
         font-size: 14px;
         font-weight: 400;
-        text-align: center;
+        // text-align: center;
         white-space: nowrap;
         user-select: none;
         cursor: default;
         border: 1px solid transparent;
 
-        background: $lightestGray;
-        border-radius: 25px;
+        // background: $lightestGray;
+        // border-radius: 25px;
         margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
         color: $black;
 
@@ -2433,6 +2446,10 @@ body.modal-open {
     border-top: none;
     border-left: none;
     border-right: none;
+
+    &.active {
+      box-shadow: none;
+    }
 }
 
 
@@ -2517,8 +2534,9 @@ body.modal-open {
     }
 
     .btn-tag {
-        background: $lightestGray;
-        color: $black;
+        // background: $lightestGray;
+        background: transparent;
+        border: 1px solid $black;
         border-radius: 25px;
         margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
         width: calc(33% - #{$GRID_SPACE}); 
@@ -2532,6 +2550,7 @@ body.modal-open {
         &.active {
             background: $green;
             color: white;
+            box-shadow: none;
  
             // &:before {
             //     content: '☑';
@@ -3683,6 +3702,11 @@ body.modal-open {
 
     .tagDisplayContainer {
       width: calc(50% - #{$GRID_SPACE});      
+    }
+
+    .minimap-container {
+      margin-left: 0;
+      margin-right: 0;
     }
 
     .review {
