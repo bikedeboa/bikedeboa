@@ -2860,45 +2860,36 @@ body.modal-open {
   ul { 
     display: flex;
     flex-wrap: wrap;
+    padding-left: 6px;
 
     li {
       display: flex !important;
       align-items: baseline;
-      width: 50%;
       white-space: nowrap;
       line-height: normal;
-      padding: 0;
+      padding: 0 $GRID_SPACE/2;
+      margin: 0 $GRID_SPACE/2;
+      
+      // Explanation on the reason for the string interpolation:
+      //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+      width: calc(50% - #{$GRID_SPACE});
+      
+      border-radius: 10px;
+      transition: color 0.2s ease-out, background 0.2s ease-out;
 
       &:hover {
-        background: none;
-      }
-
-      input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+        background: #f3f3f3;
       }
 
       input:checked + label {
-        color: #fff!important;
-        // font-weight: 700;
-        background: $filtersHightlightColor;
+        font-weight: bold;
       }
      
       label {
         flex-grow: 1;
         font-weight: normal;
         cursor: pointer;
-        padding: 10px 10px;
-        margin: 0 8px;
-        border-radius: 10px;
-
-        transition: color 0.2s ease-out, background 0.2s ease-out;
-
-        &:hover {
-          // font-weight: 700;
-          background: $lightestGray;
-        }
+        padding: $GRID_SPACE $GRID_SPACE/2;
 
         img {
           height: 1em;
@@ -4361,6 +4352,7 @@ body.modal-open {
           height: 100%;
           padding: 8% 5% 3%;
           opacity: .9;
+          vertical-align: bottom;
 
           transition: opacity 0.5s ease-out;
 
