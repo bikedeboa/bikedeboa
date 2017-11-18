@@ -1260,13 +1260,17 @@ a.unstyled-link {
     right: 0px;
 
     border-radius: 25px;
-    padding: 0 15px;
-    margin: 10px 0;
     border: 0;
     background-color: white;
-    height: 40px;
     font-family: $bodyFont;
-    @include shadow(1);
+
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    font-size: 0;
+    @include shadow(2);
+    
+    margin: 0px $GRID_SPACE $GRID_SPACE;
 
     &.active {
       border: 2px solid $lightestPurple;
@@ -1281,34 +1285,18 @@ a.unstyled-link {
       width: 20px;
       height: 20px;
       margin-right: 5px;
+      margin: 0;
     }
 
     #active-filters-counter.badge {
       background-color: $filtersHightlightColor;
     }
-}
 
-#filterBtn {
-  width: 50px;
-  height: 50px;
-  padding: 0;
-  font-size: 0;
-  @include shadow(2);
-  
-  margin: 0px $GRID_SPACE $GRID_SPACE;
-  // position: absolute;
-  // bottom: 150px;
-  // right: $GRID_SPACE;
-
-  .badge {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
-
-  img {
-    margin: 0;
-  }
+    .badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
 }
 
 .navbar {
@@ -3474,26 +3462,7 @@ body.modal-open {
   }
 
   // #filterBtn {
-  //   width: 50px;
-  //   height: 50px;
-  //   padding: 0;
-  //   font-size: 0;
-  //   @include shadow(2);
-    
-  //   margin: 0px $GRID_SPACE $GRID_SPACE;
-  //   // position: absolute;
-  //   // bottom: 150px;
-  //   // right: $GRID_SPACE;
-
-  //   .badge {
-  //     position: absolute;
-  //     bottom: 0;
-  //     right: 0;
-  //   }
-
-  //   img {
-  //     margin: 0;
-  //   }
+  //   display: none;
   // }
 
   #aboutModal {

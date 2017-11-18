@@ -83,10 +83,12 @@ $(() => {
       }); 
     } else {
       $(selector).off('click').on('click', e => {
-        const $tooltipEl =$(e.currentTarget);
+        const $tooltipEl = $(e.currentTarget);
         swal({
           customClass: 'tooltip-modal',
-          html: $tooltipEl.data('title')
+          html: $tooltipEl.data('title'),
+          showConfirmButton: false,
+          showCloseButton: true
         });
       });
     }
@@ -1573,18 +1575,20 @@ $(() => {
 
         $('body').addClass('already-reviewed');
 
-        swal({ 
-          title: 'Valeu!',
-          html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
-          type: 'success',
-          onOpen: () => {
-            startConfettis();
-          },
-          onClose: () => {
-            stopConfettis();
-            promptPWAInstallPopup();
-          } 
-        });
+        // swal({ 
+        //   title: 'Valeu!',
+        //   html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
+        //   type: 'success',
+        //   onOpen: () => {
+        //     startConfettis();
+        //   },
+        //   onClose: () => {
+        //     stopConfettis();
+        //     promptPWAInstallPopup();
+        //   } 
+        // });
+        toastr['success']('Avaliação salva. Valeu!'); 
+        promptPWAInstallPopup();
       }
 
       // Update marker data
@@ -1894,7 +1898,6 @@ $(() => {
 
       ga('send', 'event', 'Misc', 'contact opened');
       
-      swal('Contato', '', 'info');
       swal({
         title: 'Contato',
         html:
