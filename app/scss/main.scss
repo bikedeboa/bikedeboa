@@ -3701,12 +3701,12 @@ body.modal-open {
     }
 
     .tagDisplayContainer {
-      width: calc(50% - #{$GRID_SPACE});      
+      width: calc(50% - #{$GRID_SPACE});
     }
 
     .minimap-container {
-      margin-left: 0;
-      margin-right: 0;
+      margin-left: -$GRID_SPACE;
+      margin-right: -$GRID_SPACE;
     }
 
     .review {
