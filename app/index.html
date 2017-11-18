@@ -1341,11 +1341,6 @@
                   {{else}}
                     <h1 style="font-style: italic;">Sem nome</h1>
                   {{/if}}
-
-                  <p class="address">
-                      {{address}}
-                  </p>
-
               </section>
 
               <section class="info">
@@ -1548,16 +1543,26 @@
 
               <hr>
 
-              {{#if description}}
-                  <section class="description">
-                      <h2>
-                          <!-- <span class="glyphicon glyphicon-info-sign"></span> -->
-                          <b>+</b> Mais Informações
-                      </h2>
+              <section class="description">
+                <ul class="details-list">
+                  <!-- <li>
+                    <span class="details-list-icon glyphicon glyphicon-eye-open"></span>
+                      <div>123</div>
+                  </li> -->
 
-                      {{{description}}}
-                  </section>
-              {{/if}}
+                  {{#if description}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
+                      <div> {{{description}}} </div>
+                    </li>
+                  {{/if}}
+
+                  <li>
+                    <span class="details-list-icon glyphicon glyphicon-map-marker"></span>
+                      <div>{{{address}}} </div>
+                  </li>
+                </ul>
+              </section>
 
               {{#if mapStaticImg}}
                   <section class="minimap-container">
