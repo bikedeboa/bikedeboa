@@ -4429,12 +4429,14 @@ body.modal-open {
 
 .side-nav--animatable .side-nav__container {
   // transition: transform 0.2s ease-in-out;
-  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  // transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1); 
+  transition: transform 0.2s $coolEaseOut;  
 }
 
 .side-nav--visible.side-nav--animatable .side-nav__container {
   // transition: transform 0.3s ease-in-out;
-  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  // transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  transition: transform 0.3s $coolEaseOut;
 }
 
 .side-nav--visible::before {
