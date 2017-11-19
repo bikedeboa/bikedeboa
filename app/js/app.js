@@ -180,7 +180,13 @@ $(() => {
     templateData.gmapsRedirectUrl = (_isMobile ? 'maps://' : 'https://') + `maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
 
     // Photo
-    templateData.photoUrl = m.photo;
+    if (m.photo) {
+      templateData.photoUrl = m.photo;
+      
+      if (_isMobile) {
+        $('body').addClass('transparent-mobile-topbar');
+      }
+    }
 
     // Is public? 
     if (m.isPublic != null) {
@@ -215,12 +221,11 @@ $(() => {
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
       templateData.savedRating = previousReview.rating;
-      templateData.userThumbUrl = BDB.User.profile.thumbnail;
     }
 
-    // if (BDB.User.profile.thumbnail) {
-    //   templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-    // }
+    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
+    }
 
 
     ////////////////////////////////
@@ -2013,6 +2018,7 @@ $(() => {
 
       if (_isMobile) {
         $('#map, #addPlace').removeClass('optimized-hidden');
+        $('body').removeClass('transparent-mobile-topbar');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {

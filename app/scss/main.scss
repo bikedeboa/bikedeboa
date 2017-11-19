@@ -650,6 +650,15 @@ a.unstyled-link {
   }
 }
 
+.avatar {
+  background: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid white;
+  @include shadow(1);
+}
+
 #userBtn {
   position: fixed;
   right: $GRID_SPACE;
@@ -667,15 +676,6 @@ a.unstyled-link {
     padding: 0;
     background: none;
     border-radius: 50%;
-  
-    .avatar {
-      background: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 3px solid white;
-      @include shadow(1);
-    }
   }
 
   &.admin {
@@ -1572,6 +1572,17 @@ body.clean-modal-open {
   display: none;
 }
 
+body.transparent-mobile-topbar {
+  #top-mobile-bar {
+    box-shadow: none;
+    background: linear-gradient(rgba(0,0,0,0.8), transparent);
+  }
+
+  .modal .modal-content {
+    padding-top: 0;
+  }
+}
+
 body.modal-open {
   overflow-y: scroll;
 
@@ -2203,11 +2214,6 @@ body.modal-open {
   border-bottom-right-radius: 5px;
   overflow: hidden;
 
-  & img {
-      width: 25px;
-      height: 28px;
-  }
-
   .btn + .btn {
     text-transform: uppercase;
   }
@@ -2369,9 +2375,6 @@ body.modal-open {
     }
 
     .minimap-container {
-      // margin-left: -$GRID_SPACE*3;
-      // margin-right: -$GRID_SPACE*3;
-
       .minimap { 
           width: 100%;
           min-height: 50px;
@@ -2381,6 +2384,14 @@ body.modal-open {
           &.close-modal {
             cursor: pointer;
           }
+      }
+    }
+
+    .modal-footer {
+      .avatar {
+        margin-bottom: 0.5em;
+        display: block;
+        box-shadow: none;
       }
     }
 }
@@ -4310,7 +4321,7 @@ body.modal-open {
 .side-nav__container {
   position: relative;
   width: 90%;
-  max-width: 400px;
+  max-width: 450px;
   background: #FFF;
   height: 100%;
   box-shadow: 2px 0 12px rgba(0,0,0,0.4);
@@ -4421,7 +4432,8 @@ body.modal-open {
         img {
           height: 1em;
           max-width: 1em;
-          margin-right: 5px;
+          // margin-right: 5px;
+          vertical-align: baseline;
         }
       }
 
