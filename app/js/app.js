@@ -32,48 +32,59 @@ $(() => {
     // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
     const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
 
-    swal({  
-      imageUrl: _isMobile ? '' : '/img/icon_share.svg',
-      imageWidth: 80,
-      imageHeight: 80,
-      customClass: 'share-modal',
-      html:
-        `Compartilhe este bicicletário<br><br>
-        <div class="share-icons">
-          <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-          <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
-          <button class="share-email-btn">
-            <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
-              <img src="/img/icon_mail.svg" class="icon-mail"/><span class="share-email-label unstyled-link">Email</span> 
-            </a>
-          </button>
-        </div>
-        <hr>
-        ...ou clique para copiar o link<br><br>
-        <div class="share-url-container">
-          <span class="glyphicon glyphicon-link share-url-icon"></span>
-          <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>
-        </div>`,
-      showConfirmButton: false,
-      showCloseButton: true,
-      onOpen: () => {
-        // Initializes Twitter share button
-        twttr.widgets.load();
+    if (navigator.share) {
+      navigator.share({
+          title: 'bike de boa',
+          text: openedMarker.text,
+          url: shareUrl,
+      })
+      .then(() => {})
+      .catch((error) => console.error('ERROR sharing', error));
+    } else {
+      swal({  
+        imageUrl: _isMobile ? '' : '/img/icon_share.svg',
+        imageWidth: 80,
+        imageHeight: 80,
+        customClass: 'share-modal',
+        html:
+          `Compartilhe este bicicletário<br><br>
+          <div class="share-icons">
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
+            <button class="share-email-btn">
+              <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
+                <img src="/img/icon_mail.svg" class="icon-mail"/><span class="share-email-label unstyled-link">Email</span> 
+              </a>
+            </button>
+          </div>
+          <hr>
+          ...ou clique para copiar o link<br><br>
+          <div class="share-url-container">
+            <span class="glyphicon glyphicon-link share-url-icon"></span>
+            <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>
+          </div>`,
+        showConfirmButton: false,
+        showCloseButton: true,
+        onOpen: () => {
+          // Initializes Twitter share button
+          twttr.widgets.load();
 
-        // Copy share URL to clipboard
-        $('#share-url-btn').on('click', e => {
-          ga('send', 'event', 'Local', 'share - copy url to clipboard', ''+openedMarker.id);
+          // Copy share URL to clipboard
+          $('#share-url-btn').on('click', e => {
+            ga('send', 'event', 'Local', 'share - copy url to clipboard', ''+openedMarker.id);
 
-          copyToClipboard(e.currentTarget);
- 
-          // Tooltip
-          $('#share-url-btn').tooltip('show');
-          $('#share-url-btn').one('mouseout', () => {
-            $('#share-url-btn').tooltip('hide');
+            copyToClipboard(e.currentTarget);
+   
+            // Tooltip
+            $('#share-url-btn').tooltip('show');
+            $('#share-url-btn').one('mouseout', () => {
+              $('#share-url-btn').tooltip('hide');
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    }
+
   }
 
   function initHelpTooltip(selector) {
