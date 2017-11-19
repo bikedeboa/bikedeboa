@@ -1725,15 +1725,17 @@ body.modal-open {
     section.rating-input-container {
       text-align: center;
       // border-top: $separatorBorderStyle;
-      padding: $GRID_SPACE*3 0 $GRID_SPACE*4;
-      background: $paleWhite;
+      padding: $GRID_SPACE*3 0;
+      // background: $paleWhite;
+      background: $greenGradient;
 
       h2 {
         margin: 0;
         font-family: $bodyFont;
-        color: $lightGray;
+        color: white;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: bold;
+        margin-bottom: .5em;
       }
     }
 
@@ -2355,7 +2357,6 @@ body.modal-open {
       }
 
       .details-list-icon {
-          flex: 0 0 $GRID_SPACE*2;
           font-size: 22px;
           margin: 0 $GRID_SPACE;
           color: $gray;
@@ -2368,8 +2369,8 @@ body.modal-open {
     }
 
     .minimap-container {
-      margin-left: -$GRID_SPACE*3;
-      margin-right: -$GRID_SPACE*3;
+      // margin-left: -$GRID_SPACE*3;
+      // margin-right: -$GRID_SPACE*3;
 
       .minimap { 
           width: 100%;
@@ -2889,7 +2890,7 @@ body.modal-open {
         flex-grow: 1;
         font-weight: normal;
         cursor: pointer;
-        padding: $GRID_SPACE $GRID_SPACE/2;
+        padding: $GRID_SPACE;
 
         img {
           height: 1em;
@@ -3398,10 +3399,6 @@ body.modal-open {
       margin: 0;
     }
 
-    // .rating-input-container {
-    //   display: none;
-    // }
-
     .modal-header {
       display: none;
     }
@@ -3679,14 +3676,18 @@ body.modal-open {
       margin-right: -12px;
     }
 
+    .modal-footer {
+      display: none;
+    }
+
     .tagDisplayContainer {
       width: calc(50% - #{$GRID_SPACE});
     }
 
-    .minimap-container {
-      margin-left: -$GRID_SPACE;
-      margin-right: -$GRID_SPACE;
-    }
+    // .minimap-container {
+    //   margin-left: -$GRID_SPACE;
+    //   margin-right: -$GRID_SPACE;
+    // }
 
     .review {
       text-align: left;
@@ -4389,8 +4390,8 @@ body.modal-open {
 
     h3 {
       padding: 10px;
-      font-weight: lighter;
-      font-size: 14px;
+      font-weight: bold;
+      font-size: 12px;
       color: $lightGray;
       user-select: none;
       padding: 10px 0 0 16px;
