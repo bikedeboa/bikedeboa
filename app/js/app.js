@@ -177,7 +177,7 @@ $(() => {
     }
 
     // Route button 
-    templateData.gmapsRedirectUrl = (_isMobile ? 'maps://' : 'https://') + `maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
+    templateData.gmapsRedirectUrl = `https://maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`; 
 
     // Photo
     if (m.photo) {
