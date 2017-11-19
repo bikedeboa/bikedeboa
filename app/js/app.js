@@ -177,7 +177,7 @@ $(() => {
     }
 
     // Route button 
-    templateData.gmapsRedirectUrl = `https://maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`; 
+    templateData.gmapsRedirectUrl = `https://maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
 
     // Photo
     if (m.photo) {
@@ -384,7 +384,9 @@ $(() => {
           ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
           
           if (map) {
-            map.panTo(data.location);
+            if (!_geolocationInitialized) {
+              map.panTo(data.location);
+            }
 
             $('#geolocationBtn').removeClass('loading');
           }
@@ -417,8 +419,6 @@ $(() => {
         if (!quiet) {
           $('#geolocationBtn').addClass('loading');
         }
-
-        _geolocationInitialized = false;
 
         const options = {
           enableHighAccuracy: true,
