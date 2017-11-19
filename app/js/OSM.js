@@ -159,8 +159,8 @@ BDB.OSM = {
 
       // 
       // Debug mode
-      // ret.description += '<small style="color: gray;">' + JSON.stringify(tags).split(',"').join(',<br>"') + '</small>';
-      ret.description += '<small style="color: gray;">' + JSON.stringify(tags) + '</small>';
+      ret.description += '<small style="color: gray;">' + JSON.stringify(tags).split(',"').join(',<br>"') + '</small>';
+      // ret.description += '<small style="color: gray;">' + JSON.stringify(tags) + '</small>';
     }
 
     return ret;
