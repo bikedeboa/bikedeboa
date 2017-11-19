@@ -1576,6 +1576,9 @@
             {{#unless savedRating}}
               <section class="rating-input-container">
                 <h2>
+                  {{#if userThumbUrl}}
+                    <img src="{{userThumbUrl}}"/>
+                  {{/if}}
                   Dê sua nota para este bicicletário
                 </h2>
 
