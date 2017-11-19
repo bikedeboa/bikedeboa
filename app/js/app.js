@@ -83,10 +83,12 @@ $(() => {
       }); 
     } else {
       $(selector).off('click').on('click', e => {
-        const $tooltipEl =$(e.currentTarget);
+        const $tooltipEl = $(e.currentTarget);
         swal({
           customClass: 'tooltip-modal',
-          html: $tooltipEl.data('title')
+          html: $tooltipEl.data('title'),
+          showConfirmButton: false,
+          showCloseButton: true
         });
       });
     }
@@ -117,7 +119,7 @@ $(() => {
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
-    const staticImgDimensions = _isMobile ? '400x70' : '1000x150';
+    const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
@@ -360,7 +362,11 @@ $(() => {
     // Hit Google Geolocation to get user's position without GPS
     // This might not be precise, but it's faster and more reliable than the GPS, so it's a good fallback.
     if (!_geolocationInitialized) {
-      // Documentaiton: https://developers.google.com/maps/documentation/geolocation/intro?hl=en
+      if (!quiet) {
+        $('#geolocationBtn').addClass('loading');
+      }
+
+      // API docs: https://developers.google.com/maps/documentation/geolocation/intro?hl=en
       $.ajax({
         url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
         type: 'POST'
@@ -371,6 +377,8 @@ $(() => {
           
           if (map) {
             map.panTo(data.location);
+
+            $('#geolocationBtn').removeClass('loading');
           }
         } else {
           console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
@@ -464,11 +472,11 @@ $(() => {
                   break;
                 case 2:
                   // POSITION_UNAVAILABLE
-                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS.');
+                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
                   break;
                 case 3:
                   // TIMEOUT
-                  toastr['warning']('Não foi possível recuperar sua posição pelo GPS. Quem sabe tenta denovo? ;)');
+                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
                   break;
                 }
               }
@@ -1575,18 +1583,20 @@ $(() => {
 
         $('body').addClass('already-reviewed');
 
-        swal({ 
-          title: 'Valeu!',
-          html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
-          type: 'success',
-          onOpen: () => {
-            startConfettis();
-          },
-          onClose: () => {
-            stopConfettis();
-            promptPWAInstallPopup();
-          } 
-        });
+        // swal({ 
+        //   title: 'Valeu!',
+        //   html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
+        //   type: 'success',
+        //   onOpen: () => {
+        //     startConfettis();
+        //   },
+        //   onClose: () => {
+        //     stopConfettis();
+        //     promptPWAInstallPopup();
+        //   } 
+        // });
+        toastr['success']('Avaliação salva. Valeu!'); 
+        promptPWAInstallPopup();
       }
 
       // Update marker data
@@ -1896,7 +1906,6 @@ $(() => {
 
       ga('send', 'event', 'Misc', 'contact opened');
       
-      swal('Contato', '', 'info');
       swal({
         title: 'Contato',
         html:
@@ -1960,11 +1969,13 @@ $(() => {
           confirmButtonText: 'Descartar', 
           allowOutsideClick: false
         }).then(() => {
-          returnToPreviousView();
+          // returnToPreviousView();
+          goHome();
         }
         );
       } else {
-        returnToPreviousView();
+        // returnToPreviousView();
+        goHome();
       }
     });
 
@@ -2247,12 +2258,13 @@ $(() => {
       const p = $(this).data('prop');
       const v = $(this).data('value'); 
 
-      // Mark corresponding filter checkbox
-      $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked',true);
-      updateFilters();
-
       // Close modal
       goHome();
+
+      // Mark corresponding filter checkbox
+      $('.filter-checkbox').prop('checked', false);
+      $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked', true);
+      updateFilters();
     });
   } 
  
@@ -2318,8 +2330,8 @@ $(() => {
       _isDeeplink = true;
 
       // $('#map').addClass('mock-map');
+      // $('#top-mobile-bar-title').text('bike de boa');
       $('body').addClass('deeplink'); 
-      $('#top-mobile-bar-title').text('bike de boa');
 
       // Center the map on pin's position
       if (map && _deeplinkMarker) {
@@ -2382,7 +2394,7 @@ $(() => {
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
       maxWidth: 0,
-      pixelOffset: new google.maps.Size(-infoboxWidth/2, _isMobile ? 10 : 20),
+      pixelOffset: new google.maps.Size(-infoboxWidth/2, 0),
       disableAutoPan: _isMobile ? false : true,
       zIndex: null,
       boxStyle: {

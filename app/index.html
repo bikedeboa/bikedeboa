@@ -364,7 +364,7 @@
             </button> 
             
             <header class="side-nav__header">
-              <h2>Filtrar Bicicletários</h2>
+              <h2>Filtros</h2>
 
               <!-- <div class="setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
@@ -1158,6 +1158,8 @@
 
                             <input id="photoInput" type="file" name="photoInput" accept="image/*">
                             <label for="photoInput"></label>
+
+                            <span class="photoInputDisclaimer"">Você pode adicionar uma foto mais tarde se quiser ;)</span>
                         </div>
 
                         <div class="modal-body">
@@ -1339,10 +1341,6 @@
                   {{else}}
                     <h1 style="font-style: italic; color: #b3b3b3;">Sem nome</h1>
                   {{/if}}
-
-                  <p class="address">
-                      {{address}}
-                  </p>
               </section>
 
               <section class="info">
@@ -1545,22 +1543,32 @@
 
               <hr>
 
-              {{#if description}}
-                  <section class="description">
-                      <h2>
-                          <!-- <span class="glyphicon glyphicon-info-sign"></span> -->
-                          <b>+</b> Mais Informações
-                      </h2>
+              <section class="description">
+                <ul class="details-list">
+                  <!-- <li>
+                    <span class="details-list-icon glyphicon glyphicon-eye-open"></span>
+                      <div>123</div>
+                  </li> -->
 
-                      {{{description}}}
-                  </section>
-              {{/if}}
+                  {{#if description}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
+                      <div> {{{description}}} </div>
+                    </li>
+                  {{/if}}
+
+                  {{#if address}}
+                    <li>
+                      <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.png">
+                      <div>{{{address}}} </div>
+                    </li>
+                  {{/if}}
+                </ul>
+              </section>
 
               {{#if mapStaticImg}}
                   <section class="minimap-container">
-                      <div>
-                        <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
-                      </div>
+                      <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
                   </section>
               {{/if}}
 
