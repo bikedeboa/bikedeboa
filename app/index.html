@@ -1550,6 +1550,48 @@
                       <div>123</div>
                   </li> -->
 
+                  {{#if tag_operator}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-user"></span>
+                      <div> {{{tag_operator}}} </div>
+                    </li>
+                  {{/if}}
+
+                  {{#if tag_lit}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-lamp"></span>
+                      <div> {{{tag_lit}}} </div>
+                    </li>
+                  {{/if}}
+
+                  {{#if tag_fee}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-usd"></span>
+                      <div> {{{tag_fee}}} </div>
+                    </li>
+                  {{/if}}
+
+                  {{#if tag_capacity}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-th"></span>
+                      <div> {{{tag_capacity}}} lugares </div>
+                    </li>
+                  {{/if}}
+
+                  {{#if tag_openinghours}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-time"></span>
+                      <div> {{{tag_openinghours}}} </div>
+                    </li>
+                  {{/if}}
+
+                  {{#if tag_website}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-link"></span>
+                      <div> <a href="{{{tag_website}}}">{{{tag_website}}}</a> </div>
+                    </li>
+                  {{/if}}
+
                   {{#if description}}
                     <li>
                       <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
@@ -1559,7 +1601,7 @@
 
                   {{#if address}}
                     <li>
-                      <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.png">
+                      <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
                       <div>{{{address}}} </div>
                     </li>
                   {{/if}}

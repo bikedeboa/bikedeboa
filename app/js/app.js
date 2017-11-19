@@ -109,11 +109,11 @@ $(() => {
 
     ga('send', 'event', 'Local', 'view', ''+m.id);
 
-    let templateData = {};
+    let templateData = m;
 
     templateData.title = m.text;
-    templateData.address = m.address;
-    templateData.description = m.description;
+    // templateData.address = m.address;
+    // templateData.description = m.description;
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);

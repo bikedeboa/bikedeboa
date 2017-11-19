@@ -60,7 +60,7 @@ BDB.OSM = {
         default:
           console.debug('No mapping for access=' + tags.access);
         }
-        ret.description += '<br><b>Tipo de acesso:</b> ' + tags.access;
+        // ret.description += '<br><b>Tipo de acesso:</b> ' + tags.access;
       }
 
       // https://wiki.openstreetmap.org/wiki/Key:bicycle_parking
@@ -82,29 +82,32 @@ BDB.OSM = {
         default:
           console.debug('No mapping for bicycle_parking=' + tags.bicycle_parking);
         }
-        ret.description += '<br><b>Tipo de bicicletário:</b> ' + tags.bicycle_parking;
+        // ret.tag_type = tags.bicycle_parking;
       }
 
       if (tags.name) {
         ret.text = tags.name;
         if (tags.operator) {
-          ret.description += '<br><b>Operado por</b>: ' + tags.operator;
+          // ret.description += '<br><b>Operado por</b>: ' + tags.operator;
+          ret.tag_operator = tags.operator;
         }
       } else if (tags.operator) {
         ret.text = `${tags.operator} <small>(operador)</small>`;
       }
 
       if (tags.capacity) {
-        ret.description += `<br><b>Capacidade:</b> ${tags.capacity}`;
+        ret.tag_capacity = tags.capacity;
       }
 
       if (tags.fee) {
         switch(tags.fee) {
         case 'yes':
-          ret.description += '<br><b>Pago:</b> sim';
+          // ret.description += '<br><b>Pago:</b> sim';
+          ret.tag_fee = 'Pago';
           break;
         case 'no':
-          ret.description += '<br><b>Pago:</b> não';
+          // ret.description += '<br><b>Pago:</b> não';
+          ret.tag_fee = 'Grátis';
           break;
         }
       }
@@ -112,24 +115,25 @@ BDB.OSM = {
       if (tags.lit) {
         switch(tags.lit) {
         case 'yes':
-          ret.description += '<br><b>Iluminado:</b> sim';
+          // ret.description += '<br><b>Iluminado:</b> sim';
+          ret.tag_lit = 'Iluminado';
           break;
         case 'no':
-          ret.description += '<br><b>Iluminado:</b> não';
+          ret.tag_lit = 'Mal iluminado';
           break;
         }
       }
 
-      if (tags.supervised) {
-        switch(tags.supervised) {
-        case 'yes':
-          ret.description += '<br><b>Monitorado:</b> sim';
-          break;
-        case 'no':
-          ret.description += '<br><b>Monitorado:</b> não';
-          break; 
-        }
-      }
+      // if (tags.supervised) {
+      //   switch(tags.supervised) {
+      //   case 'yes':
+      //     // ret.description += '<br><b>Monitorado:</b> sim';
+      //     break;
+      //   case 'no':
+      //     // ret.description += '<br><b>Monitorado:</b> não';
+      //     break; 
+      //   }
+      // }
 
       if (tags.covered) {
         switch(tags.covered) {
@@ -146,16 +150,17 @@ BDB.OSM = {
 
 
       if (tags.opening_hours) {
-        ret.description += '<br><b>Horário de funcionamento:</b> ' + tags.opening_hours;
+        ret.tag_openinghours = tags.opening_hours;
       }
 
       if (tags.website) {
-        ret.description += '<br><b>Website:</b> ' + tags.website; 
+        ret.tag_website = tags.website; 
       }
 
       // 
       // Debug mode
-      ret.description += '<br><br> <small style="color: gray;">' + JSON.stringify(tags).split(',"').join(',<br>"') + '</small>';
+      // ret.description += '<small style="color: gray;">' + JSON.stringify(tags).split(',"').join(',<br>"') + '</small>';
+      ret.description += '<small style="color: gray;">' + JSON.stringify(tags) + '</small>';
     }
 
     return ret;
@@ -188,7 +193,8 @@ BDB.OSM = {
           toastr['success'](`${data.elements.length} bicicletários importados.`); 
 
           for(let i=0; i < data.elements.length; i++) {
-            markers.push(BDB.OSM.convertOSMtoBDB(data.elements[i]));
+            const convertedNode = BDB.OSM.convertOSMtoBDB(data.elements[i]);
+            markers.push(convertedNode); 
           }
         }
 
