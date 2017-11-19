@@ -10,7 +10,7 @@ This page is used for authentication as well as POST using the Iframe+form+hash 
 -->
 <html>
 <head>
-	<title>Hello, redirecting...</title>
+	<title>Login</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 	
 	<style>
@@ -51,10 +51,9 @@ This page is used for authentication as well as POST using the Iframe+form+hash 
         <p id="globalSpinnerLabel">Carregando...</p>
     </div>
 
-	<!-- <h2>Please close this window to continue.</h2> -->
 	<script>
 		window.onbeforeunload = function(){
-			document.getElementsByTagName('h2')[0].innerHTML="Redirecionando...";
+			document.getElementById('globalSpinnerLabel').innerHTML = "Redirecionando...";
 		}
 	</script>
 
