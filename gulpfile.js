@@ -139,6 +139,7 @@ gulp.task('generate-service-worker', function(callback) {
       'assets/img/icon_geolocation.svg',
       'assets/img/icon_filter.svg',
       'assets/img/icon_hamburger.svg',
+      'assets/img/icon_user_big.svg',
       'assets/img/spinner.svg',
     ], 
     stripPrefixMulti: {

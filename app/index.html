@@ -1537,28 +1537,30 @@
 
               <section class="description">
                 <ul class="details-list">
-                  <!-- <li>
-                    <span class="details-list-icon glyphicon glyphicon-eye-open"></span>
-                      <div>123</div>
-                  </li> -->
-
                   {{#if author}}
                     <li>
                       <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
-                      <div> Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                      <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
                     </li>
                   {{/if}}
 
                   {{#if description}}
                     <li>
                       <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
-                      <div> {{{description}}} </div>
+                      <div>{{{description}}}</div>
+                    </li>
+                  {{/if}}
+
+                  {{#if views}}
+                    <li>
+                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_views.svg">
+                      <div>{{{views}}} visualizações</div>
                     </li>
                   {{/if}}
 
                   <li>
                     <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
-                    <div>{{{address}}} </div>
+                    <div>{{{address}}}</div>
                   </li>
                 </ul>
               </section>

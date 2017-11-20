@@ -126,6 +126,7 @@ $(() => {
     templateData.address = m.address;
     templateData.description = m.description;
     templateData.author = m.User && m.User.fullname;
+    templateData.views = m.views;
     templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
 
     // Average

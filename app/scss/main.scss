@@ -2404,6 +2404,8 @@ body.modal-open {
           font-size: 22px;
           margin: 0 $GRID_SPACE;
           color: $gray;
+          min-width: 30px;
+          text-align: center;
       }
     }
 
