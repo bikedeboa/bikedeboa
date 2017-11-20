@@ -107,6 +107,18 @@
 
     <body>
         <div id="map"></div>
+        
+        <div id="offline-overlay" class="message-overlay">
+          <div class="message-overlay-content">
+            <div class="message-overlay-label"> 
+              Você está<b> offline</b>.
+            </div>
+
+            <button id="reloadBtn" class="btn">
+              Recarregar
+            </button>
+          </div>
+        </div>
 
         <div id="spinnerOverlay">
             <div class="spinnerContainer">
@@ -190,18 +202,6 @@
 
         <div id="modalPlaceholder"></div>
 
-        <div id="offline-overlay" class="message-overlay">
-          <div class="message-overlay-content">
-            <div class="message-overlay-label"> 
-              Você está<b> offline</b>.
-            </div>
-
-            <button id="reloadBtn" class="btn">
-              Recarregar
-            </button>
-          </div>
-        </div>
- 
         <div id="out-of-bounds-overlay" class="message-overlay">
           <div class="message-overlay-content"> 
             <div class="message-overlay-label">  
@@ -231,7 +231,7 @@
 
         <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
           <div>
-            <img src="/img/geolocation.svg">
+            <img src="/img/icon_geolocation.svg">
           </div>
         </div>
 

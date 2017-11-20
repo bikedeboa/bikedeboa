@@ -2748,18 +2748,20 @@ $(() => {
       allowOutsideClick: true
     });
 
-    // Featherlight - photo lightbox lib
-    // Extension to show the img alt tag as a caption within the image
-    $.featherlight.prototype.afterContent = function() { 
-      var caption = this.$currentTarget.find('img').attr('alt');
-      this.$instance.find('.caption').remove();
-      $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
-    };
-    $.featherlight.prototype.beforeOpen = function() { 
-      History.pushState(null, null, 'foto');
-      _isFeatherlightOpen = true; 
-    };
-    $.featherlight.defaults.closeOnEsc = false;
+    if ($.featherlight) {
+      // Featherlight - photo lightbox lib
+      // Extension to show the img alt tag as a caption within the image
+      $.featherlight.prototype.afterContent = function() { 
+        var caption = this.$currentTarget.find('img').attr('alt');
+        this.$instance.find('.caption').remove();
+        $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+      };
+      $.featherlight.prototype.beforeOpen = function() { 
+        History.pushState(null, null, 'foto');
+        _isFeatherlightOpen = true; 
+      };
+      $.featherlight.defaults.closeOnEsc = false;
+    }
  
     // Toastr options
     toastr.options = {
