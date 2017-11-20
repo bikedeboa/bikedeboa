@@ -909,14 +909,15 @@ a.unstyled-link {
 
 .big-numbers {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
 
   .big-numbers--col {
       text-align: center;
+      line-height: 30px;
   }
 
   .big-numbers--number {
-      font-size: 30px;
+      font-size: 50px;
       font-weight: bold;
   }
 
@@ -925,9 +926,10 @@ a.unstyled-link {
   }
 }
 
-#profileModal {
-  h1 {
+#contributionsModal {
+  h2 {
     text-align: center;
+    margin: 0;
 
     img {
       border-radius: 50%;
@@ -937,13 +939,18 @@ a.unstyled-link {
       margin: 0 auto;
       display: block;
     }
-  } 
+  }
 
-  h2 { 
+  .you-are-admin {
+    text-align: center;
+    color: $darkYellow;
+  }
+
+  h3 { 
     padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE 0;
     font-size: 12px;
     font-weight: bold;
-    color: $lightGray;
+    color: $gray;
     user-select: none;
     text-transform: uppercase;
     margin-top: 1em;
@@ -957,7 +964,7 @@ a.unstyled-link {
   }
 
   .big-numbers {
-    margin: 0 .5em;
+    margin: 2em 0 1em;
   }
 
   .go-to-place-btn {
@@ -982,9 +989,13 @@ a.unstyled-link {
       // width: calc(100vw - $GRID_SPACE*2);
     }
 
+    .go-to-place-btn--rating {
+      font-weight: bold;
+    }
+
     .go-to-place-btn--daysago {
       display: block;
-      color: gray;
+      color: $lightGray;
       font-size: 12px;
     }
   }
@@ -1601,7 +1612,8 @@ body.clean-modal-open {
 body.transparent-mobile-topbar {
   #top-mobile-bar {
     box-shadow: none;
-    background: linear-gradient(rgba(0,0,0,0.8), transparent);
+    background: linear-gradient(rgba(0,0,0,0.5), transparent);
+    position: absolute;
   }
 
   .modal .modal-content {
@@ -2599,7 +2611,7 @@ body.modal-open {
 
     p.small {
       font-size: 13px;
-      color: gray;
+      color: $gray;
       font-style: italic;
     }
 }
@@ -2876,7 +2888,7 @@ body.modal-open {
         font-family: $bodyFont;
         font-size: 12px;
         margin-top: 5px;
-        color: gray;
+        color: $gray;
     }
   }
 
@@ -2927,7 +2939,8 @@ body.modal-open {
 
         img {
           height: 1em;
-          // margin-right: 5px;
+          vertical-align: baseline;
+          margin: 0;
         }
       }
     }
@@ -2961,7 +2974,7 @@ body.modal-open {
       font-family: $bodyFont;
       font-size: 12px;
       margin-top: 5px;
-      color: gray;
+      color: $gray;
     }
   }
 
@@ -3653,18 +3666,6 @@ body.modal-open {
       // }
     }
   }
-
-  body.gradient-topbar {
-    .modal-content {
-      padding-top: 0;
-    }
-
-    #top-mobile-bar {
-      background: linear-gradient(rgba(0,0,0,0.5), transparent);
-      box-shadow: none; 
-    }
-  }
-
 
   #bottom-mobile-bar {
       position: fixed;
@@ -4465,8 +4466,7 @@ body.modal-open {
         img {
           height: 1em;
           max-width: 1em;
-          // margin-right: 5px;
-          vertical-align: baseline;
+          margin-right: 5px;
         }
       }
 

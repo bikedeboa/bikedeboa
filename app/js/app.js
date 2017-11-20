@@ -553,7 +553,7 @@ $(() => {
   //   return controlDiv;
   // }
  
-  // Just delegate the action to the route controller
+  // Set router to open Local
   function openLocal(marker, callback) {
     let url = BDB.Places.getMarkerShareUrl(marker);
  
@@ -568,7 +568,7 @@ $(() => {
     this.openLocal(place, callback);
   }
 
-  function _openLocal(marker, callback) {
+  function routerOpenLocal(marker, callback) {
     if (marker) {
       openDetailsModal(marker, callback);
 
@@ -1286,9 +1286,9 @@ $(() => {
       templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
     }
 
-    let profileModalTemplate = $('#profileModalTemplate').html();
-    if (profileModalTemplate) {
-      templates.profileModalTemplate = Handlebars.compile(profileModalTemplate);
+    let contributionsModalTemplate = $('#contributionsModalTemplate').html();
+    if (contributionsModalTemplate) {
+      templates.contributionsModalTemplate = Handlebars.compile(contributionsModalTemplate);
     }
 
   }
@@ -1849,7 +1849,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'github hamburger menu link click');
     });
 
-    $('.openProfileBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.openContributionsBtn').on('click', queueUiCallback.bind(this, () => {
       hideAll();
       setView('Contribuições', '/contribuicoes', true);
     }));
@@ -2193,14 +2193,14 @@ $(() => {
     });
   }
 
-  function openProfileModal() { 
+  function openContributionsModal() { 
     let templateData = {};
     templateData.profile = BDB.User.profile;
     templateData.isAdmin = BDB.User.isAdmin;
     templateData.reviews = BDB.User.reviews;
     templateData.places = BDB.User.places;
 
-    // Massage reviews list
+    // Reviews list
     if (templateData.reviews) {
       templateData.nreviews = templateData.reviews.length;
 
@@ -2219,7 +2219,7 @@ $(() => {
       templateData.reviews.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
     }
 
-    // Massage places list
+    // Places list
     if (templateData.places) {
       templateData.nplaces = templateData.places.length;
 
@@ -2237,21 +2237,20 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#modalPlaceholder').html(templates.profileModalTemplate(templateData));
-    $('#profileModal').modal('show');
+    $('#modalPlaceholder').html(templates.contributionsModalTemplate(templateData));
+    $('#contributionsModal').modal('show');
 
     $('.go-to-place-btn').off('click').on('click', e => {
       const $target = $(e.currentTarget);
       const id = $target.data('id');
       const place = BDB.Places.getMarkerById(id);
 
-      $('#profileModal').modal('hide').one('hidden.bs.modal', () => {
-        openLocal(place);
-      });
+      $('#contributionsModal')
+        .one('hidden.bs.modal', () => {
+          openLocal(place);
+        })
+        .modal('hide');
     });
-
-    // $('#aboutModal').modal('show') ;
-    // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
   function openGuideModal() {
@@ -2300,7 +2299,7 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
 
           if (_deeplinkMarker) {
-            _openLocal(_deeplinkMarker);
+            routerOpenLocal(_deeplinkMarker);
           } else {
             _routePendingData = true;
           }
@@ -2325,7 +2324,8 @@ $(() => {
       openDataModal();
       break;
     case 'contribuicoes':
-      openProfileModal();
+      hideAll();
+      openContributionsModal();
       break;
     // case 'nav':
     // case 'filtros':
@@ -2585,8 +2585,8 @@ $(() => {
         // UI
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
-        // $('.openProfileBtn, .openProfileDivider').show();
-        $('.openProfileBtn').attr('disabled', false);
+        // $('.openContributionsBtn, .openProfileDivider').show();
+        $('.openContributionsBtn').attr('disabled', false);
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         if (data.role === 'admin') {
@@ -2619,7 +2619,7 @@ $(() => {
     $('#userBtn').removeClass('admin');
     $('.logoutBtn').hide();
     $('.loginBtn').show();
-    $('.openProfileBtn').attr('disabled', true);
+    $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
