@@ -2649,7 +2649,9 @@ $(() => {
         setupGoogleMaps(); 
       }
     } else {
-      setOfflineMode();
+      if (window.location.pathname !== '/dados') {
+        setOfflineMode();
+      }
     }
 
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');

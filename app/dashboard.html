@@ -71,10 +71,16 @@
         <style>
           body {
             font-family: "Roboto", Arial, sans-serif;
-            /*margin-top: 100px;*/
             padding: 24px;
             overflow: auto;
-            padding-top: 120px;
+            padding-top: 60px;
+            background: white;
+          }
+
+          h2 {
+            font-size: 14px;
+            width: 60%;
+            color: #828b90;
           }
 
           #logo {
@@ -91,10 +97,6 @@
 
           tbody > tr:hover:not(.detail-view) {
             background-color: #f5f5f5;
-          }
-
-          th, .col-title {
-            font-family: 'Raleway', sans-serif;
           }
 
           td,
@@ -167,7 +169,7 @@
           }
 
           section {
-            margin: 30px 0 0;
+            margin: 60px 0 0;
             /*padding: 50px;*/
             /*background-color: rgba(0,0,0,0.02);*/
             /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
@@ -177,12 +179,36 @@
             margin: 30px 0;
           }
 
+          .nav {
+            position: sticky;
+            top: 70px;
+            z-index: 2;
+            background: white;
+          }
+
+          .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: white;
+            z-index: 2;
+            height: 70px;
+          }
+
           .navbar-default {
             background-color: #30bb6a;
           }
 
           .nav-pills > li {
-            font-size: 1.8em;
+            /*font-size: 1.8em;*/
+            text-transform: uppercase;
+            font-weight: bold;
+          }
+
+          .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+            background: #30bb6a;
           }
 
           .tab-content h2 {
@@ -197,51 +223,79 @@
     </head>
 
     <body>
-      <!-- <div id="loginWrapper" style="float: right;">
-        <button id="login" type="button" class="btn btn-lg btn-default" >
-          <span class="glyphicon glyphicon-user"></span> Login
-        </button>
+      <div class="topbar">\
+        <h1 id="logo">
+          <a href="/" class="unstyled-link">bike de boa</a> 
+        </h1>
 
-        <div id="logged" class="btn-group">
-          <button class="btn btn-default btn-lg btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-user"></span> <span id="BDB.User.isAdmin"></span> <span class="caret"></span>
+        <div id="userBtn" class="dropdown">
+          <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="avatar" src="/img/icon_user_big.svg">
           </button>
-          <ul class="dropdown-menu">
-            <li><a id="logOff" href="#">Log off</a></li>
+
+          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+            <li>
+              <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
+            </li>
+            
+            <li>
+              <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
+            </li>
           </ul>
         </div>
-      </div> -->
+      </div>
 
-      <!-- <nav class="navbar navbar-default navbar-fixed-top">
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-          </li>
-        </ul>
-      </nav> -->
+      <h2>
+        <p>
+          Assim como nosso código fonte, os dados do bike de boa também são abertos!
+        </p>
+        
+        <p>
+          Estes são nossos dados brutos, forma de tabela. Explore, filtre, e faça download em vários formatos como Excel, CSV, XML e JSON.
+        </p>
+
+        <div class="social-links-list" style="margin-top: 2em;">
+          <a class="facebook-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+            <img alt="Facebook" src="/img/facebook_logo.svg"/>
+          </a>
+          <a class="instagram-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+            <img alt="Instagram" src="/img/instagram_logo.svg"/>
+          </a>
+          <a class="github-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+            <img alt="GitHub" src="/img/github_logo.svg"/>
+          </a>
+        </div>
+      </h2>
 
       <section>
-        <ul class="nav nav-tabs nav-pills nav-justified" role="tablist">
+        <ul class="nav nav-pills" role="tablist">
           <li role="presentation" class="active">
             <a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">
-              <i class="fa fa-bicycle"></i>
-              Bicicletarios
+              <!-- <i class="fa fa-bicycle"></i> -->
+              Bicicletários
             </a>
           </li>
           <li role="presentation" class="restricted-access">
-            <a href="#sugestoes" aria-controls="sugestoes" role="tab" data-toggle="tab">
-              <i class="fa fa-comments"></i>
-              Sugestoes
+            <a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-users"></i> -->
+              Avaliações
             </a>
           </li>
           <li role="presentation" class="restricted-access">
             <a href="#usuarios" aria-controls="usuarios" role="tab" data-toggle="tab">
-              <i class="fa fa-users"></i>
-              Usuarios
+              <!-- <i class="fa fa-users"></i> -->
+              Usuários
+            </a>
+          </li>
+          <li role="presentation" class="restricted-access">
+            <a href="#sugestoes" aria-controls="sugestoes" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-comments"></i> -->
+              Correções
             </a>
           </li>
           <li role="presentation" class="restricted-access">
             <a href="#log" aria-controls="log" role="tab" data-toggle="tab">
-              <i class="fa fa-list"></i>
+              <!-- <i class="fa fa-list"></i> -->
               Log
             </a>
           </li>
@@ -269,7 +323,7 @@
               data-detail-formatter="detailFormatter"
               data-row-style="rowStyle"
               data-show-footer="false"
-              data-sticky-header="true">
+              data-sticky-header="false">
             </table>
 
           </div>
@@ -290,7 +344,7 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
-              data-sticky-header="true">
+              data-sticky-header="false">
             </table>
           </div>
 
@@ -309,7 +363,26 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
-              data-sticky-header="true">
+              data-sticky-header="false">
+            </table>
+          </div>
+
+
+          <!-- Tabela de Avaliações -->
+
+          <div role="tabpanel" class="tab-pane fade" id="reviews" class="restricted-access">
+            <h2>
+              <span id="headingUsers">Carregando avaliações...</span>
+            </h2>
+
+            <table
+              id="reviewsTable"
+              data-classes="table table-no-bordered"
+              data-search="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-show-footer="false"
+              data-sticky-header="false">
             </table>
           </div>
 
@@ -332,32 +405,11 @@
               data-show-footer="false"
               data-detail-view="true"
               data-detail-formatter="detailFormatter"
-              data-sticky-header="true">
+              data-sticky-header="false">
             </table>
           </div>
         </div>
       </section>
-
-      <div id="userBtn" class="dropdown">
-        <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img class="avatar" src="/img/icon_user_big.svg">
-        </button>
-
-        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-          <li>
-            <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
-          </li>
-          
-          <li>
-            <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
-          </li>
-        </ul>
-      </div>
-
-      <h1 id="logo" class="">
-        <!-- bike de boa -->
-        <a href="/"><img src="/img/logo.svg" alt="bike de boa"/></a>
-      </h1>
 
       <script>
         // Generic function to display in textual form all the properties of a table entry
@@ -482,14 +534,14 @@
 
             $('#localsTable').bootstrapTable({
               columns: [
-                { 
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter',
-                },
-                {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
-                },
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin
+                },
+                { 
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
+                },
+                {
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
                 },
                 {
                   field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
@@ -535,7 +587,7 @@
                 }
               ],
               data: markers,
-              sortName: 'updatedAt', sortOrder: 'desc'
+              sortName: 'id', sortOrder: 'desc'
             });
           }, null, null, true);
         }
@@ -581,6 +633,43 @@
                 },
               ],
               data: users,
+              sortName: 'id', sortOrder: 'desc'
+            });
+          });
+        }
+
+        function updateReviewsTable() {
+          if (reviews) {
+            return;
+          }
+
+          BDB.Database.customAPICall('get','review').then( data => {
+            reviews = data;
+
+            $('#reviews h2 span').html(`<span class="text-muted">(${data.length} carregados)</span>`);
+            
+            $('#reviewsTable').bootstrapTable({
+              columns: [
+                {
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id',
+                },
+                {
+                  field: 'user_id', title: 'Cargo', sortable: true,
+                },
+                {
+                  field: 'rating', title: 'Nota', sortable: true, editable: !!BDB.User.isAdmin
+                },
+                {
+                  field: 'local_id', title: 'ID bicicletário', sortable: true
+                },
+                {
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+              ],
+              data: reviews,
               sortName: 'id', sortOrder: 'desc'
             });
           });
@@ -740,6 +829,7 @@
         let users;
         let log;
         let revisions;
+        let reviews;
         let ga = function() {};
 
 
@@ -763,6 +853,9 @@
             break;
           case 'usuarios':
             updateUsersTable();
+            break;
+          case 'reviews':
+            updateReviewsTable();
             break;
           }
         });
