@@ -1542,6 +1542,13 @@
                       <div>123</div>
                   </li> -->
 
+                  {{#if author}}
+                    <li>
+                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                      <div> Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                    </li>
+                  {{/if}}
+
                   {{#if description}}
                     <li>
                       <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
@@ -1550,7 +1557,7 @@
                   {{/if}}
 
                   <li>
-                    <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.png">
+                    <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
                     <div>{{{address}}} </div>
                   </li>
                 </ul>
@@ -1754,7 +1761,7 @@
                                       {{rating}}<span class="glyphicon glyphicon-star"></span>
                                     </span> 
                                     <span class="go-to-place-btn--daysago">
-                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdDaysAgo}} dias atrás
+                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
                                     </span> 
                                   </button>
                                 </li>
@@ -1772,7 +1779,7 @@
                                   <button class="go-to-place-btn" data-id="{{id}}">
                                     <span class="go-to-place-btn--title">{{text}}</span>
                                     <span class="go-to-place-btn--daysago">
-                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdDaysAgo}} dias atrás
+                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
                                     </span> 
                                   </button>
                                 </li>

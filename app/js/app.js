@@ -125,6 +125,8 @@ $(() => {
     templateData.title = m.text;
     templateData.address = m.address;
     templateData.description = m.description;
+    templateData.author = m.User && m.User.fullname;
+    templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -2192,12 +2194,6 @@ $(() => {
   }
 
   function openProfileModal() { 
-    function createdAtToDaysAgo(createdAtStr) {
-      const createdAtDate = Date.parse(createdAtStr);
-      const msAgo = Date.now() - createdAtDate;
-      return Math.floor(msAgo/(1000*60*60*24));
-    }
-
     let templateData = {};
     templateData.profile = BDB.User.profile;
     templateData.isAdmin = BDB.User.isAdmin;
@@ -2213,14 +2209,14 @@ $(() => {
         
         // Created X days ago
         if (r.createdAt) {
-          r.createdDaysAgo = createdAtToDaysAgo(r.createdAt);
+          r.createdTimeAgo = createdAtToDaysAgo(r.createdAt);
         }
 
         r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
 
-      templateData.reviews.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
+      templateData.reviews.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
     }
 
     // Massage places list
@@ -2231,11 +2227,11 @@ $(() => {
         let p = templateData.places[i];
         // Created X days ago
         if (p.createdAt) {
-          p.createdDaysAgo = createdAtToDaysAgo(p.createdAt);
+          p.createdTimeAgo = createdAtToDaysAgo(p.createdAt);
         }
       }
       
-      templateData.places.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
+      templateData.places.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
     }
 
     ////////////////////////////////
