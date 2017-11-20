@@ -3,14 +3,14 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <title>bike de boa - encontre e avalie bicicletários no RS</title>
-        <meta property="og:title" content="bike de boa - encontre e avalie bicicletários no RS"/>
+        <title>bike de boa</title>
+        <meta property="og:title" content="bike de boa"/>
       
-        <meta name="description" content="Vá de bici e descubra onde deixar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo. Disponível em todo Rio Grande do Sul.">
+        <meta name="description" content="Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais.">
         
-        <meta property="og:description" content="Vá de bici e descubra onde deixar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo. Disponível em todo Rio Grande do Sul." />
+        <meta property="og:description" content="Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais." />
 
-        <meta name="keywords" content="mapa bicicleta bici biciletario seguranca estacionamento estacionar deixar prender ulock colaborativo vadebici massa critica porto alegre rs ">
+        <meta name="keywords" content="mapa bicicleta bici biciletario seguranca estacionamento estacionar deixar prender ulock colaborativo vadebici massa critica porto alegre">
         <!-- <link rel="canonical" href="https://www.bikedeboa.com.br" /> -->
         <!-- <meta property="og:url" content="https://www.bikedeboa.com.br"/> -->
         <meta property="fb:app_id" content="1814653185457307"/>
@@ -20,10 +20,10 @@
         <meta name="google-site-verification" content="ftQlKcMOfc5iuPkN6xINweO31I0WNRE4s9zDbQT9iTY" />
 
         <!-- Progressive Webapp Manifest -->
-        <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json">
+        <link rel="manifest" href="/manifest.json" type="application/manifest+json">
       
         <!-- Chrome mobile nav color -->
-        <meta name="theme-color" content="#2cd978">
+        <meta name="theme-color" content="#fff">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
 
@@ -32,15 +32,7 @@
         <meta name="apple-mobile-web-app-title" content="bike de boa">
 
 
-        <!-- Favicons -->
-        <!-- Thanks https://realfavicongenerator.net/ -->
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png?v=m2dAvrr4RB">
-        <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png?v=m2dAvrr4RB" sizes="32x32">
-        <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png?v=m2dAvrr4RB" sizes="16x16"> 
-        <link rel="manifest" href="/manifest.json">
-
-        <!-- Goog
-        le Optimize (MVT Testing) -->
+        <!-- Google Optimize (MVT Testing) -->
         <!-- <style>.async-hide { opacity: 0 !important} </style>
         <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date; h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')}; (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c; })(window,document.documentElement,'async-hide','dataLayer',4000, {'GTM-MCCV34X':true});</script>  -->
 
@@ -61,10 +53,12 @@
           }
         </script>
 
-        <script>
+<!--         <script>
            WebFontConfig = {
             google: {
               families: ['Quicksand:500,500i,700']
+              // families: ['Ubuntu:400,400i,700']
+              // families: ['Poppins:400,400i,700']
             }
           };
 
@@ -74,7 +68,7 @@
               wf.async = true;
               s.parentNode.insertBefore(wf, s);
            })(document);
-        </script>
+        </script> -->
 
 
         <!-- Google Maps API (deferred) -->
@@ -113,15 +107,28 @@
 
     <body>
         <div id="map"></div>
-        
-        <h1 id="logo" class="js-menu-show-hamburger-menu">
-          bike de boa
-          <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
-        </h1>
 
-        <div class="confetti-placeholder"></div>
+        <div id="offline-overlay" class="message-overlay">
+          <div class="message-overlay-content">
+            <div class="message-overlay-label"> 
+              Você está<b> offline</b>.
+            </div>
 
-        <div id="locationSearch" class="cool-hide cool-hidden">
+            <button id="reloadBtn" class="btn">
+              Recarregar
+            </button>
+          </div>
+        </div>
+
+        <div id="spinnerOverlay">
+            <div class="spinnerContainer">
+                <img alt="Carregando..." src="/img/spinner.svg"/>
+
+                <p id="globalSpinnerLabel"> </p>
+            </div>
+        </div>
+
+        <div id="locationSearch" class="cool-hide">
             <input id="locationQueryInput" type="search">
 
             <button id="clearLocationQueryBtn">
@@ -130,18 +137,53 @@
             </button>
         </div>
 
+        <div class="welcome-message-container">
+          <div class="welcome-message">
+            <button class="welcome-message--close">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            
+            <!-- <img src="/img/bike.svg">  -->
+            
+            <!-- <h1> bike de boa </h1> -->
+
+            <div class="welcome-message--content">
+              <p>
+                Oie! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando novos!
+              </p>
+
+              <p>
+                O bike de boa é feito com <span class="glyphicon glyphicon-heart"></span> por voluntários e sempre será totalmente gratuito e colaborativo.
+              </p>
+            </div>
+            
+            <div class="welcome-message--footer">
+              <a rel="noopener" href="#" class="openAboutBtn">Saiba mais</a>
+            </div>
+            
+            <!-- <aside>Aberto até 20/04</aside> -->
+          </div>
+        </div>
+        
+        <h1 id="logo" class="js-menu-show-hamburger-menu">
+          bike de boa
+          <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
+        </h1>
+
         <button class="js-menu-show-hamburger-menu header__menu-toggle">
           <img src="/img/icon_hamburger.svg">
         </button>
 
-        <div id="userBtn" class="dropdown cool-hide cool-hidden">
+        <div class="confetti-placeholder"></div>
+
+        <div id="userBtn" class="dropdown cool-hide">
           <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="avatar" src="/img/icon_user_big.svg">
           </button>
 
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
             <li>
-              <button class="openProfileBtn" disabled>
+              <button class="openContributionsBtn" disabled>
                 <img src="/img/icon_list.svg"> Contribuições
               </button>
             </li>
@@ -160,18 +202,6 @@
 
         <div id="modalPlaceholder"></div>
 
-        <div id="offline-overlay" class="message-overlay">
-          <div class="message-overlay-content">
-            <div class="message-overlay-label"> 
-              Você está<b> offline</b>.
-            </div>
-
-            <button id="reloadBtn" class="btn">
-              Recarregar
-            </button>
-          </div>
-        </div>
- 
         <div id="out-of-bounds-overlay" class="message-overlay">
           <div class="message-overlay-content"> 
             <div class="message-overlay-label">  
@@ -188,20 +218,20 @@
           </div>
         </div>
 
-        <button id="filterBtn" type="button" title="Filtrar bicicletários" class="js-menu-show-filter-menu caption-tooltip" style="display: none;">
+        <button id="filterBtn" type="button" title="Filtrar bicicletários" class="js-menu-show-filter-menu caption-tooltip">
             <img alt="" src="/img/icon_filter.svg" class="icon"/>
             Filtrar
             <span id="active-filters-counter" class="badge"></span>
         </button>
  
-        <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip" style="display: none;">
+        <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip">
             <img alt="" src="/img/icon_add_pin.svg">
             <span>Adicionar bicicletário</span>
         </button>
 
         <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
           <div>
-            <img src="/img/geolocation.svg">
+            <img src="/img/icon_geolocation.svg">
           </div>
         </div>
 
@@ -212,14 +242,6 @@
           <button id="newPlaceholder">
               <img alt="Adicionar aqui" src="/img/pin_bike.svg"/>
           </button>
-        </div>
-
-        <div id="spinnerOverlay">
-            <div class="spinnerContainer">
-                <img alt="Carregando..." src="/img/spinner.svg"/>
-
-                <p id="globalSpinnerLabel"> </p>
-            </div>
         </div>
 
         <button id="close-modal-btn" class="close-modal">✕</button>
@@ -235,36 +257,6 @@
             </div>
         </div>
  
-        <div class="welcome-message-container">
-          <div class="welcome-message">
-            <button class="welcome-message--close">
-              <span class="glyphicon glyphicon-remove"></span>
-            </button>
-            
-            <!-- <img src="/img/bike.svg">  -->
-            
-            <h1>
-              bike de boa
-            </h1>
-
-            <div class="welcome-message--content">
-              <p>
-                Chega de não ter onde estacionar a bike de boa! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude adicionado avaliando os pontos e adicionando novos.
-              </p>
-
-              <p>
-                O bike de boa é feito com <span class="glyphicon glyphicon-heart"></span> por voluntários e sempre será totalmente gratuito e colaborativo.
-              </p>
-            </div>
-            
-            <div class="welcome-message--footer">
-              <a rel="noopener" href="#" class="openAboutBtn">Saiba mais</a>
-            </div>
-            
-            <!-- <aside>Aberto até 20/04</aside> -->
-          </div>
-        </div>
-
         
         <!-- Menus -->
 
@@ -276,12 +268,6 @@
 
             <div class="side-nav__content">
               <ul>
-                <li class="open-guide-btn side-nav--animate-in">
-                  <img alt="" src="/img/icon_guide.svg"/>
-                  Guia de Bicicletários <span class="badge">novo</span>
-                </li>
-
-                <hr>
 
                 <li class="side-nav--animate-in openAboutBtn">
                   <img alt="" src="/img/icon_info.svg"/>
@@ -295,7 +281,7 @@
 
                 <li class="open-aboutdata-btn side-nav--animate-in">
                   <img alt="" src="/img/icon_table.svg"/>
-                  Dados <span class="badge">novo</span>
+                  Dados
                 </li>
                 
                 <li class="side-nav--animate-in" id="howToInstallBtn">
@@ -304,10 +290,17 @@
                 </li>
 
                 <hr> 
+
+                <li class="open-guide-btn side-nav--animate-in">
+                  <img alt="" src="/img/icon_guide.svg"/>
+                  Guia de Bicicletários
+                </li>
+
+                <hr>
                 
                 <li class="side-nav--animate-in loginBtn">
                   <img src="/img/icon_user.svg">
-                  Login <span class="badge">novo</span>
+                  Login
                 </li>
 
                 <!-- <li class="side-nav--animate-in logoutBtn">
@@ -363,7 +356,7 @@
             </button> 
             
             <header class="side-nav__header">
-              <h2>Filtrar Bicicletários</h2>
+              <h2>Filtros</h2>
 
               <!-- <div class="setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
@@ -496,15 +489,15 @@
                               </p>
 
                               <p>
-                                Com o bike de boa queremos incentivar que mais estabelecimentos instalem bicicletários, e ajudar a dar visibilidade para os que já existem. Também trazemos informações sobre os diferentes tipos de bicicletários, qual a forma correta de usá-los e o que faz eles serem mais ou menos seguros e adequados. Acreditamos que esse conhecimento ajuda a dar mais confiança pras pessoas saírem de bike.
+                                Com o bike de boa queremos incentivar que mais estabelecimentos instalem bicicletários, e ajudar a dar visibilidade para os que já existem. Também trazemos informações sobre os diferentes tipos de bicicletários, qual a forma correta de usá-los e o que faz eles serem mais ou menos seguros e adequados. Acreditamos fortemente que essas informações ajudam a dar mais confiança pras pessoas saírem mais de bike na cidade.
                               </p>
 
                               <p>
-                                O bike de boa é um site e aplicativo totalmente colaborativo pra mapear os lugares onde dá pra estacionar a bicicleta na cidade. No app os pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e órgãos públicos. Tanto o app quanto nossos dados são livres, o que significa que qualquer pessoa pode contribuir com ele ou reutilizá-lo como quiser.
+                                O bike de boa é um site, acessível no celular, computador ou tablet, que mapeia de forma colaborativa lugares pra estacionar a bicicleta na cidade. Nele esses pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e prefeituras. Tanto o código do site quanto nossos dados são livres, o que significa que qualquer pessoa pode contribuir com ele ou reutilizá-lo como quiser.
                               </p>
 
                               <p>
-                                O site já conta com mais 500 bicicletários em Porto Alegre e outras cidades, e estes já foram acessados mais de 6000 vezes no último semestre. Além disso fomos destaque em alguns eventos. O idealizador do projeto recentemente palestrou no <a href="/io">Google IO Extended</a>, e fomos selecionados para participar do <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura</a>, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
+                                O site já conta com mais 500 bicicletários em Porto Alegre e outras cidades do Brasil, e estes são visualizados em média 2000 por mês. Também já fomos destaque em alguns eventos: palestramos no <a href="/io">Google IO Extended</a> em Porto ALegre, e fomos selecionados pra apresentar no <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura 2017</a>, em Recife, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
                               </p>
 
                               
@@ -515,23 +508,46 @@
                               </p>
 
                               <p> 
-                                Achou tri? Gostaria de participar disso com a gente? Tem algumas sugestões pra melhorar o site? Vamos conversar, estamos totalmente abertos a novos colaboradores e ideias!
+                                Curtiu? Gostaria de participar disso com a gente? Tem algumas sugestões pra melhorar o site? Vamos conversar, estamos totalmente abertos a novos colaboradores e ideias!
                               </p>
 
                               <h2>Como apoiar</h2> 
                               
                               <p>
-                                O bike de boa é absolutamente sem fins lucrativos, e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, entrevistando pessoas e divulgando o projeto visando o maior alcance possível.
+                                O bike de boa é absolutamente sem fins lucrativos e trabalhamos no tempo livre, depois do trabalho ou da faculdade, melhorando as funcionalidades, estudando pra entender melhor nossos usuários e divulgando o projeto.
                               </p>
 
                               <p>
-                                Quer nos ajudar? Paga um cafezinho pra nós pela <a href="https://apoia.se/bikedeboa">página bike de boa no Apoia.se</a>.
+                                Quer nos ajudar? Agora temos um <a href="https://apoia.se/bikedeboa">projeto no Apoia.se!</a> Você pode ajudar com a partir de 1 real por mês - e sério, isso já significa muito pra gente! :)
                               </p>
 
+                              <p style="text-align: center;">
+                                <button class="ghost" style="margin: 24px 0; border-radius: 25px; padding: 12px 36px; font-size: 22px; ">Apoie a gente ›</button>
+                              </p>
+
+                              <p>
+                                Um MUITO OBRIGADO do fundo do coração a nossos apoiadorxs:
+                              </p>
+
+                              <div class="about-collaborators">
+                                <ul>
+                                  <li>Cristiano Medeiros Dalbem</li>
+                                  <li>Eduardo Vernier</li>
+                                  <li>Francisco Cenzi de Ré</li>
+                                  <li>Hannah Kny</li>
+                                </ul>
+                              </div>
+
+
+                              <br>
+                              
                               <div class='medium-separator'>...</div>
 
+                              <br>
+
+
                               <p>
-                                Segue a gente nas redes sociais
+                                Segue a gente nas redes sociais :)
                               </p>
 
                               <div id="about-social-buttons">
@@ -596,6 +612,10 @@
                                     </p>
                                   </div>
                                 </div>
+                                
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="uinvertido">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
 
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/936.jpeg"> <img alt="Casa de Cultura Mário Quintana" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/936.jpeg"/> </a>
@@ -625,6 +645,10 @@
                                   </div>
                                 </div>
 
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="deroda">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
+
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1167.jpeg"> <img alt="Confeitaria Bom Gosto" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/1167.jpeg"/> </a>
                                   
@@ -651,6 +675,10 @@
                                   </div>
                                 </div>
 
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="trave">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
+
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1155.jpeg"> <img alt="Donna Laura" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/1155.jpeg"/> </a>
                                   
@@ -674,6 +702,10 @@
                                     </p>
                                   </div>
                                 </div>
+
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="suspenso">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
 
                                 <div class="guide-img-row"> 
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1552.jpeg">
@@ -711,6 +743,10 @@
                                   </div>
                                 </div>
 
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="grade">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
+
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/1239.jpeg">
                                     <img alt="MM Lanches" src="" data-src="https://s3.amazonaws.com/bikedeboa/images/1239.jpeg"/> </a>
@@ -737,6 +773,10 @@
                                     </p>
                                   </div>
                                 </div>
+
+                                <button class="close-and-filter link-button" data-prop="structureType" data-value="other">
+                                  Ver no mapa <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+                                </button>
 
                                 <div class="guide-img-row">
                                   <a href="#" class="unstyled-link" data-featherlight="https://s3.amazonaws.com/bikedeboa/images/963.jpeg">
@@ -837,7 +877,7 @@
                                     <a target="_blank" rel="noopener" href="/dados">Tabela de Dados</a>
                                   </h2>
                                   <p>
-                                    Nossos dados brutos em forma de tabela. Super fácil de explorar, filtrar, e fazer download em vários formatos como Excel, CSV, XML e JSON.
+                                    Nossos dados brutos em forma de tabela. Explore, filtre, e faça download em vários formatos como Excel, CSV, XML e JSON.
                                   </p>
                                 </section>
 
@@ -847,7 +887,7 @@
                                     <a target="_blank" rel="noopener" href="https://github.com/dennerevaldt/bikedeboa-api">API</a>
                                   </h2>
                                   <p>
-                                    A API que alimenta este site está aberta para consultas e contribuições. Acesse o link para conferir a documentação.
+                                    A API que alimenta este site. Acesse o link para conferir a documentação.
                                   </p>
                                 </section>
 
@@ -1110,6 +1150,8 @@
 
                             <input id="photoInput" type="file" name="photoInput" accept="image/*">
                             <label for="photoInput"></label>
+
+                            <span class="photoInputDisclaimer"">Você pode adicionar uma foto mais tarde se quiser ;)</span>
                         </div>
 
                         <div class="modal-body">
@@ -1291,95 +1333,7 @@
                   {{else}}
                     <h1 style="font-style: italic;">Sem nome</h1>
                   {{/if}}
-
-                  <p class="address">
-                      {{address}}
-                  </p>
-
-                  {{#if mapStaticImg}}
-                    <div>
-                      <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
-                    </div>
-                  {{/if}}
               </section>
-
-              <hr>
-
-              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
-                  {{#if savedRating}}
-                    <div class="savedRating">
-                      Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
-                      <button class="ghost openReviewPanelBtn">Editar</button>
-                    </div>
-                  {{/if}}
-
-                  {{#if numReviews}}
-                    <div class="numreviews">{{numReviews}}</div>
-                  {{/if}}
-
-                  {{#unless average}}
-                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
-                  {{/unless}}
-
-                  <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-                    {{#if average}}
-                        <span class="average">{{average}}</span>
-
-                        <fieldset id="ratingDisplay" class="rating disabled">
-                          <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                          <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
-                          <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                          <label class="full-star" data-value="4" for="placeDetails_star4"></label>
-                          <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                          <label class="full-star" data-value="3" for="placeDetails_star3"></label>
-                          <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                          <label class="full-star" data-value="2" for="placeDetails_star2"></label>
-                          <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                          <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                      </fieldset>
-                      
-                      {{#unless savedRating}}
-                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
-                      {{/unless}}
-                    {{/if}}
-
-                    
-                    <!-- {{#unless average}}
-                        <p style="font-style: italic; font-size: 14px;">
-                          Ninguém avaliou este bicicletário ainda.
-                        </p>
-                        <button class="openReviewPanelBtn ghost">Avaliar</button>
-
-                        <div class="rating-input-container" style="text-align: center;">
-                          <h2 style="margin-bottom: 0;">
-                            Dê sua nota 
-                          </h2>
-
-                          <fieldset class="rating rating-big empty">
-                              <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
-                              <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
-                              <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
-                              <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
-                              <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
-                              <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
-                              <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
-                          </fieldset>
-                        </div>
-                    {{/unless}} -->
-
-                  </div>
-
-                  {{#if tags}}
-                      <div class="tagsContainer">
-                          {{{tags}}}
-                      </div>
-                  {{/if}}
-              </section>
-
-              <hr>
 
               <section class="info">
                   {{#unless noIsCoveredData}}
@@ -1505,14 +1459,113 @@
 
               <hr>
 
-              {{#if description}}
-                  <section class="description">
-                      <h2>
-                          <!-- <span class="glyphicon glyphicon-info-sign"></span> -->
-                          <b>+</b> Mais Informações
-                      </h2>
+              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
+                  {{#if savedRating}}
+                    <div class="savedRating">
+                      <img src="{{userThumbUrl}}"/> Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
+                      <button class="ghost openReviewPanelBtn">Editar</button>
+                    </div>
+                  {{/if}}
 
-                      {{{description}}}
+                  {{#if numReviews}}
+                    <div class="numreviews">{{numReviews}}</div>
+                  {{/if}}
+
+                  {{#unless average}}
+                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                  {{/unless}}
+
+                  <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+                    {{#if average}}
+                        <span class="average">{{average}}</span>
+
+                        <fieldset id="ratingDisplay" class="rating disabled">
+                          <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                          <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
+                          <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                          <label class="full-star" data-value="4" for="placeDetails_star4"></label>
+                          <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                          <label class="full-star" data-value="3" for="placeDetails_star3"></label>
+                          <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                          <label class="full-star" data-value="2" for="placeDetails_star2"></label>
+                          <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                          <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                      </fieldset>
+                      
+                      {{#unless savedRating}}
+                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
+                      {{/unless}}
+                    {{/if}}
+
+                    
+                    <!-- {{#unless average}}
+                        <p style="font-style: italic; font-size: 14px;">
+                          Ninguém avaliou este bicicletário ainda.
+                        </p>
+                        <button class="openReviewPanelBtn ghost">Avaliar</button>
+
+                        <div class="rating-input-container" style="text-align: center;">
+                          <h2 style="margin-bottom: 0;">
+                            Dê sua nota 
+                          </h2>
+
+                          <fieldset class="rating rating-big empty">
+                              <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+                              <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
+                              <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
+                              <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
+                              <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
+                              <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+                              <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
+                          </fieldset>
+                        </div>
+                    {{/unless}} -->
+
+                  </div>
+
+                  {{#if tags}}
+                      <div class="tagsContainer">
+                          {{{tags}}}
+                      </div>
+                  {{/if}}
+              </section>
+
+              <hr>
+
+              <section class="description">
+                <ul class="details-list">
+                  <!-- <li>
+                    <span class="details-list-icon glyphicon glyphicon-eye-open"></span>
+                      <div>123</div>
+                  </li> -->
+
+                  {{#if author}}
+                    <li>
+                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                      <div> Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                    </li>
+                  {{/if}}
+
+                  {{#if description}}
+                    <li>
+                      <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
+                      <div> {{{description}}} </div>
+                    </li>
+                  {{/if}}
+
+                  <li>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
+                    <div>{{{address}}} </div>
+                  </li>
+                </ul>
+              </section>
+
+              {{#if mapStaticImg}}
+                  <section class="minimap-container">
+                      <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
                   </section>
               {{/if}}
 
@@ -1522,6 +1575,11 @@
             {{#unless savedRating}}
               <section class="rating-input-container">
                 <h2>
+                  {{#if userThumbUrl}}
+                    <div>
+                      <img src="{{userThumbUrl}}" class="avatar"/>
+                    </div>
+                  {{/if}}
                   Dê sua nota para este bicicletário
                 </h2>
 
@@ -1602,7 +1660,7 @@
         <script id="infoWindowTemplate" type="text/x-handlebars-template">
           <span class="infobox--arrow glyphicon glyphicon-triangle-top"></span>
 
-          <span class="infobox--caret glyphicon glyphicon-chevron-right "></span>
+          <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
 
           {{#if thumbnailUrl}}
             <div class="infobox--img loading">
@@ -1659,9 +1717,9 @@
           </div>
         </script> 
 
-        <!-- User Profile -->
-        <script id="profileModalTemplate" type="text/x-handlebars-template">
-          <div id="profileModal" data-keyboard="false" class="modal fade" tabindex="-1">
+        <!-- User Contributions View -->
+        <script id="contributionsModalTemplate" type="text/x-handlebars-template">
+          <div id="contributionsModal" data-keyboard="false" class="modal" tabindex="-1">
               <div class="vertical-alignment-helper">
                   <div class="modal-dialog vertical-align-center">
                       <div class="modal-content">
@@ -1671,47 +1729,41 @@
 
                           <div class="modal-body">
                             {{#if profile}} 
-                              <h1>
+                              <h2>
                                 {{#if profile.picture}}<img alt="" src="{{profile.picture}}">{{/if}} Oi <b>{{profile.first_name}}</b> :)
-                              </h1> 
+                              </h2> 
                               {{#if isAdmin}}
-                                <p>
+                                <p class="you-are-admin">
                                   Uhul! Você é <b>admin</b>.
                                 </p>
                               {{/if}}
                             {{/if}}
 
-                            <p>
-                              Estas são as contribuições que você já fez pro Bike de Boa.
-                            </p>
+                            {{#ifCond nreviews '&&' nplaces}}
+                              <div class="big-numbers"> 
+                                <div class="big-numbers--col">
+                                    <div class="big-numbers--number">{{{nreviews}}}</div>
+                                    <div class="big-numbers--label">avaliações</div>
+                                </div><div class="big-numbers--col">
+                                    <div class="big-numbers--number">{{{nplaces}}}</div>
+                                    <div class="big-numbers--label">bicicletários</div>
+                                </div>
+                              </div>
+                            {{/ifCond}}
 
-                            <!-- <hr> -->
+                            <hr>
 
-                            <h2>Avaliações {{#if nreviews}} ({{nreviews}}) {{/if}}</h2>
+                            <h3>Avaliações</h3>
                             <ul> 
                               {{#each reviews}}
                                 <li>
                                   <button class="go-to-place-btn" data-id="{{placeObj.id}}">
                                     <span class="go-to-place-btn--title">{{placeObj.text}}</span>
-                                    <span class="go-to-place-btn--rating average" data-color="{{color}}">{{rating}}</span> 
-                                    <!-- <div class="rating-display-container rating-display-mini" data-color={{pinColor}}>
-                                      <span class="average">{{rating}}</span>
-
-                                      <fieldset id="infobox-rating-display" class="rating disabled">
-                                        <input disabled type="radio" id="infobox_star5" name="infobox_rating" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="5" for="infobox_star5"></label> 
-                                        <input disabled type="radio" id="infobox_star4" name="infobox_rating" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="4" for="infobox_star4"></label>
-                                        <input disabled type="radio" id="infobox_star3" name="infobox_rating" value="3" {{#ifCond roundedAverage '===' '3'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="3" for="infobox_star3"></label>
-                                        <input disabled type="radio" id="infobox_star2" name="infobox_rating" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="2" for="infobox_star2"></label>
-                                        <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                                      </fieldset> 
-                                    </div> -->
+                                    <span class="go-to-place-btn--rating" data-color="{{color}}">
+                                      {{rating}}<span class="glyphicon glyphicon-star"></span>
+                                    </span> 
                                     <span class="go-to-place-btn--daysago">
-                                      <span class="glyphicon glyphicon-time"></span> {{createdDaysAgo}} dias atrás
+                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
                                     </span> 
                                   </button>
                                 </li>
@@ -1720,16 +1772,16 @@
                               {{/each}}
                             </ul>
 
-                            <!-- <hr> -->
+                            <hr>
 
-                            <h2>Bicicletários {{#if nplaces}} ({{nplaces}}) {{/if}}</h2>
+                            <h3>Bicicletários</h3>
                             <ul> 
                               {{#each places}}
                                 <li>
                                   <button class="go-to-place-btn" data-id="{{id}}">
                                     <span class="go-to-place-btn--title">{{text}}</span>
                                     <span class="go-to-place-btn--daysago">
-                                      <span class="glyphicon glyphicon-time"></span> {{createdDaysAgo}} dias atrás
+                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
                                     </span> 
                                   </button>
                                 </li>

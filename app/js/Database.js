@@ -622,8 +622,20 @@ BDB.Database = {
       if (data && data.length > 0) {
         console.debug('Successfully retrieved ' + data.length + ' tags.');
 
-        tags = data;
+        // Alphabetically sort by tag names
+        // @todo temp: filter out 'Coberto' while I haven't deleted this tag from the DB
+        tags = data
+        .filter( tag => tag.name !== 'Coberto' )
+        .sort((a, b) => {
+          var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+          if (nameA < nameB)
+            return -1;
+          if (nameA > nameB)
+            return 1;
+          return 0;
+        });
 
+        // Update id<->tagname maps
         idToTag = {};
         tagToId = {};
         tags.forEach(tagObj => {
