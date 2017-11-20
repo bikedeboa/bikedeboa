@@ -1732,37 +1732,29 @@
                               {{/if}}
                             {{/if}}
 
-                            <p>
-                              Estas são as contribuições que você já fez pro Bike de Boa.
-                            </p>
+                            <div class="big-numbers">
+                              <div class="big-numbers--col">
+                                  <div class="big-numbers--number">{{{nreviews}}}</div>
+                                  <div class="big-numbers--label">avaliações</div>
+                              </div><div class="big-numbers--col">
+                                  <div class="big-numbers--number">{{{nplaces}}}</div>
+                                  <div class="big-numbers--label">bicicletários</div>
+                              </div>
+                            </div>
 
-                            <!-- <hr> -->
+                            <hr>
 
-                            <h2>Avaliações {{#if nreviews}} ({{nreviews}}) {{/if}}</h2>
+                            <h2>Avaliações</h2>
                             <ul> 
                               {{#each reviews}}
                                 <li>
                                   <button class="go-to-place-btn" data-id="{{placeObj.id}}">
                                     <span class="go-to-place-btn--title">{{placeObj.text}}</span>
-                                    <span class="go-to-place-btn--rating average" data-color="{{color}}">{{rating}}</span> 
-                                    <!-- <div class="rating-display-container rating-display-mini" data-color={{pinColor}}>
-                                      <span class="average">{{rating}}</span>
-
-                                      <fieldset id="infobox-rating-display" class="rating disabled">
-                                        <input disabled type="radio" id="infobox_star5" name="infobox_rating" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="5" for="infobox_star5"></label> 
-                                        <input disabled type="radio" id="infobox_star4" name="infobox_rating" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="4" for="infobox_star4"></label>
-                                        <input disabled type="radio" id="infobox_star3" name="infobox_rating" value="3" {{#ifCond roundedAverage '===' '3'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="3" for="infobox_star3"></label>
-                                        <input disabled type="radio" id="infobox_star2" name="infobox_rating" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="2" for="infobox_star2"></label>
-                                        <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
-                                        <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                                      </fieldset> 
-                                    </div> -->
+                                    <span class="go-to-place-btn--rating" data-color="{{color}}">
+                                      {{rating}}<span class="glyphicon glyphicon-star"></span>
+                                    </span> 
                                     <span class="go-to-place-btn--daysago">
-                                      <span class="glyphicon glyphicon-time"></span> {{createdDaysAgo}} dias atrás
+                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdDaysAgo}} dias atrás
                                     </span> 
                                   </button>
                                 </li>
@@ -1771,16 +1763,16 @@
                               {{/each}}
                             </ul>
 
-                            <!-- <hr> -->
+                            <hr>
 
-                            <h2>Bicicletários {{#if nplaces}} ({{nplaces}}) {{/if}}</h2>
+                            <h2>Bicicletários</h2>
                             <ul> 
                               {{#each places}}
                                 <li>
                                   <button class="go-to-place-btn" data-id="{{id}}">
                                     <span class="go-to-place-btn--title">{{text}}</span>
                                     <span class="go-to-place-btn--daysago">
-                                      <span class="glyphicon glyphicon-time"></span> {{createdDaysAgo}} dias atrás
+                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdDaysAgo}} dias atrás
                                     </span> 
                                   </button>
                                 </li>

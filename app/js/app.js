@@ -2216,6 +2216,7 @@ $(() => {
           r.createdDaysAgo = createdAtToDaysAgo(r.createdAt);
         }
 
+        r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
 
@@ -2561,7 +2562,7 @@ $(() => {
   }
 
   function onSocialLogin(auth) {
-    console.log('auth', auth);
+    console.debug('auth', auth);
 
     $('#userBtn').addClass('loading');
 
@@ -2575,7 +2576,7 @@ $(() => {
 
     // Get user information for the given network
     hello(auth.network).api('me').then(function(profile) { 
-      console.log('profile', profile);
+      console.debug('profile', profile);
 
       Database.socialLogin({
         network: auth.network,
@@ -2583,8 +2584,6 @@ $(() => {
         fullname: profile.name,
         email: profile.email 
       }).then( data => { 
-        console.log('social login successful');
-
         promptPWAInstallPopup();
 
         // UI
@@ -2816,7 +2815,7 @@ $(() => {
         }, 1500);
       } else {
         // block! 
-        console.log('login called again in 1500ms window!');
+        console.debug('login called again in 1500ms window!');
         ga('send', 'event', 'Login', 'mutex-blocked: login called again in a 1500ms window');
       }
     });
@@ -2899,7 +2898,7 @@ $(() => {
     // Retrieve markers saved in a past access
     markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
-      console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
+      console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
       hideSpinner();
     } else {

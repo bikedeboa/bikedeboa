@@ -905,29 +905,57 @@ a.unstyled-link {
   }
 }
 
+.big-numbers {
+  display: flex;
+  justify-content: space-evenly;
+
+  .big-numbers--col {
+      text-align: center;
+  }
+
+  .big-numbers--number {
+      font-size: 30px;
+      font-weight: bold;
+  }
+
+  .big-numbers--label { 
+      color: $gray;
+  }
+}
+
 #profileModal {
   h1 {
+    text-align: center;
+
     img {
       border-radius: 50%;
       vertical-align: bottom;
-      height: 41px;
-      width: 41px;
+      height: 100px;
+      width: 100px;
+      margin: 0 auto;
+      display: block;
     }
-
   } 
 
-  h2 {
+  h2 { 
     padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE 0;
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: bold;
     color: $lightGray;
     user-select: none;
     text-transform: uppercase;
-    margin-top: 2em;
+    margin-top: 1em;
+    margin-bottom: 0;
   }
 
   ul {
     list-style: none;
     padding: 0;
+    padding-left: $GRID_SPACE/2;
+  }
+
+  .big-numbers {
+    margin: 0 .5em;
   }
 
   .go-to-place-btn {
@@ -946,14 +974,10 @@ a.unstyled-link {
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-    .go-to-place-btn--rating {
-      // display: block;
-      font-size: inherit;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
+      // width: calc(100vw - $GRID_SPACE*2);
     }
 
     .go-to-place-btn--daysago {
@@ -2549,11 +2573,8 @@ body.modal-open {
             background: $green;
             color: white;
             box-shadow: none;
+            border: 0;
  
-            // &:before {
-            //     content: '☑';
-            // }
-
             &:hover {
               background: $lightGreen;
             }
@@ -4016,6 +4037,17 @@ body.modal-open {
 
 .rating:not(.disabled) > label {  
     cursor: pointer;
+}
+
+
+[data-color="green"] {
+  color: $green;
+}
+[data-color="yellow"] {
+  color: $yellow;
+}
+[data-color="red"] {
+  color: $red;
 }
 
 .rating-display-container[data-color="green"] .average,
