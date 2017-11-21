@@ -184,6 +184,7 @@
             top: 70px;
             z-index: 2;
             background: white;
+            padding-bottom: .5em;
           }
 
           .topbar {
@@ -692,7 +693,7 @@
                   field: 'rating', title: 'Nota', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'Tags', title: 'Tags', sortable: true, formatter: 'tagsListColFormatter' 
+                  field: 'Tags', title: 'Tags', sortable: true, formatter: 'tagsListColFormatter', class: 'col-address'
                 },
                 {
                   field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
