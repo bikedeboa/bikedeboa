@@ -120,12 +120,66 @@
           </div>
         </div>
 
+        <div id="newPlaceholderContainer">
+          <!-- <span id="newPlaceholderShadow"></span> -->
+          <img alt="" src="/img/target.svg" id="newPlaceholderTarget"/>
+
+          <button id="newPlaceholder">
+              <img alt="Adicionar aqui" src="/img/pin_bike.svg"/>
+          </button>
+        </div>
+ 
         <div id="spinnerOverlay">
             <div class="spinnerContainer">
                 <img alt="Carregando..." src="/img/spinner.svg"/>
 
                 <p id="globalSpinnerLabel"> </p>
             </div>
+        </div>
+
+        <div id="out-of-bounds-overlay" class="message-overlay">
+          <div class="message-overlay-content"> 
+            <div class="message-overlay-label">  
+              Ops, por enquanto o bike de boa não funciona por aqui. 
+            </div>
+ 
+            <button class="btn open-faq-btn"> 
+              Saiba mais
+            </button>
+
+            <button class="btn go-to-poa"> 
+              Ver Porto Alegre
+            </button>
+          </div>
+        </div>
+
+        <button id="filterBtn" type="button" title="Filtrar bicicletários" class="js-menu-show-filter-menu caption-tooltip">
+            <img alt="" src="/img/icon_filter.svg" class="icon"/>
+            Filtrar
+            <span id="active-filters-counter" class="badge"></span>
+        </button>
+ 
+        <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip"> 
+            <img alt="" src="/img/icon_add_pin.svg">
+            <span>Adicionar bicicletário</span>
+        </button>
+
+        <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
+          <div>
+            <img src="/img/icon_geolocation.svg">
+          </div>
+        </div> 
+
+        <div id="search-overlay" class="message-overlay">
+          <div class="message-overlay-content">
+            <!-- <div class="message-overlay-label"> 
+              Digite um termo de busca
+            </div>
+
+            <button id="reloadBtn" class="btn">
+              Recarregar
+            </button> -->
+          </div>
         </div>
 
         <div id="locationSearch" class="cool-hide">
@@ -135,6 +189,30 @@
               <img alt="" class="search-icon" src="/img/icon_search.svg">
               <span class="clear-icon">✕</span>
             </button>
+        </div>
+
+        <div id="userBtn" class="dropdown cool-hide">
+          <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="avatar" src="/img/icon_user_big.svg">
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+            <li>
+              <button class="openContributionsBtn" disabled>
+                <img src="/img/icon_list.svg"> Contribuições
+              </button>
+            </li>
+            
+            <li role="separator" class="divider openProfileDivider"> </li>  
+            
+            <li>
+              <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
+            </li>
+            
+            <li>
+              <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
+            </li>
+          </ul>
         </div>
 
         <div class="welcome-message-container">
@@ -164,85 +242,19 @@
             <!-- <aside>Aberto até 20/04</aside> -->
           </div>
         </div>
+
+        <button class="js-menu-show-hamburger-menu header__menu-toggle">
+          <img src="/img/icon_hamburger.svg">
+        </button>
         
         <h1 id="logo" class="js-menu-show-hamburger-menu">
           bike de boa
           <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
         </h1>
 
-        <button class="js-menu-show-hamburger-menu header__menu-toggle">
-          <img src="/img/icon_hamburger.svg">
-        </button>
-
         <div class="confetti-placeholder"></div>
 
-        <div id="userBtn" class="dropdown cool-hide">
-          <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="avatar" src="/img/icon_user_big.svg">
-          </button>
-
-          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-            <li>
-              <button class="openContributionsBtn" disabled>
-                <img src="/img/icon_list.svg"> Contribuições
-              </button>
-            </li>
-            
-            <li role="separator" class="divider openProfileDivider"> </li>  
-            
-            <li>
-              <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
-            </li>
-            
-            <li>
-              <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
-            </li>
-          </ul>
-        </div>
-
         <div id="modalPlaceholder"></div>
-
-        <div id="out-of-bounds-overlay" class="message-overlay">
-          <div class="message-overlay-content"> 
-            <div class="message-overlay-label">  
-              Ops, por enquanto o bike de boa não funciona por aqui. 
-            </div>
- 
-            <button class="btn open-faq-btn"> 
-              Saiba mais
-            </button>
-
-            <button class="btn go-to-poa"> 
-              Ver Porto Alegre
-            </button>
-          </div>
-        </div>
-
-        <button id="filterBtn" type="button" title="Filtrar bicicletários" class="js-menu-show-filter-menu caption-tooltip">
-            <img alt="" src="/img/icon_filter.svg" class="icon"/>
-            Filtrar
-            <span id="active-filters-counter" class="badge"></span>
-        </button>
- 
-        <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip">
-            <img alt="" src="/img/icon_add_pin.svg">
-            <span>Adicionar bicicletário</span>
-        </button>
-
-        <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
-          <div>
-            <img src="/img/icon_geolocation.svg">
-          </div>
-        </div>
-
-        <div id="newPlaceholderContainer">
-          <!-- <span id="newPlaceholderShadow"></span> -->
-          <img alt="" src="/img/target.svg" id="newPlaceholderTarget"/>
-
-          <button id="newPlaceholder">
-              <img alt="Adicionar aqui" src="/img/pin_bike.svg"/>
-          </button>
-        </div>
 
         <button id="close-modal-btn" class="close-modal">✕</button>
 

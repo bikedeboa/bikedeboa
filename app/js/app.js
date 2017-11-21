@@ -955,6 +955,9 @@ $(() => {
       if (map.getBounds()) {
         const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
         $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
+        if (!isViewWithinBounds) {
+          ga('send', 'event', 'Local', 'out of bounds message triggered', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
+        }
       }
     }, 50);
   }
@@ -1726,14 +1729,16 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 0 }, { 'display': 'none' });
+    $('body').addClass('search-mode');
+    $('#search-overlay').addClass('showThis');
   }
 
   function exitLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
+    $('body').removeClass('search-mode');
+    $('#search-overlay').removeClass('showThis');
   }
 
-  function setPageTitle(text) {
+  function setPageTitle(text) { 
     text = text || '';
 
     // Header that imitates native mobile navbar
@@ -1929,7 +1934,7 @@ $(() => {
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
       map.setCenter(_portoAlegrePos);
-      map.setZoom(6);
+      map.setZoom(12);
     }));
 
     $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {
@@ -2052,16 +2057,16 @@ $(() => {
     // }); 
     
     // Location Search Mode control
-    // $('#locationQueryInput').on('focus', e => { 
-    //   if (_isMobile) {
-    //     enterLocationSearchMode();
-    //   }
-    // });
-    // $('#locationQueryInput').on('blur', e => {
-    //   if (_isMobile) {
-    //     exitLocationSearchMode();
-    //   }
-    // });
+    $('#locationQueryInput').on('focus', e => { 
+      if (_isMobile) {
+        enterLocationSearchMode();
+      }
+    });
+    $('#locationQueryInput').on('blur', e => {
+      if (_isMobile) {
+        exitLocationSearchMode();
+      }
+    });
 
     // Location Search
     $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
