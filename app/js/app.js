@@ -955,6 +955,9 @@ $(() => {
       if (map.getBounds()) {
         const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
         $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
+        if (!isViewWithinBounds) {
+          ga('send', 'event', 'Local', 'out of bounds message triggered', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
+        }
       }
     }, 50);
   }
@@ -1931,7 +1934,7 @@ $(() => {
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
       map.setCenter(_portoAlegrePos);
-      map.setZoom(6);
+      map.setZoom(12);
     }));
 
     $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {

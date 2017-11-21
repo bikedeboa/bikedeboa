@@ -218,12 +218,14 @@ p {
 }
 
 #out-of-bounds-overlay {
-  background: rgba(0,0,0,0.2);
+  // background: $darkerGreen;
+  background: rgba(4, 136, 58, 0.3);
   pointer-events: none; 
 
   .message-overlay-label {
     color: white;
     font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
   }
 
   .btn {
@@ -263,12 +265,14 @@ p {
 
   opacity: 0;
   visibility: hidden;
+  user-select: none;
 
   transition: opacity 0.5s ease-in-out;
 
   &.showThis {
     opacity: 1;
     visibility: visible;
+    user-select: auto;
   }
  
   .message-overlay-content {
@@ -1392,7 +1396,6 @@ a.unstyled-link {
         top: 20%;
         left: 50%;
         transform: translate(-50%,-100%);
-        z-index: 1;
         opacity: 0;
         background: transparent;
         border: none;
