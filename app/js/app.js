@@ -1726,14 +1726,16 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 0 }, { 'display': 'none' });
+    $('body').addClass('search-mode');
+    $('#search-overlay').addClass('showThis');
   }
 
   function exitLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
+    $('body').removeClass('search-mode');
+    $('#search-overlay').removeClass('showThis');
   }
 
-  function setPageTitle(text) {
+  function setPageTitle(text) { 
     text = text || '';
 
     // Header that imitates native mobile navbar
@@ -2052,16 +2054,16 @@ $(() => {
     // }); 
     
     // Location Search Mode control
-    // $('#locationQueryInput').on('focus', e => { 
-    //   if (_isMobile) {
-    //     enterLocationSearchMode();
-    //   }
-    // });
-    // $('#locationQueryInput').on('blur', e => {
-    //   if (_isMobile) {
-    //     exitLocationSearchMode();
-    //   }
-    // });
+    $('#locationQueryInput').on('focus', e => { 
+      if (_isMobile) {
+        enterLocationSearchMode();
+      }
+    });
+    $('#locationQueryInput').on('blur', e => {
+      if (_isMobile) {
+        exitLocationSearchMode();
+      }
+    });
 
     // Location Search
     $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {

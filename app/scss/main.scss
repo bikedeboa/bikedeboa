@@ -245,6 +245,10 @@ p {
   }
 }
 
+#search-overlay {
+  background: rgba(255,255,255,0.8); 
+}
+
 .message-overlay {
   width: 100%;
   height: 100%;
@@ -1597,6 +1601,23 @@ a.unstyled-link {
   article {
     margin-left: -$GRID_SPACE*3;
     margin-right: -$GRID_SPACE*3;
+  }
+}
+
+body.search-mode {
+  // #map,
+  // #addPlace,
+  // .login-display,
+  // #filterBtn,
+  // #geolocationBtn {
+  //   opacity: 0;
+  //   user-select: none;
+
+  //   transition: opacity 0.2s ease;
+  // }
+
+  #locationSearch {
+    box-shadow: none;
   }
 }
 
@@ -3042,6 +3063,11 @@ body.modal-open {
 // Google Maps API Customizations
 // Autocomplete results dropdown
 .pac-container {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 5px 30px rgba(0,0,0,.15);
+  padding: $GRID_SPACE/2;
+
   .pac-item-query {
       font-size: 17px;
       // font-family: $headingFont;
