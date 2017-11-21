@@ -32,48 +32,59 @@ $(() => {
     // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
     const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
 
-    swal({  
-      imageUrl: _isMobile ? '' : '/img/icon_share.svg',
-      imageWidth: 80,
-      imageHeight: 80,
-      customClass: 'share-modal',
-      html:
-        `Compartilhe este bicicletário<br><br>
-        <div class="share-icons">
-          <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-          <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
-          <button class="share-email-btn">
-            <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
-              <img src="/img/icon_mail.svg" class="icon-mail"/><span class="share-email-label unstyled-link">Email</span> 
-            </a>
-          </button>
-        </div>
-        <hr>
-        ...ou clique para copiar o link<br><br>
-        <div class="share-url-container">
-          <span class="glyphicon glyphicon-link share-url-icon"></span>
-          <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>
-        </div>`,
-      showConfirmButton: false,
-      showCloseButton: true,
-      onOpen: () => {
-        // Initializes Twitter share button
-        twttr.widgets.load();
+    if (navigator.share) {
+      navigator.share({
+          title: 'bike de boa',
+          text: openedMarker.text,
+          url: shareUrl,
+      })
+      .then(() => {})
+      .catch((error) => console.error('ERROR sharing', error));
+    } else {
+      swal({  
+        imageUrl: _isMobile ? '' : '/img/icon_share.svg',
+        imageWidth: 80,
+        imageHeight: 80,
+        customClass: 'share-modal',
+        html:
+          `Compartilhe este bicicletário<br><br>
+          <div class="share-icons">
+            <iframe src="https://www.facebook.com/plugins/share_button.php?href=${encodeURIComponent(shareUrl)}&layout=button&size=large&mobile_iframe=true&width=120&height=28&appId=1814653185457307" width="120" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+            <a target="_blank" href="https://twitter.com/share" data-size="large" class="twitter-share-button"></a>
+            <button class="share-email-btn">
+              <a target="_blank" href="mailto:?subject=Saca só esse bicicletário&amp;body=${shareUrl}" title="Enviar por email">
+                <img src="/img/icon_mail.svg" class="icon-mail"/><span class="share-email-label unstyled-link">Email</span> 
+              </a>
+            </button>
+          </div>
+          <hr>
+          ...ou clique para copiar o link<br><br>
+          <div class="share-url-container">
+            <span class="glyphicon glyphicon-link share-url-icon"></span>
+            <textarea id="share-url-btn" onclick="this.focus();this.select();" readonly="readonly" rows="1" data-toggle="tooltip" data-trigger="manual" data-placement="top" data-html="true" data-title="Copiado!">${shareUrl}</textarea>
+          </div>`,
+        showConfirmButton: false,
+        showCloseButton: true,
+        onOpen: () => {
+          // Initializes Twitter share button
+          twttr.widgets.load();
 
-        // Copy share URL to clipboard
-        $('#share-url-btn').on('click', e => {
-          ga('send', 'event', 'Local', 'share - copy url to clipboard', ''+openedMarker.id);
+          // Copy share URL to clipboard
+          $('#share-url-btn').on('click', e => {
+            ga('send', 'event', 'Local', 'share - copy url to clipboard', ''+openedMarker.id);
 
-          copyToClipboard(e.currentTarget);
- 
-          // Tooltip
-          $('#share-url-btn').tooltip('show');
-          $('#share-url-btn').one('mouseout', () => {
-            $('#share-url-btn').tooltip('hide');
+            copyToClipboard(e.currentTarget);
+   
+            // Tooltip
+            $('#share-url-btn').tooltip('show');
+            $('#share-url-btn').one('mouseout', () => {
+              $('#share-url-btn').tooltip('hide');
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    }
+
   }
 
   function initHelpTooltip(selector) {
@@ -83,10 +94,12 @@ $(() => {
       }); 
     } else {
       $(selector).off('click').on('click', e => {
-        const $tooltipEl =$(e.currentTarget);
+        const $tooltipEl = $(e.currentTarget);
         swal({
           customClass: 'tooltip-modal',
-          html: $tooltipEl.data('title')
+          html: $tooltipEl.data('title'),
+          showConfirmButton: false,
+          showCloseButton: true
         });
       });
     }
@@ -112,12 +125,15 @@ $(() => {
     templateData.title = m.text;
     templateData.address = m.address;
     templateData.description = m.description;
+    templateData.author = m.User && m.User.fullname;
+    templateData.views = m.views;
+    templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
-    const staticImgDimensions = _isMobile ? '400x70' : '1000x150';
+    const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
 
     // Tags
@@ -174,12 +190,17 @@ $(() => {
       }
     }
 
-
     // Route button 
-    templateData.gmapsRedirectUrl = `https://www.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
+    templateData.gmapsRedirectUrl = `https://maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
 
     // Photo
-    templateData.photoUrl = m.photo;
+    if (m.photo) {
+      templateData.photoUrl = m.photo;
+      
+      if (_isMobile) {
+        $('body').addClass('transparent-mobile-topbar');
+      }
+    }
 
     // Is public? 
     if (m.isPublic != null) {
@@ -214,7 +235,10 @@ $(() => {
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
       templateData.savedRating = previousReview.rating;
-      templateData.userThumbUrl = BDB.User.profile.thumbnail;
+    }
+
+    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
     }
 
 
@@ -374,7 +398,9 @@ $(() => {
           ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
           
           if (map) {
-            map.panTo(data.location);
+            if (!_geolocationInitialized) {
+              map.panTo(data.location);
+            }
 
             $('#geolocationBtn').removeClass('loading');
           }
@@ -407,8 +433,6 @@ $(() => {
         if (!quiet) {
           $('#geolocationBtn').addClass('loading');
         }
-
-        _geolocationInitialized = false;
 
         const options = {
           enableHighAccuracy: true,
@@ -530,7 +554,7 @@ $(() => {
   //   return controlDiv;
   // }
  
-  // Just delegate the action to the route controller
+  // Set router to open Local
   function openLocal(marker, callback) {
     let url = BDB.Places.getMarkerShareUrl(marker);
  
@@ -545,7 +569,7 @@ $(() => {
     this.openLocal(place, callback);
   }
 
-  function _openLocal(marker, callback) {
+  function routerOpenLocal(marker, callback) {
     if (marker) {
       openDetailsModal(marker, callback);
 
@@ -1263,9 +1287,9 @@ $(() => {
       templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
     }
 
-    let profileModalTemplate = $('#profileModalTemplate').html();
-    if (profileModalTemplate) {
-      templates.profileModalTemplate = Handlebars.compile(profileModalTemplate);
+    let contributionsModalTemplate = $('#contributionsModalTemplate').html();
+    if (contributionsModalTemplate) {
+      templates.contributionsModalTemplate = Handlebars.compile(contributionsModalTemplate);
     }
 
   }
@@ -1573,18 +1597,20 @@ $(() => {
 
         $('body').addClass('already-reviewed');
 
-        swal({ 
-          title: 'Valeu!',
-          html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
-          type: 'success',
-          onOpen: () => {
-            startConfettis();
-          },
-          onClose: () => {
-            stopConfettis();
-            promptPWAInstallPopup();
-          } 
-        });
+        // swal({ 
+        //   title: 'Valeu!',
+        //   html: 'Sua avaliação é muito importante! Juntos construímos a cidade que queremos.',
+        //   type: 'success',
+        //   onOpen: () => {
+        //     startConfettis();
+        //   },
+        //   onClose: () => {
+        //     stopConfettis();
+        //     promptPWAInstallPopup();
+        //   } 
+        // });
+        toastr['success']('Avaliação salva. Valeu!'); 
+        promptPWAInstallPopup();
       }
 
       // Update marker data
@@ -1824,7 +1850,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'github hamburger menu link click');
     });
 
-    $('.openProfileBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.openContributionsBtn').on('click', queueUiCallback.bind(this, () => {
       hideAll();
       setView('Contribuições', '/contribuicoes', true);
     }));
@@ -1894,7 +1920,6 @@ $(() => {
 
       ga('send', 'event', 'Misc', 'contact opened');
       
-      swal('Contato', '', 'info');
       swal({
         title: 'Contato',
         html:
@@ -2007,6 +2032,7 @@ $(() => {
 
       if (_isMobile) {
         $('#map, #addPlace').removeClass('optimized-hidden');
+        $('body').removeClass('transparent-mobile-topbar');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {
@@ -2168,20 +2194,14 @@ $(() => {
     });
   }
 
-  function openProfileModal() { 
-    function createdAtToDaysAgo(createdAtStr) {
-      const createdAtDate = Date.parse(createdAtStr);
-      const msAgo = Date.now() - createdAtDate;
-      return Math.floor(msAgo/(1000*60*60*24));
-    }
-
+  function openContributionsModal() { 
     let templateData = {};
     templateData.profile = BDB.User.profile;
     templateData.isAdmin = BDB.User.isAdmin;
     templateData.reviews = BDB.User.reviews;
     templateData.places = BDB.User.places;
 
-    // Massage reviews list
+    // Reviews list
     if (templateData.reviews) {
       templateData.nreviews = templateData.reviews.length;
 
@@ -2190,16 +2210,17 @@ $(() => {
         
         // Created X days ago
         if (r.createdAt) {
-          r.createdDaysAgo = createdAtToDaysAgo(r.createdAt);
+          r.createdTimeAgo = createdAtToDaysAgo(r.createdAt);
         }
 
+        r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
 
-      templateData.reviews.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
+      templateData.reviews.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
     }
 
-    // Massage places list
+    // Places list
     if (templateData.places) {
       templateData.nplaces = templateData.places.length;
 
@@ -2207,31 +2228,30 @@ $(() => {
         let p = templateData.places[i];
         // Created X days ago
         if (p.createdAt) {
-          p.createdDaysAgo = createdAtToDaysAgo(p.createdAt);
+          p.createdTimeAgo = createdAtToDaysAgo(p.createdAt);
         }
       }
       
-      templateData.places.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
+      templateData.places.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
     }
 
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#modalPlaceholder').html(templates.profileModalTemplate(templateData));
-    $('#profileModal').modal('show');
+    $('#modalPlaceholder').html(templates.contributionsModalTemplate(templateData));
+    $('#contributionsModal').modal('show');
 
     $('.go-to-place-btn').off('click').on('click', e => {
       const $target = $(e.currentTarget);
       const id = $target.data('id');
       const place = BDB.Places.getMarkerById(id);
 
-      $('#profileModal').modal('hide').one('hidden.bs.modal', () => {
-        openLocal(place);
-      });
+      $('#contributionsModal')
+        .one('hidden.bs.modal', () => {
+          openLocal(place);
+        })
+        .modal('hide');
     });
-
-    // $('#aboutModal').modal('show') ;
-    // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
   function openGuideModal() {
@@ -2280,7 +2300,7 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
 
           if (_deeplinkMarker) {
-            _openLocal(_deeplinkMarker);
+            routerOpenLocal(_deeplinkMarker);
           } else {
             _routePendingData = true;
           }
@@ -2305,7 +2325,8 @@ $(() => {
       openDataModal();
       break;
     case 'contribuicoes':
-      openProfileModal();
+      hideAll();
+      openContributionsModal();
       break;
     // case 'nav':
     // case 'filtros':
@@ -2381,7 +2402,7 @@ $(() => {
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
       maxWidth: 0,
-      pixelOffset: new google.maps.Size(-infoboxWidth/2, _isMobile ? 10 : 20),
+      pixelOffset: new google.maps.Size(-infoboxWidth/2, 0),
       disableAutoPan: _isMobile ? false : true,
       zIndex: null,
       boxStyle: {
@@ -2538,7 +2559,7 @@ $(() => {
   }
 
   function onSocialLogin(auth) {
-    console.log('auth', auth);
+    console.debug('auth', auth);
 
     $('#userBtn').addClass('loading');
 
@@ -2552,7 +2573,7 @@ $(() => {
 
     // Get user information for the given network
     hello(auth.network).api('me').then(function(profile) { 
-      console.log('profile', profile);
+      console.debug('profile', profile);
 
       Database.socialLogin({
         network: auth.network,
@@ -2560,15 +2581,13 @@ $(() => {
         fullname: profile.name,
         email: profile.email 
       }).then( data => { 
-        console.log('social login successful');
-
         promptPWAInstallPopup();
 
         // UI
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
-        // $('.openProfileBtn, .openProfileDivider').show();
-        $('.openProfileBtn').attr('disabled', false);
+        // $('.openContributionsBtn, .openProfileDivider').show();
+        $('.openContributionsBtn').attr('disabled', false);
         $('.logoutBtn').show(); 
         $('.loginBtn').hide();
         if (data.role === 'admin') {
@@ -2601,7 +2620,7 @@ $(() => {
     $('#userBtn').removeClass('admin');
     $('.logoutBtn').hide();
     $('.loginBtn').show();
-    $('.openProfileBtn').attr('disabled', true);
+    $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
@@ -2630,7 +2649,9 @@ $(() => {
         setupGoogleMaps(); 
       }
     } else {
-      setOfflineMode();
+      if (window.location.pathname !== '/dados') {
+        setOfflineMode();
+      }
     }
 
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
@@ -2730,18 +2751,20 @@ $(() => {
       allowOutsideClick: true
     });
 
-    // Featherlight - photo lightbox lib
-    // Extension to show the img alt tag as a caption within the image
-    $.featherlight.prototype.afterContent = function() { 
-      var caption = this.$currentTarget.find('img').attr('alt');
-      this.$instance.find('.caption').remove();
-      $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
-    };
-    $.featherlight.prototype.beforeOpen = function() { 
-      History.pushState(null, null, 'foto');
-      _isFeatherlightOpen = true; 
-    };
-    $.featherlight.defaults.closeOnEsc = false;
+    if ($.featherlight) {
+      // Featherlight - photo lightbox lib
+      // Extension to show the img alt tag as a caption within the image
+      $.featherlight.prototype.afterContent = function() { 
+        var caption = this.$currentTarget.find('img').attr('alt');
+        this.$instance.find('.caption').remove();
+        $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+      };
+      $.featherlight.prototype.beforeOpen = function() { 
+        History.pushState(null, null, 'foto');
+        _isFeatherlightOpen = true; 
+      };
+      $.featherlight.defaults.closeOnEsc = false;
+    }
  
     // Toastr options
     toastr.options = {
@@ -2780,7 +2803,8 @@ $(() => {
         google: GOOGLE_CLIENT_ID, 
         // windows: WINDOWS_CLIENT_ID,
     },{
-      redirect_uri: window.location.origin
+      // redirect_uri: window.location.origin
+      redirect_uri: '/redirect.html'
     });
     hello.on('auth.login', auth => {
       // Hack to fix what I think is the bug that was causing duplicate user entries
@@ -2792,7 +2816,7 @@ $(() => {
         }, 1500);
       } else {
         // block! 
-        console.log('login called again in 1500ms window!');
+        console.debug('login called again in 1500ms window!');
         ga('send', 'event', 'Login', 'mutex-blocked: login called again in a 1500ms window');
       }
     });
@@ -2875,7 +2899,7 @@ $(() => {
     // Retrieve markers saved in a past access
     markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
-      console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
+      console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
       hideSpinner();
     } else {

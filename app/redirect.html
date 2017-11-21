@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+
+FACILITATES OAuth 1,1a,2 AUTHENTICATION
+
+To link to this page in HelloJS define the redirect_uri.
+
+This page is used for authentication as well as POST using the Iframe+form+hash communication hack.
+
+-->
+<html>
+<head>
+	<title>Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+	
+	<style>
+		@keyframes spin { 100% { transform: rotate(360deg); } }
+
+		html {
+			background: #fafafa;
+		}
+
+		.spinnerContainer {
+		  position: absolute;
+		  top: 50%;
+		  left: 50%;
+		  transform: translate(-50%,-50%);
+
+		  text-align: center;
+		}
+
+		.spinnerContainer img {
+			animation: spin 3s linear infinite;
+			width: 50%; 
+			height: 50%;
+		}
+
+		.spinnerContainer p {
+			color: #30bb6a;
+			margin-top: 1em;
+			font-weight: bold;
+			font-family: "Verdana";
+		}
+	</style>
+
+</head>
+<body>
+    <div class="spinnerContainer">
+        <img alt="" src="/img/spinner.svg"/>
+
+        <p id="globalSpinnerLabel">Carregando...</p>
+    </div>
+
+	<script>
+		window.onbeforeunload = function(){
+			document.getElementById('globalSpinnerLabel').innerHTML = "Redirecionando...";
+		}
+	</script>
+
+	<script src="/js/lib/hello.all.js"></script>
+</body>
+</html>

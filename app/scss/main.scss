@@ -166,9 +166,11 @@ body.offline {
   // }
 
   #addPlace,
-  #locationQueryInput,
+  #locationSearch,
   #howToInstallBtn,
   #filterBtn,
+  #geolocationBtn,
+  #userBtn, 
   #loginBtn,
   .top-toolbar,
   .rating-input-container,
@@ -546,6 +548,7 @@ a,
 a.unstyled-link {
   border-bottom: inherit;
   box-shadow: inherit;
+  color: inherit;
   // transition: inherit;
 
   &:focus,
@@ -650,6 +653,15 @@ a.unstyled-link {
   }
 }
 
+.avatar {
+  background: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid white;
+  @include shadow(1);
+}
+
 #userBtn {
   position: fixed;
   right: $GRID_SPACE;
@@ -667,15 +679,6 @@ a.unstyled-link {
     padding: 0;
     background: none;
     border-radius: 50%;
-  
-    .avatar {
-      background: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 3px solid white;
-      @include shadow(1);
-    }
   }
 
   &.admin {
@@ -905,29 +908,65 @@ a.unstyled-link {
   }
 }
 
-#profileModal {
-  h1 {
+.big-numbers {
+  display: flex;
+  justify-content: space-around;
+
+  .big-numbers--col {
+      text-align: center;
+      line-height: 30px;
+      padding: $GRID_SPACE;
+  }
+
+  .big-numbers--number {
+      font-size: 50px;
+      font-weight: bold;
+  }
+
+  .big-numbers--label { 
+      color: $gray;
+  }
+}
+
+#contributionsModal {
+  h2 {
+    text-align: center;
+    margin: 0;
+
     img {
       border-radius: 50%;
       vertical-align: bottom;
-      height: 41px;
-      width: 41px;
+      height: 100px;
+      width: 100px;
+      margin: 0 auto;
+      display: block;
     }
+  }
 
-  } 
+  .you-are-admin {
+    text-align: center;
+    color: $darkYellow;
+  }
 
-  h2 {
+  h3 { 
     padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE 0;
-    font-size: 14px;
-    color: $lightGray;
+    font-size: 12px;
+    font-weight: bold;
+    color: $gray;
     user-select: none;
     text-transform: uppercase;
-    margin-top: 2em;
+    margin-top: 1em;
+    margin-bottom: 0;
   }
 
   ul {
     list-style: none;
     padding: 0;
+    padding-left: $GRID_SPACE/2;
+  }
+
+  .big-numbers {
+    margin: 2em 0 1em;
   }
 
   .go-to-place-btn {
@@ -946,19 +985,19 @@ a.unstyled-link {
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
+      // width: calc(100vw - $GRID_SPACE*2);
     }
 
     .go-to-place-btn--rating {
-      // display: block;
-      font-size: inherit;
+      font-weight: bold;
     }
 
     .go-to-place-btn--daysago {
       display: block;
-      color: gray;
+      color: $lightGray;
       font-size: 12px;
     }
   }
@@ -1201,7 +1240,6 @@ a.unstyled-link {
     img {
         width: 22px;
         margin-left: 3px;
-        margin-top: 2px;
     }
 
     // &:hover,
@@ -1260,13 +1298,17 @@ a.unstyled-link {
     right: 0px;
 
     border-radius: 25px;
-    padding: 0 15px;
-    margin: 10px 0;
     border: 0;
     background-color: white;
-    height: 40px;
     font-family: $bodyFont;
-    @include shadow(1);
+
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    font-size: 0;
+    @include shadow(2);
+    
+    margin: 0px $GRID_SPACE $GRID_SPACE;
 
     &.active {
       border: 2px solid $lightestPurple;
@@ -1281,34 +1323,18 @@ a.unstyled-link {
       width: 20px;
       height: 20px;
       margin-right: 5px;
+      margin: 0;
     }
 
     #active-filters-counter.badge {
       background-color: $filtersHightlightColor;
     }
-}
 
-#filterBtn {
-  width: 50px;
-  height: 50px;
-  padding: 0;
-  font-size: 0;
-  @include shadow(2);
-  
-  margin: 0px $GRID_SPACE $GRID_SPACE;
-  // position: absolute;
-  // bottom: 150px;
-  // right: $GRID_SPACE;
-
-  .badge {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
-
-  img {
-    margin: 0;
-  }
+    .badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
 }
 
 .navbar {
@@ -1585,6 +1611,18 @@ body.clean-modal-open {
   display: none;
 }
 
+body.transparent-mobile-topbar {
+  #top-mobile-bar {
+    box-shadow: none;
+    background: linear-gradient(rgba(0,0,0,0.5), transparent);
+    position: absolute;
+  }
+
+  .modal .modal-content {
+    padding-top: 0;
+  }
+}
+
 body.modal-open {
   overflow-y: scroll;
 
@@ -1738,28 +1776,23 @@ body.modal-open {
     section.rating-input-container {
       text-align: center;
       // border-top: $separatorBorderStyle;
-      padding: $GRID_SPACE*3 0 $GRID_SPACE*4;
-      background: $paleWhite;
+      padding: $GRID_SPACE*3 0;
+      // background: $paleWhite;
+      background: $greenGradient;
 
       h2 {
         margin: 0;
         font-family: $bodyFont;
-        color: $lightGray;
+        color: white;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: bold;
+        margin-bottom: .5em;
       }
     }
 
     .description {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
-        padding: $GRID_SPACE $GRID_SPACE*2 $GRID_SPACE;
-        /* color: $gray; */
-        /* border-top: $separatorBorderStyle; */
-        background: $lightestGray;
-        @include roundedCorners;
-        color: rgb(100,100,100);
-        text-align: left;
-        font-size: 14px;
+        color: $black;
 
         h2 {
             margin-top: 0; 
@@ -1870,6 +1903,7 @@ body.modal-open {
 
         h2 {
           padding: $GRID_SPACE;
+          padding-left: 0;
           font-size: 22px; 
           user-select: none;
           font-weight: bold;
@@ -1926,6 +1960,18 @@ body.modal-open {
         .minimap {
           width: 100%;
         }
+    }
+
+    .photoInputDisclaimer {
+      text-align: center;
+      display: block;
+      position: absolute;
+      opacity: 0.3;
+      font-size: 12px;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
     }
 
     #photoInput {
@@ -2046,7 +2092,7 @@ body.modal-open {
 
 .review {
     .rating-display-container {
-      margin: $GRID_SPACE 0 0 0;
+      margin: 1em 0;
     }
 
     img {
@@ -2208,11 +2254,6 @@ body.modal-open {
   border-bottom-right-radius: 5px;
   overflow: hidden;
 
-  & img {
-      width: 25px;
-      height: 28px;
-  }
-
   .btn + .btn {
     text-transform: uppercase;
   }
@@ -2301,18 +2342,6 @@ body.modal-open {
         text-transform: uppercase;
         user-select: none;
         cursor: default;
-        
-        // &:before {
-        //     content: '';
-        //     display: inline-block;
-        //     width: 14px;
-        //     height: 17px;
-        //     background-image: url(/img/icon_user.svg);
-        //     background-size: 100%;
-        //     background-repeat: no-repeat;
-        //     vertical-align: middle;
-        //     margin-right: 5px;
-        // }
       }
 
       .numreviews + .openReviewPanelBtn {
@@ -2323,12 +2352,6 @@ body.modal-open {
 
     .modal-body {
         padding-top: $GRID_SPACE;
-        // background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 5%,rgba(255,255,255,1) 100%);
-        // min-height: 500px;
-
-        // @media screen and (min-width: $MOBILE_MAX_WIDTH) {
-        //   min-height: 500px;
-        // }
     }
 
     // Elements that are animated when modal opens
@@ -2343,19 +2366,13 @@ body.modal-open {
 
     .tagDisplay {
         display: inline-block;
-        padding: $GRID_SPACE/2 $GRID_SPACE;
+        padding: $GRID_SPACE/2 $GRID_SPACE $GRID_SPACE/2 0;
         width: 100%;
         font-size: 14px;
         font-weight: 400;
-        text-align: center;
         white-space: nowrap;
         user-select: none;
         cursor: default;
-        border: 1px solid transparent;
-
-        background: $lightestGray;
-        border-radius: 25px;
-        margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
         color: $black;
 
         .tag-count {
@@ -2374,15 +2391,32 @@ body.modal-open {
         }
     }
 
+    .details-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        display: flex;
+        align-items: center;
+        margin-top: 1em;
+      }
+
+      .details-list-icon {
+          font-size: 22px;
+          margin: 0 $GRID_SPACE;
+          color: $gray;
+          min-width: 30px;
+          text-align: center;
+      }
+    }
+
     hr {
       margin-top: $GRID_SPACE*2;
       margin-bottom: $GRID_SPACE*2;
     }
 
     .minimap-container {
-      margin-left: -$GRID_SPACE*3;
-      margin-right: -$GRID_SPACE*3;
-
       .minimap { 
           width: 100%;
           min-height: 50px;
@@ -2392,6 +2426,13 @@ body.modal-open {
           &.close-modal {
             cursor: pointer;
           }
+      }
+    }
+
+    .modal-footer {
+      .avatar {
+        margin-bottom: 0.5em;
+        box-shadow: none;
       }
     }
 }
@@ -2445,6 +2486,10 @@ body.modal-open {
     border-top: none;
     border-left: none;
     border-right: none;
+
+    &.active {
+      box-shadow: none;
+    }
 }
 
 
@@ -2529,8 +2574,9 @@ body.modal-open {
     }
 
     .btn-tag {
-        background: $lightestGray;
-        color: $black;
+        // background: $lightestGray;
+        background: transparent;
+        border: 1px solid $black;
         border-radius: 25px;
         margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
         width: calc(33% - #{$GRID_SPACE}); 
@@ -2544,11 +2590,9 @@ body.modal-open {
         &.active {
             background: $green;
             color: white;
+            box-shadow: none;
+            border: 0;
  
-            // &:before {
-            //     content: '☑';
-            // }
-
             &:hover {
               background: $lightGreen;
             }
@@ -2571,7 +2615,7 @@ body.modal-open {
 
     p.small {
       font-size: 13px;
-      color: gray;
+      color: $gray;
       font-style: italic;
     }
 }
@@ -2733,7 +2777,8 @@ body.modal-open {
   align-items: flex-start;
   padding-top: $GRID_SPACE/2;
   // justify-content: flex-end;
-  // border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $lighterGray;
+  background: $paleWhite;
 
   hr {
     // border-left: 1px solid #eee; 
@@ -2759,8 +2804,8 @@ body.modal-open {
     transition: filter 0.2s ease-out, background .2s ease-out;
 
     .toolbar-item-icon {
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
 
       transition: transform .35s $spotifyBounce;
 
@@ -2847,7 +2892,7 @@ body.modal-open {
         font-family: $bodyFont;
         font-size: 12px;
         margin-top: 5px;
-        color: gray;
+        color: $gray;
     }
   }
 
@@ -2865,49 +2910,41 @@ body.modal-open {
   ul { 
     display: flex;
     flex-wrap: wrap;
+    padding-left: 6px;
 
     li {
       display: flex !important;
       align-items: baseline;
-      width: 50%;
       white-space: nowrap;
       line-height: normal;
-      padding: 0;
+      padding: 0 $GRID_SPACE/2;
+      margin: 0 $GRID_SPACE/2;
+      
+      // Explanation on the reason for the string interpolation:
+      //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+      width: calc(50% - #{$GRID_SPACE});
+      
+      border-radius: 10px;
+      transition: color 0.2s ease-out, background 0.2s ease-out;
 
       &:hover {
-        background: none;
-      }
-
-      input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+        background: #f3f3f3;
       }
 
       input:checked + label {
-        color: #fff!important;
-        // font-weight: 700;
-        background: $filtersHightlightColor;
+        font-weight: bold;
       }
      
       label {
         flex-grow: 1;
         font-weight: normal;
         cursor: pointer;
-        padding: 10px 10px;
-        margin: 0 8px;
-        border-radius: 10px;
-
-        transition: color 0.2s ease-out, background 0.2s ease-out;
-
-        &:hover {
-          // font-weight: 700;
-          background: $lightestGray;
-        }
+        padding: $GRID_SPACE;
 
         img {
           height: 1em;
-          // margin-right: 5px;
+          vertical-align: baseline;
+          margin: 0;
         }
       }
     }
@@ -2941,7 +2978,7 @@ body.modal-open {
       font-family: $bodyFont;
       font-size: 12px;
       margin-top: 5px;
-      color: gray;
+      color: $gray;
     }
   }
 
@@ -3412,10 +3449,6 @@ body.modal-open {
       margin: 0;
     }
 
-    // .rating-input-container {
-    //   display: none;
-    // }
-
     .modal-header {
       display: none;
     }
@@ -3473,28 +3506,9 @@ body.modal-open {
     }
   }
 
-  // #filterBtn {
-  //   width: 50px;
-  //   height: 50px;
-  //   padding: 0;
-  //   font-size: 0;
-  //   @include shadow(2);
-    
-  //   margin: 0px $GRID_SPACE $GRID_SPACE;
-  //   // position: absolute;
-  //   // bottom: 150px;
-  //   // right: $GRID_SPACE;
-
-  //   .badge {
-  //     position: absolute;
-  //     bottom: 0;
-  //     right: 0;
-  //   }
-
-  //   img {
-  //     margin: 0;
-  //   }
-  // }
+  #filterBtn {
+    display: none;
+  }
 
   #aboutModal {
     $leading: 16px;
@@ -3657,18 +3671,6 @@ body.modal-open {
     }
   }
 
-  body.gradient-topbar {
-    .modal-content {
-      padding-top: 0;
-    }
-
-    #top-mobile-bar {
-      background: linear-gradient(rgba(0,0,0,0.5), transparent);
-      box-shadow: none; 
-    }
-  }
-
-
   #bottom-mobile-bar {
       position: fixed;
       bottom: 0;
@@ -3712,9 +3714,18 @@ body.modal-open {
       margin-right: -12px;
     }
 
-    .tagDisplayContainer {
-      width: calc(50% - #{$GRID_SPACE});      
+    .modal-footer {
+      display: none;
     }
+
+    .tagDisplayContainer {
+      width: calc(50% - #{$GRID_SPACE});
+    }
+
+    // .minimap-container {
+    //   margin-left: -$GRID_SPACE;
+    //   margin-right: -$GRID_SPACE;
+    // }
 
     .review {
       text-align: left;
@@ -4035,6 +4046,17 @@ body.modal-open {
     cursor: pointer;
 }
 
+
+[data-color="green"] {
+  color: $green;
+}
+[data-color="yellow"] {
+  color: $yellow;
+}
+[data-color="red"] {
+  color: $red;
+}
+
 .rating-display-container[data-color="green"] .average,
 .average[data-color="green"] {
   background-color: $green;
@@ -4337,7 +4359,7 @@ body.modal-open {
 .side-nav__container {
   position: relative;
   width: 90%;
-  max-width: 400px;
+  max-width: 450px;
   background: #FFF;
   height: 100%;
   box-shadow: 2px 0 12px rgba(0,0,0,0.4);
@@ -4380,6 +4402,7 @@ body.modal-open {
           height: 100%;
           padding: 8% 5% 3%;
           opacity: .9;
+          vertical-align: bottom;
 
           transition: opacity 0.5s ease-out;
 
@@ -4416,8 +4439,8 @@ body.modal-open {
 
     h3 {
       padding: 10px;
-      font-weight: lighter;
-      font-size: 14px;
+      font-weight: bold;
+      font-size: 12px;
       color: $lightGray;
       user-select: none;
       padding: 10px 0 0 16px;
@@ -4460,12 +4483,14 @@ body.modal-open {
 
 .side-nav--animatable .side-nav__container {
   // transition: transform 0.2s ease-in-out;
-  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  // transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1); 
+  transition: transform 0.2s $coolEaseOut;  
 }
 
 .side-nav--visible.side-nav--animatable .side-nav__container {
   // transition: transform 0.3s ease-in-out;
-  transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  // transition: transform 0.5s cubic-bezier(0.39, 0.58, 0.57, 1);
+  transition: transform 0.3s $coolEaseOut;
 }
 
 .side-nav--visible::before {
