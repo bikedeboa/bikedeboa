@@ -179,14 +179,6 @@
             margin: 30px 0;
           }
 
-          .nav {
-            position: sticky;
-            top: 70px;
-            z-index: 2;
-            background: white;
-            padding-bottom: .5em;
-          }
-
           .topbar {
             position: fixed;
             top: 0;
@@ -194,8 +186,18 @@
             right: 0;
             width: 100%;
             background: white;
-            z-index: 2;
+            z-index: 3;
             height: 70px;
+          }
+
+          .nav {
+            position: sticky;
+            top: 60px;
+            z-index: 2;
+            background: white;
+            margin: 0 -24px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            padding: 12px 24px;
           }
 
           .navbar-default {
@@ -224,7 +226,7 @@
     </head>
 
     <body>
-      <div class="topbar">\
+      <div class="topbar">
         <h1 id="logo">
           <a href="/" class="unstyled-link">bike de boa</a> 
         </h1>
@@ -291,7 +293,7 @@
           <li role="presentation" class="restricted-access">
             <a href="#revisions" aria-controls="revisions" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-comments"></i> -->
-              Correções
+              Sugestões de correção
             </a>
           </li>
           <li role="presentation" class="restricted-access">
@@ -721,7 +723,7 @@
 
             revisions = data;
 
-            $('#revisions h2').html(`<span class="text-muted">${data.length}) resultados</span>`);
+            $('#revisions h2').html(`<span class="text-muted">${data.length} resultados</span>`);
             // $('[aria-controls="revisions"]').append(`<span class="text-muted"> (${data.length})</span>`);
 
             $('#revisions table').bootstrapTable({
