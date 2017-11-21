@@ -1743,19 +1743,20 @@
 
                             {{#ifCond nreviews '&&' nplaces}}
                               <div class="big-numbers"> 
-                                <div class="big-numbers--col">
+                                <a class="big-numbers--col unstyled-link" href="#avaliacoes">
                                     <div class="big-numbers--number">{{{nreviews}}}</div>
                                     <div class="big-numbers--label">avaliações</div>
-                                </div><div class="big-numbers--col">
+                                </a>
+                                <a class="big-numbers--col unstyled-link" href="#bicicletarios">
                                     <div class="big-numbers--number">{{{nplaces}}}</div>
                                     <div class="big-numbers--label">bicicletários</div>
-                                </div>
+                                </a>
                               </div>
                             {{/ifCond}}
 
                             <hr>
 
-                            <h3>Avaliações</h3>
+                            <h3 id="avaliacoes">Avaliações</h3>
                             <ul> 
                               {{#each reviews}}
                                 <li>
@@ -1776,7 +1777,7 @@
 
                             <hr>
 
-                            <h3>Bicicletários</h3>
+                            <h3 id="bicicletarios">Bicicletários</h3>
                             <ul> 
                               {{#each places}}
                                 <li>
