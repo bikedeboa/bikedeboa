@@ -270,7 +270,7 @@
       <section>
         <ul class="nav nav-pills" role="tablist">
           <li role="presentation" class="active">
-            <a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">
+            <a href="#locals" aria-controls="locals" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-bicycle"></i> -->
               Bicicletários
             </a>
@@ -282,19 +282,19 @@
             </a>
           </li>
           <li role="presentation" class="restricted-access">
-            <a href="#usuarios" aria-controls="usuarios" role="tab" data-toggle="tab">
+            <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-users"></i> -->
               Usuários
             </a>
           </li>
           <li role="presentation" class="restricted-access">
-            <a href="#sugestoes" aria-controls="sugestoes" role="tab" data-toggle="tab">
+            <a href="#revisions" aria-controls="revisions" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-comments"></i> -->
               Correções
             </a>
           </li>
           <li role="presentation" class="restricted-access">
-            <a href="#log" aria-controls="log" role="tab" data-toggle="tab">
+            <a href="#logs" aria-controls="logs" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-list"></i> -->
               Log
             </a>
@@ -303,12 +303,12 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane fade in active" id="bicicletarios">
+          <div role="tabpanel" class="tab-pane fade in active" id="locals">
 
             <!-- Tabela de Bicicletarios -->
 
             <h2>
-              <span id="headingBikes"></span>
+              Carregando...
             </h2>
 
             <table
@@ -331,10 +331,9 @@
 
           <!-- Tabela de Sugestoes das pessoas -->
 
-          <div role="tabpanel" class="tab-pane fade" id="sugestoes" class="restricted-access">
+          <div role="tabpanel" class="tab-pane fade" id="revisions" class="restricted-access">
             <h2>
-              <i class="fa fa-lightbulb-o"></i>
-              <span id="headingRevisions">Carregando sugestões...</span>
+              Carregando...
             </h2>
 
             <table
@@ -344,6 +343,8 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-detail-view="true"
+              data-detail-formatter="detailFormatter"
               data-sticky-header="false">
             </table>
           </div>
@@ -351,9 +352,9 @@
 
           <!-- Tabela de Usuarios -->
 
-          <div role="tabpanel" class="tab-pane fade" id="usuarios" class="restricted-access">
+          <div role="tabpanel" class="tab-pane fade" id="users" class="restricted-access">
             <h2>
-              <span id="headingUsers">Carregando usuários...</span>
+              Carregando...
             </h2>
 
             <table
@@ -363,6 +364,8 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-detail-view="true"
+              data-detail-formatter="detailFormatter"
               data-sticky-header="false">
             </table>
           </div>
@@ -372,7 +375,7 @@
 
           <div role="tabpanel" class="tab-pane fade" id="reviews" class="restricted-access">
             <h2>
-              <span id="headingUsers">Carregando avaliações...</span>
+              Carregando...
             </h2>
 
             <table
@@ -382,6 +385,8 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-detail-view="true"
+              data-detail-formatter="detailFormatter"
               data-sticky-header="false">
             </table>
           </div>
@@ -389,9 +394,9 @@
 
           <!-- Tabela de Log -->
 
-          <div role="tabpanel" class="tab-pane fade" id="log" class="restricted-access">
-            <h2 id="headingLog">
-              Carregando log... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
+          <div role="tabpanel" class="tab-pane fade" id="logs" class="restricted-access">
+            <h2>
+              Carregando... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
             </h2>
 
             <!-- <div id="logTable"></div> -->
@@ -463,9 +468,15 @@
           }
         }
 
-        // function photoColFormatter(value) {
-        //   return value ? 'Sim' : '-';
-        // }
+
+        ///////////////////////
+        // Column Formatters //
+        ///////////////////////
+
+        function tagsListColFormatter(tags) {
+          const ret = tags.map(tag => tag.name).join('・');
+          return ret;
+        }
 
         function timestampColFormatter(value) {
           return value && new Date(value).toLocaleString('pt-BR');
@@ -507,10 +518,15 @@
           //   return;
           // }
 
-          $('#headingBikes').html('Carregando bicicletários...');
+          $('#locals h2').html('Carregando...');
+
+          $('#locals').addClass('loading');
             
           Database.getPlaces( () => {
-            $('#headingBikes').html(`<span class="text-muted">(${markers.length} carregados)</span>`);
+            $('#locals').removeClass('loading');
+
+            $('#locals h2').html(`<span class="text-muted">${markers.length} resultados</span>`);
+            // $('[aria-controls="locals"]').append(`<span class="text-muted"> (${markers.length})</span>`);
 
             let structureTypes = [];
             for(let i=0; i < STRUCTURE_NAMES.length; i++) {
@@ -532,7 +548,7 @@
               }
             });
 
-            $('#localsTable').bootstrapTable({
+            $('#locals table').bootstrapTable({
               columns: [
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin
@@ -597,12 +613,17 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','user', null, data => {
+          $('#users').addClass('loading');
+
+          BDB.Database.customAPICall('get','user').then(data => {
+            $('#users').removeClass('loading');
+
             users = data;
 
-            $('#headingUsers').html(`<span class="text-muted">(${data.length} carregados)</span>`);
+            $('#users h2').html(`<span class="text-muted">${data.length} resultados</span>`);
+            // $('[aria-controls="users"]').append(`<span class="text-muted"> (${data.length})</span>`);
 
-            $('#usersTable').bootstrapTable({
+            $('#users table').bootstrapTable({
               columns: [
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id',
@@ -643,34 +664,42 @@
             return;
           }
 
+          $('#reviews').addClass('loading');
+
           BDB.Database.customAPICall('get','review').then( data => {
+            $('#reviews').removeClass('loading');
+
             reviews = data;
 
-            $('#reviews h2 span').html(`<span class="text-muted">(${data.length} carregados)</span>`);
+            $('#reviews h2').html(`<span class="text-muted">${data.length} resultados</span>`);
+            // $('[aria-controls="reviews"]').append(`<span class="text-muted"> (${data.length})</span>`);
             
-            $('#reviewsTable').bootstrapTable({
+            $('#reviews table').bootstrapTable({
               columns: [
                 {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id',
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false
                 },
                 {
-                  field: 'user_id', title: 'Cargo', sortable: true,
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
+                },
+                {
+                  field: 'User.fullname', title: 'Usuário', sortable: true,
                 },
                 {
                   field: 'rating', title: 'Nota', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'local_id', title: 'ID bicicletário', sortable: true
+                  field: 'Tags', title: 'Tags', sortable: true, formatter: 'tagsListColFormatter' 
                 },
                 {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-                },
-                {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
                 },
               ],
               data: reviews,
-              sortName: 'id', sortOrder: 'desc'
+              sortName: 'createdAt', sortOrder: 'desc'
             });
           });
         }
@@ -684,12 +713,17 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','revision', null, data => {
+          $('#revisions').addClass('loading');
+
+          BDB.Database.customAPICall('get','revision').then(data => {
+            $('#revisions').removeClass('loading');
+
             revisions = data;
 
-            $('#headingRevisions').html(`Sugestões de Correção <span class="text-muted">(${data.length})</span>`);
+            $('#revisions h2').html(`<span class="text-muted">${data.length}) resultados</span>`);
+            // $('[aria-controls="revisions"]').append(`<span class="text-muted"> (${data.length})</span>`);
 
-            $('#revisionsTable').bootstrapTable({
+            $('#revisions table').bootstrapTable({
               columns: [
                 {
                   field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
@@ -698,10 +732,10 @@
                   field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
                 },
                 {
-                  field: 'local_id', title: 'ID Bicicletário', sortable: true
+                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
                 },
                 {
-                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
+                  field: 'local_id', title: 'ID Bicicletário', sortable: true, visible: false,
                 },
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
@@ -752,12 +786,13 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','log', null, data => {
+          BDB.Database.customAPICall('get','log').then(data => {
             log = data;
 
-            $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`);
+            $('#logs h2').html(`<span class="text-muted">${data.length} resultados</span>`);
+            // $('[aria-controls="logs"]').append(`<span class="text-muted"> (${data.length})</span>`);
 
-            $('#logTable').bootstrapTable({
+            $('#logs table').bootstrapTable({
               columns: [
                 {
                   field: 'updatedAt', title: 'updatedAt', sortable: true, formatter: 'timestampColFormatter', visible: false,
@@ -845,13 +880,13 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
           const tabName = e.target.getAttribute('aria-controls');
           switch (tabName) {
-          case 'sugestoes':
+          case 'revisions':
             updateRevisionTable();
             break;
-          case 'log':
+          case 'logs':
             updateLogTable();
             break;
-          case 'usuarios':
+          case 'users':
             updateUsersTable();
             break;
           case 'reviews':
