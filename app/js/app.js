@@ -1890,7 +1890,7 @@ $(() => {
       hello.logout('google');
     }); 
 
-    $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       hideAll();
 
       ga('send', 'event', 'Misc', 'how-to-install opened');
@@ -1928,7 +1928,33 @@ $(() => {
       swal({
         title: 'Contato',
         html:
-          `<a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com</a>`,
+          `
+            <div style="text-align: left;">
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  <img alt="" class="svg-icon" src="/img/facebook_logo.svg"/> /bikedeboaapp
+                </a> 
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                  <img alt="" class="svg-icon" src="/img/instagram_logo.svg"/> @bikedeboa
+                </a>
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                  <img alt="" class="svg-icon" src="/img/github_logo.svg"/> github
+                </a>
+              </p>
+
+              <p>
+                <a href="mailto:bikedeboa@gmail.com">
+                  <img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com
+                </a>
+              </p>
+            </div>
+          `,
       });
     }));
 
@@ -2589,12 +2615,14 @@ $(() => {
         promptPWAInstallPopup();
 
         // UI
+        $('#userBtn').show();
+        $('#topbarLoginBtn').css('visibiliy','hidden'); 
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
-        $('.openContributionsBtn').attr('disabled', false);
-        $('.logoutBtn').show(); 
-        $('.loginBtn').hide();
+        $('#userBtn .openContributionsBtn').attr('disabled', false);
+        $('#userBtn .logoutBtn').show(); 
+        $('#userBtn .loginBtn').hide();
         if (data.role === 'admin') {
           $('#userBtn').addClass('admin');
           profile.isAdmin = true;
@@ -2841,7 +2869,7 @@ $(() => {
       e.preventDefault();
       _deferredPWAPrompt = e;
 
-      $('#howToInstallBtn').css({'font-weight': 'bold'});
+      $('.howToInstallBtn').css({'font-weight': 'bold'});
 
       return false;
     });

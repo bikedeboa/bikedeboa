@@ -167,7 +167,7 @@ body.offline {
 
   #addPlace,
   #locationSearch,
-  #howToInstallBtn,
+  .howToInstallBtn,
   #filterBtn,
   #geolocationBtn,
   #userBtn, 
@@ -190,7 +190,7 @@ body.offline {
 
 body.webview-app,
 body.pwa-installed {
-  #howToInstallBtn {
+  .howToInstallBtn {
     display: none;
   }
 }
@@ -291,31 +291,6 @@ p {
      width: 100%;
      margin-top: 6px;
   }
-}
-
-#logo {
-    position: fixed;
-    top: 8px;
-    left: 62px;
-    // text-shadow: 1px 1px 1px white;
-    // top: 10px;
-    // left: 10px;
-    margin: 0;
-    padding: 0;
-    
-    margin-top: 10px;
-    color: $green;
-    user-select: none;
-    font-size: 28px;
-    letter-spacing: -0.02em;
-    font-weight: bold;
-    font-family: $headingFont;
-    // opacity: 0.6;
-
-    img {
-      height: 20px;
-      width: auto;
-    }
 }
 
 .loading,
@@ -521,6 +496,87 @@ body.deeplink {
     display: none;
 }
 
+@media screen and (min-width: $MOBILE_MAX_WIDTH) {
+  #userBtn {
+    display: none;
+    
+    .avatar {
+      box-shadow: none;
+    }
+  }
+
+  #locationQueryInput {
+    box-shadow: none !important;
+    background: $lightestGray;
+  }
+
+  .header__menu-toggle {
+      display: none;
+  }
+
+  .navbar-de-boa {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background: white;
+      height: 60px;
+
+      box-shadow: 0 0 10px rgba(0,0,0,.05);
+
+      #logo {
+          position: fixed;
+          top: 16px;
+          left: $GRID_SPACE*2;
+          margin: 0;
+
+          font-size: 22px;
+          line-height: normal;
+          
+          color: $green;
+          user-select: none;
+          letter-spacing: -0.02em;
+          font-weight: bold;
+          font-family: $headingFont;
+      }
+
+      .navbar-de-boa--list {
+        display: flex;
+        list-style: none;
+        height: 100%;
+        justify-content: flex-end;
+        // padding-right: 80px;
+        margin-right: $GRID_SPACE;
+        // justify-content: flex-start;
+        // padding-left: 200px;
+
+        // .caret {
+        //   opacity: .5;
+        // }
+
+        .navbar-de-boa--item {
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+          font-weight: bold;
+          margin: 0 $GRID_SPACE;
+          text-transform: lowercase;
+        }
+      }
+
+      .dropdown-menu {
+        top: 58px;
+        border: none;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        left: -24px;
+        width: auto;
+      }
+
+  }
+}
+
 // iOS Fix
 // source: https://github.com/twbs/bootstrap/issues/14839
 .modal {
@@ -603,13 +659,14 @@ a.unstyled-link {
 
 
 .dropdown-menu {
-  $dropdown-border-color: $lighterGrey;
   padding: $GRID_SPACE/2 0;
-  border: 1px solid $dropdown-border-color;
+  border: 1px solid $lighterGrey;
   min-width: 180px;
+  width: auto;
 
   li {
     margin: $GRID_SPACE/2 0;
+    white-space: nowrap;
 
     img {
       height: 14px;
@@ -636,29 +693,6 @@ a.unstyled-link {
       }
     }
   }
-
-  &:before {
-    position: absolute;
-    top: -10px;
-    right: 14px;
-    display: inline-block;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid $dropdown-border-color;
-    border-left: 10px solid transparent;
-    border-bottom-color: $dropdown-border-color;
-    content: '';
-  }
-
-  &:after {
-    position: absolute; 
-    top: -8px;
-    right: 14px;
-    display: inline-block;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid white;
-    border-left: 10px solid transparent;
-    content: '';
-  }
 }
 
 .avatar {
@@ -673,7 +707,7 @@ a.unstyled-link {
 #userBtn {
   position: fixed;
   right: $GRID_SPACE;
-  top: 10px;
+  top: 6px;
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
  
@@ -695,6 +729,31 @@ a.unstyled-link {
       box-shadow: 0 0px 5px gold;
     }
   }
+ 
+  .dropdown-menu {
+    &:before {
+      position: absolute;
+      top: -10px;
+      right: 14px;
+      display: inline-block;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid $lighterGrey;
+      border-left: 10px solid transparent;
+      border-bottom-color: $lighterGrey;
+      content: '';
+    }
+
+    &:after {
+      position: absolute; 
+      top: -8px;
+      right: 14px;
+      display: inline-block;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+      border-left: 10px solid transparent;
+      content: '';
+    }
+  }
 }
 
 .logoutBtn {
@@ -706,13 +765,12 @@ a.unstyled-link {
 }
 
 #locationSearch {
-    top: 10px;
+    top: 9px;
     position: absolute;
     left: 0;
     right: 0;
     margin: auto;
     width: 95%;
-    height: 48px;
     max-width: 400px;
     width: calc(100% - 20px); 
     // z-index: 1;
@@ -723,12 +781,12 @@ a.unstyled-link {
       opacity: 0;
       transform: translateY(-20px);
     }
-
+ 
     input {
         width: 100%;
         font-size: 14px;
         padding: 0 $GRID_SPACE 0 50px;
-        // font-weight: lighter;
+        height: 42px;
         @include roundedCorners;
         @include shadow(1);
 
@@ -742,14 +800,14 @@ a.unstyled-link {
 
     #clearLocationQueryBtn {
       position: absolute;
-      top: 0px;
+      top: 0;
       right: 0;
       border: none;
       background: transparent;
       font-size: 20px;
-      font-family: Arial;
-      margin: 5px;
+      margin: 0;
       padding: 6px 13px;
+      height: 42px;
 
       transition: all 0.2s ease;
 
@@ -762,7 +820,8 @@ a.unstyled-link {
         height: 20px;
         position: absolute;
         right: 10px;
-        top: 10px;
+        top: 50%;
+        transform: translateY(-50%); 
       }
 
       .clear-icon {
@@ -789,7 +848,7 @@ a.unstyled-link {
       }
     }
 
-    // Desktop
+    // Desktop-only
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
       #clearLocationQueryBtn {
         right: inherit;
@@ -1247,7 +1306,7 @@ a.unstyled-link {
 
     img {
         width: 22px;
-        margin-left: 3px;
+        margin-left: 2px;
     }
 
     // &:hover,
@@ -1290,14 +1349,6 @@ a.unstyled-link {
             padding: 0 $GRID_SPACE;
         }
     }
-}
-
-#locationSearch input,
-#filterBtn {
-    height: 48px;
-    // display: table-cell;
-    // border: none;
-    /* vertical-align: top; */
 }
 
 #filterBtn {
@@ -3197,7 +3248,7 @@ body.modal-open {
       }
 
 
-      // Desktop version
+      // Desktop-only version
       @media screen and (min-width: $MOBILE_MAX_WIDTH) {
         & {
           max-width: 400px;
@@ -3426,9 +3477,9 @@ body.modal-open {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
-  #logo {
+  .navbar-de-boa {
     display: none;
-  }
+  } 
 
   .clean-modal {
     article {
@@ -3504,25 +3555,21 @@ body.modal-open {
   }
 
   #locationSearch {
+    input {
+      height: 48px;
+    }
+
     #locationQueryInput { 
       padding: 0 90px 0 60px; 
     }
     #clearLocationQueryBtn {
       right: 40px;
+      height: 48px;
     }
   }
 
   #userBtn {
-    // border-left: 1px solid $lighterGray;
-    // &:before {
-    //     background: $lightGray;
-    //     width: 0.5px; 
-    //     height: 50%;
-    //     content: '';
-    //     left: 0;
-    //     position: absolute;
-    //     margin-top: 25%;
-    // }
+    top: 10px;
 
     & > button {
         .avatar {
@@ -3530,7 +3577,7 @@ body.modal-open {
           box-shadow: none; 
           width: 20px; 
           height: 20px;
-          margin: 15px;
+          margin: 13px;
       }
     }
   }
@@ -4329,7 +4376,7 @@ body.modal-open {
     //     background: $darkerGreen;
     // }
 
-    // Desktop
+    // Desktop-only
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
       // &:after {
       //   content: 'menu';
