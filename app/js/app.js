@@ -2615,8 +2615,8 @@ $(() => {
         promptPWAInstallPopup();
 
         // UI
+        $('#topbarLoginBtn').css('visibility','hidden'); 
         $('#userBtn').show();
-        $('#topbarLoginBtn').css('visibiliy','hidden'); 
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
