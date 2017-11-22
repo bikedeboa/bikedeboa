@@ -572,6 +572,13 @@ body.deeplink {
         border-top-right-radius: 0;
         left: -24px;
         width: auto;
+
+        // font-size: 18px;
+      }
+
+      // Open Bootstrap dropdown on hover
+      ul li.dropdown:hover > ul.dropdown-menu {
+          display: block;    
       }
 
   }
@@ -669,7 +676,6 @@ a.unstyled-link {
     white-space: nowrap;
 
     img {
-      height: 14px;
       vertical-align: text-top;
       margin-right: 3px;
     }
@@ -752,6 +758,10 @@ a.unstyled-link {
       border-bottom: 10px solid white;
       border-left: 10px solid transparent;
       content: '';
+    }
+
+    img {
+      height: 14px;
     }
   }
 }
