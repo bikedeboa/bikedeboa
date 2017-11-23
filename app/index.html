@@ -182,6 +182,102 @@
           </div>
         </div>
 
+        <nav class="navbar-de-boa cool-hide">
+          <h1 id="logo">
+            <a href="/" class="unstyled-link">bike de boa</a>
+            <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
+          </h1>
+          
+          <ul class="navbar-de-boa--list">
+            
+            <!-- Sobre dropdown nav menu -->
+            <li class="navbar-de-boa--item dropdown">
+              <a href="#" class="unstyled-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Sobre <span class="caret"></span>
+              </a>
+ 
+              <ul class="dropdown-menu"> 
+                <li>
+                  <button class="openAboutBtn">
+                    <img class="svg-icon" alt="" src="/img/icon_info.svg"/>
+                    Sobre o Projeto
+                  </button>
+                </li>
+                
+                <li>
+                  <button class="open-faq-btn">
+                    <img class="svg-icon" alt="" src="/img/icon_faq.svg"/>
+                    Perguntas Frequentes
+                  </button>
+                </li>
+                
+                <li>
+                  <button class="open-aboutdata-btn">
+                    <img class="svg-icon" alt="" src="/img/icon_table.svg"/>
+                    Dados
+                  </button>
+                </li>
+                
+                <li>
+                  <button class="contact-btn">
+                    <img src="/img/icon_mail.svg" class="icon-mail"/>
+                    Contato
+                  </button>
+                </li>
+
+                <li role="separator" class="divider openProfileDivider"> </li>  
+                
+                <li>
+                  <button class="howToInstallBtn">
+                    <img class="svg-icon" alt="" src="/img/icon_app.svg"/>
+                    Instalar o App
+                  </button>
+                </li>
+                
+              </ul>
+            </li>
+            
+            <!-- Guias dropdown nav menu -->
+            <li class="navbar-de-boa--item dropdown">
+              <a href="#" class="unstyled-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Guias <span class="caret"></span>
+              </a>
+ 
+              <ul class="dropdown-menu">
+                <li>
+                  <button class="open-guide-btn">
+                    <img class="svg-icon" alt="" src="/img/icon_guide.svg"/>
+                    Tipos de bicicletários
+                  </button>
+                </li>
+                
+                <li>
+                  <button disabled="true">
+                    <img class="svg-icon" alt="" src="/img/icon_guide.svg"/>
+                    Mais em breve :)
+                  </button>
+                </li>
+
+                <!-- <li role="separator" class="divider openProfileDivider"> </li>   -->
+              </ul>
+            </li>
+
+            <!-- <li class="navbar-de-boa--item ">
+              <a href="#" class="unstyled-link contact-btn">
+                <img src="/img/icon_mail.svg" class="icon-mail"/>
+                Contato
+              </a>
+            </li> -->
+
+            <li id="topbarLoginBtn" class="navbar-de-boa--item">
+              <a href="#" class="unstyled-link loginBtn">
+                <!-- <img src="/img/icon_login.svg"> -->
+                Login/Cadastro
+              </a>
+            </li>
+
+        </nav>
+
         <div id="locationSearch" class="cool-hide">
             <input id="locationQueryInput" type="search">
 
@@ -227,7 +323,7 @@
 
             <div class="welcome-message--content">
               <p>
-                Oie! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando novos!
+                Oie! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando pontos na sua cidade!
               </p>
 
               <p>
@@ -246,11 +342,6 @@
         <button class="js-menu-show-hamburger-menu header__menu-toggle">
           <img src="/img/icon_hamburger.svg">
         </button>
-        
-        <h1 id="logo" class="js-menu-show-hamburger-menu">
-          bike de boa
-          <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
-        </h1>
 
         <div class="confetti-placeholder"></div>
 
@@ -403,7 +494,7 @@
                 </ul>
               </div>
 
-              <hr>
+              <!-- <hr> -->
               
               <div>
                 <h3>Acesso</h3>
@@ -419,7 +510,7 @@
                 </ul>
               </div>
 
-              <hr>
+              <!-- <hr> -->
 
               <div>
                 <h3>Tipos de Bicicletário</h3>
@@ -451,7 +542,7 @@
                 </ul>
               </div>
 
-              <hr>
+              <!-- <hr> -->
 
               <div>
                 <h3>Cobertura</h3>
@@ -501,17 +592,17 @@
                               </p>
 
                               <p>
-                                Com o bike de boa queremos incentivar que mais estabelecimentos instalem bicicletários, e ajudar a dar visibilidade para os que já existem. Também trazemos informações sobre os diferentes tipos de bicicletários, qual a forma correta de usá-los e o que faz eles serem mais ou menos seguros e adequados. Acreditamos fortemente que essas informações ajudam a dar mais confiança pras pessoas saírem mais de bike na cidade.
+                                Com o bike de boa queremos incentivar que mais estabelecimentos instalem bicicletários, e ajudar a dar visibilidade para os que já existem. Também ensinamos sobre os diferentes tipos de bicicletários e o que faz eles serem seguros e adequados. Acreditamos que tudo isso contribui fortemente para que as pessoas se sintam mais seguras e usem mais a bicicleta na cidade.
                               </p>
 
                               <p>
-                                O bike de boa é um site, acessível no celular, computador ou tablet, que mapeia de forma colaborativa lugares pra estacionar a bicicleta na cidade. Nele esses pontos também podem ser avaliados, assim as pessoas expressam suas opiniões sobre as estruturas que estão sendo oferecidas pelos estabelecimentos e prefeituras. Tanto o código do site quanto nossos dados são livres, o que significa que qualquer pessoa pode contribuir com ele ou reutilizá-lo como quiser.
+                                O bike de boa é um site e app que mapeia de forma colaborativa lugares pra estacionar a bicicleta na cidade. Todos podem contribuir mapeando e avaliando os bicicletários que conhecem, desta forma fazendo sua voz ser ouvida sobre o que tem sido oferecido nas ruas e pelos estabelecimentos. Tanto nosso <a target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">código fonte</a> quanto nosso <a target="_blank" rel="noopener" href="/dados">banco de dados</a> são livres, o que significa que qualquer pessoa pode acessar, contribuir ou reutilizar como quiser.
                               </p>
 
                               <p>
-                                O site já conta com mais 500 bicicletários em Porto Alegre e outras cidades do Brasil, e estes são visualizados em média 2000 por mês. Também já fomos destaque em alguns eventos: palestramos no <a href="/io">Google IO Extended</a> em Porto ALegre, e fomos selecionados pra apresentar no <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura 2017</a>, em Recife, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
+                                O site já conta com mais 500 bicicletários em Porto Alegre e outras cidades do Brasil e estes já foram visualizados mais de 10.000 vezes no total. Já fomos destaque em alguns eventos: palestramos no <a href="/io">Google IO Extended</a> em Porto ALegre, e fomos selecionados pra apresentar no <a href="https://www.facebook.com/bicicultura.brasil">Bicicultura</a> em Recife, o maior evento de bicicleta do país. O projeto também chamou a atenção da Rádio Unisinos, que veiculou <a href="https://soundcloud.com/unisinosfm/atomica-app-bike-de-boa">uma entrevista conosco</a>.
                               </p>
-
+ 
                               
                               <h2>Quem somos</h2> 
                               
@@ -880,7 +971,7 @@
                         <div class="modal-body">
                             <article>
                                 <p>
-                                  Assim como nosso <a href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos dados também são abertos.
+                                  Assim como nosso <a target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">código fonte</a>, nossos dados também são abertos.
                                 </p>
 
                                 <section>

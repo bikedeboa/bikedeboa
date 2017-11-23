@@ -1890,7 +1890,7 @@ $(() => {
       hello.logout('google');
     }); 
 
-    $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       hideAll();
 
       ga('send', 'event', 'Misc', 'how-to-install opened');
@@ -1928,7 +1928,33 @@ $(() => {
       swal({
         title: 'Contato',
         html:
-          `<a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com</a>`,
+          `
+            <div style="text-align: left;">
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  <img alt="" class="svg-icon" src="/img/facebook_logo.svg"/> /bikedeboaapp
+                </a> 
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                  <img alt="" class="svg-icon" src="/img/instagram_logo.svg"/> @bikedeboa
+                </a>
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                  <img alt="" class="svg-icon" src="/img/github_logo.svg"/> github
+                </a>
+              </p>
+
+              <p>
+                <a href="mailto:bikedeboa@gmail.com">
+                  <img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com
+                </a>
+              </p>
+            </div>
+          `,
       });
     }));
 
@@ -2589,12 +2615,14 @@ $(() => {
         promptPWAInstallPopup();
 
         // UI
+        $('#topbarLoginBtn').css('visibility','hidden'); 
+        $('#userBtn').show();
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
-        $('.openContributionsBtn').attr('disabled', false);
-        $('.logoutBtn').show(); 
-        $('.loginBtn').hide();
+        $('#userBtn .openContributionsBtn').attr('disabled', false);
+        $('#userBtn .logoutBtn').show(); 
+        $('#userBtn .loginBtn').hide();
         if (data.role === 'admin') {
           $('#userBtn').addClass('admin');
           profile.isAdmin = true;
@@ -2743,6 +2771,10 @@ $(() => {
       }
 
       BDB.User.init();       
+
+      if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
+        openWelcomeMessage();
+      }
     };
 
     // Set up Sweet Alert
@@ -2841,7 +2873,7 @@ $(() => {
       e.preventDefault();
       _deferredPWAPrompt = e;
 
-      $('#howToInstallBtn').css({'font-weight': 'bold'});
+      $('.howToInstallBtn').css({'font-weight': 'bold'});
 
       return false;
     });
@@ -2861,11 +2893,12 @@ $(() => {
     }
 
     ga('send', 'event', 'Misc', 'welcome message - show');
-    
-    $('.welcome-message-container').show(); 
+     
+    // $('.welcome-message-container').show(); 
+    $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
-      $('.welcome-message-container').velocity('transition.slideUpOut'); 
+      $('.welcome-message').velocity('transition.slideDownOut'); 
       // $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
 
@@ -2873,8 +2906,8 @@ $(() => {
     });
 
     $('.welcome-message-container a').on('click', e => {
-      // $('.welcome-message-container').remove();
-      // BDB.Session.setWelcomeMessageViewed(); 
+      $('.welcome-message-container').remove();
+      BDB.Session.setWelcomeMessageViewed(); 
 
       ga('send', 'event', 'Misc', 'welcome message - link click');
     });
@@ -2955,10 +2988,6 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-    }
-
-    if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
-      openWelcomeMessage();
     }
   } 
 
