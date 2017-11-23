@@ -2771,6 +2771,10 @@ $(() => {
       }
 
       BDB.User.init();       
+
+      if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
+        openWelcomeMessage();
+      }
     };
 
     // Set up Sweet Alert
@@ -2889,11 +2893,12 @@ $(() => {
     }
 
     ga('send', 'event', 'Misc', 'welcome message - show');
-    
-    $('.welcome-message-container').show(); 
+     
+    // $('.welcome-message-container').show(); 
+    $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
-      $('.welcome-message-container').velocity('transition.slideUpOut'); 
+      $('.welcome-message').velocity('transition.slideDownOut'); 
       // $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
 
@@ -2901,8 +2906,8 @@ $(() => {
     });
 
     $('.welcome-message-container a').on('click', e => {
-      // $('.welcome-message-container').remove();
-      // BDB.Session.setWelcomeMessageViewed(); 
+      $('.welcome-message-container').remove();
+      BDB.Session.setWelcomeMessageViewed(); 
 
       ga('send', 'event', 'Misc', 'welcome message - link click');
     });
@@ -2983,10 +2988,6 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-    }
-
-    if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
-      openWelcomeMessage();
     }
   } 
 

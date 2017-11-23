@@ -3204,31 +3204,32 @@ body.modal-open {
 }
 
 .welcome-message-container {
-  // Initializes hidden
-  display: none; 
 
   .welcome-message {
-      position: fixed;
-      top: 0;
+      // Initializes hidden
+      display: none;  
+
+      position: absolute;
       width: 100%;
-      // z-index: 2;
-      text-align: left;
-      display: flex; 
-      // align-items: center;
-      // align-content: center;
+      text-align: left; 
+      // display: flex; 
       flex-wrap: wrap;
-      border-bottom-right-radius: 5px;
       box-shadow: 0 5px 30px rgba(0,0,0,.15);
 
+      // border-top-right-radius: 5px;
+      border-radius: 5px;
+      bottom: 12px;
+      left: 12px;
+
+      font-size: 16px;
+
       height: auto;
-      padding: 5em $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
-      // font-size: 16px;
+      padding: $GRID_SPACE*4 $GRID_SPACE*4 $GRID_SPACE*2 $GRID_SPACE*2;
       
-      // background: $green;
-      // color: white;
-      
-      color: $gray;
-      background: white;
+      background: $green;
+      color: white;
+      // color: $gray;
+      // background: white;
 
       span {
         // font-family: $bodyFont;
@@ -3236,7 +3237,8 @@ body.modal-open {
       }
 
       a {
-        color: $gray;
+        color: white;
+        font-weight: bold;
       }
 
       h1, h2 {
@@ -3278,10 +3280,7 @@ body.modal-open {
       }
 
       .welcome-message--content {
-        // opacity: .9;
-        // padding-right: $GRID_SPACE*6;
         font-weight: normal;
-        font-size: 14px;
       }
 
       .welcome-message--footer {
@@ -3291,17 +3290,16 @@ body.modal-open {
 
 
       // Desktop-only version
-      @media screen and (min-width: $MOBILE_MAX_WIDTH) {
+      // @media screen and (min-width: $MOBILE_MAX_WIDTH) {
         & {
           max-width: 400px;
-          left: 0;
           opacity: 1;
         }
 
         img {
           display: inline-block;
         }
-      }
+      // }
   }
 }
 
