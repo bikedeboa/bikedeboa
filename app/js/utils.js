@@ -37,6 +37,34 @@ BDB.geocodeLatLng = function(lat, lng, successCB, failCB) {
   });
 };
 
+window.createdAtToDaysAgo = createdAtStr => {
+  let ret;
+
+  const createdAtDate = Date.parse(createdAtStr);
+  const msAgo = Date.now() - createdAtDate;
+  const daysAgo = Math.floor(msAgo/(1000*60*60*24));
+
+  if (daysAgo) {
+    ret = `${daysAgo} dias atrás`;
+  } else {
+    const hoursAgo = Math.floor(msAgo/(1000*60*60));
+
+    if (hoursAgo) {
+      ret = `${hoursAgo} horas atrás`;
+    } else {
+      const minsAgo = Math.floor(msAgo/(1000*60));
+      
+      if (minsAgo) {
+        ret = `${minsAgo} minutos atrás`;
+      } else {
+        ret = 'agora há pouco';
+      }
+    }
+  }
+  
+  return ret;
+}
+
 window.toggleSpinner = () => {
   $('#spinnerOverlay').fadeToggle();
 };

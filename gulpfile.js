@@ -133,7 +133,14 @@ gulp.task('generate-service-worker', function(callback) {
       '/fonts/glyphicons-halflings-regular.ttf',
       '/fonts/glyphicons-halflings-regular.woff',
       '/fonts/glyphicons-halflings-regular.woff2',
-      'public/**/*.{webmanifest}'
+      'public/**/*.{json}',
+      'assets/img/icon_search.svg',
+      'assets/img/icon_add_pin.svg',
+      'assets/img/icon_geolocation.svg',
+      'assets/img/icon_filter.svg',
+      'assets/img/icon_hamburger.svg',
+      'assets/img/icon_user_big.svg',
+      'assets/img/spinner.svg',
     ], 
     stripPrefixMulti: {
       'dist/': '/', 

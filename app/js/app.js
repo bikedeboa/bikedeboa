@@ -125,6 +125,9 @@ $(() => {
     templateData.title = m.text;
     // templateData.address = m.address;
     // templateData.description = m.description;
+    // templateData.author = m.User && m.User.fullname;
+    // templateData.views = m.views;
+    // templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -551,7 +554,7 @@ $(() => {
   //   return controlDiv;
   // }
  
-  // Just delegate the action to the route controller
+  // Set router to open Local
   function openLocal(marker, callback) {
     let url = BDB.Places.getMarkerShareUrl(marker);
  
@@ -566,7 +569,7 @@ $(() => {
     this.openLocal(place, callback);
   }
 
-  function _openLocal(marker, callback) {
+  function routerOpenLocal(marker, callback) {
     if (marker) {
       openDetailsModal(marker, callback);
 
@@ -960,6 +963,9 @@ $(() => {
       if (map.getBounds()) {
         const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
         $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
+        if (!isViewWithinBounds) {
+          ga('send', 'event', 'Local', 'out of bounds message triggered', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
+        }
       }
     }, 50);
   }
@@ -1292,9 +1298,9 @@ $(() => {
       templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
     }
 
-    let profileModalTemplate = $('#profileModalTemplate').html();
-    if (profileModalTemplate) {
-      templates.profileModalTemplate = Handlebars.compile(profileModalTemplate);
+    let contributionsModalTemplate = $('#contributionsModalTemplate').html();
+    if (contributionsModalTemplate) {
+      templates.contributionsModalTemplate = Handlebars.compile(contributionsModalTemplate);
     }
 
   }
@@ -1731,14 +1737,16 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 0 }, { 'display': 'none' });
+    $('body').addClass('search-mode');
+    $('#search-overlay').addClass('showThis');
   }
 
   function exitLocationSearchMode() {
-    $('#map, #addPlace, .login-display, #filterBtn').velocity({ opacity: 1 }, { 'display': 'block' });
+    $('body').removeClass('search-mode');
+    $('#search-overlay').removeClass('showThis');
   }
 
-  function setPageTitle(text) {
+  function setPageTitle(text) { 
     text = text || '';
 
     // Header that imitates native mobile navbar
@@ -1855,7 +1863,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'github hamburger menu link click');
     });
 
-    $('.openProfileBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.openContributionsBtn').on('click', queueUiCallback.bind(this, () => {
       hideAll();
       setView('Contribuições', '/contribuicoes', true);
     }));
@@ -1890,7 +1898,7 @@ $(() => {
       hello.logout('google');
     }); 
 
-    $('#howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
+    $('.howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
       hideAll();
 
       ga('send', 'event', 'Misc', 'how-to-install opened');
@@ -1928,13 +1936,39 @@ $(() => {
       swal({
         title: 'Contato',
         html:
-          `<a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com</a>`,
+          `
+            <div style="text-align: left;">
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  <img alt="" class="svg-icon" src="/img/facebook_logo.svg"/> /bikedeboaapp
+                </a> 
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                  <img alt="" class="svg-icon" src="/img/instagram_logo.svg"/> @bikedeboa
+                </a>
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                  <img alt="" class="svg-icon" src="/img/github_logo.svg"/> github
+                </a>
+              </p>
+
+              <p>
+                <a href="mailto:bikedeboa@gmail.com">
+                  <img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com
+                </a>
+              </p>
+            </div>
+          `,
       });
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
       map.setCenter(_portoAlegrePos);
-      map.setZoom(6);
+      map.setZoom(12);
     }));
 
     $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {
@@ -2057,16 +2091,16 @@ $(() => {
     // }); 
     
     // Location Search Mode control
-    // $('#locationQueryInput').on('focus', e => { 
-    //   if (_isMobile) {
-    //     enterLocationSearchMode();
-    //   }
-    // });
-    // $('#locationQueryInput').on('blur', e => {
-    //   if (_isMobile) {
-    //     exitLocationSearchMode();
-    //   }
-    // });
+    $('#locationQueryInput').on('focus', e => { 
+      if (_isMobile) {
+        enterLocationSearchMode();
+      }
+    });
+    $('#locationQueryInput').on('blur', e => {
+      if (_isMobile) {
+        exitLocationSearchMode();
+      }
+    });
 
     // Location Search
     $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
@@ -2199,20 +2233,14 @@ $(() => {
     });
   }
 
-  function openProfileModal() { 
-    function createdAtToDaysAgo(createdAtStr) {
-      const createdAtDate = Date.parse(createdAtStr);
-      const msAgo = Date.now() - createdAtDate;
-      return Math.floor(msAgo/(1000*60*60*24));
-    }
-
+  function openContributionsModal() { 
     let templateData = {};
     templateData.profile = BDB.User.profile;
     templateData.isAdmin = BDB.User.isAdmin;
     templateData.reviews = BDB.User.reviews;
     templateData.places = BDB.User.places;
 
-    // Massage reviews list
+    // Reviews list
     if (templateData.reviews) {
       templateData.nreviews = templateData.reviews.length;
 
@@ -2221,16 +2249,17 @@ $(() => {
         
         // Created X days ago
         if (r.createdAt) {
-          r.createdDaysAgo = createdAtToDaysAgo(r.createdAt);
+          r.createdTimeAgo = createdAtToDaysAgo(r.createdAt);
         }
 
+        r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
 
-      templateData.reviews.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
+      templateData.reviews.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
     }
 
-    // Massage places list
+    // Places list
     if (templateData.places) {
       templateData.nplaces = templateData.places.length;
 
@@ -2238,31 +2267,30 @@ $(() => {
         let p = templateData.places[i];
         // Created X days ago
         if (p.createdAt) {
-          p.createdDaysAgo = createdAtToDaysAgo(p.createdAt);
+          p.createdTimeAgo = createdAtToDaysAgo(p.createdAt);
         }
       }
       
-      templateData.places.sort( (a,b) => { return a.createdDaysAgo - b.createdDaysAgo; } );
+      templateData.places.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
     }
 
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#modalPlaceholder').html(templates.profileModalTemplate(templateData));
-    $('#profileModal').modal('show');
+    $('#modalPlaceholder').html(templates.contributionsModalTemplate(templateData));
+    $('#contributionsModal').modal('show');
 
     $('.go-to-place-btn').off('click').on('click', e => {
       const $target = $(e.currentTarget);
       const id = $target.data('id');
       const place = BDB.Places.getMarkerById(id);
 
-      $('#profileModal').modal('hide').one('hidden.bs.modal', () => {
-        openLocal(place);
-      });
+      $('#contributionsModal')
+        .one('hidden.bs.modal', () => {
+          openLocal(place);
+        })
+        .modal('hide');
     });
-
-    // $('#aboutModal').modal('show') ;
-    // $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   }
 
   function openGuideModal() {
@@ -2311,7 +2339,7 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
 
           if (_deeplinkMarker) {
-            _openLocal(_deeplinkMarker);
+            routerOpenLocal(_deeplinkMarker);
           } else {
             _routePendingData = true;
           }
@@ -2336,7 +2364,8 @@ $(() => {
       openDataModal();
       break;
     case 'contribuicoes':
-      openProfileModal();
+      hideAll();
+      openContributionsModal();
       break;
     // case 'nav':
     // case 'filtros':
@@ -2572,7 +2601,7 @@ $(() => {
   }
 
   function onSocialLogin(auth) {
-    console.log('auth', auth);
+    console.debug('auth', auth);
 
     $('#userBtn').addClass('loading');
 
@@ -2586,7 +2615,7 @@ $(() => {
 
     // Get user information for the given network
     hello(auth.network).api('me').then(function(profile) { 
-      console.log('profile', profile);
+      console.debug('profile', profile);
 
       Database.socialLogin({
         network: auth.network,
@@ -2594,17 +2623,17 @@ $(() => {
         fullname: profile.name,
         email: profile.email 
       }).then( data => { 
-        console.log('social login successful');
-
         promptPWAInstallPopup();
 
         // UI
+        $('#topbarLoginBtn').css('visibility','hidden'); 
+        $('#userBtn').show();
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
-        // $('.openProfileBtn, .openProfileDivider').show();
-        $('.openProfileBtn').attr('disabled', false);
-        $('.logoutBtn').show(); 
-        $('.loginBtn').hide();
+        // $('.openContributionsBtn, .openProfileDivider').show();
+        $('#userBtn .openContributionsBtn').attr('disabled', false);
+        $('#userBtn .logoutBtn').show(); 
+        $('#userBtn .loginBtn').hide();
         if (data.role === 'admin') {
           $('#userBtn').addClass('admin');
           profile.isAdmin = true;
@@ -2635,7 +2664,7 @@ $(() => {
     $('#userBtn').removeClass('admin');
     $('.logoutBtn').hide();
     $('.loginBtn').show();
-    $('.openProfileBtn').attr('disabled', true);
+    $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
@@ -2664,7 +2693,9 @@ $(() => {
         setupGoogleMaps(); 
       }
     } else {
-      setOfflineMode();
+      if (window.location.pathname !== '/dados') {
+        setOfflineMode();
+      }
     }
 
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
@@ -2751,6 +2782,10 @@ $(() => {
       }
 
       BDB.User.init();       
+
+      if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
+        openWelcomeMessage();
+      }
     };
 
     // Set up Sweet Alert
@@ -2764,18 +2799,20 @@ $(() => {
       allowOutsideClick: true
     });
 
-    // Featherlight - photo lightbox lib
-    // Extension to show the img alt tag as a caption within the image
-    $.featherlight.prototype.afterContent = function() { 
-      var caption = this.$currentTarget.find('img').attr('alt');
-      this.$instance.find('.caption').remove();
-      $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
-    };
-    $.featherlight.prototype.beforeOpen = function() { 
-      History.pushState(null, null, 'foto');
-      _isFeatherlightOpen = true; 
-    };
-    $.featherlight.defaults.closeOnEsc = false;
+    if ($.featherlight) {
+      // Featherlight - photo lightbox lib
+      // Extension to show the img alt tag as a caption within the image
+      $.featherlight.prototype.afterContent = function() { 
+        var caption = this.$currentTarget.find('img').attr('alt');
+        this.$instance.find('.caption').remove();
+        $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+      };
+      $.featherlight.prototype.beforeOpen = function() { 
+        History.pushState(null, null, 'foto');
+        _isFeatherlightOpen = true; 
+      };
+      $.featherlight.defaults.closeOnEsc = false;
+    }
  
     // Toastr options
     toastr.options = {
@@ -2827,7 +2864,7 @@ $(() => {
         }, 1500);
       } else {
         // block! 
-        console.log('login called again in 1500ms window!');
+        console.debug('login called again in 1500ms window!');
         ga('send', 'event', 'Login', 'mutex-blocked: login called again in a 1500ms window');
       }
     });
@@ -2847,7 +2884,7 @@ $(() => {
       e.preventDefault();
       _deferredPWAPrompt = e;
 
-      $('#howToInstallBtn').css({'font-weight': 'bold'});
+      $('.howToInstallBtn').css({'font-weight': 'bold'});
 
       return false;
     });
@@ -2867,11 +2904,12 @@ $(() => {
     }
 
     ga('send', 'event', 'Misc', 'welcome message - show');
-    
-    $('.welcome-message-container').show(); 
+     
+    // $('.welcome-message-container').show(); 
+    $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
 
     $('.welcome-message-container .welcome-message--close').on('click', e => {
-      $('.welcome-message-container').velocity('transition.slideUpOut'); 
+      $('.welcome-message').velocity('transition.slideDownOut'); 
       // $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
 
@@ -2879,8 +2917,8 @@ $(() => {
     });
 
     $('.welcome-message-container a').on('click', e => {
-      // $('.welcome-message-container').remove();
-      // BDB.Session.setWelcomeMessageViewed(); 
+      $('.welcome-message-container').remove();
+      BDB.Session.setWelcomeMessageViewed(); 
 
       ga('send', 'event', 'Misc', 'welcome message - link click');
     });
@@ -2910,7 +2948,7 @@ $(() => {
     // Retrieve markers saved in a past access
     // markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
-      console.log(`Retrieved ${markers.length} locations from LocalStorage.`);
+      console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
       updateMarkers();
       hideSpinner();
     } else {
@@ -2961,10 +2999,6 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-    }
-
-    if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
-      openWelcomeMessage();
     }
   } 
 
