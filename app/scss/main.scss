@@ -803,6 +803,22 @@ a.unstyled-link {
     }
   }
 
+  #logo {
+      position: fixed;
+      top: 16px;
+      left: $GRID_SPACE*2;
+      margin: 0;
+
+      font-size: 22px;
+      line-height: normal;
+      
+      color: $green;
+      user-select: none;
+      letter-spacing: -0.02em;
+      font-weight: bold;
+      font-family: $headingFont;
+  }
+
 
   .header__menu-toggle {
       display: none;
@@ -829,22 +845,6 @@ a.unstyled-link {
         opacity: 0;
         transform: translateY(-20px);
       } 
-
-      #logo {
-          position: fixed;
-          top: 16px;
-          left: $GRID_SPACE*2;
-          margin: 0;
-
-          font-size: 22px;
-          line-height: normal;
-          
-          color: $green;
-          user-select: none;
-          letter-spacing: -0.02em;
-          font-weight: bold;
-          font-family: $headingFont;
-      }
 
       .navbar-de-boa--list {
         display: flex;
