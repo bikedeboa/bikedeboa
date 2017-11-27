@@ -327,7 +327,7 @@ $(() => {
     } else { 
       // Just fade new detailed content in
       // $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-      $('#placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('#placeDetailsModal .tagsContainer, #placeDetailsModal .description').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
@@ -2331,7 +2331,13 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
 
           if (_deeplinkMarker) {
-            routerOpenLocal(_deeplinkMarker);
+            // Horrible, horrible fix for a race condition.
+            if (tags) {
+              routerOpenLocal(_deeplinkMarker);
+            } else {
+              // console.debug('not yet');
+              setTimeout(handleRouting, 300);
+            }
           } else {
             _routePendingData = true;
           }
@@ -2912,12 +2918,6 @@ $(() => {
       ga('send', 'event', 'Misc', 'welcome message - link click');
     });
   }
- 
-  function login() {
-    Database.authenticate(() => {
-      Database.getAllTags();
-    });
-  }
 
   function localhostOverrides() {
     // if (_isLocalhost) {
@@ -2967,12 +2967,8 @@ $(() => {
         // }
       });
 
-      // Authenticate to be ready for next calls
-      login();
-
-      handleRouting(true);
-
-      // This is the only request allowed to be unauthenticated
+      Database.authenticate();
+      Database.getAllTags();
       Database.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
         $('#filter-results-total').html(markers.length);
@@ -2988,6 +2984,8 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
+
+      handleRouting(true);
     }
   } 
 
