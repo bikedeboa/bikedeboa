@@ -1844,15 +1844,19 @@ $(() => {
     });
 
     $('.facebook-social-link').on('click', () => {
-      ga('send', 'event', 'Misc', 'facebook hamburger menu link click');
+      ga('send', 'event', 'Misc', 'facebook link click');
     });
 
     $('.instagram-social-link').on('click', () => {
-      ga('send', 'event', 'Misc', 'instagram hamburger menu link click');
+      ga('send', 'event', 'Misc', 'instagram link click');
     });
 
     $('.github-social-link').on('click', () => {
-      ga('send', 'event', 'Misc', 'github hamburger menu link click');
+      ga('send', 'event', 'Misc', 'github link click');
+    });
+
+    $('.medium-social-link').on('click', () => {
+      ga('send', 'event', 'Misc', 'medium link click');
     });
 
     $('.openContributionsBtn').on('click', queueUiCallback.bind(this, () => {
@@ -1932,19 +1936,25 @@ $(() => {
             <div style="text-align: left;">
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/facebook_logo.svg"/> /bikedeboaapp
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/> /bikedeboaapp
                 </a> 
               </p>
 
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/instagram_logo.svg"/> @bikedeboa
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/> @bikedeboa 
+                </a>
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/> medium 
                 </a>
               </p>
 
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/github_logo.svg"/> github
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/> github
                 </a>
               </p>
 

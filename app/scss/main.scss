@@ -365,14 +365,6 @@ p {
   
   transition: opacity 0.2s ease, transform 0.2s ease;
 
-  &:first-child {
-    padding-left: 0;
-  }
-
-  &:last-child {
-    padding-right: 0;
-  }
-
   &:hover,
   &:focus {
     opacity: 1;
@@ -2650,7 +2642,7 @@ body.modal-open {
     text-shadow: 0 -1px 0 #354C8C;
     
     &:before {
-      background: url('/img/facebook_logo_white.svg') $GRID_SPACE $GRID_SPACE no-repeat;
+      background: url('/img/icon_social_facebook_w.svg') $GRID_SPACE $GRID_SPACE no-repeat;
       background-size: $GRID_SPACE*2;
     }
     
@@ -3068,9 +3060,7 @@ body.modal-open {
   }
 
   h2 {
-    margin-top: 50px;
     color: $black;
-
   }
 
   #clear-filters-btn {
@@ -3558,11 +3548,9 @@ body.modal-open {
       border-radius: 0;
       box-shadow: none;
       
-      // Explanation on the reason for the string interpolation:
-      //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-      // min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
-
       min-height: 100vh;
+      max-width: 100vw;
+
 
       padding-top: $MOBILE_NAVBAR_HEIGHT;
       padding-bottom: 70px;
@@ -3656,6 +3644,10 @@ body.modal-open {
   }
 
   #guideModal {
+    .close-and-filter {
+      display: none;
+    }
+    
     .guide-img-row {
       justify-content: left;
       width: calc(100vw);
@@ -4527,18 +4519,12 @@ body.modal-open {
   }
 
   .side-nav__footer {
-      padding: 16px;
-
-      // .footer-label {
-      //   text-transform: uppercase;
-      //   font-size: 12px;
-      //   font-weight: bold;
-      // }
+      padding: 8px 16px 0;
+      background: #F3F3F3;
 
       .social-links-list {
         display: flex;
-        // justify-content: space-around;
-        // background-color: $lightestGray;
+        margin-left: -14px;
       }
   }
 
