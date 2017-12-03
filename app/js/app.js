@@ -2989,7 +2989,8 @@ $(() => {
 
       Database.authenticate();
       Database.getAllTags();
-      Database.getPlaces( () => {
+      // Database.getPlaces( () => {
+      BDB.OSM.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
         $('#filter-results-total').html(markers.length);
 
