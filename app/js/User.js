@@ -63,10 +63,6 @@ BDB.User = {
       swal({ 
         title: title,
         html: message,
-        // type: 'question',
-        // showCancelButton: true,
-        // confirmButtonText: 'Sim',
-        // cancelButtonText: 'Não, apagar histórico',
       })
         .then(() => {
           if (prevPlaces) {
@@ -179,9 +175,6 @@ BDB.User = {
   checkEditPermission: function (id) {
     if (id && this.isLoggedIn) {
       return this.places.find( i => i.id === id );
-      
-      // Old permission check based on Cookies
-      // return Cookies.get('bikedeboa_local_' + id);
     } else {
       return false;
     }
