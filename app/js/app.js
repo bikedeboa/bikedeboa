@@ -243,9 +243,9 @@ $(() => {
 
 
     ////////////////////////////////
-    // Render handlebars template //
+    // Render handlebars template // 
     ////////////////////////////////
-    $('#placeDetailsModalTemplatePlaceholder').html(templates.placeDetailsModalTemplate(templateData));
+    $('#placeDetailsContent').html(templates.placeDetailsContentTemplate(templateData));
 
     if (m.average) {
       $('input[name=placeDetails_rating]').val(['' + Math.round(m.average)]);
@@ -273,9 +273,9 @@ $(() => {
     $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('#editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
-    $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
-    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
+    $('.deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
+    $('.createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
@@ -326,19 +326,19 @@ $(() => {
         .modal('show');
     } else { 
       // Just fade new detailed content in
-      // $('#placeDetailsModal .photo-container, #placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-      $('#placeDetailsModal .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      // $('#placeDetailsContent .photo-container, #placeDetailsContent .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
     if(!_isTouchDevice) {
-      $('#placeDetailsModal .full-star').tooltip({
+      $('#placeDetailsContent .full-star').tooltip({
         toggle: 'tooltip',
         placement: 'bottom', 
         'delay': {'show': 0, 'hide': 100}
       });
     }
-    initHelpTooltip('#placeDetailsModal .help-tooltip-trigger');
+    initHelpTooltip('#placeDetailsContent .help-tooltip-trigger');
 
     $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - pin details public access');
@@ -1283,14 +1283,9 @@ $(() => {
       }
     });
 
-    let placeDetailsModalTemplate = $('#placeDetailsModalTemplate').html();
-    if (placeDetailsModalTemplate) {
-      templates.placeDetailsModalTemplate = Handlebars.compile(placeDetailsModalTemplate);
-    }
-
-    let placeDetailsModalLoadingTemplate = $('#placeDetailsModalLoadingTemplate').html();
-    if (placeDetailsModalLoadingTemplate) {
-      templates.placeDetailsModalLoadingTemplate = Handlebars.compile(placeDetailsModalLoadingTemplate);
+    let placeDetailsContentTemplate = $('#placeDetailsContentTemplate').html();
+    if (placeDetailsContentTemplate) {
+      templates.placeDetailsContentTemplate = Handlebars.compile(placeDetailsContentTemplate);
     }
 
     let infoWindowTemplate = $('#infoWindowTemplate').html();
@@ -1375,7 +1370,7 @@ $(() => {
         $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
       }
 
-      // $('#placeDetailsModal').modal('hide');
+      // $('#placeDetailsContent').modal('hide');
     } else {
       setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
@@ -1852,15 +1847,19 @@ $(() => {
     });
 
     $('.facebook-social-link').on('click', () => {
-      ga('send', 'event', 'Misc', 'facebook hamburger menu link click');
+      ga('send', 'event', 'Misc', 'facebook link click');
     });
 
     $('.instagram-social-link').on('click', () => {
-      ga('send', 'event', 'Misc', 'instagram hamburger menu link click');
+      ga('send', 'event', 'Misc', 'instagram link click');
     });
 
     $('.github-social-link').on('click', () => {
-      ga('send', 'event', 'Misc', 'github hamburger menu link click');
+      ga('send', 'event', 'Misc', 'github link click');
+    });
+
+    $('.medium-social-link').on('click', () => {
+      ga('send', 'event', 'Misc', 'medium link click');
     });
 
     $('.openContributionsBtn').on('click', queueUiCallback.bind(this, () => {
@@ -1940,19 +1939,25 @@ $(() => {
             <div style="text-align: left;">
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/facebook_logo.svg"/> /bikedeboaapp
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/> /bikedeboaapp
                 </a> 
               </p>
 
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/instagram_logo.svg"/> @bikedeboa
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/> @bikedeboa 
+                </a>
+              </p>
+
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/> medium 
                 </a>
               </p>
 
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/github_logo.svg"/> github
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/> github
                 </a>
               </p>
 
@@ -2339,7 +2344,13 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
 
           if (_deeplinkMarker) {
-            routerOpenLocal(_deeplinkMarker);
+            // Horrible, horrible fix for a race condition.
+            if (tags) {
+              routerOpenLocal(_deeplinkMarker);
+            } else {
+              // console.debug('not yet');
+              setTimeout(handleRouting, 300);
+            }
           } else {
             _routePendingData = true;
           }
@@ -2628,6 +2639,7 @@ $(() => {
         // UI
         $('#topbarLoginBtn').css('visibility','hidden'); 
         $('#userBtn').show();
+        $('#userBtn .userBtn--user-name').text(profile.first_name);
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
@@ -2644,7 +2656,7 @@ $(() => {
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(profile);
+        BDB.User.login(profile); 
 
         document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {
@@ -2660,10 +2672,13 @@ $(() => {
     BDB.User.logout();
 
     // UI
-    $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
+    $('#userBtn').hide();
+    $('#topbarLoginBtn').css('visibility','visible');
+    // $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
     $('#userBtn').removeClass('admin');
+    $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();
-    $('.loginBtn').show();
+    $('.loginBtn').show(); 
     $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
@@ -2923,12 +2938,6 @@ $(() => {
       ga('send', 'event', 'Misc', 'welcome message - link click');
     });
   }
- 
-  function login() {
-    Database.authenticate(() => {
-      Database.getAllTags();
-    });
-  }
 
   function localhostOverrides() {
     // if (_isLocalhost) {
@@ -2978,13 +2987,9 @@ $(() => {
         // }
       });
 
-      // Authenticate to be ready for next calls
-      login();
-
-      handleRouting(true);
-
-      // Database.getPlaces( () => { 
-      BDB.OSM.getPlaces( () => {
+      Database.authenticate();
+      Database.getAllTags();
+      Database.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
         $('#filter-results-total').html(markers.length);
 
@@ -2999,6 +3004,8 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
+
+      handleRouting(true);
     }
   } 
 

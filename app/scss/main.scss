@@ -172,7 +172,7 @@ body.offline {
   .minimap,
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
-  #placeDetailsModal .photo-container.hasImage.loading {
+  #placeDetailsContent .photo-container.hasImage.loading {
     display: none !important;
   }
 
@@ -365,14 +365,6 @@ p {
   
   transition: opacity 0.2s ease, transform 0.2s ease;
 
-  &:first-child {
-    padding-left: 0;
-  }
-
-  &:last-child {
-    padding-right: 0;
-  }
-
   &:hover,
   &:focus {
     opacity: 1;
@@ -539,8 +531,8 @@ a.unstyled-link {
 .link-button {
     border: none;
     background: transparent;
-    min-height: 42px;
     min-width: 42px;
+    // min-height: 42px;
 
     &:focus,
     &:active,
@@ -625,7 +617,7 @@ a.unstyled-link {
 #userBtn {
   position: fixed;
   top: 0;
-  right: 0;
+  right: $GRID_SPACE;
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
  
@@ -639,6 +631,7 @@ a.unstyled-link {
     padding: 0;
     background: none;
     border-radius: 50%;
+    padding-right: $GRID_SPACE;
   }
 
   &.admin {
@@ -651,7 +644,7 @@ a.unstyled-link {
   .avatar {
     width: 40px;
     height: 40px;
-    margin: 10px 20px;
+    margin: 10px $GRID_SPACE/2 10px;
   }
  
   .dropdown-menu {
@@ -803,6 +796,22 @@ a.unstyled-link {
     }
   }
 
+  #logo {
+      position: fixed;
+      top: 16px;
+      left: $GRID_SPACE*2;
+      margin: 0;
+
+      font-size: 22px;
+      line-height: normal;
+      
+      color: $green;
+      user-select: none;
+      letter-spacing: -0.02em;
+      font-weight: bold;
+      font-family: $headingFont;
+  }
+
 
   .header__menu-toggle {
       display: none;
@@ -829,22 +838,6 @@ a.unstyled-link {
         opacity: 0;
         transform: translateY(-20px);
       } 
-
-      #logo {
-          position: fixed;
-          top: 16px;
-          left: $GRID_SPACE*2;
-          margin: 0;
-
-          font-size: 22px;
-          line-height: normal;
-          
-          color: $green;
-          user-select: none;
-          letter-spacing: -0.02em;
-          font-weight: bold;
-          font-family: $headingFont;
-      }
 
       .navbar-de-boa--list {
         display: flex;
@@ -2351,7 +2344,7 @@ body.modal-open {
     vertical-align: middle;
     background: transparent;
 
-    transition: color .2s ease;
+    // transition: color .2s ease, background .2s ease;
     
     &:hover,
     &:focus,
@@ -2416,13 +2409,23 @@ body.modal-open {
 
         &.skeleton-box {
             height: 20px;
-            bnackground: rgba(0,0,0,0.05);
+            background: rgba(0,0,0,0.05);
         }
     }
 }
 
 
-#placeDetailsModal {
+// #placeDetailsPanel {
+//   position: fixed;
+//   top: 60px;
+//   left: 0;
+//   width: 400px;
+//   background: white;
+//   overflow: scroll;
+//   height: 100%;
+// }
+
+#placeDetailsContent {
     .review {
       .savedRating {
           text-align: center;
@@ -2650,7 +2653,7 @@ body.modal-open {
     text-shadow: 0 -1px 0 #354C8C;
     
     &:before {
-      background: url('/img/facebook_logo_white.svg') $GRID_SPACE $GRID_SPACE no-repeat;
+      background: url('/img/icon_social_facebook_w.svg') $GRID_SPACE $GRID_SPACE no-repeat;
       background-size: $GRID_SPACE*2;
     }
     
@@ -2749,7 +2752,7 @@ body.modal-open {
     float: left;
 }
 
-#placeDetailsModalTemplatePlaceholder .modal-footer .col-half + .col-half {
+#placeDetailsContent .modal-footer .col-half + .col-half {
     border-left: 1px solid transparent;
 }
 
@@ -3001,15 +3004,22 @@ body.modal-open {
   }
 
   .side-nav__hide {
-    color: black;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: $green;
+    color: white;
+    top: inherit;
 
-    .glyphicon:after {
-        content: 'Feito';
-        display: block;
-        font-family: $bodyFont;
-        font-size: 12px;
-        margin-top: 5px;
-        color: $gray;
+    // Explanation on the reason for the string interpolation:
+    //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+    width: calc(100% - #{$GRID_SPACE});
+    margin: $GRID_SPACE/2;
+    border-radius: 5px;
+
+    &:hover, &:active, &:focus {
+      background-color: $lightGreen; 
     }
   }
 
@@ -3057,6 +3067,7 @@ body.modal-open {
         font-weight: normal;
         cursor: pointer;
         padding: $GRID_SPACE;
+        // font-size: 14px;
 
         img {
           height: 1em;
@@ -3068,35 +3079,17 @@ body.modal-open {
   }
 
   h2 {
-    margin-top: 50px;
     color: $black;
-
+    display: inline-block;
   }
 
   #clear-filters-btn {
     opacity: 0;
-    
-    position: absolute;
-    right: 50px;
-    top: 0;
-    width: 56px;
-    height: 56px;
-    font-size: 15px;
-    line-height: 12px;
-    background: 0 0;
+    font-size: 13px;
     border: none;
-    color: #333;
-    padding: 0;
-    margin: 0;
-
-    &:after {
-      content: 'Limpar';
-      display: block;
-      font-family: $bodyFont;
-      font-size: 12px;
-      margin-top: 5px;
-      color: $gray;
-    }
+    color: gray;
+    font-weight: bold;
+    text-decoration: underline;
   }
 
   #filter-results-counter-container {
@@ -3558,11 +3551,9 @@ body.modal-open {
       border-radius: 0;
       box-shadow: none;
       
-      // Explanation on the reason for the string interpolation:
-      //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-      // min-height: calc(100vh - #{$MODAL_BODY_MINHEIGHT_PADDING});
-
       min-height: 100vh;
+      max-width: 100vw;
+
 
       padding-top: $MOBILE_NAVBAR_HEIGHT;
       padding-bottom: 70px;
@@ -3610,13 +3601,19 @@ body.modal-open {
     right: 12px;
 
     & > button {
-        .avatar {
+      padding: 0;
+      
+      .avatar {
           border: 0;
           box-shadow: none; 
           width: 25px;
           height: 25px;
           margin: 8px;
       }
+    }
+
+    .userBtn--user-name {
+      display: none;
     }
   }
 
@@ -3656,6 +3653,10 @@ body.modal-open {
   }
 
   #guideModal {
+    .close-and-filter {
+      display: none;
+    }
+    
     .guide-img-row {
       justify-content: left;
       width: calc(100vw);
@@ -3822,7 +3823,7 @@ body.modal-open {
       // }
   }
 
-  #placeDetailsModal {
+  #placeDetailsContent {
     hr {
       margin-left: -12px;
       margin-right: -12px;
@@ -4527,18 +4528,12 @@ body.modal-open {
   }
 
   .side-nav__footer {
-      padding: 16px;
-
-      // .footer-label {
-      //   text-transform: uppercase;
-      //   font-size: 12px;
-      //   font-weight: bold;
-      // }
+      padding: 8px 16px 0;
+      background: #F3F3F3;
 
       .social-links-list {
         display: flex;
-        // justify-content: space-around;
-        // background-color: $lightestGray;
+        margin-left: -14px;
       }
   }
 

@@ -222,6 +222,10 @@
             display: none !important;
           }
 
+          #userBtn {
+            display: block !important;
+          }
+
         </style>
     </head>
 
@@ -259,13 +263,16 @@
 
         <div class="social-links-list" style="margin-top: 2em;">
           <a class="facebook-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-            <img alt="Facebook" src="/img/facebook_logo.svg"/>
+            <img alt="" src="/img/icon_social_facebook.svg"/>
           </a>
           <a class="instagram-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-            <img alt="Instagram" src="/img/instagram_logo.svg"/>
+            <img alt="" src="/img/icon_social_instagram.svg"/>
+          </a>
+          <a class="medium-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+            <img alt="" src="/img/icon_social_medium.svg"/>
           </a>
           <a class="github-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-            <img alt="GitHub" src="/img/github_logo.svg"/>
+            <img alt="" src="/img/icon_social_github.svg"/>
           </a>
         </div>
       </h2>
@@ -323,9 +330,14 @@
               data-show-columns="true"
               data-show-export="true"
               data-detail-view="true"
-              data-detail-formatter="detailFormatter"
+              data-detail-formatter="genericDetailsFormatter"
               data-row-style="rowStyle"
               data-show-footer="false"
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
               data-sticky-header="false">
             </table>
 
@@ -347,7 +359,7 @@
               data-show-columns="true"
               data-show-footer="false"
               data-detail-view="true"
-              data-detail-formatter="detailFormatter"
+              data-detail-formatter="genericDetailsFormatter"
               data-sticky-header="false">
             </table>
           </div>
@@ -368,7 +380,7 @@
               data-show-columns="true"
               data-show-footer="false"
               data-detail-view="true"
-              data-detail-formatter="detailFormatter"
+              data-detail-formatter="genericDetailsFormatter"
               data-sticky-header="false">
             </table>
           </div>
@@ -388,8 +400,14 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-show-export="true"
               data-detail-view="true"
-              data-detail-formatter="detailFormatter"
+              data-detail-formatter="genericDetailsFormatter"
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
               data-sticky-header="false">
             </table>
           </div>
@@ -399,7 +417,7 @@
 
           <div role="tabpanel" class="tab-pane fade" id="logs" class="restricted-access">
             <h2>
-              Carregando... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
+              Carregando...
             </h2>
 
             <!-- <div id="logTable"></div> -->
@@ -411,8 +429,14 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-show-export="true"
               data-detail-view="true"
-              data-detail-formatter="detailFormatter"
+              data-detail-formatter="genericDetailsFormatter"
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
               data-sticky-header="false">
             </table>
           </div>
@@ -421,8 +445,8 @@
 
       <script>
         // Generic function to display in textual form all the properties of a table entry
-        function detailFormatter(index, row) {
-          var html = '';
+        function genericDetailsFormatter(index, row) {
+          let html = '';
 
           html += '<div class="details-view">';
 
@@ -444,6 +468,46 @@
               html += '<span><b>' + key + ':</b> ' + jsonColFormatter(value) + '</span><br>';
               break;
             case 'photo':
+              break;
+            case 'User':
+              if (value) {
+                html += '<span><b>' + key + ':</b> ' + value.fullname + '</span><br>';
+              }
+              break; 
+            case 'Locals':
+              html += '<div><b>' + key + ':</b></div>';
+              html += '<ul>';
+              value.forEach( l => {
+                html += `<li>name=${l.text}</li>`;
+              });
+              html += '</ul>';
+              break;
+            case 'Reviews':
+              // html += '<span><b>' + key + ':</b> ' + value.map(t => t.name).join('・') + '</span><br>';
+              html += '<div><b>' + key + ':</b></div>';
+              
+              // Counts total of tags, and at the same time prints each reviews contents into a <ul>
+              html += '<ul>';
+              let tags = {};
+              value.forEach( r => {
+                html += `<li>local id=${r.local_id}, rating=${r.rating}, user id=${r.user_id}</li>`;
+                if (r.Tags) {
+                  r.Tags.forEach( t => {
+                    tags[t.name] = (tags[t.name] || 0) + 1;
+                  });
+                }
+              });
+              html += '</ul>';
+              
+              // Prints each tags count
+              html += '<div><b>Tags:</b></div>';
+              html += '<ul>';
+              Object.keys(tags).forEach( k => {
+                html += `<li><b>${k}:</b> ${tags[k]}</li>`;
+              })
+              html += '</ul>';
+              break;
+            case '_hasDetails':
               break;
             default:
               html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
@@ -584,16 +648,13 @@
                   field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
-                  field: 'reviews', title: 'Nº Avaliações', sortable: true, class: 'col-reviews'
+                  field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
                 },
                 {
                   field: 'average', title: 'Média', sortable: true, visible: true,
                 },
                 {
                   field: 'views', title: 'Visualizações', sortable: true, visible: true,
-                },
-                {
-                  field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
                 },
                 {
                   field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
@@ -644,13 +705,19 @@
                   field: 'email', title: 'Email', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin
+                  field: 'Reviews.length', title: 'Avaliações', sortable: true
                 },
                 {
-                  field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin
+                  field: 'Locals.length', title: 'Bicicletários', sortable: true,
                 },
                 {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
                 },
                 {
                   field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
@@ -807,7 +874,7 @@
                   field: 'user', title: 'user', sortable: true
                 },
                 {
-                  field: 'ip_origin', title: 'IP', sortable: true
+                  field: 'ip_origin', title: 'IP', sortable: true, visible: false
                 },
                 {
                   field: 'role', title: 'role', sortable: true, visible: false,

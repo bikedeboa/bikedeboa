@@ -247,14 +247,14 @@
                 <li>
                   <button class="open-guide-btn">
                     <img class="svg-icon" alt="" src="/img/icon_guide.svg"/>
-                    Tipos de bicicletários
+                    Tipos de Bicicletários
                   </button>
                 </li>
                 
                 <li>
                   <button disabled="true">
-                    <img class="svg-icon" alt="" src="/img/icon_guide.svg"/>
-                    Mais em breve :)
+                    <!-- <img class="svg-icon" alt="" src="/img/icon_guide.svg"/> -->
+                    Mais em breve... :)
                   </button>
                 </li>
 
@@ -270,10 +270,10 @@
             </li> -->
 
             <li id="topbarLoginBtn" class="navbar-de-boa--item">
-              <a href="#" class="unstyled-link loginBtn">
+              <button class="ghost loginBtn">
                 <!-- <img src="/img/icon_login.svg"> -->
-                Login/Cadastro
-              </a>
+                login/cadastro
+              </button>
             </li>
 
         </nav>
@@ -288,8 +288,9 @@
         </div>
 
         <div id="userBtn" class="dropdown cool-hide">
-          <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="avatar" src="/img/icon_user_big.svg">
+            <span class="userBtn--user-name"></span>
           </button>
 
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
@@ -396,7 +397,7 @@
 
                 <li class="open-guide-btn side-nav--animate-in">
                   <img alt="" src="/img/icon_guide.svg"/>
-                  Guia de Bicicletários
+                  Tipos de Bicicletários
                 </li>
 
                 <hr>
@@ -430,18 +431,21 @@
               <!-- <img class="illustration" alt="" src="/img/art1.svg"/> -->
 
               <div class="footer-label">
-                Segue a gente
+                Segue a gente:
               </div>
 
               <div class="social-links-list">
                 <a class="facebook-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="Facebook" src="/img/facebook_logo.svg"/>
+                  <img alt="" src="/img/icon_social_facebook.svg"/>
                 </a>
                 <a class="instagram-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="Instagram" src="/img/instagram_logo.svg"/>
+                  <img alt="" src="/img/icon_social_instagram.svg"/>
+                </a>
+                <a class="medium-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                  <img alt="" src="/img/icon_social_medium.svg"/>
                 </a>
                 <a class="github-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="GitHub" src="/img/github_logo.svg"/>
+                  <img alt="" src="/img/icon_social_github.svg"/>
                 </a>
               </div>
             </footer>
@@ -450,16 +454,15 @@
 
         <aside id="filter-menu" class="js-side-nav side-nav side-nav-inverted side-nav-fixed">
           <nav class="js-side-nav-container side-nav__container">
-            <button id="clear-filters-btn" class="link-button">
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-
             <button class="js-menu-hide side-nav__hide">
-              <span class="glyphicon glyphicon-ok"></span>
+              Feito
             </button> 
             
             <header class="side-nav__header">
-              <h2>Filtros</h2>
+              <h2>
+                Filtros
+              </h2>
+              <button id="clear-filters-btn" class="link-button">(limpar todos)</button>
 
               <!-- <div class="setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
@@ -560,11 +563,11 @@
               
             </div>
 
-            <footer>
+            <!-- <footer>
               <div id="filter-results-counter-container">
                 <span class="glyphicon glyphicon-chevron-left"></span> Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
               </div>
-            </footer>
+            </footer> -->
 
           </nav>
         </aside>
@@ -621,11 +624,13 @@
                               </p>
 
                               <p>
-                                Quer nos ajudar? Agora temos um <a href="https://apoia.se/bikedeboa">projeto no Apoia.se!</a> Você pode ajudar com a partir de 1 real por mês - e sério, isso já significa muito pra gente! :)
+                                Quer nos ajudar? Agora temos um <a target="_blank" rel="noopener" href="https://apoia.se/bikedeboa">projeto no Apoia.se!</a> Você pode ajudar com a partir de 1 real por mês - e sério, isso já significa muito pra gente! :)
                               </p>
 
                               <p style="text-align: center;">
-                                <button class="ghost" style="margin: 24px 0; border-radius: 25px; padding: 12px 36px; font-size: 22px; ">Apoie a gente ›</button>
+                                <a target="_blank" rel="noopener" href="https://apoia.se/bikedeboa" class="ghost" style="margin: 24px 0; border-radius: 25px; padding: 12px 36px; font-size: 22px; box-shadow: none; cursor: pointer;">
+                                  Apoie a gente ›
+                                </a> 
                               </p>
 
                               <p>
@@ -650,22 +655,29 @@
 
 
                               <p>
-                                Segue a gente nas redes sociais :)
+                                Nos acompanhe nas redes sociais:
                               </p>
 
                               <div id="about-social-buttons">
-                                <!-- Facebook like and share buttons -->
-                                <!-- <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbikedeboaapp%2F&width=280&layout=standard&action=like&size=small&show_faces=true&share=true&height=80&appId=1814653185457307" width="280" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
+                                <a class="social-link facebook-social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                                  <img alt="" src="/img/icon_social_facebook.svg"/> Facebook
+                                </a>
+                                <a class="social-link instagram-social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                                  <img alt="" src="/img/icon_social_instagram.svg"/> Instagram
+                                </a>
+                                <a class="social-link medium-social-link unstyled-link" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                                  <img alt="" src="/img/icon_social_medium.svg"/> Medium
+                                </a>
+                                <a class="social-link github-social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                                  <img alt="" src="/img/icon_social_github.svg"/> Github
+                                </a>
+                              </div>
 
-                                <a id="facebook-social-link" class="social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                                  <img alt="Facebook" src="/img/facebook_logo.svg"/> Facebook
-                                </a>
-                                <a id="instagram-social-link" class="social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                                  <img alt="Instagram" src="/img/instagram_logo.svg"/> Instagram
-                                </a>
-                                <a id="github-social-link" class="social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                                  <img alt="GitHub" src="/img/github_logo.svg"/> Github
-                                </a>
+                              <hr>
+
+                              <div style="text-align: center;">
+                                <!-- Facebook like and share buttons -->
+                                <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbikedeboaapp%2F&width=280&layout=standard&action=like&size=small&show_faces=true&share=true&height=80&appId=1814653185457307" width="280" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
                               </div>
                             </article>
                         </div>
@@ -680,7 +692,7 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title view-name">Guia de Bicicletários</h1>
+                          <h1 class="modal-title view-name">Guia de Tipos de Bicicletários</h1>
                         </div>
 
                         <div class="modal-body">
@@ -698,7 +710,7 @@
                               </div> -->
 
                               <p>
-                                Os tipos de bicicletário deste guia são os que a nossa equipe de pesquisa encontrou pela cidade. Cada um tem características de <b>segurança e praticidade diferentes</b>, por isso é bacana começar a reparar nesses detalhes quando for estacionar a bike.
+                                Selecionamos os tipos de bicicletário abaixo por serem os mais comuns nas cidades brasileiras. Cada um tem características de <b>segurança e praticidade diferentes</b>, por isso é bacana começar a reparar nesses detalhes quando for estacionar a bike.
                               </p>
 
                               <section>
@@ -1237,11 +1249,15 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
-                      <div id="placeDetailsModalTemplatePlaceholder"></div>
+                      <div id="placeDetailsContent"></div> 
                     </div> 
                 </div>
             </div>
-        </div>
+        </div> 
+
+        <!-- <div id="placeDetailsPanel">
+          <div id="placeDetailsContent"></div>
+        </div> -->
 
         <!-- New Pin Modal -->
         <div data-keyboard="false" class="modal fade" id="newPlaceModal" tabindex="-1">
@@ -1300,7 +1316,7 @@
                               <h2>
                                 Tipo de Bicicletário
                                 <a id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<p>Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor.</p>
-                                <p>Saiba mais no <a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>"></a>
+                                <p>Saiba mais no <a href='#' class='open-guide-btn'>Guia de BicicletáriosTipos de </a></p>"></a>
                               </h2>
 
                               <div class="custom-radio-group" data-form-step="1">
@@ -1385,7 +1401,7 @@
         </div>
 
         <!-- View Details Modal -->
-        <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
+        <script id="placeDetailsContentTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
             <section class="photo-container hasImage loading {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
               <a href="#" class="unstyled-link" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}"/></a>
@@ -1409,20 +1425,17 @@
             </button>
 
             {{#if canModify}}
-              <button id="editPlaceBtn" class="toolbar-item">
+              <button class="editPlaceBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Editar</label>
               </button>
 
-              <button id="deletePlaceBtn" class="toolbar-item">
+              <button class="deletePlaceBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
                 <label>Excluir</label>
               </button>
-              <!-- {{#unless isAdmin}}
-                <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
-              {{/unless}} -->
             {{else}}
-              <button id="createRevisionBtn" class="toolbar-item">
+              <button class="createRevisionBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Sugerir correção</label>
               </button>
@@ -1457,7 +1470,12 @@
                     {{#if isAdmin}}
                       <div>
                         <div class="icon-label">
-                            <small>Sem informação sobre cobertura</small>
+                            Sem informação sobre cobertura
+                            {{#if canModify}}
+                              <button class="editPlaceBtn link-button">
+                                (editar)
+                              </button>
+                            {{/if}}
                         </div>
                       </div>
                     {{/if}}
@@ -1487,7 +1505,12 @@
                     {{#if isAdmin}}
                       <div>
                         <div class="icon-label">
-                          <small>Sem informação sobre restrição de acesso</small>
+                          Sem informação sobre restrição de acesso
+                          {{#if canModify}}
+                            <button class="editPlaceBtn link-button">
+                              (editar)
+                            </button>
+                          {{/if}}
                         </div>
                       </div>
                     {{/if}}
@@ -1506,7 +1529,7 @@
                                 <p>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.</p>
                                 <p>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.</p>
                                 <p>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock.</p>
-                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de BicicletáriosTipos de </a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'deroda'}}
@@ -1515,14 +1538,14 @@
                                 <p>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.</p>
                                 <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.</p>
                                 <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
-                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de BicicletáriosTipos de </a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'trave'}}
                                 <a id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Trave</h2>
                                 <p>Normalmente um poste de luz ou placa de trânsito.</p>
                                 <p>Dá pra prender a bicicleta de varias formas, mas o melhor é <b>prender pelo quadro da bicicleta</b> e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.</p>
-                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de BicicletáriosTipos de </a></p>
                                 "></a> 
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'suspenso'}}
@@ -1530,7 +1553,7 @@
                                 <p>Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede.</p>
                                 <p>Cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.</p>
                                 <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
-                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de BicicletáriosTipos de </a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'grade'}}
@@ -1538,7 +1561,7 @@
                                 <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não.</p>
                                 <p>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda, por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.</p>
                                 <p>Prefira sempre <b>prender pelo quadro da bicicleta<b>.</p>
-                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de BicicletáriosTipos de </a></p>
                                 "></a>
                               {{/ifCond}}
                               {{#ifCond structureTypeCode '===' 'other'}}
@@ -1546,18 +1569,23 @@
                                 <p>Um bicicletário diferentão, ou nem é bicicletário de fato.</p>
                                 <p>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.</p>
                                 <p>Sempre prenda sua bicicleta pelo quadro e o mais próximo possível desse objeto.</p>
-                                <p><a href='#' class='open-guide-btn'>Guia de Bicicletários</a></p>
+                                <p><a href='#' class='open-guide-btn'>Guia de BicicletáriosTipos de </a></p>
                                 "></a>
                               {{/ifCond}}  
                         </div>
                     </div>
                   {{else}}
-                    <div>
-                      {{#if isAdmin}}
-                        <small>Sem informação sobre tipo de bicicletário</small>
-                      {{/if}}
-                    </div>
-                  {{/if}}
+                    {{#if isAdmin}}
+                      <div class="icon-label"> 
+                        Sem informação sobre tipo de bicicletário
+                        {{#if canModify}}
+                          <button class="editPlaceBtn link-button">
+                            (editar)
+                          </button>
+                        {{/if}}
+                      </div>
+                    {{/if}}
+                  {{/if}} 
               </section>
 
               <hr>
@@ -1640,12 +1668,14 @@
 
               <section class="description">
                 <ul class="details-list">
-                  {{#if author}}
-                    <li>
-                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                  <li>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                    {{#if author}}
                       <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
-                    </li>
-                  {{/if}}
+                    {{else}}
+                      <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
+                    {{/if}}
+                  </li>
 
                   {{#if tag_operator}}
                     <li>
@@ -1941,26 +1971,6 @@
                             </ul>
 
                           </div>
-
-                          <!-- {{#unless profile}}
-                            <footer style="padding: 36px; background: #fafafa;">
-                              <p>
-                                Você está <b>deslogado</b>.
-                              </p>
-                              
-                              <p>
-                                Fazendo login você pode adicionar novos pontos no mapa e também salva todas contribuições que já fez.
-                              </p>
-                              
-                              <button class="customLoginBtn facebookLoginBtn">
-                                Facebook
-                              </button>
-
-                              <button class="customLoginBtn googleLoginBtn">
-                                Google
-                              </button>
-                            </footer>
-                          {{/unless}} -->
                       </div>
                   </div>
               </div>
