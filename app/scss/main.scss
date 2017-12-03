@@ -617,7 +617,7 @@ a.unstyled-link {
 #userBtn {
   position: fixed;
   top: 0;
-  right: 0;
+  right: $GRID_SPACE;
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
  
@@ -631,6 +631,7 @@ a.unstyled-link {
     padding: 0;
     background: none;
     border-radius: 50%;
+    padding-right: $GRID_SPACE;
   }
 
   &.admin {
@@ -643,7 +644,7 @@ a.unstyled-link {
   .avatar {
     width: 40px;
     height: 40px;
-    margin: 10px 20px;
+    margin: 10px $GRID_SPACE/2 10px;
   }
  
   .dropdown-menu {
@@ -3600,13 +3601,19 @@ body.modal-open {
     right: 12px;
 
     & > button {
-        .avatar {
+      padding: 0;
+      
+      .avatar {
           border: 0;
           box-shadow: none; 
           width: 25px;
           height: 25px;
           margin: 8px;
       }
+    }
+
+    .userBtn--user-name {
+      display: none;
     }
   }
 

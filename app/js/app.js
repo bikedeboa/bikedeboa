@@ -2628,6 +2628,7 @@ $(() => {
         // UI
         $('#topbarLoginBtn').css('visibility','hidden'); 
         $('#userBtn').show();
+        $('#userBtn .userBtn--user-name').text(profile.first_name);
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
@@ -2644,7 +2645,7 @@ $(() => {
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(profile);
+        BDB.User.login(profile); 
 
         document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {
@@ -2660,10 +2661,13 @@ $(() => {
     BDB.User.logout();
 
     // UI
-    $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
+    $('#userBtn').hide();
+    $('#topbarLoginBtn').css('visibility','visible');
+    // $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
     $('#userBtn').removeClass('admin');
+    $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();
-    $('.loginBtn').show();
+    $('.loginBtn').show(); 
     $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));

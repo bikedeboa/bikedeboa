@@ -288,8 +288,9 @@
         </div>
 
         <div id="userBtn" class="dropdown cool-hide">
-          <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="avatar" src="/img/icon_user_big.svg">
+            <span class="userBtn--user-name"></span>
           </button>
 
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
@@ -1433,9 +1434,6 @@
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
                 <label>Excluir</label>
               </button>
-              <!-- {{#unless isAdmin}}
-                <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
-              {{/unless}} -->
             {{else}}
               <button id="createRevisionBtn" class="toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
@@ -1655,12 +1653,14 @@
 
               <section class="description">
                 <ul class="details-list">
-                  {{#if author}}
-                    <li>
-                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                  <li>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                    {{#if author}}
                       <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
-                    </li>
-                  {{/if}}
+                    {{else}}
+                      <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
+                    {{/if}}
+                  </li>
 
                   {{#if description}}
                     <li>
@@ -1912,26 +1912,6 @@
                             </ul>
 
                           </div>
-
-                          <!-- {{#unless profile}}
-                            <footer style="padding: 36px; background: #fafafa;">
-                              <p>
-                                Você está <b>deslogado</b>.
-                              </p>
-                              
-                              <p>
-                                Fazendo login você pode adicionar novos pontos no mapa e também salva todas contribuições que já fez.
-                              </p>
-                              
-                              <button class="customLoginBtn facebookLoginBtn">
-                                Facebook
-                              </button>
-
-                              <button class="customLoginBtn googleLoginBtn">
-                                Google
-                              </button>
-                            </footer>
-                          {{/unless}} -->
                       </div>
                   </div>
               </div>
