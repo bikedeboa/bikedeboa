@@ -270,10 +270,10 @@
             </li> -->
 
             <li id="topbarLoginBtn" class="navbar-de-boa--item">
-              <a href="#" class="unstyled-link loginBtn">
+              <button class="ghost loginBtn">
                 <!-- <img src="/img/icon_login.svg"> -->
-                Login/Cadastro
-              </a>
+                login/cadastro
+              </button>
             </li>
 
         </nav>
@@ -453,16 +453,15 @@
 
         <aside id="filter-menu" class="js-side-nav side-nav side-nav-inverted side-nav-fixed">
           <nav class="js-side-nav-container side-nav__container">
-            <button id="clear-filters-btn" class="link-button">
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-
             <button class="js-menu-hide side-nav__hide">
-              <span class="glyphicon glyphicon-ok"></span>
+              Feito
             </button> 
             
             <header class="side-nav__header">
-              <h2>Filtros</h2>
+              <h2>
+                Filtros
+              </h2>
+              <button id="clear-filters-btn" class="link-button">(limpar todos)</button>
 
               <!-- <div class="setting-checkbox-container">
                   <input type="checkbox" id="show-bike-layer">
@@ -563,11 +562,11 @@
               
             </div>
 
-            <footer>
+            <!-- <footer>
               <div id="filter-results-counter-container">
                 <span class="glyphicon glyphicon-chevron-left"></span> Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
               </div>
-            </footer>
+            </footer> -->
 
           </nav>
         </aside>
@@ -1249,11 +1248,15 @@
             <div class="vertical-alignment-helper">
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
-                      <div id="placeDetailsModalTemplatePlaceholder"></div>
+                      <div id="placeDetailsContent"></div> 
                     </div> 
                 </div>
             </div>
-        </div>
+        </div> 
+
+        <!-- <div id="placeDetailsPanel">
+          <div id="placeDetailsContent"></div>
+        </div> -->
 
         <!-- New Pin Modal -->
         <div data-keyboard="false" class="modal fade" id="newPlaceModal" tabindex="-1">
@@ -1397,7 +1400,7 @@
         </div>
 
         <!-- View Details Modal -->
-        <script id="placeDetailsModalTemplate" type="text/x-handlebars-template">
+        <script id="placeDetailsContentTemplate" type="text/x-handlebars-template">
           {{#if photoUrl}}
             <section class="photo-container hasImage loading {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
               <a href="#" class="unstyled-link" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}"/></a>
