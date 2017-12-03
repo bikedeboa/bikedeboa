@@ -245,7 +245,11 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template // 
     ////////////////////////////////
-    $('#placeDetailsContent').html(templates.placeDetailsContentTemplate(templateData));
+    if (_isMobile) { 
+      $('#placeDetailsPlaceholder_mobile').html(templates.placeDetailsContentTemplate(templateData));
+    } else {
+      $('#placeDetailsPlaceholder_desktop').html(templates.placeDetailsContentTemplate(templateData));
+    }
 
     if (m.average) {
       $('input[name=placeDetails_rating]').val(['' + Math.round(m.average)]);
@@ -326,19 +330,19 @@ $(() => {
         .modal('show');
     } else { 
       // Just fade new detailed content in
-      // $('#placeDetailsContent .photo-container, #placeDetailsContent .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-      $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      // $('.placeDetailsContent .photo-container, .placeDetailsContent .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
+      $('.placeDetailsContent .tagsContainer, .placeDetailsContent .description').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
     }
 
     // Tooltips
     if(!_isTouchDevice) {
-      $('#placeDetailsContent .full-star').tooltip({
+      $('.placeDetailsContent .full-star').tooltip({
         toggle: 'tooltip',
         placement: 'bottom', 
         'delay': {'show': 0, 'hide': 100}
       });
     }
-    initHelpTooltip('#placeDetailsContent .help-tooltip-trigger');
+    initHelpTooltip('.placeDetailsContent .help-tooltip-trigger');
 
     $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
       ga('send', 'event', 'Misc', 'tooltip - pin details public access');
@@ -1275,7 +1279,7 @@ $(() => {
       }
     });
 
-    let placeDetailsContentTemplate = $('#placeDetailsContentTemplate').html();
+    let placeDetailsContentTemplate = $('#placeDetailsContentTemplate').html(); 
     if (placeDetailsContentTemplate) {
       templates.placeDetailsContentTemplate = Handlebars.compile(placeDetailsContentTemplate);
     }
@@ -1362,7 +1366,7 @@ $(() => {
         $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
       }
 
-      // $('#placeDetailsContent').modal('hide');
+      // $('.placeDetailsContent').modal('hide');
     } else {
       setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
@@ -2055,7 +2059,7 @@ $(() => {
       if (_isMobile) {
         $('#map, #addPlace').addClass('optimized-hidden');
       } else {
-        hideUI();
+        // hideUI();
 
         if ($(e.currentTarget).hasClass('clean-modal')) {
           $('body').addClass('clean-modal-open');
