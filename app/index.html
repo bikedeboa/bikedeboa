@@ -1425,17 +1425,17 @@
             </button>
 
             {{#if canModify}}
-              <button id="editPlaceBtn" class="toolbar-item">
+              <button class="editPlaceBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Editar</label>
               </button>
 
-              <button id="deletePlaceBtn" class="toolbar-item">
+              <button class="deletePlaceBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
                 <label>Excluir</label>
               </button>
             {{else}}
-              <button id="createRevisionBtn" class="toolbar-item">
+              <button class="createRevisionBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Sugerir correção</label>
               </button>
@@ -1470,7 +1470,12 @@
                     {{#if isAdmin}}
                       <div>
                         <div class="icon-label">
-                            <small>Sem informação sobre cobertura</small>
+                            Sem informação sobre cobertura
+                            {{#if canModify}}
+                              <button class="editPlaceBtn link-button">
+                                (editar)
+                              </button>
+                            {{/if}}
                         </div>
                       </div>
                     {{/if}}
@@ -1500,7 +1505,12 @@
                     {{#if isAdmin}}
                       <div>
                         <div class="icon-label">
-                          <small>Sem informação sobre restrição de acesso</small>
+                          Sem informação sobre restrição de acesso
+                          {{#if canModify}}
+                            <button class="editPlaceBtn link-button">
+                              (editar)
+                            </button>
+                          {{/if}}
                         </div>
                       </div>
                     {{/if}}
@@ -1565,12 +1575,17 @@
                         </div>
                     </div>
                   {{else}}
-                    <div>
-                      {{#if isAdmin}}
-                        <small>Sem informação sobre tipo de bicicletário</small>
-                      {{/if}}
-                    </div>
-                  {{/if}}
+                    {{#if isAdmin}}
+                      <div class="icon-label"> 
+                        Sem informação sobre tipo de bicicletário
+                        {{#if canModify}}
+                          <button class="editPlaceBtn link-button">
+                            (editar)
+                          </button>
+                        {{/if}}
+                      </div>
+                    {{/if}}
+                  {{/if}} 
               </section>
 
               <hr>

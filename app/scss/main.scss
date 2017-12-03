@@ -531,8 +531,8 @@ a.unstyled-link {
 .link-button {
     border: none;
     background: transparent;
-    min-height: 42px;
     min-width: 42px;
+    // min-height: 42px;
 
     &:focus,
     &:active,
