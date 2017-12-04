@@ -1754,14 +1754,15 @@ $(() => {
       // Open Graph Picture
       if (openedMarker.photo) {
         $('meta[name="og:image"]').attr('content', openedMarker.photo);
-      }
+      } 
 
-      // Custom Open Graph Description
+      // Dynamic description (Open Graph and others)
       if (openedMarker.address) {
-        let desc = 'Informações e avaliações deste bicicletário na ';
+        let desc = 'Veja detalhes e avaliações sobre este bicicletário na ';
         desc += openedMarker.address;
 
-        $('meta[name="og:title"]').attr('content', desc); 
+        $('meta[property="og:description"]').attr('content', desc); 
+        $('meta[name="description"]').attr('content', desc); 
       }
     }
   }
