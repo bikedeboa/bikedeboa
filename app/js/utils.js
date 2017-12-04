@@ -63,7 +63,7 @@ window.createdAtToDaysAgo = createdAtStr => {
   }
   
   return ret;
-}
+};
 
 window.toggleSpinner = () => {
   $('#spinnerOverlay').fadeToggle();

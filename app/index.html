@@ -1673,7 +1673,9 @@
                     {{#if author}}
                       <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
                     {{else}}
-                      <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
+                      {{#if createdTimeAgo}}
+                        <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
+                      {{/if}}
                     {{/if}}
                   </li>
 

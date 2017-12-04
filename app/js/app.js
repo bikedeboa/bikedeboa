@@ -127,7 +127,10 @@ $(() => {
     templateData.description = m.description;
     templateData.author = m.User && m.User.fullname;
     templateData.views = m.views;
-    templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+
+    if (m.createdAt) {
+      templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+    }
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -2253,7 +2256,7 @@ $(() => {
         r.color = getPinColorFromAverage(r.rating);
       }
 
-      templateData.reviews.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
+      templateData.reviews.sort( (a,b) => a.createdAt < b.createdAt );
     }
 
     // Places list
@@ -2268,7 +2271,7 @@ $(() => {
         }
       }
       
-      templateData.places.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
+      templateData.places.sort( (a,b) => a.createdAt < b.createdAt );
     }
 
     ////////////////////////////////
