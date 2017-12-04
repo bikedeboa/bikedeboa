@@ -2325,6 +2325,11 @@ $(() => {
   function openAboutModal() {
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+
+    if (markers) {
+      $('#about-stats--nplaces').text(markers.length);
+      // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    }
   }
 
   function handleRouting(initialRouting = false) { 

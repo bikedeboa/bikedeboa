@@ -1011,17 +1011,18 @@ a.unstyled-link {
 }
 
 .big-numbers {
-  display: flex;
+  display: flex !important;
   justify-content: space-around;
+  flex-wrap: wrap;
 
   .big-numbers--col {
       text-align: center;
-      line-height: 30px;
       padding: $GRID_SPACE;
   }
 
   .big-numbers--number {
       font-size: 50px;
+      line-height: 50px;
       font-weight: bold;
   }
 
@@ -1147,6 +1148,10 @@ a.unstyled-link {
         margin-top: .5em;
       }
     }
+  }
+
+  .big-numbers {
+    margin: 2em 0;
   }
 
   .social-link {
@@ -3649,6 +3654,10 @@ body.modal-open {
       font-size: $leading*1.618;
       margin-top: 2em;
       margin-bottom: .5em;
+    }
+
+    .social-link {
+      font-size: 12px;
     }
   }
 
