@@ -740,7 +740,7 @@ $(() => {
               url: iconType, // url
               scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
               origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H - MARKER_H/10)*scale), // anchor
             };
 
             m.iconMini = {
