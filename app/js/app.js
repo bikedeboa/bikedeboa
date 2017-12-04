@@ -740,7 +740,7 @@ $(() => {
               url: iconType, // url
               scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
               origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H - MARKER_H/10)*scale), // anchor
             };
 
             m.iconMini = {
@@ -2256,8 +2256,8 @@ $(() => {
         r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
-
-      templateData.reviews = templateData.reviews.sort( (a,b) => a.createdAt < b.createdAt );
+ 
+      templateData.reviews = templateData.reviews.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     // Places list
@@ -2272,7 +2272,7 @@ $(() => {
         }
       }
       
-      templateData.places = templateData.places.sort( (a,b) => a.createdAt < b.createdAt );
+      templateData.places = templateData.places.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     ////////////////////////////////
