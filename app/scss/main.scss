@@ -243,7 +243,26 @@ p {
 }
 
 #search-overlay {
-  background: rgba(255,255,255,0.8); 
+  background: $paleWhite;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 60px;
+  padding-left: 12px;
+
+  transition: opacity 0.5s ease-in-out;   
+
+  // opacity: 0;
+  // visibility: hidden;
+  // user-select: none;
+
+  &.showThis {
+    opacity: 1;
+    visibility: visible;
+    user-select: auto;
+  }
 }
 
 .message-overlay {
@@ -1709,6 +1728,10 @@ body.search-mode {
 
   //   transition: opacity 0.2s ease;
   // }
+
+  #userBtn { 
+    display: none;
+  }
 
   #locationSearch {
     box-shadow: none;
