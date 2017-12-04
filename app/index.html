@@ -170,16 +170,19 @@
           </div>
         </div> 
 
-        <div id="search-overlay" class="message-overlay">
-          <div class="message-overlay-content">
-            <!-- <div class="message-overlay-label"> 
+        <!-- <div id="search-overlay" class="message-overlay"> -->
+        <div id="search-overlay">
+          <div id="searchOverlayContentPlaceholder"></div>
+
+          <!-- <div class="message-overlay-content">
+            <div class="message-overlay-label"> 
               Digite um termo de busca
             </div>
 
             <button id="reloadBtn" class="btn">
               Recarregar
-            </button> -->
-          </div>
+            </button>
+          </div> -->
         </div>
 
         <nav class="navbar-de-boa cool-hide">
@@ -1737,63 +1740,21 @@
           </div>
         </script>
 
-        <!-- View Details Empty Shell Modal -->
-        <script id="placeDetailsModalLoadingTemplate" type="text/x-handlebars-template">
-            <div class="photo-container skeleton-box">
-            </div>
-
-            <div class="modal-body">
-                <div id="placeDetails_heading" class="title">
-                    <h1 class="skeleton-box"></h1>
-                    <p class="address">
-                        <span class="skeleton-box"></span>
-                    </p>
-                    <div class="minimap"></div>
-                </div>
-
-                <div class="review">
-                    <fieldset id="ratingDisplay" class="rating disabled">
-                        <input disabled type="radio" name="placeDetails_rating" value="5" />
-                        <label class="full-star"></label>
-
-                        <input disabled type="radio" name="placeDetails_rating" value="4" />
-                        <label class="full-star"></label>
-
-                        <input disabled type="radio" name="placeDetails_rating" value="3" />
-                        <label class="full-star"></label>
-
-                        <input disabled type="radio" name="placeDetails_rating" value="2" />
-                        <label class="full-star"></label>
-
-                        <input disabled type="radio" name="placeDetails_rating" value="1" />
-                        <label class="full-star"></label>
-                    </fieldset>
-                </div>
-
-                <div class="info clearfix">
-                    <div class="col-half">
-                        <span class="skeleton-box"></span>
-                        <br>
-                        <div class="icon-label skeleton-box"></div>
-                    </div>
-                    <div class="col-half">
-                        <span class="skeleton-box"></span>
-                        <br>
-                        <div class="icon-label skeleton-box"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- <div class="modal-footer">
-                <div class="col-half">
-                    <a class="btn skeleton-box btn-footer"></a>
-                </div>
-                <div class="col-half">
-                    <a class="btn skeleton-box btn-footer"></a>
-                </div>
-            </div> -->
+        <!-- Content that shows in Search mode, like recent searches, ... -->
+        <script id="searchOverlayTemplate" type="text/x-handlebars-template">
+          <h2>Buscas Recentes</h2>
+          <ul class="recent-searches">
+            {{#each recentSearches}}
+              <li>
+                <button data-term="{{{this}}}">
+                  <span class="glyphicon glyphicon-time"></span> {{{this}}}
+                </button>
+              </li>
+            {{/each}}
+          </ul>
         </script>
 
+        <!-- Dynamic infoboxes that previews the content of bike parkings -->
         <script id="infoWindowTemplate" type="text/x-handlebars-template">
           <span class="infobox--arrow glyphicon glyphicon-triangle-top"></span>
 

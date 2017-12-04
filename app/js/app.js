@@ -1278,21 +1278,18 @@ $(() => {
       }
     });
 
-    let placeDetailsContentTemplate = $('#placeDetailsContentTemplate').html();
-    if (placeDetailsContentTemplate) {
-      templates.placeDetailsContentTemplate = Handlebars.compile(placeDetailsContentTemplate);
-    }
-
-    let infoWindowTemplate = $('#infoWindowTemplate').html();
-    if (infoWindowTemplate) {
-      templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
-    }
-
-    let contributionsModalTemplate = $('#contributionsModalTemplate').html();
-    if (contributionsModalTemplate) {
-      templates.contributionsModalTemplate = Handlebars.compile(contributionsModalTemplate);
-    }
-
+    // Pre-compile all Handlebars templates
+    [
+      'placeDetailsContentTemplate',
+      'infoWindowTemplate',
+      'contributionsModalTemplate',
+      'searchOverlayTemplate',
+    ].forEach( templateName => {
+      let templateContent = $(`#${templateName}`).html();
+      if (templateContent) {
+        templates[templateName] = Handlebars.compile(templateContent);
+      }
+    });
   }
 
   function validateNewPlaceForm() {
@@ -1727,6 +1724,24 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
+    let templateData = {};
+    templateData.recentSearches = [
+      'Porto Alegre',
+      'Butia'
+    ];
+
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
+    $('#searchOverlayContentPlaceholder').html(templates.searchOverlayTemplate(templateData));
+
+    $('#search-overlay .recent-searches button').off('click').on('click', e => {
+      const $target = $(e.currentTarget);
+      const term = $target.data('term');
+
+      $('#locationQueryInput').val(term).focus();
+    });
+
     $('body').addClass('search-mode');
     $('#search-overlay').addClass('showThis');
   }
