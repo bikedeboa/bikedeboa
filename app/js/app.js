@@ -2257,7 +2257,7 @@ $(() => {
         r.color = getPinColorFromAverage(r.rating);
       }
 
-      templateData.reviews.sort( (a,b) => a.createdAt < b.createdAt );
+      templateData.reviews = templateData.reviews.sort( (a,b) => a.createdAt < b.createdAt );
     }
 
     // Places list
@@ -2272,7 +2272,7 @@ $(() => {
         }
       }
       
-      templateData.places.sort( (a,b) => a.createdAt < b.createdAt );
+      templateData.places = templateData.places.sort( (a,b) => a.createdAt < b.createdAt );
     }
 
     ////////////////////////////////
