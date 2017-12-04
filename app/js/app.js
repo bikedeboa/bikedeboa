@@ -2256,8 +2256,8 @@ $(() => {
         r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
-
-      templateData.reviews = templateData.reviews.sort( (a,b) => a.createdAt < b.createdAt );
+ 
+      templateData.reviews = templateData.reviews.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     // Places list
@@ -2272,7 +2272,7 @@ $(() => {
         }
       }
       
-      templateData.places = templateData.places.sort( (a,b) => a.createdAt < b.createdAt );
+      templateData.places = templateData.places.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     ////////////////////////////////
