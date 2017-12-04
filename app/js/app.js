@@ -127,7 +127,10 @@ $(() => {
     templateData.description = m.description;
     templateData.author = m.User && m.User.fullname;
     templateData.views = m.views;
-    templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+
+    if (m.createdAt) {
+      templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+    }
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -273,9 +276,9 @@ $(() => {
     $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('#editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
-    $('#deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
-    $('#createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
+    $('.deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
+    $('.createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
@@ -1751,14 +1754,15 @@ $(() => {
       // Open Graph Picture
       if (openedMarker.photo) {
         $('meta[name="og:image"]').attr('content', openedMarker.photo);
-      }
+      } 
 
-      // Custom Open Graph Description
+      // Dynamic description (Open Graph and others)
       if (openedMarker.address) {
-        let desc = 'Informações e avaliações deste bicicletário na ';
+        let desc = 'Veja detalhes e avaliações sobre este bicicletário na ';
         desc += openedMarker.address;
 
-        $('meta[name="og:title"]').attr('content', desc); 
+        $('meta[property="og:description"]').attr('content', desc); 
+        $('meta[name="description"]').attr('content', desc); 
       }
     }
   }
@@ -2253,7 +2257,7 @@ $(() => {
         r.color = getPinColorFromAverage(r.rating);
       }
 
-      templateData.reviews.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
+      templateData.reviews.sort( (a,b) => a.createdAt < b.createdAt );
     }
 
     // Places list
@@ -2268,7 +2272,7 @@ $(() => {
         }
       }
       
-      templateData.places.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
+      templateData.places.sort( (a,b) => a.createdAt < b.createdAt );
     }
 
     ////////////////////////////////
@@ -2628,6 +2632,7 @@ $(() => {
         // UI
         $('#topbarLoginBtn').css('visibility','hidden'); 
         $('#userBtn').show();
+        $('#userBtn .userBtn--user-name').text(profile.first_name);
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
@@ -2644,7 +2649,7 @@ $(() => {
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(profile);
+        BDB.User.login(profile); 
 
         document.dispatchEvent(new CustomEvent('bikedeboa.login'));
       }).catch( error => {
@@ -2660,10 +2665,13 @@ $(() => {
     BDB.User.logout();
 
     // UI
-    $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
+    $('#userBtn').hide();
+    $('#topbarLoginBtn').css('visibility','visible');
+    // $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
     $('#userBtn').removeClass('admin');
+    $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();
-    $('.loginBtn').show();
+    $('.loginBtn').show(); 
     $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));

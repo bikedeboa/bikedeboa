@@ -6,7 +6,7 @@
         <title>bike de boa</title>
         <meta property="og:title" content="bike de boa"/>
       
-        <meta name="description" content="Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais.">
+        <meta name="description" content="Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais."> 
         
         <meta property="og:description" content="Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais." />
 
@@ -288,8 +288,9 @@
         </div>
 
         <div id="userBtn" class="dropdown cool-hide">
-          <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="avatar" src="/img/icon_user_big.svg">
+            <span class="userBtn--user-name"></span>
           </button>
 
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
@@ -323,11 +324,11 @@
 
             <div class="welcome-message--content">
               <p>
-                Oie! Este é um mapa colaborativo de lugares pra prender a bicicleta. As cores representam as avaliações que as pessoas fizeram. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando pontos na sua cidade!
+                Oie! Este é um mapa colaborativo de lugares pra prender a bicicleta, onde as cores representam o quão seguro o local é. Contribua com a cultura de bicicleta e ajude avaliando os lugares e adicionando pontos na sua cidade!
               </p>
 
               <p>
-                O bike de boa é feito com <span class="glyphicon glyphicon-heart"></span> por voluntários e sempre será totalmente gratuito e colaborativo.
+                O bike de boa é feito com <span class="glyphicon glyphicon-heart"></span> por ciclistas para ciclistas e sempre será totalmente gratuito e aberto.
               </p>
             </div>
             
@@ -1424,20 +1425,17 @@
             </button>
 
             {{#if canModify}}
-              <button id="editPlaceBtn" class="toolbar-item">
+              <button class="editPlaceBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Editar</label>
               </button>
 
-              <button id="deletePlaceBtn" class="toolbar-item">
+              <button class="deletePlaceBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
                 <label>Excluir</label>
               </button>
-              <!-- {{#unless isAdmin}}
-                <div class="footer-toolbar--label">Você pode editar este bicicletário até 24h depois de criá-lo.</div>
-              {{/unless}} -->
             {{else}}
-              <button id="createRevisionBtn" class="toolbar-item">
+              <button class="createRevisionBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
                 <label>Sugerir correção</label>
               </button>
@@ -1472,7 +1470,12 @@
                     {{#if isAdmin}}
                       <div>
                         <div class="icon-label">
-                            <small>Sem informação sobre cobertura</small>
+                            Sem informação sobre cobertura
+                            {{#if canModify}}
+                              <button class="editPlaceBtn link-button">
+                                (editar)
+                              </button>
+                            {{/if}}
                         </div>
                       </div>
                     {{/if}}
@@ -1502,7 +1505,12 @@
                     {{#if isAdmin}}
                       <div>
                         <div class="icon-label">
-                          <small>Sem informação sobre restrição de acesso</small>
+                          Sem informação sobre restrição de acesso
+                          {{#if canModify}}
+                            <button class="editPlaceBtn link-button">
+                              (editar)
+                            </button>
+                          {{/if}}
                         </div>
                       </div>
                     {{/if}}
@@ -1567,12 +1575,17 @@
                         </div>
                     </div>
                   {{else}}
-                    <div>
-                      {{#if isAdmin}}
-                        <small>Sem informação sobre tipo de bicicletário</small>
-                      {{/if}}
-                    </div>
-                  {{/if}}
+                    {{#if isAdmin}}
+                      <div class="icon-label"> 
+                        Sem informação sobre tipo de bicicletário
+                        {{#if canModify}}
+                          <button class="editPlaceBtn link-button">
+                            (editar)
+                          </button>
+                        {{/if}}
+                      </div>
+                    {{/if}}
+                  {{/if}} 
               </section>
 
               <hr>
@@ -1655,12 +1668,16 @@
 
               <section class="description">
                 <ul class="details-list">
-                  {{#if author}}
-                    <li>
-                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                  <li>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                    {{#if author}}
                       <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
-                    </li>
-                  {{/if}}
+                    {{else}}
+                      {{#if createdTimeAgo}}
+                        <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
+                      {{/if}}
+                    {{/if}}
+                  </li>
 
                   {{#if description}}
                     <li>
@@ -1854,7 +1871,7 @@
                               </h2> 
                               {{#if isAdmin}}
                                 <p class="you-are-admin">
-                                  Uhul! Você é <b>admin</b>.
+                                  Uhul! Você é <b>admin</b> :D
                                 </p>
                               {{/if}}
                             {{/if}}
@@ -1902,7 +1919,7 @@
                                   <button class="go-to-place-btn" data-id="{{id}}">
                                     <span class="go-to-place-btn--title">{{text}}</span>
                                     <span class="go-to-place-btn--daysago">
-                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
+                                      <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}} · {{views}} visualizações
                                     </span> 
                                   </button>
                                 </li>
@@ -1912,26 +1929,6 @@
                             </ul>
 
                           </div>
-
-                          <!-- {{#unless profile}}
-                            <footer style="padding: 36px; background: #fafafa;">
-                              <p>
-                                Você está <b>deslogado</b>.
-                              </p>
-                              
-                              <p>
-                                Fazendo login você pode adicionar novos pontos no mapa e também salva todas contribuições que já fez.
-                              </p>
-                              
-                              <button class="customLoginBtn facebookLoginBtn">
-                                Facebook
-                              </button>
-
-                              <button class="customLoginBtn googleLoginBtn">
-                                Google
-                              </button>
-                            </footer>
-                          {{/unless}} -->
                       </div>
                   </div>
               </div>
