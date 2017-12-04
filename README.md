@@ -8,9 +8,7 @@ A (progressive) web app for colaboratively mapping and reviewing places to park 
 
 ## Contribute
 
-WE NEED HELP!
-
-We have dozens of cool things to do, from small bugfixes to great new features. Our web development tasks are all neatly organized on our [Trello Board](https://trello.com/b/C9HizZN0/bike-de-boa-dev-web) (sorry, portuguese only). Please let us know if you'd like to help us. Feel free to propose new stuff as well.
+We have dozens of cool things to do, from small bugfixes to great new features. Our web development tasks are all neatly organized on our [Trello Board](https://trello.com/b/C9HizZN0/bike-de-boa-dev-web) (sorry, Portuguese only). Please let us know if you'd like to help us. Feel free to propose new stuff as well.
 
 Contributing should be super easy if you have basic frontend skills. The web client was developed with very accessible and popular libraries and frameworks. Still, always feel free to reach to us if you have any questions. :)
 
@@ -28,6 +26,8 @@ This API data is licensed under [Creative Commons Attribution 4.0 International]
 
 Come say hello to us!
 
-Facebook: https://www.facebook.com/bikedeboaapp
-
 Email: bikedeboa@gmail.com
+
+Facebook: https://www.facebook.com/bikedeboaapp
+Instagram: https://www.instagram.com/bikedeboa/
+Medium: https://medium.com/bike-de-boa
