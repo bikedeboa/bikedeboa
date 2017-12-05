@@ -3207,7 +3207,7 @@ body.modal-open {
       // Initializes hidden
       display: none;  
 
-      position: absolute;
+      position: fixed;
       width: 100%;
       text-align: left; 
       // display: flex; 
