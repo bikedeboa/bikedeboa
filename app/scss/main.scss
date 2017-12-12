@@ -772,7 +772,7 @@ a.unstyled-link {
     // Desktop-only
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
       #clearLocationQueryBtn {
-        right: inherit;
+        right: auto;
         left: 0;
       }
     }
@@ -3015,7 +3015,7 @@ body.modal-open {
     right: 0;
     background: $green;
     color: white;
-    top: inherit;
+    top: auto;
 
     // Explanation on the reason for the string interpolation:
     //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
