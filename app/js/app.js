@@ -2327,9 +2327,16 @@ $(() => {
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
     if (markers) {
-      $('#about-stats--nplaces').text(markers.length);
+      $('#about-stats--places').data('countupto', markers.length);
       // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
     }
+
+    // $('[data-countupto]').each( function(i, val) {
+    //   new CountUp(this.id, 0, this.data('countupto')).start();
+    // });  
+    // new CountUp("about-stats--places", 0, $('#about-stats--places').data('countupto'), 0, 5).start();
+    // new CountUp("about-stats--reviews", 0, $('#about-stats--reviews').data('countupto'), 0, 5).start();
+    // new CountUp("about-stats--views", 0, $('#about-stats--views').data('countupto'), 0, 5).start();
   }
 
   function handleRouting(initialRouting = false) { 
@@ -2369,8 +2376,7 @@ $(() => {
       openGuideModal();
       break;
     case 'sobre':
-      $('#aboutModal').modal('show');
-      $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      openAboutModal();
       break;
     case 'sobre-nossos-dados':
       openDataModal();
