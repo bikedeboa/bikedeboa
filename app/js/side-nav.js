@@ -19,13 +19,12 @@ class SideNav {
   constructor (id, options) {
     this.id = id;
 
-    this.showButtonEls = document.querySelectorAll(`.js-menu-show-${id}`);
+    // this.showButtonEls = document.querySelectorAll(`.js-menu-show-${id}`);
     this.hideButtonEl = document.querySelector(`#${id} .js-menu-hide`);
     this.sideNavEl = document.querySelector(`#${id}`);
     this.sideNavContainerEl = document.querySelector(`#${id} .js-side-nav-container`);
     
-    if (!this.showButtonEls ||
-        !this.hideButtonEl ||
+    if (!this.hideButtonEl ||
         !this.sideNavEl ||
         !this.sideNavContainerEl) {
       throw Error('Something went wrong when initializing sidenav ' + id);
@@ -73,7 +72,7 @@ class SideNav {
   }
 
   addEventListeners () {
-    this.showButtonEls.forEach( i => i.addEventListener('click', this.show) );
+    // this.showButtonEls.forEach( i => i.addEventListener('click', this.show) );
     this.hideButtonEl.addEventListener('click', this._hide);
     if (!this.options.fixed) {
       this.sideNavEl.addEventListener('click', this._hide);
