@@ -791,7 +791,7 @@ a.unstyled-link {
     // Desktop-only
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
       #clearLocationQueryBtn {
-        right: inherit;
+        right: auto;
         left: 0;
       }
     }
@@ -1030,17 +1030,18 @@ a.unstyled-link {
 }
 
 .big-numbers {
-  display: flex;
+  display: flex !important;
   justify-content: space-around;
+  flex-wrap: wrap;
 
   .big-numbers--col {
       text-align: center;
-      line-height: 30px;
       padding: $GRID_SPACE;
   }
 
   .big-numbers--number {
       font-size: 50px;
+      line-height: 50px;
       font-weight: bold;
   }
 
@@ -1166,6 +1167,10 @@ a.unstyled-link {
         margin-top: .5em;
       }
     }
+  }
+
+  .big-numbers {
+    margin: 2em 0;
   }
 
   .social-link {
@@ -3033,7 +3038,7 @@ body.modal-open {
     right: 0;
     background: $green;
     color: white;
-    top: inherit;
+    top: auto;
 
     // Explanation on the reason for the string interpolation:
     //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
@@ -3225,7 +3230,7 @@ body.modal-open {
       // Initializes hidden
       display: none;  
 
-      position: absolute;
+      position: fixed;
       width: 100%;
       text-align: left; 
       // display: flex; 
@@ -3672,6 +3677,10 @@ body.modal-open {
       font-size: $leading*1.618;
       margin-top: 2em;
       margin-bottom: .5em;
+    }
+
+    .social-link {
+      font-size: 12px;
     }
   }
 

@@ -51,14 +51,14 @@ if ('serviceWorker' in navigator) {
                 // It's the perfect time to display a "Content is cached for offline use." message.
                 console.log('[Service Worker] Content is now available offline!');
 
-                // if (window.toastr) {
+                // if (window.toastr) { 
                 //   toastr['success']('A partir de agora você pode explorar os bicicletários mesmo sem Internet.', 'Webapp salvo offline');
                 // }
               }
               break;
 
             case 'redundant':
-              console.error('The installing service worker became redundant.');
+              console.error('[Service Worker] The installing service worker became redundant.');
               break;
           }
         };

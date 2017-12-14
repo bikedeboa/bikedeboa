@@ -740,7 +740,7 @@ $(() => {
               url: iconType, // url
               scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
               origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H - MARKER_H/10)*scale), // anchor
             };
 
             m.iconMini = {
@@ -1769,14 +1769,15 @@ $(() => {
       // Open Graph Picture
       if (openedMarker.photo) {
         $('meta[name="og:image"]').attr('content', openedMarker.photo);
-      }
+      } 
 
-      // Custom Open Graph Description
+      // Dynamic description (Open Graph and others)
       if (openedMarker.address) {
-        let desc = 'Informações e avaliações deste bicicletário na ';
+        let desc = 'Veja detalhes e avaliações sobre este bicicletário na ';
         desc += openedMarker.address;
 
-        $('meta[name="og:title"]').attr('content', desc); 
+        $('meta[property="og:description"]').attr('content', desc); 
+        $('meta[name="description"]').attr('content', desc); 
       }
     }
   }
@@ -2270,8 +2271,8 @@ $(() => {
         r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
-
-      templateData.reviews.sort( (a,b) => a.createdAt < b.createdAt );
+ 
+      templateData.reviews = templateData.reviews.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     // Places list
@@ -2286,7 +2287,7 @@ $(() => {
         }
       }
       
-      templateData.places.sort( (a,b) => a.createdAt < b.createdAt );
+      templateData.places = templateData.places.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     ////////////////////////////////
@@ -2339,6 +2340,18 @@ $(() => {
   function openAboutModal() {
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+
+    if (markers) {
+      $('#about-stats--places').data('countupto', markers.length);
+      // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    }
+
+    // $('[data-countupto]').each( function(i, val) {
+    //   new CountUp(this.id, 0, this.data('countupto')).start();
+    // });  
+    // new CountUp("about-stats--places", 0, $('#about-stats--places').data('countupto'), 0, 5).start();
+    // new CountUp("about-stats--reviews", 0, $('#about-stats--reviews').data('countupto'), 0, 5).start();
+    // new CountUp("about-stats--views", 0, $('#about-stats--views').data('countupto'), 0, 5).start();
   }
 
   function handleRouting(initialRouting = false) { 
@@ -2378,8 +2391,7 @@ $(() => {
       openGuideModal();
       break;
     case 'sobre':
-      $('#aboutModal').modal('show');
-      $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      openAboutModal();
       break;
     case 'sobre-nossos-dados':
       openDataModal();
