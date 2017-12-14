@@ -1168,7 +1168,6 @@ $(() => {
       anchorPoint: new google.maps.Point(0, -29)
     });
 
-
     autocomplete.addListener('place_changed', () => {
       // infowindow.close();
       _searchResultMarker.setVisible(false);
@@ -1724,11 +1723,23 @@ $(() => {
   }
 
   function enterLocationSearchMode() {
-    let templateData = {};
-    templateData.recentSearches = [
-      'Porto Alegre',
-      'Butia'
+    window._recentSearches = [
+      { 
+        name: 'Porto Alegre',
+        pos: {
+          lat: -30.0346, lng: -51.2177
+        }
+      },
+      {
+        name: 'Butia',
+        pos: {
+          lat: -30.123382156085338, lng: -51.963194199999975
+        }
+      }
     ];
+    
+    let templateData = {};
+    templateData.recentSearches = _recentSearches;
 
     ////////////////////////////////
     // Render handlebars template //
@@ -1737,18 +1748,32 @@ $(() => {
 
     $('#search-overlay .recent-searches button').off('click').on('click', e => {
       const $target = $(e.currentTarget);
-      const term = $target.data('term');
+      const id = parseInt($target.data('recentsearchid'));
+      const item = _recentSearches[id];
 
-      $('#locationQueryInput').val(term).focus();
+      $('#locationQueryInput').val(item.name);
+
+      map.panTo(item.pos);
+      map.setZoom(17); // Why 17? Because it looks good.  
+
+      exitLocationSearchMode();
+
+      // $('#locationQueryInput').val(term).focus();
     });
 
-    $('body').addClass('search-mode');
+    $('body').addClass('search-mode'); 
     $('#search-overlay').addClass('showThis');
+    $('.hamburger-button').addClass('back-mode');
+
+    $('.hamburger-button.back-mode').one('click', () => {
+      exitLocationSearchMode();
+    });
   }
 
   function exitLocationSearchMode() {
     $('body').removeClass('search-mode');
     $('#search-overlay').removeClass('showThis');
+    $('.hamburger-button').removeClass('back-mode');
   }
 
   function setPageTitle(text) { 
@@ -1833,11 +1858,15 @@ $(() => {
       goHome();
     });
 
-    $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
+    $('.hamburger-button').on('click', e => {
+      const $target = $(e.currentTarget);
+      if ($target.hasClass('back-mode')) { 
+        return;
+      }
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
       setView('', '/nav');
-    }));
+    });
     
     $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
@@ -2112,11 +2141,11 @@ $(() => {
         enterLocationSearchMode();
       }
     });
-    $('#locationQueryInput').on('blur', e => {
-      if (_isMobile) {
-        exitLocationSearchMode();
-      }
-    });
+    // $('#locationQueryInput').on('blur', e => {
+    //   if (_isMobile) {
+    //     exitLocationSearchMode();
+    //   }
+    // });
 
     // Location Search
     $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
@@ -2400,7 +2429,8 @@ $(() => {
       hideAll();
       openContributionsModal();
       break;
-    // case 'nav':
+    case 'nav':
+      _hamburgerMenu.show();
     // case 'filtros':
     //   hideAll();
     default:

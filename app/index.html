@@ -154,7 +154,7 @@
           </div>
         </div>
 
-        <button id="filterBtn" type="button" title="Filtrar bicicletários" class="js-menu-show-filter-menu caption-tooltip">
+        <button id="filterBtn" type="button" title="Filtrar bicicletários" class="fmenu-show-filter-menu caption-tooltip">
             <img alt="" src="/img/icon_filter.svg" class="icon"/>
             Filtrar
             <span id="active-filters-counter" class="badge"></span>
@@ -344,9 +344,7 @@
           </div>
         </div>
 
-        <button class="js-menu-show-hamburger-menu header__menu-toggle">
-          <img src="/img/icon_hamburger.svg">
-        </button>
+        <button class="hamburger-button js-menu-show-hamburger-menu"></button>
 
         <div class="confetti-placeholder"></div>
 
@@ -1762,12 +1760,12 @@
 
         <!-- Content that shows in Search mode, like recent searches, ... -->
         <script id="searchOverlayTemplate" type="text/x-handlebars-template">
-          <h2>Buscas Recentes</h2>
+          <!-- <h2>Buscas Recentes</h2> -->
           <ul class="recent-searches">
             {{#each recentSearches}}
               <li>
-                <button data-term="{{{this}}}">
-                  <span class="glyphicon glyphicon-time"></span> {{{this}}}
+                <button data-recentsearchid="{{@index}}">
+                  <span class="glyphicon glyphicon-time"></span> {{{this.name}}}
                 </button>
               </li>
             {{/each}}
