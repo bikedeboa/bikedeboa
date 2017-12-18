@@ -25,6 +25,8 @@ const swPrecache = require('sw-precache');
 const htmlmin = require('gulp-htmlmin');
 const environments = require('gulp-environments');
 const replace = require('gulp-replace');
+const server = require('gulp-develop-server');
+const argv = require('yargs').argv;
 
 const BOWER_PATH = './bower_components';
 const DEST_PATH =  'dist';
@@ -227,12 +229,20 @@ gulp.task('images', () => {
     .pipe(gulp.dest('dist/img')); 
 });
 
-gulp.task('server', () => {
+/*gulp.task('server', () => {
   child.spawn('node', ['server.js']);
-  // var log = fs.createWriteStream('server.log', {flags: 'a'});
-  // server.stdout.pipe(log);
-  // server.stderr.pipe(log);
+});*/
+
+gulp.task('server', ()=>{
+  let port = (argv.port === undefined) ? 5000 : argv.port
+  server.listen({
+      path: 'server.js',
+      env : {
+        PORT:port
+      }
+    });
 });
+
 
 gulp.task('clean', del.bind(null, ['dist']));
  
@@ -243,5 +253,5 @@ gulp.task('build', () => {
 });
 
 gulp.task('default', () => {
-  runSequence('build', 'server', 'watch');
+  runSequence('build', 'watch', 'server');
 });
