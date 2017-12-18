@@ -5,6 +5,16 @@
 A (progressive) web app for colaboratively mapping and reviewing places to park your bike.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Development
+
+$ npm install
+
+$ gulp
+
+check your browser at http://localhost:5000 
+
+:)
+
 
 ## Contribute
 
