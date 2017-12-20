@@ -2316,7 +2316,12 @@ $(() => {
       updateFilters();
     });
   } 
- 
+  function openNotFoundModal(url){
+    toastr['warning']('Que pena, parece que o link não foi encontrado. <br/> Mas você pode encontrar um bicletário pertinho de você! <br/>Da uma olhada!');
+    ga('send', 'event', '404', 'Not Found', url);
+
+    setupGoogleMaps(); 
+  }
   function openDataModal() {
     $('#dataModal').modal('show');
     $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
@@ -2342,27 +2347,32 @@ $(() => {
   function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
-
+    
     switch (urlBreakdown[1]) {
     case 'b':
       if (urlBreakdown[2]) {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
-          _deeplinkMarker = BDB.Places.getMarkerById(id);
 
+          _deeplinkMarker = BDB.Places.getMarkerById(id);
           if (_deeplinkMarker) {
-            // Horrible, horrible fix for a race condition.
-            if (tags) {
+            // todo: put the modal on loader while waiting for the event trigger.
+            if (tags){
               routerOpenLocal(_deeplinkMarker);
-            } else {
-              // console.debug('not yet');
-              setTimeout(handleRouting, 300);
+            }else{
+              $(document).on('tags:loaded', function(){
+                routerOpenLocal(_deeplinkMarker);
+              });  
             }
+            
+          } else if(_deeplinkMarker === null) {
+            // 404 code. 
+            openNotFoundModal(match);
+            match = false;
           } else {
             _routePendingData = true;
           }
-
         }
       }
       break;
@@ -2385,15 +2395,18 @@ $(() => {
       hideAll();
       openContributionsModal();
       break;
-    // case 'nav':
-    // case 'filtros':
-    //   hideAll();
+    case 'nav':
+      break;
+    case '':
+      match = false; 
+      break;
     default:
+      openNotFoundModal(match);
       match = false; 
       break;
     }
-
     if (match && initialRouting) {
+
       _isDeeplink = true;
 
       // $('#map').addClass('mock-map');
@@ -2409,7 +2422,6 @@ $(() => {
         });
       }
     }
-
     return match;
   }
 
@@ -2423,7 +2435,6 @@ $(() => {
     } else {
       initialCenter = _portoAlegrePos;
     }
-
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialCenter,
       zoom: wasDeeplink ? 18 : 15,

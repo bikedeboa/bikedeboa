@@ -25,7 +25,7 @@ BDB.Places = {
       }
     }
 
-    console.error('Error on getMarkerById: ID is not valid');
+    //console.error('Error on getMarkerById: ID is not valid');
     return null;
   },
 
