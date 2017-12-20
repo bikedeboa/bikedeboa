@@ -2318,7 +2318,7 @@ $(() => {
   } 
   function openNotFoundModal(url){
     toastr['warning']('Que pena, parece que o link não foi encontrado. <br/> Mas você pode encontrar um bicletário pertinho de você! <br/>Da uma olhada!');
-    ga('send', 'event', '404', 'Not Found', url);
+    ga('send', 'event', 'Misc', 'router - 404 Not Found', url);
 
     setupGoogleMaps(); 
   }
