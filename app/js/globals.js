@@ -23,7 +23,7 @@ function getSimulatedDelay () {
 const N_MOCK_PICS = 14;
 
 const MARKER_W = 20*1.3;
-const MARKER_H = 24*1.3;
+const MARKER_H = 26*1.3;
 const MARKER_W_MINI = 10*1.3;
 const MARKER_H_MINI = 10*1.3;
 const CURRENT_LOCATION_MARKER_W = 20;

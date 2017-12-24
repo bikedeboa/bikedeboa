@@ -127,7 +127,10 @@ $(() => {
     // templateData.description = m.description;
     // templateData.author = m.User && m.User.fullname;
     // templateData.views = m.views;
-    // templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+
+    // if (m.createdAt) {
+    //   templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+    // }
 
     // Average
     templateData.pinColor = getPinColorFromAverage(m.average);
@@ -737,7 +740,7 @@ $(() => {
               url: iconType, // url
               scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
               origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H*scale)), // anchor
+              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H - MARKER_H/10)*scale), // anchor
             };
 
             m.iconMini = {
@@ -1759,14 +1762,15 @@ $(() => {
       // Open Graph Picture
       if (openedMarker.photo) {
         $('meta[name="og:image"]').attr('content', openedMarker.photo);
-      }
+      } 
 
-      // Custom Open Graph Description
+      // Dynamic description (Open Graph and others)
       if (openedMarker.address) {
-        let desc = 'Informações e avaliações deste bicicletário na ';
+        let desc = 'Veja detalhes e avaliações sobre este bicicletário na ';
         desc += openedMarker.address;
 
-        $('meta[name="og:title"]').attr('content', desc); 
+        $('meta[property="og:description"]').attr('content', desc); 
+        $('meta[name="description"]').attr('content', desc); 
       }
     }
   }
@@ -2260,8 +2264,8 @@ $(() => {
         r.rating = r.rating + '';
         r.color = getPinColorFromAverage(r.rating);
       }
-
-      templateData.reviews.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
+ 
+      templateData.reviews = templateData.reviews.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     // Places list
@@ -2276,7 +2280,7 @@ $(() => {
         }
       }
       
-      templateData.places.sort( (a,b) => { return a.createdTimeAgo - b.createdTimeAgo; } );
+      templateData.places = templateData.places.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
     }
 
     ////////////////////////////////
@@ -2320,7 +2324,12 @@ $(() => {
       updateFilters();
     });
   } 
- 
+  function openNotFoundModal(url){
+    toastr['warning']('Que pena, parece que o link não foi encontrado. <br/> Mas você pode encontrar um bicletário pertinho de você! <br/>Da uma olhada!');
+    ga('send', 'event', 'Misc', 'router - 404 Not Found', url);
+
+    setupGoogleMaps(); 
+  }
   function openDataModal() {
     $('#dataModal').modal('show');
     $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
@@ -2329,32 +2338,49 @@ $(() => {
   function openAboutModal() {
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+
+    if (markers) {
+      $('#about-stats--places').data('countupto', markers.length);
+      // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    }
+
+    // $('[data-countupto]').each( function(i, val) {
+    //   new CountUp(this.id, 0, this.data('countupto')).start();
+    // });  
+    // new CountUp("about-stats--places", 0, $('#about-stats--places').data('countupto'), 0, 5).start();
+    // new CountUp("about-stats--reviews", 0, $('#about-stats--reviews').data('countupto'), 0, 5).start();
+    // new CountUp("about-stats--views", 0, $('#about-stats--views').data('countupto'), 0, 5).start();
   }
 
   function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
-
+    
     switch (urlBreakdown[1]) {
     case 'b':
       if (urlBreakdown[2]) {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
-          _deeplinkMarker = BDB.Places.getMarkerById(id);
 
+          _deeplinkMarker = BDB.Places.getMarkerById(id);
           if (_deeplinkMarker) {
-            // Horrible, horrible fix for a race condition.
-            if (tags) {
+            // todo: put the modal on loader while waiting for the event trigger.
+            if (tags){
               routerOpenLocal(_deeplinkMarker);
-            } else {
-              // console.debug('not yet');
-              setTimeout(handleRouting, 300);
+            }else{
+              $(document).on('tags:loaded', function(){
+                routerOpenLocal(_deeplinkMarker);
+              });  
             }
+            
+          } else if(_deeplinkMarker === null) {
+            // 404 code. 
+            openNotFoundModal(match);
+            match = false;
           } else {
             _routePendingData = true;
           }
-
         }
       }
       break;
@@ -2368,8 +2394,7 @@ $(() => {
       openGuideModal();
       break;
     case 'sobre':
-      $('#aboutModal').modal('show');
-      $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+      openAboutModal();
       break;
     case 'sobre-nossos-dados':
       openDataModal();
@@ -2378,15 +2403,18 @@ $(() => {
       hideAll();
       openContributionsModal();
       break;
-    // case 'nav':
-    // case 'filtros':
-    //   hideAll();
+    case 'nav':
+      break;
+    case '':
+      match = false; 
+      break;
     default:
+      openNotFoundModal(match);
       match = false; 
       break;
     }
-
     if (match && initialRouting) {
+
       _isDeeplink = true;
 
       // $('#map').addClass('mock-map');
@@ -2402,7 +2430,6 @@ $(() => {
         });
       }
     }
-
     return match;
   }
 
@@ -2416,7 +2443,6 @@ $(() => {
     } else {
       initialCenter = _portoAlegrePos;
     }
-
     map = new google.maps.Map(document.getElementById('map'), {
       center: initialCenter,
       zoom: wasDeeplink ? 18 : 15,

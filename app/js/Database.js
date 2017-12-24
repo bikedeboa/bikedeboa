@@ -465,7 +465,7 @@ BDB.Database = {
           idToTag[tagObj.id] = tagObj.name;
           tagToId[tagObj.name] = tagObj.id;
         });
-
+        $(document).trigger('tags:loaded');
         if (successCB && typeof successCB === 'function') {
           successCB();
         }
