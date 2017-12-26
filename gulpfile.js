@@ -54,6 +54,7 @@ const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[facebookEnv];
 const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
 const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
+const GOOGLE_MAPS_ID = GOOGLE_API_KEY + (development() ? '&v=3.exp&use_slippy=true' : '');
 // const GOOGLE_MAPS_ID = development() ? 'AIzaSyD1dNf2iN1XS0wx17MTf2lPTbPg8UIJqfA' : 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 
