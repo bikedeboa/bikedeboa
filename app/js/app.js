@@ -2395,7 +2395,9 @@ $(() => {
       hideAll();
       openContributionsModal();
       break;
-    case 'nav':
+    case 'nav' : 
+    case 'novo' :
+    case 'filtros':
       break;
     case '':
       match = false; 
