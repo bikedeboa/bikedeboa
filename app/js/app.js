@@ -2397,6 +2397,7 @@ $(() => {
       break;
     case 'nav' : 
     case 'novo' :
+    case 'editar':
     case 'filtros':
       break;
     case '':
