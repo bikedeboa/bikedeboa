@@ -171,8 +171,6 @@ gulp.task('bower', function() {
 
   return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
 
-  .pipe(fileSizes({title: 'bower files', gzip: true, showFiles: true}))
-
   // grab vendor js files from bower_components, minify and push in DEST_PATH
   .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
@@ -182,7 +180,8 @@ gulp.task('bower', function() {
   // .pipe(rename({
   //   suffix: ".min"
   // }))
-  .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
+  .pipe(fileSizes({title: 'bower lib:', gzip: true, showFiles: true}))
+  // .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
   .pipe(gulp.dest(DEST_PATH + '/js/lib/'))
   .pipe(jsFilter.restore)
 

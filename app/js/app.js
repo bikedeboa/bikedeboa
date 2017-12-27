@@ -767,14 +767,8 @@ $(() => {
                   lat: parseFloat(m.lat),
                   lng: parseFloat(m.lng)
                 },
-                map: map,
+                // map: map,
                 icon: m.icon,
-                // title: m.text,
-                // label: labelStr && {
-                //   text: labelStr,
-                //   color: 'white',
-                //   fontFamily: 'Roboto'
-                // },
                 zIndex: i, //markers should be ordered by average
                 // opacity: 0.1 + (m.average/5).
               }));
@@ -877,6 +871,30 @@ $(() => {
 
     if (map) {
       _geolocationMarker.setZIndex(markers.length);
+
+      var clusterOptions = {
+        // imagePath: 'img/markerClusterer/m', 
+        maxZoom: 10, 
+        minimumClusterSize: 1,
+        styles: [
+          {
+            url: '/img/markerCluster.png', 
+            height: 40,
+            width: 40
+          },
+         {
+            url: '/img/markerCluster.png',
+            height: 60,
+            width: 60
+          },
+         {
+            url: '/img/markerCluster.png',
+            height: 80,
+            width: 80
+          }
+        ]
+      };
+      window._markerCluster = new MarkerClusterer(map, _gmarkers, clusterOptions);
     } 
   }
 
@@ -2455,6 +2473,7 @@ $(() => {
       zoomControlOptions: {
           position: google.maps.ControlPosition.RIGHT_CENTER
       },
+      // mapTypeId: 'terrain',
       // streetViewControl: _isDesktop,
       // streetViewControlOptions: {
       //     position: google.maps.ControlPosition.RIGHT_CENTER
