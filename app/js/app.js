@@ -127,6 +127,9 @@ $(() => {
     templateData.description = m.description;
     templateData.author = m.User && m.User.fullname;
     templateData.views = m.views;
+    templateData.reviews = m.reviews;
+    templateData.lat = m.lat;
+    templateData.lng = m.lng;
 
     if (m.createdAt) {
       templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
