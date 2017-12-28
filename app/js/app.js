@@ -21,7 +21,7 @@ $(() => {
       } else {
         pinColor = 'gray'; 
       }
-    } else {
+    } else { 
       pinColor = 'gray';
     }
 
@@ -767,14 +767,8 @@ $(() => {
                   lat: parseFloat(m.lat),
                   lng: parseFloat(m.lng)
                 },
-                map: map,
+                // map: map,
                 icon: m.icon,
-                // title: m.text,
-                // label: labelStr && {
-                //   text: labelStr,
-                //   color: 'white',
-                //   fontFamily: 'Roboto'
-                // },
                 zIndex: i, //markers should be ordered by average
                 // opacity: 0.1 + (m.average/5).
               }));
@@ -877,6 +871,30 @@ $(() => {
 
     if (map) {
       _geolocationMarker.setZIndex(markers.length);
+
+      var clusterOptions = {
+        // imagePath: 'img/markerClusterer/m', 
+        maxZoom: 10, 
+        minimumClusterSize: 1,
+        styles: [
+          {
+            url: '/img/markerCluster.png', 
+            height: 40,
+            width: 40
+          },
+         {
+            url: '/img/markerCluster.png',
+            height: 60,
+            width: 60
+          },
+         {
+            url: '/img/markerCluster.png',
+            height: 80,
+            width: 80
+          }
+        ]
+      };
+      window._markerCluster = new MarkerClusterer(map, _gmarkers, clusterOptions);
     } 
   }
 
@@ -2350,7 +2368,7 @@ $(() => {
     
     switch (urlBreakdown[1]) {
     case 'b':
-      if (urlBreakdown[2]) {
+      if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
@@ -2358,9 +2376,9 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
           if (_deeplinkMarker) {
             // todo: put the modal on loader while waiting for the event trigger.
-            if (tags){
+            if (tags) {
               routerOpenLocal(_deeplinkMarker);
-            }else{
+            } else {
               $(document).on('tags:loaded', function(){
                 routerOpenLocal(_deeplinkMarker);
               });  
@@ -2455,6 +2473,7 @@ $(() => {
       zoomControlOptions: {
           position: google.maps.ControlPosition.RIGHT_CENTER
       },
+      // mapTypeId: 'terrain',
       // streetViewControl: _isDesktop,
       // streetViewControlOptions: {
       //     position: google.maps.ControlPosition.RIGHT_CENTER
