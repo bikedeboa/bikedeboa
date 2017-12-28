@@ -21,7 +21,7 @@ $(() => {
       } else {
         pinColor = 'gray'; 
       }
-    } else {
+    } else { 
       pinColor = 'gray';
     }
 
@@ -2368,7 +2368,7 @@ $(() => {
     
     switch (urlBreakdown[1]) {
     case 'b':
-      if (urlBreakdown[2]) {
+      if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
@@ -2376,9 +2376,9 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
           if (_deeplinkMarker) {
             // todo: put the modal on loader while waiting for the event trigger.
-            if (tags){
+            if (tags) {
               routerOpenLocal(_deeplinkMarker);
-            }else{
+            } else {
               $(document).on('tags:loaded', function(){
                 routerOpenLocal(_deeplinkMarker);
               });  
