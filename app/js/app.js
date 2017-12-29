@@ -2531,17 +2531,6 @@ $(() => {
 
     setupAutocomplete();
 
-    // Bike Layer: google maps bycicling layer
-    window._bikeLayer = new google.maps.BicyclingLayer();
-    
-    // Bike layer: GeoJSON from #datapoa
-    map.data.map = null;
-    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
-    map.data.setStyle({
-      strokeColor: 'green',
-      strokeWeight: 5
-    });
-
     // map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
 
     // // Geolocalization button
@@ -2595,6 +2584,22 @@ $(() => {
     // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
     // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
     // $('#map').css('filter', 'none');
+  }
+
+  function showBikeLayer(map){
+    // Bike Layer: google maps bycicling layer
+    window._bikeLayer = new google.maps.BicyclingLayer();
+    
+    // Bike layer: GeoJSON from #datapoa
+    map.data.map = null;
+    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
+    map.data.setStyle({
+      strokeColor: 'green',
+      strokeWeight: 5
+    });
+
+    window._bikeLayer.setMap(map);
+
   }
 
   function openLoginDialog(showPermissionDisclaimer = false) {
