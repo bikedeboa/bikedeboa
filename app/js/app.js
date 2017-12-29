@@ -127,6 +127,9 @@ $(() => {
     templateData.description = m.description;
     templateData.author = m.User && m.User.fullname;
     templateData.views = m.views;
+    templateData.reviews = m.reviews;
+    templateData.lat = m.lat;
+    templateData.lng = m.lng;
 
     if (m.createdAt) {
       templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
@@ -763,6 +766,7 @@ $(() => {
           if (map) {
             if (m.lat && m.lng) {
               _gmarkers.push(new google.maps.Marker({
+                optimized: true,
                 position: {
                   lat: parseFloat(m.lat),
                   lng: parseFloat(m.lng)
@@ -1180,17 +1184,18 @@ $(() => {
     // autocomplete.bindTo('bounds', map);
 
     // var infowindow = new google.maps.InfoWindow();
-    _searchResultMarker = new google.maps.Marker({
-      map: map,
-      clickable: false,
-      anchorPoint: new google.maps.Point(0, -29)
-    });
+    // _searchResultMarker = new google.maps.Marker({
+    //   optimized: true,
+    //   map: map,
+    //   clickable: false,
+    //   anchorPoint: new google.maps.Point(0, -29)
+    // });
 
 
     autocomplete.addListener('place_changed', () => {
       // infowindow.close();
-      _searchResultMarker.setVisible(false);
-      _searchResultMarker.setAnimation(null);
+      // _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setAnimation(null);
 
       const place = autocomplete.getPlace();
       if (!place.geometry) {
@@ -2508,7 +2513,7 @@ $(() => {
     };
     _infoWindow = new InfoBox(myOptions);
     
-    // Override with custom transition
+    // Override infowindow render function with custom transition
     // const oldDraw = _infoWindow.draw; 
     // _infoWindow.draw = function() {
     //    oldDraw.apply(this);
@@ -2531,17 +2536,6 @@ $(() => {
 
     setupAutocomplete();
 
-    // Bike Layer: google maps bycicling layer
-    window._bikeLayer = new google.maps.BicyclingLayer();
-    
-    // Bike layer: GeoJSON from #datapoa
-    map.data.map = null;
-    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
-    map.data.setStyle({
-      strokeColor: 'green',
-      strokeWeight: 5
-    });
-
     // map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
 
     // // Geolocalization button
@@ -2555,11 +2549,6 @@ $(() => {
     //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
     // // }
 
-    // These were initialized hidden in CSS
-    // $('#geolocationBtn').show();
-    // $('#filterBtn').show();
-    // $('#addPlace').show(); 
-
     // Especial tooltips for map UI buttons that have only an icon
     if(!_isTouchDevice) {
       $('.caption-tooltip').tooltip({
@@ -2571,6 +2560,7 @@ $(() => {
     }
 
     _geolocationMarker = new google.maps.Marker({
+      optimized: true,
       map: map,
       clickable: false,
       icon: {
@@ -2595,6 +2585,22 @@ $(() => {
     // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
     // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
     // $('#map').css('filter', 'none');
+  }
+
+  function showBikeLayer(map){
+    // Bike Layer: google maps bycicling layer
+    window._bikeLayer = new google.maps.BicyclingLayer();
+    
+    // Bike layer: GeoJSON from #datapoa
+    map.data.map = null;
+    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
+    map.data.setStyle({
+      strokeColor: 'green',
+      strokeWeight: 5
+    });
+
+    window._bikeLayer.setMap(map);
+
   }
 
   function openLoginDialog(showPermissionDisclaimer = false) {
