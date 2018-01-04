@@ -629,6 +629,8 @@ $(() => {
     const structureFilters = filters.filter(i => i.prop === 'structureType');
     const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters];
 
+    const tempMarkers = _markerCluster.getMarkers();
+
     for(let i=0; i < markers.length; i++) {
       const m = markers[i];
       let showIt = true;
@@ -671,10 +673,10 @@ $(() => {
         }
       }
 
-      // _gmarkers[i].setMap(showIt ? map : null);
-      _gmarkers[i].setIcon(showIt ? m.icon : m.iconMini);
-      _gmarkers[i].setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
-      _gmarkers[i].collapsed = !showIt;
+      // tempMarkers[i].setMap(showIt ? map : null);
+      tempMarkers[i].setIcon(showIt ? m.icon : m.iconMini);
+      tempMarkers[i].setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
+      tempMarkers[i].collapsed = !showIt;
       cont += showIt ? 1 : 0;
     }
 
@@ -709,6 +711,8 @@ $(() => {
       // markers = markers.sort((a, b) => {
       //   return a.average - b.average;
       // });
+
+      let gmarkers = [];
 
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
@@ -765,7 +769,7 @@ $(() => {
 
           if (map) {
             if (m.lat && m.lng) {
-              _gmarkers.push(new google.maps.Marker({
+              let newMarker = new google.maps.Marker({
                 optimized: true,
                 position: {
                   lat: parseFloat(m.lat),
@@ -775,7 +779,8 @@ $(() => {
                 icon: m.icon,
                 zIndex: i, //markers should be ordered by average
                 // opacity: 0.1 + (m.average/5).
-              }));
+              });
+              gmarkers.push(newMarker);
 
               // Info window
               let thumbUrl = '';
@@ -817,13 +822,13 @@ $(() => {
 
               if (_isTouchDevice) {
                 // Infobox preview on click
-                _gmarkers[i].addListener('click', () => {
+                newMarker.addListener('click', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
-                  map.panTo(_gmarkers[i].getPosition());
+                  map.panTo(newMarker.getPosition());
 
                   _infoWindow.setContent(contentString);
-                  _infoWindow.open(map, _gmarkers[i]);
+                  _infoWindow.open(map, newMarker);
                   _infoWindow.addListener('domready', () => {
                     $('.infobox--img img').off('load').on('load', e => {
                       $(e.target).parent().removeClass('loading');
@@ -841,16 +846,16 @@ $(() => {
                 });
               } else {
                 // No infobox, directly opens the details modal
-                _gmarkers[i].addListener('click', () => {
+                newMarker.addListener('click', () => {
                   openLocal(markers[i]);
                 });
 
                 // Infobox preview on hover
-                _gmarkers[i].addListener('mouseover', () => {
+                newMarker.addListener('mouseover', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
                   _infoWindow.setContent(contentString); 
-                  _infoWindow.open(map, _gmarkers[i]);
+                  _infoWindow.open(map, newMarker);
                   _infoWindow.addListener('domready', () => {
                     $('.infobox--img img').off('load').on('load', e => {
                       $(e.target).parent().removeClass('loading');
@@ -858,7 +863,7 @@ $(() => {
                   });
                 });
 
-                _gmarkers[i].addListener('mouseout', () => {
+                newMarker.addListener('mouseout', () => {
                   _infoWindow.close();
                 });
               }
@@ -871,60 +876,64 @@ $(() => {
           console.error('marker is weirdly empty on addMarkerToMap()');
         }
       }
+
+      if (map) {
+        _geolocationMarker.setZIndex(markers.length);
+
+        var clusterOptions = {
+          // imagePath: 'img/markerClusterer/m', 
+          maxZoom: 10, 
+          minimumClusterSize: 1,
+          styles: [
+            {
+              url: '/img/markerCluster.png', 
+              height: 40,
+              width: 40
+            },
+           {
+              url: '/img/markerCluster.png',
+              height: 60,
+              width: 60
+            },
+           {
+              url: '/img/markerCluster.png',
+              height: 80,
+              width: 80
+            }
+          ]
+        };
+
+        _markerCluster = new MarkerClusterer(map, gmarkers, clusterOptions);
+      } 
     }
-
-    if (map) {
-      _geolocationMarker.setZIndex(markers.length);
-
-      var clusterOptions = {
-        // imagePath: 'img/markerClusterer/m', 
-        maxZoom: 10, 
-        minimumClusterSize: 1,
-        styles: [
-          {
-            url: '/img/markerCluster.png', 
-            height: 40,
-            width: 40
-          },
-         {
-            url: '/img/markerCluster.png',
-            height: 60,
-            width: 60
-          },
-         {
-            url: '/img/markerCluster.png',
-            height: 80,
-            width: 80
-          }
-        ]
-      };
-      window._markerCluster = new MarkerClusterer(map, _gmarkers, clusterOptions);
-    } 
   }
 
   // Sets the map on all markers in the array.
   function setMapOnAll (map) {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
-      for (let i = 0; i < _gmarkers.length; i++) {
-        _gmarkers[i].setMap(map);
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
+      for (let i = 0; i < tempMarkers.length; i++) {
+        tempMarkers[i].setMap(map);
       }
     }
   }
 
   // Removes the markers from the map, but keeps them in the array.
   function hideMarkers () {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
-      for (let i = 0; i < _gmarkers.length; i++) {
-        _gmarkers[i].setOptions({clickable: false, opacity: 0.3});
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
+      for (let i = 0; i < tempMarkers.length; i++) {
+        tempMarkers[i].setOptions({clickable: false, opacity: 0.3});
       }
     }
   }
 
   // Shows any markers currently in the array.
   function showMarkers () {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
-      for (let i = 0; i < _gmarkers.length; i++) {
-        _gmarkers[i].setOptions({clickable: true, opacity: 1});
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
+      for (let i = 0; i < tempMarkers.length; i++) {
+        tempMarkers[i].setOptions({clickable: true, opacity: 1});
       }
     }
   }
@@ -932,19 +941,23 @@ $(() => {
   // Switches all marker icons to the full or the mini scale
   // scale := 'mini' | 'full'
   function setMarkersIcon (scale) {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
       let m;
-      for (let i = 0; i < _gmarkers.length; i++) {
+      for (let i = 0; i < tempMarkers.length; i++) {
         m = markers[i];
-        _gmarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
+        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
       }
     }
   }
 
   // Deletes all markers in the array by removing references to them.
   function clearMarkers () {
-    setMapOnAll(null);
-    _gmarkers = [];
+    // setMapOnAll(null);
+    // gmarkers = [];
+    if (_markerCluster) {
+      _markerCluster.clearMarkers();
+    }
   }
 
   function toggleMarkers() {
