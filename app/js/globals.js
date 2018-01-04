@@ -98,7 +98,6 @@ let markers;
 let tags;
 let idToTag = {};
 let tagToId = {};
-let _gmarkers;
 let _geolocationMarker;
 let _geolocationRadius;
 let areMarkersHidden = false;
@@ -131,5 +130,6 @@ let _deferredPWAPrompt;
 let _loginMutexBlocked;
 let _isFeatherlightOpen;
 let _routePendingData;
+let _markerCluster;
 
 let templates = {};
