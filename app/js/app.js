@@ -6,7 +6,7 @@ $(() => {
     if (typeof average === 'string') {
       average = parseFloat(average);
     }
-
+      
     let pinColor;
 
     if (average) {
@@ -34,9 +34,9 @@ $(() => {
 
     if (navigator.share) {
       navigator.share({
-          title: 'bike de boa',
-          text: openedMarker.text,
-          url: shareUrl,
+        title: 'bike de boa',
+        text: openedMarker.text,
+        url: shareUrl,
       })
       .then(() => {})
       .catch((error) => console.error('ERROR sharing', error));
@@ -890,12 +890,12 @@ $(() => {
               height: 40,
               width: 40
             },
-           {
+            {
               url: '/img/markerCluster.png',
               height: 60,
               width: 60
             },
-           {
+            {
               url: '/img/markerCluster.png',
               height: 80,
               width: 80
@@ -1503,7 +1503,7 @@ $(() => {
           $('#titleInput').focus();
         })
         .modal('show');
-    }
+    };
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal')
         .one('hidden.bs.modal', () => { 
@@ -1518,11 +1518,11 @@ $(() => {
   function deletePlace() {
     if (openedMarker) {
       swal({
-        title: "Deletar bicicletário",
-        text: "Tem certeza disso?",
-        type: "warning",
+        title: 'Deletar bicicletário',
+        text: 'Tem certeza disso?',
+        type: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Deletar",
+        confirmButtonText: 'Deletar',
         confirmButtonColor: '#FF8265'
       }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
@@ -1588,7 +1588,7 @@ $(() => {
               ${tagsButtons}
           </div>
         </section>`,
-      confirmButtonText: "Enviar",
+      confirmButtonText: 'Enviar',
       confirmButtonClass: 'btn green sendReviewBtn',
       showCloseButton: true,
       showLoaderOnConfirm: true,
@@ -1744,7 +1744,7 @@ $(() => {
           <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> 
           email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
         </p>`,
-      confirmButtonText: "Enviar",
+      confirmButtonText: 'Enviar',
       showCloseButton: true
     }).then(() => {
       showSpinner();
@@ -2183,16 +2183,6 @@ $(() => {
     });
   }
 
-  function showBikeLayer() {
-    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
-    
-    // Bike layer from Google Maps
-    _bikeLayer.setMap(map);
-    
-    // GeoJSON data from #datapoa/EPTC
-    map.data.setMap(map);
-  }
-
   function hideBikeLayer() {
     map.setOptions({styles: _gmapsCustomStyle});
     
@@ -2489,7 +2479,7 @@ $(() => {
       // },
       zoomControl: _isDesktop,
       zoomControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_CENTER
+        position: google.maps.ControlPosition.RIGHT_CENTER
       },
       // mapTypeId: 'terrain',
       // streetViewControl: _isDesktop,
@@ -2613,7 +2603,6 @@ $(() => {
     });
 
     window._bikeLayer.setMap(map);
-
   }
 
   function openLoginDialog(showPermissionDisclaimer = false) {
@@ -2664,7 +2653,7 @@ $(() => {
       onOpen: () => {
         window._isLoginDialogOpened = true;
       }
-    }); 
+    });
   }
 
   function onSocialLogin(auth) {
@@ -2914,12 +2903,12 @@ $(() => {
       );
     } catch (err) {
       _hamburgerMenu = _filterMenu = null;
-    };
+    }
 
     // Hello.js
     hello.init({
-        facebook: FACEBOOK_CLIENT_ID,
-        google: GOOGLE_CLIENT_ID, 
+      facebook: FACEBOOK_CLIENT_ID,
+      google: GOOGLE_CLIENT_ID, 
         // windows: WINDOWS_CLIENT_ID,
     },{
       // redirect_uri: window.location.origin
@@ -2979,7 +2968,7 @@ $(() => {
     // $('.welcome-message-container').show(); 
     $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
 
-    $('.welcome-message-container .welcome-message--close').on('click', e => {
+    $('.welcome-message-container .welcome-message--close').on('click', () => {
       $('.welcome-message').velocity('transition.slideDownOut'); 
       // $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
@@ -2987,7 +2976,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'welcome message - closed');
     });
 
-    $('.welcome-message-container a').on('click', e => {
+    $('.welcome-message-container a').on('click', () => {
       $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
 
