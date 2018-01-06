@@ -38,32 +38,31 @@ BDB.geocodeLatLng = function(lat, lng, successCB, failCB) {
 };
 
 window.createdAtToDaysAgo = createdAtStr => {
-  let ret;
-
   const createdAtDate = Date.parse(createdAtStr);
   const msAgo = Date.now() - createdAtDate;
-  const daysAgo = Math.floor(msAgo/(1000*60*60*24));
 
-  if (daysAgo) {
-    ret = `${daysAgo} dias atrás`;
-  } else {
-    const hoursAgo = Math.floor(msAgo/(1000*60*60));
-
-    if (hoursAgo) {
-      ret = `${hoursAgo} horas atrás`;
-    } else {
-      const minsAgo = Math.floor(msAgo/(1000*60));
-      
-      if (minsAgo) {
-        ret = `${minsAgo} minutos atrás`;
-      } else {
-        ret = 'agora há pouco';
-      }
-    }
+  const monthsAgo = Math.floor(msAgo/(1000*60*60*24*30));
+  if (monthsAgo) {
+    return `${monthsAgo} ${monthsAgo > 1 ? 'meses' : 'mês'} atrás`;
   }
   
-  return ret;
-}
+  const daysAgo = Math.floor(msAgo/(1000*60*60*24));
+  if (daysAgo) {
+    return `${daysAgo} dia${daysAgo > 1 ? 's' : ''} atrás`;
+  }
+
+  const hoursAgo = Math.floor(msAgo/(1000*60*60));
+  if (hoursAgo) {
+    return `${hoursAgo} hora${hoursAgo > 1 ? 's' : ''} atrás`;
+  }
+
+  const minsAgo = Math.floor(msAgo/(1000*60));
+  if (minsAgo) {
+    return `${minsAgo} minuto${minsAgo > 1 ? 's' : ''} atrás`;
+  }
+
+  return 'agora há pouco';
+};
 
 window.toggleSpinner = () => {
   $('#spinnerOverlay').fadeToggle();
