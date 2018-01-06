@@ -6,7 +6,7 @@ $(() => {
     if (typeof average === 'string') {
       average = parseFloat(average);
     }
-
+      
     let pinColor;
 
     if (average) {
@@ -21,7 +21,7 @@ $(() => {
       } else {
         pinColor = 'gray'; 
       }
-    } else {
+    } else { 
       pinColor = 'gray';
     }
 
@@ -34,9 +34,9 @@ $(() => {
 
     if (navigator.share) {
       navigator.share({
-          title: 'bike de boa',
-          text: openedMarker.text,
-          url: shareUrl,
+        title: 'bike de boa',
+        text: openedMarker.text,
+        url: shareUrl,
       })
       .then(() => {})
       .catch((error) => console.error('ERROR sharing', error));
@@ -127,6 +127,9 @@ $(() => {
     // templateData.description = m.description;
     // templateData.author = m.User && m.User.fullname;
     // templateData.views = m.views;
+    // templateData.reviews = m.reviews;
+    // templateData.lat = m.lat;
+    // templateData.lng = m.lng;
 
     // if (m.createdAt) {
     //   templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
@@ -626,6 +629,8 @@ $(() => {
     const structureFilters = filters.filter(i => i.prop === 'structureType');
     const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters];
 
+    const tempMarkers = _markerCluster.getMarkers();
+
     for(let i=0; i < markers.length; i++) {
       const m = markers[i];
       let showIt = true;
@@ -668,10 +673,10 @@ $(() => {
         }
       }
 
-      // _gmarkers[i].setMap(showIt ? map : null);
-      _gmarkers[i].setIcon(showIt ? m.icon : m.iconMini);
-      _gmarkers[i].setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
-      _gmarkers[i].collapsed = !showIt;
+      // tempMarkers[i].setMap(showIt ? map : null);
+      tempMarkers[i].setIcon(showIt ? m.icon : m.iconMini);
+      tempMarkers[i].setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
+      tempMarkers[i].collapsed = !showIt;
       cont += showIt ? 1 : 0;
     }
 
@@ -706,6 +711,8 @@ $(() => {
       // markers = markers.sort((a, b) => {
       //   return a.average - b.average;
       // });
+
+      let gmarkers = [];
 
       for(let i=0; i < markers.length; i++) {
         const m = markers[i];
@@ -762,22 +769,18 @@ $(() => {
 
           if (map) {
             if (m.lat && m.lng) {
-              _gmarkers.push(new google.maps.Marker({
+              let newMarker = new google.maps.Marker({
+                optimized: true,
                 position: {
                   lat: parseFloat(m.lat),
                   lng: parseFloat(m.lng)
                 },
-                map: map,
+                // map: map,
                 icon: m.icon,
-                // title: m.text,
-                // label: labelStr && {
-                //   text: labelStr,
-                //   color: 'white',
-                //   fontFamily: 'Roboto'
-                // },
                 zIndex: i, //markers should be ordered by average
                 // opacity: 0.1 + (m.average/5).
-              }));
+              });
+              gmarkers.push(newMarker);
 
               // Info window
               let thumbUrl = '';
@@ -819,13 +822,13 @@ $(() => {
 
               if (_isTouchDevice) {
                 // Infobox preview on click
-                _gmarkers[i].addListener('click', () => {
+                newMarker.addListener('click', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
-                  map.panTo(_gmarkers[i].getPosition());
+                  map.panTo(newMarker.getPosition());
 
                   _infoWindow.setContent(contentString);
-                  _infoWindow.open(map, _gmarkers[i]);
+                  _infoWindow.open(map, newMarker);
                   _infoWindow.addListener('domready', () => {
                     $('.infobox--img img').off('load').on('load', e => {
                       $(e.target).parent().removeClass('loading');
@@ -843,16 +846,16 @@ $(() => {
                 });
               } else {
                 // No infobox, directly opens the details modal
-                _gmarkers[i].addListener('click', () => {
+                newMarker.addListener('click', () => {
                   openLocal(markers[i]);
                 });
 
                 // Infobox preview on hover
-                _gmarkers[i].addListener('mouseover', () => {
+                newMarker.addListener('mouseover', () => {
                   ga('send', 'event', 'Local', 'infobox opened', m.id); 
 
                   _infoWindow.setContent(contentString); 
-                  _infoWindow.open(map, _gmarkers[i]);
+                  _infoWindow.open(map, newMarker);
                   _infoWindow.addListener('domready', () => {
                     $('.infobox--img img').off('load').on('load', e => {
                       $(e.target).parent().removeClass('loading');
@@ -860,7 +863,7 @@ $(() => {
                   });
                 });
 
-                _gmarkers[i].addListener('mouseout', () => {
+                newMarker.addListener('mouseout', () => {
                   _infoWindow.close();
                 });
               }
@@ -873,36 +876,64 @@ $(() => {
           console.error('marker is weirdly empty on addMarkerToMap()');
         }
       }
-    }
 
-    if (map) {
-      _geolocationMarker.setZIndex(markers.length);
-    } 
+      if (map) {
+        _geolocationMarker.setZIndex(markers.length);
+
+        var clusterOptions = {
+          // imagePath: 'img/markerClusterer/m', 
+          maxZoom: 10, 
+          minimumClusterSize: 1,
+          styles: [
+            {
+              url: '/img/markerCluster.png', 
+              height: 40,
+              width: 40
+            },
+            {
+              url: '/img/markerCluster.png',
+              height: 60,
+              width: 60
+            },
+            {
+              url: '/img/markerCluster.png',
+              height: 80,
+              width: 80
+            }
+          ]
+        };
+
+        _markerCluster = new MarkerClusterer(map, gmarkers, clusterOptions);
+      } 
+    }
   }
 
   // Sets the map on all markers in the array.
   function setMapOnAll (map) {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
-      for (let i = 0; i < _gmarkers.length; i++) {
-        _gmarkers[i].setMap(map);
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
+      for (let i = 0; i < tempMarkers.length; i++) {
+        tempMarkers[i].setMap(map);
       }
     }
   }
 
   // Removes the markers from the map, but keeps them in the array.
   function hideMarkers () {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
-      for (let i = 0; i < _gmarkers.length; i++) {
-        _gmarkers[i].setOptions({clickable: false, opacity: 0.3});
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
+      for (let i = 0; i < tempMarkers.length; i++) {
+        tempMarkers[i].setOptions({clickable: false, opacity: 0.3});
       }
     }
   }
 
   // Shows any markers currently in the array.
   function showMarkers () {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
-      for (let i = 0; i < _gmarkers.length; i++) {
-        _gmarkers[i].setOptions({clickable: true, opacity: 1});
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
+      for (let i = 0; i < tempMarkers.length; i++) {
+        tempMarkers[i].setOptions({clickable: true, opacity: 1});
       }
     }
   }
@@ -910,19 +941,23 @@ $(() => {
   // Switches all marker icons to the full or the mini scale
   // scale := 'mini' | 'full'
   function setMarkersIcon (scale) {
-    if (_gmarkers && Array.isArray(_gmarkers)) {
+    const tempMarkers = _markerCluster.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
       let m;
-      for (let i = 0; i < _gmarkers.length; i++) {
+      for (let i = 0; i < tempMarkers.length; i++) {
         m = markers[i];
-        _gmarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
+        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
       }
     }
   }
 
   // Deletes all markers in the array by removing references to them.
   function clearMarkers () {
-    setMapOnAll(null);
-    _gmarkers = [];
+    // setMapOnAll(null);
+    // gmarkers = [];
+    if (_markerCluster) {
+      _markerCluster.clearMarkers();
+    }
   }
 
   function toggleMarkers() {
@@ -1170,17 +1205,18 @@ $(() => {
     // autocomplete.bindTo('bounds', map);
 
     // var infowindow = new google.maps.InfoWindow();
-    _searchResultMarker = new google.maps.Marker({
-      map: map,
-      clickable: false,
-      anchorPoint: new google.maps.Point(0, -29)
-    });
+    // _searchResultMarker = new google.maps.Marker({
+    //   optimized: true,
+    //   map: map,
+    //   clickable: false,
+    //   anchorPoint: new google.maps.Point(0, -29)
+    // });
 
 
     autocomplete.addListener('place_changed', () => {
       // infowindow.close();
-      _searchResultMarker.setVisible(false);
-      _searchResultMarker.setAnimation(null);
+      // _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setAnimation(null);
 
       const place = autocomplete.getPlace();
       if (!place.geometry) {
@@ -1475,7 +1511,7 @@ $(() => {
           $('#titleInput').focus();
         })
         .modal('show');
-    }
+    };
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal')
         .one('hidden.bs.modal', () => { 
@@ -1490,11 +1526,11 @@ $(() => {
   function deletePlace() {
     if (openedMarker) {
       swal({
-        title: "Deletar bicicletário",
-        text: "Tem certeza disso?",
-        type: "warning",
+        title: 'Deletar bicicletário',
+        text: 'Tem certeza disso?',
+        type: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Deletar",
+        confirmButtonText: 'Deletar',
         confirmButtonColor: '#FF8265'
       }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
@@ -1560,7 +1596,7 @@ $(() => {
               ${tagsButtons}
           </div>
         </section>`,
-      confirmButtonText: "Enviar",
+      confirmButtonText: 'Enviar',
       confirmButtonClass: 'btn green sendReviewBtn',
       showCloseButton: true,
       showLoaderOnConfirm: true,
@@ -1716,7 +1752,7 @@ $(() => {
           <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> 
           email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
         </p>`,
-      confirmButtonText: "Enviar",
+      confirmButtonText: 'Enviar',
       showCloseButton: true
     }).then(() => {
       showSpinner();
@@ -2155,16 +2191,6 @@ $(() => {
     });
   }
 
-  function showBikeLayer() {
-    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
-    
-    // Bike layer from Google Maps
-    _bikeLayer.setMap(map);
-    
-    // GeoJSON data from #datapoa/EPTC
-    map.data.setMap(map);
-  }
-
   function hideBikeLayer() {
     map.setOptions({styles: _gmapsCustomStyle});
     
@@ -2358,7 +2384,7 @@ $(() => {
     
     switch (urlBreakdown[1]) {
     case 'b':
-      if (urlBreakdown[2]) {
+      if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
@@ -2366,9 +2392,9 @@ $(() => {
           _deeplinkMarker = BDB.Places.getMarkerById(id);
           if (_deeplinkMarker) {
             // todo: put the modal on loader while waiting for the event trigger.
-            if (tags){
+            if (tags) {
               routerOpenLocal(_deeplinkMarker);
-            }else{
+            } else {
               $(document).on('tags:loaded', function(){
                 routerOpenLocal(_deeplinkMarker);
               });  
@@ -2403,7 +2429,10 @@ $(() => {
       hideAll();
       openContributionsModal();
       break;
-    case 'nav':
+    case 'nav' : 
+    case 'novo' :
+    case 'editar':
+    case 'filtros':
       break;
     case '':
       match = false; 
@@ -2458,8 +2487,9 @@ $(() => {
       // },
       zoomControl: _isDesktop,
       zoomControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_CENTER
+        position: google.maps.ControlPosition.RIGHT_CENTER
       },
+      // mapTypeId: 'terrain',
       // streetViewControl: _isDesktop,
       // streetViewControlOptions: {
       //     position: google.maps.ControlPosition.RIGHT_CENTER
@@ -2496,7 +2526,7 @@ $(() => {
     };
     _infoWindow = new InfoBox(myOptions);
     
-    // Override with custom transition
+    // Override infowindow render function with custom transition
     // const oldDraw = _infoWindow.draw; 
     // _infoWindow.draw = function() {
     //    oldDraw.apply(this);
@@ -2520,17 +2550,6 @@ $(() => {
 
     setupAutocomplete();
 
-    // Bike Layer: google maps bycicling layer
-    window._bikeLayer = new google.maps.BicyclingLayer();
-    
-    // Bike layer: GeoJSON from #datapoa
-    map.data.map = null;
-    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
-    map.data.setStyle({
-      strokeColor: 'green',
-      strokeWeight: 5
-    });
-
     // map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
 
     // // Geolocalization button
@@ -2544,11 +2563,6 @@ $(() => {
     //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
     // // }
 
-    // These were initialized hidden in CSS
-    // $('#geolocationBtn').show();
-    // $('#filterBtn').show();
-    // $('#addPlace').show(); 
-
     // Especial tooltips for map UI buttons that have only an icon
     if(!_isTouchDevice) {
       $('.caption-tooltip').tooltip({
@@ -2560,6 +2574,7 @@ $(() => {
     }
 
     _geolocationMarker = new google.maps.Marker({
+      optimized: true,
       map: map,
       clickable: false,
       icon: {
@@ -2584,6 +2599,21 @@ $(() => {
     // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
     // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
     // $('#map').css('filter', 'none');
+  }
+
+  function showBikeLayer(map){
+    // Bike Layer: google maps bycicling layer
+    window._bikeLayer = new google.maps.BicyclingLayer();
+    
+    // Bike layer: GeoJSON from #datapoa
+    map.data.map = null;
+    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
+    map.data.setStyle({
+      strokeColor: 'green',
+      strokeWeight: 5
+    });
+
+    window._bikeLayer.setMap(map);
   }
 
   function openLoginDialog(showPermissionDisclaimer = false) {
@@ -2634,7 +2664,7 @@ $(() => {
       onOpen: () => {
         window._isLoginDialogOpened = true;
       }
-    }); 
+    });
   }
 
   function onSocialLogin(auth) {
@@ -2884,12 +2914,12 @@ $(() => {
       );
     } catch (err) {
       _hamburgerMenu = _filterMenu = null;
-    };
+    }
 
     // Hello.js
     hello.init({
-        facebook: FACEBOOK_CLIENT_ID,
-        google: GOOGLE_CLIENT_ID, 
+      facebook: FACEBOOK_CLIENT_ID,
+      google: GOOGLE_CLIENT_ID, 
         // windows: WINDOWS_CLIENT_ID,
     },{
       // redirect_uri: window.location.origin
@@ -2949,7 +2979,7 @@ $(() => {
     // $('.welcome-message-container').show(); 
     $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
 
-    $('.welcome-message-container .welcome-message--close').on('click', e => {
+    $('.welcome-message-container .welcome-message--close').on('click', () => {
       $('.welcome-message').velocity('transition.slideDownOut'); 
       // $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
@@ -2957,7 +2987,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'welcome message - closed');
     });
 
-    $('.welcome-message-container a').on('click', e => {
+    $('.welcome-message-container a').on('click', () => {
       $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
 

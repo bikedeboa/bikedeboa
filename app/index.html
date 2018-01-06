@@ -98,6 +98,7 @@
         <script defer src="/js/lib/velocity.ui.js"></script>
         <script defer src="/js/lib/hello.all.js"></script>
         <script defer src="/lib/featherlight.min.js"></script>
+        <script defer src="/lib/markerclusterer.min.js"></script>
         <!-- <script defer src="/lib/countUp.min.js"></script> -->
         
         <script defer src="/js/app.min.js"></script>
@@ -1422,13 +1423,15 @@
 
         <!-- View Details Modal -->
         <script id="placeDetailsContentTemplate" type="text/x-handlebars-template">
+          <section itemscope itemtype="http://schema.org/ParkingFacility">
           {{#if photoUrl}}
             <section class="photo-container hasImage loading {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
-              <a href="#" class="unstyled-link" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}"/></a>
+              <a href="#" class="unstyled-link" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}" itemprop="image"/></a>
             </section>
           {{/if}}
 
           <section class="top-toolbar">
+            <meta itemprop="map" content="{{{gmapsRedirectUrl}}}">
             <a href="{{{gmapsRedirectUrl}}}" target="_blank" rel="noopener" class="toolbar-item directionsBtn unstyled-link">
               <img alt="" class="toolbar-item-icon" src="/img/route.svg">
               <label>Como chegar</label>
@@ -1465,23 +1468,24 @@
           <div class="modal-body">
               <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
                   {{#if title}}
-                    <h1 class="view-name">{{{title}}}</h1>
+                    <h1 class="view-name" itemprop="name">{{title}}</h1>
                   {{else}}
-                    <h1 style="font-style: italic; color: #b3b3b3;">Sem nome</h1>
+                    <h1 style="font-style: italic;" itemprop="name">Sem nome</h1>
                   {{/if}}
               </section>
 
               <section class="info">
                   {{#unless noIsCoveredData}}
-                    <div class="{{#ifCond isAdmin '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                    <div itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification" class="{{#ifCond isAdmin '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                      <meta itemprop="name" content="Cobertura">
                       {{#if isCovered}}
                           <img alt="" src="/img/icon_covered.svg"/>
-                          <div class="icon-label">
+                          <div class="icon-label" itemprop="value">
                             Coberto
                           </div>
                       {{else}}
                           <img alt="" src="/img/icon_uncovered.svg"/>
-                          <div class="icon-label">
+                          <div class="icon-label" itemprop="value">
                             Não coberto
                           </div> 
                       {{/if}}
@@ -1502,11 +1506,12 @@
                   {{/unless}}
 
                   {{#unless noIsPublicData}}
-                      <div class="{{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}">
+                      <div class="{{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}" itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification">
+                        <meta itemprop="name" content="Acesso">
                         {{#if isPublic}}
                             <img alt="" src="/img/icon_public.svg"/>
                             <div class="icon-label">
-                              Público
+                              <span itemprop="value">Público</span>
                               <a id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Público</h2>
                               <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
                               <p>Normalmente está em espaço público, como calçadas ou parques.</p>
@@ -1515,7 +1520,7 @@
                         {{else}}
                             <img alt="" src="/img/icon_private.svg"/>
                             <div class="icon-label">
-                                Privado
+                                <span itemprop="value">Privado</span>
                                 <a id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Privado</h2>
                                 <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a> 
                             </div> 
@@ -1537,12 +1542,13 @@
                   {{/unless}}
 
                   {{#if structureTypeLabel}}
-                    <div class="{{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}">
+                    <div class="{{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}" itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification">
                         {{#if structureTypeIcon}}
                             <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                         {{/if}}
                         <div class="icon-label" id="placeDetails_structureType">
-                              {{{structureTypeLabel}}}
+                              <meta itemprop="name" content="Tipo">
+                              <span itemprop="value">{{{structureTypeLabel}}}</span>
 
                               {{#ifCond structureTypeCode '===' 'uinvertido'}}
                                 <a id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger unstyled-link" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>U Invertido</h2>
@@ -1610,7 +1616,9 @@
 
               <hr>
 
-              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}}>
+              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}} itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+                  <meta itemprop="ratingValue" content="{{average}}"/>
+                  <meta itemprop="reviewCount" content="{{reviews}}"/>
                   {{#if savedRating}}
                     <div class="savedRating">
                       <img src="{{userThumbUrl}}"/> Você o avaliou <b>{{savedRating}}<span class="glyphicon glyphicon-star"></span></b>
@@ -1744,7 +1752,7 @@
                   {{#if description}}
                     <li>
                       <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
-                      <div>{{{description}}}</div>
+                      <div itemprop="description">{{{description}}}</div>
                     </li>
                   {{/if}}
 
@@ -1758,10 +1766,14 @@
                   {{#if address}}
                     <li>
                       <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
-                      <div>{{{address}}} </div>
+                      <div itemprop="address">{{{address}}}</div>
                     </li>
                   {{/if}}
                 </ul>
+                <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+                  <meta itemprop="latitude" content="{{lat}}" />
+                  <meta itemprop="longitude" content="{{lng}}" />
+                </div>
               </section>
 
               {{#if mapStaticImg}}
@@ -2002,6 +2014,14 @@
 
 
         <!-- External -->
+
+        <!-- Heap -->
+        <script type="text/javascript">
+          if (location.hostname === 'www.bikedeboa.com.br') {
+            window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+              heap.load("898452368");
+          }
+        </script>
 
         <!-- Hotjar -->
         <script>  

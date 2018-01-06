@@ -53,8 +53,13 @@ const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[facebookEnv];
 const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
-const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
+// const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
+let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
 // const GOOGLE_MAPS_ID = development() ? 'AIzaSyD1dNf2iN1XS0wx17MTf2lPTbPg8UIJqfA' : 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+
+if (facebookEnv === 'beta') {
+  GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
+}
 
 
 
@@ -166,8 +171,6 @@ gulp.task('bower', function() {
 
   return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
 
-  .pipe(fileSizes({title: 'bower files', gzip: true, showFiles: true}))
-
   // grab vendor js files from bower_components, minify and push in DEST_PATH
   .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
@@ -177,7 +180,8 @@ gulp.task('bower', function() {
   // .pipe(rename({
   //   suffix: ".min"
   // }))
-  .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
+  .pipe(fileSizes({title: 'bower lib:', gzip: true, showFiles: true}))
+  // .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
   .pipe(gulp.dest(DEST_PATH + '/js/lib/'))
   .pipe(jsFilter.restore)
 
