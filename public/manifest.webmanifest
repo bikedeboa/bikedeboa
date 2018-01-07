@@ -1,13 +1,13 @@
 {
   "name": "bike de boa",
   "short_name": "bike de boa",
-  "start_url": ".",
+  "start_url": "/?utm_source=homescreen"
   "lang": "pt-br",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#04883A",
-  "theme_color": "#2cd978",
-  "description": "Contribua para a cultura da bicicleta. Descubra e avalie os mais de 450 bicicletários neste mapa colaborativo de Porto Alegre e do Rio Grande do Sul.",
+  "theme_color": "#fff",
+  "description": "Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais.",
   "icons": [{
     "src": "/favicons/icon-36x36.png",
     "sizes": "36x36",

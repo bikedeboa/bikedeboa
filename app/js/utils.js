@@ -1,18 +1,18 @@
-var BIKE = BIKE || {};
+var BDB = BDB || {};
 
-BIKE.getMarkersFromLocalStorage = () => {
+BDB.getMarkersFromLocalStorage = () => {
   return JSON.parse( localStorage.getItem('markers') );
 };
 
-BIKE.saveMarkersToLocalStorage = markersToSave => {
+BDB.saveMarkersToLocalStorage = markersToSave => {
   localStorage.setItem( 'markers', JSON.stringify(markersToSave) );
 };
 
-BIKE.getURLParameter = function(name) {
+BDB.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
 
-BIKE.geocodeLatLng = function(lat, lng, successCB, failCB) {
+BDB.geocodeLatLng = function(lat, lng, successCB, failCB) {
   const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
 
   geocoder.geocode({'location': latlng}, function(results, status) {
@@ -35,6 +35,33 @@ BIKE.geocodeLatLng = function(lat, lng, successCB, failCB) {
       }
     }
   });
+};
+
+window.createdAtToDaysAgo = createdAtStr => {
+  const createdAtDate = Date.parse(createdAtStr);
+  const msAgo = Date.now() - createdAtDate;
+
+  const monthsAgo = Math.floor(msAgo/(1000*60*60*24*30));
+  if (monthsAgo) {
+    return `${monthsAgo} ${monthsAgo > 1 ? 'meses' : 'mês'} atrás`;
+  }
+  
+  const daysAgo = Math.floor(msAgo/(1000*60*60*24));
+  if (daysAgo) {
+    return `${daysAgo} dia${daysAgo > 1 ? 's' : ''} atrás`;
+  }
+
+  const hoursAgo = Math.floor(msAgo/(1000*60*60));
+  if (hoursAgo) {
+    return `${hoursAgo} hora${hoursAgo > 1 ? 's' : ''} atrás`;
+  }
+
+  const minsAgo = Math.floor(msAgo/(1000*60));
+  if (minsAgo) {
+    return `${minsAgo} minuto${minsAgo > 1 ? 's' : ''} atrás`;
+  }
+
+  return 'agora há pouco';
 };
 
 window.toggleSpinner = () => {

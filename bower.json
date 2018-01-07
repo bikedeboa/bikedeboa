@@ -8,8 +8,9 @@
     "js-cookie": "^2.1.3",
     "velocity": "^1.4.0",
     "toastr": "^2.1.3",
-    "sweetalert2": "^6.6.5", 
-    "history.js": "^1.8.0"
+    "sweetalert2": "^6.6.5",
+    "history.js": "^1.8.0",
+    "hello": "^1.15.1"
   },
   "resolutions": {
     "jquery": "3.2.1"

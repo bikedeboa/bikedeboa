@@ -23,9 +23,9 @@ function getSimulatedDelay () {
 const N_MOCK_PICS = 14;
 
 const MARKER_W = 20*1.3;
-const MARKER_H = 24*1.3;
+const MARKER_H = 26*1.3;
 const MARKER_W_MINI = 10*1.3;
-const MARKER_H_MINI = 12*1.3;
+const MARKER_H_MINI = 10*1.3;
 const CURRENT_LOCATION_MARKER_W = 20;
 const CURRENT_LOCATION_MARKER_H = 20; 
 const MARKER_ICON_GREEN = '/img/pin_green.svg';
@@ -51,9 +51,11 @@ const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CO
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+const FACEBOOK_CLIENT_ID = '<FACEBOOK_CLIENT_ID>';
+const GOOGLE_CLIENT_ID = '<GOOGLE_CLIENT_ID>';
 
-const MOBILE_MAX_WIDTH = '414px';
-const DESKTOP_MIN_WIDTH = '414px';
+const MOBILE_MAX_WIDTH = '430px'; 
+const DESKTOP_MIN_WIDTH = '430px';
 let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH})`).matches;
 let _isDesktop = window.matchMedia && window.matchMedia(`(min-width: ${DESKTOP_MIN_WIDTH})`).matches;
 
@@ -71,10 +73,23 @@ let isDemoMode = false;//
 //                     //
 //                     //
 /////////////////////////
+ 
 
+// "Main Brazil" Bounding Box
+//   [lat, long]
+// SW [[-34.0526594796, -61.3037107971],
+// SE [-34.0526594796, -34.3652340941],
+// NE [0.1757808338, -34.3652340941],
+// NW [0.1757808338, -61.3037107971]]]
+
+// Rio Grande do Sul Bounding Box
+// let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+
+// "Main Brazil"
+let _mapBoundsCoords = {sw: {lat:'-34.0526594796', lng:'-61.3037107971'}, ne: {lat: '0.1757808338', lng:'-34.3652340941'}};
 
 let _portoAlegrePos = {lat: -30.0346, lng: -51.2177};
-let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+
 let map;
 let _mapBounds;
 let Database;
@@ -83,7 +98,6 @@ let markers;
 let tags;
 let idToTag = {};
 let tagToId = {};
-let _gmarkers;
 let _geolocationMarker;
 let _geolocationRadius;
 let _userCurrentPosition;
@@ -91,10 +105,10 @@ let _wasGeolocationPermissionGranted;
 let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker;
-let newMarkerTemp = {};
+let _newMarkerTemp;
 let currentPendingRating;
 let _uploadingPhotoBlob;
-let loggedUser;
+// let loggedUser;
 let _searchResultMarker;
 let _abortedDetailsRequest;
 let _positionWatcher;
@@ -113,8 +127,14 @@ let _isDeeplink = false;
 let _deeplinkMarker;
 let _onDataReadyCallback;
 let _currentTab;
+let _socialToken;
 let _centerChangedTimeout;
 let _geolocationPermissionQuery;
 let _deferredPWAPrompt;
+let _loginMutexBlocked;
+let _isFeatherlightOpen;
+let _routePendingData;
+let _markerCluster;
+let gmarkers;
 
 let templates = {};
