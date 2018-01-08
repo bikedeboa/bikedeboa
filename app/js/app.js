@@ -128,6 +128,7 @@ $(() => {
     templateData.author = m.User && m.User.fullname;
     templateData.views = m.views;
     templateData.reviews = m.reviews;
+    templateData.average = m.average;
     templateData.lat = m.lat;
     templateData.lng = m.lng;
 
@@ -2442,13 +2443,13 @@ $(() => {
           showSpinner('Localizando...');
 
           geolocate(true).then(() => {
-            hideSpinner();
+            // hideSpinner();
 
             openNearbyPlacesModal(order);
           }).catch(() => {
             console.error('Cant open nearby places, geolocation failed.');
 
-            hideSpinner();
+            // hideSpinner();
 
             switchToMap();
           });
@@ -2902,10 +2903,11 @@ $(() => {
     if (match) {
       _isDeeplink = true;
 
-      $('body').addClass('deeplink'); 
+      // $('body').addClass('deeplink'); // not doing anything for now
+      hideUI();
 
       // Force branding on mobile topbar
-      $('#top-mobile-bar-title').text('bike de boa');
+      // $('#top-mobile-bar-title').text('bike de boa');
 
       // Center the map on pin's position
       if (map && _deeplinkMarker) {
@@ -3141,6 +3143,24 @@ $(() => {
       $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
     }
 
+    if (_isMobile) {
+      // This permission query might take a little longer to answer than all the app initialization
+      // if (_geolocationPermissionQuery) {
+      //   _geolocationPermissionQuery.then( permission => {
+      //     if (permission.state === 'granted') {
+      //       switchToList();
+      //     } else {
+      //       switchToMap();
+      //     }
+      //   });
+      // } else {
+      //   switchToMap();
+      // }
+      switchToList();
+    } else {
+      switchToMap();
+    }
+
     // User is within Facebook browser.
     // thanks to: https://stackoverflow.com/questions/31569518/how-to-detect-facebook-in-app-browser
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -3204,24 +3224,6 @@ $(() => {
       updateMarkers();
  
       initRouting();
-
-      // @todo please document this shit
-      if (_isMobile) {
-        // This permission query might take a little longer to answer than all the app initialization
-        if (_geolocationPermissionQuery) {
-          _geolocationPermissionQuery.then( permission => {
-            if (permission.state === 'granted') {
-              switchToList();
-            } else {
-              switchToMap();
-            }
-          });
-        } else {
-          switchToMap();
-        }
-      } else { 
-        switchToMap();
-      }
 
       if (_routePendingData) {
         handleRouting();

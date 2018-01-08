@@ -109,6 +109,14 @@
         <div id="map"></div>
 
         <div id="list-view"></div>
+
+        <div id="spinnerOverlay">
+            <div class="spinnerContainer">
+                <img alt="Carregando..." src="/img/spinner.svg" />
+        
+                <p id="globalSpinnerLabel"> </p>
+            </div>
+        </div>
         
         <div id="bottom-navbar">
           <ul>
@@ -144,14 +152,6 @@
               <img alt="Adicionar aqui" src="/img/pin_bike.svg"/>
           </button>
         </div>
- 
-        <div id="spinnerOverlay">
-            <div class="spinnerContainer">
-                <img alt="Carregando..." src="/img/spinner.svg"/>
-
-                <p id="globalSpinnerLabel"> </p>
-            </div>
-        </div>
 
         <div id="out-of-bounds-overlay" class="message-overlay">
           <div class="message-overlay-content"> 
@@ -175,12 +175,12 @@
             <span id="active-filters-counter" class="badge"></span>
         </button>
  
-        <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip"> 
+        <button id="addPlace" title="Adicionar bicicletário" class="caption-tooltip cool-hide hidden-ui"> 
             <img alt="" src="/img/icon_add_pin.svg">
             <span>Adicionar bicicletário</span>
-        </button>
+        </button>  
 
-        <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
+        <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active cool-hide hidden-ui">
           <div>
             <img src="/img/icon_geolocation.svg">
           </div>
@@ -198,7 +198,7 @@
           </div>
         </div>
 
-        <nav class="navbar-de-boa cool-hide">
+        <nav class="navbar-de-boa cool-hide hidden-ui">
           <h1 id="logo">
             <a href="/" class="unstyled-link">bike de boa</a>
             <!-- <img src="/img/logo.svg" alt="bike de boa"/> -->
@@ -294,7 +294,7 @@
 
         </nav>
 
-        <div id="locationSearch" class="cool-hide">
+        <div id="locationSearch" class="cool-hide hidden-ui">
             <input id="locationQueryInput" type="search">
 
             <button id="clearLocationQueryBtn">
@@ -303,7 +303,7 @@
             </button>
         </div>
 
-        <div id="userBtn" class="dropdown cool-hide">
+        <div id="userBtn" class="dropdown cool-hide hidden-ui">
           <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img class="avatar" src="/img/icon_user_big.svg">
             <span class="userBtn--user-name"></span>
@@ -356,7 +356,7 @@
           </div>
         </div>
 
-        <button class="js-menu-show-hamburger-menu header__menu-toggle cool-hide">
+        <button class="js-menu-show-hamburger-menu header__menu-toggle cool-hide hidden-ui">
           <img src="/img/icon_hamburger.svg">
         </button>
 
@@ -1671,7 +1671,7 @@
 
               <hr>
 
-              <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}} itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+            <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}} itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
                   <meta itemprop="ratingValue" content="{{average}}"/>
                   <meta itemprop="reviewCount" content="{{reviews}}"/>
                   {{#if savedRating}}
@@ -1945,7 +1945,9 @@
           <div class="infobox-list"> 
             {{#each places}}
               <div class="infobox" data-id="{{id}}">
-                <span class="infobox--distance">{{distance}}</span>
+                <span class="infobox--distance">
+                    <span class="glyphicon glyphicon-map-marker"></span>{{distance}}
+                </span>
 
                 <div class="infobox--img">
                   {{#if thumbnailUrl}}

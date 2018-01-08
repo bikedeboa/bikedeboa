@@ -1326,6 +1326,16 @@ a.unstyled-link {
   background: $lightGrey;
 } 
 
+#geolocationBtn,
+#addPlace {
+  transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
+ 
+  &.hidden-ui {
+    opacity: 0;
+    transform: translateY(-20px);
+  } 
+}
+
 #geolocationBtn {
     position: fixed;
     bottom: 76px;
@@ -1346,24 +1356,6 @@ a.unstyled-link {
     
     @include shadow(2);
 
-    img {
-        width: 22px;
-    }
-
-    &.hidden-ui {
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-    }
-}
-
-#geolocationBtn {
-    margin: 0px $GRID_SPACE $GRID_SPACE*15;
-
-    background-color: white;
-    border: 2px solid white;
-    filter: grayscale(100%);
-    
     &.active {
         filter: none;
     }
@@ -3388,7 +3380,6 @@ body.modal-open {
   background: white;
   @include shadow(1);
   display: flex;
-  margin-top: $GRID_SPACE*2;
 
   &:active,
   &:focus,
@@ -4091,11 +4082,11 @@ body.modal-open {
   }
 
   #geolocationBtn {
-      margin-bottom:$GRID_SPACE*12;
+      margin-bottom:$GRID_SPACE*5;
   }
 
-  #addPlace {
-      margin-bottom:$GRID_SPACE*7; 
+  #addPlace { 
+      margin-bottom:$GRID_SPACE*5; 
   }
 
   #hamburger-menu {
