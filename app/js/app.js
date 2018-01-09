@@ -2942,11 +2942,14 @@ $(() => {
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       _deferredPWAPrompt = e;
-
+    
       $('.howToInstallBtn').css({'font-weight': 'bold'});
-
+    
       return false;
     });
+    
+    // Temporarily disabled manually prompting this because it sucks 
+    promptPWAInstallPopup()
   }
 
   function openWelcomeMessage() { 
