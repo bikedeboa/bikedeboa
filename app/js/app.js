@@ -1224,6 +1224,9 @@ $(() => {
         map.setZoom(17);  // Why 17? Because it looks good.
       }
 
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
+
       // Custom icon depending on place type
       // _searchResultMarker.setIcon(/** @type {google.maps.Icon} */({
       //   url: place.icon,
@@ -2139,7 +2142,7 @@ $(() => {
     });
 
     // Location Search
-    $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
+    $('#locationQueryInput').on('input change paste', queueUiCallback.bind(this, () => {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     }));
 
@@ -2149,7 +2152,7 @@ $(() => {
       // }
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
-      _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setVisible(false);
     }));
   }
 
