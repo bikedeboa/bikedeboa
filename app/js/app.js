@@ -1230,6 +1230,9 @@ $(() => {
       });
 
       exitLocationSearchMode();
+      
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
 
       // Show temporary result marker
       // _searchResultMarker.setPosition(place.geometry.location);
@@ -2183,14 +2186,11 @@ $(() => {
     // });
 
     // Location Search
-    $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
+    $('#locationQueryInput').on('input change paste', queueUiCallback.bind(this, () => {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     }));
 
     $('#clearLocationQueryBtn').on('click', queueUiCallback.bind(this, () => {
-      // if (_isMobile) {
-      //   exitLocationSearchMode();
-      // }
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
       // _searchResultMarker.setVisible(false);
