@@ -1197,20 +1197,12 @@ $(() => {
     // autocomplete.bindTo('bounds', map);
 
     // var infowindow = new google.maps.InfoWindow();
-<<<<<<< HEAD
     // _searchResultMarker = new google.maps.Marker({
     //   optimized: true,
     //   map: map,
     //   clickable: false,
     //   anchorPoint: new google.maps.Point(0, -29)
     // });
-=======
-    _searchResultMarker = new google.maps.Marker({
-      map: map,
-      clickable: false,
-      anchorPoint: new google.maps.Point(0, -29)
-    });
->>>>>>> f444f014337f3013f23f80ede24747f7514edaed
 
     autocomplete.addListener('place_changed', () => {
       // infowindow.close();
