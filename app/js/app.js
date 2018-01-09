@@ -1205,39 +1205,36 @@ $(() => {
     // });
 
     autocomplete.addListener('place_changed', () => {
-      // infowindow.close();
-      // _searchResultMarker.setVisible(false);
-      // _searchResultMarker.setAnimation(null);
-
       const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
         return;
       }
 
-      // If the place has a geometry, then present it on a map.
-      if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
+      // infowindow.close();
+      // _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setAnimation(null);
+      ga('send', 'event', 'Search', 'location', place.formatted_address); 
+
+      map.panTo(place.geometry.location);
+      if (place.geometry.viewport) { 
+        map.fitBounds(place.geometry.viewport); 
       } else {
-        map.panTo(place.geometry.location);
         map.setZoom(17);  // Why 17? Because it looks good.
       }
+      
+      addToRecentSearches({
+        name: place.name,
+        pos: place.geometry.location,
+        viewport: place.geometry.viewport
+      });
 
-      // Custom icon depending on place type
-      // _searchResultMarker.setIcon(/** @type {google.maps.Icon} */({
-      //   url: place.icon,
-      //   size: new google.maps.Size(71, 71),
-      //   origin: new google.maps.Point(0, 0),
-      //   anchor: new google.maps.Point(17, 34),
-      //   scaledSize: new google.maps.Size(35, 35)
-      // }));
+      exitLocationSearchMode();
 
       // Show temporary result marker
       // _searchResultMarker.setPosition(place.geometry.location);
       // _searchResultMarker.setVisible(true);
       // _searchResultMarker.setAnimation(google.maps.Animation.DROP);
-
-      ga('send', 'event', 'Search', 'location', place.formatted_address); 
     });
   }
 
@@ -1758,24 +1755,23 @@ $(() => {
     });
   }
 
-  function enterLocationSearchMode() {
-    window._recentSearches = [
-      { 
-        name: 'Porto Alegre',
-        pos: {
-          lat: -30.0346, lng: -51.2177
-        }
-      },
-      {
-        name: 'Butia',
-        pos: {
-          lat: -30.123382156085338, lng: -51.963194199999975
-        }
-      }
-    ];
+  function getRecentSearches() {
+    return JSON.parse(localStorage.getItem('recentSearches'));
+  }
+
+  function addToRecentSearches(search) {
+    let searches = getRecentSearches() || [];
+
+    searches.splice(0, 0, search);
     
+    searches.splice(MAX_RECENT_SEARCHES, 1);
+
+    localStorage.setItem('recentSearches', JSON.stringify(searches));
+  }
+
+  function enterLocationSearchMode() {
     let templateData = {};
-    templateData.recentSearches = _recentSearches;
+    templateData.recentSearches = getRecentSearches();
 
     ////////////////////////////////
     // Render handlebars template //
@@ -1785,12 +1781,16 @@ $(() => {
     $('#search-overlay .recent-searches button').off('click').on('click', e => {
       const $target = $(e.currentTarget);
       const id = parseInt($target.data('recentsearchid'));
-      const item = _recentSearches[id];
+      const item = getRecentSearches()[id];
 
-      $('#locationQueryInput').val(item.name);
+      // $('#locationQueryInput').val(item.name);
 
       map.panTo(item.pos);
-      map.setZoom(17); // Why 17? Because it looks good.  
+      if (item.viewport) {
+        map.fitBounds(item.viewport);
+      } else {
+        map.setZoom(17);  // Why 17? Because it looks good.
+      }
 
       exitLocationSearchMode();
 
@@ -2193,7 +2193,7 @@ $(() => {
       // }
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
-      _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setVisible(false);
     }));
   }
 
