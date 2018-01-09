@@ -2469,8 +2469,8 @@ $(() => {
     case 'novo' :
     case 'editar':
     case 'filtros':
-      break;
     case '':
+      break;
     default:
       openNotFoundModal(match);
       match = false; 
