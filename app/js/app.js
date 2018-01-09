@@ -1968,36 +1968,35 @@ $(() => {
         title: 'Contato',
         html:
           `
-            <div style="text-align: left;">
+            <div style="text-align: center; font-size: 30px;">
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/> /bikedeboaapp
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
                 </a> 
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/> @bikedeboa 
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/> medium 
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/> github
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a href="mailto:bikedeboa@gmail.com">
-                  <img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com
+                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
                 </a>
               </p>
+            </div> 
+
+            <hr>
+
+            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
+            <div style="text-align: center;">
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
             </div>
           `,
       });
