@@ -140,8 +140,8 @@ $(() => {
     templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
-    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
-
+    templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
+  
     // Tags
     if (m.tags && m.tags.length > 0) {
       const MAX_TAG_COUNT = m.reviews;
@@ -371,194 +371,6 @@ $(() => {
       ga('send', 'event', 'Misc', 'tooltip - pin details other type');
     });
   }
-
-  function updateCurrentPosition(position) {
-    const pos = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
-
-    if (map) {
-      _geolocationMarker.setPosition(pos);
-
-      _geolocationRadius.setCenter(pos);
-      _geolocationRadius.setRadius(position.coords.accuracy);
-    }
-  }
-
-  function geolocate(toCenter, callback, quiet = false) {
-    // Hit Google Geolocation to get user's position without GPS
-    // This might not be precise, but it's faster and more reliable than the GPS, so it's a good fallback.
-    if (!_geolocationInitialized) {
-      if (!quiet) {
-        $('#geolocationBtn').addClass('loading');
-      }
-
-      // API docs: https://developers.google.com/maps/documentation/geolocation/intro?hl=en
-      $.ajax({
-        url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
-        type: 'POST'
-      }).done(data => {
-        if (data && data.location) {
-          const pos = data.location;
-          ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
-          
-          if (map) {
-            if (!_geolocationInitialized) {
-              map.panTo(data.location);
-            }
-
-            $('#geolocationBtn').removeClass('loading');
-          }
-        } else {
-          console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
-          ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
-        }
-      });
-    }
-
-    // Geolocation with GPS
-    if (navigator.geolocation) {
-      // @todo split both behaviors into different functions
-      if (_geolocationInitialized) {
-        if (map) {
-          const markerPos = _geolocationMarker.getPosition();
-          const pos = {
-            lat: markerPos.lat(),
-            lng: markerPos.lng()
-          };
-
-          map.panTo(pos);
-          
-          // Set minimum map zoom
-          if (map.getZoom() < 17) {
-            map.setZoom(17);
-          }
-        }
-      } else {
-        if (!quiet) {
-          $('#geolocationBtn').addClass('loading');
-        }
-
-        const options = {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        };
-
-        navigator.geolocation.getCurrentPosition(
-            position => {
-              console.debug(position);
-
-              _geolocationInitialized = true;
-
-              ga('send', 'event', 'Geolocation', 'init', `${position.coords.latitude},${position.coords.longitude}`);
-
-              updateCurrentPosition(position);
-
-              $('#geolocationBtn').addClass('active');
-              
-              if (map) {
-                _geolocationRadius.setVisible(true);
-                if (markers && markers.length) {
-                  _geolocationMarker.setZIndex(markers.length);
-                }
-
-                if (toCenter) {
-                  const pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  };
-
-                  map.panTo(pos);
-                  
-                  // Set minimum map zoom
-                  if (map.getZoom() < 17) {  
-                    map.setZoom(17);
-                  }
-                }
-              }
-
-              if (callback && typeof callback === 'function') {
-                callback();
-              }
-            },
-            error => {
-              ga('send', 'event', 'Geolocation', error.message ? `fail - ${error.message}`: 'fail - no_message');
-
-              console.error('Geolocation failed.', error);
-
-              if (!quiet) {
-                switch(error.code) {
-                case 1:
-                  // PERMISSION_DENIED
-                  if (_isFacebookBrowser) {
-                    toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
-                  } else {
-                    toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
-                  }
-                  break;
-                case 2:
-                  // POSITION_UNAVAILABLE
-                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-                  break;
-                case 3:
-                  // TIMEOUT
-                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-                  break;
-                }
-              }
-
-              // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
-              if(error.message.indexOf('Only secure origins are allowed') == 0) {
-                // Disable button since it won't work anyway in the current domain.
-                $('#geolocationBtn').hide();
-              }
-
-              if (callback && typeof callback === 'function') {
-                callback();
-              }
-            },
-            options
-        );
-
-        if (_positionWatcher) {
-          navigator.geolocation.clearWatch(_positionWatcher);
-        }
-        _positionWatcher = navigator.geolocation.watchPosition(updateCurrentPosition, null, options);
-      }
-
-
-    }
-  }
-
-  // function geolocationBtn() {
-  //   let controlDiv = document.createElement('div');
-  //   let controlUI = document.createElement('div');
-  //   controlUI.id = 'geolocationBtn';
-  //   controlUI.title = 'Onde estou?';
-  //   controlUI.className = 'caption-tooltip'; 
-
-  //   controlDiv.appendChild(controlUI);
-
-  //   // Set CSS for the control interior.
-  //   let controlText = document.createElement('div');
-  //   controlText.style.color = '#30bb6a';
-  //   controlText.style.width = '100%';
-  //   controlText.style.paddingTop = '13px';
-  //   controlText.innerHTML = '<img src="/img/geolocation.svg" style="width: 20px;"/>';
-  //   controlUI.appendChild(controlText);
-
-  //   // Setup the click event listeners
-  //   controlUI.addEventListener('click', () => {
-  //     ga('send', 'event', 'Geolocation', 'geolocate button click');
-  //     geolocate(true, () => {
-  //       $('#geolocationBtn').removeClass('loading');
-  //     });
-  //   });
-
-  //   return controlDiv;
-  // }
  
   // Set router to open Local
   function openLocal(marker, callback) {
@@ -878,7 +690,7 @@ $(() => {
       }
 
       if (map) {
-        _geolocationMarker.setZIndex(markers.length);
+        //_geolocationMarker.setZIndex(markers.length);
 
         var clusterOptions = {
           // imagePath: 'img/markerClusterer/m', 
@@ -972,34 +784,6 @@ $(() => {
     }
   }
 
-  function isPosWithinBounds(pos) {
-    const ret = _mapBounds.contains(pos);
-    return ret;
-  }
-
-  function mapCenterChanged() {
-    // Makes sure this doesnt destroy the overall performance by limiting these calculations 
-    //   to not be executed more then 20 times per second (1000ms/50ms = 20x).
-    // (I'm not entirely sure this is needed though, but why not)
-    clearTimeout(_centerChangedTimeout);
-    _centerChangedTimeout = setTimeout( () => {
-      // console.log('centerchanged');
-
-      // Check center
-      const isCenterWithinBounds = isPosWithinBounds(map.getCenter());
-      $('#newPlaceholder').toggleClass('invalid', !isCenterWithinBounds);
-
-      // Check visible bounds
-      if (map.getBounds()) {
-        const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
-        $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
-        if (!isViewWithinBounds) {
-          ga('send', 'event', 'Local', 'out of bounds message triggered', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
-        }
-      }
-    }, 50);
-  }
-
   function toggleLocationInputMode() {
     addLocationMode = !addLocationMode;
     const isTurningOn = addLocationMode;
@@ -1016,7 +800,7 @@ $(() => {
         
         // Saves this position for later
         _newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-        BDB.geocodeLatLng(
+        BDB.Geolocation.reverseGeocode(
           _newMarkerTemp.lat, _newMarkerTemp.lng,
           (address) => {
             // console.log('Resolved location address:');
@@ -1034,7 +818,7 @@ $(() => {
           openedMarker.lng = mapCenter.lng();
           openNewOrEditPlaceModal();
         } else {
-          if (isPosWithinBounds(map.getCenter())) {
+          if (BDB.Map.checkBounds()) {
             openNewOrEditPlaceModal();
           } else {
             const mapCenter = map.getCenter();
@@ -1089,7 +873,7 @@ $(() => {
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
-    $('#geolocationBtnBtn').toggle();
+    $('#geolocationBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -1174,7 +958,7 @@ $(() => {
             }
           });
         }
-      });
+      }); 
     };
 
     if (updatingMarker) {
@@ -1184,61 +968,6 @@ $(() => {
       ga('send', 'event', 'Local', 'create');
       Database.sendPlace(place, onPlaceSaved);
     }
-  }
-
-  function setupAutocomplete() {
-    const inputElem = document.getElementById('locationQueryInput');
-    // Limits the search to the our bounding box
-    const options = {
-      bounds: _mapBounds,
-      strictBounds: true
-    };
-    let autocomplete = new google.maps.places.Autocomplete(inputElem, options);
-    // autocomplete.bindTo('bounds', map);
-
-    // var infowindow = new google.maps.InfoWindow();
-    // _searchResultMarker = new google.maps.Marker({
-    //   optimized: true,
-    //   map: map,
-    //   clickable: false,
-    //   anchorPoint: new google.maps.Point(0, -29)
-    // });
-
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (!place.geometry) {
-        console.error('Autocomplete\'s returned place contains no geometry');
-        return;
-      }
-
-      // infowindow.close();
-      // _searchResultMarker.setVisible(false);
-      // _searchResultMarker.setAnimation(null);
-      ga('send', 'event', 'Search', 'location', place.formatted_address); 
-
-      map.panTo(place.geometry.location);
-      if (place.geometry.viewport) { 
-        map.fitBounds(place.geometry.viewport); 
-      } else {
-        map.setZoom(17);  // Why 17? Because it looks good.
-      }
-      
-      addToRecentSearches({
-        name: place.name,
-        pos: place.geometry.location,
-        viewport: place.geometry.viewport
-      });
-
-      exitLocationSearchMode();
-      
-      $('#locationQueryInput').val('');
-      toggleClearLocationBtn('hide');
-
-      // Show temporary result marker
-      // _searchResultMarker.setPosition(place.geometry.location);
-      // _searchResultMarker.setVisible(true);
-      // _searchResultMarker.setAnimation(google.maps.Animation.DROP);
-    });
   }
 
   function photoUploadCB(e) {
@@ -1385,7 +1114,7 @@ $(() => {
       // Minimap
       // @todo generalize this
       const staticImgDimensions = _isMobile ? '400x100' : '1000x100';
-      const minimapUrl = `https://maps.googleapis.com/maps/api/staticmap?zoom=20&size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${getPinColorFromAverage(m.average)}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
+      const minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getPinColorFromAverage(m.average), m.lat, m.lng, 20);
       $('#newPlaceModal .minimap').attr('src', minimapUrl);
 
       // More info section
@@ -2061,13 +1790,48 @@ $(() => {
       map.setZoom(12);
     }));
 
+    
     $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Geolocation', 'geolocate button click');
-      geolocate(true, () => {
-        $('#geolocationBtn').removeClass('loading');
-      });
+      
+      $('#geolocationBtn').addClass('loading');
+      
+      BDB.Map.getGeolocation();
+      
     }));
 
+    $(document).on('geolocation:done', function(e){
+      let result = e.detail;
+      $('#geolocationBtn').removeClass('loading');
+
+      if (result.status){
+        ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
+        return false;
+      }
+
+      ga('send', 'event', 'Geolocation', result.response.message ? `fail - ${result.response.message}`: 'fail - no_message');
+
+      switch(result.response.code) {
+      case 1:
+        // PERMISSION_DENIED
+        if (_isFacebookBrowser) {
+          toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
+        } else {
+          toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
+        }
+        break; 
+      case 2:
+        // POSITION_UNAVAILABLE
+        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+        break;
+      case 3:
+        // TIMEOUT
+        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+        break;
+      }
+      
+    });
+    
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
@@ -2233,13 +1997,6 @@ $(() => {
     });
   }
 
-  function hideBikeLayer() {
-    map.setOptions({styles: _gmapsCustomStyle});
-    
-    _bikeLayer.setMap(null);
-    map.data.setMap(null);
-  }
-
   function promptPWAInstallPopup() { 
     // Deferred prompt handling based on:
     //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
@@ -2392,11 +2149,12 @@ $(() => {
       updateFilters();
     });
   } 
+
   function openNotFoundModal(url){
     toastr['warning']('Que pena, parece que o link não foi encontrado. <br/> Mas você pode encontrar um bicletário pertinho de você! <br/>Da uma olhada!');
     ga('send', 'event', 'Misc', 'router - 404 Not Found', url);
-
-    setupGoogleMaps(); 
+    //to do: Rethink this:
+    $(document).trigger('LoadMap');
   }
   function openDataModal() {
     $('#dataModal').modal('show');
@@ -2423,7 +2181,6 @@ $(() => {
   function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
-    
     switch (urlBreakdown[1]) {
     case 'b':
       if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
@@ -2501,157 +2258,6 @@ $(() => {
       }
     }
     return match;
-  }
-
-  function setupGoogleMaps(wasDeeplink) {
-    let initialCenter;
-    if (wasDeeplink && _deeplinkMarker) {
-      initialCenter = {
-        lat: parseFloat(_deeplinkMarker.lat),
-        lng: parseFloat(_deeplinkMarker.lng)
-      };
-    } else {
-      initialCenter = _portoAlegrePos;
-    }
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: initialCenter,
-      zoom: wasDeeplink ? 18 : 15,
-      disableDefaultUI: true,
-      scaleControl: false,
-      clickableIcons: false,
-      styles: _gmapsCustomStyle,
-      mapTypeControl: false,
-      // mapTypeControl: _isDesktop,
-      // mapTypeControlOptions: {
-      //     style: google.maps.MapTypeControlStyle.DROPDOWN_MENU, 
-      //     position: google.maps.ControlPosition.RIGHT_CENTER
-      // },
-      zoomControl: _isDesktop,
-      zoomControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_CENTER
-      },
-      // mapTypeId: 'terrain',
-      // streetViewControl: _isDesktop,
-      // streetViewControlOptions: {
-      //     position: google.maps.ControlPosition.RIGHT_CENTER
-      // },
-      // fullscreenControl: true
-    });
-
-    _mapBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
-        new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
-    );
-
-    mapCenterChanged();
-    map.addListener('center_changed', mapCenterChanged);
-
-    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
-    const myOptions = {
-      maxWidth: 0,
-      pixelOffset: new google.maps.Size(-infoboxWidth/2, 0),
-      disableAutoPan: _isMobile ? false : true,
-      zIndex: null,
-      boxStyle: {
-        width: `${infoboxWidth}px`,
-        height: '75px', 
-        cursor: 'pointer',
-      },
-      // closeBoxMargin: '10px 2px 2px 2px',
-      closeBoxURL: '',
-      infoBoxClearance: new google.maps.Size(1, 1),
-      pane: 'floatPane',
-      enableEventPropagation: false,
-    };
-    _infoWindow = new InfoBox(myOptions);
-    
-    // Override infowindow render function with custom transition
-    // const oldDraw = _infoWindow.draw; 
-    // _infoWindow.draw = function() {
-    //    oldDraw.apply(this);
-    //    $(_infoWindow.div_).velocity('transition.slideUpIn', {display: 'flex', duration: 250}); 
-    // }
-
-    google.maps.event.addListener(map, 'zoom_changed', () => {
-      const prevZoomLevel = _mapZoomLevel;
-
-      _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
-
-      if (prevZoomLevel !== _mapZoomLevel) {
-        if (!_activeFilters) {
-          setMarkersIcon(_mapZoomLevel);
-        }
-      }
-    });
-
-    geocoder = new google.maps.Geocoder();
-
-    setupAutocomplete();
-
-    // map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
-
-    // // Geolocalization button
-    // if (navigator.geolocation) {
-    //   const btn = document.getElementById('geolocationBtn');
-    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
-    // }
-
-    // // if (_isMobile) {
-    //   const filterBtnEl = document.getElementById('filterBtn');
-    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
-    // // }
-
-    // Especial tooltips for map UI buttons that have only an icon
-    if(!_isTouchDevice) {
-      $('.caption-tooltip').tooltip({
-        toggle: 'tooltip', 
-        trigger: 'hover',
-        placement: 'left', 
-        'delay': {'show': 0, 'hide': 0}
-      });
-    }
-
-    _geolocationMarker = new google.maps.Marker({
-      optimized: true,
-      map: map,
-      clickable: false,
-      icon: {
-        url: '/img/current_position.svg', // url
-        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
-        origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W/2, CURRENT_LOCATION_MARKER_H/2), // anchor
-      }
-    });
-
-    _geolocationRadius = new google.maps.Circle({
-      map: map,
-      clickable: false,
-      fillColor: '#705EC7',
-      fillOpacity: '0.2',
-      strokeColor: 'transparent',
-      strokeOpacity: '0'
-    });
-
-    // Finally, enable the basic UI
-    showUI();
-    // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-    // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-    // $('#map').css('filter', 'none');
-  }
-
-  function showBikeLayer(map){
-    // Bike Layer: google maps bycicling layer
-    window._bikeLayer = new google.maps.BicyclingLayer();
-    
-    // Bike layer: GeoJSON from #datapoa
-    map.data.map = null;
-    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
-    map.data.setStyle({
-      strokeColor: 'green',
-      strokeWeight: 5
-    });
-
-    window._bikeLayer.setMap(map);
   }
 
   function openLoginDialog(showPermissionDisclaimer = false) {
@@ -2778,12 +2384,178 @@ $(() => {
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
 
-  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
+  function openWelcomeMessage() { 
+    // setTimeout( () => {
+    //   if (_isMobile) {
+    //     $('.welcome-message-container').show();  
+    //   } else {
+    //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
+    //   }
+    // }, 2000); 
+
+    if (_isMobile) {
+      return;
+    }
+
+    ga('send', 'event', 'Misc', 'welcome message - show');
+     
+    // $('.welcome-message-container').show(); 
+    $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
+
+    $('.welcome-message-container .welcome-message--close').on('click', () => {
+      $('.welcome-message').velocity('transition.slideDownOut'); 
+      // $('.welcome-message-container').remove();
+      BDB.Session.setWelcomeMessageViewed(); 
+
+      ga('send', 'event', 'Misc', 'welcome message - closed');
+    });
+
+    $('.welcome-message-container a').on('click', () => {
+      $('.welcome-message-container').remove();
+      BDB.Session.setWelcomeMessageViewed(); 
+
+      ga('send', 'event', 'Misc', 'welcome message - link click');
+    });
+  }
+
+  function localhostOverrides() {
+    // if (_isLocalhost) {
+    //   Database.API_URL = 'http://localhost:3000';
+    // }
+  }
+
+  function init() {
+    if (isDemoMode) {
+      Database = BDB.MockedDatabase;
+    } else {
+      Database = BDB.Database;
+    }
+
+    localhostOverrides();
+
+    // Retrieve markers saved in a past access
+    markers = BDB.getMarkersFromLocalStorage();
+    if (markers && markers.length) {
+      console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
+      //hideSpinner();
+    } else {
+      showSpinner('Carregando bicicletários...');
+    }
+
+    if (!_isOffline) {
+      // Use external service to get user's IP
+      $.getJSON('//ipinfo.io/json', data => {
+        if (data && data.ip) {
+          ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
+          Database._setOriginHeader(data.ip);
+        } else {
+          console.error('Something went wrong when trying to retrieve user IP.');
+          ga('send', 'event', 'Misc', 'IP retrieval error');
+        }
+
+        // Coords via IP
+        // if (data && data.loc) {
+        //   const coords = data.loc.split(',');
+        //   const pos = {
+        //     lat: parseFloat(coords[0]),
+        //     lng: parseFloat(coords[1])
+        //   };
+
+        //   map.panTo(pos);
+        // }
+      });
+
+      Database.authenticate();
+      Database.getAllTags();
+      Database.getPlaces( () => {
+        $('#filter-results-counter').html(markers.length);
+        $('#filter-results-total').html(markers.length);
+
+        updateMarkers();
+
+        // Hide spinner that is initialized visible on CSS
+        //hideSpinner();
+
+        //
+        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+          _onDataReadyCallback();
+          _onDataReadyCallback = null;
+        }
+      }); 
+
+      handleRouting(true);
+    }
+  } 
+
+    // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
     // References:
     //   https://developers.google.com/web/updates/2015/10/display-mode
     //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
+
+    //set Map Initialization 
+    $(document).on('map:ready', function(){
+        hideSpinner();
+        //get gMap instance to be used by functions to still referer to map here (mainly markers);
+        map = BDB.Map.getMap();
+        updateMarkers(); 
+
+        //to-do: refactor this to map.js
+        google.maps.event.addListener(map, 'zoom_changed', () => {    
+          const prevZoomLevel = _mapZoomLevel;   
+       
+          _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';   
+       
+          if (prevZoomLevel !== _mapZoomLevel) {   
+            if (!_activeFilters) {   
+              setMarkersIcon(_mapZoomLevel);   
+            }    
+          }    
+        });
+    });
+
+    $(document).on("autocomplete:done", function(e){
+      let place = e.detail
+
+      addToRecentSearches({
+        name: place.name,
+        pos: place.geometry.location,
+        viewport: place.geometry.viewport
+      });
+
+      exitLocationSearchMode();
+      
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
+      ga('send', 'event', 'Search', 'location', place.formatted_address); 
+
+    });
+
+    $(document).one("LoadMap",function(){
+      // showSpinner('Carregando Mapa :)');
+      
+      BDB.Map.init();
+
+      if(!_isTouchDevice) {
+        $('.caption-tooltip').tooltip({
+          toggle: 'tooltip', 
+          trigger: 'hover',
+          placement: 'left', 
+          'delay': {'show': 0, 'hide': 0}
+        });
+      }
+      showUI();
+    });
+
+    $(document).on('map:outofbounds', function(result){
+      let response = result.detail;
+      
+        $('#newPlaceholder').toggleClass('invalid', !response.isCenterWithinBounds);
+        $('#out-of-bounds-overlay').toggleClass('showThis', !response.isViewWithinBounds); 
+      
+    });
+
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       $('body').addClass('pwa-installed');
       ga('send', 'event', 'Misc', 'launched with display=standalone');
@@ -2799,14 +2571,14 @@ $(() => {
     if (window.google) {
       // On Mobile we defer the initialization of the map if we're in deeplink
       if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-        setupGoogleMaps(); 
+        $(document).trigger("LoadMap");
       }
     } else {
       if (window.location.pathname !== '/dados') {
         setOfflineMode();
       }
     }
-
+    
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
     isMobileListener.addListener((isMobileListener) => {
       _isMobile = isMobileListener.matches;
@@ -2823,19 +2595,6 @@ $(() => {
       $('.modal').removeClass('fade');
     } else {
       $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
-    }
-
-
-    // If permission to geolocation was already granted we already center the map
-    if (navigator.permissions) {
-      navigator.permissions.query({'name': 'geolocation'})
-        .then( permission => {
-          if (permission.state === 'granted') {
-            ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            geolocate(true, null, true); 
-          }
-        }
-      );
     }
 
     // User is within Facebook browser.
@@ -2862,8 +2621,8 @@ $(() => {
 
       if (state.data && state.data.isHome) {
         if (!map && !_isOffline) {
-          setupGoogleMaps();
-          updateMarkers();
+          $(document).trigger('loadMap');
+          //updateMarkers();
         }
 
         if (_isDeeplink) {
@@ -2998,114 +2757,11 @@ $(() => {
     
       return false;
     });
-    
-    // Temporarily disabled manually prompting this because it sucks 
+
+     // Temporarily disabled manually prompting this because it sucks 
     promptPWAInstallPopup()
   }
 
-  function openWelcomeMessage() { 
-    // setTimeout( () => {
-    //   if (_isMobile) {
-    //     $('.welcome-message-container').show();  
-    //   } else {
-    //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
-    //   }
-    // }, 2000); 
-
-    if (_isMobile) {
-      return;
-    }
-
-    ga('send', 'event', 'Misc', 'welcome message - show');
-     
-    // $('.welcome-message-container').show(); 
-    $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
-
-    $('.welcome-message-container .welcome-message--close').on('click', () => {
-      $('.welcome-message').velocity('transition.slideDownOut'); 
-      // $('.welcome-message-container').remove();
-      BDB.Session.setWelcomeMessageViewed(); 
-
-      ga('send', 'event', 'Misc', 'welcome message - closed');
-    });
-
-    $('.welcome-message-container a').on('click', () => {
-      $('.welcome-message-container').remove();
-      BDB.Session.setWelcomeMessageViewed(); 
-
-      ga('send', 'event', 'Misc', 'welcome message - link click');
-    });
-  }
-
-  function localhostOverrides() {
-    // if (_isLocalhost) {
-    //   Database.API_URL = 'http://localhost:3000';
-    // }
-  }
-
-  function init() {
-    if (isDemoMode) {
-      Database = BDB.MockedDatabase;
-    } else {
-      Database = BDB.Database;
-    }
-
-    localhostOverrides();
-
-    // Retrieve markers saved in a past access
-    markers = BDB.getMarkersFromLocalStorage();
-    if (markers && markers.length) {
-      console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
-      updateMarkers();
-      hideSpinner();
-    } else {
-      showSpinner('Carregando bicicletários...');
-    }
-
-    if (!_isOffline) {
-      // Use external service to get user's IP
-      $.getJSON('//ipinfo.io/json', data => {
-        if (data && data.ip) {
-          ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
-          Database._setOriginHeader(data.ip);
-        } else {
-          console.error('Something went wrong when trying to retrieve user IP.');
-          ga('send', 'event', 'Misc', 'IP retrieval error');
-        }
-
-        // Coords via IP
-        // if (data && data.loc) {
-        //   const coords = data.loc.split(',');
-        //   const pos = {
-        //     lat: parseFloat(coords[0]),
-        //     lng: parseFloat(coords[1])
-        //   };
-
-        //   map.panTo(pos);
-        // }
-      });
-
-      Database.authenticate();
-      Database.getAllTags();
-      Database.getPlaces( () => {
-        $('#filter-results-counter').html(markers.length);
-        $('#filter-results-total').html(markers.length);
-
-        updateMarkers();
-
-        // Hide spinner that is initialized visible on CSS
-        hideSpinner();
-
-        //
-        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
-          _onDataReadyCallback();
-          _onDataReadyCallback = null;
-        }
-      }); 
-
-      handleRouting(true);
-    }
-  } 
 
   window.toggleDemoMode = () => {
     showSpinner();
