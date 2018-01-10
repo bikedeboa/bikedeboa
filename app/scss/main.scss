@@ -274,6 +274,15 @@ p {
       border: 0;
       background: 0;
     }
+
+    li {
+      margin: $GRID_SPACE 0;
+      color: $gray;
+
+      .glyphicon {
+        margin: 0 6px;
+      }
+    }
   }
 }
 

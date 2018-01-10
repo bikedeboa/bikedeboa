@@ -1762,11 +1762,13 @@ $(() => {
     return JSON.parse(localStorage.getItem('recentSearches'));
   }
 
-  function addToRecentSearches(search) {
+  function addToRecentSearches(searchItem) {
     let searches = getRecentSearches() || [];
 
-    searches.splice(0, 0, search);
+    // Add new item to the top
+    searches.splice(0, 0, searchItem);
     
+    // Remove last item if exceeds MAX_RECENT_SEARCHES
     searches.splice(MAX_RECENT_SEARCHES, 1);
 
     localStorage.setItem('recentSearches', JSON.stringify(searches));
