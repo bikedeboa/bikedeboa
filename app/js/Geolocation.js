@@ -127,7 +127,13 @@ BDB.Geolocation = (function(){
 		checkPermission : function(){
 			if (navigator.permissions) {
 			  return navigator.permissions.query({'name': 'geolocation'});
+			}else{
+				let fallback = new Promise(function(resolve,reject){
+			  		reject(false);
+			  	});
+			  return fallback;
 			}
+
 		},
 		reverseGeocode : function(lat, lng, successCB, failCB) {
   			const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
