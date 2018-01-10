@@ -1,7 +1,7 @@
 var BDB = BDB || {};
 
 BDB.Map = (function(){
-	//google maps api Key
+  //google maps api Key
   const apiKey = '<GOOGLE_MAPS_ID>';
 
   let map, 
@@ -115,7 +115,7 @@ BDB.Map = (function(){
     map.panTo(gpos);
     updateMarkerPosition(gpos);
     if (map.getZoom() < 17) {
-      map.setZoom(17);
+      map.setZoom(17); 
     } 
     geolocationRadius.setVisible(true);
   };
@@ -193,30 +193,30 @@ BDB.Map = (function(){
       });
     }
   };
-	return {
+  return {
     init: function(){
-      //check user permission to start at Geolocation.
+      let zoom = (BDB.Geolocation.isDefaultLocation()) ? 15 : 17; 
+      let coords =  BDB.Geolocation.getLastestLocation();
+      initMap(coords, zoom);
+      
+      // Check previous user permission for geolocation
       BDB.Geolocation.checkPermission().then( permission => {
-        let zoom = (BDB.Geolocation.isDefaultLocation()) ? 15 : 17; 
-        let coords =  BDB.Geolocation.getLastestLocation();
-
         if (permission.state === 'granted') {
             BDB.Geolocation.getLocation().then(function(result){
-              initMap(result.response, 17);
+              // initMap(result.response, 17); 
+              updateMapCenter(result.response);
             },function(error){
-              initMap(coords, zoom);
+              // initMap(coords, zoom);
             });
-        }else{
-          initMap(coords, zoom);
         }
       });
     },
-		getStaticImgMap : function (staticImgDimensions, pinColor, lat, lng, customStyle, zoom = false) {
-			let zoomStr = (zoom) ? `zoom=${zoom}&` : '';
-			let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?${zoomStr}size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${pinColor}.png|${lat},${lng}&key=${apiKey}&${_gmapsCustomStyleStaticApi}`;
-						  
-			return imgUrl;
-		},
+    getStaticImgMap : function (staticImgDimensions, pinColor, lat, lng, customStyle, zoom = false) {
+      let zoomStr = (zoom) ? `zoom=${zoom}&` : '';
+      let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?${zoomStr}size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${pinColor}.png|${lat},${lng}&key=${apiKey}&${_gmapsCustomStyleStaticApi}`;
+              
+      return imgUrl;
+    },
     getGeolocation : function(options = false){
       geolocate(options);
     },
@@ -240,5 +240,5 @@ BDB.Map = (function(){
         return false;
       }    
     }
-	}
+  }
 })();
