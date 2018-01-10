@@ -2526,7 +2526,7 @@ $(() => {
     });
 
     $(document).one("LoadMap",function(){
-      showSpinner('Carregando Mapa :)');
+      // showSpinner('Carregando Mapa :)');
       
       BDB.Map.init();
 
