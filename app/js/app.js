@@ -1950,7 +1950,7 @@ $(() => {
       // @todo having to call these two ones here is bizarre
       hideAll();
       goHome();
-      
+
       // setView('Login Administrador', '/login', true);
       // login(true);
 
@@ -2903,7 +2903,8 @@ $(() => {
       cancelButtonText: 'Cancelar',
       cancelButtonClass: 'btn',
       buttonsStyling: false,
-      allowOutsideClick: true
+      allowOutsideClick: true,
+      animation: false
     });
 
     if ($.featherlight) {
