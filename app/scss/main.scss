@@ -243,7 +243,47 @@ p {
 }
 
 #search-overlay {
-  background: rgba(255,255,255,0.8); 
+  background: $paleWhite;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0; 
+  left: 0;
+  padding-top: 60px;
+  padding-left: 12px;
+
+  transition: opacity 0.5s ease-in-out;   
+
+  // temp dev temp dev temp dev temp dev temp dev temp dev 
+  opacity: 0;
+  visibility: hidden;
+  user-select: none;
+
+  &.showThis {
+    opacity: 1; 
+    visibility: visible;
+    user-select: auto;
+  }
+
+  .recent-searches {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    button {
+      border: 0;
+      background: 0;
+    }
+
+    li {
+      margin: $GRID_SPACE 0;
+      color: $gray;
+
+      .glyphicon {
+        margin: 0 6px;
+      }
+    }
+  }
 }
 
 .message-overlay {
@@ -813,7 +853,7 @@ a.unstyled-link {
   }
 
 
-  .header__menu-toggle {
+  .hamburger-button {
       display: none;
   }
 
@@ -1709,6 +1749,10 @@ body.search-mode {
 
   //   transition: opacity 0.2s ease;
   // }
+
+  #userBtn { 
+    display: none;
+  }
 
   #locationSearch {
     box-shadow: none;
@@ -4394,11 +4438,8 @@ body.modal-open {
 //   padding: 0 16px;
 // }
 
-.js-menu-show-hamburger-menu {
-  cursor: pointer;
-}
 
-.header__menu-toggle {
+.hamburger-button {
     position: fixed;
     top: 10px;
     left: 10px;
@@ -4408,37 +4449,14 @@ body.modal-open {
     border: none;
     margin: 0;
     padding: 13px;
-    // font-size: 17px;
-    // background-color: $green;
-    // border-top-left-radius: 5px;
-    // border-bottom-left-radius: 5px;
 
-    border-radius: 50%;
-    background: transparent;
-    color: $green;
-    text-shadow: 1px 1px 2px #fff;
+    cursor: pointer;
 
-    // &:focus,
-    // &:active,
-    // &:hover {
-    //     background: $darkerGreen;
-    // }
+    background: url(/img/icon_hamburger.svg) 13px 13px no-repeat;
+    background-size: 22px;
 
-    // Desktop-only
-    @media screen and (min-width: $MOBILE_MAX_WIDTH) {
-      // &:after {
-      //   content: 'menu';
-      //   font-size: 9px;
-      //   position: absolute;
-      //   bottom: 6px;
-      //   left: 11px;
-      //   text-transform: uppercase;
-      //   font-weight: bold;
-      // }
-
-      // .glyphicon-menu-hamburger { 
-      //   top: -4px;
-      // }
+    &.back-mode {
+      background-image: url(/img/icon_back.svg);
     }
 }
 

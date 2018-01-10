@@ -6,7 +6,7 @@ $(() => {
     if (typeof average === 'string') {
       average = parseFloat(average);
     }
-
+      
     let pinColor;
 
     if (average) {
@@ -34,9 +34,9 @@ $(() => {
 
     if (navigator.share) {
       navigator.share({
-          title: 'bike de boa',
-          text: openedMarker.text,
-          url: shareUrl,
+        title: 'bike de boa',
+        text: openedMarker.text,
+        url: shareUrl,
       })
       .then(() => {})
       .catch((error) => console.error('ERROR sharing', error));
@@ -890,12 +890,12 @@ $(() => {
               height: 40,
               width: 40
             },
-           {
+            {
               url: '/img/markerCluster.png',
               height: 60,
               width: 60
             },
-           {
+            {
               url: '/img/markerCluster.png',
               height: 80,
               width: 80
@@ -1204,41 +1204,40 @@ $(() => {
     //   anchorPoint: new google.maps.Point(0, -29)
     // });
 
-
     autocomplete.addListener('place_changed', () => {
-      // infowindow.close();
-      // _searchResultMarker.setVisible(false);
-      // _searchResultMarker.setAnimation(null);
-
       const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
         return;
       }
 
-      // If the place has a geometry, then present it on a map.
-      if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
+      // infowindow.close();
+      // _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setAnimation(null);
+      ga('send', 'event', 'Search', 'location', place.formatted_address); 
+
+      map.panTo(place.geometry.location);
+      if (place.geometry.viewport) { 
+        map.fitBounds(place.geometry.viewport); 
       } else {
-        map.panTo(place.geometry.location);
         map.setZoom(17);  // Why 17? Because it looks good.
       }
+      
+      addToRecentSearches({
+        name: place.name,
+        pos: place.geometry.location,
+        viewport: place.geometry.viewport
+      });
 
-      // Custom icon depending on place type
-      // _searchResultMarker.setIcon(/** @type {google.maps.Icon} */({
-      //   url: place.icon,
-      //   size: new google.maps.Size(71, 71),
-      //   origin: new google.maps.Point(0, 0),
-      //   anchor: new google.maps.Point(17, 34),
-      //   scaledSize: new google.maps.Size(35, 35)
-      // }));
+      exitLocationSearchMode();
+      
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
 
       // Show temporary result marker
       // _searchResultMarker.setPosition(place.geometry.location);
       // _searchResultMarker.setVisible(true);
       // _searchResultMarker.setAnimation(google.maps.Animation.DROP);
-
-      ga('send', 'event', 'Search', 'location', place.formatted_address); 
     });
   }
 
@@ -1314,21 +1313,18 @@ $(() => {
       }
     });
 
-    let placeDetailsContentTemplate = $('#placeDetailsContentTemplate').html();
-    if (placeDetailsContentTemplate) {
-      templates.placeDetailsContentTemplate = Handlebars.compile(placeDetailsContentTemplate);
-    }
-
-    let infoWindowTemplate = $('#infoWindowTemplate').html();
-    if (infoWindowTemplate) {
-      templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
-    }
-
-    let contributionsModalTemplate = $('#contributionsModalTemplate').html();
-    if (contributionsModalTemplate) {
-      templates.contributionsModalTemplate = Handlebars.compile(contributionsModalTemplate);
-    }
-
+    // Pre-compile all Handlebars templates
+    [
+      'placeDetailsContentTemplate',
+      'infoWindowTemplate',
+      'contributionsModalTemplate',
+      'searchOverlayTemplate',
+    ].forEach( templateName => {
+      let templateContent = $(`#${templateName}`).html();
+      if (templateContent) {
+        templates[templateName] = Handlebars.compile(templateContent);
+      }
+    });
   }
 
   function validateNewPlaceForm() {
@@ -1503,7 +1499,7 @@ $(() => {
           $('#titleInput').focus();
         })
         .modal('show');
-    }
+    };
     if (openedMarker && $('#placeDetailsModal').is(':visible')) {
       $('#placeDetailsModal')
         .one('hidden.bs.modal', () => { 
@@ -1518,11 +1514,11 @@ $(() => {
   function deletePlace() {
     if (openedMarker) {
       swal({
-        title: "Deletar bicicletário",
-        text: "Tem certeza disso?",
-        type: "warning",
+        title: 'Deletar bicicletário',
+        text: 'Tem certeza disso?',
+        type: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Deletar",
+        confirmButtonText: 'Deletar',
         confirmButtonColor: '#FF8265'
       }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
@@ -1588,7 +1584,7 @@ $(() => {
               ${tagsButtons}
           </div>
         </section>`,
-      confirmButtonText: "Enviar",
+      confirmButtonText: 'Enviar',
       confirmButtonClass: 'btn green sendReviewBtn',
       showCloseButton: true,
       showLoaderOnConfirm: true,
@@ -1744,7 +1740,7 @@ $(() => {
           <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> 
           email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
         </p>`,
-      confirmButtonText: "Enviar",
+      confirmButtonText: 'Enviar',
       showCloseButton: true
     }).then(() => {
       showSpinner();
@@ -1762,14 +1758,63 @@ $(() => {
     });
   }
 
+  function getRecentSearches() {
+    return JSON.parse(localStorage.getItem('recentSearches'));
+  }
+
+  function addToRecentSearches(searchItem) {
+    let searches = getRecentSearches() || [];
+
+    // Add new item to the top
+    searches.splice(0, 0, searchItem);
+    
+    // Remove last item if exceeds MAX_RECENT_SEARCHES
+    searches.splice(MAX_RECENT_SEARCHES, 1);
+
+    localStorage.setItem('recentSearches', JSON.stringify(searches));
+  }
+
   function enterLocationSearchMode() {
-    $('body').addClass('search-mode');
+    let templateData = {};
+    templateData.recentSearches = getRecentSearches();
+
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
+    $('#searchOverlayContentPlaceholder').html(templates.searchOverlayTemplate(templateData));
+
+    $('#search-overlay .recent-searches button').off('click').on('click', e => {
+      const $target = $(e.currentTarget);
+      const id = parseInt($target.data('recentsearchid'));
+      const item = getRecentSearches()[id];
+
+      // $('#locationQueryInput').val(item.name);
+
+      map.panTo(item.pos);
+      if (item.viewport) {
+        map.fitBounds(item.viewport);
+      } else {
+        map.setZoom(17);  // Why 17? Because it looks good.
+      }
+
+      exitLocationSearchMode();
+
+      // $('#locationQueryInput').val(term).focus();
+    });
+
+    $('body').addClass('search-mode'); 
     $('#search-overlay').addClass('showThis');
+    $('.hamburger-button').addClass('back-mode');
+
+    $('.hamburger-button.back-mode').one('click', () => {
+      exitLocationSearchMode();
+    });
   }
 
   function exitLocationSearchMode() {
     $('body').removeClass('search-mode');
     $('#search-overlay').removeClass('showThis');
+    $('.hamburger-button').removeClass('back-mode');
   }
 
   function setPageTitle(text) { 
@@ -1854,11 +1899,15 @@ $(() => {
       goHome();
     });
 
-    $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
+    $('.hamburger-button').on('click', e => {
+      const $target = $(e.currentTarget);
+      if ($target.hasClass('back-mode')) { 
+        return;
+      }
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
       setView('', '/nav');
-    }));
+    });
     
     $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
@@ -1900,7 +1949,10 @@ $(() => {
     }));
  
     $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
       hideAll();
+      goHome();
+
       // setView('Login Administrador', '/login', true);
       // login(true);
 
@@ -1960,7 +2012,9 @@ $(() => {
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
       hideAll();
+      goHome();
 
       ga('send', 'event', 'Misc', 'contact opened');
       
@@ -1968,36 +2022,35 @@ $(() => {
         title: 'Contato',
         html:
           `
-            <div style="text-align: left;">
+            <div style="text-align: center; font-size: 30px;">
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/> /bikedeboaapp
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
                 </a> 
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/> @bikedeboa 
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/> medium 
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/> github
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a href="mailto:bikedeboa@gmail.com">
-                  <img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com
+                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
                 </a>
               </p>
+            </div> 
+
+            <hr>
+
+            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
+            <div style="text-align: center;">
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
             </div>
           `,
       });
@@ -2133,24 +2186,21 @@ $(() => {
         enterLocationSearchMode();
       }
     });
-    $('#locationQueryInput').on('blur', e => {
-      if (_isMobile) {
-        exitLocationSearchMode();
-      }
-    });
+    // $('#locationQueryInput').on('blur', e => {
+    //   if (_isMobile) {
+    //     exitLocationSearchMode();
+    //   }
+    // });
 
     // Location Search
-    $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
+    $('#locationQueryInput').on('input change paste', queueUiCallback.bind(this, () => {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     }));
 
     $('#clearLocationQueryBtn').on('click', queueUiCallback.bind(this, () => {
-      // if (_isMobile) {
-      //   exitLocationSearchMode();
-      // }
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
-      _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setVisible(false);
     }));
   }
 
@@ -2181,16 +2231,6 @@ $(() => {
         resolve();
       }
     });
-  }
-
-  function showBikeLayer() {
-    map.setOptions({styles: _gmapsCustomStyle_bikeLayerOptimized});
-    
-    // Bike layer from Google Maps
-    _bikeLayer.setMap(map);
-    
-    // GeoJSON data from #datapoa/EPTC
-    map.data.setMap(map);
   }
 
   function hideBikeLayer() {
@@ -2431,13 +2471,12 @@ $(() => {
       hideAll();
       openContributionsModal();
       break;
-    case 'nav' : 
+    case 'nav':
+        _hamburgerMenu.show();
     case 'novo' :
     case 'editar':
     case 'filtros':
-      break;
     case '':
-      match = false; 
       break;
     default:
       openNotFoundModal(match);
@@ -2489,7 +2528,7 @@ $(() => {
       // },
       zoomControl: _isDesktop,
       zoomControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_CENTER
+        position: google.maps.ControlPosition.RIGHT_CENTER
       },
       // mapTypeId: 'terrain',
       // streetViewControl: _isDesktop,
@@ -2613,7 +2652,6 @@ $(() => {
     });
 
     window._bikeLayer.setMap(map);
-
   }
 
   function openLoginDialog(showPermissionDisclaimer = false) {
@@ -2664,7 +2702,7 @@ $(() => {
       onOpen: () => {
         window._isLoginDialogOpened = true;
       }
-    }); 
+    });
   }
 
   function onSocialLogin(auth) {
@@ -2867,7 +2905,8 @@ $(() => {
       cancelButtonText: 'Cancelar',
       cancelButtonClass: 'btn',
       buttonsStyling: false,
-      allowOutsideClick: true
+      allowOutsideClick: true,
+      animation: false
     });
 
     if ($.featherlight) {
@@ -2914,12 +2953,12 @@ $(() => {
       );
     } catch (err) {
       _hamburgerMenu = _filterMenu = null;
-    };
+    }
 
     // Hello.js
     hello.init({
-        facebook: FACEBOOK_CLIENT_ID,
-        google: GOOGLE_CLIENT_ID, 
+      facebook: FACEBOOK_CLIENT_ID,
+      google: GOOGLE_CLIENT_ID, 
         // windows: WINDOWS_CLIENT_ID,
     },{
       // redirect_uri: window.location.origin
@@ -2954,11 +2993,14 @@ $(() => {
     window.addEventListener('beforeinstallprompt', e => {
       e.preventDefault();
       _deferredPWAPrompt = e;
-
+    
       $('.howToInstallBtn').css({'font-weight': 'bold'});
-
+    
       return false;
     });
+    
+    // Temporarily disabled manually prompting this because it sucks 
+    promptPWAInstallPopup()
   }
 
   function openWelcomeMessage() { 
@@ -2979,7 +3021,7 @@ $(() => {
     // $('.welcome-message-container').show(); 
     $('.welcome-message').velocity('transition.slideUpIn', {delay: 1000, duration: 1600});  
 
-    $('.welcome-message-container .welcome-message--close').on('click', e => {
+    $('.welcome-message-container .welcome-message--close').on('click', () => {
       $('.welcome-message').velocity('transition.slideDownOut'); 
       // $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
@@ -2987,7 +3029,7 @@ $(() => {
       ga('send', 'event', 'Misc', 'welcome message - closed');
     });
 
-    $('.welcome-message-container a').on('click', e => {
+    $('.welcome-message-container a').on('click', () => {
       $('.welcome-message-container').remove();
       BDB.Session.setWelcomeMessageViewed(); 
 
