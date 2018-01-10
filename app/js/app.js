@@ -1947,7 +1947,10 @@ $(() => {
     }));
  
     $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
       hideAll();
+      goHome();
+      
       // setView('Login Administrador', '/login', true);
       // login(true);
 
@@ -2007,7 +2010,9 @@ $(() => {
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
       hideAll();
+      goHome();
 
       ga('send', 'event', 'Misc', 'contact opened');
       
