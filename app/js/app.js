@@ -1909,10 +1909,10 @@ $(() => {
       setView('', '/nav');
     });
     
-    $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
+    $('#filterBtn').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
-      setView('', '/filtros');
+      setView('', '/filtros'); 
     }));
 
     $('#show-bike-layer').on('change', e => {
@@ -2472,10 +2472,13 @@ $(() => {
       openContributionsModal();
       break;
     case 'nav':
-        _hamburgerMenu.show();
+      _hamburgerMenu.show();
+      break;
+    case 'filtros':
+      _filterMenu.show();
+      break;
     case 'novo' :
     case 'editar':
-    case 'filtros':
     case '':
       break;
     default:
