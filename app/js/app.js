@@ -692,30 +692,39 @@ $(() => {
       if (map) {
         //_geolocationMarker.setZIndex(markers.length);
 
-        var clusterOptions = {
-          // imagePath: 'img/markerClusterer/m', 
-          maxZoom: 10, 
-          minimumClusterSize: 1,
-          styles: [
-            {
-              url: '/img/markerCluster.png', 
-              height: 40,
-              width: 40
-            },
-            {
-              url: '/img/markerCluster.png',
-              height: 60,
-              width: 60
-            },
-            {
-              url: '/img/markerCluster.png',
-              height: 80,
-              width: 80
-            }
-          ]
-        };
+        const clustererStyles = [
+          {
+            url: '/img/cluster_small.png',
+            height: 40,
+            width: 40
+          },
+          {
+            url: '/img/cluster_medium.png',
+            height: 60,
+            width: 60
+          },
+          {
+            url: '/img/cluster_big.png',
+            height: 80,
+            width: 80
+          }
+        ];
+        let clustererOptions;
+        if (_isMobile) {
+          clustererOptions = {
+            maxZoom: 16, 
+            minimumClusterSize: 5, 
+            styles: clustererStyles
+          };
+        } else {
+          clustererOptions = {
+            maxZoom: 10, 
+            minimumClusterSize: 1,
+            styles: clustererStyles
+          };
+        }
 
-        _markerCluster = new MarkerClusterer(map, gmarkers, clusterOptions);
+        _markerCluster = new MarkerClusterer(map, gmarkers, clustererOptions);
       } 
     }
   }
@@ -2502,17 +2511,19 @@ $(() => {
         updateMarkers(); 
 
         //to-do: refactor this to map.js
-        google.maps.event.addListener(map, 'zoom_changed', () => {    
-          const prevZoomLevel = _mapZoomLevel;   
-       
-          _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';   
-       
-          if (prevZoomLevel !== _mapZoomLevel) {   
-            if (!_activeFilters) {   
-              setMarkersIcon(_mapZoomLevel);   
+        if (!_isMobile) {
+          google.maps.event.addListener(map, 'zoom_changed', () => {    
+            const prevZoomLevel = _mapZoomLevel;   
+        
+            _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';   
+        
+            if (prevZoomLevel !== _mapZoomLevel) {   
+              if (!_activeFilters) {   
+                setMarkersIcon(_mapZoomLevel);   
+              }    
             }    
-          }    
-        });
+          });
+        }
     });
 
     $(document).on("autocomplete:done", function(e){
