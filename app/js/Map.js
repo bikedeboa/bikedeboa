@@ -12,18 +12,18 @@ BDB.Map = (function(){
       positionWatcher,
       bikeLayer;
 
-  let initMap = function(coords, zoomValue = 15) {
+  let initMap = function(coords, zoomValue = 15, pinUser) {
     // Dynamically inject Google Map's lib
     $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
         $.getScript('/lib/infobox.min.js', () => {
-            initMap_continue(coords, zoomValue);
+            initMap_continue(coords, zoomValue, pinUser);
           }
         );
       }
     );
   };
   
-  let initMap_continue = function(coords, zoomValue = 15) {
+  let initMap_continue = function(coords, zoomValue = 15, pinUser) {
     let gpos = convertToGmaps(coords);
     map = new google.maps.Map(document.getElementById('map'), {
         center: gpos,
@@ -40,8 +40,10 @@ BDB.Map = (function(){
     });
     setMarker(); 
     setRadius();
-    updateMarkerPosition(gpos);
-
+    if (pinUser){
+      updateMarkerPosition(gpos);  
+    }
+    
     setupAutocomplete();
     BDB.Geolocation.init();
     
@@ -206,9 +208,11 @@ BDB.Map = (function(){
   };
   return {
     init: function(){
-      let zoom = (BDB.Geolocation.isDefaultLocation()) ? 15 : 17; 
+      let isDefaultLocation = BDB.Geolocation.isDefaultLocation();
+      let zoom = (isDefaultLocation) ? 15 : 17; 
       let coords =  BDB.Geolocation.getLastestLocation();
-      initMap(coords, zoom);
+
+      initMap(coords, zoom, !isDefaultLocation);
       
       // Check previous user permission for geolocation
       BDB.Geolocation.checkPermission().then( permission => {
