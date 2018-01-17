@@ -44,7 +44,8 @@ window.toggleSpinner = () => {
 };
 
 window.showSpinner = function (label, callback) {
-  console.log('showspinner');
+  console.debug('show spinner');
+
   if (label) {
     $('#globalSpinnerLabel').html(label);
   }
@@ -56,6 +57,8 @@ window.showSpinner = function (label, callback) {
 };
 
 window.hideSpinner = callback => {
+  console.debug('hide spinner');
+
   $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
     $('#globalSpinnerLabel').html('');
 

@@ -12,7 +12,18 @@ BDB.Map = (function(){
       positionWatcher,
       bikeLayer;
 
-  let initMap = function(coords, zoomValue = 15){
+  let initMap = function(coords, zoomValue = 15) {
+    // Dynamically inject Google Map's lib
+    $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
+        $.getScript('/lib/infobox.min.js', () => {
+            initMap_continue(coords, zoomValue);
+          }
+        );
+      }
+    );
+  };
+  
+  let initMap_continue = function(coords, zoomValue = 15) {
     let gpos = convertToGmaps(coords);
     map = new google.maps.Map(document.getElementById('map'), {
         center: gpos,
@@ -32,20 +43,20 @@ BDB.Map = (function(){
     updateMarkerPosition(gpos);
 
     setupAutocomplete();
+    BDB.Geolocation.init();
     
     map.addListener('center_changed', mapCenterChanged);
 
     setMapBounds();
     mapCenterChanged();
-    
+     
     setInfoBox();
 
     //native Event Dispatcher 
-    
     let event = new Event('map:ready');
     document.dispatchEvent(event);
-
   };
+
   let convertToGmaps = function(obj, convert = true){
     if (convert){
       let coords = {

@@ -1919,7 +1919,7 @@ $(() => {
 
       // Mobile optimizations
       if (_isMobile) {
-        $('#map, #addPlace').addClass('optimized-hidden');
+        // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
       } else {
         hideUI();
 
@@ -1932,8 +1932,8 @@ $(() => {
     $('body').on('hide.bs.modal', '.modal', e => {
       // $('.modal-dialog').velocity('transition.slideDownBigOut');
 
-      if (_isMobile) {
-        $('#map, #addPlace').removeClass('optimized-hidden');
+      if (_isMobile) { 
+        // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
         $('body').removeClass('transparent-mobile-topbar');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
@@ -2252,10 +2252,10 @@ $(() => {
     if (match && initialRouting) {
 
       _isDeeplink = true;
-
-      // $('#map').addClass('mock-map');
-      // $('#top-mobile-bar-title').text('bike de boa');
       $('body').addClass('deeplink'); 
+      // $('#top-mobile-bar-title').text('bike de boa');
+
+      // showSpinner();
 
       // Center the map on pin's position
       if (map && _deeplinkMarker) {
@@ -2579,16 +2579,16 @@ $(() => {
     }
 
     // Got Google Maps, either we're online or the SDK is in cache.
-    if (window.google) {
+    // if (window.google) {
       // On Mobile we defer the initialization of the map if we're in deeplink
       if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-        $(document).trigger("LoadMap");
+        $(document).trigger("LoadMap"); 
       }
-    } else {
-      if (window.location.pathname !== '/dados') {
-        setOfflineMode();
-      }
-    }
+    // } else {
+    //   if (window.location.pathname !== '/dados') {
+    //     setOfflineMode();
+    //   }
+    // }
     
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
     isMobileListener.addListener((isMobileListener) => {
@@ -2632,7 +2632,7 @@ $(() => {
 
       if (state.data && state.data.isHome) {
         if (!map && !_isOffline) {
-          $(document).trigger('loadMap');
+          $(document).trigger('LoadMap');
           //updateMarkers();
         }
 

@@ -1,15 +1,13 @@
 var BDB = BDB || {};
 
 BDB.Geolocation = (function(){
-
 	// intialize the geolocation in Porto Alegre
 	let currentPosition = {
 			latitude: -30.0346, 
 			longitude: -51.2177
 		};
-	let geocoder = new google.maps.Geocoder(); 
 	let positionWatcher;
-
+	let geocoder;
 
 	let setCurrentPosition = function(position){
 		let newstring = JSON.stringify(position,[
@@ -114,6 +112,9 @@ BDB.Geolocation = (function(){
         }
 	}; 
 	return {
+		init: function () {
+			geocoder = new google.maps.Geocoder();
+		},
 		getLastestLocation: function(){
 			getFromLocalStorage();
 			return currentPosition;
