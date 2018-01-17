@@ -689,6 +689,7 @@ $(() => {
         }
       }
 
+      // @todo move this to Map.js
       if (map) {
         //_geolocationMarker.setZIndex(markers.length);
 
@@ -712,8 +713,8 @@ $(() => {
         let clustererOptions;
         if (_isMobile) {
           clustererOptions = {
-            maxZoom: 16, 
-            minimumClusterSize: 5, 
+            maxZoom: 15, 
+            minimumClusterSize: 2, 
             styles: clustererStyles
           };
         } else {

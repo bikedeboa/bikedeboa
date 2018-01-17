@@ -11,8 +11,8 @@ BDB.Map = (function(){
       geolocationInitialized,
       positionWatcher,
       bikeLayer;
-
-  let initMap = function(coords, zoomValue = 15, pinUser) {
+   
+  let initMap = function(coords, zoomValue, pinUser) {
     // Dynamically inject Google Map's lib
     $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
         $.getScript('/lib/infobox.min.js', () => {
@@ -23,7 +23,7 @@ BDB.Map = (function(){
     );
   };
   
-  let initMap_continue = function(coords, zoomValue = 15, pinUser) {
+  let initMap_continue = function(coords, zoomValue, pinUser) {
     let gpos = convertToGmaps(coords);
     map = new google.maps.Map(document.getElementById('map'), {
         center: gpos,
@@ -209,7 +209,7 @@ BDB.Map = (function(){
   return {
     init: function(){
       let isDefaultLocation = BDB.Geolocation.isDefaultLocation();
-      let zoom = (isDefaultLocation) ? 15 : 17; 
+      let zoom = (isDefaultLocation) ? 13 : 17; 
       let coords =  BDB.Geolocation.getLastestLocation();
 
       initMap(coords, zoom, !isDefaultLocation);
