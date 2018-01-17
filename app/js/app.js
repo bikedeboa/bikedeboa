@@ -1647,7 +1647,7 @@ $(() => {
       setView('', '/nav');
     });
     
-    $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
+    $('#filterBtn').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
       setView('', '/filtros');
@@ -2239,9 +2239,12 @@ $(() => {
       break;
     case 'nav':
         _hamburgerMenu.show();
+        break;
+    case 'filtros':
+        _filterMenu.show();
+        break;
     case 'novo' :
     case 'editar':
-    case 'filtros':
     case '':
       break;
     default:
