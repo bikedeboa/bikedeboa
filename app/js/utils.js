@@ -12,31 +12,6 @@ BDB.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
 
-BDB.geocodeLatLng = function(lat, lng, successCB, failCB) {
-  const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
-
-  geocoder.geocode({'location': latlng}, function(results, status) {
-    if (status === google.maps.GeocoderStatus.OK) {
-      // console.log('geocoding results', results);
-      
-      if (results[0]) {
-        const r = results[0].address_components;
-        const address = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`
-        if (successCB && typeof successCB === 'function') {
-          successCB(address);
-        }
-      } else {
-        console.error('No results found');
-      }
-    } else {
-      console.error('Geocoder failed due to: ' + status);
-      if (failCB && typeof failCB === 'function') {
-        failCB();
-      }
-    }
-  });
-};
-
 window.createdAtToDaysAgo = createdAtStr => {
   const createdAtDate = Date.parse(createdAtStr);
   const msAgo = Date.now() - createdAtDate;
@@ -69,11 +44,12 @@ window.toggleSpinner = () => {
 };
 
 window.showSpinner = function (label, callback) {
-  console.log('showspinner');
+  console.debug('show spinner');
+
   if (label) {
     $('#globalSpinnerLabel').html(label);
   }
-  $('#spinnerOverlay').velocity('transition.fadeIn', {complete: () => {
+  $('#spinnerOverlay:hidden').velocity('transition.fadeIn', {complete: () => {
     if (callback && typeof callback === 'function') {
       callback();
     }
@@ -81,6 +57,8 @@ window.showSpinner = function (label, callback) {
 };
 
 window.hideSpinner = callback => {
+  console.debug('hide spinner');
+
   $('#spinnerOverlay').velocity('transition.fadeOut', {duration: 400, complete: () => {
     $('#globalSpinnerLabel').html('');
 

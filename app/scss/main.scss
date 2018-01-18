@@ -3579,6 +3579,11 @@ body.modal-open {
     #list-view {
       display: none;
     }
+
+    #map, #addPlace, #geolocationBtn {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 
   .modal {
