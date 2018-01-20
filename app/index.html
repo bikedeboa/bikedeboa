@@ -1634,40 +1634,18 @@
                         <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
                       {{/unless}}
                     {{/if}}
-
-                    
-                    <!-- {{#unless average}}
-                        <p style="font-style: italic; font-size: 14px;">
-                          Ninguém avaliou este bicicletário ainda.
-                        </p>
-                        <button class="openReviewPanelBtn ghost">Avaliar</button>
-
-                        <div class="rating-input-container" style="text-align: center;">
-                          <h2 style="margin-bottom: 0;">
-                            Dê sua nota 
-                          </h2>
-
-                          <fieldset class="rating rating-big empty">
-                              <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
-                              <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
-                              <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
-                              <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
-                              <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
-                              <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
-                              <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
-                          </fieldset>
-                        </div>
-                    {{/unless}} -->
-
                   </div>
 
-                  {{#if tags}}
-                      <div class="tagsContainer">
-                          {{{tags}}}
-                      </div>
+                  {{#if average}}
+                    {{#if tags}}
+                        <div class="tagsContainer">
+                            {{{tags}}}
+                        </div>
+                    {{else}}
+                        <div class="tagsContainer loading" style="position: relative;">
+                          Carregando... 
+                        </div>
+                    {{/if}}
                   {{/if}}
               </section>
 
@@ -1675,16 +1653,16 @@
 
               <section class="description">
                 <ul class="details-list">
-                  <li>
-                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
-                    {{#if author}}
-                      <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
-                    {{else}}
-                      {{#if createdTimeAgo}}
+                  {{#if createdTimeAgo}}
+                    <li>
+                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                      {{#if author}}
+                        <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                      {{else}}
                         <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
                       {{/if}}
-                    {{/if}}
-                  </li>
+                    </li>
+                  {{/if}}
 
                   {{#if description}}
                     <li>
@@ -1770,7 +1748,7 @@
           <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
 
           {{#if thumbnailUrl}}
-            <div class="infobox--img loading">
+            <div class="infobox--img">
               <img alt="" src="{{thumbnailUrl}}"/>
             </div>
           {{/if}}

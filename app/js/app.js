@@ -393,11 +393,13 @@ $(() => {
 
       if (!marker._hasDetails) {
         // Request content
-        Database.getPlaceDetails(marker.id, () => {
-          if (openedMarker && openedMarker.id === marker.id) {
-            openDetailsModal(marker, callback);
-          }
-        });
+        Database.getPlaceDetails(marker.id)
+          .then(updatedMarker => {
+            // Check if details panel is still open...
+            if (openedMarker && openedMarker.id === updatedMarker.id) {
+              openDetailsModal(updatedMarker, callback); 
+            }
+          });
       }
     }
   }
@@ -607,15 +609,7 @@ $(() => {
                 pinColor: getPinColorFromAverage(m.average)
               };
  
-              // @todo: encapsulate both the next 2 in one method
-              // Reviews count
-              if (m.reviews === 0) {
-                templateData.numReviews = '';
-              } else if (m.reviews === '1') {
-                templateData.numReviews = '1 avaliação';
-              } else {
-                templateData.numReviews = `${m.reviews} avaliações`;
-              }
+              templateData.numReviews = m.reviews;
 
               // Attributes
               const attrs = [];
@@ -642,9 +636,9 @@ $(() => {
                   _infoWindow.setContent(contentString);
                   _infoWindow.open(map, newMarker);
                   _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
+                    // $('.infobox--img img').off('load').on('load', e => {
+                    //   $(e.target).parent().removeClass('loading');
+                    // });
 
                     $('.infoBox').off('click').on('click', () => {
                       openLocal(markers[i]);
@@ -1402,9 +1396,9 @@ $(() => {
       }
 
       // Update marker data
-      Database.getPlaceDetails(m.id, () => {
+      Database.getPlaceDetails(m.id, updatedMarker => {
         updateMarkers();
-        openDetailsModal(m);
+        openDetailsModal(updatedMarker);
       });
     });
   }

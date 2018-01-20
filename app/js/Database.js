@@ -575,50 +575,43 @@ BDB.Database = {
     }
   },
 
-  getPlaceDetails: function(placeId, successCB, failCB, alwaysCB) {
+  getPlaceDetails: function(placeId) {
     const self = this;
 
     console.debug('Getting place detail...');
+ 
+    return new Promise((resolve, reject) => {
+      function justDoIt() {
+        $.ajax({
+          type: 'get',
+          headers: self._headers,
+          url: self.API_URL + '/local/' + placeId
+        }).done(function (data) {
+          if (data) {
+            console.debug('Got place detail:');
+            console.debug(data);
 
-    function justDoIt() { 
-      $.ajax({
-        type: 'get', 
-        headers: self._headers,
-        url: self.API_URL + '/local/' + placeId
-      }).done(function(data) {
-        if (data) {
-          console.debug('Got place detail:');
-          console.debug(data);
+            // Combine detailed data with what we had
+            let updatedMarker = markers.find(m => { return m.id === placeId; });
+            Object.assign(updatedMarker, data);
 
-          // Combine detailed data with what we had
-          let updatedMarker = markers.find(m => {return m.id === placeId; });
-          Object.assign(updatedMarker, data);
+            // Set flag
+            updatedMarker._hasDetails = true;
 
-          // Set flag
-          updatedMarker._hasDetails = true;
+            // Update offline-stored markers with new state
+            BDB.saveMarkersToLocalStorage(markers);
 
-          // Update offline-stored markers with new state
-          BDB.saveMarkersToLocalStorage(markers);
-
-          if (successCB && typeof successCB === 'function') {
-            successCB();
+            resolve(updatedMarker);
           }
-        }
-      })
-      .fail(() => {
-        requestFailHandler();
+        })
+        .fail(() => {
+          requestFailHandler();
 
-        if (failCB && typeof failCB === 'function') {
-          failCB();
-        }
-      })
-      .always(() => {
-        if (alwaysCB && typeof alwaysCB === 'function') {
-          alwaysCB();
-        }
-      });
-    }
+          reject();
+        })
+      }
 
-    this.waitAuthentication(justDoIt); 
+      this.waitAuthentication(justDoIt);
+    });
   },
 };

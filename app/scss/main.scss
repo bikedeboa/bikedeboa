@@ -557,7 +557,7 @@ a,
 #map a,
 a.unstyled-link {
   border-bottom: inherit;
-  box-shadow: inherit;
+  box-shadow: none;
   color: inherit;
   transition: inherit;
 
@@ -2015,12 +2015,10 @@ body.modal-open {
     }
 
     &.hasImage { 
-        // height: 180px;
         max-height: 60vh;
         height: auto;
-        // min-height: 170px;
-        // max-height: 170px;
-
+        min-height: 300px;
+ 
         & img {
             width: 100%;
             object-fit: cover;
@@ -2967,10 +2965,9 @@ body.modal-open {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  padding-top: $GRID_SPACE/2;
   // justify-content: flex-end;
   border-bottom: 1px solid $lighterGray;
-  background: $paleWhite;
+  // background: $paleWhite;
 
   hr {
     // border-left: 1px solid #eee; 
@@ -2987,8 +2984,13 @@ body.modal-open {
     background: none;
     color: $green;
     width: 100%;
-    padding: $GRID_SPACE/2 0;
+    padding: $GRID_SPACE 0 $GRID_SPACE/2;
     // min-width: 110px;
+
+    border-left: 1px solid $lighterGray;
+    &:first-child {
+      border: 0;
+    }
 
     backface-visibility: hidden;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -3381,7 +3383,7 @@ body.modal-open {
   }
 
   .numreviews {
-    color: $lightGray;
+    color: $gray;
   }
 
   .infobox--img {
@@ -3652,6 +3654,7 @@ body.modal-open {
 
       &.hasImage {
         height: 30vh;
+        min-height: 0;
       }
 
       &.hasImage:not(.loading):after {
@@ -3956,8 +3959,8 @@ body.modal-open {
         }
 
         .toolbar-item-icon {
-          width: 25px;
-          height: 25px;
+          width: 20px;
+          height: 20px;
         }
       }
     }
