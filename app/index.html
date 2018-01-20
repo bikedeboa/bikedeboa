@@ -103,6 +103,8 @@
                 <img alt="Carregando..." src="/img/spinner.svg"/>
 
                 <p id="globalSpinnerLabel"> </p>
+
+                <progress id="globalProgressBar" value="0" max="100"></progress>
             </div>
         </div>
 
@@ -1260,12 +1262,14 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="photo-container photoInputContainer">
-                            <img alt="" id="photoInputBg"/>
-
                             <input id="photoInput" type="file" name="photoInput" accept="image/*">
                             <label for="photoInput"></label>
 
-                            <span class="photoInputDisclaimer"">Você pode adicionar uma foto mais tarde se quiser ;)</span>
+                            <span class="photoInputDisclaimer">
+                              Você pode adicionar uma foto mais tarde se quiser ;)
+                            </span>
+
+                            <img alt="" id="photoInputBg" />
                         </div>
 
                         <div class="modal-body">
@@ -1811,11 +1815,11 @@
               Mais detalhes <span class="glyphicon glyphicon-chevron-right"></span>
             </div> -->
 
-            {{#unless average}}
+            <!-- {{#unless average}}
               <div class="infobox--label">
                 Clique para ver mais
               </div>
-            {{/unless}}
+            {{/unless}} -->
 
           </div>
         </script> 

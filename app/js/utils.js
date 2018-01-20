@@ -43,16 +43,21 @@ window.toggleSpinner = () => {
   $('#spinnerOverlay').fadeToggle();
 };
 
-window.showSpinner = function (label, callback) {
+window.showSpinner = function (label, showProgress) {
   console.debug('show spinner');
+
+  $('#globalProgressBar').toggle(!!showProgress);
+  if (showProgress) {
+    updateSpinnerProgress(0);
+  }
 
   if (label) {
     $('#globalSpinnerLabel').html(label);
   }
   $('#spinnerOverlay:hidden').velocity('transition.fadeIn', {complete: () => {
-    if (callback && typeof callback === 'function') {
-      callback();
-    }
+    // if (callback && typeof callback === 'function') {
+    //   callback();
+    // }
   }});
 };
 
@@ -68,8 +73,13 @@ window.hideSpinner = callback => {
   }});
 };
 
-window.defaultFailCallback = () => {
+window.updateSpinnerProgress = (percentComplete) => {
+  $('#globalProgressBar').attr('value', percentComplete*100);
+}
+
+window.requestFailHandler = () => {
   hideSpinner();
+  toastr['warning']('Ops, algo deu errado :(');
   // swal('Ops', 'Algo deu errado. :/', 'error');
 },
 

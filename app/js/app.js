@@ -921,7 +921,7 @@ $(() => {
     openedMarker = null;
     
     goHome();
-    showSpinner('Salvando bicicletário...');
+    showSpinner('Salvando...', true);
 
     let place = {};
 
@@ -948,6 +948,10 @@ $(() => {
     const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
         BDB.User.saveNewPlace(newPlace.id);
+      } else {
+        // Doesnt block the user from viewing the map if it was just updating the pin
+        hideSpinner();
+        toastr['success']('Bicicletário atualizado.');
       }
 
       Database.getPlaces( () => {
@@ -955,9 +959,7 @@ $(() => {
         
         hideSpinner();
 
-        if (updatingMarker) {
-          toastr['success']('Bicicletário atualizado.'); 
-        } else { 
+        if (!updatingMarker) {
           swal({
             title: 'Bicicletário criado',
             text: 'Valeu! Sua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
@@ -1108,6 +1110,8 @@ $(() => {
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
     $('#newPlaceModal .minimap-container').toggle(!!openedMarker);
     $('#newPlaceModal #cancelEditPlaceBtn').toggle(!!openedMarker);
+    
+    $('#newPlaceModal .photoInputDisclaimer').toggle(!openedMarker); 
 
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
