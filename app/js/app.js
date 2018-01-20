@@ -695,33 +695,45 @@ $(() => {
 
         const clustererStyles = [
           {
-            url: '/img/cluster_small.png',
-            height: 40,
-            width: 40
+            url: '/img/cluster_medium.png',
+            height: 50,
+            width: 50
           },
           {
             url: '/img/cluster_medium.png',
-            height: 60,
-            width: 60
+            height: 75,
+            width: 75
           },
           {
-            url: '/img/cluster_big.png',
+            url: '/img/cluster_medium.png',
             height: 80,
             width: 80
-          }
+          },
+          { 
+            url: '/img/cluster_big.png',
+            height: 100,
+            width: 100
+          },
+          { 
+            url: '/img/cluster_big.png',
+            height: 120,
+            width: 120
+          },
         ];
         let clustererOptions;
         if (_isMobile) {
           clustererOptions = {
             maxZoom: 15, 
             minimumClusterSize: 2, 
-            styles: clustererStyles
+            styles: clustererStyles,
+            gridSize: 50 
           };
         } else {
-          clustererOptions = {
+          clustererOptions = { 
             maxZoom: 10, 
             minimumClusterSize: 1,
-            styles: clustererStyles
+            styles: clustererStyles,
+            gridSize: 50
           };
         }
 
