@@ -393,11 +393,13 @@ $(() => {
 
       if (!marker._hasDetails) {
         // Request content
-        Database.getPlaceDetails(marker.id, () => {
-          if (openedMarker && openedMarker.id === marker.id) {
-            openDetailsModal(marker, callback);
-          }
-        });
+        Database.getPlaceDetails(marker.id)
+          .then(updatedMarker => {
+            // Check if details panel is still open...
+            if (openedMarker && openedMarker.id === updatedMarker.id) {
+              openDetailsModal(updatedMarker, callback); 
+            }
+          });
       }
     }
   }
@@ -607,15 +609,7 @@ $(() => {
                 pinColor: getPinColorFromAverage(m.average)
               };
  
-              // @todo: encapsulate both the next 2 in one method
-              // Reviews count
-              if (m.reviews === 0) {
-                templateData.numReviews = '';
-              } else if (m.reviews === '1') {
-                templateData.numReviews = '1 avaliação';
-              } else {
-                templateData.numReviews = `${m.reviews} avaliações`;
-              }
+              templateData.numReviews = m.reviews;
 
               // Attributes
               const attrs = [];
@@ -642,9 +636,9 @@ $(() => {
                   _infoWindow.setContent(contentString);
                   _infoWindow.open(map, newMarker);
                   _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
+                    // $('.infobox--img img').off('load').on('load', e => {
+                    //   $(e.target).parent().removeClass('loading');
+                    // });
 
                     $('.infoBox').off('click').on('click', () => {
                       openLocal(markers[i]);
@@ -695,33 +689,45 @@ $(() => {
 
         const clustererStyles = [
           {
-            url: '/img/cluster_small.png',
-            height: 40,
-            width: 40
+            url: '/img/cluster_medium.png',
+            height: 50,
+            width: 50
           },
           {
             url: '/img/cluster_medium.png',
-            height: 60,
-            width: 60
+            height: 75,
+            width: 75
           },
           {
-            url: '/img/cluster_big.png',
+            url: '/img/cluster_medium.png',
             height: 80,
             width: 80
-          }
+          },
+          { 
+            url: '/img/cluster_big.png',
+            height: 100,
+            width: 100
+          },
+          { 
+            url: '/img/cluster_big.png',
+            height: 120,
+            width: 120
+          },
         ];
         let clustererOptions;
         if (_isMobile) {
           clustererOptions = {
             maxZoom: 15, 
             minimumClusterSize: 2, 
-            styles: clustererStyles
+            styles: clustererStyles,
+            gridSize: 50 
           };
         } else {
-          clustererOptions = {
+          clustererOptions = { 
             maxZoom: 10, 
             minimumClusterSize: 1,
-            styles: clustererStyles
+            styles: clustererStyles,
+            gridSize: 50
           };
         }
 
@@ -909,7 +915,7 @@ $(() => {
     openedMarker = null;
     
     goHome();
-    showSpinner('Salvando bicicletário...');
+    showSpinner('Salvando...', true);
 
     let place = {};
 
@@ -936,6 +942,10 @@ $(() => {
     const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
         BDB.User.saveNewPlace(newPlace.id);
+      } else {
+        // Doesnt block the user from viewing the map if it was just updating the pin
+        hideSpinner();
+        toastr['success']('Bicicletário atualizado.');
       }
 
       Database.getPlaces( () => {
@@ -943,9 +953,7 @@ $(() => {
         
         hideSpinner();
 
-        if (updatingMarker) {
-          toastr['success']('Bicicletário atualizado.'); 
-        } else { 
+        if (!updatingMarker) {
           swal({
             title: 'Bicicletário criado',
             text: 'Valeu! Sua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
@@ -1096,6 +1104,8 @@ $(() => {
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
     $('#newPlaceModal .minimap-container').toggle(!!openedMarker);
     $('#newPlaceModal #cancelEditPlaceBtn').toggle(!!openedMarker);
+    
+    $('#newPlaceModal .photoInputDisclaimer').toggle(!openedMarker); 
 
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
@@ -1386,9 +1396,9 @@ $(() => {
       }
 
       // Update marker data
-      Database.getPlaceDetails(m.id, () => {
+      Database.getPlaceDetails(m.id, updatedMarker => {
         updateMarkers();
-        openDetailsModal(m);
+        openDetailsModal(updatedMarker);
       });
     });
   }

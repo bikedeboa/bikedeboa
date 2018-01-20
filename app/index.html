@@ -37,40 +37,6 @@
         <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date; h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')}; (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c; })(window,document.documentElement,'async-hide','dataLayer',4000, {'GTM-MCCV34X':true});</script>  -->
 
 
-        <!-- Google Analytics --> 
-        <script>
-          if (location.hostname === 'www.bikedeboa.com.br') {
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-            ga('create', 'UA-19085664-3', {'siteSpeedSampleRate': 100});
-            ga('require', 'GTM-MCCV34X');
-            ga('send', 'pageview');
-          } else {
-            ga = function() {};            
-          }
-        </script>
-
-        <script>
-           WebFontConfig = {
-            google: {
-              families: ['Quicksand:500,500i,700']
-              // families: ['Ubuntu:400,400i,700']
-              // families: ['Poppins:400,400i,700']
-            }
-          };
-
-           (function(d) {
-              var wf = d.createElement('script'), s = d.scripts[0];
-              wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
-              wf.async = true;
-              s.parentNode.insertBefore(wf, s);
-           })(document);
-        </script>
-
-
         <!-- Google Maps API (deferred) -->
         <!-- > moved to be dynamically injected in Map.js -->
         <!-- <script defer src="https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR" type="text/javascript"></script> -->
@@ -137,6 +103,8 @@
                 <img alt="Carregando..." src="/img/spinner.svg"/>
 
                 <p id="globalSpinnerLabel"> </p>
+
+                <progress id="globalProgressBar" value="0" max="100"></progress>
             </div>
         </div>
 
@@ -1294,12 +1262,14 @@
                 <div class="modal-dialog vertical-align-center">
                     <div class="modal-content">
                         <div class="photo-container photoInputContainer">
-                            <img alt="" id="photoInputBg"/>
-
                             <input id="photoInput" type="file" name="photoInput" accept="image/*">
                             <label for="photoInput"></label>
 
-                            <span class="photoInputDisclaimer"">Você pode adicionar uma foto mais tarde se quiser ;)</span>
+                            <span class="photoInputDisclaimer">
+                              Você pode adicionar uma foto mais tarde se quiser ;)
+                            </span>
+
+                            <img alt="" id="photoInputBg" />
                         </div>
 
                         <div class="modal-body">
@@ -1664,40 +1634,18 @@
                         <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
                       {{/unless}}
                     {{/if}}
-
-                    
-                    <!-- {{#unless average}}
-                        <p style="font-style: italic; font-size: 14px;">
-                          Ninguém avaliou este bicicletário ainda.
-                        </p>
-                        <button class="openReviewPanelBtn ghost">Avaliar</button>
-
-                        <div class="rating-input-container" style="text-align: center;">
-                          <h2 style="margin-bottom: 0;">
-                            Dê sua nota 
-                          </h2>
-
-                          <fieldset class="rating rating-big empty">
-                              <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
-                              <label class="full-star" data-value="5" for="placeDetails_star5_input" title="De boa!"></label> 
-                              <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-                              <label class="full-star" data-value="4" for="placeDetails_star4_input" title="Bem bom"></label>
-                              <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-                              <label class="full-star" data-value="3" for="placeDetails_star3_input" title="Médio"></label>
-                              <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-                              <label class="full-star" data-value="2" for="placeDetails_star2_input" title="Ruim"></label>
-                              <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
-                              <label class="full-star" data-value="1" for="placeDetails_star1" title="Horrivel"></label>
-                          </fieldset>
-                        </div>
-                    {{/unless}} -->
-
                   </div>
 
-                  {{#if tags}}
-                      <div class="tagsContainer">
-                          {{{tags}}}
-                      </div>
+                  {{#if average}}
+                    {{#if tags}}
+                        <div class="tagsContainer">
+                            {{{tags}}}
+                        </div>
+                    {{else}}
+                        <div class="tagsContainer loading" style="position: relative;">
+                          Carregando... 
+                        </div>
+                    {{/if}}
                   {{/if}}
               </section>
 
@@ -1705,16 +1653,16 @@
 
               <section class="description">
                 <ul class="details-list">
-                  <li>
-                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
-                    {{#if author}}
-                      <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
-                    {{else}}
-                      {{#if createdTimeAgo}}
+                  {{#if createdTimeAgo}}
+                    <li>
+                      <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                      {{#if author}}
+                        <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                      {{else}}
                         <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
                       {{/if}}
-                    {{/if}}
-                  </li>
+                    </li>
+                  {{/if}}
 
                   {{#if description}}
                     <li>
@@ -1800,7 +1748,7 @@
           <span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
 
           {{#if thumbnailUrl}}
-            <div class="infobox--img loading">
+            <div class="infobox--img">
               <img alt="" src="{{thumbnailUrl}}"/>
             </div>
           {{/if}}
@@ -1845,11 +1793,11 @@
               Mais detalhes <span class="glyphicon glyphicon-chevron-right"></span>
             </div> -->
 
-            {{#unless average}}
+            <!-- {{#unless average}}
               <div class="infobox--label">
                 Clique para ver mais
               </div>
-            {{/unless}}
+            {{/unless}} -->
 
           </div>
         </script> 
@@ -1938,6 +1886,41 @@
 
 
         <!-- External -->
+
+        <!-- Google Analytics -->
+        <script>
+            if (location.hostname === 'www.bikedeboa.com.br') {
+                (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-19085664-3', { 'siteSpeedSampleRate': 100 });
+                ga('require', 'GTM-MCCV34X');
+                ga('send', 'pageview');
+            } else {
+                ga = function () { };
+            }
+        </script>
+        
+        <script>
+            WebFontConfig = {
+                google: {
+                    families: ['Quicksand:500,500i,700']
+                    // families: ['Ubuntu:400,400i,700']
+                    // families: ['Poppins:400,400i,700']
+                }
+            };
+
+            (function (d) {
+                var wf = d.createElement('script'), s = d.scripts[0];
+                wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+                wf.async = true;
+                s.parentNode.insertBefore(wf, s);
+            })(document);
+        </script>
 
         <!-- Heap -->
         <script type="text/javascript">

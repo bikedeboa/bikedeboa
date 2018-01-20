@@ -274,7 +274,7 @@ BDB.Database = {
       headers: self._headers,
       url: self.API_URL + '/review/' + reviewId,
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
       },
       success: function(data) {
@@ -363,6 +363,7 @@ BDB.Database = {
     console.debug(place);
 
     $.ajax({
+      xhr: () => this.getUploadProgressHandler(),
       type: 'post',
       headers: self._headers,
       url: self.API_URL + '/local',
@@ -378,10 +379,25 @@ BDB.Database = {
         }
       },
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
-      }
+      },
     });
+  },
+
+  getUploadProgressHandler: function() {
+    let xhr = new window.XMLHttpRequest();
+
+    // Upload progress
+    xhr.upload.addEventListener("progress", function (evt) {
+      if (evt.lengthComputable) {
+        const percentComplete = evt.loaded / evt.total;
+        // console.log(percentComplete);
+        updateSpinnerProgress(percentComplete);
+      }
+    }, false);
+
+    return xhr;
   },
 
   updatePlace: function(placeId, place, callback) {
@@ -389,8 +405,9 @@ BDB.Database = {
 
     console.debug('Updating place:');
     console.debug(place);
-
+ 
     $.ajax({
+      xhr: () => this.getUploadProgressHandler(),
       type: 'put',
       headers: self._headers,
       url: self.API_URL + '/local/' + placeId,
@@ -405,7 +422,7 @@ BDB.Database = {
         }
       },
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
       }
     });
@@ -419,7 +436,7 @@ BDB.Database = {
       headers: self._headers,
       url: self.API_URL + '/local/' + placeId,
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
       },
       success: function(data) {
@@ -470,7 +487,7 @@ BDB.Database = {
           successCB();
         }
       } else {
-        defaultFailCallback();
+        requestFailHandler();
 
         if (failCB && typeof failCB === 'function') {
           failCB();
@@ -478,7 +495,7 @@ BDB.Database = {
       }
     })
     .fail(() => {
-      defaultFailCallback();
+      requestFailHandler();
 
       if (failCB && typeof failCB === 'function') {
         failCB();
@@ -500,6 +517,19 @@ BDB.Database = {
       type: 'get',
       headers: self._headers, 
       url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
+      // xhr: function () {
+      //   var xhr = new window.XMLHttpRequest();
+      //   // Download progress
+      //   xhr.addEventListener("progress", function (evt) {
+      //     console.log('download progress');
+      //     if (evt.lengthComputable) {
+      //       var percentComplete = evt.loaded / evt.total;
+      //       //Do something with download progress
+      //       console.log(percentComplete);
+      //     }
+      //   }, false);
+      //   return xhr;
+      // },
     }).done(function(data) {
       console.debug('Retrieved ' + data.length + ' locations from API.');
 
@@ -523,7 +553,7 @@ BDB.Database = {
       }
     })
     .fail(() => {
-      defaultFailCallback();
+      requestFailHandler();
 
       if (failCB && typeof failCB === 'function') {
         failCB();
@@ -545,50 +575,43 @@ BDB.Database = {
     }
   },
 
-  getPlaceDetails: function(placeId, successCB, failCB, alwaysCB) {
+  getPlaceDetails: function(placeId) {
     const self = this;
 
     console.debug('Getting place detail...');
+ 
+    return new Promise((resolve, reject) => {
+      function justDoIt() {
+        $.ajax({
+          type: 'get',
+          headers: self._headers,
+          url: self.API_URL + '/local/' + placeId
+        }).done(function (data) {
+          if (data) {
+            console.debug('Got place detail:');
+            console.debug(data);
 
-    function justDoIt() { 
-      $.ajax({
-        type: 'get', 
-        headers: self._headers,
-        url: self.API_URL + '/local/' + placeId
-      }).done(function(data) {
-        if (data) {
-          console.debug('Got place detail:');
-          console.debug(data);
+            // Combine detailed data with what we had
+            let updatedMarker = markers.find(m => { return m.id === placeId; });
+            Object.assign(updatedMarker, data);
 
-          // Combine detailed data with what we had
-          let updatedMarker = markers.find(m => {return m.id === placeId; });
-          Object.assign(updatedMarker, data);
+            // Set flag
+            updatedMarker._hasDetails = true;
 
-          // Set flag
-          updatedMarker._hasDetails = true;
+            // Update offline-stored markers with new state
+            BDB.saveMarkersToLocalStorage(markers);
 
-          // Update offline-stored markers with new state
-          BDB.saveMarkersToLocalStorage(markers);
-
-          if (successCB && typeof successCB === 'function') {
-            successCB();
+            resolve(updatedMarker);
           }
-        }
-      })
-      .fail(() => {
-        defaultFailCallback();
+        })
+        .fail(() => {
+          requestFailHandler();
 
-        if (failCB && typeof failCB === 'function') {
-          failCB();
-        }
-      })
-      .always(() => {
-        if (alwaysCB && typeof alwaysCB === 'function') {
-          alwaysCB();
-        }
-      });
-    }
+          reject();
+        })
+      }
 
-    this.waitAuthentication(justDoIt); 
+      this.waitAuthentication(justDoIt);
+    });
   },
 };
