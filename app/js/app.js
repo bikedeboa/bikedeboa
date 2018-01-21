@@ -234,7 +234,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template // 
     ////////////////////////////////
-    $('#placeDetailsContent').html(templates.placeDetailsContentTemplate(templateData));
+    $('#placeDetailsContent').html(BDB.templates.placeDetailsContent(templateData));
 
     if (m.average) {
       $('input[name=placeDetails_rating]').val(['' + Math.round(m.average)]);
@@ -608,7 +608,7 @@ $(() => {
               }
               templateData.attrs = attrs.join(' · '); 
 
-              const contentString = templates.infoWindowTemplate(templateData);
+              const contentString = BDB.templates.infoWindow(templateData);
 
               if (_isTouchDevice) {
                 // Infobox preview on click
@@ -1009,53 +1009,6 @@ $(() => {
     }
 
     hideSpinner();
-  }
-
-  function _initTemplates() {
-    // Thanks https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
-    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
-      switch (operator) {
-      case '==':
-        return (v1 == v2) ? options.fn(this) : options.inverse(this);
-      case '===':
-        return (v1 === v2) ? options.fn(this) : options.inverse(this);
-      case '!=':
-        return (v1 != v2) ? options.fn(this) : options.inverse(this);
-      case '!==':
-        return (v1 !== v2) ? options.fn(this) : options.inverse(this);
-      case '<':
-        return (v1 < v2) ? options.fn(this) : options.inverse(this);
-      case '<=':
-        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
-      case '>':
-        return (v1 > v2) ? options.fn(this) : options.inverse(this);
-      case '>=':
-        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-      case '&&':
-        return (v1 && v2) ? options.fn(this) : options.inverse(this);
-      case '&&!':
-        return (v1 && !v2) ? options.fn(this) : options.inverse(this);
-      case '||':
-        return (v1 || v2) ? options.fn(this) : options.inverse(this);
-      case '||!':
-        return (v1 || !v2) ? options.fn(this) : options.inverse(this);
-      default:
-        return options.inverse(this);
-      }
-    });
-
-    // Pre-compile all Handlebars templates
-    [
-      'placeDetailsContentTemplate',
-      'infoWindowTemplate',
-      'contributionsModalTemplate',
-      'searchOverlayTemplate',
-    ].forEach( templateName => {
-      let templateContent = $(`#${templateName}`).html();
-      if (templateContent) {
-        templates[templateName] = Handlebars.compile(templateContent);
-      }
-    });
   }
 
   function validateNewPlaceForm() {
@@ -1513,7 +1466,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#searchOverlayContentPlaceholder').html(templates.searchOverlayTemplate(templateData));
+    $('#searchOverlayContentPlaceholder').html(BDB.templates.searchOverlay(templateData));
 
     $('#search-overlay .recent-searches button').off('click').on('click', e => {
       const $target = $(e.currentTarget);
@@ -2182,7 +2135,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#modalPlaceholder').html(templates.contributionsModalTemplate(templateData));
+    $('#modalPlaceholder').html(BDB.templates.contributionsModal(templateData));
     $('#contributionsModal').modal('show');
 
     $('.go-to-place-btn').off('click').on('click', e => {
@@ -2600,8 +2553,6 @@ $(() => {
     //     setOfflineMode();
     //   }
     // }
-
-    _initTemplates();
 
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {

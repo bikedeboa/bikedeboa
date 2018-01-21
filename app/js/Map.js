@@ -110,7 +110,8 @@ BDB.Map = (function () {
     );
   };
   let setInfoBox = function () {
-    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 400;
+    // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 400;
+    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
       maxWidth: 0,
       pixelOffset: new google.maps.Size(-infoboxWidth / 2, 0),
@@ -118,7 +119,8 @@ BDB.Map = (function () {
       zIndex: null,
       boxStyle: {
         width: `${infoboxWidth}px`,
-        height: _isMobile ? '75px' : '100px',
+        // height: _isMobile ? '75px' : '100px',
+        height: '75px',
         cursor: 'pointer',
       },
       // closeBoxMargin: '10px 2px 2px 2px',

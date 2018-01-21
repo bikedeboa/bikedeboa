@@ -25,6 +25,11 @@ const swPrecache = require('sw-precache');
 const htmlmin = require('gulp-htmlmin');
 const environments = require('gulp-environments');
 const replace = require('gulp-replace');
+const handlebars = require('gulp-handlebars');
+const wrap = require('gulp-wrap');
+const declare = require('gulp-declare'); 
+const merge = require('merge-stream');
+
 
 const BOWER_PATH = './bower_components';
 const DEST_PATH =  'dist';
@@ -62,7 +67,6 @@ if (facebookEnv === 'beta') {
 }
 
 
-
 // SASS
 gulp.task('sass', () => {
     return gulp.src('app/scss/*.scss')
@@ -88,27 +92,38 @@ gulp.task('scripts', () => {
   gulp.src('app/service-worker-registration.js')
     .pipe(gulp.dest('dist/'));
 
-  return gulp.src('app/js/*.js') 
+  var jsStream = gulp.src('app/js/*.js')
     .pipe(development(sourcemaps.init()))
     .pipe(replace('<DATABASE_URL>', DATABASE_URL))
     .pipe(replace('<FACEBOOK_CLIENT_ID>', FACEBOOK_CLIENT_ID))
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
-    .pipe(plumber()) 
-    .pipe(concat('app.js'))
+    .pipe(plumber())
+    // .pipe(concat('app.js'))
     .pipe(babel({
       presets: ['es2015']
     }))
+
+  var templatesStream = gulp.src('app/templates/*.hbs')
+    .pipe(handlebars())
+    .pipe(wrap('Handlebars.template(<%= contents %>)'))
+    .pipe(declare({
+      namespace: 'BDB.templates',
+      noRedeclare: true, // Avoid duplicate declarations
+    }))
+    // .pipe(concat('templates.js')) 
+
+  return merge(jsStream, templatesStream)
+    .pipe(concat('app.min.js')) 
     // .on('error', function(e) {
     //   console.log(e);
     //   this.emit('end');
     // })
-    // .pipe(sourcemaps.write('maps'))
     // .pipe(gulp.dest('dist/js'))
-    .pipe(rename('app.min.js'))
+    // .pipe(rename('app.min.js'))
     .pipe(production(uglify()))
     .pipe(sourcemaps.write('maps'))
-    .pipe(fileSizes({title: 'app.min.js', gzip: true}))
+    .pipe(fileSizes({ title: 'app.min.js', gzip: true }))
     .pipe(gulp.dest('dist/js'));
 });
 
@@ -212,17 +227,18 @@ gulp.task('bower-fonts', function() {
 
 // Watch Files For Changes
 gulp.task('watch', () => {
-  // gulp.watch('js/*.js', ['lint', 'scripts']);
-  // gulp.watch('assets/*', ['images']);
   gulp.watch('app/js/*.js', () => {
     runSequence(['scripts'], ['generate-service-worker'])
   });
   gulp.watch('app/scss/*.scss', () => {
     runSequence(['sass'], ['generate-service-worker'])
-  });
+  }); 
   gulp.watch('app/*.html', () => {
     runSequence(['html'], ['generate-service-worker'])
   });
+  gulp.watch('app/templates/*.hbs', () => {
+    runSequence(['scripts'], ['generate-service-worker'])
+  }); 
 });
 
 gulp.task('images', () => {
@@ -234,7 +250,7 @@ gulp.task('images', () => {
 gulp.task('server', () => {
   child.spawn('node', ['server.js']);
   // var log = fs.createWriteStream('server.log', {flags: 'a'});
-  // server.stdout.pipe(log);
+  // server.stdout.pipe(log); 
   // server.stderr.pipe(log);
 });
 
@@ -242,7 +258,7 @@ gulp.task('clean', del.bind(null, ['dist']));
  
 gulp.task('build', () => {
   runSequence(['clean'], ['bower', 'bower-fonts', 'html', 'sass', 'scripts'], ['generate-service-worker'], () => {
-    return gulp.src('dist/**/*').pipe(fileSizes({title: 'total output', gzip: true}));
+    return gulp.src('dist/**/*').pipe(fileSizes({title: 'total output', gzip: true})); 
   });
 });
 
