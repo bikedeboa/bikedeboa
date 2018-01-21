@@ -856,7 +856,7 @@ $(() => {
                 `Foi mal, o bike de boa ainda não chegou aqui!
                 <br><br>
                 <small>
-                  <i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">
+                  <i>Acompanha nosso <a class="external-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
                   Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i>
                 </small>`,
               type: 'warning',
@@ -1496,9 +1496,7 @@ $(() => {
         </p>
 
         <p class="disclaimer">
-          Para qualquer comentário sobre o site em geral, lembre que estamos sempre de olho no 
-          <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> 
-          email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
+          Para qualquer comentário sobre o site em geral, entre em <a class="external-link contact-btn"> <img src="/img/icon_mail.svg" class="icon-mail" /> contato</a>!
         </p>`,
       confirmButtonText: 'Enviar',
       showCloseButton: true
@@ -1810,7 +1808,7 @@ $(() => {
 
             <h2 class="swal2-title" id="swal2-title">Feedback</h2>
             <div style="text-align: center;">
-              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
             </div>
           `,
       });
