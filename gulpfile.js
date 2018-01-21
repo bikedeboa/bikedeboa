@@ -115,7 +115,7 @@ gulp.task('scripts', () => {
 // HTML
 gulp.task('html', () => {
   return gulp.src('app/*.html')
-    .pipe(development(replace('manifest.webmanifest', 'manifest-dev.webmanifest')))
+    .pipe(development(replace('manifest.json', 'manifest-dev.json')))
     .pipe(development(replace('/favicons/', '/favicons-dev/')))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(production(htmlmin({
