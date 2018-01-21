@@ -2,30 +2,30 @@
 /* eslint-env node, jquery */
 
 $(() => {
-  function getPinColorFromAverage(average) {
+  function getColorFromAverage(average) {
     if (typeof average === 'string') {
       average = parseFloat(average);
     }
       
-    let pinColor;
+    let color;
 
     if (average) {
       if (!average || average === 0) {
-        pinColor = 'gray';
+        color = 'gray';
       } else if (average > 0 && average <= 2) {
-        pinColor = 'red'; 
+        color = 'red'; 
       } else if (average > 2 && average < 3.5) {
-        pinColor = 'yellow';
+        color = 'yellow';
       } else if (average >= 3.5) {
-        pinColor = 'green';
+        color = 'green';
       } else {
-        pinColor = 'gray'; 
+        color = 'gray'; 
       }
     } else { 
-      pinColor = 'gray';
+      color = 'gray';
     }
 
-    return pinColor; 
+    return color; 
   }
 
   function openShareDialog() {
@@ -136,7 +136,7 @@ $(() => {
     }
 
     // Average
-    templateData.pinColor = getPinColorFromAverage(m.average);
+    templateData.pinColor = getColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
@@ -240,7 +240,16 @@ $(() => {
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
-      templateData.savedRating = previousReview.rating;
+      const rating = previousReview.rating;
+      
+      templateData.color = getColorFromAverage(rating);
+
+      // @todo modularize this method
+      let stars = '';
+      for (let s = 0; s < parseInt(rating); s++) {
+        stars += '<span class="glyphicon glyphicon-star"></span>';
+      }
+      templateData.savedRatingContent = rating + stars;
     }
 
     if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
@@ -333,8 +342,9 @@ $(() => {
     } else { 
       // Just fade new detailed content in
       // $('#placeDetailsContent .photo-container, #placeDetailsContent .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-      $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-    }
+      $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description')
+        .velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false, duration: 2000});
+    } 
 
     // Tooltips
     if(!_isTouchDevice) {
@@ -606,7 +616,7 @@ $(() => {
                 title: m.text,
                 average: m.average,
                 roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average)
+                pinColor: getColorFromAverage(m.average)
               };
  
               templateData.numReviews = m.reviews;
@@ -1134,7 +1144,7 @@ $(() => {
       // Minimap
       // @todo generalize this
       const staticImgDimensions = _isMobile ? '400x100' : '1000x100';
-      const minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getPinColorFromAverage(m.average), m.lat, m.lng, 20);
+      const minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getColorFromAverage(m.average), m.lat, m.lng, 20);
       $('#newPlaceModal .minimap').attr('src', minimapUrl);
 
       // More info section
@@ -1268,7 +1278,7 @@ $(() => {
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Deletar',
-        confirmButtonColor: '#FF8265'
+        confirmButtonColor: '#FF8265' 
       }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
@@ -1396,10 +1406,11 @@ $(() => {
       }
 
       // Update marker data
-      Database.getPlaceDetails(m.id, updatedMarker => {
-        updateMarkers();
-        openDetailsModal(updatedMarker);
-      });
+      Database.getPlaceDetails(m.id)
+        .then(updatedMarker => {
+          updateMarkers();
+          openDetailsModal(updatedMarker);
+        });
     });
   }
 
@@ -1918,9 +1929,9 @@ $(() => {
     // Modal callbacks
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
-      // $('.modal-dialog')
-      //   .velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION})
-      //   .velocity({display: 'table-cell'});
+      $('.modal-dialog')
+        .velocity((_isMobile ? 'transition.slideUpIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
+        .velocity({display: 'table-cell'}); 
 
       // Set mobile navbar with modal's title
       const openingModalTitle = $(e.currentTarget).find('.view-name').text();
@@ -1941,7 +1952,8 @@ $(() => {
     });
 
     $('body').on('hide.bs.modal', '.modal', e => {
-      // $('.modal-dialog').velocity('transition.slideDownBigOut');
+      // Doesnt work :()
+      // $('.modal-dialog').velocity((_isMobile ? 'transition.slideDownOut' : 'transition.slideUpOut'), {queue: true})
 
       if (_isMobile) { 
         // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
@@ -2106,8 +2118,13 @@ $(() => {
           r.createdTimeAgo = createdAtToDaysAgo(r.createdAt);
         }
 
-        r.rating = r.rating + '';
-        r.color = getPinColorFromAverage(r.rating);
+        let stars = '';
+        for (let s=0; s < r.rating; s++) {
+          stars += '<span class="glyphicon glyphicon-star"></span>';
+        }
+        r.ratingContent = r.rating + stars; 
+
+        r.color = getColorFromAverage(r.rating);
       }
  
       templateData.reviews = templateData.reviews.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
@@ -2256,6 +2273,7 @@ $(() => {
         break;
     case 'novo' :
     case 'editar':
+    case 'foto':
     case '':
       break;
     default:
@@ -2685,7 +2703,7 @@ $(() => {
     swal.setDefaults({
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
-      confirmButtonClass: 'btn green',
+      confirmButtonClass: 'btn',
       cancelButtonText: 'Cancelar',
       cancelButtonClass: 'btn',
       buttonsStyling: false,

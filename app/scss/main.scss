@@ -121,6 +121,11 @@ $GRID_SPACE: 12px;
   border-radius: 5px;
 }
 
+@mixin defaultButtonHover {
+  transform: translateY(-1px);
+  box-shadow: 0px 6px 10px rgba(0,0,0,.2);
+}
+
 
 
 
@@ -137,6 +142,12 @@ body {
     overflow: hidden;
     font-family: $bodyFont;
     background-color: $lightestGray;
+}
+
+// Completely hide occasional scrollbars for smoother transitions
+body::-webkit-scrollbar,
+.modal-dialog::-webkit-scrollbar {
+    display: none;
 }
 
 body.beta #map {
@@ -384,7 +395,10 @@ p {
 
 .help-tooltip-trigger {
   cursor: pointer;
-  color: $lightGray;
+  color: $lightGray; 
+
+  transition: color .2s ease;
+
   
   & + .tooltip {
     .tooltip-inner {
@@ -535,13 +549,24 @@ body.deeplink {
     direction: rtl;
     user-select: none;
     cursor: default;
+} 
+
+a {
+  &:focus,
+  &:active,
+  &:hover {
+    text-decoration: none; 
+  }
 }
 
-a,
+.external-link,
 .link-like {
     color: $black;
     border-bottom: 3px solid $yellow;
     box-shadow: inset 0 -4px 0 $yellow;
+
+    cursor: pointer;
+    
     transition: all 0.2s ease;
 
     &:focus,
@@ -559,7 +584,7 @@ a.unstyled-link {
   border-bottom: inherit;
   box-shadow: none;
   color: inherit;
-  transition: inherit;
+  transition: inherit; 
 
   &:focus,
   &:active,
@@ -1379,7 +1404,7 @@ a.unstyled-link {
     padding: 13px;
     text-align: left;
     overflow: hidden;
-    transition: width .5s $coolEaseOut;
+    transition: width .5s $coolEaseOut, background .2s;
 
     // transition: background 0.2s ease-out, width 0.5s ease-out;
     // opacity: 0;
@@ -1820,7 +1845,7 @@ body.modal-open {
     height: 46px;
     border-radius: 50%;
 
-    // transition: color 0.2s ease-out;
+    transition: all 0.2s ease-out;
 
     &:hover {
       background: $lighterGray;
@@ -2414,13 +2439,13 @@ body.modal-open {
     vertical-align: middle;
     background: transparent;
 
-    // transition: color .2s ease, background .2s ease;
+    transition: all;
     
     &:hover,
     &:focus,
     &:active {
         color: white;
-        border-color: white;
+        border-color: transparent;
         // background-color: $gray;
         background: $greenGradient;
     }
@@ -2498,20 +2523,21 @@ body.modal-open {
 #placeDetailsContent {
     .review {
       .savedRating {
-          text-align: center;
+          text-align: left;
           color: $gray;
           font-weight: 400;
           margin-top: $GRID_SPACE;
           font-size: 14px;
           line-height: 14px;
           background: $paleWhite;
-          padding: $GRID_SPACE/2 0;
+          padding: $GRID_SPACE/2;
           vertical-align: middle;
 
           button {
             font-size: 12px;
             margin: 0;
             margin-left: 6px;
+            float: right; 
           }
 
           img {
@@ -2699,6 +2725,12 @@ body.modal-open {
   text-align: center;
   @include roundedCorners;
   font-weight: bold;
+
+  transition: .2s;
+
+  &:hover {
+    @include defaultButtonHover;
+  }
   
   &:before {
     content: "";
@@ -4121,6 +4153,8 @@ body.modal-open {
     border-radius: 50%;
     text-shadow: 0 0 3px white;
 
+    transition: background .2s;
+
     &:hover {
       background: $lighterGray;
     }
@@ -4718,11 +4752,16 @@ body.modal-open {
 
   .swal2-cancel,
   .swal2-confirm {
-    border-bottom-width: 3px;
-    border-bottom-style: solid;
+    border: 0;
     @include roundedCorners;
     font-weight: 700;  
     min-width: 90px;
+    
+    transition: all .2s;
+    
+    &:hover {
+      @include defaultButtonHover;
+    }
     
     &:active {
       outline: 0;
