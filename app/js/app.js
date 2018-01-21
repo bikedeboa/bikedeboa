@@ -1487,7 +1487,7 @@ $(() => {
       customClass: 'revision-modal',
       html:
         `<p>
-          Este bicicletário está desatualizado ou está faltando uma informação importante? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil. :)
+          Este bicicletário está desatualizado ou está faltando uma informação importante? Nos ajude a manter o mapeamento sempre atualizado e útil pra todo mundo. :)
         </p>
 
         <p>

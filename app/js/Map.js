@@ -209,7 +209,7 @@ BDB.Map = (function(){
   return {
     init: function(){
       let isDefaultLocation = BDB.Geolocation.isDefaultLocation();
-      let zoom = (isDefaultLocation) ? 13 : 17; 
+      let zoom = (isDefaultLocation) ? 15 : 17; 
       let coords =  BDB.Geolocation.getLastestLocation();
 
       initMap(coords, zoom, !isDefaultLocation);

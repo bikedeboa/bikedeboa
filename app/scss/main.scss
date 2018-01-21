@@ -86,6 +86,23 @@ $GRID_SPACE: 12px;
   to {transform: rotate(360deg);}
 }
 
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2439,15 +2456,15 @@ body.modal-open {
     vertical-align: middle;
     background: transparent;
 
-    transition: all;
+    transition: all .2s;
     
     &:hover,
     &:focus,
     &:active {
         color: white;
         border-color: transparent;
-        // background-color: $gray;
-        background: $greenGradient;
+        background-color: $lightGreen;
+        // background: $greenGradient;
     }
 }
 
@@ -2728,7 +2745,7 @@ body.modal-open {
 
   transition: .2s;
 
-  &:hover {
+  &:hover:not([disabled]) {
     @include defaultButtonHover;
   }
   
@@ -2784,7 +2801,6 @@ body.modal-open {
     }
   }
 }
-
 
 .review-modal {
     text-align: center;
@@ -2860,10 +2876,8 @@ body.modal-open {
 
 .btn.green {
     background-color: $lightGreen;
-    border-color: $darkGreen;
-    color: rgb(250,250,250);
+    color: rgb(250,250,250); 
     
-    &:hover:not([disabled]),
     &:focus:not([disabled]),
     &.active:not([disabled]) {
         color: white;
@@ -2871,28 +2885,15 @@ body.modal-open {
     }
 }
 
-.btn.btn-action.green {
-    border-bottom: 3px solid $darkGreen;
-}
-
 .btn.btn-action {
-    $depth: 3px;
-
     width: 100%;
     @include roundedCorners;
-    border-bottom: $depth solid $lighterGray;
     padding: 20px;
 
-    &:active {
-        outline: 0; 
-        border-bottom-width: ($depth - 3px);
-        // transform: translateY(3px);
-        // // compensate for relayout because of changing border size
-        // margin-bottom: calc(2% + 3px);
-    }
+    transition: all .2s;
 
-    &:disabled {
-        border-bottom: $depth solid $gray;
+    &:hover:not([disabled]) {
+      @include defaultButtonHover;
     }
 }
 
@@ -2910,7 +2911,7 @@ body.modal-open {
 
     transition: background-color 0.2s ease-out;
 
-    &:disabled {
+    &:disabled { 
         background-color: $lightGray;
         color: $lighterGray;
     }
@@ -3408,6 +3409,8 @@ body.modal-open {
   display: flex;
   margin-top: $GRID_SPACE*2;
 
+  animation: slideIn .2s $coolEaseOut;
+
   &:active,
   &:focus,
   &:hover {
@@ -3478,9 +3481,19 @@ body.modal-open {
     text-transform: uppercase;
   }
 
-  .infobox--arrow,
   .infobox--caret {
     display: none;
+  }
+
+  .infobox--arrow {
+    display: block;
+
+    position: absolute;
+    top: -13px;
+    left: calc(50% - 10px);
+    font-size: 20px;
+    color: white; 
+    text-shadow: 1px -1px 2px rgba(0,0,0,.1);
   }
 }
 
@@ -4050,16 +4063,16 @@ body.modal-open {
       display: none;
     }
 
-    .infobox--arrow {
-      display: block;
+    // .infobox--arrow {
+    //   display: block;
 
-      position: absolute;
-      top: -13px;
-      left: calc(50% - 10px);
-      font-size: 20px;
-      color: white; 
-      text-shadow: 1px -2px 3px rgba(0,0,0,.15);
-    }
+    //   position: absolute;
+    //   top: -13px;
+    //   left: calc(50% - 10px);
+    //   font-size: 20px;
+    //   color: white; 
+    //   text-shadow: 1px -2px 3px rgba(0,0,0,.15);
+    // }
 
     .infobox--caret {
       display: block;
@@ -4750,6 +4763,11 @@ body.modal-open {
     border-color: $gray
   }
 
+  .swal2-confirm {
+    background: $green;
+    color: white;
+  }
+
   .swal2-cancel,
   .swal2-confirm {
     border: 0;
@@ -4759,7 +4777,7 @@ body.modal-open {
     
     transition: all .2s;
     
-    &:hover {
+    &:hover:not([disabled]) {
       @include defaultButtonHover;
     }
     
