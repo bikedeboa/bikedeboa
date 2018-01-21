@@ -2308,6 +2308,7 @@ $(() => {
     case 'novo' :
     case 'editar':
     case 'foto':
+    case 'dados':
     case '':
       break;
     default:
