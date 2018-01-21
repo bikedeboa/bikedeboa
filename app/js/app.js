@@ -2,32 +2,6 @@
 /* eslint-env node, jquery */
 
 $(() => {
-  function getColorFromAverage(average) {
-    if (typeof average === 'string') {
-      average = parseFloat(average);
-    }
-      
-    let color;
-
-    if (average) {
-      if (!average || average === 0) {
-        color = 'gray';
-      } else if (average > 0 && average <= 2) {
-        color = 'red'; 
-      } else if (average > 2 && average < 3.5) {
-        color = 'yellow';
-      } else if (average >= 3.5) {
-        color = 'green';
-      } else {
-        color = 'gray'; 
-      }
-    } else { 
-      color = 'gray';
-    }
-
-    return color; 
-  }
-
   function openShareDialog() {
     // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
     const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
@@ -403,7 +377,7 @@ $(() => {
 
       if (!marker._hasDetails) {
         // Request content
-        Database.getPlaceDetails(marker.id)
+        BDB.Database.getPlaceDetails(marker.id)
           .then(updatedMarker => {
             // Check if details panel is still open...
             if (openedMarker && openedMarker.id === updatedMarker.id) {
@@ -958,7 +932,7 @@ $(() => {
         toastr['success']('Bicicletário atualizado.');
       }
 
-      Database.getPlaces( () => {
+      BDB.Database.getPlaces( () => {
         updateMarkers();
         
         hideSpinner();
@@ -991,10 +965,10 @@ $(() => {
 
     if (updatingMarker) {
       ga('send', 'event', 'Local', 'update', ''+updatingMarker.id);
-      Database.updatePlace(updatingMarker.id, place, onPlaceSaved);
+      BDB.Database.updatePlace(updatingMarker.id, place, onPlaceSaved);
     } else {
       ga('send', 'event', 'Local', 'create');
-      Database.sendPlace(place, onPlaceSaved);
+      BDB.Database.sendPlace(place, onPlaceSaved);
     }
   }
 
@@ -1283,9 +1257,9 @@ $(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
-        Database.deletePlace(openedMarker.id, () => {
+        BDB.Database.deletePlace(openedMarker.id, () => {
           goHome();
-          Database.getPlaces( () => {
+          BDB.Database.getPlaces( () => {
             updateMarkers();
             hideSpinner();
             toastr['success']('Bicicletário deletado.');
@@ -1406,7 +1380,7 @@ $(() => {
       }
 
       // Update marker data
-      Database.getPlaceDetails(m.id)
+      BDB.Database.getPlaceDetails(m.id)
         .then(updatedMarker => {
           updateMarkers();
           openDetailsModal(updatedMarker);
@@ -1463,7 +1437,7 @@ $(() => {
       };
 
       const callback = () => {
-        Database.sendReview(reviewObj, reviewId => {
+        BDB.Database.sendReview(reviewObj, reviewId => {
           reviewObj.databaseId = reviewId;
           BDB.User.saveReview(reviewObj);
 
@@ -1474,7 +1448,7 @@ $(() => {
       const previousReview = BDB.User.getReviewByPlaceId(m.id);
       if (previousReview) {
         // Delete previous
-        Database.deleteReview(previousReview.databaseId, callback);
+        BDB.Database.deleteReview(previousReview.databaseId, callback);
       } else {
         callback();
       }
@@ -1508,7 +1482,7 @@ $(() => {
         content: $('#revisionText').val()
       };
 
-      Database.sendRevision(revisionObj, revisionId => {
+      BDB.Database.sendRevision(revisionObj, revisionId => {
         hideSpinner();
         swal('Sugestão enviada', `Obrigado por contribuir com o bike de boa! Sua sugestão será 
           avaliada pelo nosso time de colaboradores o mais rápido possível.`, 'success');
@@ -1653,6 +1627,69 @@ $(() => {
   }
 
   function _initGlobalCallbacks() {
+    //set Map Initialization 
+    $(document).on('map:ready', function () {
+      hideSpinner();
+      //get gMap instance to be used by functions to still referer to map here (mainly markers);
+      map = BDB.Map.getMap();
+      updateMarkers();
+
+      //to-do: refactor this to map.js
+      if (!_isMobile) {
+        google.maps.event.addListener(map, 'zoom_changed', () => {
+          const prevZoomLevel = _mapZoomLevel;
+
+          _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
+
+          if (prevZoomLevel !== _mapZoomLevel) {
+            if (!_activeFilters) {
+              setMarkersIcon(_mapZoomLevel);
+            }
+          }
+        });
+      }
+    });
+
+    $(document).on("autocomplete:done", function (e) {
+      let place = e.detail
+
+      addToRecentSearches({
+        name: place.name,
+        pos: place.geometry.location,
+        viewport: place.geometry.viewport
+      });
+
+      exitLocationSearchMode();
+
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
+      ga('send', 'event', 'Search', 'location', place.formatted_address);
+
+    });
+
+    $(document).one("LoadMap", function () {
+      // showSpinner('Carregando Mapa :)');
+
+      BDB.Map.init();
+
+      if (!_isTouchDevice) {
+        $('.caption-tooltip').tooltip({
+          toggle: 'tooltip',
+          trigger: 'hover',
+          placement: 'left',
+          'delay': { 'show': 0, 'hide': 0 }
+        });
+      }
+      showUI();
+    });
+
+    $(document).on('map:outofbounds', function (result) {
+      let response = result.detail;
+
+      $('#newPlaceholder').toggleClass('invalid', !response.isCenterWithinBounds);
+      $('#out-of-bounds-overlay').toggleClass('showThis', !response.isViewWithinBounds);
+    });
+
     $('#logo').on('click', () => {
       goHome();
     });
@@ -1815,8 +1852,7 @@ $(() => {
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
-      map.setCenter(_portoAlegrePos);
-      map.setZoom(12);
+      map.goToPortoAlegre();
     }));
 
     
@@ -2367,7 +2403,7 @@ $(() => {
     hello(auth.network).api('me').then(function(profile) { 
       console.debug('profile', profile);
 
-      Database.socialLogin({
+      BDB.Database.socialLogin({
         network: auth.network,
         socialToken: _socialToken,
         fullname: profile.name,
@@ -2430,7 +2466,7 @@ $(() => {
     //   } else {
     //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
     //   }
-    // }, 2000); 
+    // }, 2000);
 
     if (_isMobile) {
       return;
@@ -2457,21 +2493,7 @@ $(() => {
     });
   }
 
-  function localhostOverrides() {
-    // if (_isLocalhost) {
-    //   Database.API_URL = 'http://localhost:3000';
-    // }
-  }
-
   function init() {
-    if (isDemoMode) {
-      Database = BDB.MockedDatabase;
-    } else {
-      Database = BDB.Database;
-    }
-
-    localhostOverrides();
-
     // Retrieve markers saved in a past access
     markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
@@ -2486,7 +2508,7 @@ $(() => {
       $.getJSON('//ipinfo.io/json', data => {
         if (data && data.ip) {
           ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
-          Database._setOriginHeader(data.ip);
+          BDB.Database._setOriginHeader(data.ip);
         } else {
           console.error('Something went wrong when trying to retrieve user IP.');
           ga('send', 'event', 'Misc', 'IP retrieval error');
@@ -2504,9 +2526,9 @@ $(() => {
         // }
       });
 
-      Database.authenticate();
-      Database.getAllTags();
-      Database.getPlaces( () => {
+      BDB.Database.authenticate();
+      BDB.Database.getAllTags();
+      BDB.Database.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
         $('#filter-results-total').html(markers.length);
 
@@ -2526,77 +2548,12 @@ $(() => {
     }
   } 
 
-    // Setup must only be called *once*, differently than init() that may be called to reset the app state.
+  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
     // References:
     //   https://developers.google.com/web/updates/2015/10/display-mode
     //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
-
-    //set Map Initialization 
-    $(document).on('map:ready', function(){
-        hideSpinner();
-        //get gMap instance to be used by functions to still referer to map here (mainly markers);
-        map = BDB.Map.getMap();
-        updateMarkers(); 
-
-        //to-do: refactor this to map.js
-        if (!_isMobile) {
-          google.maps.event.addListener(map, 'zoom_changed', () => {    
-            const prevZoomLevel = _mapZoomLevel;   
-        
-            _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';   
-        
-            if (prevZoomLevel !== _mapZoomLevel) {   
-              if (!_activeFilters) {   
-                setMarkersIcon(_mapZoomLevel);   
-              }    
-            }    
-          });
-        }
-    });
-
-    $(document).on("autocomplete:done", function(e){
-      let place = e.detail
-
-      addToRecentSearches({
-        name: place.name,
-        pos: place.geometry.location,
-        viewport: place.geometry.viewport
-      });
-
-      exitLocationSearchMode();
-      
-      $('#locationQueryInput').val('');
-      toggleClearLocationBtn('hide');
-      ga('send', 'event', 'Search', 'location', place.formatted_address); 
-
-    });
-
-    $(document).one("LoadMap",function(){
-      // showSpinner('Carregando Mapa :)');
-      
-      BDB.Map.init();
-
-      if(!_isTouchDevice) {
-        $('.caption-tooltip').tooltip({
-          toggle: 'tooltip', 
-          trigger: 'hover',
-          placement: 'left', 
-          'delay': {'show': 0, 'hide': 0}
-        });
-      }
-      showUI();
-    });
-
-    $(document).on('map:outofbounds', function(result){
-      let response = result.detail;
-      
-        $('#newPlaceholder').toggleClass('invalid', !response.isCenterWithinBounds);
-        $('#out-of-bounds-overlay').toggleClass('showThis', !response.isViewWithinBounds); 
-      
-    });
-
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       $('body').addClass('pwa-installed');
       ga('send', 'event', 'Misc', 'launched with display=standalone');
@@ -2608,31 +2565,17 @@ $(() => {
       ga('send', 'event', 'Misc', 'launched from native app'); 
     }
 
-    // Got Google Maps, either we're online or the SDK is in cache.
-    // if (window.google) {
-      // On Mobile we defer the initialization of the map if we're in deeplink
-      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-        $(document).trigger("LoadMap"); 
-      }
-    // } else {
-    //   if (window.location.pathname !== '/dados') {
-    //     setOfflineMode();
-    //   }
-    // }
-    
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
     isMobileListener.addListener((isMobileListener) => {
       _isMobile = isMobileListener.matches;
     });
-    const isDesktopListener = window.matchMedia('(min-width: ${DESKTOP_MIN_WIDTH})');
-    isDesktopListener.addListener((isDesktopListener) => {
-      _isDesktop = isDesktopListener.matches;
-    });
-
+    
     // Super specific mobile stuff
     if (_isMobile) {
+      // Optimized short placeholder
       $('#locationQueryInput').attr('placeholder','Buscar endereço');
 
+      // Remove Bootstrap fade class
       $('.modal').removeClass('fade');
     } else {
       $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
@@ -2643,8 +2586,19 @@ $(() => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
 
-
     _initGlobalCallbacks();
+
+    // Got Google Maps, either we're online or the SDK is in cache.
+    // if (window.google) {
+    // On Mobile we defer the initialization of the map if we're in deeplink
+    if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+      $(document).trigger("LoadMap");
+    }
+    // } else {
+    //   if (window.location.pathname !== '/dados') {
+    //     setOfflineMode();
+    //   }
+    // }
 
     _initTemplates();
 
@@ -2697,7 +2651,7 @@ $(() => {
       }
     };
 
-    // Set up Sweet Alert
+    // Set up SweetAlert, the alert window lib
     swal.setDefaults({
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
@@ -2709,8 +2663,8 @@ $(() => {
       animation: false
     });
 
+    // Set up Featherlight - photo lightbox lib
     if ($.featherlight) {
-      // Featherlight - photo lightbox lib
       // Extension to show the img alt tag as a caption within the image
       $.featherlight.prototype.afterContent = function() { 
         var caption = this.$currentTarget.find('img').attr('alt');
@@ -2724,7 +2678,7 @@ $(() => {
       $.featherlight.defaults.closeOnEsc = false;
     }
  
-    // Toastr options
+    // Set up Toastr, the messaging lib
     toastr.options = {
       'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
       'closeButton': false,
@@ -2733,7 +2687,7 @@ $(() => {
 
     // Sidenav (hamburger and filter menus)
     const sidenavHideCallback = () => {
-      // @todo explain me
+      // @todo explain this
       setView('bike de boa', '/', true);
     };
     try {
@@ -2755,7 +2709,7 @@ $(() => {
       _hamburgerMenu = _filterMenu = null;
     }
 
-    // Hello.js
+    // Set up Hello.js, the Social Login lib
     hello.init({
       facebook: FACEBOOK_CLIENT_ID,
       google: GOOGLE_CLIENT_ID, 
@@ -2782,38 +2736,34 @@ $(() => {
       onSocialLogout(); 
     });
 
+    // Initialize all help tooltips
     initHelpTooltip('#filter-menu .help-tooltip-trigger');
 
-    $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - ciclovias');
-    });
+    // Temporarily in disuse
+    // $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+    //   ga('send', 'event', 'Misc', 'tooltip - ciclovias');
+    // });
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      _deferredPWAPrompt = e;
+    // window.addEventListener('beforeinstallprompt', e => {
+    //   e.preventDefault();
+    //   _deferredPWAPrompt = e;
     
-      $('.howToInstallBtn').css({'font-weight': 'bold'});
+    //   $('.howToInstallBtn').css({'font-weight': 'bold'});
     
-      return false;
-    });
-
-     // Temporarily disabled manually prompting this because it sucks 
-    promptPWAInstallPopup()
+    //   return false;
+    // });
   }
 
-
-  window.toggleDemoMode = () => {
-    showSpinner();
-    isDemoMode = !isDemoMode;
-    init();
-  };
 
   //////////////////////////
   // Start initialization //
   //////////////////////////
 
+  // Things that are only done once per app
   setup(); 
+
+  // Things that can be redone
   init();
 });

@@ -1,57 +1,70 @@
 var BDB = BDB || {};
 
-BDB.Map = (function(){
+BDB.Map = (function () {
   //google maps api Key
   const apiKey = '<GOOGLE_MAPS_ID>';
 
-  let map, 
-      mapBounds,
-      geolocationMarker,
-      geolocationRadius,
-      geolocationInitialized,
-      positionWatcher,
-      bikeLayer;
-   
-  let initMap = function(coords, zoomValue, pinUser) {
+  let map,
+    mapBounds,
+    geolocationMarker,
+    geolocationRadius,
+    geolocationInitialized,
+    positionWatcher,
+    bikeLayer;
+
+  // "Main Brazil" Bounding Box
+  //   [lat, long]
+  // SW [[-34.0526594796, -61.3037107971],
+  // SE [-34.0526594796, -34.3652340941],
+  // NE [0.1757808338, -34.3652340941],
+  // NW [0.1757808338, -61.3037107971]]]
+
+  // Rio Grande do Sul Bounding Box
+  // let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
+
+  // "Main Brazil"
+  let _mapBoundsCoords = { sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, ne: { lat: '0.1757808338', lng: '-34.3652340941' } };
+
+  let initMap = function (coords, zoomValue, pinUser) {
     // Dynamically inject Google Map's lib
     $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
-        $.getScript('/lib/infobox.min.js', () => {
-            initMap_continue(coords, zoomValue, pinUser);
-          }
-        );
+      $.getScript('/lib/infobox.min.js', () => {
+        initMap_continue(coords, zoomValue, pinUser);
       }
+      );
+    }
     );
   };
-  
-  let initMap_continue = function(coords, zoomValue, pinUser) {
+
+  let initMap_continue = function (coords, zoomValue, pinUser) {
     let gpos = convertToGmaps(coords);
     map = new google.maps.Map(document.getElementById('map'), {
-        center: gpos,
-        zoom: zoomValue,
-        disableDefaultUI: true,
-        scaleControl: false,
-        clickableIcons: false,
-        styles: _gmapsCustomStyle,
-        mapTypeControl: false,
-        zoomControl: _isDesktop,
-        zoomControlOptions: {
-            position: google.maps.ControlPosition.RIGHT_CENTER
-        }
+      center: gpos,
+      zoom: zoomValue,
+      disableDefaultUI: true,
+      scaleControl: false,
+      clickableIcons: false,
+      styles: _gmapsCustomStyle,
+      mapTypeControl: false,
+      zoomControl: !_isMobile,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_CENTER
+      }
     });
-    setMarker(); 
+    setMarker();
     setRadius();
-    if (pinUser){
-      updateMarkerPosition(gpos);  
+    if (pinUser) {
+      updateMarkerPosition(gpos);
     }
-    
+
     setupAutocomplete();
     BDB.Geolocation.init();
-    
+
     map.addListener('center_changed', mapCenterChanged);
 
     setMapBounds();
     mapCenterChanged();
-     
+
     setInfoBox();
 
     //native Event Dispatcher 
@@ -59,81 +72,81 @@ BDB.Map = (function(){
     document.dispatchEvent(event);
   };
 
-  let convertToGmaps = function(obj, convert = true){
-    if (convert){
+  let convertToGmaps = function (obj, convert = true) {
+    if (convert) {
       let coords = {
-        lat : obj.latitude,
-        lng : obj.longitude,
+        lat: obj.latitude,
+        lng: obj.longitude,
         accuracy: obj.accuracy
-      };  
+      };
       return coords;
-    }else{
+    } else {
       return obj;
-    }    
+    }
   };
-  let mapCenterChanged = function(){
+  let mapCenterChanged = function () {
     clearTimeout(_centerChangedTimeout);
-    _centerChangedTimeout = setTimeout( () => {
-      
+    _centerChangedTimeout = setTimeout(() => {
+
       const isCenterWithinBounds = isPosWithinBounds(map.getCenter());
 
       let centerInfo = {
-        isCenterWithinBounds : isPosWithinBounds(map.getCenter()),
-        isViewWithinBounds : (map.getBounds())? map.getBounds().intersects(mapBounds) : isPosWithinBounds(map.getCenter())
+        isCenterWithinBounds: isPosWithinBounds(map.getCenter()),
+        isViewWithinBounds: (map.getBounds()) ? map.getBounds().intersects(mapBounds) : isPosWithinBounds(map.getCenter())
       }
-      let event = new CustomEvent('map:outofbounds', {detail: centerInfo});
+      let event = new CustomEvent('map:outofbounds', { detail: centerInfo });
       document.dispatchEvent(event);
 
-     }, 50);
+    }, 50);
   };
-  let isPosWithinBounds = function(pos) {
+  let isPosWithinBounds = function (pos) {
     const ret = mapBounds.contains(pos);
     return ret;
   };
-  let setMapBounds = function(){
-      mapBounds = new google.maps.LatLngBounds(
-          new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
-          new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
-      );
+  let setMapBounds = function () {
+    mapBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
+      new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
+    );
   };
-  let setInfoBox = function(){
-      const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
-      const myOptions = {
-        maxWidth: 0,
-        pixelOffset: new google.maps.Size(-infoboxWidth/2, 0),
-        disableAutoPan: _isMobile ? false : true,
-        zIndex: null,
-        boxStyle: {
-          width: `${infoboxWidth}px`,
-          height: '75px', 
-          cursor: 'pointer',
-        },
-        // closeBoxMargin: '10px 2px 2px 2px',
-        closeBoxURL: '',
-        infoBoxClearance: new google.maps.Size(1, 1),
-        pane: 'floatPane',
-        enableEventPropagation: false,
-      };
-      _infoWindow = new InfoBox(myOptions);
+  let setInfoBox = function () {
+    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 400;
+    const myOptions = {
+      maxWidth: 0,
+      pixelOffset: new google.maps.Size(-infoboxWidth / 2, 0),
+      disableAutoPan: _isMobile ? false : true,
+      zIndex: null,
+      boxStyle: {
+        width: `${infoboxWidth}px`,
+        height: _isMobile ? '75px' : '100px',
+        cursor: 'pointer',
+      },
+      // closeBoxMargin: '10px 2px 2px 2px',
+      closeBoxURL: '',
+      infoBoxClearance: new google.maps.Size(1, 1),
+      pane: 'floatPane',
+      enableEventPropagation: false,
+    };
+    _infoWindow = new InfoBox(myOptions);
   };
-  let updateMarkerPosition = function(gposition) {    
+  let updateMarkerPosition = function (gposition) {
     if (map) {
       geolocationMarker.setPosition(gposition);
       geolocationRadius.setCenter(gposition);
       geolocationRadius.setRadius(gposition.accuracy);
     }
   };
-  let updateMapCenter = function(coords, convert = true){
-    let gpos = convertToGmaps(coords, convert); 
+  let updateMapCenter = function (coords, convert = true) {
+    let gpos = convertToGmaps(coords, convert);
     map.panTo(gpos);
     updateMarkerPosition(gpos);
     if (map.getZoom() < 17) {
-      map.setZoom(17); 
-    } 
+      map.setZoom(17);
+    }
     geolocationRadius.setVisible(true);
   };
 
-  let setMarker = function(){
+  let setMarker = function () {
     geolocationMarker = new google.maps.Marker({
       optimized: true,
       map: map,
@@ -142,11 +155,11 @@ BDB.Map = (function(){
         url: '/img/current_position.svg', // url
         scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
         origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W/2, CURRENT_LOCATION_MARKER_H/2), // anchor
+        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
       }
     });
   };
-  let setRadius = function(){
+  let setRadius = function () {
     geolocationRadius = new google.maps.Circle({
       map: map,
       clickable: false,
@@ -157,16 +170,16 @@ BDB.Map = (function(){
     });
   };
 
-  let geolocate = function(options = false){
-      document.addEventListener('geolocation:done', function(result){
-        if(result.detail.status){
-          updateMapCenter(result.detail.response);  
-        }
-      });
-      BDB.Geolocation.getLocation(options);
+  let geolocate = function (options = false) {
+    document.addEventListener('geolocation:done', function (result) {
+      if (result.detail.status) {
+        updateMapCenter(result.detail.response);
+      }
+    });
+    BDB.Geolocation.getLocation(options);
   };
-  
-  let setupAutocomplete = function() {
+
+  let setupAutocomplete = function () {
     const inputElem = document.getElementById('locationQueryInput');
     // Limits the search to the our bounding box
     const options = {
@@ -174,9 +187,9 @@ BDB.Map = (function(){
       strictBounds: true
     };
     let autocomplete = new google.maps.places.Autocomplete(inputElem, options);
-    
+
     autocomplete.addListener('place_changed', () => {
-      
+
       const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
@@ -184,19 +197,19 @@ BDB.Map = (function(){
       }
 
       map.panTo(place.geometry.location);
-      if (place.geometry.viewport) { 
-        map.fitBounds(place.geometry.viewport); 
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
       } else {
         map.setZoom(17);  // Why 17? Because it looks good.
       }
 
-      let event = new CustomEvent('autocomplete:done', {detail: place});
+      let event = new CustomEvent('autocomplete:done', { detail: place });
       document.dispatchEvent(event);
-      
-      });
+
+    });
   };
-  let setupBikeLayer = function(){
-    if (!bikeLayer){
+  let setupBikeLayer = function () {
+    if (!bikeLayer) {
       bikeLayer = new google.maps.BicyclingLayer();
       map.data.map = null;
       map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
@@ -207,53 +220,57 @@ BDB.Map = (function(){
     }
   };
   return {
-    init: function(){
+    init: function () {
       let isDefaultLocation = BDB.Geolocation.isDefaultLocation();
       let zoom = (isDefaultLocation) ? 15 : 17; 
       let coords =  BDB.Geolocation.getLastestLocation();
 
       initMap(coords, zoom, !isDefaultLocation);
-      
+
       // Check previous user permission for geolocation
-      BDB.Geolocation.checkPermission().then( permission => {
+      BDB.Geolocation.checkPermission().then(permission => {
         if (permission.state === 'granted') {
-            BDB.Geolocation.getLocation().then(function(result){
-              // initMap(result.response, 17); 
-              updateMapCenter(result.response);
-            },function(error){
-              // initMap(coords, zoom);
-            });
+          BDB.Geolocation.getLocation().then(function (result) {
+            // initMap(result.response, 17); 
+            updateMapCenter(result.response);
+          }, function (error) {
+            // initMap(coords, zoom);
+          });
         }
       });
     },
-    getStaticImgMap : function (staticImgDimensions, pinColor, lat, lng, customStyle, zoom = false) {
+    getStaticImgMap: function (staticImgDimensions, pinColor, lat, lng, customStyle, zoom = false) {
       let zoomStr = (zoom) ? `zoom=${zoom}&` : '';
       let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?${zoomStr}size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${pinColor}.png|${lat},${lng}&key=${apiKey}&${_gmapsCustomStyleStaticApi}`;
-              
+
       return imgUrl;
     },
-    getGeolocation : function(options = false){
+    getGeolocation: function (options = false) {
       geolocate(options);
     },
-    showBikeLayer : function(){
+    showBikeLayer: function () {
       setupBikeLayer();
       bikeLayer.setMap(map);
     },
-    hideBikeLayer : function() {
-      map.setOptions({styles: _gmapsCustomStyle});
+    hideBikeLayer: function () {
+      map.setOptions({ styles: _gmapsCustomStyle });
       bikeLayer.setMap(null);
       map.data.setMap(null);
     },
     //return this to app.js to apply markers 
-    getMap : function(){
+    getMap: function () {
       return map;
     },
-    checkBounds: function(){
-      if (map){
-        return isPosWithinBounds(map.getCenter());  
-      }else{
+    checkBounds: function () {
+      if (map) {
+        return isPosWithinBounds(map.getCenter());
+      } else {
         return false;
-      }    
+      }
+    },
+    goToPortoAlegre: function () {
+      map.setCenter({ lat: -30.0346, lng: -51.2177 });
+      map.setZoom(12);
     }
   }
 })();

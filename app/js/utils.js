@@ -188,7 +188,7 @@ window.setOfflineMode = () => {
 }
 
 // https://stackoverflow.com/questions/22581345/click-button-copy-to-clipboard-using-jquery
-function copyToClipboard(elem) { 
+window.copyToClipboard = function(elem) {
     // create hidden text element, if it doesn't already exist
     var targetId = "_hiddenCopyText_";
     var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
@@ -236,6 +236,32 @@ function copyToClipboard(elem) {
         target.textContent = "";
     }
     return succeed;
+}
+
+window.getColorFromAverage = function(average) {
+  if (typeof average === 'string') {
+    average = parseFloat(average);
+  }
+
+  let color;
+ 
+  if (average) {
+    if (!average || average === 0) {
+      color = 'gray';
+    } else if (average > 0 && average <= 2) {
+      color = 'red';
+    } else if (average > 2 && average < 3.5) {
+      color = 'yellow';
+    } else if (average >= 3.5) {
+      color = 'green';
+    } else {
+      color = 'gray';
+    }
+  } else {
+    color = 'gray';
+  }
+
+  return color;
 }
 
 
