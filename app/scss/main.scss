@@ -652,6 +652,8 @@ a.unstyled-link {
   min-width: 180px;
   width: auto;
 
+  animation: slideIn .2s $coolEaseOut;
+
   li {
     margin: $GRID_SPACE/2 0;
     white-space: nowrap;
@@ -3104,6 +3106,10 @@ body.modal-open {
     height: auto;
     background: none;
     padding-left: 16px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
   }
 
   .side-nav__container {
