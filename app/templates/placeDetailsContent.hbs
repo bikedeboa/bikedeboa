@@ -1,0 +1,328 @@
+<!-- View Details Modal -->
+<section itemscope itemtype="http://schema.org/ParkingFacility">
+    {{#if photoUrl}}
+    <section class="photo-container hasImage loading {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
+        <a href="#" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}" itemprop="image"/></a>
+    </section>
+    {{/if}}
+
+    <section class="top-toolbar">
+    <meta itemprop="map" content="{{{gmapsRedirectUrl}}}">
+    <a href="{{{gmapsRedirectUrl}}}" target="_blank" rel="noopener" class="toolbar-item directionsBtn unstyled-link">
+        <img alt="" class="toolbar-item-icon" src="/img/route.svg">
+        <label>Como chegar</label>
+    </a>
+
+    <!-- <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
+        <img alt="" class="toolbar-item-icon" src="/img/review.svg">
+        <label>Avaliar</label>
+    </button> -->
+
+    <button class="toolbar-item shareBtn" tabindex="0">
+        <img alt="" class="toolbar-item-icon" src="/img/icon_share.svg">
+        <label>Compartilhar</label>
+    </button>
+
+    {{#if canModify}}
+        <button class="editPlaceBtn toolbar-item">
+        <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
+        <label>Editar</label>
+        </button>
+
+        <button class="deletePlaceBtn toolbar-item">
+        <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
+        <label>Excluir</label>
+        </button>
+    {{else}}
+        <button class="createRevisionBtn toolbar-item">
+        <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
+        <label>Sugerir correção</label>
+        </button>
+    {{/if}}
+    </section>
+
+    <div class="modal-body">
+        <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
+            {{#if title}}
+            <h1 class="view-name" itemprop="name">{{title}}</h1>
+            {{else}}
+            <h1 style="font-style: italic;" itemprop="name">Sem nome</h1>
+            {{/if}}
+        </section>
+
+        <section class="info">
+            {{#unless noIsCoveredData}}
+            <div itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification" class="{{#ifCond isAdmin '&&' noIsCoveredData}} missing-info {{/ifCond}}">
+                <meta itemprop="name" content="Cobertura">
+                {{#if isCovered}}
+                    <img alt="" src="/img/icon_covered.svg"/>
+                    <div class="icon-label" itemprop="value">
+                    Coberto
+                    </div>
+                {{else}}
+                    <img alt="" src="/img/icon_uncovered.svg"/>
+                    <div class="icon-label" itemprop="value">
+                    Não coberto
+                    </div> 
+                {{/if}}
+            </div>
+            {{else}}
+            {{#if isAdmin}}
+                <div>
+                <div class="icon-label">
+                    Sem informação sobre cobertura
+                    {{#if canModify}}
+                        <button class="editPlaceBtn link-button">
+                        (editar)
+                        </button>
+                    {{/if}}
+                </div>
+                </div>
+            {{/if}}
+            {{/unless}}
+
+            {{#unless noIsPublicData}}
+                <div class="{{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}" itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification">
+                <meta itemprop="name" content="Acesso">
+                {{#if isPublic}}
+                    <img alt="" src="/img/icon_public.svg"/>
+                    <div class="icon-label">
+                        <span itemprop="value">Público</span>
+                        <a id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Público</h2>
+                        <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
+                        <p>Normalmente está em espaço público, como calçadas ou parques.</p>
+                        <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></a>
+                    </div>
+                {{else}}
+                    <img alt="" src="/img/icon_private.svg"/>
+                    <div class="icon-label">
+                        <span itemprop="value">Privado</span>
+                        <a id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Privado</h2>
+                        <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a> 
+                    </div> 
+                {{/if}}
+                </div>
+            {{else}}
+            {{#if isAdmin}}
+                <div>
+                <div class="icon-label">
+                    Sem informação sobre restrição de acesso
+                    {{#if canModify}}
+                    <button class="editPlaceBtn link-button">
+                        (editar)
+                    </button>
+                    {{/if}}
+                </div>
+                </div>
+            {{/if}}
+            {{/unless}}
+
+            {{#if structureTypeLabel}}
+            <div class="{{#ifCond isAdmin '&&!' structureTypeLabel}} missing-info {{/ifCond}}" itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification">
+                {{#if structureTypeIcon}}
+                    <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
+                {{/if}}
+                <div class="icon-label" id="placeDetails_structureType">
+                        <meta itemprop="name" content="Tipo">
+                        <span itemprop="value">{{{structureTypeLabel}}}</span>
+
+                        {{#ifCond structureTypeCode '===' 'uinvertido'}}
+                        <a id="uinvertido-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>U Invertido</h2>
+                        <p>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.</p>
+                        <p>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.</p>
+                        <p>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock.</p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        "></a>
+                        {{/ifCond}}
+                        {{#ifCond structureTypeCode '===' 'deroda'}}
+                        <a id="deroda-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>De Roda</h2>
+                        <p>Pode ter várias formas. Os mais comuns são pequenos triângulos ou semi-círculos.</p>
+                        <p>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.</p>
+                        <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.</p>
+                        <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        "></a>
+                        {{/ifCond}}
+                        {{#ifCond structureTypeCode '===' 'trave'}}
+                        <a id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Trave</h2>
+                        <p>Normalmente um poste de luz ou placa de trânsito.</p>
+                        <p>Dá pra prender a bicicleta de varias formas, mas o melhor é <b>prender pelo quadro da bicicleta</b> e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.</p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        "></a> 
+                        {{/ifCond}}
+                        {{#ifCond structureTypeCode '===' 'suspenso'}}
+                        <a id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Suspenso</h2>
+                        <p>Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede.</p>
+                        <p>Cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.</p>
+                        <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        "></a>
+                        {{/ifCond}}
+                        {{#ifCond structureTypeCode '===' 'grade'}}
+                        <a id="grade-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Grade</h2>
+                        <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não.</p>
+                        <p>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda, por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.</p>
+                        <p>Prefira sempre <b>prender pelo quadro da bicicleta<b>.</p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        "></a>
+                        {{/ifCond}}
+                        {{#ifCond structureTypeCode '===' 'other'}}
+                        <a id="other-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Outro</h2>
+                        <p>Um bicicletário diferentão, ou nem é bicicletário de fato.</p>
+                        <p>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.</p>
+                        <p>Sempre prenda sua bicicleta pelo quadro e o mais próximo possível desse objeto.</p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        "></a>
+                        {{/ifCond}}  
+                </div>
+            </div>
+            {{else}}
+            {{#if isAdmin}}
+                <div class="icon-label"> 
+                Sem informação sobre tipo de bicicletário
+                {{#if canModify}}
+                    <button class="editPlaceBtn link-button">
+                    (editar)
+                    </button>
+                {{/if}}
+                </div>
+            {{/if}}
+            {{/if}} 
+        </section>
+
+        <hr>
+
+        <section class="review {{#ifCond isAdmin '&&!' average}} missing-info {{/ifCond}}" {{#unless average}} style="text-align: center;"{{/unless}} itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+            <meta itemprop="ratingValue" content="{{average}}"/>
+            <meta itemprop="reviewCount" content="{{reviews}}"/>
+
+            {{#if numReviews}}
+            <div class="numreviews">{{numReviews}}</div>
+            {{/if}}
+
+            {{#unless average}}
+            <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+            {{/unless}}
+
+            <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+            {{#if average}}
+                <span class="average">{{average}}</span>
+
+                <fieldset id="ratingDisplay" class="rating disabled">
+                    <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                    <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
+                    <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                    <label class="full-star" data-value="4" for="placeDetails_star4"></label>
+                    <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                    <label class="full-star" data-value="3" for="placeDetails_star3"></label>
+                    <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                    <label class="full-star" data-value="2" for="placeDetails_star2"></label>
+                    <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                    <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                </fieldset>
+                
+                {{#unless savedRating}}
+                <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
+                {{/unless}}
+            {{/if}}
+            </div>
+
+            {{#if average}}
+            {{#if tags}}
+                <div class="tagsContainer">
+                    {{{tags}}}
+                </div>
+            {{else}}
+                <div class="tagsContainer loading" style="position: relative;">
+                    Carregando... 
+                </div>
+            {{/if}}
+            {{/if}}
+
+            {{#if savedRatingContent}} 
+                <div class="savedRating">
+                <img src="{{userThumbUrl}}" /> Sua avaliação:
+                <b data-color="{{color}}">
+                    {{{savedRatingContent}}}
+                </b>
+                <button class="ghost openReviewPanelBtn">Editar</button>
+                </div>
+            {{/if}}
+        </section>
+
+        <hr>
+
+        <section class="description">
+        <ul class="details-list">
+            {{#if createdTimeAgo}}
+            <li>
+                <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                {{#if author}}
+                <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                {{else}}
+                <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
+                {{/if}}
+            </li>
+            {{/if}}
+
+            {{#if description}}
+            <li>
+                <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
+                <div itemprop="description">{{{description}}}</div>
+            </li>
+            {{/if}}
+
+            {{#if views}}
+            <li>
+                <img class="details-list-icon svg-icon" alt="" src="/img/icon_views.svg">
+                <div>{{{views}}} visualizações</div>
+            </li>
+            {{/if}}
+
+            <li>
+            <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
+            <div itemprop="address">{{{address}}}</div>
+            </li>
+        </ul>
+        <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+            <meta itemprop="latitude" content="{{lat}}" />
+            <meta itemprop="longitude" content="{{lng}}" />
+        </div>
+        </section>
+
+        {{#if mapStaticImg}}
+            <section class="minimap-container">
+                <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
+            </section>
+        {{/if}}
+
+    </div>
+
+    <div class="modal-footer">
+    {{#unless savedRatingContent}}
+        <section class="rating-input-container">
+        <h2>
+            {{#if userThumbUrl}}
+            <div>
+                <img src="{{userThumbUrl}}" class="avatar"/>
+            </div>
+            {{/if}}
+            Dê sua nota para este bicicletário
+        </h2>
+
+        <fieldset class="rating rating-big empty">
+            <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+            <label class="full-star" data-value="5" for="placeDetails_star5_input"></label> 
+            <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+            <label class="full-star" data-value="4" for="placeDetails_star4_input"></label>
+            <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+            <label class="full-star" data-value="3" for="placeDetails_star3_input"></label>
+            <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+            <label class="full-star" data-value="2" for="placeDetails_star2_input"></label>
+            <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+            <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+        </fieldset>
+        </section>
+    {{/unless}}
+    </div>
+</section>

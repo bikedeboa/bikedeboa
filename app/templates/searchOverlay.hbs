@@ -1,0 +1,12 @@
+<!-- Content that shows in Search mode, like recent searches, ... -->
+
+<!-- <h2>Buscas Recentes</h2> -->
+<ul class="recent-searches">
+{{#each recentSearches}}
+    <li>
+    <button data-recentsearchid="{{@index}}">
+        <span class="glyphicon glyphicon-time"></span> {{{this.name}}}
+    </button>
+    </li>
+{{/each}}
+</ul>
