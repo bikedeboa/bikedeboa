@@ -427,7 +427,7 @@ $(() => {
     const structureFilters = filters.filter(i => i.prop === 'structureType');
     const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters];
 
-    const tempMarkers = _markerCluster.getMarkers();
+    const tempMarkers = BDB.Map.getMarkers();
 
     for(let i=0; i < markers.length; i++) {
       const m = markers[i];
@@ -485,303 +485,7 @@ $(() => {
 
   function clearFilters() {
     _activeFilters = null;
-    setMapOnAll(map);
-  }
-
-  function formatAverage(avg) {
-    if (avg) {
-      avg = parseFloat(avg);
-      if (avg.toFixed && avg !== Math.round(avg)) {
-        avg = avg.toFixed(1);
-      }
-      avg = '' + avg;
-    }
-
-    return avg;
-  }
-
-  function updateMarkers() {
-    clearMarkers();
-
-    // Markers from Database
-    if (markers && markers.length > 0) {
-      // Order by average so best ones will have higher z-index
-      // markers = markers.sort((a, b) => {
-      //   return a.average - b.average;
-      // });
-
-      let gmarkers = [];
-
-      for(let i=0; i < markers.length; i++) {
-        const m = markers[i];
-
-        if (m) {
-          // Icon and Scaling
-          let scale;
-          let iconType, iconTypeMini;
-          if (!m.average || m.average === 0) {
-            iconType = MARKER_ICON_GRAY;
-            iconTypeMini = MARKER_ICON_GRAY_MINI;
-            scale = 0.8;
-          } else if (m.average > 0 && m.average <= 2) {
-            iconType = MARKER_ICON_RED;
-            iconTypeMini = MARKER_ICON_RED_MINI;
-          } else if (m.average > 2 && m.average < 3.5) {
-            iconType = MARKER_ICON_YELLOW;
-            iconTypeMini = MARKER_ICON_YELLOW_MINI;
-          } else if (m.average >= 3.5) {
-            iconType = MARKER_ICON_GREEN;
-            iconTypeMini = MARKER_ICON_GREEN_MINI;
-          } else {
-            iconType = MARKER_ICON_GRAY;
-            iconTypeMini = MARKER_ICON_GRAY_MINI;
-          }
-          if (!scale) {
-            scale = 0.5 + (m.average/10);
-          }
-
-          if (map) {
-            m.icon = {
-              url: iconType, // url
-              scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H - MARKER_H/10)*scale), // anchor
-            };
-
-            m.iconMini = {
-              url: iconTypeMini, // url
-              scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
-            };
-          }
-
-          // Average might come with crazy floating point value
-          m.average = formatAverage(m.average);
-
-          // @todo temporarily disabled this because backend still doesnt support flags for these
-          // let labelStr;
-          // if (BDB.User.isAdmin && (!m.photo || !m.structureType || m.isPublic == null)) {
-          //   labelStr = '?';
-          // }
-
-          if (map) {
-            if (m.lat && m.lng) {
-              let newMarker = new google.maps.Marker({
-                optimized: true,
-                position: {
-                  lat: parseFloat(m.lat),
-                  lng: parseFloat(m.lng)
-                },
-                // map: map,
-                icon: m.icon,
-                zIndex: i, //markers should be ordered by average
-                // opacity: 0.1 + (m.average/5).
-              });
-              gmarkers.push(newMarker);
-
-              // Info window
-              let thumbUrl = '';
-              if (m.photo) { 
-                thumbUrl = m.photo.replace('images', 'images/thumbs');
-              }
-              let templateData = {
-                thumbnailUrl: thumbUrl,
-                title: m.text,
-                average: m.average,
-                roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getColorFromAverage(m.average)
-              };
- 
-              templateData.numReviews = m.reviews;
-
-              // Attributes
-              const attrs = [];
-              if (m.isPublic != null) {
-                attrs.push(m.isPublic ? 'Público' : 'Privado');
-              }
-              if (m.structureType) {
-                attrs.push(STRUCTURE_CODE_TO_NAME[m.structureType]);
-              }
-              if (m.isCovered != null) { 
-                attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
-              }
-              templateData.attrs = attrs.join(' · '); 
-
-              const contentString = BDB.templates.infoWindow(templateData);
-
-              if (_isTouchDevice) {
-                // Infobox preview on click
-                newMarker.addListener('click', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  map.panTo(newMarker.getPosition());
-
-                  _infoWindow.setContent(contentString);
-                  _infoWindow.open(map, newMarker);
-                  _infoWindow.addListener('domready', () => {
-                    // $('.infobox--img img').off('load').on('load', e => {
-                    //   $(e.target).parent().removeClass('loading');
-                    // });
-
-                    $('.infoBox').off('click').on('click', () => {
-                      openLocal(markers[i]);
-                      _infoWindow.close();
-                    });
-                  });
-                });
-
-                map.addListener('click', () => {
-                  _infoWindow.close();
-                });
-              } else {
-                // No infobox, directly opens the details modal
-                newMarker.addListener('click', () => {
-                  openLocal(markers[i]);
-                });
-
-                // Infobox preview on hover
-                newMarker.addListener('mouseover', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  _infoWindow.setContent(contentString); 
-                  _infoWindow.open(map, newMarker);
-                  _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
-                  });
-                });
-
-                newMarker.addListener('mouseout', () => {
-                  _infoWindow.close();
-                });
-              }
-            } else {
-              console.error('error: pin with no latitude/longitude');
-            }
-          }
-
-        } else {
-          console.error('marker is weirdly empty on addMarkerToMap()');
-        }
-      }
-
-      // @todo move this to Map.js
-      if (map) {
-        //_geolocationMarker.setZIndex(markers.length);
-
-        const clustererStyles = [
-          {
-            url: '/img/cluster_medium.png',
-            height: 50,
-            width: 50
-          },
-          {
-            url: '/img/cluster_medium.png',
-            height: 75,
-            width: 75
-          },
-          {
-            url: '/img/cluster_medium.png',
-            height: 80,
-            width: 80
-          },
-          { 
-            url: '/img/cluster_big.png',
-            height: 100,
-            width: 100
-          },
-          { 
-            url: '/img/cluster_big.png',
-            height: 120,
-            width: 120
-          },
-        ];
-        let clustererOptions;
-        if (_isMobile) {
-          clustererOptions = {
-            maxZoom: 15, 
-            minimumClusterSize: 2, 
-            styles: clustererStyles,
-            gridSize: 50 
-          };
-        } else {
-          clustererOptions = { 
-            maxZoom: 10, 
-            minimumClusterSize: 1,
-            styles: clustererStyles,
-            gridSize: 50
-          };
-        }
-
-        _markerCluster = new MarkerClusterer(map, gmarkers, clustererOptions);
-      } 
-    }
-  }
-
-  // Sets the map on all markers in the array.
-  function setMapOnAll (map) {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setMap(map);
-      }
-    }
-  }
-
-  // Removes the markers from the map, but keeps them in the array.
-  function hideMarkers () {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setOptions({clickable: false, opacity: 0.3});
-      }
-    }
-  }
-
-  // Shows any markers currently in the array.
-  function showMarkers () {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setOptions({clickable: true, opacity: 1});
-      }
-    }
-  }
-
-  // Switches all marker icons to the full or the mini scale
-  // scale := 'mini' | 'full'
-  function setMarkersIcon (scale) {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      let m;
-      for (let i = 0; i < tempMarkers.length; i++) {
-        m = markers[i];
-        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
-      }
-    }
-  }
-
-  // Deletes all markers in the array by removing references to them.
-  function clearMarkers () {
-    // setMapOnAll(null);
-    // gmarkers = [];
-    if (_markerCluster) {
-      _markerCluster.clearMarkers();
-    }
-  }
-
-  function toggleMarkers() {
-    if (areMarkersHidden) {
-      // showMarkers();
-      setMarkersIcon('full');
-      areMarkersHidden = false;
-    } else {
-      // hideMarkers();
-      setMarkersIcon('mini'); 
-      areMarkersHidden = true;
-    }
+    BDB.Map.setMapOnAll(map); 
   }
 
   function toggleLocationInputMode() {
@@ -867,7 +571,7 @@ $(() => {
       // }
     }
 
-    toggleMarkers();
+    BDB.Map.toggleMarkers();
     $('#addPlace').toggleClass('active');
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
@@ -933,7 +637,7 @@ $(() => {
       }
 
       BDB.Database.getPlaces( () => {
-        updateMarkers();
+        BDB.Map.updateMarkers();
         
         hideSpinner();
 
@@ -1213,7 +917,7 @@ $(() => {
         BDB.Database.deletePlace(openedMarker.id, () => {
           goHome();
           BDB.Database.getPlaces( () => {
-            updateMarkers();
+            BDB.Map.updateMarkers();
             hideSpinner();
             toastr['success']('Bicicletário deletado.');
           });
@@ -1335,7 +1039,7 @@ $(() => {
       // Update marker data
       BDB.Database.getPlaceDetails(m.id)
         .then(updatedMarker => {
-          updateMarkers();
+          BDB.Map.updateMarkers();
           openDetailsModal(updatedMarker);
         });
     });
@@ -1585,7 +1289,7 @@ $(() => {
       hideSpinner();
       //get gMap instance to be used by functions to still referer to map here (mainly markers);
       map = BDB.Map.getMap();
-      updateMarkers();
+      BDB.Map.updateMarkers();
 
       //to-do: refactor this to map.js
       if (!_isMobile) {
@@ -1596,7 +1300,7 @@ $(() => {
 
           if (prevZoomLevel !== _mapZoomLevel) {
             if (!_activeFilters) {
-              setMarkersIcon(_mapZoomLevel);
+              BDB.Map.setMarkersIcon(_mapZoomLevel);
             }
           }
         });
@@ -1623,7 +1327,7 @@ $(() => {
     $(document).one("LoadMap", function () {
       // showSpinner('Carregando Mapa :)');
 
-      BDB.Map.init();
+      BDB.Map.init(openLocal); 
 
       if (!_isTouchDevice) {
         $('.caption-tooltip').tooltip({
@@ -2486,7 +2190,7 @@ $(() => {
         $('#filter-results-counter').html(markers.length);
         $('#filter-results-total').html(markers.length);
 
-        updateMarkers();
+        BDB.Map.updateMarkers();
 
         // Hide spinner that is initialized visible on CSS
         //hideSpinner();
@@ -2569,7 +2273,7 @@ $(() => {
       if (state.data && state.data.isHome) {
         if (!map && !_isOffline) {
           $(document).trigger('LoadMap');
-          //updateMarkers();
+          //BDB.Map.updateMarkers();
         }
 
         if (_isDeeplink) {

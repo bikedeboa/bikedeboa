@@ -73,7 +73,6 @@ let markers;
 let tags;
 let idToTag = {};
 let tagToId = {};
-let areMarkersHidden = false;
 let addLocationMode = false;
 let openedMarker;
 let _newMarkerTemp;
@@ -99,6 +98,5 @@ let _deferredPWAPrompt;
 let _loginMutexBlocked;
 let _isFeatherlightOpen;
 let _routePendingData;
-let _markerCluster;
 
 let templates = {};

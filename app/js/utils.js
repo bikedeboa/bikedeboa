@@ -187,6 +187,18 @@ window.setOfflineMode = () => {
 
 }
 
+window.formatAverage = function(avg) {
+  if (avg) {
+    avg = parseFloat(avg);
+    if (avg.toFixed && avg !== Math.round(avg)) {
+      avg = avg.toFixed(1);
+    }
+    avg = '' + avg;
+  }
+
+  return avg;
+}
+
 // https://stackoverflow.com/questions/22581345/click-button-copy-to-clipboard-using-jquery
 window.copyToClipboard = function(elem) {
     // create hidden text element, if it doesn't already exist
