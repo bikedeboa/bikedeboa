@@ -46,12 +46,14 @@ BDB.Geolocation = (function(){
 
         let result = {
             status : false,
+            center : false,
             response : {}
         }
 
         let Location = new Promise(function(resolve,reject){
             if (positionWatcher){
                 result.status = true;
+                result.center = true;
                 result.response = currentPosition;
                 resolve(result);
             }else{
@@ -60,6 +62,7 @@ BDB.Geolocation = (function(){
                     navigator.geolocation.getCurrentPosition(
                         position => {
                             result.status = true;
+                            result.center = true;
                             result.response = position.coords;
                             setCurrentPosition(result.response);
                             geoWatch(options);
@@ -91,6 +94,7 @@ BDB.Geolocation = (function(){
         positionWatcher = navigator.geolocation.watchPosition(function(position){
             let result = {
                 status: true,
+                center: false,
                 response : position.coords
             };
             setCurrentPosition(position.coords);
@@ -98,6 +102,7 @@ BDB.Geolocation = (function(){
         },function(error){
             let result = {
                 status: false,
+                center: false,
                 response : error
             };
             geolocateDone(result);
