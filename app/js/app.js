@@ -2,32 +2,6 @@
 /* eslint-env node, jquery */
 
 $(() => {
-  function getPinColorFromAverage(average) {
-    if (typeof average === 'string') {
-      average = parseFloat(average);
-    }
-      
-    let pinColor;
-
-    if (average) {
-      if (!average || average === 0) {
-        pinColor = 'gray';
-      } else if (average > 0 && average <= 2) {
-        pinColor = 'red'; 
-      } else if (average > 2 && average < 3.5) {
-        pinColor = 'yellow';
-      } else if (average >= 3.5) {
-        pinColor = 'green';
-      } else {
-        pinColor = 'gray'; 
-      }
-    } else { 
-      pinColor = 'gray';
-    }
-
-    return pinColor; 
-  }
-
   function openShareDialog() {
     // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
     const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
@@ -136,7 +110,7 @@ $(() => {
     }
 
     // Average
-    templateData.pinColor = getPinColorFromAverage(m.average);
+    templateData.pinColor = getColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
@@ -240,7 +214,16 @@ $(() => {
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
-      templateData.savedRating = previousReview.rating;
+      const rating = previousReview.rating;
+      
+      templateData.color = getColorFromAverage(rating);
+
+      // @todo modularize this method
+      let stars = '';
+      for (let s = 0; s < parseInt(rating); s++) {
+        stars += '<span class="glyphicon glyphicon-star"></span>';
+      }
+      templateData.savedRatingContent = rating + stars;
     }
 
     if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
@@ -251,7 +234,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template // 
     ////////////////////////////////
-    $('#placeDetailsContent').html(templates.placeDetailsContentTemplate(templateData));
+    $('#placeDetailsContent').html(BDB.templates.placeDetailsContent(templateData));
 
     if (m.average) {
       $('input[name=placeDetails_rating]').val(['' + Math.round(m.average)]);
@@ -333,8 +316,9 @@ $(() => {
     } else { 
       // Just fade new detailed content in
       // $('#placeDetailsContent .photo-container, #placeDetailsContent .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-      $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-    }
+      $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description')
+        .velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false, duration: 2000});
+    } 
 
     // Tooltips
     if(!_isTouchDevice) {
@@ -393,7 +377,7 @@ $(() => {
 
       if (!marker._hasDetails) {
         // Request content
-        Database.getPlaceDetails(marker.id)
+        BDB.Database.getPlaceDetails(marker.id)
           .then(updatedMarker => {
             // Check if details panel is still open...
             if (openedMarker && openedMarker.id === updatedMarker.id) {
@@ -443,7 +427,7 @@ $(() => {
     const structureFilters = filters.filter(i => i.prop === 'structureType');
     const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters];
 
-    const tempMarkers = _markerCluster.getMarkers();
+    const tempMarkers = BDB.Map.getMarkers();
 
     for(let i=0; i < markers.length; i++) {
       const m = markers[i];
@@ -501,303 +485,7 @@ $(() => {
 
   function clearFilters() {
     _activeFilters = null;
-    setMapOnAll(map);
-  }
-
-  function formatAverage(avg) {
-    if (avg) {
-      avg = parseFloat(avg);
-      if (avg.toFixed && avg !== Math.round(avg)) {
-        avg = avg.toFixed(1);
-      }
-      avg = '' + avg;
-    }
-
-    return avg;
-  }
-
-  function updateMarkers() {
-    clearMarkers();
-
-    // Markers from Database
-    if (markers && markers.length > 0) {
-      // Order by average so best ones will have higher z-index
-      // markers = markers.sort((a, b) => {
-      //   return a.average - b.average;
-      // });
-
-      let gmarkers = [];
-
-      for(let i=0; i < markers.length; i++) {
-        const m = markers[i];
-
-        if (m) {
-          // Icon and Scaling
-          let scale;
-          let iconType, iconTypeMini;
-          if (!m.average || m.average === 0) {
-            iconType = MARKER_ICON_GRAY;
-            iconTypeMini = MARKER_ICON_GRAY_MINI;
-            scale = 0.8;
-          } else if (m.average > 0 && m.average <= 2) {
-            iconType = MARKER_ICON_RED;
-            iconTypeMini = MARKER_ICON_RED_MINI;
-          } else if (m.average > 2 && m.average < 3.5) {
-            iconType = MARKER_ICON_YELLOW;
-            iconTypeMini = MARKER_ICON_YELLOW_MINI;
-          } else if (m.average >= 3.5) {
-            iconType = MARKER_ICON_GREEN;
-            iconTypeMini = MARKER_ICON_GREEN_MINI;
-          } else {
-            iconType = MARKER_ICON_GRAY;
-            iconTypeMini = MARKER_ICON_GRAY_MINI;
-          }
-          if (!scale) {
-            scale = 0.5 + (m.average/10);
-          }
-
-          if (map) {
-            m.icon = {
-              url: iconType, // url
-              scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H - MARKER_H/10)*scale), // anchor
-            };
-
-            m.iconMini = {
-              url: iconTypeMini, // url
-              scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
-            };
-          }
-
-          // Average might come with crazy floating point value
-          m.average = formatAverage(m.average);
-
-          // @todo temporarily disabled this because backend still doesnt support flags for these
-          // let labelStr;
-          // if (BDB.User.isAdmin && (!m.photo || !m.structureType || m.isPublic == null)) {
-          //   labelStr = '?';
-          // }
-
-          if (map) {
-            if (m.lat && m.lng) {
-              let newMarker = new google.maps.Marker({
-                optimized: true,
-                position: {
-                  lat: parseFloat(m.lat),
-                  lng: parseFloat(m.lng)
-                },
-                // map: map,
-                icon: m.icon,
-                zIndex: i, //markers should be ordered by average
-                // opacity: 0.1 + (m.average/5).
-              });
-              gmarkers.push(newMarker);
-
-              // Info window
-              let thumbUrl = '';
-              if (m.photo) { 
-                thumbUrl = m.photo.replace('images', 'images/thumbs');
-              }
-              let templateData = {
-                thumbnailUrl: thumbUrl,
-                title: m.text,
-                average: m.average,
-                roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average)
-              };
- 
-              templateData.numReviews = m.reviews;
-
-              // Attributes
-              const attrs = [];
-              if (m.isPublic != null) {
-                attrs.push(m.isPublic ? 'Público' : 'Privado');
-              }
-              if (m.structureType) {
-                attrs.push(STRUCTURE_CODE_TO_NAME[m.structureType]);
-              }
-              if (m.isCovered != null) { 
-                attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
-              }
-              templateData.attrs = attrs.join(' · '); 
-
-              const contentString = templates.infoWindowTemplate(templateData);
-
-              if (_isTouchDevice) {
-                // Infobox preview on click
-                newMarker.addListener('click', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  map.panTo(newMarker.getPosition());
-
-                  _infoWindow.setContent(contentString);
-                  _infoWindow.open(map, newMarker);
-                  _infoWindow.addListener('domready', () => {
-                    // $('.infobox--img img').off('load').on('load', e => {
-                    //   $(e.target).parent().removeClass('loading');
-                    // });
-
-                    $('.infoBox').off('click').on('click', () => {
-                      openLocal(markers[i]);
-                      _infoWindow.close();
-                    });
-                  });
-                });
-
-                map.addListener('click', () => {
-                  _infoWindow.close();
-                });
-              } else {
-                // No infobox, directly opens the details modal
-                newMarker.addListener('click', () => {
-                  openLocal(markers[i]);
-                });
-
-                // Infobox preview on hover
-                newMarker.addListener('mouseover', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  _infoWindow.setContent(contentString); 
-                  _infoWindow.open(map, newMarker);
-                  _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
-                  });
-                });
-
-                newMarker.addListener('mouseout', () => {
-                  _infoWindow.close();
-                });
-              }
-            } else {
-              console.error('error: pin with no latitude/longitude');
-            }
-          }
-
-        } else {
-          console.error('marker is weirdly empty on addMarkerToMap()');
-        }
-      }
-
-      // @todo move this to Map.js
-      if (map) {
-        //_geolocationMarker.setZIndex(markers.length);
-
-        const clustererStyles = [
-          {
-            url: '/img/cluster_medium.png',
-            height: 50,
-            width: 50
-          },
-          {
-            url: '/img/cluster_medium.png',
-            height: 75,
-            width: 75
-          },
-          {
-            url: '/img/cluster_medium.png',
-            height: 80,
-            width: 80
-          },
-          { 
-            url: '/img/cluster_big.png',
-            height: 100,
-            width: 100
-          },
-          { 
-            url: '/img/cluster_big.png',
-            height: 120,
-            width: 120
-          },
-        ];
-        let clustererOptions;
-        if (_isMobile) {
-          clustererOptions = {
-            maxZoom: 15, 
-            minimumClusterSize: 2, 
-            styles: clustererStyles,
-            gridSize: 50 
-          };
-        } else {
-          clustererOptions = { 
-            maxZoom: 10, 
-            minimumClusterSize: 1,
-            styles: clustererStyles,
-            gridSize: 50
-          };
-        }
-
-        _markerCluster = new MarkerClusterer(map, gmarkers, clustererOptions);
-      } 
-    }
-  }
-
-  // Sets the map on all markers in the array.
-  function setMapOnAll (map) {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setMap(map);
-      }
-    }
-  }
-
-  // Removes the markers from the map, but keeps them in the array.
-  function hideMarkers () {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setOptions({clickable: false, opacity: 0.3});
-      }
-    }
-  }
-
-  // Shows any markers currently in the array.
-  function showMarkers () {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setOptions({clickable: true, opacity: 1});
-      }
-    }
-  }
-
-  // Switches all marker icons to the full or the mini scale
-  // scale := 'mini' | 'full'
-  function setMarkersIcon (scale) {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      let m;
-      for (let i = 0; i < tempMarkers.length; i++) {
-        m = markers[i];
-        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
-      }
-    }
-  }
-
-  // Deletes all markers in the array by removing references to them.
-  function clearMarkers () {
-    // setMapOnAll(null);
-    // gmarkers = [];
-    if (_markerCluster) {
-      _markerCluster.clearMarkers();
-    }
-  }
-
-  function toggleMarkers() {
-    if (areMarkersHidden) {
-      // showMarkers();
-      setMarkersIcon('full');
-      areMarkersHidden = false;
-    } else {
-      // hideMarkers();
-      setMarkersIcon('mini'); 
-      areMarkersHidden = true;
-    }
+    BDB.Map.setMapOnAll(map); 
   }
 
   function toggleLocationInputMode() {
@@ -846,7 +534,7 @@ $(() => {
                 `Foi mal, o bike de boa ainda não chegou aqui!
                 <br><br>
                 <small>
-                  <i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">
+                  <i>Acompanha nosso <a class="external-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
                   Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i>
                 </small>`,
               type: 'warning',
@@ -883,7 +571,7 @@ $(() => {
       // }
     }
 
-    toggleMarkers();
+    BDB.Map.toggleMarkers();
     $('#addPlace').toggleClass('active');
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
@@ -948,8 +636,8 @@ $(() => {
         toastr['success']('Bicicletário atualizado.');
       }
 
-      Database.getPlaces( () => {
-        updateMarkers();
+      BDB.Database.getPlaces( () => {
+        BDB.Map.updateMarkers();
         
         hideSpinner();
 
@@ -981,10 +669,10 @@ $(() => {
 
     if (updatingMarker) {
       ga('send', 'event', 'Local', 'update', ''+updatingMarker.id);
-      Database.updatePlace(updatingMarker.id, place, onPlaceSaved);
+      BDB.Database.updatePlace(updatingMarker.id, place, onPlaceSaved);
     } else {
       ga('send', 'event', 'Local', 'create');
-      Database.sendPlace(place, onPlaceSaved);
+      BDB.Database.sendPlace(place, onPlaceSaved);
     }
   }
 
@@ -1025,53 +713,6 @@ $(() => {
     }
 
     hideSpinner();
-  }
-
-  function _initTemplates() {
-    // Thanks https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
-    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
-      switch (operator) {
-      case '==':
-        return (v1 == v2) ? options.fn(this) : options.inverse(this);
-      case '===':
-        return (v1 === v2) ? options.fn(this) : options.inverse(this);
-      case '!=':
-        return (v1 != v2) ? options.fn(this) : options.inverse(this);
-      case '!==':
-        return (v1 !== v2) ? options.fn(this) : options.inverse(this);
-      case '<':
-        return (v1 < v2) ? options.fn(this) : options.inverse(this);
-      case '<=':
-        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
-      case '>':
-        return (v1 > v2) ? options.fn(this) : options.inverse(this);
-      case '>=':
-        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-      case '&&':
-        return (v1 && v2) ? options.fn(this) : options.inverse(this);
-      case '&&!':
-        return (v1 && !v2) ? options.fn(this) : options.inverse(this);
-      case '||':
-        return (v1 || v2) ? options.fn(this) : options.inverse(this);
-      case '||!':
-        return (v1 || !v2) ? options.fn(this) : options.inverse(this);
-      default:
-        return options.inverse(this);
-      }
-    });
-
-    // Pre-compile all Handlebars templates
-    [
-      'placeDetailsContentTemplate',
-      'infoWindowTemplate',
-      'contributionsModalTemplate',
-      'searchOverlayTemplate',
-    ].forEach( templateName => {
-      let templateContent = $(`#${templateName}`).html();
-      if (templateContent) {
-        templates[templateName] = Handlebars.compile(templateContent);
-      }
-    });
   }
 
   function validateNewPlaceForm() {
@@ -1134,7 +775,7 @@ $(() => {
       // Minimap
       // @todo generalize this
       const staticImgDimensions = _isMobile ? '400x100' : '1000x100';
-      const minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getPinColorFromAverage(m.average), m.lat, m.lng, 20);
+      const minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getColorFromAverage(m.average), m.lat, m.lng, 20);
       $('#newPlaceModal .minimap').attr('src', minimapUrl);
 
       // More info section
@@ -1268,15 +909,15 @@ $(() => {
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Deletar',
-        confirmButtonColor: '#FF8265'
+        confirmButtonColor: '#FF8265' 
       }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
-        Database.deletePlace(openedMarker.id, () => {
+        BDB.Database.deletePlace(openedMarker.id, () => {
           goHome();
-          Database.getPlaces( () => {
-            updateMarkers();
+          BDB.Database.getPlaces( () => {
+            BDB.Map.updateMarkers();
             hideSpinner();
             toastr['success']('Bicicletário deletado.');
           });
@@ -1396,10 +1037,11 @@ $(() => {
       }
 
       // Update marker data
-      Database.getPlaceDetails(m.id, updatedMarker => {
-        updateMarkers();
-        openDetailsModal(updatedMarker);
-      });
+      BDB.Database.getPlaceDetails(m.id)
+        .then(updatedMarker => {
+          BDB.Map.updateMarkers();
+          openDetailsModal(updatedMarker);
+        });
     });
   }
 
@@ -1452,7 +1094,7 @@ $(() => {
       };
 
       const callback = () => {
-        Database.sendReview(reviewObj, reviewId => {
+        BDB.Database.sendReview(reviewObj, reviewId => {
           reviewObj.databaseId = reviewId;
           BDB.User.saveReview(reviewObj);
 
@@ -1463,7 +1105,7 @@ $(() => {
       const previousReview = BDB.User.getReviewByPlaceId(m.id);
       if (previousReview) {
         // Delete previous
-        Database.deleteReview(previousReview.databaseId, callback);
+        BDB.Database.deleteReview(previousReview.databaseId, callback);
       } else {
         callback();
       }
@@ -1476,7 +1118,7 @@ $(() => {
       customClass: 'revision-modal',
       html:
         `<p>
-          Este bicicletário está desatualizado ou está faltando uma informação importante? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil. :)
+          Este bicicletário está desatualizado ou está faltando uma informação importante? Nos ajude a manter o mapeamento sempre atualizado e útil pra todo mundo. :)
         </p>
 
         <p>
@@ -1485,9 +1127,7 @@ $(() => {
         </p>
 
         <p class="disclaimer">
-          Para qualquer comentário sobre o site em geral, lembre que estamos sempre de olho no 
-          <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> 
-          email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
+          Para qualquer comentário sobre o site em geral, entre em <a class="external-link contact-btn"> <img src="/img/icon_mail.svg" class="icon-mail" /> contato</a>!
         </p>`,
       confirmButtonText: 'Enviar',
       showCloseButton: true
@@ -1499,7 +1139,7 @@ $(() => {
         content: $('#revisionText').val()
       };
 
-      Database.sendRevision(revisionObj, revisionId => {
+      BDB.Database.sendRevision(revisionObj, revisionId => {
         hideSpinner();
         swal('Sugestão enviada', `Obrigado por contribuir com o bike de boa! Sua sugestão será 
           avaliada pelo nosso time de colaboradores o mais rápido possível.`, 'success');
@@ -1530,7 +1170,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#searchOverlayContentPlaceholder').html(templates.searchOverlayTemplate(templateData));
+    $('#searchOverlayContentPlaceholder').html(BDB.templates.searchOverlay(templateData));
 
     $('#search-overlay .recent-searches button').off('click').on('click', e => {
       const $target = $(e.currentTarget);
@@ -1644,6 +1284,69 @@ $(() => {
   }
 
   function _initGlobalCallbacks() {
+    //set Map Initialization 
+    $(document).on('map:ready', function () {
+      hideSpinner();
+      //get gMap instance to be used by functions to still referer to map here (mainly markers);
+      map = BDB.Map.getMap();
+      BDB.Map.updateMarkers();
+
+      //to-do: refactor this to map.js
+      if (!_isMobile) {
+        google.maps.event.addListener(map, 'zoom_changed', () => {
+          const prevZoomLevel = _mapZoomLevel;
+
+          _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
+
+          if (prevZoomLevel !== _mapZoomLevel) {
+            if (!_activeFilters) {
+              BDB.Map.setMarkersIcon(_mapZoomLevel);
+            }
+          }
+        });
+      }
+    });
+
+    $(document).on("autocomplete:done", function (e) {
+      let place = e.detail
+
+      addToRecentSearches({
+        name: place.name,
+        pos: place.geometry.location,
+        viewport: place.geometry.viewport
+      });
+
+      exitLocationSearchMode();
+
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
+      ga('send', 'event', 'Search', 'location', place.formatted_address);
+
+    });
+
+    $(document).one("LoadMap", function () {
+      // showSpinner('Carregando Mapa :)');
+
+      BDB.Map.init(openLocal); 
+
+      if (!_isTouchDevice) {
+        $('.caption-tooltip').tooltip({
+          toggle: 'tooltip',
+          trigger: 'hover',
+          placement: 'left',
+          'delay': { 'show': 0, 'hide': 0 }
+        });
+      }
+      showUI();
+    });
+
+    $(document).on('map:outofbounds', function (result) {
+      let response = result.detail;
+
+      $('#newPlaceholder').toggleClass('invalid', !response.isCenterWithinBounds);
+      $('#out-of-bounds-overlay').toggleClass('showThis', !response.isViewWithinBounds);
+    });
+
     $('#logo').on('click', () => {
       goHome();
     });
@@ -1799,15 +1502,14 @@ $(() => {
 
             <h2 class="swal2-title" id="swal2-title">Feedback</h2>
             <div style="text-align: center;">
-              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
             </div>
           `,
       });
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
-      map.setCenter(_portoAlegrePos);
-      map.setZoom(12);
+      map.goToPortoAlegre();
     }));
 
     
@@ -1918,9 +1620,9 @@ $(() => {
     // Modal callbacks
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
-      // $('.modal-dialog')
-      //   .velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION})
-      //   .velocity({display: 'table-cell'});
+      $('.modal-dialog')
+        .velocity((_isMobile ? 'transition.slideUpIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
+        .velocity({display: 'table-cell'}); 
 
       // Set mobile navbar with modal's title
       const openingModalTitle = $(e.currentTarget).find('.view-name').text();
@@ -1941,7 +1643,8 @@ $(() => {
     });
 
     $('body').on('hide.bs.modal', '.modal', e => {
-      // $('.modal-dialog').velocity('transition.slideDownBigOut');
+      // Doesnt work :()
+      // $('.modal-dialog').velocity((_isMobile ? 'transition.slideDownOut' : 'transition.slideUpOut'), {queue: true})
 
       if (_isMobile) { 
         // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
@@ -2106,8 +1809,13 @@ $(() => {
           r.createdTimeAgo = createdAtToDaysAgo(r.createdAt);
         }
 
-        r.rating = r.rating + '';
-        r.color = getPinColorFromAverage(r.rating);
+        let stars = '';
+        for (let s=0; s < r.rating; s++) {
+          stars += '<span class="glyphicon glyphicon-star"></span>';
+        }
+        r.ratingContent = r.rating + stars; 
+
+        r.color = getColorFromAverage(r.rating);
       }
  
       templateData.reviews = templateData.reviews.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
@@ -2131,7 +1839,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#modalPlaceholder').html(templates.contributionsModalTemplate(templateData));
+    $('#modalPlaceholder').html(BDB.templates.contributionsModal(templateData));
     $('#contributionsModal').modal('show');
 
     $('.go-to-place-btn').off('click').on('click', e => {
@@ -2256,6 +1964,8 @@ $(() => {
       break;
     case 'novo' :
     case 'editar':
+    case 'foto':
+    case 'dados':
     case '':
       break;
     default:
@@ -2351,7 +2061,7 @@ $(() => {
     hello(auth.network).api('me').then(function(profile) { 
       console.debug('profile', profile);
 
-      Database.socialLogin({
+      BDB.Database.socialLogin({
         network: auth.network,
         socialToken: _socialToken,
         fullname: profile.name,
@@ -2414,7 +2124,7 @@ $(() => {
     //   } else {
     //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
     //   }
-    // }, 2000); 
+    // }, 2000);
 
     if (_isMobile) {
       return;
@@ -2441,21 +2151,7 @@ $(() => {
     });
   }
 
-  function localhostOverrides() {
-    // if (_isLocalhost) {
-    //   Database.API_URL = 'http://localhost:3000';
-    // }
-  }
-
   function init() {
-    if (isDemoMode) {
-      Database = BDB.MockedDatabase;
-    } else {
-      Database = BDB.Database;
-    }
-
-    localhostOverrides();
-
     // Retrieve markers saved in a past access
     markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
@@ -2470,7 +2166,7 @@ $(() => {
       $.getJSON('//ipinfo.io/json', data => {
         if (data && data.ip) {
           ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
-          Database._setOriginHeader(data.ip);
+          BDB.Database._setOriginHeader(data.ip);
         } else {
           console.error('Something went wrong when trying to retrieve user IP.');
           ga('send', 'event', 'Misc', 'IP retrieval error');
@@ -2488,13 +2184,13 @@ $(() => {
         // }
       });
 
-      Database.authenticate();
-      Database.getAllTags();
-      Database.getPlaces( () => {
+      BDB.Database.authenticate();
+      BDB.Database.getAllTags();
+      BDB.Database.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
         $('#filter-results-total').html(markers.length);
 
-        updateMarkers();
+        BDB.Map.updateMarkers();
 
         // Hide spinner that is initialized visible on CSS
         //hideSpinner();
@@ -2510,77 +2206,12 @@ $(() => {
     }
   } 
 
-    // Setup must only be called *once*, differently than init() that may be called to reset the app state.
+  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
     // References:
     //   https://developers.google.com/web/updates/2015/10/display-mode
     //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
-
-    //set Map Initialization 
-    $(document).on('map:ready', function(){
-        hideSpinner();
-        //get gMap instance to be used by functions to still referer to map here (mainly markers);
-        map = BDB.Map.getMap();
-        updateMarkers(); 
-
-        //to-do: refactor this to map.js
-        if (!_isMobile) {
-          google.maps.event.addListener(map, 'zoom_changed', () => {    
-            const prevZoomLevel = _mapZoomLevel;   
-        
-            _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';   
-        
-            if (prevZoomLevel !== _mapZoomLevel) {   
-              if (!_activeFilters) {   
-                setMarkersIcon(_mapZoomLevel);   
-              }    
-            }    
-          });
-        }
-    });
-
-    $(document).on("autocomplete:done", function(e){
-      let place = e.detail
-
-      addToRecentSearches({
-        name: place.name,
-        pos: place.geometry.location,
-        viewport: place.geometry.viewport
-      });
-
-      exitLocationSearchMode();
-      
-      $('#locationQueryInput').val('');
-      toggleClearLocationBtn('hide');
-      ga('send', 'event', 'Search', 'location', place.formatted_address); 
-
-    });
-
-    $(document).one("LoadMap",function(){
-      // showSpinner('Carregando Mapa :)');
-      
-      BDB.Map.init();
-
-      if(!_isTouchDevice) {
-        $('.caption-tooltip').tooltip({
-          toggle: 'tooltip', 
-          trigger: 'hover',
-          placement: 'left', 
-          'delay': {'show': 0, 'hide': 0}
-        });
-      }
-      showUI();
-    });
-
-    $(document).on('map:outofbounds', function(result){
-      let response = result.detail;
-      
-        $('#newPlaceholder').toggleClass('invalid', !response.isCenterWithinBounds);
-        $('#out-of-bounds-overlay').toggleClass('showThis', !response.isViewWithinBounds); 
-      
-    });
-
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       $('body').addClass('pwa-installed');
       ga('send', 'event', 'Misc', 'launched with display=standalone');
@@ -2592,31 +2223,17 @@ $(() => {
       ga('send', 'event', 'Misc', 'launched from native app'); 
     }
 
-    // Got Google Maps, either we're online or the SDK is in cache.
-    // if (window.google) {
-      // On Mobile we defer the initialization of the map if we're in deeplink
-      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-        $(document).trigger("LoadMap"); 
-      }
-    // } else {
-    //   if (window.location.pathname !== '/dados') {
-    //     setOfflineMode();
-    //   }
-    // }
-    
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
     isMobileListener.addListener((isMobileListener) => {
       _isMobile = isMobileListener.matches;
     });
-    const isDesktopListener = window.matchMedia('(min-width: ${DESKTOP_MIN_WIDTH})');
-    isDesktopListener.addListener((isDesktopListener) => {
-      _isDesktop = isDesktopListener.matches;
-    });
-
+    
     // Super specific mobile stuff
     if (_isMobile) {
+      // Optimized short placeholder
       $('#locationQueryInput').attr('placeholder','Buscar endereço');
 
+      // Remove Bootstrap fade class
       $('.modal').removeClass('fade');
     } else {
       $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
@@ -2627,10 +2244,19 @@ $(() => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
 
-
     _initGlobalCallbacks();
 
-    _initTemplates();
+    // Got Google Maps, either we're online or the SDK is in cache.
+    // if (window.google) {
+    // On Mobile we defer the initialization of the map if we're in deeplink
+    if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+      $(document).trigger("LoadMap");
+    }
+    // } else {
+    //   if (window.location.pathname !== '/dados') {
+    //     setOfflineMode();
+    //   }
+    // }
 
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
@@ -2647,7 +2273,7 @@ $(() => {
       if (state.data && state.data.isHome) {
         if (!map && !_isOffline) {
           $(document).trigger('LoadMap');
-          //updateMarkers();
+          //BDB.Map.updateMarkers();
         }
 
         if (_isDeeplink) {
@@ -2681,11 +2307,11 @@ $(() => {
       }
     };
 
-    // Set up Sweet Alert
+    // Set up SweetAlert, the alert window lib
     swal.setDefaults({
       confirmButtonColor: '#30bb6a',
       confirmButtonText: 'OK',
-      confirmButtonClass: 'btn green',
+      confirmButtonClass: 'btn',
       cancelButtonText: 'Cancelar',
       cancelButtonClass: 'btn',
       buttonsStyling: false,
@@ -2693,8 +2319,8 @@ $(() => {
       animation: false
     });
 
+    // Set up Featherlight - photo lightbox lib
     if ($.featherlight) {
-      // Featherlight - photo lightbox lib
       // Extension to show the img alt tag as a caption within the image
       $.featherlight.prototype.afterContent = function() { 
         var caption = this.$currentTarget.find('img').attr('alt');
@@ -2708,7 +2334,7 @@ $(() => {
       $.featherlight.defaults.closeOnEsc = false;
     }
  
-    // Toastr options
+    // Set up Toastr, the messaging lib
     toastr.options = {
       'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
       'closeButton': false,
@@ -2717,7 +2343,7 @@ $(() => {
 
     // Sidenav (hamburger and filter menus)
     const sidenavHideCallback = () => {
-      // @todo explain me
+      // @todo explain this
       setView('bike de boa', '/', true);
     };
     try {
@@ -2739,7 +2365,7 @@ $(() => {
       _hamburgerMenu = _filterMenu = null;
     }
 
-    // Hello.js
+    // Set up Hello.js, the Social Login lib
     hello.init({
       facebook: FACEBOOK_CLIENT_ID,
       google: GOOGLE_CLIENT_ID, 
@@ -2766,38 +2392,34 @@ $(() => {
       onSocialLogout(); 
     });
 
+    // Initialize all help tooltips
     initHelpTooltip('#filter-menu .help-tooltip-trigger');
 
-    $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - ciclovias');
-    });
+    // Temporarily in disuse
+    // $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+    //   ga('send', 'event', 'Misc', 'tooltip - ciclovias');
+    // });
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      _deferredPWAPrompt = e;
+    // window.addEventListener('beforeinstallprompt', e => {
+    //   e.preventDefault();
+    //   _deferredPWAPrompt = e;
     
-      $('.howToInstallBtn').css({'font-weight': 'bold'});
+    //   $('.howToInstallBtn').css({'font-weight': 'bold'});
     
-      return false;
-    });
-
-     // Temporarily disabled manually prompting this because it sucks 
-    promptPWAInstallPopup()
+    //   return false;
+    // });
   }
 
-
-  window.toggleDemoMode = () => {
-    showSpinner();
-    isDemoMode = !isDemoMode;
-    init();
-  };
 
   //////////////////////////
   // Start initialization //
   //////////////////////////
 
+  // Things that are only done once per app
   setup(); 
+
+  // Things that can be redone
   init();
 });

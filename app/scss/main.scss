@@ -86,6 +86,23 @@ $GRID_SPACE: 12px;
   to {transform: rotate(360deg);}
 }
 
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,6 +138,11 @@ $GRID_SPACE: 12px;
   border-radius: 5px;
 }
 
+@mixin defaultButtonHover {
+  transform: translateY(-1px);
+  box-shadow: 0px 6px 10px rgba(0,0,0,.2);
+}
+
 
 
 
@@ -137,6 +159,12 @@ body {
     overflow: hidden;
     font-family: $bodyFont;
     background-color: $lightestGray;
+}
+
+// Completely hide occasional scrollbars for smoother transitions
+body::-webkit-scrollbar,
+.modal-dialog::-webkit-scrollbar {
+    display: none;
 }
 
 body.beta #map {
@@ -384,7 +412,10 @@ p {
 
 .help-tooltip-trigger {
   cursor: pointer;
-  color: $lightGray;
+  color: $lightGray; 
+
+  transition: color .2s ease;
+
   
   & + .tooltip {
     .tooltip-inner {
@@ -535,13 +566,24 @@ body.deeplink {
     direction: rtl;
     user-select: none;
     cursor: default;
+} 
+
+a {
+  &:focus,
+  &:active,
+  &:hover {
+    text-decoration: none; 
+  }
 }
 
-a,
+.external-link,
 .link-like {
     color: $black;
     border-bottom: 3px solid $yellow;
     box-shadow: inset 0 -4px 0 $yellow;
+
+    cursor: pointer;
+    
     transition: all 0.2s ease;
 
     &:focus,
@@ -559,7 +601,7 @@ a.unstyled-link {
   border-bottom: inherit;
   box-shadow: none;
   color: inherit;
-  transition: inherit;
+  transition: inherit; 
 
   &:focus,
   &:active,
@@ -609,6 +651,8 @@ a.unstyled-link {
   border: 1px solid $lighterGrey;
   min-width: 180px;
   width: auto;
+
+  animation: slideIn .2s $coolEaseOut;
 
   li {
     margin: $GRID_SPACE/2 0;
@@ -1379,7 +1423,7 @@ a.unstyled-link {
     padding: 13px;
     text-align: left;
     overflow: hidden;
-    transition: width .5s $coolEaseOut;
+    transition: width .5s $coolEaseOut, background .2s;
 
     // transition: background 0.2s ease-out, width 0.5s ease-out;
     // opacity: 0;
@@ -1820,7 +1864,7 @@ body.modal-open {
     height: 46px;
     border-radius: 50%;
 
-    // transition: color 0.2s ease-out;
+    transition: all 0.2s ease-out;
 
     &:hover {
       background: $lighterGray;
@@ -2414,15 +2458,15 @@ body.modal-open {
     vertical-align: middle;
     background: transparent;
 
-    // transition: color .2s ease, background .2s ease;
+    transition: all .2s;
     
     &:hover,
     &:focus,
     &:active {
         color: white;
-        border-color: white;
-        // background-color: $gray;
-        background: $greenGradient;
+        border-color: transparent;
+        background-color: $lightGreen;
+        // background: $greenGradient;
     }
 }
 
@@ -2498,20 +2542,21 @@ body.modal-open {
 #placeDetailsContent {
     .review {
       .savedRating {
-          text-align: center;
+          text-align: left;
           color: $gray;
           font-weight: 400;
           margin-top: $GRID_SPACE;
           font-size: 14px;
           line-height: 14px;
           background: $paleWhite;
-          padding: $GRID_SPACE/2 0;
+          padding: $GRID_SPACE/2;
           vertical-align: middle;
 
           button {
             font-size: 12px;
             margin: 0;
             margin-left: 6px;
+            float: right; 
           }
 
           img {
@@ -2699,6 +2744,12 @@ body.modal-open {
   text-align: center;
   @include roundedCorners;
   font-weight: bold;
+
+  transition: .2s;
+
+  &:hover:not([disabled]) {
+    @include defaultButtonHover;
+  }
   
   &:before {
     content: "";
@@ -2752,7 +2803,6 @@ body.modal-open {
     }
   }
 }
-
 
 .review-modal {
     text-align: center;
@@ -2828,10 +2878,8 @@ body.modal-open {
 
 .btn.green {
     background-color: $lightGreen;
-    border-color: $darkGreen;
-    color: rgb(250,250,250);
+    color: rgb(250,250,250); 
     
-    &:hover:not([disabled]),
     &:focus:not([disabled]),
     &.active:not([disabled]) {
         color: white;
@@ -2839,28 +2887,15 @@ body.modal-open {
     }
 }
 
-.btn.btn-action.green {
-    border-bottom: 3px solid $darkGreen;
-}
-
 .btn.btn-action {
-    $depth: 3px;
-
     width: 100%;
     @include roundedCorners;
-    border-bottom: $depth solid $lighterGray;
     padding: 20px;
 
-    &:active {
-        outline: 0; 
-        border-bottom-width: ($depth - 3px);
-        // transform: translateY(3px);
-        // // compensate for relayout because of changing border size
-        // margin-bottom: calc(2% + 3px);
-    }
+    transition: all .2s;
 
-    &:disabled {
-        border-bottom: $depth solid $gray;
+    &:hover:not([disabled]) {
+      @include defaultButtonHover;
     }
 }
 
@@ -2878,7 +2913,7 @@ body.modal-open {
 
     transition: background-color 0.2s ease-out;
 
-    &:disabled {
+    &:disabled { 
         background-color: $lightGray;
         color: $lighterGray;
     }
@@ -3071,6 +3106,10 @@ body.modal-open {
     height: auto;
     background: none;
     padding-left: 16px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
   }
 
   .side-nav__container {
@@ -3376,6 +3415,8 @@ body.modal-open {
   display: flex;
   margin-top: $GRID_SPACE*2;
 
+  animation: slideIn .2s $coolEaseOut;
+
   &:active,
   &:focus,
   &:hover {
@@ -3446,9 +3487,19 @@ body.modal-open {
     text-transform: uppercase;
   }
 
-  .infobox--arrow,
   .infobox--caret {
     display: none;
+  }
+
+  .infobox--arrow {
+    display: block;
+
+    position: absolute;
+    top: -13px;
+    left: calc(50% - 10px);
+    font-size: 20px;
+    color: white; 
+    text-shadow: 1px -1px 2px rgba(0,0,0,.1);
   }
 }
 
@@ -4018,16 +4069,16 @@ body.modal-open {
       display: none;
     }
 
-    .infobox--arrow {
-      display: block;
+    // .infobox--arrow {
+    //   display: block;
 
-      position: absolute;
-      top: -13px;
-      left: calc(50% - 10px);
-      font-size: 20px;
-      color: white; 
-      text-shadow: 1px -2px 3px rgba(0,0,0,.15);
-    }
+    //   position: absolute;
+    //   top: -13px;
+    //   left: calc(50% - 10px);
+    //   font-size: 20px;
+    //   color: white; 
+    //   text-shadow: 1px -2px 3px rgba(0,0,0,.15);
+    // }
 
     .infobox--caret {
       display: block;
@@ -4120,6 +4171,8 @@ body.modal-open {
     height: 46px;
     border-radius: 50%;
     text-shadow: 0 0 3px white;
+
+    transition: background .2s;
 
     &:hover {
       background: $lighterGray;
@@ -4716,13 +4769,23 @@ body.modal-open {
     border-color: $gray
   }
 
+  .swal2-confirm {
+    background: $green;
+    color: white;
+  }
+
   .swal2-cancel,
   .swal2-confirm {
-    border-bottom-width: 3px;
-    border-bottom-style: solid;
+    border: 0;
     @include roundedCorners;
     font-weight: 700;  
     min-width: 90px;
+    
+    transition: all .2s;
+    
+    &:hover:not([disabled]) {
+      @include defaultButtonHover;
+    }
     
     &:active {
       outline: 0;
