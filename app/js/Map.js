@@ -142,7 +142,7 @@ BDB.Map = (function () {
       geolocationRadius.setRadius(gposition.accuracy);
     }
   };
-  let updateMapCenter = function (coords, center = true, convert = true) {
+  let updateUserPosition = function (coords, center = true, convert = true) {
     let gpos = convertToGmaps(coords, convert);
     updateMarkerPosition(gpos);
     geolocationRadius.setVisible(true);
@@ -182,7 +182,7 @@ BDB.Map = (function () {
   let geolocate = function (options = false) {
     document.addEventListener('geolocation:done', function (result) {
       if (result.detail.status) {
-          updateMapCenter(result.detail.response, result.detail.center);  
+          updateUserPosition(result.detail.response, result.detail.center);  
       }
     });
     BDB.Geolocation.getLocation(options);
@@ -253,7 +253,7 @@ BDB.Map = (function () {
         if (permission.state === 'granted') {
           BDB.Geolocation.getLocation().then(function (result) {
             // initMap(result.response, 17); 
-            updateMapCenter(result.response);
+            updateUserPosition(result.response);
           }, function (error) {
             // initMap(coords, zoom);
           });
