@@ -177,7 +177,7 @@ $(() => {
     if (m.photo) {
       templateData.photoUrl = m.photo;
       
-      if (_isMobile) {
+      if (_isMobile && !_isDeeplink) {
         $('body').addClass('transparent-mobile-topbar');
       }
     }
@@ -1196,6 +1196,7 @@ $(() => {
 
     $('body').addClass('search-mode'); 
     $('#search-overlay').addClass('showThis');
+    $('#search-overlay .recent-searches li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, queue: false }); 
     $('.hamburger-button').addClass('back-mode');
 
     $('.hamburger-button.back-mode').one('click', () => {
@@ -1213,7 +1214,11 @@ $(() => {
     text = text || '';
 
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar-title').text(openedMarker ? '' : text);
+    if (_isDeeplink && openedMarker) {
+      $('#top-mobile-bar-title').text('bike de boa');
+    } else {
+      $('#top-mobile-bar-title').text(openedMarker ? '' : text); 
+    }
 
     // Basic website metatags
     if (!text || text.length == 0) {
@@ -1912,6 +1917,7 @@ $(() => {
   function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
+
     switch (urlBreakdown[1]) {
     case 'b':
       if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
@@ -1976,11 +1982,11 @@ $(() => {
       match = false; 
       break;
     }
+
     if (match && initialRouting) {
 
       _isDeeplink = true;
       $('body').addClass('deeplink'); 
-      // $('#top-mobile-bar-title').text('bike de boa');
 
       // showSpinner();
 

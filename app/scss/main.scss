@@ -280,7 +280,7 @@ p {
   padding-top: 60px;
   padding-left: 12px;
 
-  transition: opacity 0.5s ease-in-out;   
+  transition: all 0.3s $coolEaseOut;   
 
   // temp dev temp dev temp dev temp dev temp dev temp dev 
   opacity: 0;
