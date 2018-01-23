@@ -38,10 +38,10 @@ const DEST_PATH =  'dist';
 // Environment specific variables
 const development = environments.development;
 const production = environments.production;
-const facebookEnv = process.env.FACEBOOK_ENV || 'localhost';
+const BDB_ENV = process.env.BDB_ENV || 'localhost';
 
 console.log('NODE_ENV =', development() ? 'development' : 'production');
-console.log('FACEBOOK_ENV =', facebookEnv);
+console.log('BDB_ENV =', BDB_ENV);
  
 const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
 const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.com';
@@ -49,42 +49,42 @@ const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.c
 const FACEBOOK_IDS = {
   production: '1814653185457307',
   beta: '1554610834551808',
-  development: '116937842287717', 
+  beta2: '116937842287717', 
   localhost: '478533412529512'
 };
 const GOOGLE_PROD = '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com';
 const GOOGLE_DEV = '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com';
 const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
-const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[facebookEnv];
+const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[BDB_ENV];
 const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
-// const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
 let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
-// const GOOGLE_MAPS_ID = development() ? 'AIzaSyD1dNf2iN1XS0wx17MTf2lPTbPg8UIJqfA' : 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
-
-if (facebookEnv === 'beta') {
+ 
+// Uses the brand new Renderer (Beta)
+// https://developers.google.com/maps/documentation/javascript/beta-renderer
+if (BDB_ENV === 'beta') {  
   GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
 }
 
 
 // SASS
 gulp.task('sass', () => {
-    return gulp.src('app/scss/*.scss')
-        .pipe(sourcemaps.init())
-        .pipe(plumber())
-        .pipe(sass())
-        .on('error', function(e) {
-          console.log(e);
-          this.emit('end');
-        })
-        .pipe(autoprefixer({
-            browsers: ['> 1%']
-        }))
-        .pipe(concat('main.min.css'))
-        .pipe(minifycss())
-        .pipe(sourcemaps.write('.'))
-        .pipe(fileSizes({title: 'main.min.css', gzip: true}))
-        .pipe(gulp.dest('dist/css'));
+  return gulp.src('app/scss/*.scss')
+    .pipe(sourcemaps.init())
+    .pipe(plumber())
+    .pipe(sass())
+    .on('error', function(e) {
+      console.log(e);
+      this.emit('end');
+    })
+    .pipe(autoprefixer({
+      browsers: ['> 1%']
+    }))
+    .pipe(concat('main.min.css'))
+    .pipe(minifycss())
+    .pipe(sourcemaps.write('.'))
+    .pipe(fileSizes({title: 'main.min.css', gzip: true}))
+    .pipe(gulp.dest('dist/css'));
 });
 
 // Javascript
@@ -98,6 +98,7 @@ gulp.task('scripts', () => {
     .pipe(replace('<FACEBOOK_CLIENT_ID>', FACEBOOK_CLIENT_ID))
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
+    .pipe(replace('<BDB_ENV>', BDB_ENV))
     .pipe(plumber())
     // .pipe(concat('app.js'))
     .pipe(babel({
@@ -133,6 +134,7 @@ gulp.task('html', () => {
     .pipe(development(replace('manifest.json', 'manifest-dev.json')))
     .pipe(development(replace('/favicons/', '/favicons-dev/')))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
+    .pipe(replace('<BDB_ENV>', BDB_ENV))
     .pipe(production(htmlmin({
       collapseWhitespace: true,
       removeComments: true,
@@ -148,7 +150,7 @@ gulp.task('generate-service-worker', function(callback) {
     staticFileGlobs: [
       'dist/**/*.{js,css}',
       'dist/*.html', 
-    // 'assets/**/*.{svg,png,jpg}',
+      // 'assets/**/*.{svg,png,jpg}',
       // 'dist/**/*.{ttf,woff,woff2}',
       '/fonts/glyphicons-halflings-regular.ttf',
       '/fonts/glyphicons-halflings-regular.woff',
@@ -179,38 +181,38 @@ gulp.task('generate-service-worker', function(callback) {
 // grab libraries files from bower_components, minify and push in DEST_PATH
 gulp.task('bower', function() {
   var jsFilter = filter('**/*.js', {restore: true}),
-      cssFilter = filter('**/*.css', {restore: true}),
-      fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
+    cssFilter = filter('**/*.css', {restore: true}),
+    fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
 
   // console.log(mainBowerFiles());
 
   return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
 
   // grab vendor js files from bower_components, minify and push in DEST_PATH
-  .pipe(jsFilter)
+    .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
   // .pipe(concat('vendors.min.js'))
-  .pipe(rename({dirname: ''}))
-  .pipe(production(uglify()))
+    .pipe(rename({dirname: ''}))
+    .pipe(production(uglify()))
   // .pipe(rename({
   //   suffix: ".min"
   // }))
-  .pipe(fileSizes({title: 'bower lib:', gzip: true, showFiles: true}))
+    .pipe(fileSizes({title: 'bower lib:', gzip: true, showFiles: true}))
   // .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
-  .pipe(gulp.dest(DEST_PATH + '/js/lib/'))
-  .pipe(jsFilter.restore)
+    .pipe(gulp.dest(DEST_PATH + '/js/lib/'))
+    .pipe(jsFilter.restore)
 
   // grab vendor css files from bower_components, minify and push in DEST_PATH
-  .pipe(cssFilter)
-  .pipe(concat('vendors.min.css'))
+    .pipe(cssFilter)
+    .pipe(concat('vendors.min.css'))
   // .pipe(gulp.dest(DEST_PATH + '/css'))
-  .pipe(production(minifycss()))
+    .pipe(production(minifycss()))
   // .pipe(rename({
   //     suffix: ".min"
   // }))
-  .pipe(fileSizes({title: 'vendors.min.css', gzip: true}))
-  .pipe(gulp.dest(DEST_PATH + '/css'))
-  .pipe(cssFilter.restore);
+    .pipe(fileSizes({title: 'vendors.min.css', gzip: true}))
+    .pipe(gulp.dest(DEST_PATH + '/css'))
+    .pipe(cssFilter.restore);
 
   // grab vendor font files from bower_components and push in DEST_PATH
   // .pipe(fontFilter)

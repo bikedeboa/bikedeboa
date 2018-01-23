@@ -177,7 +177,7 @@ $(() => {
     if (m.photo) {
       templateData.photoUrl = m.photo;
       
-      if (_isMobile) {
+      if (_isMobile && !_isDeeplink) {
         $('body').addClass('transparent-mobile-topbar');
       }
     }
@@ -1152,16 +1152,19 @@ $(() => {
   }
 
   function addToRecentSearches(searchItem) {
-    let searches = getRecentSearches() || [];
-
+    let recentSearches = getRecentSearches() || [];
+ 
+    // Remove previous occurences of the new item
+    recentSearches = recentSearches.filter( r => r.name !== searchItem.name);
+    
     // Add new item to the top
-    searches.splice(0, 0, searchItem);
+    recentSearches.splice(0, 0, searchItem);
     
     // Remove last item if exceeds MAX_RECENT_SEARCHES
-    searches.splice(MAX_RECENT_SEARCHES, 1);
+    recentSearches.splice(MAX_RECENT_SEARCHES, 1);
 
-    localStorage.setItem('recentSearches', JSON.stringify(searches));
-  }
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+  } 
 
   function enterLocationSearchMode() {
     let templateData = {};
@@ -1193,6 +1196,7 @@ $(() => {
 
     $('body').addClass('search-mode'); 
     $('#search-overlay').addClass('showThis');
+    $('#search-overlay .recent-searches li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, queue: false }); 
     $('.hamburger-button').addClass('back-mode');
 
     $('.hamburger-button.back-mode').one('click', () => {
@@ -1210,7 +1214,11 @@ $(() => {
     text = text || '';
 
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar-title').text(openedMarker ? '' : text);
+    if (_isDeeplink && openedMarker) {
+      $('#top-mobile-bar-title').text('bike de boa');
+    } else {
+      $('#top-mobile-bar-title').text(openedMarker ? '' : text); 
+    }
 
     // Basic website metatags
     if (!text || text.length == 0) {
@@ -1290,21 +1298,6 @@ $(() => {
       //get gMap instance to be used by functions to still referer to map here (mainly markers);
       map = BDB.Map.getMap();
       BDB.Map.updateMarkers();
-
-      //to-do: refactor this to map.js
-      if (!_isMobile) {
-        google.maps.event.addListener(map, 'zoom_changed', () => {
-          const prevZoomLevel = _mapZoomLevel;
-
-          _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
-
-          if (prevZoomLevel !== _mapZoomLevel) {
-            if (!_activeFilters) {
-              BDB.Map.setMarkersIcon(_mapZoomLevel);
-            }
-          }
-        });
-      }
     });
 
     $(document).on("autocomplete:done", function (e) {
@@ -1909,6 +1902,7 @@ $(() => {
   function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
+
     switch (urlBreakdown[1]) {
     case 'b':
       if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
@@ -1973,11 +1967,11 @@ $(() => {
       match = false; 
       break;
     }
+
     if (match && initialRouting) {
 
       _isDeeplink = true;
       $('body').addClass('deeplink'); 
-      // $('#top-mobile-bar-title').text('bike de boa');
 
       // showSpinner();
 

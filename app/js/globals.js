@@ -22,10 +22,12 @@ function getSimulatedDelay () {
 
 const N_MOCK_PICS = 14;
 
-const MARKER_W = 20*1.3;
-const MARKER_H = 26*1.3;
-const MARKER_W_MINI = 10*1.3;
-const MARKER_H_MINI = 10*1.3;
+const MARKER_SIZE_MULTIPLIER = 1.5;
+
+const MARKER_W = 20 * MARKER_SIZE_MULTIPLIER;
+const MARKER_H = 26 * MARKER_SIZE_MULTIPLIER;
+const MARKER_W_MINI = 12; 
+const MARKER_H_MINI = 12;
 const CURRENT_LOCATION_MARKER_W = 20;
 const CURRENT_LOCATION_MARKER_H = 20; 
 const MARKER_ICON_GREEN = '/img/pin_green.svg';
@@ -55,12 +57,13 @@ const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NA
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 const FACEBOOK_CLIENT_ID = '<FACEBOOK_CLIENT_ID>';
 const GOOGLE_CLIENT_ID = '<GOOGLE_CLIENT_ID>';
+const BDB_ENV = '<BDB_ENV>';
 
 const MOBILE_MAX_WIDTH = '430px'; 
 const DESKTOP_MIN_WIDTH = '430px';
 let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH})`).matches;
 
-const _isLocalhost = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+const _isLocalhost = BDB_ENV === 'localhost';
 const _isTouchDevice = ('ontouchstart' in window || navigator.msMaxTouchPoints);
 
 /////////////
@@ -83,7 +86,6 @@ let _abortedDetailsRequest;
 let _hamburgerMenu;
 let _filterMenu;
 let _updatingReview;
-let _mapZoomLevel;
 let _isFacebookBrowser;
 let _activeFilters;
 let _infoWindow;

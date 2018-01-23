@@ -232,6 +232,12 @@ body.position-pin-mode {
     }
 }
 
+body.showMarkerLabels {
+  .markerLabel {
+    display: block !important;
+  }
+}
+
 hr {
   border-top: $separatorBorderStyle;
 }
@@ -280,7 +286,7 @@ p {
   padding-top: 60px;
   padding-left: 12px;
 
-  transition: opacity 0.5s ease-in-out;   
+  transition: all 0.3s $coolEaseOut;   
 
   // temp dev temp dev temp dev temp dev temp dev temp dev 
   opacity: 0;
@@ -290,7 +296,7 @@ p {
   &.showThis {
     opacity: 1; 
     visibility: visible;
-    user-select: auto;
+    pointer-events: auto;
   }
 
   .recent-searches {
@@ -335,7 +341,7 @@ p {
   &.showThis {
     opacity: 1;
     visibility: visible;
-    user-select: auto;
+    pointer-events: auto;
   }
  
   .message-overlay-content {
@@ -3853,9 +3859,9 @@ body.modal-open {
   body.details-view:not(.already-reviewed) #bottom-mobile-bar,
   body.modal-open #top-mobile-bar {
     visibility: visible;
+    pointer-events: auto;
     opacity: 1;
     transform: none;
-    pointer-events: auto;
     // transform: translateY(0);
   }
 
@@ -4300,14 +4306,17 @@ body.modal-open {
 }
 
 
-[data-color="green"] {
+[data-color="green"], .color-green {
   color: $green;
 }
-[data-color="yellow"] {
+[data-color="yellow"], .color-yellow {
   color: $yellow;
 }
-[data-color="red"] {
+[data-color="red"], .color-red {
   color: $red;
+}
+[data-color="gray"], .color-gray {
+  color: $gray;
 }
 
 .rating-display-container[data-color="green"] .average,
@@ -4832,4 +4841,22 @@ body.modal-open {
     color: white !important;
     font-weight: normal !important;
   }
+}
+
+// MarkerWithLabels
+.markerLabel { 
+  display: none;
+  
+  // font-weight: bold;
+  opacity: 0.7;
+  font-family: $bodyFont;
+  font-size: 10px;
+  text-shadow: 0 1px 1px white;
+  padding-left: 3px;
+  
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+  width: 70px;
+  max-height: 26px;
+  margin: 0;
 }
