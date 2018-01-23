@@ -277,6 +277,26 @@ window.getColorFromAverage = function(average) {
 }
 
 
+// Service Worker
+window.swUpdateAvailableCallback = function() {
+  // At this point, the old content will have been purged and the fresh content will
+  // have been added to the cache.
+  // It's the perfect time to display a "New content is available; please refresh."
+  // message in the page's interface.
+ 
+  if (BDB_ENV === 'beta' || BDB_ENV === 'localhost') {
+    $('.hamburger-button, #logo').css({ filter: 'grayscale(100%)' });
+  }  
+} 
+
+window.swCachedCallback = function() {
+  // At this point, everything has been precached.
+  // It's the perfect time to display a "Content is cached for offline use." message.
+
+  // toastr['success']('A partir de agora você pode explorar os bicicletários mesmo sem Internet.', 'Webapp salvo offline');
+}
+
+
 // Confettiful
 // Production ready confetti generator, yo. By Jacob Gunnarsson.
 // https://codepen.io/jacobgunnarsson/pen/pbPwga
