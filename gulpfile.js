@@ -58,8 +58,8 @@ const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
 const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[BDB_ENV];
 const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
-const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
-
+let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
+ 
 // Uses the brand new Renderer (Beta)
 // https://developers.google.com/maps/documentation/javascript/beta-renderer
 if (BDB_ENV === 'beta') {  
