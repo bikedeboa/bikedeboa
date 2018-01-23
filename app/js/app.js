@@ -1298,21 +1298,6 @@ $(() => {
       //get gMap instance to be used by functions to still referer to map here (mainly markers);
       map = BDB.Map.getMap();
       BDB.Map.updateMarkers();
-
-      //to-do: refactor this to map.js
-      if (!_isMobile) {
-        google.maps.event.addListener(map, 'zoom_changed', () => {
-          const prevZoomLevel = _mapZoomLevel;
-
-          _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
-
-          if (prevZoomLevel !== _mapZoomLevel) {
-            if (!_activeFilters) {
-              BDB.Map.setMarkersIcon(_mapZoomLevel);
-            }
-          }
-        });
-      }
     });
 
     $(document).on("autocomplete:done", function (e) {

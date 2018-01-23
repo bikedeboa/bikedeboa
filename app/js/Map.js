@@ -14,6 +14,7 @@ BDB.Map = (function () {
   let markerClickCallback;
   let markerClusterer;
   let areMarkersHidden = false;
+  let mapZoomLevel; 
 
   // "Main Brazil" Bounding Box
   //   [lat, long]
@@ -33,10 +34,13 @@ BDB.Map = (function () {
     // Dynamically inject Google Map's lib
     $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
       $.getScript('/lib/infobox.min.js', () => {
-        initMap_continue(coords, zoomValue, pinUser);
-      }
-      );
-    }
+        $.getScript('/lib/markerclusterer.min.js', () => {
+          // $.getScript('/lib/markerwithlabel.min.js', () => {
+            initMap_continue(coords, zoomValue, pinUser);
+          // });
+        });
+      });
+    } 
     );
   };
 
@@ -60,16 +64,21 @@ BDB.Map = (function () {
     if (pinUser) {
       updateMarkerPosition(gpos);
     }
-
+ 
     setupAutocomplete();
     BDB.Geolocation.init();
-
-    map.addListener('center_changed', mapCenterChanged);
-
+    
     setMapBounds();
+    
+    setInfoBox();
+    
+    map.addListener('center_changed', mapCenterChanged);
     mapCenterChanged();
 
-    setInfoBox();
+    if (!_isMobile) {
+      google.maps.event.addListener(map, 'zoom_changed', mapZoomChanged);
+    }
+    mapZoomChanged();
 
     //native Event Dispatcher 
     let event = new Event('map:ready');
@@ -86,6 +95,18 @@ BDB.Map = (function () {
       return coords;
     } else {
       return obj;
+    }
+  };
+  let mapZoomChanged = function () {
+    const prevZoomLevel = mapZoomLevel;
+
+    mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
+
+    if (!prevZoomLevel || prevZoomLevel !== mapZoomLevel) { 
+      if (!_activeFilters) {
+        setMarkersIcon(mapZoomLevel); 
+        // $('body').toggleClass('showMarkerLabels', mapZoomLevel === 'full');
+      }
     }
   };
   let mapCenterChanged = function () {
@@ -229,7 +250,7 @@ BDB.Map = (function () {
     }
   };
   let setMarkersIcon = function(scale) {
-    const tempMarkers = markerClusterer.getMarkers();
+    const tempMarkers = markerClusterer && markerClusterer.getMarkers();
     if (tempMarkers && Array.isArray(tempMarkers)) {
       let m;
       for (let i = 0; i < tempMarkers.length; i++) {
@@ -306,7 +327,7 @@ BDB.Map = (function () {
     },
     // Sets the map on all markers in the array.
     setMapOnAll: function(map) {
-      const tempMarkers = markerClusterer.getMarkers();
+      const tempMarkers = markerClusterer && markerClusterer.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setMap(map);
@@ -315,7 +336,7 @@ BDB.Map = (function () {
     },
     hideMarkers: function() {
       // Removes the markers from the map, but keeps them in the array.
-      const tempMarkers = markerClusterer.getMarkers();
+      const tempMarkers = markerClusterer && markerClusterer.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setOptions({ clickable: false, opacity: 0.3 });
@@ -324,7 +345,7 @@ BDB.Map = (function () {
     },
     showMarkers: function() {
       // Shows any markers currently in the array.
-      const tempMarkers = markerClusterer.getMarkers();
+      const tempMarkers = markerClusterer && markerClusterer.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setOptions({ clickable: true, opacity: 1 });
@@ -366,23 +387,28 @@ BDB.Map = (function () {
             // Icon and Scaling
             let scale;
             let iconType, iconTypeMini;
-            if (!m.average || m.average === 0) {
+            let color = getColorFromAverage(m.average);
+            switch (color) {
+            case 'red':
+              iconType = MARKER_ICON_RED;
+              iconTypeMini = MARKER_ICON_RED_MINI;
+              break;
+            case 'yellow':
+              iconType = MARKER_ICON_YELLOW;
+              iconTypeMini = MARKER_ICON_YELLOW_MINI;
+              break;
+            case 'green':
+              iconType = MARKER_ICON_GREEN;
+              iconTypeMini = MARKER_ICON_GREEN_MINI;
+              break;
+            case 'gray':
+            default:
               iconType = MARKER_ICON_GRAY;
               iconTypeMini = MARKER_ICON_GRAY_MINI;
               scale = 0.8;
-            } else if (m.average > 0 && m.average <= 2) {
-              iconType = MARKER_ICON_RED;
-              iconTypeMini = MARKER_ICON_RED_MINI;
-            } else if (m.average > 2 && m.average < 3.5) {
-              iconType = MARKER_ICON_YELLOW;
-              iconTypeMini = MARKER_ICON_YELLOW_MINI;
-            } else if (m.average >= 3.5) {
-              iconType = MARKER_ICON_GREEN;
-              iconTypeMini = MARKER_ICON_GREEN_MINI;
-            } else {
-              iconType = MARKER_ICON_GRAY;
-              iconTypeMini = MARKER_ICON_GRAY_MINI;
+              break;
             }
+
             if (!scale) {
               scale = 0.5 + (m.average / 10);
             }
@@ -415,7 +441,7 @@ BDB.Map = (function () {
             if (map) {
               if (m.lat && m.lng) {
                 let newMarker = new google.maps.Marker({
-                  optimized: true,
+                  optimized: true, 
                   position: {
                     lat: parseFloat(m.lat),
                     lng: parseFloat(m.lng)
@@ -425,7 +451,20 @@ BDB.Map = (function () {
                   zIndex: i, //markers should be ordered by average
                   // opacity: 0.1 + (m.average/5).
                 });
-                gmarkers.push(newMarker);
+                // Performance of MarkerWithLabel is horrible even when hiding labels with display:none :(
+                // const labelHeightPx = 12;
+                // let newMarker = new MarkerWithLabel({
+                //   optimized: false, // this lib forces optimized to be false anyway
+                //   labelVisible: false, // force display:none first, for performance
+                //   position: {
+                //     lat: parseFloat(m.lat),
+                //     lng: parseFloat(m.lng)
+                //   },
+                //   icon: m.icon,
+                //   labelContent: m.text,
+                //   labelAnchor: new google.maps.Point(-(MARKER_W * scale) / 2, (MARKER_H * scale) / 2 + labelHeightPx/2),
+                //   labelClass: `markerLabel color-${color}`,
+                // });
 
                 // Info window
                 let thumbUrl = '';
@@ -505,6 +544,8 @@ BDB.Map = (function () {
                     _infoWindow.close();
                   });
                 }
+
+                gmarkers.push(newMarker);
               } else {
                 console.error('error: pin with no latitude/longitude');
               }

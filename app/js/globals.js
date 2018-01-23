@@ -22,7 +22,7 @@ function getSimulatedDelay () {
 
 const N_MOCK_PICS = 14;
 
-const MARKER_SIZE_MULTIPLIER = 1.3;
+const MARKER_SIZE_MULTIPLIER = 1.5;
 
 const MARKER_W = 20 * MARKER_SIZE_MULTIPLIER;
 const MARKER_H = 26 * MARKER_SIZE_MULTIPLIER;
@@ -86,7 +86,6 @@ let _abortedDetailsRequest;
 let _hamburgerMenu;
 let _filterMenu;
 let _updatingReview;
-let _mapZoomLevel;
 let _isFacebookBrowser;
 let _activeFilters;
 let _infoWindow;
