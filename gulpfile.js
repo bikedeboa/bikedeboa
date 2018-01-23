@@ -134,6 +134,7 @@ gulp.task('html', () => {
     .pipe(development(replace('manifest.json', 'manifest-dev.json')))
     .pipe(development(replace('/favicons/', '/favicons-dev/')))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
+    .pipe(replace('<BDB_ENV>', BDB_ENV))
     .pipe(production(htmlmin({
       collapseWhitespace: true,
       removeComments: true,

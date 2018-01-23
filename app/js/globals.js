@@ -63,7 +63,7 @@ const MOBILE_MAX_WIDTH = '430px';
 const DESKTOP_MIN_WIDTH = '430px';
 let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX_WIDTH})`).matches;
 
-const _isLocalhost = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+const _isLocalhost = BDB_ENV === 'localhost';
 const _isTouchDevice = ('ontouchstart' in window || navigator.msMaxTouchPoints);
 
 /////////////
