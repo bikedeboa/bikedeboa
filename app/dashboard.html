@@ -3,7 +3,7 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <title>admin</title>
+        <title>Dados</title>
 
         <!-- Google Fonts (async) -->
         <link async href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
@@ -14,7 +14,7 @@
 
         <!-- Google Analytics --> 
         <script>
-          if (location.hostname === 'www.bikedeboa.com.br') {
+          if ('BDB_ENV' === 'prod') {
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -71,10 +71,16 @@
         <style>
           body {
             font-family: "Roboto", Arial, sans-serif;
-            /*margin-top: 100px;*/
             padding: 24px;
             overflow: auto;
-            padding-top: 120px;
+            padding-top: 60px;
+            background: white;
+          }
+
+          h2 {
+            font-size: 16px;
+            width: 60%;
+            color: #828b90;
           }
 
           #logo {
@@ -91,10 +97,6 @@
 
           tbody > tr:hover:not(.detail-view) {
             background-color: #f5f5f5;
-          }
-
-          th, .col-title {
-            font-family: 'Raleway', sans-serif;
           }
 
           td,
@@ -167,7 +169,7 @@
           }
 
           section {
-            margin: 30px 0 0;
+            margin: 60px 0 0;
             /*padding: 50px;*/
             /*background-color: rgba(0,0,0,0.02);*/
             /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
@@ -177,12 +179,39 @@
             margin: 30px 0;
           }
 
+          .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: white;
+            z-index: 3;
+            height: 70px;
+          }
+
+          .nav {
+            position: sticky;
+            top: 60px;
+            z-index: 2;
+            background: white;
+            margin: 0 -24px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            padding: 12px 24px;
+          }
+
           .navbar-default {
             background-color: #30bb6a;
           }
 
           .nav-pills > li {
-            font-size: 1.8em;
+            /*font-size: 1.8em;*/
+            text-transform: uppercase;
+            font-weight: bold;
+          }
+
+          .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+            background: #30bb6a;
           }
 
           .tab-content h2 {
@@ -193,55 +222,90 @@
             display: none !important;
           }
 
+          #userBtn {
+            display: block !important;
+          }
+
         </style>
     </head>
 
     <body>
-      <!-- <div id="loginWrapper" style="float: right;">
-        <button id="login" type="button" class="btn btn-lg btn-default" >
-          <span class="glyphicon glyphicon-user"></span> Login
-        </button>
+      <div class="topbar">
+        <h1 id="logo">
+          <a href="/" class="unstyled-link">bike de boa</a> 
+        </h1>
 
-        <div id="logged" class="btn-group">
-          <button class="btn btn-default btn-lg btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-user"></span> <span id="BDB.User.isAdmin"></span> <span class="caret"></span>
+        <div id="userBtn" class="dropdown">
+          <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="avatar" src="/img/icon_user_big.svg">
           </button>
-          <ul class="dropdown-menu">
-            <li><a id="logOff" href="#">Log off</a></li>
+
+          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+            <li>
+              <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
+            </li>
+            
+            <li>
+              <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
+            </li>
           </ul>
         </div>
-      </div> -->
+      </div>
 
-      <!-- <nav class="navbar navbar-default navbar-fixed-top">
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-          </li>
-        </ul>
-      </nav> -->
+      <h2>
+        <p>
+          Assim como nosso código fonte, os dados do bike de boa também são abertos!
+        </p>
+        
+        <p>
+          Estes são nossos dados brutos em forma de tabela. Explore, filtre, e faça download em vários formatos como Excel, CSV, XML e JSON.
+        </p>
+
+        <div class="social-links-list" style="margin-top: 2em;">
+          <a class="facebook-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+            <img alt="" src="/img/icon_social_facebook.svg"/>
+          </a>
+          <a class="instagram-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+            <img alt="" src="/img/icon_social_instagram.svg"/>
+          </a>
+          <a class="medium-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+            <img alt="" src="/img/icon_social_medium.svg"/>
+          </a>
+          <a class="github-social-link social-link unstyled-link" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+            <img alt="" src="/img/icon_social_github.svg"/>
+          </a>
+        </div>
+      </h2>
 
       <section>
-        <ul class="nav nav-tabs nav-pills nav-justified" role="tablist">
+        <ul class="nav nav-pills" role="tablist">
           <li role="presentation" class="active">
-            <a href="#bicicletarios" aria-controls="bicicletarios" role="tab" data-toggle="tab">
-              <i class="fa fa-bicycle"></i>
-              Bicicletarios
+            <a href="#locals" aria-controls="locals" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-bicycle"></i> -->
+              Bicicletários
             </a>
           </li>
           <li role="presentation" class="restricted-access">
-            <a href="#sugestoes" aria-controls="sugestoes" role="tab" data-toggle="tab">
-              <i class="fa fa-comments"></i>
-              Sugestoes
+            <a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-users"></i> -->
+              Avaliações
             </a>
           </li>
           <li role="presentation" class="restricted-access">
-            <a href="#usuarios" aria-controls="usuarios" role="tab" data-toggle="tab">
-              <i class="fa fa-users"></i>
-              Usuarios
+            <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-users"></i> -->
+              Usuários
             </a>
           </li>
           <li role="presentation" class="restricted-access">
-            <a href="#log" aria-controls="log" role="tab" data-toggle="tab">
-              <i class="fa fa-list"></i>
+            <a href="#revisions" aria-controls="revisions" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-comments"></i> -->
+              Sugestões de correção
+            </a>
+          </li>
+          <li role="presentation" class="restricted-access">
+            <a href="#logs" aria-controls="logs" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-list"></i> -->
               Log
             </a>
           </li>
@@ -249,12 +313,12 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane fade in active" id="bicicletarios">
+          <div role="tabpanel" class="tab-pane fade in active" id="locals">
 
             <!-- Tabela de Bicicletarios -->
 
             <h2>
-              <span id="headingBikes"></span>
+              Carregando...
             </h2>
 
             <table
@@ -266,10 +330,15 @@
               data-show-columns="true"
               data-show-export="true"
               data-detail-view="true"
-              data-detail-formatter="detailFormatter"
+              data-detail-formatter="genericDetailsFormatter"
               data-row-style="rowStyle"
               data-show-footer="false"
-              data-sticky-header="true">
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
+              data-sticky-header="false">
             </table>
 
           </div>
@@ -277,10 +346,9 @@
 
           <!-- Tabela de Sugestoes das pessoas -->
 
-          <div role="tabpanel" class="tab-pane fade" id="sugestoes" class="restricted-access">
+          <div role="tabpanel" class="tab-pane fade" id="revisions" class="restricted-access">
             <h2>
-              <i class="fa fa-lightbulb-o"></i>
-              <span id="headingRevisions">Carregando sugestões...</span>
+              Carregando...
             </h2>
 
             <table
@@ -290,16 +358,18 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
-              data-sticky-header="true">
+              data-detail-view="true"
+              data-detail-formatter="genericDetailsFormatter"
+              data-sticky-header="false">
             </table>
           </div>
 
 
           <!-- Tabela de Usuarios -->
 
-          <div role="tabpanel" class="tab-pane fade" id="usuarios" class="restricted-access">
+          <div role="tabpanel" class="tab-pane fade" id="users" class="restricted-access">
             <h2>
-              <span id="headingUsers">Carregando usuários...</span>
+              Carregando...
             </h2>
 
             <table
@@ -309,16 +379,45 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
-              data-sticky-header="true">
+              data-detail-view="true"
+              data-detail-formatter="genericDetailsFormatter"
+              data-sticky-header="false">
+            </table>
+          </div>
+
+
+          <!-- Tabela de Avaliações -->
+
+          <div role="tabpanel" class="tab-pane fade" id="reviews" class="restricted-access">
+            <h2>
+              Carregando...
+            </h2>
+
+            <table
+              id="reviewsTable"
+              data-classes="table table-no-bordered"
+              data-search="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-show-footer="false"
+              data-show-export="true"
+              data-detail-view="true"
+              data-detail-formatter="genericDetailsFormatter"
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
+              data-sticky-header="false">
             </table>
           </div>
 
 
           <!-- Tabela de Log -->
 
-          <div role="tabpanel" class="tab-pane fade" id="log" class="restricted-access">
-            <h2 id="headingLog">
-              Carregando log... (pode demorar pq é um monte de log e essa lib de datatable é uma bosta)
+          <div role="tabpanel" class="tab-pane fade" id="logs" class="restricted-access">
+            <h2>
+              Carregando...
             </h2>
 
             <!-- <div id="logTable"></div> -->
@@ -330,39 +429,24 @@
               data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-show-export="true"
               data-detail-view="true"
-              data-detail-formatter="detailFormatter"
-              data-sticky-header="true">
+              data-detail-formatter="genericDetailsFormatter"
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
+              data-sticky-header="false">
             </table>
           </div>
         </div>
       </section>
 
-      <div id="userBtn" class="dropdown">
-        <button class="" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img class="avatar" src="/img/icon_user_big.svg">
-        </button>
-
-        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-          <li>
-            <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
-          </li>
-          
-          <li>
-            <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
-          </li>
-        </ul>
-      </div>
-
-      <h1 id="logo" class="">
-        <!-- bike de boa -->
-        <a href="/"><img src="/img/logo.svg" alt="bike de boa"/></a>
-      </h1>
-
       <script>
         // Generic function to display in textual form all the properties of a table entry
-        function detailFormatter(index, row) {
-          var html = '';
+        function genericDetailsFormatter(index, row) {
+          let html = '';
 
           html += '<div class="details-view">';
 
@@ -384,6 +468,46 @@
               html += '<span><b>' + key + ':</b> ' + jsonColFormatter(value) + '</span><br>';
               break;
             case 'photo':
+              break;
+            case 'User':
+              if (value) {
+                html += '<span><b>' + key + ':</b> ' + value.fullname + '</span><br>';
+              }
+              break; 
+            case 'Locals':
+              html += '<div><b>' + key + ':</b></div>';
+              html += '<ul>';
+              value.forEach( l => {
+                html += `<li>name=${l.text}</li>`;
+              });
+              html += '</ul>';
+              break;
+            case 'Reviews':
+              // html += '<span><b>' + key + ':</b> ' + value.map(t => t.name).join('・') + '</span><br>';
+              html += '<div><b>' + key + ':</b></div>';
+              
+              // Counts total of tags, and at the same time prints each reviews contents into a <ul>
+              html += '<ul>';
+              let tags = {};
+              value.forEach( r => {
+                html += `<li>local id=${r.local_id}, rating=${r.rating}, user id=${r.user_id}</li>`;
+                if (r.Tags) {
+                  r.Tags.forEach( t => {
+                    tags[t.name] = (tags[t.name] || 0) + 1;
+                  });
+                }
+              });
+              html += '</ul>';
+              
+              // Prints each tags count
+              html += '<div><b>Tags:</b></div>';
+              html += '<ul>';
+              Object.keys(tags).forEach( k => {
+                html += `<li><b>${k}:</b> ${tags[k]}</li>`;
+              })
+              html += '</ul>';
+              break;
+            case '_hasDetails':
               break;
             default:
               html += '<span><b>' + key + ':</b> ' + value + '</span><br>';
@@ -411,9 +535,15 @@
           }
         }
 
-        // function photoColFormatter(value) {
-        //   return value ? 'Sim' : '-';
-        // }
+
+        ///////////////////////
+        // Column Formatters //
+        ///////////////////////
+
+        function tagsListColFormatter(tags) {
+          const ret = tags.map(tag => tag.name).join('・');
+          return ret;
+        }
 
         function timestampColFormatter(value) {
           return value && new Date(value).toLocaleString('pt-BR');
@@ -455,10 +585,15 @@
           //   return;
           // }
 
-          $('#headingBikes').html('Carregando bicicletários...');
+          $('#locals h2').html('Carregando...');
+
+          $('#locals').addClass('loading');
             
           Database.getPlaces( () => {
-            $('#headingBikes').html(`<span class="text-muted">(${markers.length} carregados)</span>`);
+            $('#locals').removeClass('loading');
+
+            $('#locals h2').html(`<span class="text-muted">${markers.length} resultados</span>`);
+            // $('[aria-controls="locals"]').append(`<span class="text-muted"> (${markers.length})</span>`);
 
             let structureTypes = [];
             for(let i=0; i < STRUCTURE_NAMES.length; i++) {
@@ -480,16 +615,16 @@
               }
             });
 
-            $('#localsTable').bootstrapTable({
+            $('#locals table').bootstrapTable({
               columns: [
-                { 
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter',
-                },
-                {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
-                },
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin
+                },
+                { 
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
+                },
+                {
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
                 },
                 {
                   field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
@@ -513,13 +648,13 @@
                   field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
                 },
                 {
-                  field: 'reviews', title: 'Nº Avaliações', sortable: true, class: 'col-reviews'
+                  field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
                 },
                 {
                   field: 'average', title: 'Média', sortable: true, visible: true,
                 },
                 {
-                  field: 'checkins', title: 'Check-ins',sortable: true, visible: false,
+                  field: 'views', title: 'Visualizações', sortable: true, visible: true,
                 },
                 {
                   field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
@@ -532,7 +667,7 @@
                 }
               ],
               data: markers,
-              sortName: 'updatedAt', sortOrder: 'desc'
+              sortName: 'id', sortOrder: 'desc'
             });
           }, null, null, true);
         }
@@ -542,12 +677,17 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','user', null, data => {
+          $('#users').addClass('loading');
+
+          BDB.Database.customAPICall('get','user').then(data => {
+            $('#users').removeClass('loading');
+
             users = data;
 
-            $('#headingUsers').html(`<span class="text-muted">(${data.length} carregados)</span>`);
+            $('#users h2').html(`<span class="text-muted">${data.length} resultados</span>`);
+            // $('[aria-controls="users"]').append(`<span class="text-muted"> (${data.length})</span>`);
 
-            $('#usersTable').bootstrapTable({
+            $('#users table').bootstrapTable({
               columns: [
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id',
@@ -565,13 +705,19 @@
                   field: 'email', title: 'Email', sortable: true, editable: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin
+                  field: 'Reviews.length', title: 'Avaliações', sortable: true
                 },
                 {
-                  field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin
+                  field: 'Locals.length', title: 'Bicicletários', sortable: true,
                 },
                 {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
                 },
                 {
                   field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
@@ -579,6 +725,51 @@
               ],
               data: users,
               sortName: 'id', sortOrder: 'desc'
+            });
+          });
+        }
+
+        function updateReviewsTable() {
+          if (reviews) {
+            return;
+          }
+
+          $('#reviews').addClass('loading');
+
+          BDB.Database.customAPICall('get','review').then( data => {
+            $('#reviews').removeClass('loading');
+
+            reviews = data;
+
+            $('#reviews h2').html(`<span class="text-muted">${data.length} resultados</span>`);
+            // $('[aria-controls="reviews"]').append(`<span class="text-muted"> (${data.length})</span>`);
+            
+            $('#reviews table').bootstrapTable({
+              columns: [
+                {
+                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false
+                },
+                {
+                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
+                },
+                {
+                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
+                },
+                {
+                  field: 'User.fullname', title: 'Usuário', sortable: true,
+                },
+                {
+                  field: 'rating', title: 'Nota', sortable: true, editable: !!BDB.User.isAdmin
+                },
+                {
+                  field: 'Tags', title: 'Tags', sortable: true, formatter: 'tagsListColFormatter', class: 'col-address'
+                },
+                {
+                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
+                },
+              ],
+              data: reviews,
+              sortName: 'createdAt', sortOrder: 'desc'
             });
           });
         }
@@ -592,12 +783,17 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','revision', null, data => {
+          $('#revisions').addClass('loading');
+
+          BDB.Database.customAPICall('get','revision').then(data => {
+            $('#revisions').removeClass('loading');
+
             revisions = data;
 
-            $('#headingRevisions').html(`Sugestões de Correção <span class="text-muted">(${data.length})</span>`);
+            $('#revisions h2').html(`<span class="text-muted">${data.length} resultados</span>`);
+            // $('[aria-controls="revisions"]').append(`<span class="text-muted"> (${data.length})</span>`);
 
-            $('#revisionsTable').bootstrapTable({
+            $('#revisions table').bootstrapTable({
               columns: [
                 {
                   field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
@@ -606,10 +802,10 @@
                   field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
                 },
                 {
-                  field: 'local_id', title: 'ID Bicicletário', sortable: true
+                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
                 },
                 {
-                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
+                  field: 'local_id', title: 'ID Bicicletário', sortable: true, visible: false,
                 },
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
@@ -660,12 +856,13 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','log', null, data => {
+          BDB.Database.customAPICall('get','log').then(data => {
             log = data;
 
-            $('#headingLog').html(`<span class="text-muted">(${data.length} carregados)</span>`);
+            $('#logs h2').html(`<span class="text-muted">${data.length} resultados</span>`);
+            // $('[aria-controls="logs"]').append(`<span class="text-muted"> (${data.length})</span>`);
 
-            $('#logTable').bootstrapTable({
+            $('#logs table').bootstrapTable({
               columns: [
                 {
                   field: 'updatedAt', title: 'updatedAt', sortable: true, formatter: 'timestampColFormatter', visible: false,
@@ -677,7 +874,7 @@
                   field: 'user', title: 'user', sortable: true
                 },
                 {
-                  field: 'ip_origin', title: 'IP', sortable: true
+                  field: 'ip_origin', title: 'IP', sortable: true, visible: false
                 },
                 {
                   field: 'role', title: 'role', sortable: true, visible: false,
@@ -737,6 +934,7 @@
         let users;
         let log;
         let revisions;
+        let reviews;
         let ga = function() {};
 
 
@@ -752,14 +950,17 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
           const tabName = e.target.getAttribute('aria-controls');
           switch (tabName) {
-          case 'sugestoes':
+          case 'revisions':
             updateRevisionTable();
             break;
-          case 'log':
+          case 'logs':
             updateLogTable();
             break;
-          case 'usuarios':
+          case 'users':
             updateUsersTable();
+            break;
+          case 'reviews':
+            updateReviewsTable();
             break;
           }
         });
@@ -820,7 +1021,7 @@
 
       <!-- Hotjar -->
       <script>  
-        if (location.hostname === 'www.bikedeboa.com.br') {
+        if ('<BDB_ENV>' === 'prod') {
           (function(h,o,t,j,a,r){
               h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
               h._hjSettings={hjid:476334,hjsv:5};

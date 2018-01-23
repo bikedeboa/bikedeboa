@@ -23,7 +23,7 @@
         <script>
           var REDIRECT_URL = 'https://drive.google.com/open?id=18DyziybC2Benf43OMAd5T7611QULd9oWA1L60rzvrsM';
 
-          if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+          if ('<BDB_ENV>' === 'localhost') {
             ga = function() {};
             window.location.href = REDIRECT_URL;
           } else {

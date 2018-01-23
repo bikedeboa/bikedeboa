@@ -20,191 +20,11 @@ BDB.Database = {
   ///////////////////
   // M E T H O D S //
   ///////////////////
- 
-  _redoLogEntry: (logEntry, cb) => {
-    console.debug('redoing log entry', logEntry);
-
-    const reducedEndpoint = logEntry.endpoint.split('bdb-api.herokuapp.com/')[1]
-
-    BDB.Database._headers.ip_origin = logEntry.ip_origin;
-
-    if (logEntry.method==='POST' && reducedEndpoint === 'local') {
-      logEntry.body.idLocal = BDB.Database._currentIDToAdd;
-      if (!logEntry.body.authorIP) {
-        logEntry.body.authorIP = BDB.Database._currentIDToAdd;
-      }
-    }
-
-    BDB.Database.customAPICall(logEntry.method, reducedEndpoint, logEntry.body, () => {
-      logEntry.redone = true;
-
-      if (logEntry.method==='POST' && reducedEndpoint === 'local') {
-        BDB.Database._currentIDToAdd++;
-      }
-
-      if (cb && typeof cb === 'function') {
-        return cb();
-      }
-    });
-  },
-
-  // @todo Improve this to automatically save to a file.
-  _getDatabaseBackupJSON: () => {
-    BDB.Database.customAPICall('get','local', {}, (data) => {
-      let json = '';
-      let fullMarkers = [];
-
-      if (data && data.length > 0) {
-        fullMarkers = data;
-
-        fullMarkers.forEach( m => {
-          // json += JSON.stringify({
-          //   text: m.text,
-          //   description: m.description,
-          //   address: m.address,
-          //   lat: m.lat,
-          //   lng: m.lng,
-          //   photo: m.photo,
-          // });
-          json += JSON.stringify(m);
-        });
-
-        console.debug('Database backup DONE');
-        console.debug(json);
-      }
-    });
-  },
-
-
-  _fillAllDescriptionsRec: function(index = 0) {
-    const max = markers.length;
-
-    if (index!=markers.length) {
-      let m = markers[index];
-
-      console.warn(`${index} of ${max}`);
-
-      const key = m.lat+m.lng;
-      const desc = window._hashmap[key];
-      if (desc) {
-        console.debug(desc);
-        BDB.Database.customAPICall('PUT', 'local/'+m.id,
-          {description: desc},
-          () => {this._fillAllDescriptionsRec(index+1);}
-        );
-      } else {
-        this._fillAllDescriptionsRec(index+1);
-      }
-    }
-  },
-
-  _fillAllDescriptions: () => {
-    var allMarkers = BDB.MockedDatabase.allMarkers;
-    window._hashmap = {};
-    for(let i=0; i<allMarkers.length; i++) {
-      const m = allMarkers[i];
-      const key = m.lat+m.lng;
-
-      if (m.description && m.description.length > 255) {
-        console.error('Description too big for database!');
-        console.error(m);
-        return false;
-      }
-
-      if (window._hashmap[key]) {
-        console.error('same key!');
-        console.error(key + ' : ' + window._hashmap[key]);
-        console.error(m);
-      }
-
-      window._hashmap[key] = m.description;
-    }
-
-    this._fillAllDescriptionsRec();
-  },
-
-  _fillMarkersAddressesOnlyIfMissing() {
-    this.getPlaces(() => {
-      this._fillMarkersAddresses(0, true);
-    }, null, null, true);
-  },
-
-  _fillMarkersAddresses: function(i = 0, onlyIfMissing = false) {
-    const max = markers.length;
-    const MIN_ADDRESS_SIZE = 6;
-
-    if (i!=markers.length) {
-      let m = markers[i];
-
-      console.warn(`${i} of ${max}`);
-
-      if (onlyIfMissing && m.address && m.address.length > MIN_ADDRESS_SIZE) {
-        // console.debug(m.address);
-        this._fillMarkersAddresses(i+1, onlyIfMissing);
-      } else {
-        BDB.geocodeLatLng(
-          m.lat, m.lng,
-          (address) => {
-            console.debug(m.lat, m.lng, m.id);
-            console.debug(address);
-            this.customAPICall('PUT','local/'+m.id, {address: address}, () => {
-              this._fillMarkersAddresses(i+1, onlyIfMissing);
-            });
-          }, () => {
-            setTimeout(() => {
-              this._fillMarkersAddresses(i, onlyIfMissing);
-            }, 2000);
-          }
-        );
-      }
-    }
-  },
-
-  _removeAll: () => {
-    const self = this;
-
-    console.debug('Removing all entries in 5 seconds...');
-
-    setTimeout(() => {
-      $.ajax({
-        url: self.API_URL + '/local',
-        type: 'DELETE',
-        headers: self._headers,
-      }).done(function(data) {
-        console.debug(data);
-      });
-    }, 5000);
-  },
-
-  _sendAllMarkersToBackend: function(isToMock) {
-    const self = this;
-    let allMarkers = BDB.MockedDatabase.allMarkers;
-
-    if (isToMock) {
-      allMarkers = BDB.MockedDatabase.mockData(allMarkers);
-    } else if (isToMock !== false) {
-      console.error('Please specify if you want to mock content or not.');
-      return;
-    }
-
-
-    console.debug('Sending ALL ' + allMarkers.length + ' places.');
-
-    allMarkers.forEach(function(m){
-      $.ajax({
-        type: 'post',
-        headers: self._headers,
-        url: self.API_URL + '/local',
-        data: m
-      });
-    });
-  },
-
   _setOriginHeader: function(ip) {
     this._headers.ip_origin = ip; 
   },
 
-  customAPICall: function(type, endpoint, data, callback, quiet = false) {
+  customAPICall: function(type, endpoint, data, quiet = false) {
     const self = this;
 
     if (!type) {
@@ -214,22 +34,25 @@ BDB.Database = {
       console.error('no endpoint');
     }
 
-    $.ajax({
-      type: type,
-      headers: self._headers,
-      url: self.API_URL + '/' + endpoint,
-      data: data,
-      success: function(data) {
-        console.debug('_customCall success.');
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: type,
+        headers: self._headers,
+        url: self.API_URL + '/' + endpoint,
+        data: data,
+        success: function(data) {
+          console.debug('_customCall success.');
 
-        if (!quiet) {
-          console.debug(data);
-        }
+          if (!quiet) {
+            console.debug(data);
+          }
 
-        if (callback && typeof callback === 'function') {
-          callback(data);
+          resolve(data);
+        },
+        error: function(error) {
+          reject(error)
         }
-      }
+      });
     });
   },
 
@@ -451,7 +274,7 @@ BDB.Database = {
       headers: self._headers,
       url: self.API_URL + '/review/' + reviewId,
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
       },
       success: function(data) {
@@ -540,6 +363,7 @@ BDB.Database = {
     console.debug(place);
 
     $.ajax({
+      xhr: () => this.getUploadProgressHandler(),
       type: 'post',
       headers: self._headers,
       url: self.API_URL + '/local',
@@ -555,10 +379,25 @@ BDB.Database = {
         }
       },
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
-      }
+      },
     });
+  },
+
+  getUploadProgressHandler: function() {
+    let xhr = new window.XMLHttpRequest();
+
+    // Upload progress
+    xhr.upload.addEventListener("progress", function (evt) {
+      if (evt.lengthComputable) {
+        const percentComplete = evt.loaded / evt.total;
+        // console.log(percentComplete);
+        updateSpinnerProgress(percentComplete);
+      }
+    }, false);
+
+    return xhr;
   },
 
   updatePlace: function(placeId, place, callback) {
@@ -566,8 +405,9 @@ BDB.Database = {
 
     console.debug('Updating place:');
     console.debug(place);
-
+ 
     $.ajax({
+      xhr: () => this.getUploadProgressHandler(),
       type: 'put',
       headers: self._headers,
       url: self.API_URL + '/local/' + placeId,
@@ -582,7 +422,7 @@ BDB.Database = {
         }
       },
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
       }
     });
@@ -596,7 +436,7 @@ BDB.Database = {
       headers: self._headers,
       url: self.API_URL + '/local/' + placeId,
       error: function(e) {
-        defaultFailCallback();
+        requestFailHandler();
         console.error(e);
       },
       success: function(data) {
@@ -642,12 +482,12 @@ BDB.Database = {
           idToTag[tagObj.id] = tagObj.name;
           tagToId[tagObj.name] = tagObj.id;
         });
-
+        $(document).trigger('tags:loaded');
         if (successCB && typeof successCB === 'function') {
           successCB();
         }
       } else {
-        defaultFailCallback();
+        requestFailHandler();
 
         if (failCB && typeof failCB === 'function') {
           failCB();
@@ -655,7 +495,7 @@ BDB.Database = {
       }
     })
     .fail(() => {
-      defaultFailCallback();
+      requestFailHandler();
 
       if (failCB && typeof failCB === 'function') {
         failCB();
@@ -677,6 +517,19 @@ BDB.Database = {
       type: 'get',
       headers: self._headers, 
       url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
+      // xhr: function () {
+      //   var xhr = new window.XMLHttpRequest();
+      //   // Download progress
+      //   xhr.addEventListener("progress", function (evt) {
+      //     console.log('download progress');
+      //     if (evt.lengthComputable) {
+      //       var percentComplete = evt.loaded / evt.total;
+      //       //Do something with download progress
+      //       console.log(percentComplete);
+      //     }
+      //   }, false);
+      //   return xhr;
+      // },
     }).done(function(data) {
       console.debug('Retrieved ' + data.length + ' locations from API.');
 
@@ -700,7 +553,7 @@ BDB.Database = {
       }
     })
     .fail(() => {
-      defaultFailCallback();
+      requestFailHandler();
 
       if (failCB && typeof failCB === 'function') {
         failCB();
@@ -722,50 +575,43 @@ BDB.Database = {
     }
   },
 
-  getPlaceDetails: function(placeId, successCB, failCB, alwaysCB) {
+  getPlaceDetails: function(placeId) {
     const self = this;
 
     console.debug('Getting place detail...');
+ 
+    return new Promise((resolve, reject) => {
+      function justDoIt() {
+        $.ajax({
+          type: 'get',
+          headers: self._headers,
+          url: self.API_URL + '/local/' + placeId
+        }).done(function (data) {
+          if (data) {
+            console.debug('Got place detail:');
+            console.debug(data);
 
-    function justDoIt() { 
-      $.ajax({
-        type: 'get', 
-        headers: self._headers,
-        url: self.API_URL + '/local/' + placeId
-      }).done(function(data) {
-        if (data) {
-          console.debug('Got place detail:');
-          console.debug(data);
+            // Combine detailed data with what we had
+            let updatedMarker = markers.find(m => { return m.id === placeId; });
+            Object.assign(updatedMarker, data);
 
-          // Combine detailed data with what we had
-          let updatedMarker = markers.find(m => {return m.id === placeId; });
-          Object.assign(updatedMarker, data);
+            // Set flag
+            updatedMarker._hasDetails = true;
 
-          // Set flag
-          updatedMarker._hasDetails = true;
+            // Update offline-stored markers with new state
+            BDB.saveMarkersToLocalStorage(markers);
 
-          // Update offline-stored markers with new state
-          BDB.saveMarkersToLocalStorage(markers);
-
-          if (successCB && typeof successCB === 'function') {
-            successCB();
+            resolve(updatedMarker);
           }
-        }
-      })
-      .fail(() => {
-        defaultFailCallback();
+        })
+        .fail(() => {
+          requestFailHandler();
 
-        if (failCB && typeof failCB === 'function') {
-          failCB();
-        }
-      })
-      .always(() => {
-        if (alwaysCB && typeof alwaysCB === 'function') {
-          alwaysCB();
-        }
-      });
-    }
+          reject();
+        })
+      }
 
-    this.waitAuthentication(justDoIt); 
+      this.waitAuthentication(justDoIt);
+    });
   },
 };

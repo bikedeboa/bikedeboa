@@ -1,0 +1,58 @@
+<!-- Dynamic infoboxes that previews the content of bike parkings -->
+<span class="infobox--arrow glyphicon glyphicon-triangle-top"></span>
+
+<span class="infobox--caret glyphicon glyphicon-chevron-right"></span>
+
+{{#if thumbnailUrl}}
+<div class="infobox--img">
+    <img alt="" src="{{thumbnailUrl}}"/>
+</div>
+{{/if}}
+
+<div class="infobox--content">
+{{#if title}}
+    <h2>{{title}}</h2>
+{{else}}
+    <h2 style="font-style: italic;">Sem título</h2>
+{{/if}}
+
+<div class="infobox--details">
+    {{{attrs}}}
+</div>
+
+<div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+    {{#if average}}
+    <span class="average">{{average}}</span>
+
+    <fieldset id="infobox-rating-display" class="rating disabled">
+        <input disabled type="radio" id="infobox_star5" name="infobox_rating" value="5" {{#ifCond roundedAverage '===' '5'}} checked {{/ifCond}}/>
+        <label class="full-star" data-value="5" for="infobox_star5"></label> 
+        <input disabled type="radio" id="infobox_star4" name="infobox_rating" value="4" {{#ifCond roundedAverage '===' '4'}} checked {{/ifCond}}/>
+        <label class="full-star" data-value="4" for="infobox_star4"></label>
+        <input disabled type="radio" id="infobox_star3" name="infobox_rating" value="3" {{#ifCond roundedAverage '===' '3'}} checked {{/ifCond}}/>
+        <label class="full-star" data-value="3" for="infobox_star3"></label>
+        <input disabled type="radio" id="infobox_star2" name="infobox_rating" value="2" {{#ifCond roundedAverage '===' '2'}} checked {{/ifCond}}/>
+        <label class="full-star" data-value="2" for="infobox_star2"></label>
+        <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
+        <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+    </fieldset> 
+
+    {{#if numReviews}}
+        <span class="numreviews">{{numReviews}}</span>
+    {{/if}}
+    {{else}}
+    <!-- <span style="font-style: italic; color: #828b90;">Sem avaliações</span> -->
+    {{/if}}
+</div>
+
+<!-- <div class="infobox--label">
+    Mais detalhes <span class="glyphicon glyphicon-chevron-right"></span>
+</div> -->
+
+<!-- {{#unless average}}
+    <div class="infobox--label">
+    Clique para ver mais
+    </div>
+{{/unless}} -->
+
+</div>
