@@ -642,27 +642,54 @@ $(() => {
         hideSpinner();
 
         if (!updatingMarker) {
-          swal({
-            title: 'Bicicletário criado',
-            text: 'Valeu! Sua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
-            type: 'success',
-            allowOutsideClick: false, // because this wouldnt trigger the callback @todo
-            allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
-          }).then(() => {
-            // Clicked OK or dismissed the modal
-            const newMarker = markers.find( i => i.id === newPlace.id );
-            if (newMarker) {
-              openLocal(newMarker, () => {
-                promptPWAInstallPopup();
+          const newMarker = markers.find( i => i.id === newPlace.id );
+          if (newMarker) {
+            // promptPWAInstallPopup();
 
-                // $('.rating-input-container').velocity('callout.bounce');
-                $('.openReviewPanelBtn').tooltip('show');
-                setTimeout(() => { 
-                  $('.openReviewPanelBtn').tooltip('hide');
-                }, 5000);
-              });
-            }
-          });
+            swal({
+              title: 'Bicicletário criado',
+              customClass: 'post-create-modal',
+              type: 'success',
+              html:
+                `<section class="rating-input-container">
+                  <p>
+                    Quer já deixar sua avaliação?
+                  </p>  
+
+                  <fieldset class="rating empty">
+                      <input disabled type="radio" id="star5_input" name="rating_input" value="5" />
+                      <label class="full-star" data-value="5" for="star5_input"></label> 
+                      <input disabled type="radio" id="star4_input" name="rating_input" value="4" />
+                      <label class="full-star" data-value="4" for="star4_input"></label>
+                      <input disabled type="radio" id="star3_input" name="rating_input" value="3" />
+                      <label class="full-star" data-value="3" for="star3_input"></label>
+                      <input disabled type="radio" id="star2_input" name="rating_input" value="2" />
+                      <label class="full-star" data-value="2" for="star2_input"></label>
+                      <input disabled type="radio" id="star1_input" name="rating_input" value="1" />
+                      <label class="full-star" data-value="1" for="star1"></label>
+                  </fieldset>
+              </section>`,
+              confirmButtonText: 'Avaliar outra hora',
+              showCloseButton: true,
+              onOpen: () => { 
+                // $('.post-create-modal .rating-input-container, .swal2-confirm')
+                //   .css({ opacity: 0 })
+                //   .velocity('transition.slideDownIn', { delay: 400 });
+
+                $('.post-create-modal .rating-input-container .full-star').on('click', e => {
+                  openedMarker = newMarker;
+                  openReviewModal($(e.target).data('value'));
+                });
+              }
+            });
+            // openLocal(newMarker, () => {
+            //   // $('.rating-input-container').velocity('callout.bounce');
+            //   $('.openReviewPanelBtn').tooltip('show');
+            //   setTimeout(() => { 
+            //     $('.openReviewPanelBtn').tooltip('hide');
+            //   }, 5000);
+            // });
+          }
         }
       }); 
     };

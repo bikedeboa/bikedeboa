@@ -2555,7 +2555,7 @@ body.modal-open {
           font-size: 14px;
           line-height: 14px;
           background: $paleWhite;
-          padding: $GRID_SPACE/2;
+          padding: $GRID_SPACE/2 $GRID_SPACE;
           vertical-align: middle;
 
           button {
@@ -2808,6 +2808,13 @@ body.modal-open {
       background: $lightestGray;
     }
   }
+}
+
+.post-create-modal {
+    .swal2-confirm {
+      background: transparent !important;
+      color: $gray !important;
+    }
 }
 
 .review-modal {
