@@ -166,7 +166,10 @@ BDB.Map = (function () {
   let updateUserPosition = function (coords, center = true, convert = true) {
     let gpos = convertToGmaps(coords, convert);
     updateMarkerPosition(gpos);
-    geolocationRadius.setVisible(true);
+    
+    if (geolocationRadius) {
+      geolocationRadius.setVisible(true);
+    }
 
     if (center){
       map.panTo(gpos); 

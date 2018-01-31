@@ -1213,6 +1213,8 @@ $(() => {
   function setPageTitle(text) { 
     text = text || '';
 
+    console.log('setPageTitle', text);
+
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
@@ -1226,6 +1228,9 @@ $(() => {
     }
     document.title = text; 
     $('meta[name="og:title"]').attr('content', text);
+    
+    // Set every URL as canonical, otherwise Google thinks some are duplicates. Gotta index 'em all!
+    $('link[rel="canonical"]').attr('href', window.location.href); 
 
     // Special metatags for Details View
     if (openedMarker) {
