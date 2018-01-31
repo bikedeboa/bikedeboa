@@ -47,7 +47,7 @@ const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp
 const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.com';
 
 const FACEBOOK_IDS = {
-  production: '1814653185457307',
+  prod: '1814653185457307',
   beta: '1554610834551808',
   beta2: '116937842287717', 
   localhost: '478533412529512'

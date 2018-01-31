@@ -1524,7 +1524,7 @@ $(() => {
       let result = e.detail;
       $('#geolocationBtn').removeClass('loading');
 
-      if (result.status){
+            if (result.status && result.center){
         ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
         return false;
       }
