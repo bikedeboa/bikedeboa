@@ -612,7 +612,10 @@ $(() => {
       place.lng = _newMarkerTemp.lng;
       if (_newMarkerTemp.address) {
         place.address = _newMarkerTemp.address;
-      }
+        place.city = _newMarkerTemp.city;
+        place.state = _newMarkerTemp.state;
+        place.country = _newMarkerTemp.country;
+      } 
       _newMarkerTemp = null;
     }
 
