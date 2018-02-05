@@ -504,16 +504,15 @@ $(() => {
         
         // Saves this position for later
         _newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-        BDB.Geolocation.reverseGeocode(
-          _newMarkerTemp.lat, _newMarkerTemp.lng,
-          (address) => {
+        BDB.Geolocation.reverseGeocode(_newMarkerTemp.lat, _newMarkerTemp.lng)
+          .then( (addressObj) => {
             // console.log('Resolved location address:');
             // console.log(address);
-            _newMarkerTemp.address = address;
-          }, () => {
-            // nothing here.
-          }
-        );
+            _newMarkerTemp.address = addressObj.address;
+            _newMarkerTemp.city = addressObj.city;
+            _newMarkerTemp.state = addressObj.state;
+            _newMarkerTemp.country = addressObj.country;
+          });
 
         if (openedMarker) {
           // Was editing the marker position, so return to Edit Modal
