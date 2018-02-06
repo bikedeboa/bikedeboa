@@ -2027,7 +2027,9 @@ $(() => {
     case 'editar':
     case 'foto':
     case 'dados':
+      break;
     case '':
+      hideAll();
       break;
     default:
       openNotFoundModal(match);
@@ -2036,7 +2038,6 @@ $(() => {
     }
 
     if (match && initialRouting) {
-
       _isDeeplink = true;
       $('body').addClass('deeplink'); 
 
