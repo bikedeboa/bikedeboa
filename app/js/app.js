@@ -104,6 +104,19 @@ $(() => {
     templateData.reviews = m.reviews;
     templateData.lat = m.lat;
     templateData.lng = m.lng;
+    templateData.slots = m.slots;
+    
+    if (m.DataSource) {
+      templateData.dataSourceName = m.DataSource.name;
+    }
+ 
+    if (m.isPaid) {
+      if (m.isPaid === true) {
+        templateData.isPaid = 'Pago';
+      } else {
+        templateData.isPaid = 'Gratuito';
+      }
+    }
 
     if (m.createdAt) {
       templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
@@ -244,6 +257,19 @@ $(() => {
 
     $('.photo-container img').on('load', e => {
       $(e.target).parent().parent().removeClass('loading');
+    });
+
+    $('#placeDetailsModal .openDataSourceDialog').off('click').on('click', () => {
+      if (openedMarker) { 
+        swal({
+          showCloseButton: true,
+          showConfirmButton: false,
+          html:
+            `Este bicicletário foi importado de:
+            <h3>${openedMarker.DataSource.name}</h3>
+            <p> <a target="_blank" rel="noopener" href="${openedMarker.DataSource.url}">${openedMarker.DataSource.url}</a>`,
+        });
+      }
     });
  
     // Init click callbacks

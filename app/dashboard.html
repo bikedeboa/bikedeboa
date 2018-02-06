@@ -745,13 +745,19 @@
                   field: 'views', title: 'Visualizações', sortable: true, visible: true,
                 },
                 {
-                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
+                  field: 'slots', title: 'Vagas', sortable: true, visible: false
                 },
                 {
+                  field: 'isPaid', title: 'Pago?', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
+                },
+                { 
                   field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin
+                  field: 'operate', title: 'Ações', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin
                 }
               ],
               data: markers,

@@ -254,6 +254,13 @@
 
         <section class="description">
         <ul class="details-list">
+            {{#if description}}
+            <li>
+                <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
+                <div itemprop="description">{{{description}}}</div>
+            </li>
+            {{/if}}
+
             {{#if createdTimeAgo}}
             <li>
                 <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
@@ -265,11 +272,18 @@
             </li>
             {{/if}}
 
-            {{#if description}}
-            <li>
-                <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
-                <div itemprop="description">{{{description}}}</div>
-            </li>
+            {{#if isPaid}}
+                <li>
+                    <span class="details-list-icon glyphicon glyphicon-usd"></span>
+                    <div> {{{isPaid}}} </div>
+                </li>
+            {{/if}}
+
+            {{#if slots}}
+                <li>
+                    <span class="details-list-icon glyphicon glyphicon-th"></span>
+                    <div> {{{slots}}} vagas </div>
+                </li>
             {{/if}}
 
             {{#if views}}
@@ -279,11 +293,13 @@
             </li>
             {{/if}}
 
+
             <li>
             <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
             <div itemprop="address">{{{address}}}</div>
             </li>
         </ul>
+        
         <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
             <meta itemprop="latitude" content="{{lat}}" />
             <meta itemprop="longitude" content="{{lng}}" />
@@ -294,6 +310,18 @@
             <section class="minimap-container">
                 <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
             </section>
+        {{/if}}
+
+        {{#if dataSourceName}} 
+            <ul class="details-list">
+                <li>
+                    <span class="details-list-icon svg-icon" alt="" src=""></span>
+                    <div style="opacity: .5; font-size: .8em; ">
+                        Importado de
+                        <button class="link-button openDataSourceDialog"> {{dataSourceName}}</button>
+                    </div>
+                </li>
+            </ul>
         {{/if}}
 
     </div>
