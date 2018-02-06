@@ -702,7 +702,8 @@
               }
             });
 
-            $('#locals table').bootstrapTable({
+            $('#locals table').bootstrapTable('destroy');
+            $('#locals table').bootstrapTable({ 
               columns: [
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin
@@ -1044,6 +1045,10 @@
           return str.replace(/<[^>]*>/gs, "");
         }
 
+        function removeWhitespaces(str) {
+          return str.replace(/\s/g, '');
+        }
+
         $('#kmlFileImport').on('click', () => {
           if (_importedPlaces) {
             swal({
@@ -1217,7 +1222,7 @@
                         const value = ext.children[0].innerHTML.toLowerCase();
 
                         switch (name) {
-                          case 'gx_media_links':
+                          case 'gx_media_links': 
                             tmp.photo = value;
                             break; 
                           
@@ -1282,8 +1287,8 @@
                       if (c.children && c.children[0]) {
                         // lat and lng are inverted on purporse
                         const [lng, lat] = c.children[0].innerHTML.split(',');
-                        tmp.lat = lat;
-                        tmp.lng = lng;
+                        tmp.lat = removeWhitespaces(lat);
+                        tmp.lng = removeWhitespaces(lng);
                       }
                       break;
                     
@@ -1365,12 +1370,14 @@
           return new Promise((resolve, reject) => {
             function importRecursive(i = 0) {
               const max = _importedPlaces.length;
+              // const max = 5;
   
-              if (i != _importedPlaces.length) {
+              if (i < max) {
                 let m = _importedPlaces[i]; 
 
                 // Fill custom field
                 m.datasource_id = _importedPlaces_datasourceid;
+                m.isAnonymous = true; 
   
                 updateSpinnerProgress(i/max);
                 $('#globalSpinnerLabel').text(`${i}/${max}`);
@@ -1388,7 +1395,7 @@
                     m.country = addressObj.country;
                     
                     BDB.Database.customAPICall('POST', 'local', m).then( () => {
-                      // importRecursive(i + 1); 
+                      importRecursive(i + 1);
                     });
                   })
                   .catch( () => {

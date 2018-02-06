@@ -1920,10 +1920,17 @@ $(() => {
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
-    if (markers) {
-      $('#about-stats--places').data('countupto', markers.length);
-      // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
-    }
+    BDB.Database.customAPICall('get', 'stats')
+      .then(data => {
+        $('#about-stats--places').velocity('fadeIn').text(data.localsCount);
+        $('#about-stats--reviews').velocity('fadeIn').text(data.reviewsCount);
+        $('#about-stats--views').velocity('fadeIn').text(data.viewsCount);
+      });
+
+    // if (markers) {
+    //   $('#about-stats--places').data('countupto', markers.length);
+    //   // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    // }
 
     // $('[data-countupto]').each( function(i, val) {
     //   new CountUp(this.id, 0, this.data('countupto')).start();
