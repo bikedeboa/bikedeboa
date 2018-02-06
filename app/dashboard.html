@@ -635,7 +635,11 @@
         function timestampColFormatter(value) {
           return value && new Date(value).toLocaleString('pt-BR');
         }
-        
+
+        function dataSourceColFormatter(value) {
+          return value && value.name;
+        }
+
         function booleanColFormatter(value) {
           if (value === 0) {
             return 'não';
@@ -749,6 +753,9 @@
                 },
                 {
                   field: 'isPaid', title: 'Pago?', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'DataSource', title: 'Fonte dos dados', sortable: true, editable: !!BDB.User.isAdmin, visible: false, formatter: dataSourceColFormatter
                 },
                 {
                   field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
