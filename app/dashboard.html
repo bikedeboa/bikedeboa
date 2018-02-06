@@ -116,7 +116,7 @@
 
           #spinnerOverlay {
             position: fixed;
-            z-index: 2;
+            z-index: 3;
           }
 
           tbody > tr:not(.detail-view) {
@@ -1042,11 +1042,19 @@
         }
 
         function removeHTML(str) {
-          return str.replace(/<[^>]*>/gs, "");
+          if (str) {
+            return str.replace(/<[^>]*>/gs, "");
+          } else {
+            return str;
+          }
         }
 
         function removeWhitespaces(str) {
-          return str.replace(/\s/g, '');
+          if (str) {
+            return str.replace(/\s/g, '');
+          } else {
+            return str;
+          }
         }
 
         $('#kmlFileImport').on('click', () => {
