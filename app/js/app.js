@@ -104,6 +104,19 @@ $(() => {
     templateData.reviews = m.reviews;
     templateData.lat = m.lat;
     templateData.lng = m.lng;
+    templateData.slots = m.slots;
+    
+    if (m.DataSource) {
+      templateData.dataSourceName = m.DataSource.name;
+    }
+ 
+    if (m.isPaid) {
+      if (m.isPaid === true) {
+        templateData.isPaid = 'Pago';
+      } else {
+        templateData.isPaid = 'Gratuito';
+      }
+    }
 
     if (m.createdAt) {
       templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
@@ -244,6 +257,19 @@ $(() => {
 
     $('.photo-container img').on('load', e => {
       $(e.target).parent().parent().removeClass('loading');
+    });
+
+    $('#placeDetailsModal .openDataSourceDialog').off('click').on('click', () => {
+      if (openedMarker) { 
+        swal({
+          showCloseButton: true,
+          showConfirmButton: false,
+          html:
+            `Este bicicletário foi importado de:
+            <h3>${openedMarker.DataSource.name}</h3>
+            <p> <a target="_blank" rel="noopener" href="${openedMarker.DataSource.url}">${openedMarker.DataSource.url}</a>`,
+        });
+      }
     });
  
     // Init click callbacks
@@ -504,16 +530,15 @@ $(() => {
         
         // Saves this position for later
         _newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-        BDB.Geolocation.reverseGeocode(
-          _newMarkerTemp.lat, _newMarkerTemp.lng,
-          (address) => {
+        BDB.Geolocation.reverseGeocode(_newMarkerTemp.lat, _newMarkerTemp.lng)
+          .then( (addressObj) => {
             // console.log('Resolved location address:');
             // console.log(address);
-            _newMarkerTemp.address = address;
-          }, () => {
-            // nothing here.
-          }
-        );
+            _newMarkerTemp.address = addressObj.address;
+            _newMarkerTemp.city = addressObj.city;
+            _newMarkerTemp.state = addressObj.state;
+            _newMarkerTemp.country = addressObj.country;
+          });
 
         if (openedMarker) {
           // Was editing the marker position, so return to Edit Modal
@@ -613,7 +638,10 @@ $(() => {
       place.lng = _newMarkerTemp.lng;
       if (_newMarkerTemp.address) {
         place.address = _newMarkerTemp.address;
-      }
+        place.city = _newMarkerTemp.city;
+        place.state = _newMarkerTemp.state;
+        place.country = _newMarkerTemp.country;
+      } 
       _newMarkerTemp = null;
     }
 
@@ -1838,7 +1866,7 @@ $(() => {
         for (let s=0; s < r.rating; s++) {
           stars += '<span class="glyphicon glyphicon-star"></span>';
         }
-        r.ratingContent = r.rating + stars; 
+        r.ratingContent = r.rating + ' ' + stars;  
 
         r.color = getColorFromAverage(r.rating);
       }
@@ -1918,10 +1946,17 @@ $(() => {
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
-    if (markers) {
-      $('#about-stats--places').data('countupto', markers.length);
-      // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
-    }
+    BDB.Database.customAPICall('get', 'stats')
+      .then(data => {
+        $('#about-stats--places').velocity('fadeIn').text(data.localsCount);
+        $('#about-stats--reviews').velocity('fadeIn').text(data.reviewsCount);
+        $('#about-stats--views').velocity('fadeIn').text(data.viewsCount);
+      });
+
+    // if (markers) {
+    //   $('#about-stats--places').data('countupto', markers.length);
+    //   // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    // }
 
     // $('[data-countupto]').each( function(i, val) {
     //   new CountUp(this.id, 0, this.data('countupto')).start();
@@ -1992,7 +2027,9 @@ $(() => {
     case 'editar':
     case 'foto':
     case 'dados':
+      break;
     case '':
+      hideAll();
       break;
     default:
       openNotFoundModal(match);
@@ -2001,7 +2038,6 @@ $(() => {
     }
 
     if (match && initialRouting) {
-
       _isDeeplink = true;
       $('body').addClass('deeplink'); 
 

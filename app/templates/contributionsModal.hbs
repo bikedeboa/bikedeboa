@@ -39,12 +39,12 @@
                     {{#each reviews}}
                     <li>
                         <button class="go-to-place-btn" data-id="{{placeObj.id}}">
+                        <span class="go-to-place-btn--daysago">
+                            <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
+                        </span> 
                         <span class="go-to-place-btn--title">{{placeObj.text}}</span>
                         <span class="go-to-place-btn--rating" data-color="{{color}}">
                             {{{ratingContent}}}
-                        </span> 
-                        <span class="go-to-place-btn--daysago">
-                            <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
                         </span> 
                         </button>
                     </li>
@@ -60,10 +60,13 @@
                     {{#each places}}
                     <li>
                         <button class="go-to-place-btn" data-id="{{id}}">
-                        <span class="go-to-place-btn--title">{{text}}</span>
                         <span class="go-to-place-btn--daysago">
-                            <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}} · {{views}} visualizações
-                            <!-- · {{nreviews}} visualizações -->
+                            <!-- <span class="glyphicon glyphicon-time"></span>  -->
+                            {{createdTimeAgo}}
+                        </span> 
+                        <span class="go-to-place-btn--title">{{text}}</span>
+                        <span class="go-to-place-btn--views">
+                             {{views}} visualizações
                         </span> 
                         </button>
                     </li>

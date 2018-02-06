@@ -80,6 +80,11 @@ $GRID_SPACE: 12px;
   to { opacity: 0.6;}
 }
 
+@keyframes pulseSubtle {
+  from { opacity: 0.8;}
+  to { opacity: 1;}
+}
+
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
 @keyframes spinner {
@@ -1155,7 +1160,7 @@ a.unstyled-link {
   ul {
     list-style: none;
     padding: 0;
-    padding-left: $GRID_SPACE/2;
+    // padding-left: $GRID_SPACE/2;
   }
 
   .big-numbers {
@@ -1164,12 +1169,19 @@ a.unstyled-link {
 
   .go-to-place-btn {
     border: 0;
-    background: 0;
+    background: transparent;
     padding: 0;
     color: #333;
     font-size: 18px;
     margin-bottom: 0.5em;
     text-align: left;
+    width: 100%;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: $lightestGray; 
+    }
 
     .go-to-place-btn--title {
       font-family: $headingFont;
@@ -1186,10 +1198,20 @@ a.unstyled-link {
 
     .go-to-place-btn--rating {
       font-weight: bold;
+      display: block;
+      margin-top: 2px;
     }
 
     .go-to-place-btn--daysago {
+      float: right;
+    }
+    
+    .go-to-place-btn--views {
       display: block;
+    }
+
+    .go-to-place-btn--daysago,
+    .go-to-place-btn--views {
       color: $lightGray;
       font-size: 12px;
     }

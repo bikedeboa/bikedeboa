@@ -3,11 +3,13 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <title>Dados</title>
+        <title>bike de boa | dados</title>
+        <meta property="og:title" content="bike de boa | dados" />
 
-        <!-- Google Fonts (async) -->
-        <link async href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-        <link async href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png?v=m2dAvrr4RB">
+        <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png?v=m2dAvrr4RB" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png?v=m2dAvrr4RB" sizes="16x16">
 
         <!-- Google Maps API -->
         <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script> -->
@@ -27,6 +29,23 @@
             ga = function() {};            
           }
         </script>
+
+        <script>
+          WebFontConfig = {
+            google: {
+              families: ['Quicksand:500,500i,700']
+              // families: ['Ubuntu:400,400i,700']
+              // families: ['Poppins:400,400i,700']
+            }
+          };
+
+          (function (d) {
+            var wf = d.createElement('script'), s = d.scripts[0];
+            wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+            wf.async = true;
+            s.parentNode.insertBefore(wf, s);
+          })(document);
+        </script> 
 
         <!-- CSS (async) -->
         <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
@@ -69,6 +88,10 @@
         <script src="https://use.fontawesome.com/9c52cfba3f.js"></script>
 
         <style>
+          body::-webkit-scrollbar {
+              display: initial;
+          }
+
           body {
             font-family: "Roboto", Arial, sans-serif;
             padding: 24px;
@@ -79,7 +102,7 @@
 
           h2 {
             font-size: 16px;
-            width: 60%;
+            /* width: 60%; */
             color: #828b90;
           }
 
@@ -89,6 +112,11 @@
 
           #userBtn {
             right: 24px;
+          }
+
+          #spinnerOverlay {
+            position: fixed;
+            z-index: 3;
           }
 
           tbody > tr:not(.detail-view) {
@@ -279,17 +307,17 @@
 
       <section>
         <ul class="nav nav-pills" role="tablist">
-          <li role="presentation" class="active">
+          <li role="presentation">
             <a href="#locals" aria-controls="locals" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-bicycle"></i> -->
               Bicicletários
             </a>
           </li>
-          <li role="presentation" class="restricted-access">
+          <li role="presentation">
             <a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-users"></i> -->
               Avaliações
-            </a>
+            </a> 
           </li>
           <li role="presentation" class="restricted-access">
             <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
@@ -309,11 +337,17 @@
               Log
             </a>
           </li>
+          <li role="presentation" class="restricted-access">
+            <a href="#importador" aria-controls="importador" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-list"></i> -->
+              Importador de KML
+            </a>
+          </li>
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane fade in active" id="locals">
+          <div role="tabpanel" class="tab-pane fade" id="locals">
 
             <!-- Tabela de Bicicletarios -->
 
@@ -440,8 +474,56 @@
               data-sticky-header="false">
             </table>
           </div>
+          
+          
+          <!-- Importador de dados -->
+
+          <div role="tabpanel" class="tab-pane fade" id="importador" class="restricted-access">
+            <p style="margin-top: 2em;">
+              <input id="kmlFileInput" type="file" name="kmlFileInput" accept=".kml" />
+            </p>
+            
+            <table
+              data-classes="table table-no-bordered"
+              data-search="true"
+              data-show-toggle="true"
+              data-show-columns="true" 
+              data-show-footer="false"
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
+              data-detail-view="true"
+              data-detail-formatter="genericDetailsFormatter"
+              data-sticky-header="true">
+            </table>
+
+            <hr>
+
+            <div style="margin-top: 2em;"> 
+              <p>
+                <label for="kmlFileImport_datasourceid">Fonte dos dados:</label>
+                <select id="kmlFileImport_datasourceid"> </select>
+              </p>
+              
+              <button id="kmlFileImport" class="btn btn-action green" disabled>
+                <i class="fa fa-cloud-upload"></i> Importar 
+              </button>
+            </div>
+          </div>
         </div>
       </section>
+
+      <div id="spinnerOverlay">
+        <div class="spinnerContainer">
+          <img alt="Carregando..." src="/img/spinner.svg" />
+      
+          <p id="globalSpinnerLabel"> </p>
+      
+          <progress id="globalProgressBar" value="0" max="100"></progress>
+        </div>
+      </div>
 
       <script>
         // Generic function to display in textual form all the properties of a table entry
@@ -545,10 +627,19 @@
           return ret;
         }
 
+        function photoColFormatter(value) { 
+          const ret = '<img src="' + value + '" style="width: 50px; height: 50px;"/>';
+          return ret;
+        }
+
         function timestampColFormatter(value) {
           return value && new Date(value).toLocaleString('pt-BR');
         }
-        
+
+        function dataSourceColFormatter(value) {
+          return value && value.name;
+        }
+
         function booleanColFormatter(value) {
           if (value === 0) {
             return 'não';
@@ -615,7 +706,8 @@
               }
             });
 
-            $('#locals table').bootstrapTable({
+            $('#locals table').bootstrapTable('destroy');
+            $('#locals table').bootstrapTable({ 
               columns: [
                 {
                   field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin
@@ -633,13 +725,22 @@
                   field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
+                  field: 'city', title: 'Cidade', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'state', title: 'Estado', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'country', title: 'País', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
                   field: 'lat', title: 'lat', sortable: true, visible: false,
                 },
                 {
                   field: 'lng', title: 'lng', sortable: true, visible: false,
                 },
                 {
-                  field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]",
+                  field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Privado'} ]",
                 },
                 {
                   field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]",
@@ -657,13 +758,22 @@
                   field: 'views', title: 'Visualizações', sortable: true, visible: true,
                 },
                 {
-                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
+                  field: 'slots', title: 'Vagas', sortable: true, visible: false
                 },
                 {
+                  field: 'isPaid', title: 'Pago?', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'DataSource', title: 'Fonte dos dados', sortable: true, editable: !!BDB.User.isAdmin, visible: false, formatter: dataSourceColFormatter
+                },
+                {
+                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
+                },
+                { 
                   field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin
                 },
                 {
-                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin
+                  field: 'operate', title: 'Ações', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin
                 }
               ],
               data: markers,
@@ -826,7 +936,7 @@
         window.logTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BDB.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `revision/${row.id}`).then( () => {
                 updateRevisionTable(true);
               });
             }
@@ -836,7 +946,7 @@
         window.localsTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BDB.Database.customAPICall('delete', `local/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `local/${row.id}`).then( () => {
                 updateLocalsTable(true);
               });
             }
@@ -856,7 +966,7 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','log').then(data => {
+          BDB.Database.customAPICall('get','log').then( data => {
             log = data;
 
             $('#logs h2').html(`<span class="text-muted">${data.length} resultados</span>`);
@@ -899,11 +1009,13 @@
         }
 
         function init() {
-          showSpinner();
+          // showSpinner();
 
           Database.authenticate(() => {
-            updateLocalsTable();
-            hideSpinner();
+            // temp
+            // updateLocalsTable();
+
+            // hideSpinner();
           });
         }
 
@@ -913,7 +1025,17 @@
             $('#localsTable').bootstrapTable('destroy');
             updateLocalsTable();
 
-            Database.getAllTags();
+            Database.getAllTags(); 
+
+            // Fill DataSource options for KML import 
+            BDB.Database.customAPICall('get', 'datasource').then(data => {
+              data.forEach(d => {
+                $('#kmlFileImport_datasourceid').append($('<option>', {
+                  value: d.id,
+                  text: d.name
+                }));
+              })
+            });
 
             $('.restricted-access').removeClass('restricted-access');
           }
@@ -922,6 +1044,406 @@
         document.addEventListener('bikedeboa.logout', function(e) {
           document.location.reload();
         });
+
+        function extractFromCDATA(str) {
+          let ret;
+
+          // Extract CDATA content
+          // Example: <![CDATA[Garimpo da Mary Arte & Decoração]]>
+          //   regex capture group 1: Garimpo da Mary Arte & Decoração
+          const regex = /^<!\[CDATA\[(.*?)\]\]>/s;
+          const result = regex.exec(str);
+          if (result && result[1]) {
+            ret = result[1];
+          } else {
+            // console.error('ERROR on extractFromCDATA: regex failed');
+            ret = str;
+          }
+
+          return ret;
+        }
+
+        function removeHTML(str) {
+          if (str) {
+            return str.replace(/<[^>]*>/gs, "");
+          } else {
+            return str;
+          }
+        }
+
+        function removeWhitespaces(str) {
+          if (str) {
+            return str.replace(/\s/g, '');
+          } else {
+            return str;
+          }
+        }
+
+        $('#kmlFileImport').on('click', () => {
+          if (_importedPlaces) {
+            swal({
+              title: 'Importar dados pro banco',
+              text: `Você está importando ${_importedPlaces.length} bicicletários permanentemente pro banco de dados do bike de boa. Tem certeza que deseja continuar?`,
+              // type: 'warning',
+              showCancelButton: true, 
+            }).then(() => {
+              showSpinner('Importando...', true);
+
+              $('#localsTable').bootstrapTable('destroy');
+
+              window._importedPlaces_datasourceid = $('#kmlFileImport_datasourceid').val();
+
+              uploadImportedPlacesToBackend().then( () => {
+                hideSpinner(); 
+              });;
+            });
+            
+          }
+        });
+          
+        $('#kmlFileInput').on('change', () => {
+          window._importedPlaces = [];
+
+          var file = document.getElementById("kmlFileInput").files[0];
+          if (file) {
+            var reader = new FileReader();
+            reader.readAsText(file, "UTF-8");
+            reader.onload = function (evt) {
+              const txt = evt.target.result
+              const contentContainer = document.getElementById('fileContents');
+
+              parser = new DOMParser();
+              window.xmlDoc = parser.parseFromString(txt, "text/xml");
+
+              console.log(xmlDoc);
+
+              let data = [];
+              let tags = [...xmlDoc.getElementsByTagName("Placemark")];
+              tags.forEach(p => {
+                let tmp = {
+                  'isCovered': null,
+                  'hasFee': null,
+                  'isPublic': null,
+                  'address': null,
+                  'structureType': null,
+                  'slots': null,
+                  'isPaid': null
+                }; 
+
+                let regex, result;
+
+                const children = [...p.children];
+                children.forEach(c => {
+                  switch (c.tagName) {
+                    case 'name':
+                      tmp.text = c.innerHTML;
+
+                      if (tmp.text.toLowerCase().indexOf('bikerio') > 0) {
+                        //break;
+                        console.log('BIKERIO!!!',tmp.text);
+                      }
+
+                      // Transporte Ativo: remove special code in front of all names
+                      // Example: BC0137 - Bicicletário Lagoon
+                      //   regex capture group 1: BC0137
+                      //   regex capture group 2: Bicicletário Lagoon 
+                      regex = /^(BC[\d]*)\s\-\s(.*)/s;
+                      result = regex.exec(tmp.text);
+                      if (result && result[0] && result[1]) {
+                        tmp.taCode = result[1];
+                        tmp.text = result[2];
+                      }
+
+                      tmp.text = extractFromCDATA(tmp.text);
+                    case 'description':
+                      tmp.description = c.innerHTML;
+                      tmp.description = extractFromCDATA(tmp.description);
+                      tmp.description = removeHTML(tmp.description);
+
+                      /////////////////
+                      // Magic stuff //
+                      /////////////////
+                      const str = tmp.description.toLowerCase();
+
+                      const fusionTableShit = '![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
+                      if (tmp.description.indexOf(fusionTableShit) > 0) {
+                        tmp.description = tmp.description.split(fusionTableShit)[1];
+                      }
+
+                      // 'X vagas'
+                      regex = /(\d*)\svaga/s;
+                      result = regex.exec(str);
+                      if (result && result[1]) {
+                        tmp.slots = result[1];
+                      }
+
+                      // Coberto?
+                      if (str.indexOf('descoberto') > 0
+                        || str.indexOf('descoberta') > 0
+                        || str.indexOf('sem cobertura') > 0
+                        || str.indexOf('não coberto') > 0
+                        || str.indexOf('não coberta') > 0
+                        || str.indexOf('nao coberta') > 0
+                        || str.indexOf('nao é coberta') > 0
+                        || str.indexOf('nao e coberta') > 0
+                        || str.indexOf('não é coberto') > 0
+                        || str.indexOf('nao e coberto') > 0
+                        || str.indexOf('nao é coberto') > 0
+                        || str.indexOf('ar livre') > 0
+                        || str.indexOf('céu aberto') > 0
+                        || str.indexOf('ceu aberto') > 0) {
+                        tmp.isCovered = false;
+                      } else if (str.indexOf('coberto') > 0
+                        || str.indexOf('coberta') > 0
+                        || str.indexOf('subsolo') > 0
+                        || str.indexOf('subterrânea') > 0
+                        || str.indexOf('subterranea') > 0
+                        || str.indexOf('subterraneo') > 0
+                        || str.indexOf('subterrâneo') > 0) {
+                        tmp.isCovered = true;
+                      }
+
+                      // Gratuito?
+                      if (str.indexOf('gratuito') > 0) {
+                        tmp.isPaid = false;
+                      } else if (str.indexOf('pago') > 0 
+                        || str.indexOf('custa') > 0) {
+                        tmp.isPaid = true;
+                        tmp.isPublic = false;
+                      }
+
+                      // Público?
+                      if (str.indexOf('privado') > 0
+                        || str.indexOf('funcionários') > 0
+                        || str.indexOf('moradores') > 0
+                        || str.indexOf('sócios') > 0
+                        || str.indexOf('restrito para') > 0
+                        || str.indexOf('exclusivo para') > 0
+                        || str.indexOf('apenas para') > 0) {
+                        tmp.isPublic = false;
+                      } else if (str.indexOf('publico') > 0
+                        || str.indexOf('público') > 0
+                        || str.indexOf('na rua') > 0
+                        || str.indexOf('calçada') > 0) {
+                        tmp.isPublic = true;
+                      } 
+
+                      // Tipo de bicicletário
+                      // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+                      if (str.indexOf('u invertido') > 0
+                        || str.indexOf('suporte em u') > 0) {
+                        tmp.structureType = 'uinvertido';
+                      } else if (str.indexOf('açougue') > 0) {
+                        tmp.structureType = 'suspenso';
+                      } 
+
+                      // tmp.structureType = /^tipo\s([\w])/
+                      break;
+                    case 'styleUrl':
+                      break;
+                    case 'ExtendedData':
+                      const extData = [...c.children]; 
+                      extData.forEach(ext => {
+                        if (!ext.attributes[0] || !ext.children[0] || !ext.children[0].innerHTML) {
+                          return;
+                        }
+                        
+                        const name = ext.attributes[0].nodeValue;
+                        const value = ext.children[0].innerHTML.toLowerCase();
+
+                        switch (name) {
+                          case 'gx_media_links': 
+                            tmp.photo = value;
+                            break; 
+                          
+                          //////////////////////////////////////////////////
+                          // Transporte Ativo Fusion Maps specific field //
+                          //////////////////////////////////////////////////
+                          case 'BC_slots':
+                            tmp.slots = value;
+                            break;
+                          case 'BC_covered':
+                            if (tmp.isCovered === 'yes')   {
+                              tmp.isCovered = true;
+                            } else if (tmp.isCovered === 'no') {
+                              tmp.isCovered = false; 
+                            }
+                            break;
+                            break;
+                          case 'BC_type':
+                            // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+                            switch(value) { 
+                              case 'açougue': 
+                              case 'metrôrio':
+                                tmp.structureType = 'suspenso';
+                                break;
+                              case 'grelha':
+                              case 'holandês':
+                              case 'jujubinha':
+                              case 'de roda':  
+                              case 'trincheira':  
+                                tmp.structureType = 'deroda';
+                                break;
+                              case 'pente':
+                              case 'sulamerica':
+                              case 'pescocinho':
+                              case 'transcarioca':
+                              case 'm': 
+                                tmp.structureType = 'other';
+                                break;
+                              case 'u invertido':
+                              case 'u invertido quiosque':
+                              case 'r': 
+                                tmp.structureType = 'uinvertido';
+                                break;
+                              default:
+                                console.warn('tipo nao identificado:', value);
+                                break;
+                            }
+                            break;
+                          case 'BC_paid':
+                            tmp.isPaid = value;
+                            break;
+
+                          ///////////// 
+                          // Default //
+                          /////////////
+                          default:
+                            // Any other tag that we haven't identified yet
+                            tmp[name] = value;
+                        } 
+                      });
+                    case 'Point':
+                      if (c.children && c.children[0]) {
+                        // lat and lng are inverted on purporse
+                        const [lng, lat] = c.children[0].innerHTML.split(',');
+                        tmp.lat = removeWhitespaces(lat);
+                        tmp.lng = removeWhitespaces(lng);
+                      }
+                      break;
+                    
+                    ///////////// 
+                    // Default //
+                    /////////////
+                    default:
+                      // Any other tag that we haven't identified yet
+                      tmp[c.tagName] = c.innerHTML;
+                  }
+
+                });
+
+                data.push(tmp);
+
+              })
+
+
+              // @todo move this to global
+              let structureTypes = [];
+              for (let i = 0; i < STRUCTURE_NAMES.length; i++) {
+                structureTypes.push({ value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i] });
+              }
+
+              $('#importador table').bootstrapTable({
+                columns: [
+                  { 
+                    field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
+                  },
+                  {
+                    field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false,
+                  },
+                  {
+                    field: 'lat', title: 'lat', sortable: true, visible: false,
+                  },
+                  {
+                    field: 'lng', title: 'lng', sortable: true, visible: false,
+                  },
+                  {
+                    field: 'slots', title: 'Vagas', sortable: true, 
+                  },
+                  {
+                    field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Publico'}, {'value': false, 'text': 'Privado'} ]",
+                  },
+                  {
+                    field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Coberto'}, {'value': false, 'text': 'Não coberto'} ]",
+                  },
+                  {
+                    field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin
+                  },
+                  {
+                    field: 'isPaid', title: 'Pago?', sortable: true, editable: !!BDB.User.isAdmin
+                  },
+                  { 
+                    field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea',
+                  },
+                  {
+                    field: 'photo', title: 'Foto', sortable: true, visible: !!BDB.User.isAdmin
+                  }
+                ],
+                data: data,
+                sortName: 'text'
+              });
+
+              // Save data globally
+              _importedPlaces = data;
+
+              $('#kmlFileImport').attr('disabled', false);
+            }
+
+            reader.onerror = function (evt) {
+              document.getElementById("fileContents").innerHTML = "error reading file";
+            }
+          }
+
+        });
+
+        function uploadImportedPlacesToBackend() {
+          return new Promise((resolve, reject) => {
+            function importRecursive(i = 0) {
+              const max = _importedPlaces.length;
+              // const max = 5;
+  
+              if (i < max) {
+                let m = _importedPlaces[i]; 
+
+                // Fill custom field
+                m.datasource_id = _importedPlaces_datasourceid;
+                m.isAnonymous = true; 
+  
+                updateSpinnerProgress(i/max);
+                $('#globalSpinnerLabel').text(`${i}/${max}`);
+                console.warn(`${i} of ${max}`);
+  
+                // @todo it's always getting the address, despite having it already
+                BDB.Geolocation.reverseGeocode(m.lat, m.lng)
+                  .then( (addressObj) => {
+                    console.debug(m.lat, m.lng, m.id);
+                    console.debug(addressObj);
+  
+                    m.address = addressObj.address;
+                    m.city = addressObj.city;
+                    m.state = addressObj.state;
+                    m.country = addressObj.country;
+                    
+                    BDB.Database.customAPICall('POST', 'local', m).then( () => {
+                      importRecursive(i + 1);
+                    });
+                  })
+                  .catch( () => {
+                    // Google Maps quota limits the frequency of calls of the service
+                    setTimeout(() => {
+                      importRecursive(i);
+                    }, 2000); 
+                  });
+              } else {
+                resolve();
+              }
+            };
+  
+            BDB.Geolocation.init();
+            importRecursive();
+          });
+        }
+
 
 
         /////////////////////
@@ -950,6 +1472,9 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
           const tabName = e.target.getAttribute('aria-controls');
           switch (tabName) {
+          case 'locals':
+            updateLocalsTable();
+            break;
           case 'revisions':
             updateRevisionTable();
             break;

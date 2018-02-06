@@ -465,15 +465,15 @@ BDB.Database = {
         // Alphabetically sort by tag names
         // @todo temp: filter out 'Coberto' while I haven't deleted this tag from the DB
         tags = data
-        .filter( tag => tag.name !== 'Coberto' )
-        .sort((a, b) => {
-          var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-          if (nameA < nameB)
-            return -1;
-          if (nameA > nameB)
-            return 1;
-          return 0;
-        });
+          .filter( tag => tag.name !== 'Coberto' )
+          .sort((a, b) => {
+            var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+            if (nameA < nameB)
+              return -1;
+            if (nameA > nameB)
+              return 1;
+            return 0;
+          });
 
         // Update id<->tagname maps
         idToTag = {};
@@ -494,18 +494,18 @@ BDB.Database = {
         }
       }
     })
-    .fail(() => {
-      requestFailHandler();
+      .fail(() => {
+        requestFailHandler();
 
-      if (failCB && typeof failCB === 'function') {
-        failCB();
-      }
-    })
-    .always(() => {
-      if (alwaysCB && typeof alwaysCB === 'function') {
-        alwaysCB();
-      }
-    });
+        if (failCB && typeof failCB === 'function') {
+          failCB();
+        }
+      })
+      .always(() => {
+        if (alwaysCB && typeof alwaysCB === 'function') {
+          alwaysCB();
+        }
+      });
   },
 
   getPlaces: function(successCB, failCB, alwaysCB, getFullData = false) {
@@ -552,18 +552,18 @@ BDB.Database = {
         successCB(markers);
       }
     })
-    .fail(() => {
-      requestFailHandler();
+      .fail(() => {
+        requestFailHandler();
 
-      if (failCB && typeof failCB === 'function') {
-        failCB();
-      }
-    })
-    .always(() => {
-      if (alwaysCB && typeof alwaysCB === 'function') {
-        alwaysCB();
-      }
-    });
+        if (failCB && typeof failCB === 'function') {
+          failCB();
+        }
+      })
+      .always(() => {
+        if (alwaysCB && typeof alwaysCB === 'function') {
+          alwaysCB();
+        }
+      });
   },
 
   waitAuthentication: function(callback) {
@@ -604,11 +604,11 @@ BDB.Database = {
             resolve(updatedMarker);
           }
         })
-        .fail(() => {
-          requestFailHandler();
+          .fail(() => {
+            requestFailHandler();
 
-          reject();
-        })
+            reject();
+          })
       }
 
       this.waitAuthentication(justDoIt);
