@@ -1866,7 +1866,7 @@ $(() => {
         for (let s=0; s < r.rating; s++) {
           stars += '<span class="glyphicon glyphicon-star"></span>';
         }
-        r.ratingContent = r.rating + stars; 
+        r.ratingContent = r.rating + ' ' + stars;  
 
         r.color = getColorFromAverage(r.rating);
       }
