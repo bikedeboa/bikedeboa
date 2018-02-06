@@ -725,6 +725,15 @@
                   field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
                 },
                 {
+                  field: 'city', title: 'Cidade', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'state', title: 'Estado', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
+                  field: 'country', title: 'País', sortable: true, editable: !!BDB.User.isAdmin, visible: false
+                },
+                {
                   field: 'lat', title: 'lat', sortable: true, visible: false,
                 },
                 {
