@@ -501,11 +501,16 @@
 
             <hr>
 
-            <p style="margin-top: 2em;"> 
+            <div style="margin-top: 2em;"> 
+              <p>
+                <label for="kmlFileImport_datasourceid">Fonte dos dados:</label>
+                <select id="kmlFileImport_datasourceid"> </select>
+              </p>
+              
               <button id="kmlFileImport" class="btn btn-action green" disabled>
                 <i class="fa fa-cloud-upload"></i> Importar 
               </button>
-            </p>
+            </div>
           </div>
         </div>
       </section>
@@ -908,7 +913,7 @@
         window.logTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BDB.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `revision/${row.id}`).then( () => {
                 updateRevisionTable(true);
               });
             }
@@ -918,7 +923,7 @@
         window.localsTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BDB.Database.customAPICall('delete', `local/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `local/${row.id}`).then( () => {
                 updateLocalsTable(true);
               });
             }
@@ -938,7 +943,7 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','log').then(data => {
+          BDB.Database.customAPICall('get','log').then( data => {
             log = data;
 
             $('#logs h2').html(`<span class="text-muted">${data.length} resultados</span>`);
@@ -981,12 +986,13 @@
         }
 
         function init() {
-          showSpinner();
+          // showSpinner();
 
           Database.authenticate(() => {
             // temp
             // updateLocalsTable();
-            hideSpinner();
+
+            // hideSpinner();
           });
         }
 
@@ -996,7 +1002,17 @@
             $('#localsTable').bootstrapTable('destroy');
             updateLocalsTable();
 
-            Database.getAllTags();
+            Database.getAllTags(); 
+
+            // Fill DataSource options for KML import 
+            BDB.Database.customAPICall('get', 'datasource').then(data => {
+              data.forEach(d => {
+                $('#kmlFileImport_datasourceid').append($('<option>', {
+                  value: d.id,
+                  text: d.name
+                }));
+              })
+            });
 
             $('.restricted-access').removeClass('restricted-access');
           }
@@ -1039,6 +1055,8 @@
               showSpinner('Importando...', true);
 
               $('#localsTable').bootstrapTable('destroy');
+
+              window._importedPlaces_datasourceid = $('#kmlFileImport_datasourceid').val();
 
               uploadImportedPlacesToBackend().then( () => {
                 hideSpinner(); 
@@ -1350,6 +1368,9 @@
   
               if (i != _importedPlaces.length) {
                 let m = _importedPlaces[i]; 
+
+                // Fill custom field
+                m.datasource_id = _importedPlaces_datasourceid;
   
                 updateSpinnerProgress(i/max);
                 $('#globalSpinnerLabel').text(`${i}/${max}`);
@@ -1365,9 +1386,9 @@
                     m.city = addressObj.city;
                     m.state = addressObj.state;
                     m.country = addressObj.country;
-  
-                    BDB.Database.customAPICall('POST', 'local', m, () => {
-                      // importRecursive(i + 1);
+                    
+                    BDB.Database.customAPICall('POST', 'local', m).then( () => {
+                      // importRecursive(i + 1); 
                     });
                   })
                   .catch( () => {
