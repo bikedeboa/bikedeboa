@@ -397,7 +397,9 @@ $(() => {
     this.openLocal(place, callback);
   }
 
-  function routerOpenLocal(marker, callback) {
+  function routerOpenLocal(markerId, callback) {
+    const marker = BDB.Places.getMarkerById(markerId)
+ 
     if (marker) {
       openDetailsModal(marker, callback);
 
@@ -412,6 +414,21 @@ $(() => {
           });
       }
     }
+  }
+
+  function routerOpenDeeplinkMarker(markerId, callback) {
+    BDB.Database.getPlaceDetails(markerId)
+      .then(marker => {
+        _deeplinkMarker = marker;
+
+        // if (tags) { 
+          openDetailsModal(marker, callback);
+        // } else {
+        //   $(document).on('tags:loaded', () => {
+        //     openDetailsModal(marker, callback);
+        //   });
+        // }
+      });
   }
 
   function updateFilters() {
@@ -1380,6 +1397,22 @@ $(() => {
     $(document).one("LoadMap", function () {
       // showSpinner('Carregando Mapa :)');
 
+      BDB.Database.getPlaces( () => {
+        $('#filter-results-counter').html(markers.length);
+        $('#filter-results-total').html(markers.length);
+
+        BDB.Map.updateMarkers();
+
+        // Hide spinner that is initialized visible on CSS
+        // hideSpinner();
+
+        //
+        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+          _onDataReadyCallback();
+          _onDataReadyCallback = null;
+        }
+      }); 
+
       BDB.Map.init(openLocal); 
 
       if (!_isTouchDevice) {
@@ -1803,10 +1836,10 @@ $(() => {
   }
 
   function openHowToInstallModal() {
-    const hasNativePromptWorked = promptPWAInstallPopup(); 
+    // const hasNativePromptWorked = promptPWAInstallPopup(); 
 
-    if (!hasNativePromptWorked) {
-      if (_isMobile) {
+    // if (!hasNativePromptWorked) {
+      if (_isMobile) { 
         // Tries to guess the user agent to initialize the correspondent accordion item opened
         const userAgent = window.getBrowserName();
         switch (userAgent) {
@@ -1830,7 +1863,7 @@ $(() => {
       $('#howToInstallModal').modal('show');
 
       $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-    }
+    // }
   }
 
   function openFaqModal() { 
@@ -1977,24 +2010,15 @@ $(() => {
         if (id) {
           id = parseInt(id);
 
-          _deeplinkMarker = BDB.Places.getMarkerById(id);
-          if (_deeplinkMarker) {
-            // todo: put the modal on loader while waiting for the event trigger.
-            if (tags) {
-              routerOpenLocal(_deeplinkMarker);
-            } else {
-              $(document).on('tags:loaded', function(){
-                routerOpenLocal(_deeplinkMarker);
-              });  
-            }
-            
-          } else if(_deeplinkMarker === null) {
-            // 404 code. 
-            openNotFoundModal(match);
-            match = false;
+          if (_isDeeplink) {
+            routerOpenDeeplinkMarker(id);
           } else {
-            _routePendingData = true;
+            routerOpenLocal(id);
           }
+        } else {
+          // 404 code. 
+          openNotFoundModal(match);
+          match = false;
         }
       }
       break;
@@ -2246,25 +2270,10 @@ $(() => {
         // }
       });
 
+      handleRouting(true);
+
       BDB.Database.authenticate();
       BDB.Database.getAllTags();
-      BDB.Database.getPlaces( () => {
-        $('#filter-results-counter').html(markers.length);
-        $('#filter-results-total').html(markers.length);
-
-        BDB.Map.updateMarkers();
-
-        // Hide spinner that is initialized visible on CSS
-        //hideSpinner();
-
-        //
-        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
-          _onDataReadyCallback();
-          _onDataReadyCallback = null;
-        }
-      }); 
-
-      handleRouting(true);
     }
   } 
 
@@ -2353,14 +2362,15 @@ $(() => {
 
     // Initialize router
     _onDataReadyCallback = () => {
-      if (window.performance) {
+      if (window.performance && !_isDeeplink) {
         const timeSincePageLoad = Math.round(performance.now());
         ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
       }
 
-      if (_routePendingData) {
-        handleRouting();
-      }
+      // Not used anymore (for now?)
+      // if (_routePendingData) {
+      //   handleRouting();
+      // }
 
       BDB.User.init();       
 
