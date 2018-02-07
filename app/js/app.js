@@ -1976,6 +1976,11 @@ $(() => {
   } 
 
   function openAboutModal() {
+    // Lazy load images when modal is shown
+    $('#aboutModal img').each((i, v) => {
+      $(v).attr('src', $(v).data('src'));
+    }); 
+
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
