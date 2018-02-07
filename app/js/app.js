@@ -1836,10 +1836,10 @@ $(() => {
   }
 
   function openHowToInstallModal() {
-    const hasNativePromptWorked = promptPWAInstallPopup(); 
+    // const hasNativePromptWorked = promptPWAInstallPopup(); 
 
-    if (!hasNativePromptWorked) {
-      if (_isMobile) {
+    // if (!hasNativePromptWorked) {
+      if (_isMobile) { 
         // Tries to guess the user agent to initialize the correspondent accordion item opened
         const userAgent = window.getBrowserName();
         switch (userAgent) {
@@ -1863,7 +1863,7 @@ $(() => {
       $('#howToInstallModal').modal('show');
 
       $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-    }
+    // }
   }
 
   function openFaqModal() { 
