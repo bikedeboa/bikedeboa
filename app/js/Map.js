@@ -515,8 +515,9 @@ BDB.Map = (function () {
                       // });
 
                       $('.infoBox').off('click').on('click', () => {
-                        markerClickCallback(markers[i]);
-                        _infoWindow.close();
+                        markerClickCallback(markers[i], () => {
+                          _infoWindow.close();
+                        });
                       });
                     });
                   });
