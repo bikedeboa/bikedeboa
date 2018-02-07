@@ -130,7 +130,7 @@ $(() => {
     templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
   
     // Tags
-    if (m.tags && m.tags.length > 0) {
+    if (tags && m.tags && m.tags.length > 0) {
       const MAX_TAG_COUNT = m.reviews;
       const MIN_TAG_OPACITY = 0.3;
 
@@ -421,13 +421,13 @@ $(() => {
       .then(marker => {
         _deeplinkMarker = marker;
 
-        // if (tags) { 
+        if (tags) { 
           openDetailsModal(marker, callback);
-        // } else {
-        //   $(document).on('tags:loaded', () => {
-        //     openDetailsModal(marker, callback);
-        //   });
-        // }
+        } else {
+          $(document).on('tags:loaded', () => {
+            openDetailsModal(marker, callback);
+          });
+        }
       });
   }
 
