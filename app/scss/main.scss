@@ -82,10 +82,32 @@ $GRID_SPACE: 12px;
   to { opacity: 0.6;}
 }
 
+@keyframes pulseSubtle {
+  from { opacity: 0.8;}
+  to { opacity: 1;}
+}
+
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
 @keyframes spinner {
   to {transform: rotate(360deg);}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 
@@ -123,6 +145,11 @@ $GRID_SPACE: 12px;
   border-radius: 5px;
 }
 
+@mixin defaultButtonHover {
+  transform: translateY(-1px);
+  box-shadow: 0px 6px 10px rgba(0,0,0,.2);
+}
+
 
 
 
@@ -139,6 +166,12 @@ body {
     overflow: hidden;
     font-family: $bodyFont;
     background-color: $lightestGray;
+}
+
+// Completely hide occasional scrollbars for smoother transitions
+body::-webkit-scrollbar,
+.modal-dialog::-webkit-scrollbar {
+    display: none;
 }
 
 body.beta #map {
@@ -206,6 +239,12 @@ body.position-pin-mode {
     }
 }
 
+body.showMarkerLabels {
+  .markerLabel {
+    display: block !important;
+  }
+}
+
 hr {
   border-top: $separatorBorderStyle;
 }
@@ -245,7 +284,47 @@ p {
 }
 
 #search-overlay {
-  background: rgba(255,255,255,0.8); 
+  background: $paleWhite;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0; 
+  left: 0;
+  padding-top: 60px;
+  padding-left: 12px;
+
+  transition: all 0.3s $coolEaseOut;   
+
+  // temp dev temp dev temp dev temp dev temp dev temp dev 
+  opacity: 0;
+  visibility: hidden;
+  user-select: none;
+
+  &.showThis {
+    opacity: 1; 
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .recent-searches {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    button {
+      border: 0;
+      background: 0;
+    }
+
+    li {
+      margin: $GRID_SPACE 0;
+      color: $gray;
+
+      .glyphicon {
+        margin: 0 6px;
+      }
+    }
+  }
 }
 
 .message-overlay {
@@ -269,7 +348,7 @@ p {
   &.showThis {
     opacity: 1;
     visibility: visible;
-    user-select: auto;
+    pointer-events: auto;
   }
  
   .message-overlay-content {
@@ -352,11 +431,11 @@ button.reset {
 
 .help-tooltip-trigger {
   cursor: pointer;
-  color: $lightGray;
-  border: 0;
-  background: 0;
-  padding: 0;
+  color: $lightGray; 
 
+  transition: color .2s ease;
+
+  
   & + .tooltip {
     .tooltip-inner {
       text-align: left;
@@ -365,6 +444,38 @@ button.reset {
 
   &:hover {
     color: $black;
+  }
+}
+
+.media-grid {
+  display: -webkit-box!important;
+  display: flex!important;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  
+  .media-link {
+    opacity: 0.7;
+    border: 0;
+    padding: 2%;
+    width: 28%; 
+    // flex: 1; 
+
+    backface-visibility: hidden;
+
+    filter: grayscale(100%);
+    
+    transition: all 0.2s ease-in-out;
+
+    &:hover,
+    &:focus {
+      opacity: 1;
+      text-decoration: none;
+      border: 0;
+      transform: scale(1.1);
+      filter: none;
+    }
+
   }
 }
 
@@ -506,31 +617,43 @@ body.deeplink {
     direction: rtl;
     user-select: none;
     cursor: default;
+} 
+
+a {
+  &:focus,
+  &:active,
+  &:hover {
+    text-decoration: none; 
+  }
 }
 
-a,
+.external-link,
 .link-like {
     color: $black;
-    border-bottom: 3px solid $yellow;
-    box-shadow: inset 0 -4px 0 $yellow;
+    // border-bottom: 3px solid $yellow;
+    box-shadow: inset 0 -4px 0 -1px $yellow;
+
+    cursor: pointer;
+    
     transition: all 0.2s ease;
 
     &:focus,
     &:active,
     &:hover {
       color: $black;
-      text-decoration: none; 
+      text-decoration: none;  
 
-      background: $yellow;
+      // background: $yellow;
+      box-shadow: inset 0 -23px 0 -1px $yellow;
     }
 }
 
 #map a,
 a.unstyled-link {
   border-bottom: inherit;
-  box-shadow: inherit;
+  box-shadow: none;
   color: inherit;
-  transition: inherit;
+  transition: inherit; 
 
   &:focus,
   &:active,
@@ -580,6 +703,8 @@ a.unstyled-link {
   border: 1px solid $lighterGrey;
   min-width: 180px;
   width: auto;
+
+  animation: slideIn .2s $coolEaseOut;
 
   li {
     margin: $GRID_SPACE/2 0;
@@ -824,7 +949,7 @@ a.unstyled-link {
   }
 
 
-  .header__menu-toggle {
+  .hamburger-button {
       display: none;
   }
 
@@ -1076,7 +1201,7 @@ a.unstyled-link {
   ul {
     list-style: none;
     padding: 0;
-    padding-left: $GRID_SPACE/2;
+    // padding-left: $GRID_SPACE/2;
   }
 
   .big-numbers {
@@ -1085,12 +1210,19 @@ a.unstyled-link {
 
   .go-to-place-btn {
     border: 0;
-    background: 0;
+    background: transparent;
     padding: 0;
     color: #333;
     font-size: 18px;
     margin-bottom: 0.5em;
     text-align: left;
+    width: 100%;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: $lightestGray; 
+    }
 
     .go-to-place-btn--title {
       font-family: $headingFont;
@@ -1107,10 +1239,20 @@ a.unstyled-link {
 
     .go-to-place-btn--rating {
       font-weight: bold;
+      display: block;
+      margin-top: 2px;
     }
 
     .go-to-place-btn--daysago {
+      float: right;
+    }
+    
+    .go-to-place-btn--views {
       display: block;
+    }
+
+    .go-to-place-btn--daysago,
+    .go-to-place-btn--views {
       color: $lightGray;
       font-size: 12px;
     }
@@ -1350,7 +1492,7 @@ a.unstyled-link {
     padding: 13px;
     text-align: left;
     overflow: hidden;
-    transition: width .5s $coolEaseOut;
+    transition: width .5s $coolEaseOut, background .2s;
 
     // transition: background 0.2s ease-out, width 0.5s ease-out;
     // opacity: 0;
@@ -1620,7 +1762,27 @@ a.unstyled-link {
           margin-top: 10px;
           font-weight: 700;
       }
-  }
+    }
+
+    progress[value] {
+      appearance: none;
+      border: none;
+      
+      display: block;
+      height: 3px;
+      width: 100px;
+      margin: 16px auto;
+ 
+      &::-webkit-progress-bar {
+        background-color: transparent;
+      }
+
+      &::-webkit-progress-value {
+        background: $green;
+        border-radius: 3px; 
+        transition: all .5s ease-in-out;
+      }
+    }
 }
 
 
@@ -1721,6 +1883,10 @@ body.search-mode {
   //   transition: opacity 0.2s ease;
   // }
 
+  #userBtn { 
+    display: none;
+  }
+
   #locationSearch {
     box-shadow: none;
   }
@@ -1767,7 +1933,7 @@ body.modal-open {
     height: 46px;
     border-radius: 50%;
 
-    // transition: color 0.2s ease-out;
+    transition: all 0.2s ease-out;
 
     &:hover {
       background: $lighterGray;
@@ -1933,12 +2099,10 @@ body.modal-open {
     }
 
     &.hasImage { 
-        // height: 180px;
         max-height: 60vh;
         height: auto;
-        // min-height: 170px;
-        // max-height: 170px;
-
+        min-height: 300px;
+ 
         & img {
             width: 100%;
             object-fit: cover;
@@ -2075,6 +2239,9 @@ body.modal-open {
       opacity: 0;
       overflow: hidden;
       z-index: -1;
+      position: absolute;
+      top: -999px;
+      left: -999px;
 
       & + label {
           position: absolute;
@@ -2331,15 +2498,15 @@ body.modal-open {
     vertical-align: middle;
     background: transparent;
 
-    // transition: color .2s ease, background .2s ease;
+    transition: all .2s;
     
     &:hover,
     &:focus,
     &:active {
         color: white;
-        border-color: white;
-        // background-color: $gray;
-        background: $greenGradient;
+        border-color: transparent;
+        background-color: $lightGreen;
+        // background: $greenGradient;
     }
 }
 
@@ -2445,20 +2612,21 @@ body.details-view {
 .placeDetailsContent {
     .review {
       .savedRating {
-          text-align: center;
+          text-align: left;
           color: $gray;
           font-weight: 400;
           margin-top: $GRID_SPACE;
           font-size: 14px;
           line-height: 14px;
           background: $paleWhite;
-          padding: $GRID_SPACE/2 0;
+          padding: $GRID_SPACE/2 $GRID_SPACE;
           vertical-align: middle;
 
           button {
             font-size: 12px;
             margin: 0;
             margin-left: 6px;
+            float: right; 
           }
 
           img {
@@ -2671,6 +2839,12 @@ body.details-view {
   text-align: center;
   @include roundedCorners;
   font-weight: bold;
+
+  transition: .2s;
+
+  &:hover:not([disabled]) {
+    @include defaultButtonHover;
+  }
   
   &:before {
     content: "";
@@ -2725,6 +2899,12 @@ body.details-view {
   }
 }
 
+.post-create-modal {
+    .swal2-confirm {
+      background: transparent !important;
+      color: $gray !important;
+    }
+}
 
 .review-modal {
     text-align: center;
@@ -2800,10 +2980,8 @@ body.details-view {
 
 .btn.green {
     background-color: $lightGreen;
-    border-color: $darkGreen;
-    color: rgb(250,250,250);
+    color: rgb(250,250,250); 
     
-    &:hover:not([disabled]),
     &:focus:not([disabled]),
     &.active:not([disabled]) {
         color: white;
@@ -2811,28 +2989,15 @@ body.details-view {
     }
 }
 
-.btn.btn-action.green {
-    border-bottom: 3px solid $darkGreen;
-}
-
 .btn.btn-action {
-    $depth: 3px;
-
     width: 100%;
     @include roundedCorners;
-    border-bottom: $depth solid $lighterGray;
     padding: 20px;
 
-    &:active {
-        outline: 0; 
-        border-bottom-width: ($depth - 3px);
-        // transform: translateY(3px);
-        // // compensate for relayout because of changing border size
-        // margin-bottom: calc(2% + 3px);
-    }
+    transition: all .2s;
 
-    &:disabled {
-        border-bottom: $depth solid $gray;
+    &:hover:not([disabled]) {
+      @include defaultButtonHover;
     }
 }
 
@@ -2850,7 +3015,7 @@ body.details-view {
 
     transition: background-color 0.2s ease-out;
 
-    &:disabled {
+    &:disabled { 
         background-color: $lightGray;
         color: $lighterGray;
     }
@@ -2937,10 +3102,9 @@ body.details-view {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  padding-top: $GRID_SPACE/2;
   // justify-content: flex-end;
   border-bottom: 1px solid $lighterGray;
-  background: $paleWhite;
+  // background: $paleWhite;
 
   hr {
     // border-left: 1px solid #eee; 
@@ -2957,8 +3121,13 @@ body.details-view {
     background: none;
     color: $green;
     width: 100%;
-    padding: $GRID_SPACE/2 0;
+    padding: $GRID_SPACE 0 $GRID_SPACE/2;
     // min-width: 110px;
+
+    border-left: 1px solid $lighterGray;
+    &:first-child {
+      border: 0;
+    }
 
     backface-visibility: hidden;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -3039,6 +3208,10 @@ body.details-view {
     height: auto;
     background: none;
     padding-left: 16px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
   }
 
   .side-nav__container {
@@ -3338,6 +3511,8 @@ body.details-view {
   display: flex;
   margin-top: $GRID_SPACE*2;
 
+  animation: slideIn .2s $coolEaseOut;
+
   &:active,
   &:focus,
   &:hover {
@@ -3345,7 +3520,7 @@ body.details-view {
   }
 
   .numreviews {
-    color: $lightGray;
+    color: $gray;
   }
 
   .infobox--img {
@@ -3359,7 +3534,7 @@ body.details-view {
       width: 100%;
       height: 100%;
     }
-  }
+  } 
 
   .infobox--content {
     // margin: 10px;
@@ -3391,7 +3566,7 @@ body.details-view {
 
   .infobox--details {
     color: $gray;
-    font-size: 10px;
+    font-size: 12px;
     font-family: $bodyFont;
   }
 
@@ -3408,9 +3583,19 @@ body.details-view {
     text-transform: uppercase;
   }
 
-  .infobox--arrow,
   .infobox--caret {
     display: none;
+  }
+
+  .infobox--arrow {
+    display: block;
+
+    position: absolute;
+    top: -13px;
+    left: calc(50% - 10px);
+    font-size: 20px;
+    color: white; 
+    text-shadow: 1px -1px 2px rgba(0,0,0,.1);
   }
 }
 
@@ -3566,6 +3751,11 @@ body.details-view {
     #list-view {
       display: none;
     }
+
+    #map, #addPlace, #geolocationBtn {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 
   .modal {
@@ -3611,6 +3801,7 @@ body.details-view {
 
       &.hasImage {
         height: 30vh;
+        min-height: 0;
       }
 
       &.hasImage:not(.loading):after {
@@ -3758,9 +3949,9 @@ body.details-view {
   body.details-view:not(.already-reviewed) #bottom-mobile-bar,
   body.modal-open #top-mobile-bar {
     visibility: visible;
+    pointer-events: auto;
     opacity: 1;
     transform: none;
-    pointer-events: auto;
     // transform: translateY(0);
   }
 
@@ -3915,8 +4106,8 @@ body.details-view {
         }
 
         .toolbar-item-icon {
-          width: 25px;
-          height: 25px;
+          width: 20px;
+          height: 20px;
         }
       }
     }
@@ -3974,25 +4165,26 @@ body.details-view {
       display: none;
     }
 
-    .infobox--arrow {
-      display: block;
+    // .infobox--arrow {
+    //   display: block;
 
-      position: absolute;
-      top: -13px;
-      left: calc(50% - 10px);
-      font-size: 20px;
-      color: white; 
-      text-shadow: 1px -2px 3px rgba(0,0,0,.15);
-    }
+    //   position: absolute;
+    //   top: -13px;
+    //   left: calc(50% - 10px);
+    //   font-size: 20px;
+    //   color: white; 
+    //   text-shadow: 1px -2px 3px rgba(0,0,0,.15);
+    // }
 
     .infobox--caret {
       display: block;
+      
+      color: $green; 
 
       position: absolute;
       right: 12px;
-      top: calc(50% - 10px);
+      top: calc(50% - 10px); 
       font-size: 20px;
-      color: $gray;
     }
   }
 
@@ -4075,6 +4267,8 @@ body.details-view {
     height: 46px;
     border-radius: 50%;
     text-shadow: 0 0 3px white;
+
+    transition: background .2s;
 
     &:hover {
       background: $lighterGray;
@@ -4202,14 +4396,17 @@ body.details-view {
 }
 
 
-[data-color="green"] {
+[data-color="green"], .color-green {
   color: $green;
 }
-[data-color="yellow"] {
+[data-color="yellow"], .color-yellow {
   color: $yellow;
 }
-[data-color="red"] {
+[data-color="red"], .color-red {
   color: $red;
+}
+[data-color="gray"], .color-gray {
+  color: $gray;
 }
 
 .rating-display-container[data-color="green"] .average,
@@ -4425,11 +4622,8 @@ body.details-view {
 //   padding: 0 16px;
 // }
 
-.js-menu-show-hamburger-menu {
-  cursor: pointer;
-}
 
-.header__menu-toggle {
+.hamburger-button {
     position: fixed;
     top: 10px;
     left: 10px;
@@ -4439,37 +4633,14 @@ body.details-view {
     border: none;
     margin: 0;
     padding: 13px;
-    // font-size: 17px;
-    // background-color: $green;
-    // border-top-left-radius: 5px;
-    // border-bottom-left-radius: 5px;
 
-    border-radius: 50%;
-    background: transparent;
-    color: $green;
-    text-shadow: 1px 1px 2px #fff;
+    cursor: pointer;
 
-    // &:focus,
-    // &:active,
-    // &:hover {
-    //     background: $darkerGreen;
-    // }
+    background: url(/img/icon_hamburger.svg) 13px 13px no-repeat;
+    background-size: 22px;
 
-    // Desktop-only
-    @media screen and (min-width: $MOBILE_MAX_WIDTH) {
-      // &:after {
-      //   content: 'menu';
-      //   font-size: 9px;
-      //   position: absolute;
-      //   bottom: 6px;
-      //   left: 11px;
-      //   text-transform: uppercase;
-      //   font-weight: bold;
-      // }
-
-      // .glyphicon-menu-hamburger { 
-      //   top: -4px;
-      // }
+    &.back-mode {
+      background-image: url(/img/icon_back.svg);
     }
 }
 
@@ -4518,7 +4689,7 @@ body.details-view {
   background: #FFF;
   height: 100%;
   box-shadow: 2px 0 12px rgba(0,0,0,0.4);
-  transform: translateX(-102%);
+  transform: translateX(-105%);
   display: flex;
   flex-direction: column;
   will-change: transform;
@@ -4697,13 +4868,23 @@ body.details-view {
     border-color: $gray
   }
 
+  .swal2-confirm {
+    background: $green;
+    color: white;
+  }
+
   .swal2-cancel,
   .swal2-confirm {
-    border-bottom-width: 3px;
-    border-bottom-style: solid;
+    border: 0;
     @include roundedCorners;
     font-weight: 700;  
     min-width: 90px;
+    
+    transition: all .2s;
+    
+    &:hover:not([disabled]) {
+      @include defaultButtonHover;
+    }
     
     &:active {
       outline: 0;
@@ -4750,4 +4931,22 @@ body.details-view {
     color: white !important;
     font-weight: normal !important;
   }
+}
+
+// MarkerWithLabels
+.markerLabel { 
+  display: none;
+  
+  // font-weight: bold;
+  opacity: 0.7;
+  font-family: $bodyFont;
+  font-size: 10px;
+  text-shadow: 0 1px 1px white;
+  padding-left: 3px;
+  
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+  width: 70px;
+  max-height: 26px;
+  margin: 0;
 }

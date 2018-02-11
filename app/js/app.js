@@ -2,32 +2,6 @@
 /* eslint-env node, jquery */
 
 $(() => {
-  function getPinColorFromAverage(average) {
-    if (typeof average === 'string') {
-      average = parseFloat(average);
-    }
-      
-    let pinColor;
-
-    if (average) {
-      if (!average || average === 0) {
-        pinColor = 'gray';
-      } else if (average > 0 && average <= 2) {
-        pinColor = 'red'; 
-      } else if (average > 2 && average < 3.5) {
-        pinColor = 'yellow';
-      } else if (average >= 3.5) {
-        pinColor = 'green';
-      } else {
-        pinColor = 'gray'; 
-      }
-    } else { 
-      pinColor = 'gray';
-    }
-
-    return pinColor; 
-  }
-
   function openShareDialog() {
     // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
     const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
@@ -130,20 +104,33 @@ $(() => {
     templateData.reviews = m.reviews;
     templateData.lat = m.lat;
     templateData.lng = m.lng;
+    templateData.slots = m.slots;
+    
+    if (m.DataSource) {
+      templateData.dataSourceName = m.DataSource.name;
+    }
+ 
+    if (m.isPaid) {
+      if (m.isPaid === true) {
+        templateData.isPaid = 'Pago';
+      } else {
+        templateData.isPaid = 'Gratuito';
+      }
+    }
 
     if (m.createdAt) {
       templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
     }
 
     // Average
-    templateData.pinColor = getPinColorFromAverage(m.average);
+    templateData.pinColor = getColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
-    templateData.mapStaticImg = `https://maps.googleapis.com/maps/api/staticmap?size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${templateData.pinColor}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
-
+    templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
+  
     // Tags
-    if (m.tags && m.tags.length > 0) {
+    if (tags && m.tags && m.tags.length > 0) {
       const MAX_TAG_COUNT = m.reviews;
       const MIN_TAG_OPACITY = 0.3;
 
@@ -203,7 +190,7 @@ $(() => {
     if (m.photo) {
       templateData.photoUrl = m.photo;
       
-      if (_isMobile) {
+      if (_isMobile && !_isDeeplink) {
         $('body').addClass('transparent-mobile-topbar');
       }
     }
@@ -240,7 +227,16 @@ $(() => {
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
-      templateData.savedRating = previousReview.rating;
+      const rating = previousReview.rating;
+      
+      templateData.color = getColorFromAverage(rating);
+
+      // @todo modularize this method
+      let stars = '';
+      for (let s = 0; s < parseInt(rating); s++) {
+        stars += '<span class="glyphicon glyphicon-star"></span>';
+      }
+      templateData.savedRatingContent = rating + stars;
     }
 
     if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
@@ -252,9 +248,9 @@ $(() => {
     // Render handlebars template // 
     ////////////////////////////////
     if (_isMobile) { 
-      $('#placeDetailsPlaceholder_mobile').html(templates.placeDetailsContentTemplate(templateData));
+      $('#placeDetailsPlaceholder_mobile').html(BDB.templates.placeDetailsContent(templateData));
     } else {
-      $('#placeDetailsPlaceholder_desktop').html(templates.placeDetailsContentTemplate(templateData));
+      $('#placeDetailsPlaceholder_desktop').html(BDB.templates.placeDetailsContent(templateData));
     }
 
     if (m.average) {
@@ -265,6 +261,19 @@ $(() => {
 
     $('.photo-container img').on('load', e => {
       $(e.target).parent().parent().removeClass('loading');
+    });
+
+    $('#placeDetailsModal .openDataSourceDialog').off('click').on('click', () => {
+      if (openedMarker) { 
+        swal({
+          showCloseButton: true,
+          showConfirmButton: false,
+          html:
+            `Este bicicletário foi importado de:
+            <h3>${openedMarker.DataSource.name}</h3>
+            <p> <a target="_blank" rel="noopener" href="${openedMarker.DataSource.url}">${openedMarker.DataSource.url}</a>`,
+        });
+      }
     });
  
     // Init click callbacks
@@ -336,9 +345,9 @@ $(() => {
         .modal('show');
     } else { 
       // Just fade new detailed content in
-      // $('.placeDetailsContent .photo-container, .placeDetailsContent .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-      $('.placeDetailsContent .tagsContainer, .placeDetailsContent .description').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
-    }
+      $('.placeDetailsContent .tagsContainer, .placeDetailsContent .description')
+        .velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false, duration: 2000});
+    } 
 
     // Tooltips
     if(!_isTouchDevice) {
@@ -375,194 +384,6 @@ $(() => {
       ga('send', 'event', 'Misc', 'tooltip - pin details other type');
     });
   }
-
-  function updateCurrentPosition(position) {
-    const pos = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
-
-    if (map) {
-      _geolocationMarker.setPosition(pos);
-
-      _geolocationRadius.setCenter(pos);
-      _geolocationRadius.setRadius(position.coords.accuracy);
-    }
-  }
-
-  function geolocate(toCenter, callback, quiet = false) {
-    // Hit Google Geolocation to get user's position without GPS
-    // This might not be precise, but it's faster and more reliable than the GPS, so it's a good fallback.
-    if (!_geolocationInitialized) {
-      if (!quiet) {
-        $('#geolocationBtn').addClass('loading');
-      }
-
-      // API docs: https://developers.google.com/maps/documentation/geolocation/intro?hl=en
-      $.ajax({
-        url: '//www.googleapis.com/geolocation/v1/geolocate?key=<GOOGLE_MAPS_ID>',
-        type: 'POST'
-      }).done(data => {
-        if (data && data.location) {
-          const pos = data.location;
-          ga('send', 'event', 'Geolocation', 'Google Geolocation retrival OK', `${pos.lat}, ${pos.lng}`);
-          
-          if (map) {
-            if (!_geolocationInitialized) {
-              map.panTo(data.location);
-            }
-
-            $('#geolocationBtn').removeClass('loading');
-          }
-        } else {
-          console.error('Something went wrong when trying to retrieve user position by Google Geolocation.');
-          ga('send', 'event', 'Geolocation', 'Google Geolocation retrival error');
-        }
-      });
-    }
-
-    // Geolocation with GPS
-    if (navigator.geolocation) {
-      // @todo split both behaviors into different functions
-      if (_geolocationInitialized) {
-        if (map) {
-          const markerPos = _geolocationMarker.getPosition();
-          const pos = {
-            lat: markerPos.lat(),
-            lng: markerPos.lng()
-          };
-
-          map.panTo(pos);
-          
-          // Set minimum map zoom
-          if (map.getZoom() < 17) {
-            map.setZoom(17);
-          }
-        }
-      } else {
-        if (!quiet) {
-          $('#geolocationBtn').addClass('loading');
-        }
-
-        const options = {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        };
-
-        navigator.geolocation.getCurrentPosition(
-            position => {
-              console.debug(position);
-
-              _geolocationInitialized = true;
-
-              ga('send', 'event', 'Geolocation', 'init', `${position.coords.latitude},${position.coords.longitude}`);
-
-              updateCurrentPosition(position);
-
-              $('#geolocationBtn').addClass('active');
-              
-              if (map) {
-                _geolocationRadius.setVisible(true);
-                if (markers && markers.length) {
-                  _geolocationMarker.setZIndex(markers.length);
-                }
-
-                if (toCenter) {
-                  const pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  };
-
-                  map.panTo(pos);
-                  
-                  // Set minimum map zoom
-                  if (map.getZoom() < 17) {  
-                    map.setZoom(17);
-                  }
-                }
-              }
-
-              if (callback && typeof callback === 'function') {
-                callback();
-              }
-            },
-            error => {
-              ga('send', 'event', 'Geolocation', error.message ? `fail - ${error.message}`: 'fail - no_message');
-
-              console.error('Geolocation failed.', error);
-
-              if (!quiet) {
-                switch(error.code) {
-                case 1:
-                  // PERMISSION_DENIED
-                  if (_isFacebookBrowser) {
-                    toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
-                  } else {
-                    toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
-                  }
-                  break;
-                case 2:
-                  // POSITION_UNAVAILABLE
-                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-                  break;
-                case 3:
-                  // TIMEOUT
-                  toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-                  break;
-                }
-              }
-
-              // Secure Origin issue test by Google: https://developers.google.com/web/updates/2016/04/geolocation-on-secure-contexts-only?hl=en
-              if(error.message.indexOf('Only secure origins are allowed') == 0) {
-                // Disable button since it won't work anyway in the current domain.
-                $('#geolocationBtn').hide();
-              }
-
-              if (callback && typeof callback === 'function') {
-                callback();
-              }
-            },
-            options
-        );
-
-        if (_positionWatcher) {
-          navigator.geolocation.clearWatch(_positionWatcher);
-        }
-        _positionWatcher = navigator.geolocation.watchPosition(updateCurrentPosition, null, options);
-      }
-
-
-    }
-  }
-
-  // function geolocationBtn() {
-  //   let controlDiv = document.createElement('div');
-  //   let controlUI = document.createElement('div');
-  //   controlUI.id = 'geolocationBtn';
-  //   controlUI.title = 'Onde estou?';
-  //   controlUI.className = 'caption-tooltip'; 
-
-  //   controlDiv.appendChild(controlUI);
-
-  //   // Set CSS for the control interior.
-  //   let controlText = document.createElement('div');
-  //   controlText.style.color = '#30bb6a';
-  //   controlText.style.width = '100%';
-  //   controlText.style.paddingTop = '13px';
-  //   controlText.innerHTML = '<img src="/img/geolocation.svg" style="width: 20px;"/>';
-  //   controlUI.appendChild(controlText);
-
-  //   // Setup the click event listeners
-  //   controlUI.addEventListener('click', () => {
-  //     ga('send', 'event', 'Geolocation', 'geolocate button click');
-  //     geolocate(true, () => {
-  //       $('#geolocationBtn').removeClass('loading');
-  //     });
-  //   });
-
-  //   return controlDiv;
-  // }
  
   // Set router to open Local
   function openLocal(marker, callback) {
@@ -579,19 +400,38 @@ $(() => {
     this.openLocal(place, callback);
   }
 
-  function routerOpenLocal(marker, callback) {
+  function routerOpenLocal(markerId, callback) {
+    const marker = BDB.Places.getMarkerById(markerId)
+ 
     if (marker) {
       openDetailsModal(marker, callback);
 
       if (!marker._hasDetails) {
         // Request content
-        Database.getPlaceDetails(marker.id, () => {
-          if (openedMarker && openedMarker.id === marker.id) {
-            openDetailsModal(marker, callback);
-          }
-        });
+        BDB.Database.getPlaceDetails(marker.id)
+          .then(updatedMarker => {
+            // Check if details panel is still open...
+            if (openedMarker && openedMarker.id === updatedMarker.id) {
+              openDetailsModal(updatedMarker, callback); 
+            }
+          });
       }
     }
+  }
+
+  function routerOpenDeeplinkMarker(markerId, callback) {
+    BDB.Database.getPlaceDetails(markerId)
+      .then(marker => {
+        _deeplinkMarker = marker;
+
+        if (tags) { 
+          openDetailsModal(marker, callback);
+        } else {
+          $(document).on('tags:loaded', () => {
+            openDetailsModal(marker, callback);
+          });
+        }
+      });
   }
 
   function updateFilters() {
@@ -633,7 +473,7 @@ $(() => {
     const structureFilters = filters.filter(i => i.prop === 'structureType');
     const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters];
 
-    const tempMarkers = _markerCluster.getMarkers();
+    const tempMarkers = BDB.Map.getMarkers();
 
     for(let i=0; i < markers.length; i++) {
       const m = markers[i];
@@ -691,317 +531,7 @@ $(() => {
 
   function clearFilters() {
     _activeFilters = null;
-    setMapOnAll(map);
-  }
-
-  function formatAverage(avg) {
-    if (avg) {
-      avg = parseFloat(avg);
-      if (avg.toFixed && avg !== Math.round(avg)) {
-        avg = avg.toFixed(1);
-      }
-      avg = '' + avg;
-    }
-
-    return avg;
-  }
-
-  function updateMarkers() {
-    clearMarkers();
-
-    // Markers from Database
-    if (markers && markers.length > 0) {
-      // Order by average so best ones will have higher z-index
-      // markers = markers.sort((a, b) => {
-      //   return a.average - b.average;
-      // });
-
-      let gmarkers = [];
-
-      for(let i=0; i < markers.length; i++) {
-        const m = markers[i];
-
-        if (m) {
-          // Icon and Scaling
-          let scale;
-          let iconType, iconTypeMini;
-          if (!m.average || m.average === 0) {
-            iconType = MARKER_ICON_GRAY;
-            iconTypeMini = MARKER_ICON_GRAY_MINI;
-            scale = 0.8;
-          } else if (m.average > 0 && m.average <= 2) {
-            iconType = MARKER_ICON_RED;
-            iconTypeMini = MARKER_ICON_RED_MINI;
-          } else if (m.average > 2 && m.average < 3.5) {
-            iconType = MARKER_ICON_YELLOW;
-            iconTypeMini = MARKER_ICON_YELLOW_MINI;
-          } else if (m.average >= 3.5) {
-            iconType = MARKER_ICON_GREEN;
-            iconTypeMini = MARKER_ICON_GREEN_MINI;
-          } else {
-            iconType = MARKER_ICON_GRAY;
-            iconTypeMini = MARKER_ICON_GRAY_MINI;
-          }
-          if (!scale) {
-            scale = 0.5 + (m.average/10);
-          }
-
-          if (map) {
-            m.icon = {
-              url: iconType, // url
-              scaledSize: new google.maps.Size((MARKER_W*scale), (MARKER_H*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W*scale)/2, (MARKER_H - MARKER_H/10)*scale), // anchor
-            };
-
-            m.iconMini = {
-              url: iconTypeMini, // url
-              scaledSize: new google.maps.Size((MARKER_W_MINI*scale), (MARKER_H_MINI*scale)), // scaled size
-              origin: new google.maps.Point(0, 0), // origin
-              anchor: new google.maps.Point((MARKER_W_MINI*scale)/2, (MARKER_H_MINI*scale)/2), // anchor
-            };
-          }
-
-          // Average might come with crazy floating point value
-          m.average = formatAverage(m.average);
-
-          // @todo temporarily disabled this because backend still doesnt support flags for these
-          // let labelStr;
-          // if (BDB.User.isAdmin && (!m.photo || !m.structureType || m.isPublic == null)) {
-          //   labelStr = '?';
-          // }
-
-          if (map) {
-            if (m.lat && m.lng) {
-              let newMarker = new google.maps.Marker({
-                optimized: true,
-                position: {
-                  lat: parseFloat(m.lat),
-                  lng: parseFloat(m.lng)
-                },
-                // map: map,
-                icon: m.icon,
-                zIndex: i, //markers should be ordered by average
-                // opacity: 0.1 + (m.average/5).
-              });
-              gmarkers.push(newMarker);
-
-              // Info window
-              let thumbUrl = '';
-              if (m.photo) { 
-                thumbUrl = m.photo.replace('images', 'images/thumbs');
-              }
-              let templateData = {
-                thumbnailUrl: thumbUrl,
-                title: m.text,
-                average: m.average,
-                roundedAverage: m.average && ('' + Math.round(m.average)),
-                pinColor: getPinColorFromAverage(m.average)
-              };
- 
-              // @todo: encapsulate both the next 2 in one method
-              // Reviews count
-              if (m.reviews === 0) {
-                templateData.numReviews = '';
-              } else if (m.reviews === '1') {
-                templateData.numReviews = '1 avaliação';
-              } else {
-                templateData.numReviews = `${m.reviews} avaliações`;
-              }
-
-              // Attributes
-              const attrs = [];
-              if (m.isPublic != null) {
-                attrs.push(m.isPublic ? 'Público' : 'Privado');
-              }
-              if (m.structureType) {
-                attrs.push(STRUCTURE_CODE_TO_NAME[m.structureType]);
-              }
-              if (m.isCovered != null) { 
-                attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
-              }
-              templateData.attrs = attrs.join(' · '); 
-
-              const contentString = templates.infoWindowTemplate(templateData);
-
-              if (_isTouchDevice) {
-                // Infobox preview on click
-                newMarker.addListener('click', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  map.panTo(newMarker.getPosition());
-
-                  _infoWindow.setContent(contentString);
-                  _infoWindow.open(map, newMarker);
-                  _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
-
-                    $('.infoBox').off('click').on('click', () => {
-                      openLocal(markers[i]);
-                      _infoWindow.close();
-                    });
-                  });
-                });
-
-                map.addListener('click', () => {
-                  _infoWindow.close();
-                });
-              } else {
-                // No infobox, directly opens the details modal
-                newMarker.addListener('click', () => {
-                  openLocal(markers[i]);
-                });
-
-                // Infobox preview on hover
-                newMarker.addListener('mouseover', () => {
-                  ga('send', 'event', 'Local', 'infobox opened', m.id); 
-
-                  _infoWindow.setContent(contentString); 
-                  _infoWindow.open(map, newMarker);
-                  _infoWindow.addListener('domready', () => {
-                    $('.infobox--img img').off('load').on('load', e => {
-                      $(e.target).parent().removeClass('loading');
-                    });
-                  });
-                });
-
-                newMarker.addListener('mouseout', () => {
-                  _infoWindow.close();
-                });
-              }
-            } else {
-              console.error('error: pin with no latitude/longitude');
-            }
-          }
-
-        } else {
-          console.error('marker is weirdly empty on addMarkerToMap()');
-        }
-      }
-
-      if (map) {
-        _geolocationMarker.setZIndex(markers.length);
-
-        var clusterOptions = {
-          // imagePath: 'img/markerClusterer/m', 
-          maxZoom: 10, 
-          minimumClusterSize: 1,
-          styles: [
-            {
-              url: '/img/markerCluster.png', 
-              height: 40,
-              width: 40
-            },
-            {
-              url: '/img/markerCluster.png',
-              height: 60,
-              width: 60
-            },
-            {
-              url: '/img/markerCluster.png',
-              height: 80,
-              width: 80
-            }
-          ]
-        };
-
-        _markerCluster = new MarkerClusterer(map, gmarkers, clusterOptions);
-      } 
-    }
-  }
-
-  // Sets the map on all markers in the array.
-  function setMapOnAll (map) {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setMap(map);
-      }
-    }
-  }
-
-  // Removes the markers from the map, but keeps them in the array.
-  function hideMarkers () {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setOptions({clickable: false, opacity: 0.3});
-      }
-    }
-  }
-
-  // Shows any markers currently in the array.
-  function showMarkers () {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      for (let i = 0; i < tempMarkers.length; i++) {
-        tempMarkers[i].setOptions({clickable: true, opacity: 1});
-      }
-    }
-  }
-
-  // Switches all marker icons to the full or the mini scale
-  // scale := 'mini' | 'full'
-  function setMarkersIcon (scale) {
-    const tempMarkers = _markerCluster.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      let m;
-      for (let i = 0; i < tempMarkers.length; i++) {
-        m = markers[i];
-        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
-      }
-    }
-  }
-
-  // Deletes all markers in the array by removing references to them.
-  function clearMarkers () {
-    // setMapOnAll(null);
-    // gmarkers = [];
-    if (_markerCluster) {
-      _markerCluster.clearMarkers();
-    }
-  }
-
-  function toggleMarkers() {
-    if (areMarkersHidden) {
-      // showMarkers();
-      setMarkersIcon('full');
-      areMarkersHidden = false;
-    } else {
-      // hideMarkers();
-      setMarkersIcon('mini'); 
-      areMarkersHidden = true;
-    }
-  }
-
-  function isPosWithinBounds(pos) {
-    const ret = _mapBounds.contains(pos);
-    return ret;
-  }
-
-  function mapCenterChanged() {
-    // Makes sure this doesnt destroy the overall performance by limiting these calculations 
-    //   to not be executed more then 20 times per second (1000ms/50ms = 20x).
-    // (I'm not entirely sure this is needed though, but why not)
-    clearTimeout(_centerChangedTimeout);
-    _centerChangedTimeout = setTimeout( () => {
-      // console.log('centerchanged');
-
-      // Check center
-      const isCenterWithinBounds = isPosWithinBounds(map.getCenter());
-      $('#newPlaceholder').toggleClass('invalid', !isCenterWithinBounds);
-
-      // Check visible bounds
-      if (map.getBounds()) {
-        const isViewWithinBounds = map.getBounds().intersects(_mapBounds);        
-        $('#out-of-bounds-overlay').toggleClass('showThis', !isViewWithinBounds); 
-        if (!isViewWithinBounds) {
-          ga('send', 'event', 'Local', 'out of bounds message triggered', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
-        }
-      }
-    }, 50);
+    BDB.Map.setMapOnAll(map); 
   }
 
   function toggleLocationInputMode() {
@@ -1020,16 +550,15 @@ $(() => {
         
         // Saves this position for later
         _newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-        BDB.geocodeLatLng(
-          _newMarkerTemp.lat, _newMarkerTemp.lng,
-          (address) => {
+        BDB.Geolocation.reverseGeocode(_newMarkerTemp.lat, _newMarkerTemp.lng)
+          .then( (addressObj) => {
             // console.log('Resolved location address:');
             // console.log(address);
-            _newMarkerTemp.address = address;
-          }, () => {
-            // nothing here.
-          }
-        );
+            _newMarkerTemp.address = addressObj.address;
+            _newMarkerTemp.city = addressObj.city;
+            _newMarkerTemp.state = addressObj.state;
+            _newMarkerTemp.country = addressObj.country;
+          });
 
         if (openedMarker) {
           // Was editing the marker position, so return to Edit Modal
@@ -1038,7 +567,7 @@ $(() => {
           openedMarker.lng = mapCenter.lng();
           openNewOrEditPlaceModal();
         } else {
-          if (isPosWithinBounds(map.getCenter())) {
+          if (BDB.Map.checkBounds()) {
             openNewOrEditPlaceModal();
           } else {
             const mapCenter = map.getCenter();
@@ -1050,7 +579,7 @@ $(() => {
                 `Foi mal, o bike de boa ainda não chegou aqui!
                 <br><br>
                 <small>
-                  <i>Acompanha nosso <a target="_blank" href="https://www.facebook.com/bikedeboaapp">
+                  <i>Acompanha nosso <a class="external-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
                   Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i>
                 </small>`,
               type: 'warning',
@@ -1087,13 +616,13 @@ $(() => {
       // }
     }
 
-    toggleMarkers();
+    BDB.Map.toggleMarkers();
     $('#addPlace').toggleClass('active');
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
-    $('#geolocationBtnBtn').toggle();
+    $('#geolocationBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -1119,7 +648,7 @@ $(() => {
     openedMarker = null;
     
     goHome();
-    showSpinner('Salvando bicicletário...');
+    showSpinner('Salvando...', true);
 
     let place = {};
 
@@ -1129,7 +658,10 @@ $(() => {
       place.lng = _newMarkerTemp.lng;
       if (_newMarkerTemp.address) {
         place.address = _newMarkerTemp.address;
-      }
+        place.city = _newMarkerTemp.city;
+        place.state = _newMarkerTemp.state;
+        place.country = _newMarkerTemp.country;
+      } 
       _newMarkerTemp = null;
     }
 
@@ -1146,104 +678,77 @@ $(() => {
     const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
         BDB.User.saveNewPlace(newPlace.id);
+      } else {
+        // Doesnt block the user from viewing the map if it was just updating the pin
+        hideSpinner();
+        toastr['success']('Bicicletário atualizado.');
       }
 
-      Database.getPlaces( () => {
-        updateMarkers();
+      BDB.Database.getPlaces( () => {
+        BDB.Map.updateMarkers();
         
         hideSpinner();
 
-        if (updatingMarker) {
-          toastr['success']('Bicicletário atualizado.'); 
-        } else { 
-          swal({
-            title: 'Bicicletário criado',
-            text: 'Valeu! Sua contribuição irá ajudar outros ciclistas a encontrar onde deixar a bici e ficar de boa. :)',
-            type: 'success',
-            allowOutsideClick: false, // because this wouldnt trigger the callback @todo
-            allowEscapeKey: false,    // because this wouldnt trigger the callback @todo
-          }).then(() => {
-            // Clicked OK or dismissed the modal
-            const newMarker = markers.find( i => i.id === newPlace.id );
-            if (newMarker) {
-              openLocal(newMarker, () => {
-                promptPWAInstallPopup();
+        if (!updatingMarker) {
+          const newMarker = markers.find( i => i.id === newPlace.id );
+          if (newMarker) {
+            // promptPWAInstallPopup();
 
-                // $('.rating-input-container').velocity('callout.bounce');
-                $('.openReviewPanelBtn').tooltip('show');
-                setTimeout(() => { 
-                  $('.openReviewPanelBtn').tooltip('hide');
-                }, 5000);
-              });
-            }
-          });
+            swal({
+              title: 'Bicicletário criado',
+              customClass: 'post-create-modal',
+              type: 'success',
+              html:
+                `<section class="rating-input-container">
+                  <p>
+                    Quer já deixar sua avaliação?
+                  </p>  
+
+                  <fieldset class="rating empty">
+                      <input disabled type="radio" id="star5_input" name="rating_input" value="5" />
+                      <label class="full-star" data-value="5" for="star5_input"></label> 
+                      <input disabled type="radio" id="star4_input" name="rating_input" value="4" />
+                      <label class="full-star" data-value="4" for="star4_input"></label>
+                      <input disabled type="radio" id="star3_input" name="rating_input" value="3" />
+                      <label class="full-star" data-value="3" for="star3_input"></label>
+                      <input disabled type="radio" id="star2_input" name="rating_input" value="2" />
+                      <label class="full-star" data-value="2" for="star2_input"></label>
+                      <input disabled type="radio" id="star1_input" name="rating_input" value="1" />
+                      <label class="full-star" data-value="1" for="star1"></label>
+                  </fieldset>
+              </section>`,
+              confirmButtonText: 'Avaliar outra hora',
+              showCloseButton: true,
+              onOpen: () => { 
+                // $('.post-create-modal .rating-input-container, .swal2-confirm')
+                //   .css({ opacity: 0 })
+                //   .velocity('transition.slideDownIn', { delay: 400 });
+
+                $('.post-create-modal .rating-input-container .full-star').on('click', e => {
+                  openedMarker = newMarker;
+                  openReviewModal($(e.target).data('value'));
+                });
+              }
+            });
+            // openLocal(newMarker, () => {
+            //   // $('.rating-input-container').velocity('callout.bounce');
+            //   $('.openReviewPanelBtn').tooltip('show');
+            //   setTimeout(() => { 
+            //     $('.openReviewPanelBtn').tooltip('hide');
+            //   }, 5000);
+            // });
+          }
         }
-      });
+      }); 
     };
 
     if (updatingMarker) {
       ga('send', 'event', 'Local', 'update', ''+updatingMarker.id);
-      Database.updatePlace(updatingMarker.id, place, onPlaceSaved);
+      BDB.Database.updatePlace(updatingMarker.id, place, onPlaceSaved);
     } else {
       ga('send', 'event', 'Local', 'create');
-      Database.sendPlace(place, onPlaceSaved);
+      BDB.Database.sendPlace(place, onPlaceSaved);
     }
-  }
-
-  function setupAutocomplete() {
-    const inputElem = document.getElementById('locationQueryInput');
-    // Limits the search to the our bounding box
-    const options = {
-      bounds: _mapBounds,
-      strictBounds: true
-    };
-    let autocomplete = new google.maps.places.Autocomplete(inputElem, options);
-    // autocomplete.bindTo('bounds', map);
-
-    // var infowindow = new google.maps.InfoWindow();
-    // _searchResultMarker = new google.maps.Marker({
-    //   optimized: true,
-    //   map: map,
-    //   clickable: false,
-    //   anchorPoint: new google.maps.Point(0, -29)
-    // });
-
-
-    autocomplete.addListener('place_changed', () => {
-      // infowindow.close();
-      // _searchResultMarker.setVisible(false);
-      // _searchResultMarker.setAnimation(null);
-
-      const place = autocomplete.getPlace();
-      if (!place.geometry) {
-        console.error('Autocomplete\'s returned place contains no geometry');
-        return;
-      }
-
-      // If the place has a geometry, then present it on a map.
-      if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
-      } else {
-        map.panTo(place.geometry.location);
-        map.setZoom(17);  // Why 17? Because it looks good.
-      }
-
-      // Custom icon depending on place type
-      // _searchResultMarker.setIcon(/** @type {google.maps.Icon} */({
-      //   url: place.icon,
-      //   size: new google.maps.Size(71, 71),
-      //   origin: new google.maps.Point(0, 0),
-      //   anchor: new google.maps.Point(17, 34),
-      //   scaledSize: new google.maps.Size(35, 35)
-      // }));
-
-      // Show temporary result marker
-      // _searchResultMarker.setPosition(place.geometry.location);
-      // _searchResultMarker.setVisible(true);
-      // _searchResultMarker.setAnimation(google.maps.Animation.DROP);
-
-      ga('send', 'event', 'Search', 'location', place.formatted_address); 
-    });
   }
 
   function photoUploadCB(e) {
@@ -1285,56 +790,6 @@ $(() => {
     hideSpinner();
   }
 
-  function _initTemplates() {
-    // Thanks https://stackoverflow.com/questions/8853396/logical-operator-in-a-handlebars-js-if-conditional
-    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
-      switch (operator) {
-      case '==':
-        return (v1 == v2) ? options.fn(this) : options.inverse(this);
-      case '===':
-        return (v1 === v2) ? options.fn(this) : options.inverse(this);
-      case '!=':
-        return (v1 != v2) ? options.fn(this) : options.inverse(this);
-      case '!==':
-        return (v1 !== v2) ? options.fn(this) : options.inverse(this);
-      case '<':
-        return (v1 < v2) ? options.fn(this) : options.inverse(this);
-      case '<=':
-        return (v1 <= v2) ? options.fn(this) : options.inverse(this);
-      case '>':
-        return (v1 > v2) ? options.fn(this) : options.inverse(this);
-      case '>=':
-        return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-      case '&&':
-        return (v1 && v2) ? options.fn(this) : options.inverse(this);
-      case '&&!':
-        return (v1 && !v2) ? options.fn(this) : options.inverse(this);
-      case '||':
-        return (v1 || v2) ? options.fn(this) : options.inverse(this);
-      case '||!':
-        return (v1 || !v2) ? options.fn(this) : options.inverse(this);
-      default:
-        return options.inverse(this);
-      }
-    });
-
-    let placeDetailsContentTemplate = $('#placeDetailsContentTemplate').html(); 
-    if (placeDetailsContentTemplate) {
-      templates.placeDetailsContentTemplate = Handlebars.compile(placeDetailsContentTemplate);
-    }
-
-    let infoWindowTemplate = $('#infoWindowTemplate').html();
-    if (infoWindowTemplate) {
-      templates.infoWindowTemplate = Handlebars.compile(infoWindowTemplate);
-    }
-
-    let contributionsModalTemplate = $('#contributionsModalTemplate').html();
-    if (contributionsModalTemplate) {
-      templates.contributionsModalTemplate = Handlebars.compile(contributionsModalTemplate);
-    }
-
-  }
-
   function validateNewPlaceForm() {
     const textOk = $('#newPlaceModal #titleInput').is(':valid');
     const isOk =
@@ -1365,6 +820,8 @@ $(() => {
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
     $('#newPlaceModal .minimap-container').toggle(!!openedMarker);
     $('#newPlaceModal #cancelEditPlaceBtn').toggle(!!openedMarker);
+    
+    $('#newPlaceModal .photoInputDisclaimer').toggle(!openedMarker); 
 
     // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
@@ -1393,7 +850,7 @@ $(() => {
       // Minimap
       // @todo generalize this
       const staticImgDimensions = _isMobile ? '400x100' : '1000x100';
-      const minimapUrl = `https://maps.googleapis.com/maps/api/staticmap?zoom=20&size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${getPinColorFromAverage(m.average)}.png|${m.lat},${m.lng}&key=${GOOGLEMAPS_KEY}&${_gmapsCustomStyleStaticApi}`;
+      const minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getColorFromAverage(m.average), m.lat, m.lng, 20);
       $('#newPlaceModal .minimap').attr('src', minimapUrl);
 
       // More info section
@@ -1526,15 +983,15 @@ $(() => {
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Deletar',
-        confirmButtonColor: '#FF8265'
+        confirmButtonColor: '#FF8265' 
       }).then(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
-        Database.deletePlace(openedMarker.id, () => {
+        BDB.Database.deletePlace(openedMarker.id, () => {
           goHome();
-          Database.getPlaces( () => {
-            updateMarkers();
+          BDB.Database.getPlaces( () => {
+            BDB.Map.updateMarkers();
             hideSpinner();
             toastr['success']('Bicicletário deletado.');
           });
@@ -1654,10 +1111,11 @@ $(() => {
       }
 
       // Update marker data
-      Database.getPlaceDetails(m.id, () => {
-        updateMarkers();
-        openDetailsModal(m);
-      });
+      BDB.Database.getPlaceDetails(m.id)
+        .then(updatedMarker => {
+          BDB.Map.updateMarkers();
+          openDetailsModal(updatedMarker);
+        });
     });
   }
 
@@ -1710,7 +1168,7 @@ $(() => {
       };
 
       const callback = () => {
-        Database.sendReview(reviewObj, reviewId => {
+        BDB.Database.sendReview(reviewObj, reviewId => {
           reviewObj.databaseId = reviewId;
           BDB.User.saveReview(reviewObj);
 
@@ -1721,7 +1179,7 @@ $(() => {
       const previousReview = BDB.User.getReviewByPlaceId(m.id);
       if (previousReview) {
         // Delete previous
-        Database.deleteReview(previousReview.databaseId, callback);
+        BDB.Database.deleteReview(previousReview.databaseId, callback);
       } else {
         callback();
       }
@@ -1734,7 +1192,7 @@ $(() => {
       customClass: 'revision-modal',
       html:
         `<p>
-          Este bicicletário está desatualizado ou está faltando uma informação importante? Aproveite este espaço pra nos ajudar a manter o mapeamento sempre atualizado e útil. :)
+          Este bicicletário está desatualizado ou está faltando uma informação importante? Nos ajude a manter o mapeamento sempre atualizado e útil pra todo mundo. :)
         </p>
 
         <p>
@@ -1743,9 +1201,7 @@ $(() => {
         </p>
 
         <p class="disclaimer">
-          Para qualquer comentário sobre o site em geral, lembre que estamos sempre de olho no 
-          <a href="mailto:bikedeboa@gmail.com"><img src="/img/icon_mail.svg" class="icon-mail"/> 
-          email</a> e no <a target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">Facebook</a>.
+          Para qualquer comentário sobre o site em geral, entre em <a class="external-link contact-btn"> <img src="/img/icon_mail.svg" class="icon-mail" /> contato</a>!
         </p>`,
       confirmButtonText: 'Enviar',
       showCloseButton: true
@@ -1757,7 +1213,7 @@ $(() => {
         content: $('#revisionText').val()
       };
 
-      Database.sendRevision(revisionObj, revisionId => {
+      BDB.Database.sendRevision(revisionObj, revisionId => {
         hideSpinner();
         swal('Sugestão enviada', `Obrigado por contribuir com o bike de boa! Sua sugestão será 
           avaliada pelo nosso time de colaboradores o mais rápido possível.`, 'success');
@@ -1765,21 +1221,80 @@ $(() => {
     });
   }
 
+  function getRecentSearches() {
+    return JSON.parse(localStorage.getItem('recentSearches'));
+  }
+
+  function addToRecentSearches(searchItem) {
+    let recentSearches = getRecentSearches() || [];
+ 
+    // Remove previous occurences of the new item
+    recentSearches = recentSearches.filter( r => r.name !== searchItem.name);
+    
+    // Add new item to the top
+    recentSearches.splice(0, 0, searchItem);
+    
+    // Remove last item if exceeds MAX_RECENT_SEARCHES
+    recentSearches.splice(MAX_RECENT_SEARCHES, 1);
+
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+  } 
+
   function enterLocationSearchMode() {
-    $('body').addClass('search-mode');
+    let templateData = {};
+    templateData.recentSearches = getRecentSearches();
+
+    ////////////////////////////////
+    // Render handlebars template //
+    ////////////////////////////////
+    $('#searchOverlayContentPlaceholder').html(BDB.templates.searchOverlay(templateData));
+
+    $('#search-overlay .recent-searches button').off('click').on('click', e => {
+      const $target = $(e.currentTarget);
+      const id = parseInt($target.data('recentsearchid'));
+      const item = getRecentSearches()[id];
+
+      // $('#locationQueryInput').val(item.name);
+
+      map.panTo(item.pos);
+      if (item.viewport) {
+        map.fitBounds(item.viewport);
+      } else {
+        map.setZoom(17);  // Why 17? Because it looks good.
+      }
+
+      exitLocationSearchMode();
+
+      // $('#locationQueryInput').val(term).focus();
+    });
+
+    $('body').addClass('search-mode'); 
     $('#search-overlay').addClass('showThis');
+    $('#search-overlay .recent-searches li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, queue: false }); 
+    $('.hamburger-button').addClass('back-mode');
+
+    $('.hamburger-button.back-mode').one('click', () => {
+      exitLocationSearchMode();
+    });
   }
 
   function exitLocationSearchMode() {
     $('body').removeClass('search-mode');
     $('#search-overlay').removeClass('showThis');
+    $('.hamburger-button').removeClass('back-mode');
   }
 
   function setPageTitle(text) { 
     text = text || '';
 
+    console.log('setPageTitle', text);
+
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar-title').text(openedMarker ? '' : text);
+    if (_isDeeplink && openedMarker) {
+      $('#top-mobile-bar-title').text('bike de boa');
+    } else {
+      $('#top-mobile-bar-title').text(openedMarker ? '' : text); 
+    }
 
     // Basic website metatags
     if (!text || text.length == 0) {
@@ -1787,6 +1302,9 @@ $(() => {
     }
     document.title = text; 
     $('meta[name="og:title"]').attr('content', text);
+    
+    // Set every URL as canonical, otherwise Google thinks some are duplicates. Gotta index 'em all!
+    $('link[rel="canonical"]').attr('href', window.location.href); 
 
     // Special metatags for Details View
     if (openedMarker) {
@@ -1853,17 +1371,85 @@ $(() => {
   }
 
   function _initGlobalCallbacks() {
+    //set Map Initialization 
+    $(document).on('map:ready', function () {
+      hideSpinner();
+      //get gMap instance to be used by functions to still referer to map here (mainly markers);
+      map = BDB.Map.getMap();
+      BDB.Map.updateMarkers();
+    });
+
+    $(document).on("autocomplete:done", function (e) {
+      let place = e.detail
+
+      addToRecentSearches({
+        name: place.name,
+        pos: place.geometry.location,
+        viewport: place.geometry.viewport
+      });
+
+      exitLocationSearchMode();
+
+      $('#locationQueryInput').val('');
+      toggleClearLocationBtn('hide');
+      ga('send', 'event', 'Search', 'location', place.formatted_address);
+
+    });
+
+    $(document).one("LoadMap", function () {
+      // showSpinner('Carregando Mapa :)');
+
+      BDB.Database.getPlaces( () => {
+        $('#filter-results-counter').html(markers.length);
+        $('#filter-results-total').html(markers.length);
+
+        BDB.Map.updateMarkers();
+
+        // Hide spinner that is initialized visible on CSS
+        // hideSpinner();
+
+        //
+        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
+          _onDataReadyCallback();
+          _onDataReadyCallback = null;
+        }
+      }); 
+
+      BDB.Map.init(openLocal); 
+
+      if (!_isTouchDevice) {
+        $('.caption-tooltip').tooltip({
+          toggle: 'tooltip',
+          trigger: 'hover',
+          placement: 'left',
+          'delay': { 'show': 0, 'hide': 0 }
+        });
+      }
+      showUI();
+    });
+
+    $(document).on('map:outofbounds', function (result) {
+      let response = result.detail;
+
+      $('#newPlaceholder').toggleClass('invalid', !response.isCenterWithinBounds);
+      $('#out-of-bounds-overlay').toggleClass('showThis', !response.isViewWithinBounds);
+    });
+
     $('#logo').on('click', () => {
       goHome();
     });
 
-    $('.js-menu-show-hamburger-menu').on('click', queueUiCallback.bind(this, () => {
+    $('.hamburger-button').on('click', e => {
+      const $target = $(e.currentTarget);
+      if ($target.hasClass('back-mode')) { 
+        return;
+      }
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Misc', 'hamburger menu opened');
       setView('', '/nav');
-    }));
+    });
     
-    $('.js-menu-show-filter-menu').on('click', queueUiCallback.bind(this, () => {
+    $('#filterBtn').on('click', queueUiCallback.bind(this, () => {
       // Menu open is already triggered inside the menu component.
       ga('send', 'event', 'Filter', 'filter menu opened');
       setView('', '/filtros');
@@ -1903,7 +1489,10 @@ $(() => {
     }));
  
     $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
       hideAll();
+      goHome();
+
       // setView('Login Administrador', '/login', true);
       // login(true);
 
@@ -1963,7 +1552,9 @@ $(() => {
     }));
 
     $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
       hideAll();
+      goHome();
 
       ga('send', 'event', 'Misc', 'contact opened');
       
@@ -1971,53 +1562,86 @@ $(() => {
         title: 'Contato',
         html:
           `
-            <div style="text-align: left;">
+            <div style="text-align: center; font-size: 30px;">
               <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/> /bikedeboaapp
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
                 </a> 
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/> @bikedeboa 
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/> medium 
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/> github
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
                 </a>
-              </p>
 
-              <p>
                 <a href="mailto:bikedeboa@gmail.com">
-                  <img src="/img/icon_mail.svg" class="icon-mail"/> bikedeboa@gmail.com
+                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
                 </a>
               </p>
+            </div> 
+
+            <hr>
+
+            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
+            <div style="text-align: center;">
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
             </div>
           `,
       });
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
-      map.setCenter(_portoAlegrePos);
-      map.setZoom(12);
+      map.goToPortoAlegre();
     }));
 
+    
     $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Geolocation', 'geolocate button click');
-      geolocate(true, () => {
-        $('#geolocationBtn').removeClass('loading');
-      });
+      
+      $('#geolocationBtn').addClass('loading');
+      
+      BDB.Map.getGeolocation();
+      
     }));
 
+    $(document).on('geolocation:done', function(e){
+      let result = e.detail;
+      $('#geolocationBtn').removeClass('loading');
+
+            if (result.status && result.center){
+        ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
+        return false;
+      }
+
+      ga('send', 'event', 'Geolocation', result.response.message ? `fail - ${result.response.message}`: 'fail - no_message');
+
+      switch(result.response.code) {
+      case 1:
+        // PERMISSION_DENIED
+        if (_isFacebookBrowser) {
+          toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
+        } else {
+          toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
+        }
+        break; 
+      case 2:
+        // POSITION_UNAVAILABLE
+        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+        break;
+      case 3:
+        // TIMEOUT
+        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+        break;
+      }
+      
+    });
+    
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
@@ -2084,9 +1708,9 @@ $(() => {
     // Modal callbacks
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
-      // $('.modal-dialog')
-      //   .velocity('transition.slideDownBigIn', {duration: MODAL_TRANSITION_IN_DURATION})
-      //   .velocity({display: 'table-cell'});
+      $('.modal-dialog')
+        .velocity((_isMobile ? 'transition.slideUpIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
+        .velocity({display: 'table-cell'}); 
 
       // Set mobile navbar with modal's title
       const openingModalTitle = $(e.currentTarget).find('.view-name').text();
@@ -2096,7 +1720,7 @@ $(() => {
 
       // Mobile optimizations
       if (_isMobile) {
-        $('#map, #addPlace').addClass('optimized-hidden');
+        // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
       } else {
         // hideUI();
 
@@ -2107,10 +1731,11 @@ $(() => {
     });
 
     $('body').on('hide.bs.modal', '.modal', e => {
-      // $('.modal-dialog').velocity('transition.slideDownBigOut');
+      // Doesnt work :()
+      // $('.modal-dialog').velocity((_isMobile ? 'transition.slideDownOut' : 'transition.slideUpOut'), {queue: true})
 
-      if (_isMobile) {
-        $('#map, #addPlace').removeClass('optimized-hidden');
+      if (_isMobile) { 
+        // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
         $('body').removeClass('transparent-mobile-topbar');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
@@ -2136,24 +1761,21 @@ $(() => {
         enterLocationSearchMode();
       }
     });
-    $('#locationQueryInput').on('blur', e => {
-      if (_isMobile) {
-        exitLocationSearchMode();
-      }
-    });
+    // $('#locationQueryInput').on('blur', e => {
+    //   if (_isMobile) {
+    //     exitLocationSearchMode();
+    //   }
+    // });
 
     // Location Search
-    $('#locationQueryInput').on('input', queueUiCallback.bind(this, () => {
+    $('#locationQueryInput').on('input change paste', queueUiCallback.bind(this, () => {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     }));
 
     $('#clearLocationQueryBtn').on('click', queueUiCallback.bind(this, () => {
-      // if (_isMobile) {
-      //   exitLocationSearchMode();
-      // }
       $('#locationQueryInput').val('');
       toggleClearLocationBtn('hide');
-      _searchResultMarker.setVisible(false);
+      // _searchResultMarker.setVisible(false);
     }));
   }
 
@@ -2186,13 +1808,6 @@ $(() => {
     });
   }
 
-  function hideBikeLayer() {
-    map.setOptions({styles: _gmapsCustomStyle});
-    
-    _bikeLayer.setMap(null);
-    map.data.setMap(null);
-  }
-
   function promptPWAInstallPopup() { 
     // Deferred prompt handling based on:
     //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
@@ -2223,10 +1838,10 @@ $(() => {
   }
 
   function openHowToInstallModal() {
-    const hasNativePromptWorked = promptPWAInstallPopup(); 
+    // const hasNativePromptWorked = promptPWAInstallPopup(); 
 
-    if (!hasNativePromptWorked) {
-      if (_isMobile) {
+    // if (!hasNativePromptWorked) {
+      if (_isMobile) { 
         // Tries to guess the user agent to initialize the correspondent accordion item opened
         const userAgent = window.getBrowserName();
         switch (userAgent) {
@@ -2250,7 +1865,7 @@ $(() => {
       $('#howToInstallModal').modal('show');
 
       $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-    }
+    // }
   }
 
   function openFaqModal() { 
@@ -2282,8 +1897,13 @@ $(() => {
           r.createdTimeAgo = createdAtToDaysAgo(r.createdAt);
         }
 
-        r.rating = r.rating + '';
-        r.color = getPinColorFromAverage(r.rating);
+        let stars = '';
+        for (let s=0; s < r.rating; s++) {
+          stars += '<span class="glyphicon glyphicon-star"></span>';
+        }
+        r.ratingContent = r.rating + ' ' + stars;  
+
+        r.color = getColorFromAverage(r.rating);
       }
  
       templateData.reviews = templateData.reviews.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
@@ -2307,7 +1927,7 @@ $(() => {
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
-    $('#modalPlaceholder').html(templates.contributionsModalTemplate(templateData));
+    $('#modalPlaceholder').html(BDB.templates.contributionsModal(templateData));
     $('#contributionsModal').modal('show');
 
     $('.go-to-place-btn').off('click').on('click', e => {
@@ -2345,11 +1965,12 @@ $(() => {
       updateFilters();
     });
   } 
+
   function openNotFoundModal(url){
     toastr['warning']('Que pena, parece que o link não foi encontrado. <br/> Mas você pode encontrar um bicletário pertinho de você! <br/>Da uma olhada!');
     ga('send', 'event', 'Misc', 'router - 404 Not Found', url);
-
-    setupGoogleMaps(); 
+    //to do: Rethink this:
+    $(document).trigger('LoadMap');
   }
   function openDataModal() {
     $('#dataModal').modal('show');
@@ -2357,13 +1978,25 @@ $(() => {
   } 
 
   function openAboutModal() {
+    // Lazy load images when modal is shown
+    $('#aboutModal img').each((i, v) => {
+      $(v).attr('src', $(v).data('src'));
+    }); 
+
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
-    if (markers) {
-      $('#about-stats--places').data('countupto', markers.length);
-      // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
-    }
+    BDB.Database.customAPICall('get', 'stats')
+      .then(data => {
+        $('#about-stats--places').velocity('fadeIn').text(data.localsCount);
+        $('#about-stats--reviews').velocity('fadeIn').text(data.reviewsCount);
+        $('#about-stats--views').velocity('fadeIn').text(data.viewsCount);
+      });
+
+    // if (markers) {
+    //   $('#about-stats--places').data('countupto', markers.length);
+    //   // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    // }
 
     // $('[data-countupto]').each( function(i, val) {
     //   new CountUp(this.id, 0, this.data('countupto')).start();
@@ -2376,7 +2009,7 @@ $(() => {
   function handleRouting(initialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
-    
+
     switch (urlBreakdown[1]) {
     case 'b':
       if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
@@ -2384,24 +2017,15 @@ $(() => {
         if (id) {
           id = parseInt(id);
 
-          _deeplinkMarker = BDB.Places.getMarkerById(id);
-          if (_deeplinkMarker) {
-            // todo: put the modal on loader while waiting for the event trigger.
-            if (tags) {
-              routerOpenLocal(_deeplinkMarker);
-            } else {
-              $(document).on('tags:loaded', function(){
-                routerOpenLocal(_deeplinkMarker);
-              });  
-            }
-            
-          } else if(_deeplinkMarker === null) {
-            // 404 code. 
-            openNotFoundModal(match);
-            match = false;
+          if (_isDeeplink) {
+            routerOpenDeeplinkMarker(id);
           } else {
-            _routePendingData = true;
+            routerOpenLocal(id);
           }
+        } else {
+          // 404 code. 
+          openNotFoundModal(match);
+          match = false;
         }
       }
       break;
@@ -2424,26 +2048,31 @@ $(() => {
       hideAll();
       openContributionsModal();
       break;
-    case 'nav' : 
+    case 'nav':
+        _hamburgerMenu.show();
+        break;
+    case 'filtros':
+        _filterMenu.show();
+        break;
     case 'novo' :
     case 'editar':
-    case 'filtros':
+    case 'foto':
+    case 'dados':
       break;
     case '':
-      match = false; 
+      hideAll();
       break;
     default:
       openNotFoundModal(match);
       match = false; 
       break;
     }
+
     if (match && initialRouting) {
-
       _isDeeplink = true;
-
-      // $('#map').addClass('mock-map');
-      // $('#top-mobile-bar-title').text('bike de boa');
       $('body').addClass('deeplink'); 
+
+      // showSpinner();
 
       // Center the map on pin's position
       if (map && _deeplinkMarker) {
@@ -2455,157 +2084,6 @@ $(() => {
       }
     }
     return match;
-  }
-
-  function setupGoogleMaps(wasDeeplink) {
-    let initialCenter;
-    if (wasDeeplink && _deeplinkMarker) {
-      initialCenter = {
-        lat: parseFloat(_deeplinkMarker.lat),
-        lng: parseFloat(_deeplinkMarker.lng)
-      };
-    } else {
-      initialCenter = _portoAlegrePos;
-    }
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: initialCenter,
-      zoom: wasDeeplink ? 18 : 15,
-      disableDefaultUI: true,
-      scaleControl: false,
-      clickableIcons: false,
-      styles: _gmapsCustomStyle,
-      mapTypeControl: false,
-      // mapTypeControl: _isDesktop,
-      // mapTypeControlOptions: {
-      //     style: google.maps.MapTypeControlStyle.DROPDOWN_MENU, 
-      //     position: google.maps.ControlPosition.RIGHT_CENTER
-      // },
-      zoomControl: _isDesktop,
-      zoomControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_CENTER
-      },
-      // mapTypeId: 'terrain',
-      // streetViewControl: _isDesktop,
-      // streetViewControlOptions: {
-      //     position: google.maps.ControlPosition.RIGHT_CENTER
-      // },
-      // fullscreenControl: true
-    });
-
-    _mapBounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
-        new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
-    );
-
-    mapCenterChanged();
-    map.addListener('center_changed', mapCenterChanged);
-
-    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
-    const myOptions = {
-      maxWidth: 0,
-      pixelOffset: new google.maps.Size(-infoboxWidth/2, 0),
-      disableAutoPan: _isMobile ? false : true,
-      zIndex: null,
-      boxStyle: {
-        width: `${infoboxWidth}px`,
-        height: '75px', 
-        cursor: 'pointer',
-      },
-      // closeBoxMargin: '10px 2px 2px 2px',
-      closeBoxURL: '',
-      infoBoxClearance: new google.maps.Size(1, 1),
-      pane: 'floatPane',
-      enableEventPropagation: false,
-    };
-    _infoWindow = new InfoBox(myOptions);
-    
-    // Override infowindow render function with custom transition
-    // const oldDraw = _infoWindow.draw; 
-    // _infoWindow.draw = function() {
-    //    oldDraw.apply(this);
-    //    $(_infoWindow.div_).velocity('transition.slideUpIn', {display: 'flex', duration: 250}); 
-    // }
-
-    google.maps.event.addListener(map, 'zoom_changed', () => {
-      const prevZoomLevel = _mapZoomLevel;
-
-      _mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
-
-      if (prevZoomLevel !== _mapZoomLevel) {
-        if (!_activeFilters) {
-          setMarkersIcon(_mapZoomLevel);
-        }
-      }
-    });
-
-    geocoder = new google.maps.Geocoder();
-
-    setupAutocomplete();
-
-    // map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(document.getElementById('addPlace'));
-
-    // // Geolocalization button
-    // if (navigator.geolocation) {
-    //   const btn = document.getElementById('geolocationBtn');
-    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(btn);
-    // }
-
-    // // if (_isMobile) {
-    //   const filterBtnEl = document.getElementById('filterBtn');
-    //   map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(filterBtnEl);
-    // // }
-
-    // Especial tooltips for map UI buttons that have only an icon
-    if(!_isTouchDevice) {
-      $('.caption-tooltip').tooltip({
-        toggle: 'tooltip', 
-        trigger: 'hover',
-        placement: 'left', 
-        'delay': {'show': 0, 'hide': 0}
-      });
-    }
-
-    _geolocationMarker = new google.maps.Marker({
-      optimized: true,
-      map: map,
-      clickable: false,
-      icon: {
-        url: '/img/current_position.svg', // url
-        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
-        origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W/2, CURRENT_LOCATION_MARKER_H/2), // anchor
-      }
-    });
-
-    _geolocationRadius = new google.maps.Circle({
-      map: map,
-      clickable: false,
-      fillColor: '#705EC7',
-      fillOpacity: '0.2',
-      strokeColor: 'transparent',
-      strokeOpacity: '0'
-    });
-
-    // Finally, enable the basic UI
-    showUI();
-    // $('#locationSearch').velocity('transition.slideDownIn', {delay: 300, queue: false});
-    // $('#addPlace').velocity('transition.slideUpIn', {delay: 300, queue: false});
-    // $('#map').css('filter', 'none');
-  }
-
-  function showBikeLayer(map){
-    // Bike Layer: google maps bycicling layer
-    window._bikeLayer = new google.maps.BicyclingLayer();
-    
-    // Bike layer: GeoJSON from #datapoa
-    map.data.map = null;
-    map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
-    map.data.setStyle({
-      strokeColor: 'green',
-      strokeWeight: 5
-    });
-
-    window._bikeLayer.setMap(map);
   }
 
   function openLoginDialog(showPermissionDisclaimer = false) {
@@ -2676,7 +2154,7 @@ $(() => {
     hello(auth.network).api('me').then(function(profile) { 
       console.debug('profile', profile);
 
-      Database.socialLogin({
+      BDB.Database.socialLogin({
         network: auth.network,
         socialToken: _socialToken,
         fullname: profile.name,
@@ -2732,227 +2210,6 @@ $(() => {
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
 
-  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
-  function setup() {
-    // Detect if webapp was launched from mobile homescreen (for Android and iOS)
-    // References:
-    //   https://developers.google.com/web/updates/2015/10/display-mode
-    //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
-    if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
-      $('body').addClass('pwa-installed');
-      ga('send', 'event', 'Misc', 'launched with display=standalone');
-    }
-
-    // Check if it's the Native App version
-    if (window.navigator.userAgent.indexOf('BikeDeBoaApp') > 0) {
-      $('body').addClass('webview-app');
-      ga('send', 'event', 'Misc', 'launched from native app'); 
-    }
-
-    // Got Google Maps, either we're online or the SDK is in cache.
-    if (window.google) {
-      // On Mobile we defer the initialization of the map if we're in deeplink
-      if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-        setupGoogleMaps(); 
-      }
-    } else {
-      if (window.location.pathname !== '/dados') {
-        setOfflineMode();
-      }
-    }
-
-    const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
-    isMobileListener.addListener((isMobileListener) => {
-      _isMobile = isMobileListener.matches;
-    });
-    const isDesktopListener = window.matchMedia('(min-width: ${DESKTOP_MIN_WIDTH})');
-    isDesktopListener.addListener((isDesktopListener) => {
-      _isDesktop = isDesktopListener.matches;
-    });
-
-    // Super specific mobile stuff
-    if (_isMobile) {
-      $('#locationQueryInput').attr('placeholder','Buscar endereço');
-
-      $('.modal').removeClass('fade');
-    } else {
-      $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
-    }
-
-
-    // If permission to geolocation was already granted we already center the map
-    if (navigator.permissions) {
-      navigator.permissions.query({'name': 'geolocation'})
-        .then( permission => {
-          if (permission.state === 'granted') {
-            ga('send', 'event', 'Geolocation', 'geolocate on startup');
-            geolocate(true, null, true); 
-          }
-        }
-      );
-    }
-
-    // User is within Facebook browser.
-    // thanks to: https://stackoverflow.com/questions/31569518/how-to-detect-facebook-in-app-browser
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
-
-
-    _initGlobalCallbacks();
-
-    _initTemplates();
-
-    // Bind trigger for history changes
-    History.Adapter.bind(window, 'statechange', () => {
-      const state = History.getState();
-
-      if (_isFeatherlightOpen) {
-        const openLightbox = $.featherlight.current();
-        if (openLightbox) {
-          openLightbox.close();
-        }
-        _isFeatherlightOpen = false;
-      }
-
-      if (state.data && state.data.isHome) {
-        if (!map && !_isOffline) {
-          setupGoogleMaps();
-          updateMarkers();
-        }
-
-        if (_isDeeplink) {
-          // $('#map').removeClass('mock-map');
-          // $('#logo').removeClass('clickable');
-          $('body').removeClass('deeplink');
-          _isDeeplink = false;
-        } 
-
-        hideAll();
-      } else {
-        handleRouting();
-      }
-    });
-
-    // Initialize router
-    _onDataReadyCallback = () => {
-      if (window.performance) {
-        const timeSincePageLoad = Math.round(performance.now());
-        ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
-      }
-
-      if (_routePendingData) {
-        handleRouting();
-      }
-
-      BDB.User.init();       
-
-      if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
-        openWelcomeMessage();
-      }
-    };
-
-    // Set up Sweet Alert
-    swal.setDefaults({
-      confirmButtonColor: '#30bb6a',
-      confirmButtonText: 'OK',
-      confirmButtonClass: 'btn green',
-      cancelButtonText: 'Cancelar',
-      cancelButtonClass: 'btn',
-      buttonsStyling: false,
-      allowOutsideClick: true
-    });
-
-    if ($.featherlight) {
-      // Featherlight - photo lightbox lib
-      // Extension to show the img alt tag as a caption within the image
-      $.featherlight.prototype.afterContent = function() { 
-        var caption = this.$currentTarget.find('img').attr('alt');
-        this.$instance.find('.caption').remove();
-        $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
-      };
-      $.featherlight.prototype.beforeOpen = function() { 
-        History.pushState(null, null, 'foto');
-        _isFeatherlightOpen = true; 
-      };
-      $.featherlight.defaults.closeOnEsc = false;
-    }
- 
-    // Toastr options
-    toastr.options = {
-      'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
-      'closeButton': false,
-      'progressBar': false,
-    };
-
-    // Sidenav (hamburger and filter menus)
-    const sidenavHideCallback = () => {
-      // @todo explain me
-      setView('bike de boa', '/', true);
-    };
-    try {
-      _hamburgerMenu = new SideNav(
-        'hamburger-menu',
-        {
-          hideCallback: sidenavHideCallback
-        }
-      );
-      _filterMenu = new SideNav(
-        'filter-menu',
-        {
-          inverted: true,
-          hideCallback: sidenavHideCallback
-          /*fixed: true*/
-        }
-      );
-    } catch (err) {
-      _hamburgerMenu = _filterMenu = null;
-    }
-
-    // Hello.js
-    hello.init({
-      facebook: FACEBOOK_CLIENT_ID,
-      google: GOOGLE_CLIENT_ID, 
-        // windows: WINDOWS_CLIENT_ID,
-    },{
-      // redirect_uri: window.location.origin
-      redirect_uri: '/redirect.html'
-    });
-    hello.on('auth.login', auth => {
-      // Hack to fix what I think is the bug that was causing duplicate user entries
-      if (!_loginMutexBlocked) {
-        onSocialLogin(auth);
-        _loginMutexBlocked = true;
-        setTimeout(() => { 
-          _loginMutexBlocked = false;
-        }, 1500);
-      } else {
-        // block! 
-        console.debug('login called again in 1500ms window!');
-        ga('send', 'event', 'Login', 'mutex-blocked: login called again in a 1500ms window');
-      }
-    });
-    hello.on('auth.logout', () => {
-      onSocialLogout(); 
-    });
-
-    initHelpTooltip('#filter-menu .help-tooltip-trigger');
-
-    $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - ciclovias');
-    });
-
-    // Intercepts Progressive Web App event
-    // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      _deferredPWAPrompt = e;
-
-      $('.howToInstallBtn').css({'font-weight': 'bold'});
-
-      return false;
-    });
-  }
-
   function openWelcomeMessage() { 
     // setTimeout( () => {
     //   if (_isMobile) {
@@ -2960,7 +2217,7 @@ $(() => {
     //   } else {
     //     $('.welcome-message-container').velocity('fadeIn', { duration: 3000 }); 
     //   }
-    // }, 2000); 
+    // }, 2000);
 
     if (_isMobile) {
       return;
@@ -2987,27 +2244,12 @@ $(() => {
     });
   }
 
-  function localhostOverrides() {
-    // if (_isLocalhost) {
-    //   Database.API_URL = 'http://localhost:3000';
-    // }
-  }
-
   function init() {
-    if (isDemoMode) {
-      Database = BDB.MockedDatabase;
-    } else {
-      Database = BDB.Database;
-    }
-
-    localhostOverrides();
-
     // Retrieve markers saved in a past access
     markers = BDB.getMarkersFromLocalStorage();
     if (markers && markers.length) {
       console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
-      updateMarkers();
-      hideSpinner();
+      //hideSpinner();
     } else {
       showSpinner('Carregando bicicletários...');
     }
@@ -3017,7 +2259,7 @@ $(() => {
       $.getJSON('//ipinfo.io/json', data => {
         if (data && data.ip) {
           ga('send', 'event', 'Misc', 'IP retrival OK', ''+data.ip);
-          Database._setOriginHeader(data.ip);
+          BDB.Database._setOriginHeader(data.ip);
         } else {
           console.error('Something went wrong when trying to retrieve user IP.');
           ga('send', 'event', 'Misc', 'IP retrieval error');
@@ -3035,38 +2277,228 @@ $(() => {
         // }
       });
 
-      Database.authenticate();
-      Database.getAllTags();
-      Database.getPlaces( () => {
-        $('#filter-results-counter').html(markers.length);
-        $('#filter-results-total').html(markers.length);
-
-        updateMarkers();
-
-        // Hide spinner that is initialized visible on CSS
-        hideSpinner();
-
-        //
-        if (_onDataReadyCallback && typeof _onDataReadyCallback === 'function') {
-          _onDataReadyCallback();
-          _onDataReadyCallback = null;
-        }
-      }); 
-
       handleRouting(true);
+
+      BDB.Database.authenticate();
+      BDB.Database.getAllTags();
     }
   } 
 
-  window.toggleDemoMode = () => {
-    showSpinner();
-    isDemoMode = !isDemoMode;
-    init();
-  };
+  // Setup must only be called *once*, differently than init() that may be called to reset the app state.
+  function setup() {
+    // Detect if webapp was launched from mobile homescreen (for Android and iOS)
+    // References:
+    //   https://developers.google.com/web/updates/2015/10/display-mode
+    //   https://stackoverflow.com/questions/21125337/how-to-detect-if-web-app-running-standalone-on-chrome-mobile
+    if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+      $('body').addClass('pwa-installed');
+      ga('send', 'event', 'Misc', 'launched with display=standalone');
+    }
+
+    // Check if it's the Native App version
+    if (window.navigator.userAgent.indexOf('BikeDeBoaApp') > 0) {
+      $('body').addClass('webview-app');
+      ga('send', 'event', 'Misc', 'launched from native app'); 
+    }
+
+    const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
+    isMobileListener.addListener((isMobileListener) => {
+      _isMobile = isMobileListener.matches;
+    });
+    
+    // Super specific mobile stuff
+    if (_isMobile) {
+      // Optimized short placeholder
+      $('#locationQueryInput').attr('placeholder','Buscar endereço');
+
+      // Remove Bootstrap fade class
+      $('.modal').removeClass('fade');
+    } else {
+      $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
+    }
+
+    // User is within Facebook browser.
+    // thanks to: https://stackoverflow.com/questions/31569518/how-to-detect-facebook-in-app-browser
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
+
+    _initGlobalCallbacks();
+
+    // Got Google Maps, either we're online or the SDK is in cache.
+    // if (window.google) {
+    // On Mobile we defer the initialization of the map if we're in deeplink
+    if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+      $(document).trigger("LoadMap");
+    }
+    // } else {
+    //   if (window.location.pathname !== '/dados') {
+    //     setOfflineMode();
+    //   }
+    // }
+
+    // Bind trigger for history changes
+    History.Adapter.bind(window, 'statechange', () => {
+      const state = History.getState();
+
+      if (_isFeatherlightOpen) {
+        const openLightbox = $.featherlight.current();
+        if (openLightbox) {
+          openLightbox.close();
+        }
+        _isFeatherlightOpen = false;
+      }
+
+      if (state.data && state.data.isHome) {
+        if (!map && !_isOffline) {
+          $(document).trigger('LoadMap');
+          //BDB.Map.updateMarkers();
+        }
+
+        if (_isDeeplink) {
+          // $('#map').removeClass('mock-map');
+          // $('#logo').removeClass('clickable');
+          $('body').removeClass('deeplink');
+          _isDeeplink = false;
+        } 
+
+        hideAll();
+      } else {
+        handleRouting();
+      }
+    });
+
+    // Initialize router
+    _onDataReadyCallback = () => {
+      if (window.performance && !_isDeeplink) {
+        const timeSincePageLoad = Math.round(performance.now());
+        ga('send', 'timing', 'Data', 'data ready', timeSincePageLoad);
+      }
+
+      // Not used anymore (for now?)
+      // if (_routePendingData) {
+      //   handleRouting();
+      // }
+
+      BDB.User.init();       
+
+      if (!_isDeeplink && !BDB.Session.hasUserSeenWelcomeMessage()) {
+        openWelcomeMessage();
+      }
+    };
+
+    // Set up SweetAlert, the alert window lib
+    swal.setDefaults({
+      confirmButtonColor: '#30bb6a',
+      confirmButtonText: 'OK',
+      confirmButtonClass: 'btn',
+      cancelButtonText: 'Cancelar',
+      cancelButtonClass: 'btn',
+      buttonsStyling: false,
+      allowOutsideClick: true,
+      animation: false
+    });
+
+    // Set up Featherlight - photo lightbox lib
+    if ($.featherlight) {
+      // Extension to show the img alt tag as a caption within the image
+      $.featherlight.prototype.afterContent = function() { 
+        var caption = this.$currentTarget.find('img').attr('alt');
+        this.$instance.find('.caption').remove();
+        $('<div class="featherlight-caption">').text(caption).appendTo(this.$instance.find('.featherlight-content'));
+      };
+      $.featherlight.prototype.beforeOpen = function() { 
+        History.pushState(null, null, 'foto');
+        _isFeatherlightOpen = true; 
+      };
+      $.featherlight.defaults.closeOnEsc = false;
+    }
+ 
+    // Set up Toastr, the messaging lib
+    toastr.options = {
+      'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
+      'closeButton': false,
+      'progressBar': false,
+    };
+
+    // Sidenav (hamburger and filter menus)
+    const sidenavHideCallback = () => {
+      // @todo explain this
+      setView('bike de boa', '/', true);
+    };
+    try {
+      _hamburgerMenu = new SideNav(
+        'hamburger-menu',
+        {
+          hideCallback: sidenavHideCallback
+        }
+      );
+      _filterMenu = new SideNav(
+        'filter-menu',
+        {
+          inverted: true,
+          hideCallback: sidenavHideCallback
+          /*fixed: true*/
+        }
+      );
+    } catch (err) {
+      _hamburgerMenu = _filterMenu = null;
+    }
+
+    // Set up Hello.js, the Social Login lib
+    hello.init({
+      facebook: FACEBOOK_CLIENT_ID,
+      google: GOOGLE_CLIENT_ID, 
+        // windows: WINDOWS_CLIENT_ID,
+    },{
+      // redirect_uri: window.location.origin
+      redirect_uri: '/redirect.html'
+    });
+    hello.on('auth.login', auth => {
+      // Hack to fix what I think is the bug that was causing duplicate user entries
+      if (!_loginMutexBlocked) {
+        onSocialLogin(auth);
+        _loginMutexBlocked = true;
+        setTimeout(() => { 
+          _loginMutexBlocked = false;
+        }, 1500);
+      } else {
+        // block! 
+        console.debug('login called again in 1500ms window!');
+        ga('send', 'event', 'Login', 'mutex-blocked: login called again in a 1500ms window');
+      }
+    });
+    hello.on('auth.logout', () => {
+      onSocialLogout(); 
+    });
+
+    // Initialize all help tooltips
+    initHelpTooltip('#filter-menu .help-tooltip-trigger');
+
+    // Temporarily in disuse
+    // $('#ciclovias-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
+    //   ga('send', 'event', 'Misc', 'tooltip - ciclovias');
+    // });
+
+    // Intercepts Progressive Web App event
+    // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
+    // window.addEventListener('beforeinstallprompt', e => {
+    //   e.preventDefault();
+    //   _deferredPWAPrompt = e;
+    
+    //   $('.howToInstallBtn').css({'font-weight': 'bold'});
+    
+    //   return false;
+    // });
+  }
+
 
   //////////////////////////
   // Start initialization //
   //////////////////////////
 
+  // Things that are only done once per app
   setup(); 
+
+  // Things that can be redone
   init();
 });
