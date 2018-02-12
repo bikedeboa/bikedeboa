@@ -1285,7 +1285,7 @@ $(() => {
   function setPageTitle(text) { 
     text = text || '';
 
-    console.log('setPageTitle', text);
+    // console.log('setPageTitle', text);
 
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
@@ -1394,8 +1394,10 @@ $(() => {
 
     });
 
-    $(document).one("LoadMap", function () {
-      // showSpinner('Carregando Mapa :)');
+    $(document).one('LoadMap', function () {
+      if (!markers) {
+        showSpinner('Carregando bicicletários...'); 
+      }
 
       BDB.Database.getPlaces( () => {
         $('#filter-results-counter').html(markers.length);
@@ -2015,7 +2017,23 @@ $(() => {
         if (id) {
           id = parseInt(id);
 
-          if (_isDeeplink) {
+          if (initialRouting) {
+            _isDeeplink = true;
+            $('body').addClass('deeplink');
+
+            // showSpinner();
+
+            // Center the map on pin's position
+            if (map && _deeplinkMarker) {
+              map.setZoom(18);
+              map.setCenter({
+                lat: parseFloat(_deeplinkMarker.lat),
+                lng: parseFloat(_deeplinkMarker.lng)
+              });
+            }
+          }
+
+          if (_isDeeplink) { 
             routerOpenDeeplinkMarker(id);
           } else {
             routerOpenLocal(id);
@@ -2066,21 +2084,6 @@ $(() => {
       break;
     }
 
-    if (match && initialRouting) {
-      _isDeeplink = true;
-      $('body').addClass('deeplink'); 
-
-      // showSpinner();
-
-      // Center the map on pin's position
-      if (map && _deeplinkMarker) {
-        map.setZoom(18);
-        map.setCenter({
-          lat: parseFloat(_deeplinkMarker.lat),
-          lng: parseFloat(_deeplinkMarker.lng)
-        });
-      }
-    }
     return match;
   }
 
@@ -2248,8 +2251,6 @@ $(() => {
     if (markers && markers.length) {
       console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
       //hideSpinner();
-    } else {
-      showSpinner('Carregando bicicletários...');
     }
 
     if (!_isOffline) {
@@ -2262,17 +2263,6 @@ $(() => {
           console.error('Something went wrong when trying to retrieve user IP.');
           ga('send', 'event', 'Misc', 'IP retrieval error');
         }
-
-        // Coords via IP
-        // if (data && data.loc) {
-        //   const coords = data.loc.split(',');
-        //   const pos = {
-        //     lat: parseFloat(coords[0]),
-        //     lng: parseFloat(coords[1])
-        //   };
-
-        //   map.panTo(pos);
-        // }
       });
 
       handleRouting(true);
@@ -2280,6 +2270,18 @@ $(() => {
       BDB.Database.authenticate();
       BDB.Database.getAllTags();
     }
+
+    // Got Google Maps, either we're online or the SDK is in cache.
+    // if (window.google) {
+    // On Mobile we defer the initialization of the map if we're in deeplink
+    if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+      $(document).trigger('LoadMap');
+    }
+    // } else {
+    //   if (window.location.pathname !== '/dados') {
+    //     setOfflineMode();
+    //   }
+    // }
   } 
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -2321,18 +2323,6 @@ $(() => {
     _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
 
     _initGlobalCallbacks();
-
-    // Got Google Maps, either we're online or the SDK is in cache.
-    // if (window.google) {
-    // On Mobile we defer the initialization of the map if we're in deeplink
-    if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-      $(document).trigger("LoadMap");
-    }
-    // } else {
-    //   if (window.location.pathname !== '/dados') {
-    //     setOfflineMode();
-    //   }
-    // }
 
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {

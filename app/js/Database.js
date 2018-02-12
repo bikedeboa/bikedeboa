@@ -591,11 +591,18 @@ BDB.Database = {
             console.debug('Got place detail:');
             console.debug(data);
 
-            // Combine detailed data with what we had
-            let updatedMarker = markers.find(m => { return m.id === placeId; });
-            Object.assign(updatedMarker, data);
+            let updatedMarker;
+            if (markers) {
+              // Combine detailed data with what we had
+              updatedMarker = markers.find(m => { return m.id === placeId; });
+              Object.assign(updatedMarker, data);
+            } else {
+              // Markers weren't loaded yet (it's a deeplink)
+              updatedMarker = data;
+              markers = [updatedMarker];
+            }
 
-            // Set flag
+            // Set flag 
             updatedMarker._hasDetails = true;
 
             // Update offline-stored markers with new state
