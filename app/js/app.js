@@ -79,7 +79,7 @@ $(() => {
     }
   }
 
-  function openDetailsModal(marker) {
+  function openDetailsModal(marker, callback) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
       return;
@@ -331,7 +331,10 @@ $(() => {
           // @todo do this better please
           if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
             window._openLocalCallback();
-            window._openLocalCallback = undefined;
+            window._openLocalCallback = null;
+          }
+          if (callback && typeof callback === 'function') {
+            callback();
           }
         })
         .one('hidden.bs.modal', () => {
@@ -803,6 +806,10 @@ $(() => {
 
   // @todo clean up this mess
   function openNewOrEditPlaceModal() {
+    if ($('#newPlaceModal').length === 0) {
+      $('body').append(BDB.templates.newPlaceModal());
+    }
+    
     // Reset fields
     _uploadingPhotoBlob = '';
     $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
@@ -1841,34 +1848,42 @@ $(() => {
     // const hasNativePromptWorked = promptPWAInstallPopup(); 
 
     // if (!hasNativePromptWorked) {
-      if (_isMobile) { 
-        // Tries to guess the user agent to initialize the correspondent accordion item opened
-        const userAgent = window.getBrowserName();
-        switch (userAgent) {
-        case 'Chrome':
-          $('#collapse-chrome').addClass('in');
-          break;
-        case 'Firefox':
-          $('#collapse-firefox').addClass('in');
-          break;
-        case 'Safari':
-          $('#collapse-safari').addClass('in');
-          break;
-        }
+    if (_isMobile) { 
+      // Tries to guess the user agent to initialize the correspondent accordion item opened
+      const userAgent = window.getBrowserName();
+      switch (userAgent) {
+      case 'Chrome':
+        $('#collapse-chrome').addClass('in');
+        break;
+      case 'Firefox':
+        $('#collapse-firefox').addClass('in');
+        break;
+      case 'Safari':
+        $('#collapse-safari').addClass('in');
+        break;
       }
+    }
 
-      // Lazy load gifs when modal is shown
-      $('#howToInstallModal .tutorial-gif').each( (i, v) => {
-        $(v).attr('src', $(v).data('src'));
-      });
+    if ($('#howToInstallModal').length === 0) {
+      $('body').append(BDB.templates.howToInstallModal());
+    }
 
-      $('#howToInstallModal').modal('show');
+    // Lazy load gifs when modal is shown
+    // $('#howToInstallModal .tutorial-gif').each((i, v) => {
+    //   $(v).attr('src', $(v).data('src'));
+    // });
 
-      $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    $('#howToInstallModal').modal('show');
+
+    $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     // }
   }
 
   function openFaqModal() { 
+    if ($('#faqModal').length === 0) {
+      $('body').append(BDB.templates.faqModal());
+    }
+
     $('#faqModal').modal('show');
     $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
@@ -1944,6 +1959,10 @@ $(() => {
   }
 
   function openGuideModal() {
+    if ($('#guideModal').length === 0) {
+      $('body').append(BDB.templates.guideModal());
+    }
+
     $('#guideModal').modal('show');
     $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
@@ -1973,15 +1992,23 @@ $(() => {
     $(document).trigger('LoadMap');
   }
   function openDataModal() {
+    if ($('#dataModal').length === 0) {
+      $('body').append(BDB.templates.dataModal()); 
+    }
+
     $('#dataModal').modal('show');
     $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
   } 
 
   function openAboutModal() {
+    if ($('#aboutModal').length === 0) {
+      $('body').append(BDB.templates.aboutModal());
+    }
+
     // Lazy load images when modal is shown
     $('#aboutModal img').each((i, v) => {
       $(v).attr('src', $(v).data('src'));
-    }); 
+    });
 
     $('#aboutModal').modal('show');
     $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
@@ -2034,7 +2061,12 @@ $(() => {
           }
 
           if (_isDeeplink) { 
-            routerOpenDeeplinkMarker(id);
+            routerOpenDeeplinkMarker(id, () => {
+              // Delay loading of background map for maximum optimized startup
+              if (!_isMobile) {
+                $(document).trigger('LoadMap');
+              }
+            });
           } else {
             routerOpenLocal(id);
           }
@@ -2076,6 +2108,18 @@ $(() => {
     case 'dados':
       break;
     case '':
+      if (!map && !_isOffline) {
+        $(document).trigger('LoadMap');
+        //BDB.Map.updateMarkers();
+      }
+ 
+      if (_isDeeplink) {
+        // $('#map').removeClass('mock-map');
+        // $('#logo').removeClass('clickable');
+        $('body').removeClass('deeplink');
+        _isDeeplink = false;
+      }
+
       hideAll();
       break;
     default:
@@ -2274,9 +2318,9 @@ $(() => {
     // Got Google Maps, either we're online or the SDK is in cache.
     // if (window.google) {
     // On Mobile we defer the initialization of the map if we're in deeplink
-    if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
-      $(document).trigger('LoadMap');
-    }
+    // if (!_isMobile || (_isMobile && window.location.pathname === '/')) {
+    //   $(document).trigger('LoadMap');
+    // }
     // } else {
     //   if (window.location.pathname !== '/dados') {
     //     setOfflineMode();
@@ -2336,23 +2380,7 @@ $(() => {
         _isFeatherlightOpen = false;
       }
 
-      if (state.data && state.data.isHome) {
-        if (!map && !_isOffline) {
-          $(document).trigger('LoadMap');
-          //BDB.Map.updateMarkers();
-        }
-
-        if (_isDeeplink) {
-          // $('#map').removeClass('mock-map');
-          // $('#logo').removeClass('clickable');
-          $('body').removeClass('deeplink');
-          _isDeeplink = false;
-        } 
-
-        hideAll();
-      } else {
-        handleRouting();
-      }
+      handleRouting();
     });
 
     // Initialize router

@@ -1617,7 +1617,7 @@
 
         $('body').on('click', 'tbody tr td', e => {
           if (e.target == e.currentTarget) {
-            console.log('details');
+            // console.log('details');
             $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
           }
         });
