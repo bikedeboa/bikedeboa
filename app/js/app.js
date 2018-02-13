@@ -471,7 +471,8 @@ $(() => {
     const isCoveredFilters = filters.filter(i => i.prop === 'isCovered');
     const ratingFilters = filters.filter(i => i.prop === 'rating');
     const structureFilters = filters.filter(i => i.prop === 'structureType');
-    const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters];
+    const photoFilters = filters.filter(i => i.prop === 'hasPhoto');
+    const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters, photoFilters];
 
     const tempMarkers = BDB.Map.getMarkers();
 
@@ -488,10 +489,15 @@ $(() => {
             const f = categories[cat][f_index];
             let testResult;
 
-            if (f.prop !== 'rating') {
-              testResult = m[f.prop] === f.value;
-            } else {
-              // Custom test case: rating range
+            switch (f.prop) {
+            case 'hasPhoto':
+              if (f.value === 'with') {
+                testResult = !!m.photo;
+              } else {
+                testResult = !m.photo;
+              }
+              break;
+            case 'rating':
               switch (f.value) {
               case 'good':
                 testResult = m.average >= 3.5;
@@ -506,6 +512,10 @@ $(() => {
                 testResult = m.average === null;
                 break;
               }
+              break;
+            default:
+              testResult = m[f.prop] === f.value;
+              break;
             }
             
             // Filters inside each category are compared with OR
@@ -754,7 +764,7 @@ $(() => {
   function photoUploadCB(e) {
     if (e.target.result) {
       // $('#photoInput + label').fadeOut();
-       
+      
       resizeImage(e.target.result)
         .then( resizedBlob => {
           _uploadingPhotoBlob = resizedBlob;

@@ -3318,12 +3318,6 @@ body.modal-open {
     //   }
     // }
 
-    .side-nav__hide {
-      color: black;
-      right: 0;
-      left: auto;
-    }
-
     // #filter-results-counter-container {
     //   margin-top: 30px;
     // }
@@ -4728,6 +4722,7 @@ body.modal-open {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     font-size: 18px;
+    padding-bottom: 90px;
 
     h3 {
       padding: 10px;
