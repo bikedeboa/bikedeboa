@@ -833,7 +833,7 @@ a.unstyled-link {
  
     #locationQueryInput {
         width: 100%;
-        font-size: 14px;
+        font-size: 16px;
         padding: 0 $GRID_SPACE 0 40px;
         height: 42px;
         @include roundedCorners;
@@ -1112,10 +1112,10 @@ a.unstyled-link {
 
       .references-label { 
         display: block;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 16px;
         font-style: italic;
-        // color: $gray;
+        color: $gray;
         // font-weight: bold;
       }
     }
@@ -1408,7 +1408,7 @@ a.unstyled-link {
         &:hover {
           background: $paleWhite;
         }
-      }
+      } 
 
       .panel-body {
         border-top: 2px solid $lighterGray;
@@ -1416,7 +1416,7 @@ a.unstyled-link {
         padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE*2;
 
         p {
-          font-size: 14px;
+          font-size: 16px;
           color: $gray;
         }
       }

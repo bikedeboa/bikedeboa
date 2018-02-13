@@ -150,12 +150,13 @@ gulp.task('generate-service-worker', function(callback) {
     staticFileGlobs: [
       'dist/**/*.{js,css}',
       'dist/*.html', 
+      // 'dist/*.json', 
       // 'assets/**/*.{svg,png,jpg}',
       // 'dist/**/*.{ttf,woff,woff2}',
-      '/fonts/glyphicons-halflings-regular.ttf',
-      '/fonts/glyphicons-halflings-regular.woff',
-      '/fonts/glyphicons-halflings-regular.woff2',
-      'public/**/*.{json}',
+      'fonts/glyphicons-halflings-regular.ttf',
+      'fonts/glyphicons-halflings-regular.woff',
+      'fonts/glyphicons-halflings-regular.woff2',
+      'public/manifest.json',
       'assets/img/icon_search.svg',
       'assets/img/icon_add_pin.svg',
       'assets/img/icon_geolocation.svg',
@@ -167,6 +168,7 @@ gulp.task('generate-service-worker', function(callback) {
     stripPrefixMulti: {
       'dist/': '/', 
       'assets/': '/', 
+      'fonts/': '/', 
       'public/': '/'
     },
     // If handleFetch is false (i.e. because this is called from generate-service-worker-dev), then
