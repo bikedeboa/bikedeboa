@@ -164,10 +164,13 @@
           }
 
           td.col-timestamp,
-          td.col-description,
           td.col-full-text,
           td.col-address {
             font-size: 0.8em;
+          }
+          
+          td.col-description {
+            font-size: 1.2em;
           }
 
           .col-id {
@@ -482,6 +485,8 @@
             <p style="margin-top: 2em;">
               <input id="kmlFileInput" type="file" name="kmlFileInput" accept=".kml" />
             </p>
+
+            <div id="kmlFileImportResults"></div>
             
             <table
               data-classes="table table-no-bordered"
@@ -628,7 +633,12 @@
         }
 
         function photoColFormatter(value) { 
-          const ret = '<img src="' + value + '" style="width: 50px; height: 50px;"/>';
+          let ret;
+          
+          if (value) {
+            ret = '<img src="' + value + '" style="width: 50px; height: 50px;"/>';
+          }
+          
           return ret;
         }
 
@@ -1045,6 +1055,28 @@
           document.location.reload();
         });
 
+        $('#kmlFileImport').on('click', () => {
+          if (_importResults.places) {
+            swal({
+              title: 'Importar dados pro banco',
+              text: `Você está importando ${_importResults.places.length} bicicletários permanentemente pro banco de dados do bike de boa. Tem certeza que deseja continuar?`,
+              // type: 'warning',
+              showCancelButton: true,
+            }).then(() => {
+              showSpinner('Importando...', true);
+
+              $('#localsTable').bootstrapTable('destroy');
+
+              window._importResults.places_datasourceid = $('#kmlFileImport_datasourceid').val();
+
+              uploadImportedPlacesToBackend().then(() => {
+                hideSpinner();
+              });;
+            });
+
+          }
+        });
+
         function extractFromCDATA(str) {
           let ret;
 
@@ -1079,30 +1111,166 @@
           }
         }
 
-        $('#kmlFileImport').on('click', () => {
-          if (_importedPlaces) {
-            swal({
-              title: 'Importar dados pro banco',
-              text: `Você está importando ${_importedPlaces.length} bicicletários permanentemente pro banco de dados do bike de boa. Tem certeza que deseja continuar?`,
-              // type: 'warning',
-              showCancelButton: true, 
-            }).then(() => {
-              showSpinner('Importando...', true);
+        function processDescription(tmp) {
+          tmp.description = extractFromCDATA(tmp.description);
+          tmp.description = removeHTML(tmp.description);
 
-              $('#localsTable').bootstrapTable('destroy');
+          /////////////////
+          // Magic stuff //
+          /////////////////
+          const str = tmp.description.toLowerCase();
 
-              window._importedPlaces_datasourceid = $('#kmlFileImport_datasourceid').val();
-
-              uploadImportedPlacesToBackend().then( () => {
-                hideSpinner(); 
-              });;
-            });
-            
+          const fusionTableShit = '![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
+          if (tmp.description.indexOf(fusionTableShit) > 0) {
+            tmp.description = tmp.description.split(fusionTableShit)[1];
           }
-        });
+
+          // 'X vagas/bicicletas/lugares' => X slots
+          regex = /(\d+)\s(vaga|bicicleta|lugar)/s;
+          result = regex.exec(str);
+          if (result && result[1]) {
+            tmp.slots = result[1];
+            _importResults.tagsDetected++;
+          }
+
+          // 'X us invetidos' => X*2 slots
+          regex = /(\d+)\s(us invertidos)/s;
+          result = regex.exec(str);
+          if (result && result[1]) {
+            tmp.slots = parseInt(result[1]) * 2;
+            _importResults.tagsDetected++;
+          }
+
+          // Coberto?
+          if (str.indexOf('descoberto') > 0
+            || str.indexOf('descoberta') > 0
+            || str.indexOf('sem cobertura') > 0
+            || str.indexOf('não coberto') > 0
+            || str.indexOf('não coberta') > 0
+            || str.indexOf('nao coberta') > 0
+            || str.indexOf('nao é coberta') > 0
+            || str.indexOf('nao e coberta') > 0
+            || str.indexOf('não é coberto') > 0
+            || str.indexOf('nao e coberto') > 0
+            || str.indexOf('nao é coberto') > 0
+            || str.indexOf('ar livre') > 0
+            || str.indexOf('com abrigo') > 0
+            || str.indexOf('sob o sol') > 0
+            || str.indexOf('local aberto') > 0
+            || str.indexOf('céu aberto') > 0
+            || str.indexOf('ceu aberto') > 0) {
+            tmp.isCovered = false;
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('coberto') > 0
+            || str.indexOf('coberta') > 0
+            || str.indexOf('subsolo') > 0
+            || str.indexOf('subterrânea') > 0
+            || str.indexOf('subterranea') > 0
+            || str.indexOf('subterraneo') > 0
+            || str.indexOf('subterrâneo') > 0) {
+            tmp.isCovered = true;
+            _importResults.tagsDetected++;
+          }
+
+          // Gratuito?
+          if (str.indexOf('gratuito') > 0) {
+            tmp.isPaid = false;
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('pago') > 0
+            || str.indexOf('custa') > 0) {
+            tmp.isPaid = true;
+            _importResults.tagsDetected++;
+            // tmp.isPublic = false; // será?
+          }
+
+          // Público?
+          if (str.indexOf('privado') > 0
+            || str.indexOf('funcionários') > 0
+            || str.indexOf('moradores') > 0
+            || str.indexOf('sócios') > 0
+            || str.indexOf('restrito para') > 0
+            || str.indexOf('exclusivo para') > 0
+            || str.indexOf('apenas para') > 0) {
+            tmp.isPublic = false;
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('publico') > 0
+            || str.indexOf('público') > 0
+            || str.indexOf('na rua') > 0
+            || str.indexOf('canteiro central') > 0
+            || str.indexOf('calçada') > 0) {
+            tmp.isPublic = true;
+            _importResults.tagsDetected++;
+          }
+
+          // Tipo de bicicletário
+          // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+          if (str.indexOf('u invertido') > 0
+            || str.indexOf('us invertidos') > 0
+            || str.indexOf('sheffield') > 0
+            || str.indexOf('em r') > 0
+            || str.indexOf('tipo r') > 0
+            || str.indexOf('em u') > 0
+            || str.indexOf('tipo u') > 0
+            || str.indexOf('suporte em u') > 0) {
+            tmp.structureType = 'uinvertido';
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('açougue') > 0
+            || str.indexOf('suspenso') > 0) {
+            tmp.structureType = 'suspenso';
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('entorta-roda') > 0
+            || str.indexOf('entorta roda') > 0
+            || str.indexOf('entorta aro') > 0
+            || str.indexOf('entorta-aro') > 0
+            || str.indexOf('entorta raio') > 0
+            || str.indexOf('de roda') > 0) {
+            tmp.structureType = 'deroda';
+            _importResults.tagsDetected++;
+          }
+
+          // tmp.structureType = /^tipo\s([\w])/
+        }
+
+        function testIfImageExists(url) {
+          return new Promise(function (resolve, reject) {
+            let img = new Image();
+
+            img.onload = function () {
+              resolve(url);
+            }
+            img.onerror = function () {
+              reject(url);
+            }
+            img.src = url
+          })
+        }
+
+        function updateKmlImportResults() {
+          document.getElementById("kmlFileImportResults").innerHTML = `
+            <div class="big-numbers">
+              <div class="big-numbers--col"> 
+                <div class="big-numbers--number">${_importResults.places.length}</div>
+                <div class="big-numbers--label">bicicletários</div>
+              </div>
+              <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.tagsDetected}</div>
+                <div class="big-numbers--label">tags preenchidas automaticamente</div>
+              </div>
+              <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
+                <div class="big-numbers--label">fotos com link quebrado</div>
+              </div>
+            </div>
+          `;
+        }
           
         $('#kmlFileInput').on('change', () => {
-          window._importedPlaces = [];
+          window._importResults = {
+            places: [],
+            tagsDetected: 0,
+            brokenUrls: 0,
+            totalUrls: 0,
+          };
 
           var file = document.getElementById("kmlFileInput").files[0];
           if (file) {
@@ -1139,6 +1307,7 @@
                       tmp.text = c.innerHTML;
 
                       if (tmp.text.toLowerCase().indexOf('bikerio') > 0) {
+                        // @todo: break, don't process this guy
                         //break;
                         console.log('BIKERIO!!!',tmp.text);
                       }
@@ -1157,87 +1326,7 @@
                       tmp.text = extractFromCDATA(tmp.text);
                     case 'description':
                       tmp.description = c.innerHTML;
-                      tmp.description = extractFromCDATA(tmp.description);
-                      tmp.description = removeHTML(tmp.description);
-
-                      /////////////////
-                      // Magic stuff //
-                      /////////////////
-                      const str = tmp.description.toLowerCase();
-
-                      const fusionTableShit = '![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
-                      if (tmp.description.indexOf(fusionTableShit) > 0) {
-                        tmp.description = tmp.description.split(fusionTableShit)[1];
-                      }
-
-                      // 'X vagas'
-                      regex = /(\d*)\svaga/s;
-                      result = regex.exec(str);
-                      if (result && result[1]) {
-                        tmp.slots = result[1];
-                      }
-
-                      // Coberto?
-                      if (str.indexOf('descoberto') > 0
-                        || str.indexOf('descoberta') > 0
-                        || str.indexOf('sem cobertura') > 0
-                        || str.indexOf('não coberto') > 0
-                        || str.indexOf('não coberta') > 0
-                        || str.indexOf('nao coberta') > 0
-                        || str.indexOf('nao é coberta') > 0
-                        || str.indexOf('nao e coberta') > 0
-                        || str.indexOf('não é coberto') > 0
-                        || str.indexOf('nao e coberto') > 0
-                        || str.indexOf('nao é coberto') > 0
-                        || str.indexOf('ar livre') > 0
-                        || str.indexOf('céu aberto') > 0
-                        || str.indexOf('ceu aberto') > 0) {
-                        tmp.isCovered = false;
-                      } else if (str.indexOf('coberto') > 0
-                        || str.indexOf('coberta') > 0
-                        || str.indexOf('subsolo') > 0
-                        || str.indexOf('subterrânea') > 0
-                        || str.indexOf('subterranea') > 0
-                        || str.indexOf('subterraneo') > 0
-                        || str.indexOf('subterrâneo') > 0) {
-                        tmp.isCovered = true;
-                      }
-
-                      // Gratuito?
-                      if (str.indexOf('gratuito') > 0) {
-                        tmp.isPaid = false;
-                      } else if (str.indexOf('pago') > 0 
-                        || str.indexOf('custa') > 0) {
-                        tmp.isPaid = true;
-                        tmp.isPublic = false;
-                      }
-
-                      // Público?
-                      if (str.indexOf('privado') > 0
-                        || str.indexOf('funcionários') > 0
-                        || str.indexOf('moradores') > 0
-                        || str.indexOf('sócios') > 0
-                        || str.indexOf('restrito para') > 0
-                        || str.indexOf('exclusivo para') > 0
-                        || str.indexOf('apenas para') > 0) {
-                        tmp.isPublic = false;
-                      } else if (str.indexOf('publico') > 0
-                        || str.indexOf('público') > 0
-                        || str.indexOf('na rua') > 0
-                        || str.indexOf('calçada') > 0) {
-                        tmp.isPublic = true;
-                      } 
-
-                      // Tipo de bicicletário
-                      // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-                      if (str.indexOf('u invertido') > 0
-                        || str.indexOf('suporte em u') > 0) {
-                        tmp.structureType = 'uinvertido';
-                      } else if (str.indexOf('açougue') > 0) {
-                        tmp.structureType = 'suspenso';
-                      } 
-
-                      // tmp.structureType = /^tipo\s([\w])/
+                      processDescription(tmp);
                       break;
                     case 'styleUrl':
                       break;
@@ -1249,24 +1338,48 @@
                         }
                         
                         const name = ext.attributes[0].nodeValue;
-                        const value = ext.children[0].innerHTML.toLowerCase();
+                        const valueRaw = ext.children[0].innerHTML
+                        const value = valueRaw.toLowerCase();
 
                         switch (name) {
+                          case 'Foto': 
                           case 'gx_media_links': 
-                            tmp.photo = value;
+                            _importResults.totalUrls++;
+                            testIfImageExists(valueRaw)
+                              .then( () => {
+                                tmp.photo = valueRaw;
+
+                                updateKmlImportResults();
+                              })
+                              .catch( () => {
+                                _importResults.brokenUrls++;
+                                // console.warn('image URL is broken: ', valueRaw);
+
+                                updateKmlImportResults();
+                              })
                             break; 
                           
+                          case 'Descrição':
+                          case 'descrição':
+                            // Fortaleza 
+                            tmp.description = value;
+                            processDescription(tmp);
+                            break;
+
                           //////////////////////////////////////////////////
                           // Transporte Ativo Fusion Maps specific field //
                           //////////////////////////////////////////////////
                           case 'BC_slots':
                             tmp.slots = value;
+                            _importResults.tagsDetected++;
                             break;
                           case 'BC_covered':
                             if (tmp.isCovered === 'yes')   {
                               tmp.isCovered = true;
+                              _importResults.tagsDetected++;
                             } else if (tmp.isCovered === 'no') {
                               tmp.isCovered = false; 
+                              _importResults.tagsDetected++;
                             }
                             break;
                             break;
@@ -1276,6 +1389,7 @@
                               case 'açougue': 
                               case 'metrôrio':
                                 tmp.structureType = 'suspenso';
+                                _importResults.tagsDetected++;
                                 break;
                               case 'grelha':
                               case 'holandês':
@@ -1283,6 +1397,7 @@
                               case 'de roda':  
                               case 'trincheira':  
                                 tmp.structureType = 'deroda';
+                                _importResults.tagsDetected++;
                                 break;
                               case 'pente':
                               case 'sulamerica':
@@ -1290,11 +1405,13 @@
                               case 'transcarioca':
                               case 'm': 
                                 tmp.structureType = 'other';
+                                _importResults.tagsDetected++;
                                 break;
                               case 'u invertido':
                               case 'u invertido quiosque':
                               case 'r': 
                                 tmp.structureType = 'uinvertido';
+                                _importResults.tagsDetected++;
                                 break;
                               default:
                                 console.warn('tipo nao identificado:', value);
@@ -1303,6 +1420,7 @@
                             break;
                           case 'BC_paid':
                             tmp.isPaid = value;
+                            _importResults.tagsDetected++;
                             break;
 
                           ///////////// 
@@ -1336,6 +1454,8 @@
 
               })
 
+              // Save data globally
+              _importResults.places = data;
 
               // @todo move this to global
               let structureTypes = [];
@@ -1343,13 +1463,16 @@
                 structureTypes.push({ value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i] });
               }
 
+              updateKmlImportResults();
+
               $('#importador table').bootstrapTable({
                 columns: [
                   { 
                     field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
                   },
                   {
-                    field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false,
+                    field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 
+                    'editable-type': 'textarea', visible: false,
                   },
                   {
                     field: 'lat', title: 'lat', sortable: true, visible: false,
@@ -1361,10 +1484,12 @@
                     field: 'slots', title: 'Vagas', sortable: true, 
                   },
                   {
-                    field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Publico'}, {'value': false, 'text': 'Privado'} ]",
+                    field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 
+                    'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Publico'}, {'value': false, 'text': 'Privado'} ]",
                   },
                   {
-                    field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Coberto'}, {'value': false, 'text': 'Não coberto'} ]",
+                    field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 
+                    'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Coberto'}, {'value': false, 'text': 'Não coberto'} ]",
                   },
                   {
                     field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin
@@ -1373,20 +1498,20 @@
                     field: 'isPaid', title: 'Pago?', sortable: true, editable: !!BDB.User.isAdmin
                   },
                   { 
-                    field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea',
+                    field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 
+                    'editable-type': 'textarea',
                   },
                   {
-                    field: 'photo', title: 'Foto', sortable: true, visible: !!BDB.User.isAdmin
+                    field: 'photo', title: 'Foto', sortable: true, visible: !!BDB.User.isAdmin, formatter: 'photoColFormatter'
                   }
                 ],
                 data: data,
                 sortName: 'text'
               });
 
-              // Save data globally
-              _importedPlaces = data;
-
-              $('#kmlFileImport').attr('disabled', false);
+              if (_importResults.places.length > 0) {
+                $('#kmlFileImport').attr('disabled', false);
+              }
             }
 
             reader.onerror = function (evt) {
@@ -1399,14 +1524,14 @@
         function uploadImportedPlacesToBackend() {
           return new Promise((resolve, reject) => {
             function importRecursive(i = 0) {
-              const max = _importedPlaces.length;
+              const max = _importResults.places.length;
               // const max = 5;
   
               if (i < max) {
-                let m = _importedPlaces[i]; 
+                let m = _importResults.places[i]; 
 
                 // Fill custom field
-                m.datasource_id = _importedPlaces_datasourceid;
+                m.datasource_id = _importResults.places_datasourceid;
                 m.isAnonymous = true; 
   
                 updateSpinnerProgress(i/max);
