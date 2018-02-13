@@ -187,6 +187,44 @@ window.setOfflineMode = () => {
 
 }
 
+window.resizeImage = function (blob) {
+  return new Promise((resolve, reject) => {
+    let canvas = document.createElement('canvas');
+    let img = new Image();
+    // img.crossOrigin = 'anonymous';
+    img.crossOrigin = 'https://www.bikedeboa.com.br';
+  
+    img.onload = () => {
+      // Resize image fitting PHOTO_UPLOAD_MAX_W and PHOTO_UPLOAD_MAX_H
+      let width = img.width;
+      let height = img.height;
+      if (width > height) {
+        if (width > PHOTO_UPLOAD_MAX_W) {
+          height *= PHOTO_UPLOAD_MAX_W / width;
+          width = PHOTO_UPLOAD_MAX_W;
+        }
+      } else {
+        if (height > PHOTO_UPLOAD_MAX_H) {
+          width *= PHOTO_UPLOAD_MAX_H / height;
+          height = PHOTO_UPLOAD_MAX_H;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+  
+      const resizedBlob = canvas.toDataURL('image/jpeg', 0.8);
+      resolve(resizedBlob);
+    };
+
+    img.onerror = () => {
+      reject();
+    }
+  
+    img.src = blob;
+  });
+}
+
 window.formatAverage = function(avg) {
   if (avg) {
     avg = parseFloat(avg);

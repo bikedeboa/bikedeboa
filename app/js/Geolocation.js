@@ -115,7 +115,20 @@ BDB.Geolocation = (function(){
   }; 
   return {
     init: function () {
-      geocoder = new google.maps.Geocoder();
+      return new Promise((resolve, reject) => {
+        function next() {
+          geocoder = new google.maps.Geocoder();
+          resolve();
+        }
+  
+        if (!window.google) { 
+          BDB.Map.init()
+            .then(next)
+            .catch(next)
+        } else {
+          next(); 
+        }
+      });
     },
     getLastestLocation: function(){
       getFromLocalStorage();
@@ -182,7 +195,7 @@ BDB.Geolocation = (function(){
             }
           } else {
             console.error('Geocoder failed due to: ' + status);
-            reject();
+            reject(status);
           }
         });
       });

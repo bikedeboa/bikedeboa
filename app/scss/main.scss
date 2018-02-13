@@ -1766,7 +1766,7 @@ a.unstyled-link {
       margin: 16px auto;
  
       &::-webkit-progress-bar {
-        background-color: transparent;
+        background-color: $lighterGray;
       }
 
       &::-webkit-progress-value {

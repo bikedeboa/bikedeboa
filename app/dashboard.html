@@ -1059,20 +1059,79 @@
           if (_importResults.places) {
             swal({
               title: 'Importar dados pro banco',
-              text: `Você está importando ${_importResults.places.length} bicicletários permanentemente pro banco de dados do bike de boa. Tem certeza que deseja continuar?`,
+              text: `Você está importando <b>${_importResults.places.length}</b> bicicletários permanentemente pro banco de dados do bike de boa. Tem certeza que deseja continuar?`,
               // type: 'warning',
               showCancelButton: true,
-            }).then(() => {
+            })
+            .then(() => {
               showSpinner('Importando...', true);
 
               $('#localsTable').bootstrapTable('destroy');
 
               window._importResults.places_datasourceid = $('#kmlFileImport_datasourceid').val();
 
-              uploadImportedPlacesToBackend().then(() => {
-                hideSpinner();
-              });;
-            });
+              uploadImportedPlacesToBackend()
+                .then(() => {
+                  hideSpinner();
+                  swal({
+                    title: 'Importação feita com sucesso',
+                    text: `<b>${_importResults.places.length}</b> bicicletários criados.`,
+                    type: 'success',
+                  });
+                })
+                .catch(() => {
+                  hideSpinner();
+
+                  swal({
+                    text: `Algo deu errado na importação. Quer reverter as modificações que já foram feitas?`,
+                    type: 'warning',
+                    showCancelButton: true,
+                  })
+                  .then(() => {
+                    showSpinner('Revertendo...', true);
+                    
+                    // Find out which places were successfuly submited
+                    let placesToDelete = [];
+                    _importResults.places.forEach( m => {
+                      if (m.id) {
+                        placesToDelete.push(m);
+                      }
+                    });
+
+                    // Show progress UI
+                    let i = 0;
+                    function step() {
+                      i++;
+                      updateSpinnerProgress(i / placesToDelete.length);
+                      $('#globalSpinnerLabel').text(`Revertendo... ${i}/${placesToDelete.length}`);
+
+                      if (i === placesToDelete.length-1) {
+                        hideSpinner();
+                      }
+                    }
+                    
+                    // Create one DELETE API call for each one, and let the browser manage the calls
+                    placesToDelete.forEach( m => {
+                      console.log(`Deleting ${m.id}...`);
+                      BDB.Database.customAPICall('DELETE', `local/${m.id}`)
+                        .then(() => {
+                          console.log(`SUCCESS. ${m.id} deleted.`);
+                          step();
+                        })
+                        .catch(() => {
+                          console.log(`ERROR. ${m.id} NOT deleted.`);
+                          step();
+                        });
+                    })
+                  })
+                  .catch(() => {
+                    // Nothing.
+                  })
+                })
+            })
+            .catch( () => {
+              // Nothing.
+            })
 
           }
         });
@@ -1145,6 +1204,7 @@
           if (str.indexOf('descoberto') > 0
             || str.indexOf('descoberta') > 0
             || str.indexOf('sem cobertura') > 0
+            || str.indexOf('sem coberta') > 0
             || str.indexOf('não coberto') > 0
             || str.indexOf('não coberta') > 0
             || str.indexOf('nao coberta') > 0
@@ -1234,6 +1294,7 @@
         function testIfImageExists(url) {
           return new Promise(function (resolve, reject) {
             let img = new Image();
+            img.crossOrigin = 'https://www.bikedeboa.com.br';
 
             img.onload = function () {
               resolve(url);
@@ -1241,7 +1302,8 @@
             img.onerror = function () {
               reject(url);
             }
-            img.src = url
+
+            img.src = url;
           })
         }
 
@@ -1450,7 +1512,11 @@
 
                 });
 
-                data.push(tmp);
+                if (tmp.lat && tmp.lng) {
+                  data.push(tmp);
+                } else {
+                  console.warn('Missing required fields, skipping element ', tmp);
+                }
 
               })
 
@@ -1548,24 +1614,62 @@
                     m.city = addressObj.city;
                     m.state = addressObj.state;
                     m.country = addressObj.country;
+
+                    function next() {
+                      BDB.Database.customAPICall('POST', 'local', m)
+                        .then( data => {
+                          m.id = data.id;
+                          importRecursive(i + 1);
+                        })
+                        .catch( data => {
+                          console.error('Error when creating local');
+                          console.error(m); 
+                          reject(data);
+                        })
+                    }
+
+                    if (m.photo) {
+                      resizeImage(m.photo)
+                        .then(resizedBlob => {
+                          m.photo = resizedBlob;
+                          next();
+                        })
+                        .catch( () => {
+                          console.warn('Error when retrieving image', m.photo);
+                          console.warn('Continuing...');
+                          next();
+                          // reject(i);
+                        })
+                    } else {
+                      next();
+                    }
                     
-                    BDB.Database.customAPICall('POST', 'local', m).then( () => {
-                      importRecursive(i + 1);
-                    });
                   })
-                  .catch( () => {
-                    // Google Maps quota limits the frequency of calls of the service
-                    setTimeout(() => {
-                      importRecursive(i);
-                    }, 2000); 
+                  .catch( status => {
+                    switch (status) {
+                      case 'OVER_QUERY_LIMIT':
+                        // Google Maps quota limits the frequency of calls of the service
+                        setTimeout(() => {
+                          importRecursive(i);
+                        }, 2000); 
+                        
+                        break;
+                      case 'ZERO_RESULTS':
+                        console.error(`ERROR on reverse geocoding: no results for ${m.lat}, ${m.lng}`);
+                        reject()
+                        break;
+                    }
                   });
               } else {
                 resolve();
               }
             };
   
-            BDB.Geolocation.init();
-            importRecursive();
+            BDB.Geolocation
+              .init()
+              .then( () => {
+                importRecursive();
+              })
           });
         }
 

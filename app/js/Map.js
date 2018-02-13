@@ -30,13 +30,13 @@ BDB.Map = (function () {
   let _mapBoundsCoords = { sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, ne: { lat: '0.1757808338', lng: '-34.3652340941' } };
 
 
-  let initMap = function (coords, zoomValue, pinUser) {
+  let initMap = function (coords, zoomValue, pinUser, resolve, reject) {
     // Dynamically inject Google Map's lib
     $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
       $.getScript('/lib/infobox.min.js', () => {
         $.getScript('/lib/markerclusterer.min.js', () => {
           // $.getScript('/lib/markerwithlabel.min.js', () => {
-            initMap_continue(coords, zoomValue, pinUser);
+            initMap_continue(coords, zoomValue, pinUser, resolve, reject);
           // });
         });
       });
@@ -44,9 +44,17 @@ BDB.Map = (function () {
     );
   };
 
-  let initMap_continue = function (coords, zoomValue, pinUser) {
+  let initMap_continue = function (coords, zoomValue, pinUser, resolve, reject) {
+    const mapEl = document.getElementById('map');
+
+    if (!mapEl) {
+      console.warn('Map initialization stopped: no #map element found');
+      reject();
+      return;
+    }
+
     let gpos = convertToGmaps(coords);
-    map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(mapEl, { 
       center: gpos,
       zoom: zoomValue,
       disableDefaultUI: true,
@@ -83,6 +91,8 @@ BDB.Map = (function () {
     //native Event Dispatcher 
     let event = new Event('map:ready');
     document.dispatchEvent(event);
+
+    resolve();
   };
 
   let convertToGmaps = function (obj, convert = true) {
@@ -264,24 +274,26 @@ BDB.Map = (function () {
   }
   return {
     init: function (_markerClickCallback) {
-      let isDefaultLocation = BDB.Geolocation.isDefaultLocation();
-      let zoom = (isDefaultLocation) ? 15 : 17; 
-      let coords =  BDB.Geolocation.getLastestLocation();
+      return new Promise((resolve, reject) => {
+        let isDefaultLocation = BDB.Geolocation.isDefaultLocation();
+        let zoom = (isDefaultLocation) ? 15 : 17; 
+        let coords =  BDB.Geolocation.getLastestLocation();
 
-      markerClickCallback = _markerClickCallback;
+        markerClickCallback = _markerClickCallback;
 
-      initMap(coords, zoom, !isDefaultLocation);
+        // Check previous user permission for geolocation
+        BDB.Geolocation.checkPermission().then(permission => {
+          if (permission.state === 'granted') {
+            BDB.Geolocation.getLocation().then(function (result) {
+              // initMap(result.response, 17); 
+              updateUserPosition(result.response);
+            }, function (error) {
+              // initMap(coords, zoom);
+            }); 
+          }
+        });
 
-      // Check previous user permission for geolocation
-      BDB.Geolocation.checkPermission().then(permission => {
-        if (permission.state === 'granted') {
-          BDB.Geolocation.getLocation().then(function (result) {
-            // initMap(result.response, 17); 
-            updateUserPosition(result.response);
-          }, function (error) {
-            // initMap(coords, zoom);
-          });
-        }
+        initMap(coords, zoom, !isDefaultLocation, resolve, reject);
       });
     },
     getMarkers: function() {
