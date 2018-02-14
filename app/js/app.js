@@ -2025,13 +2025,12 @@ $(() => {
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
 
-    // Routes that don't make sense on initial loading
+    // Routes that on initial loading should be redirected to the Home
     if (initialRouting) {
       switch(urlBreakdown[1]) {
       case 'novo':
       case 'editar':
       case 'foto':
-      case 'dados':
         window.location.pathname = '';
         break;
       }
