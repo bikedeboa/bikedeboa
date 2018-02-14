@@ -1838,9 +1838,9 @@ a.unstyled-link {
     overflow-y: auto;
 
     // Make it full screen
-    position: absolute;
-    bottom: auto;
-    // right: auto;
+    // position: absolute;
+    // bottom: auto;
+    // right: auto; 
 }
 
 .clean-modal {
@@ -2430,6 +2430,7 @@ body.modal-open {
         position: relative;
         filter: grayscale(100%);
         opacity: 0.9;
+        text-align: center;
 
         // transition: background-color 0.2s ease-out;
 
@@ -2445,6 +2446,7 @@ body.modal-open {
         img {
             width: 100%;
             height: 100%;
+            max-width: 100px; 
         }
 
         &.active {
@@ -3762,9 +3764,8 @@ body.modal-open {
       min-height: 100vh;
       max-width: 100vw;
 
-
       padding-top: $MOBILE_NAVBAR_HEIGHT;
-      padding-bottom: 70px;
+      // padding-bottom: 70px;
       margin: 0;
     }
 
