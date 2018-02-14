@@ -67,16 +67,18 @@
                 {{/if}}
             </div>
             {{else}}
-            {{#if isAdmin}}
-                <div>
-                <div class="icon-label">
-                    Sem informação sobre cobertura
-                    {{#if canModify}}
-                        <button class="editPlaceBtn link-button">
-                        (editar)
-                        </button>
-                    {{/if}}
-                </div>
+            {{#if canModify}}
+                <div class="missing-info-container">
+                    {{!-- <img alt="" src="/img/icon_shrug.svg"/> --}}
+                    <div class="missing-info-placeholder">?</div>
+                    <div class="icon-label">
+                        É coberto?
+                        <div>
+                            <button class="editPlaceBtn link-button">
+                            (responder)
+                            </button>
+                        </div>
+                    </div>
                 </div>
             {{/if}}
             {{/unless}}
@@ -103,16 +105,18 @@
                 {{/if}}
                 </div>
             {{else}}
-            {{#if isAdmin}}
-                <div>
-                <div class="icon-label">
-                    Sem informação sobre restrição de acesso
-                    {{#if canModify}}
-                    <button class="editPlaceBtn link-button">
-                        (editar)
-                    </button>
-                    {{/if}}
-                </div>
+            {{#if canModify}}
+                <div class="missing-info-container">
+                    {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
+                    <div class="missing-info-placeholder">?</div>
+                    <div class="icon-label">
+                        É público?
+                        <div>
+                            <button class="editPlaceBtn link-button">
+                                (responder)
+                            </button>
+                        </div>
+                    </div>
                 </div>
             {{/if}}
             {{/unless}}
@@ -177,14 +181,18 @@
                 </div>
             </div>
             {{else}}
-            {{#if isAdmin}}
-                <div class="icon-label"> 
-                Sem informação sobre tipo de bicicletário
-                {{#if canModify}}
-                    <button class="editPlaceBtn link-button">
-                    (editar)
-                    </button>
-                {{/if}}
+            {{#if canModify}}
+                <div class="missing-info-container">
+                    {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
+                    <div class="missing-info-placeholder">?</div>
+                    <div class="icon-label"> 
+                        Que tipo é?
+                        <div>
+                            <button class="editPlaceBtn link-button">
+                            (responder)
+                            </button>
+                        </div>
+                    </div>
                 </div>
             {{/if}}
             {{/if}} 

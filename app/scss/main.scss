@@ -498,28 +498,30 @@ p {
     pointer-events: none;
 }
 
-.missing-info {
-    position: relative;
-    background: floralwhite;
-    padding: 5px;
+// .missing-info {
+//     position: relative;
+//     // background: floralwhite;
+//     border: 1px solid #F6C913;
+//     border-radius: 5px;
+//     padding: 6px;
 
-    &:after {
-        content: "\e101";
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        opacity: 0.8;
-        display: inline-block;
-        font-family: $bootstrapFont;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 1;
-        -webkit-font-smoothing: antialiased;
-        color: #E9BB2B; 
-        font-size: 12px;
-        text-shadow: 0 1px 1px white;
-    }
-}
+//     &:after {
+//         content: "\e101";
+//         position: absolute;
+//         top: 5px;
+//         right: 5px;
+//         opacity: 0.8;
+//         display: inline-block;
+//         font-family: $bootstrapFont;
+//         font-style: normal;
+//         font-weight: 400;
+//         line-height: 1;
+//         -webkit-font-smoothing: antialiased;
+//         color: #E9BB2B; 
+//         font-size: 12px;
+//         text-shadow: 0 1px 1px white;
+//     }
+// }
 
 div.notice {
   // font-weight: bold;
@@ -2552,11 +2554,15 @@ body.modal-open {
     justify-content: space-around;
     margin-top: $GRID_SPACE*2;
 
+    & > div {
+      width: 30%;
+    }
+
     .skeleton-box,
     img {
         margin: 0 5px;
         display: inline-block;
-        width: 80px;
+        // width: 80px;
         max-width: 100px;
         height: auto;
         filter: grayscale(100%);
@@ -2569,6 +2575,16 @@ body.modal-open {
 
     small {
         color: $gray;
+    }
+
+    .missing-info-container {
+      opacity: .5;
+      
+      .missing-info-placeholder {
+        font-size: 100px; 
+        line-height: 100px;
+        color: $gray;
+      }
     }
 
     .icon-label {

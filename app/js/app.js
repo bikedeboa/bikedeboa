@@ -800,7 +800,6 @@ $(() => {
     
     // Reset fields
     _uploadingPhotoBlob = '';
-    $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', true);
     $('#newPlaceModal #titleInput').val('');
     $('#newPlaceModal .typeIcon').removeClass('active');
     // $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
@@ -885,13 +884,14 @@ $(() => {
       //   scrollTop: $(e.currentTarget).parent().offset().top
       // });
     });
+    
     // this has to be AFTER the typeIcon click trigger
-    $('#newPlaceModal input, #newPlaceModal .typeIcon')
-      .off('change.validate input.validate click.validate')
-      .on(' change.validate input.validate click.validate', () => {
-        validateNewPlaceForm();
-      });
-    validateNewPlaceForm();
+    // $('#newPlaceModal input, #newPlaceModal .typeIcon')
+    //   .off('change.validate input.validate click.validate')
+    //   .on(' change.validate input.validate click.validate', () => {
+    //     validateNewPlaceForm();
+    //   });
+    // validateNewPlaceForm();
     
     $('#newPlaceModal textarea').off('keyup').on('keyup', e => {
       autoGrowTextArea(e.currentTarget); 
