@@ -15,6 +15,7 @@ BDB.Map = (function () {
   let markerClusterer;
   let areMarkersHidden = false;
   let mapZoomLevel; 
+  let startInMarker = false;
 
   // "Main Brazil" Bounding Box
   //   [lat, long]
@@ -275,12 +276,16 @@ BDB.Map = (function () {
   return {
     init: function (_markerClickCallback) {
       return new Promise((resolve, reject) => {
-        let isDefaultLocation = BDB.Geolocation.isDefaultLocation();
-        let zoom = (isDefaultLocation) ? 15 : 17; 
+        let isDefaultLocation = (!startInMarker) ? BDB.Geolocation.isDefaultLocation() : true;
+        let zoom = (isDefaultLocation && !startInMarker) ? 15 : 17; 
         let coords =  BDB.Geolocation.getLastestLocation();
 
         markerClickCallback = _markerClickCallback;
 
+        initMap(coords, zoom, !isDefaultLocation, resolve, reject);
+        if (startInMarker){
+          return false;
+        }
         // Check previous user permission for geolocation
         BDB.Geolocation.checkPermission().then(permission => {
           if (permission.state === 'granted') {
@@ -293,8 +298,12 @@ BDB.Map = (function () {
           }
         });
 
-        initMap(coords, zoom, !isDefaultLocation, resolve, reject);
+        
       });
+    },
+    startInLocation: function(coords){
+      startInMarker = true;
+      BDB.Geolocation.forceLocation(coords);
     },
     getMarkers: function() {
       return markerClusterer.getMarkers();

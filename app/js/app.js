@@ -1592,7 +1592,7 @@ $(() => {
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
-      map.goToPortoAlegre();
+      BDB.Map.goToPortoAlegre();
     }));
 
     
@@ -2062,6 +2062,14 @@ $(() => {
           if (_isDeeplink) { 
             routerOpenDeeplinkMarker(id, () => {
               // Delay loading of background map for maximum optimized startup
+              //change here.
+              if (_deeplinkMarker){
+                let coords = {
+                  latitude : parseFloat(_deeplinkMarker.lat),
+                  longitude: parseFloat(_deeplinkMarker.lng)
+                }
+                BDB.Map.startInLocation(coords);  
+              }  
               if (!_isMobile) {
                 $(document).trigger('LoadMap');
               }
@@ -2127,6 +2135,10 @@ $(() => {
       break;
     }
 
+    if (match && initialRouting) {
+      _isDeeplink = true;
+      $('body').addClass('deeplink');       
+    }
     return match;
   }
 
