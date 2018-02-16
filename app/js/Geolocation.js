@@ -140,6 +140,9 @@ BDB.Geolocation = (function(){
     getLocation : function(options = false){
       return geolocate(options);
     },
+    forceLocation : function(coords){
+      setCurrentPosition(coords);
+    },
     checkPermission : function(){
       if (navigator.permissions) {
         return navigator.permissions.query({'name': 'geolocation'});
