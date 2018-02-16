@@ -31,18 +31,15 @@ BDB.Geolocation = (function(){
     }
   };
     
-  let geolocate = function(param = false){
+  let geolocate = function(param = {}){
     // set default options to geolocate
-    let options = {
+    let defaults = {
       enableHighAccuracy: true,
       timeout: 10000,
       maximumAge: 500
     };
-    if (param && typeof param === 'object'){
-      options.enableHighAccuracy = (param.enableHighAccuracy && typeof param.enableHighAccuracy === 'boolean') ?  param.enableHighAccuracy : options.enableHighAccuracy;
-      options.timeout = (param.timeout && typeof param.timeout === 'number') ?  param.timeout : options.timeout;
-      options.maximumAge = (param.maximumAge && typeof param.maximumAge === 'number') ?  param.maximumAge : options.maximumAge;
-    }  
+
+    let settings = Object.assign({}, defaults, param);
 
     let result = {
       status : false,
@@ -65,14 +62,14 @@ BDB.Geolocation = (function(){
               result.center = true;
               result.response = position.coords;
               setCurrentPosition(result.response);
-              geoWatch(options);
+              geoWatch(settings);
               resolve(result);
             },
             error => {
               result.response = error;
               reject(result);
             },
-            options
+            settings
           );
                     
         } else {
@@ -202,6 +199,9 @@ BDB.Geolocation = (function(){
           }
         });
       });
+    },
+    clearWatch : function(){
+      clearGeoWatch();
     }
   }
 })();
