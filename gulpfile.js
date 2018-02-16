@@ -60,10 +60,11 @@ const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[BDB_ENV];
 const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
 let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
  
-// Uses the brand new Renderer (Beta)
-// https://developers.google.com/maps/documentation/javascript/beta-renderer
-if (BDB_ENV === 'beta') {  
-  GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
+// Production: opt-out of the Experimental new renderer and base map style
+// https://developers.google.com/maps/documentation/javascript/releases
+if (BDB_ENV === 'prod') {  
+  // GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
+  GOOGLE_MAPS_ID += '&v=3.31';
 }
 
 

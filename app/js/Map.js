@@ -192,7 +192,7 @@ BDB.Map = (function () {
 
   let setMarker = function () {
     geolocationMarker = new google.maps.Marker({
-      optimized: true,
+      optimized: false, // more smooth in new Beta Renderer
       map: map,
       clickable: false,
       icon: {
