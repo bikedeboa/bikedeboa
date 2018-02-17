@@ -1192,8 +1192,8 @@
           // showSpinner();
 
           Database.authenticate(() => {
-            // temp
-            // updateLocalsTable();
+            // Initial view is the Locals view
+            updateLocalsTable();
 
             // hideSpinner();
           });
@@ -1271,7 +1271,7 @@
 
           });
 
-                  document.addEventListener('bikedeboa.login', function (e) {
+          document.addEventListener('bikedeboa.login', function (e) {
             if (BDB.User.isAdmin) {
               // Force table refresh
               updateLocalsTable();
