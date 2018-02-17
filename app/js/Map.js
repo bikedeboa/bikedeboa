@@ -116,7 +116,6 @@ BDB.Map = (function () {
     if (!prevZoomLevel || prevZoomLevel !== mapZoomLevel) { 
       if (!_activeFilters) {
         setMarkersIcon(mapZoomLevel); 
-        // $('body').toggleClass('showMarkerLabels', mapZoomLevel === 'full');
       }
     }
   };
@@ -340,6 +339,7 @@ BDB.Map = (function () {
     goToPortoAlegre: function () {
       map.setCenter({ lat: -30.0346, lng: -51.2177 });
       map.setZoom(12);
+      BDB.Geolocation.clearWatch();
     },
     clearMarkers: function () {
       // Deletes all markers in the array by removing references to them.
@@ -351,7 +351,7 @@ BDB.Map = (function () {
     },
     // Sets the map on all markers in the array.
     setMapOnAll: function(map) {
-      const tempMarkers = markerClusterer && markerClusterer.getMarkers();
+      let tempMarkers = markerClusterer && markerClusterer.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setMap(map);
@@ -360,7 +360,7 @@ BDB.Map = (function () {
     },
     hideMarkers: function() {
       // Removes the markers from the map, but keeps them in the array.
-      const tempMarkers = markerClusterer && markerClusterer.getMarkers();
+      let tempMarkers = markerClusterer && markerClusterer.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setOptions({ clickable: false, opacity: 0.3 });
@@ -369,7 +369,7 @@ BDB.Map = (function () {
     },
     showMarkers: function() {
       // Shows any markers currently in the array.
-      const tempMarkers = markerClusterer && markerClusterer.getMarkers();
+      let tempMarkers = markerClusterer && markerClusterer.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setOptions({ clickable: true, opacity: 1 });
@@ -491,22 +491,18 @@ BDB.Map = (function () {
                 // });
 
                 // Info window
-                let thumbUrl = '';
-                if (m.photo) {
-                  thumbUrl = m.photo.replace('images', 'images/thumbs');
-                }
+                
                 let templateData = {
-                  thumbnailUrl: thumbUrl,
+                  thumbnailUrl: (m.photo) ? m.photo.replace('images', 'images/thumbs') : '',
                   title: m.text,
                   average: m.average,
                   roundedAverage: m.average && ('' + Math.round(m.average)),
-                  pinColor: getColorFromAverage(m.average)
+                  pinColor: getColorFromAverage(m.average),
+                  numReviews : m.reviews
                 };
 
-                templateData.numReviews = m.reviews;
-
                 // Attributes
-                const attrs = [];
+                let attrs = [];
                 if (m.isPublic != null) {
                   attrs.push(m.isPublic ? 'Público' : 'Privado');
                 }
@@ -611,22 +607,16 @@ BDB.Map = (function () {
               width: 120
             },
           ];
-          let clustererOptions;
-          if (_isMobile) {
-            clustererOptions = {
-              maxZoom: 15,
-              minimumClusterSize: 2,
-              styles: clustererStyles,
-              gridSize: 50
-            };
-          } else {
-            clustererOptions = {
+          let clustererOptions = {
               maxZoom: 10,
               minimumClusterSize: 1,
               styles: clustererStyles,
               gridSize: 50
-            };
-          }
+          };
+          if (_isMobile) {
+            clustererOptions.maxZoom = 15;
+            clustererOptions.minimumClusterSize = 2;
+          } 
 
           markerClusterer = new MarkerClusterer(map, gmarkers, clustererOptions);
         }

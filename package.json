@@ -1,6 +1,5 @@
 {
   "name": "bikedeboa",
-  "main": "server.js",
   "engines": {
     "node": "8.6.0"
   },
@@ -51,6 +50,7 @@
     "wiredep": "^4.0.0"
   },
   "scripts": {
+    "start": "gulp",
     "postinstall": "./node_modules/bower/bin/bower install; gulp build"
   },
   "devDependencies": {
