@@ -15,7 +15,7 @@ Everyone can add new places and review existing one. and reviewing places to par
 
 This project is (Progressive) Web App, which runs smoothly on both Desktop and Mobile and different from regular bike apps, it's totally indexable by search engines.
 
-![Screenshot of webapp the main map view](http://g.recordit.co/4bmQwawzeZ.gif)
+![Screenshot of webapp the main map view](https://i.imgur.com/HxsYdu6.png)
 
 
 
