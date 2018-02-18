@@ -2304,6 +2304,7 @@ $(() => {
   function init() {
     // Retrieve markers saved in a past access
     markers = BDB.getMarkersFromLocalStorage();
+    
     if (markers && markers.length) {
       console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
       //hideSpinner();

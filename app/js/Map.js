@@ -175,13 +175,14 @@ BDB.Map = (function () {
   };
   let updateUserPosition = function (coords, center = true, convert = true) {
     let gpos = convertToGmaps(coords, convert);
+    
     updateMarkerPosition(gpos);
     
     if (geolocationRadius) {
       geolocationRadius.setVisible(true);
     }
 
-    if (center){
+    if (center && map) {
       map.panTo(gpos); 
       if (map.getZoom() < 17) {
         map.setZoom(17);
@@ -216,7 +217,7 @@ BDB.Map = (function () {
   let geolocate = function (options = false) {
     document.addEventListener('geolocation:done', function (result) {
       if (result.detail.status) {
-          updateUserPosition(result.detail.response, result.detail.center);  
+        updateUserPosition(result.detail.response, result.detail.center);  
       }
     });
     BDB.Geolocation.getLocation(options);
