@@ -1226,7 +1226,7 @@ $(() => {
   }
 
   function getRecentSearches() {
-    return JSON.parse(localStorage.getItem('recentSearches'));
+    return JSON.parse(localStorage.getItem('recentSearches')).slice(0, MAX_RECENT_SEARCHES);
   }
 
   function addToRecentSearches(searchItem) {
@@ -1245,16 +1245,20 @@ $(() => {
   } 
 
   function enterLocationSearchMode() {
+    if ($('body').hasClass('search-mode')) {
+      return;
+    }
+
     let templateData = {};
     templateData.recentSearches = getRecentSearches();
-    templateData.topCities = getTopCities();//.slice(0,5); 
+    templateData.topCities = getTopCities().slice(0, MAX_TOP_CITIES);
 
     ////////////////////////////////
     // Render handlebars template //
     ////////////////////////////////
     $('#searchOverlayContentPlaceholder').html(BDB.templates.searchOverlay(templateData));
 
-    $('#search-overlay .recent-searches button').off('click').on('click', e => {
+    $('.goToRecentSearchBtn').off('click').on('click', e => {
       const $target = $(e.currentTarget);
       const id = parseInt($target.data('recentsearchid'));
       const item = getRecentSearches()[id];
@@ -1269,7 +1273,12 @@ $(() => {
       exitLocationSearchMode();
     });
 
-    $('#search-overlay .top-cities button').off('click').on('click', e => {
+    $('.openTopCitiesModal').off('click').on('click', e => {
+      exitLocationSearchMode();
+      setView('Principais Cidades', '/cidades-mapeadas', true);
+    });
+
+    $('.goToCityBtn').off('click').on('click', e => {
       const $target = $(e.currentTarget);
       const cityName = $target.data('cityname');
 
@@ -1281,7 +1290,7 @@ $(() => {
 
     $('body').addClass('search-mode'); 
     $('#search-overlay').addClass('showThis');
-    $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST }); 
+    $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, duration: 500 }); 
     $('.hamburger-button').addClass('back-mode');
 
     $('.hamburger-button.back-mode').one('click', () => {
@@ -1292,7 +1301,7 @@ $(() => {
   function exitLocationSearchMode() {
     $('body').removeClass('search-mode');
     $('#search-overlay').removeClass('showThis');
-    $('.hamburger-button').removeClass('back-mode');
+    $('.hamburger-button').removeClass('back-mode'); 
   }
 
   function setPageTitle(text) { 
@@ -1627,7 +1636,7 @@ $(() => {
       let result = e.detail;
       $('#geolocationBtn').removeClass('loading');
 
-            if (result.status && result.center){
+      if (result.status && result.center){
         ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
         return false;
       }
@@ -1670,6 +1679,11 @@ $(() => {
       }
     }));
 
+
+    /////////////
+    // Filters //
+    ///////////// 
+
     $('#clear-filters-btn').on('click', () => {
       $('.filter-checkbox:checked').prop('checked', false);
 
@@ -1685,7 +1699,7 @@ $(() => {
       ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(':checked') ? 'ON' : 'OFF'}`);
 
       queueUiCallback(updateFilters);
-    });
+    }); 
 
     $('body').on('click', '.back-button', e => {
       // If was creating a new local
@@ -1709,6 +1723,11 @@ $(() => {
       }
     });
 
+        
+    /////////////////////
+    // Modal callbacks //
+    /////////////////////
+
     $('body').on('click', '.modal, .close-modal', e => {
       // If click wasn't on the close button or in the backdrop, but in any other part of the modal
       if (e.target != e.currentTarget) {
@@ -1718,7 +1737,6 @@ $(() => {
       goHome();
     });
 
-    // Modal callbacks
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
       $('.modal-dialog')
@@ -1762,25 +1780,33 @@ $(() => {
         $('body').removeClass('clean-modal-open');
       }
     }); 
-
-    // Any click to a lightbox picture
-    // $('body').on('click', '[data-featherlight]', e => {
-    //   setView('Foto', 'foto');
-    // }); 
     
-    // Location Search Mode control
+
+    /////////////////////
+    // Location Search //
+    /////////////////////
+
     $('#locationQueryInput').on('focus', e => { 
-      if (_isMobile) {
+      if ($('#locationQueryInput').val().length === 0) {
         enterLocationSearchMode();
       }
     });
-    // $('#locationQueryInput').on('blur', e => {
-    //   if (_isMobile) {
-    //     exitLocationSearchMode();
-    //   }
-    // });
+    if (!_isMobile) {
+      // Hide our panel if the user clicked anywhere outside
+      // $('#locationQueryInput').on('blur', e => { 
+      //   exitLocationSearchMode();
+      // });
+       
+      // Hide our panel if the Google Autocomplete panel is opened
+      $('#locationQueryInput').on('input change paste', e => {
+        if ($('#locationQueryInput').val().length > 0) {
+          exitLocationSearchMode(); 
+        } else { 
+          enterLocationSearchMode();
+        }
+      });
+    }
 
-    // Location Search
     $('#locationQueryInput').on('input change paste', queueUiCallback.bind(this, () => {
       toggleClearLocationBtn($('#locationQueryInput').val().length > 0 ? 'show' : 'hide');
     }));
@@ -1896,6 +1922,29 @@ $(() => {
     $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
       const questionTitle = $(e.target).parent().find('.panel-title').text();
       ga('send', 'event', 'FAQ', 'question opened', questionTitle);
+    });
+  }
+
+  function openTopCitiesModal() { 
+    if ($('#topCitiesModal').length === 0) {
+      let templateData = {};
+      templateData.topCities = getTopCities();
+      
+      $('body').append(BDB.templates.topCitiesModal(templateData));
+    }
+
+    $('#topCitiesModal').modal('show');
+    $('#topCitiesModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+
+    $('.goToCityBtn').off('click').on('click', e => {
+      const $target = $(e.currentTarget);
+      const cityName = $target.data('cityname');
+
+      $('#topCitiesModal').modal('hide');
+      BDB.Map.searchAndCenter(cityName) 
+        .then(() => {
+          exitLocationSearchMode();
+        })
     });
   }
 
@@ -2126,6 +2175,9 @@ $(() => {
       break;
     case 'filtros':
       _filterMenu.show();
+      break;
+    case 'cidades-mapeadas':
+      openTopCitiesModal(); 
       break;
     case 'novo' :
     case 'editar':

@@ -146,21 +146,6 @@
           </div>
         </div> 
 
-        <!-- <div id="search-overlay" class="message-overlay"> -->
-        <div id="search-overlay">
-          <div id="searchOverlayContentPlaceholder"></div>
-
-          <!-- <div class="message-overlay-content">
-            <div class="message-overlay-label"> 
-              Digite um termo de busca
-            </div>
-
-            <button id="reloadBtn" class="btn">
-              Recarregar
-            </button>
-          </div> -->
-        </div>
-
         <nav class="navbar-de-boa cool-hide">
           <h1 id="logo">
             <a href="/" class="unstyled-link">bike de boa</a>
@@ -258,12 +243,16 @@
         </nav>
 
         <div id="locationSearch" class="cool-hide">
-            <input id="locationQueryInput" type="search" data-hj-whitelist>
+          <div id="search-overlay">
+            <div id="searchOverlayContentPlaceholder"></div>
+          </div>
 
-            <button id="clearLocationQueryBtn">
-              <img alt="" class="search-icon" src="/img/icon_search.svg">
-              <span class="clear-icon">✕</span>
-            </button>
+          <input id="locationQueryInput" type="search" data-hj-whitelist>
+
+          <button id="clearLocationQueryBtn">
+            <img alt="" class="search-icon" src="/img/icon_search.svg">
+            <span class="clear-icon">✕</span>
+          </button>
         </div>
 
         <div id="userBtn" class="dropdown cool-hide">

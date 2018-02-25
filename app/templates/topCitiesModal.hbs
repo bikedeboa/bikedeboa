@@ -1,0 +1,38 @@
+<!-- Data Modal -->
+<div id="topCitiesModal" data-keyboard="false" class="modal fade" tabindex="-1">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title view-name">Cidades mapeadas</h1>
+                </div>
+
+                <div class="modal-body">
+                    <article>
+                        <p>
+                            Estas são as principais cidades que já estão mapeadas no bike de boa:
+                        </p>
+
+                        <ul class="top-cities">
+                            {{#each topCities}}
+                                <li>
+                                    <button class="goToCityBtn" data-cityname="{{{this.[0]}}}">
+                                        <img class="svg-icon" alt="" src="/img/icon_city.svg" /> {{{this.[0]}}} 
+                                        <span style="float: right;">{{{this.[1]}}}</span>
+                                    </button>
+                                </li>
+                            {{/each}}
+                        </ul>
+
+                        <hr>
+
+                        <p>
+                            Não encontrou a sua cidade? Este é um mapa colaborativo, onde todas informações são enviadas pelos próprios usuários. Ajude você também enviando os bicicletários da sua cidade, e divulgue o site na sua comunidade para que todos ajudem e se beneficiem.
+                        </p>
+
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

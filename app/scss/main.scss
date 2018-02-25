@@ -289,16 +289,30 @@ p {
   top: 0; 
   left: 0;
   padding: 60px 12px;
-  transition: all 0.3s $coolEaseOut;   
+  transition: all 0.3s $coolEaseOut; 
+
+  // Desktop-only
+  @media screen and (min-width: $MOBILE_MAX_WIDTH) {
+    position: absolute; 
+    height: auto;
+    top: 42px;
+    height: auto;
+    width: 100%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    padding: $GRID_SPACE;
+  }
 
   // temp dev temp dev temp dev temp dev temp dev temp dev 
   opacity: 0;
   visibility: hidden;
   user-select: none;
 
+  font-size: 16px;
+
   h2 {
-    text-transform: uppercase;
-    font-size: 16px;
+    // text-transform: uppercase;
+    font-size: 14px;
     font-weight: bold;
   }
 
@@ -308,26 +322,50 @@ p {
     pointer-events: auto;
   }
 
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+}
 
+.top-cities,
+#search-overlay ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: $gray;
+
+  li {
     button {
       border: 0;
       background: 0;
       width: 100%;
       text-align: left; 
-      padding: 0;
-    }
+      padding: $GRID_SPACE $GRID_SPACE/2; 
 
-    li {
-      margin: $GRID_SPACE 0;
-      color: $gray;
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-      .glyphicon {
-        margin: 0 6px;
+      &:focus,
+      &:active,
+      &:hover {
+        color: $black;
+        background: $lightestGray;
       }
+
+      .glyphicon,
+      img {
+        margin-right: 6px;
+      }
+    }
+  }
+}
+
+#topCitiesModal {
+  .top-cities {
+    font-size: 16px;
+    color: $black;
+
+    li button {
+      padding: $GRID_SPACE 0; 
+      margin: 0;
     }
   }
 }
@@ -841,6 +879,7 @@ a.unstyled-link {
     }
  
     #locationQueryInput {
+        position: relative;
         width: 100%;
         font-size: 16px;
         padding: 0 $GRID_SPACE 0 40px;
@@ -3368,6 +3407,7 @@ body.modal-open {
       display: block;
       padding: 10px;
       cursor: pointer;
+      border: none;
   }
 
   .pac-item > span:last-child {
