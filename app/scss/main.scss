@@ -51,8 +51,10 @@ $spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
 // Typography //////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$bodyFont: 'Core Sans G', sans-serif;
-$headingFont: 'Core Sans GS', sans-serif;
+// $bodyFont: 'Core Sans G', sans-serif;
+// $headingFont: 'Core Sans GS', sans-serif;
+$bodyFont: 'Gotham Rounded', sans-serif;
+$headingFont: 'Gotham Rounded', sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
@@ -71,7 +73,6 @@ $GRID_SPACE: 12px;
     font-weight: normal;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'Core Sans G';
     src: url('CoreSansG65-webfont.woff2') format('woff2'),
@@ -79,7 +80,6 @@ $GRID_SPACE: 12px;
     font-weight: bold;
     font-style: normal;
 }
-
 @font-face {
     font-family: 'Core Sans G'; 
     src: url('CoreSansG45It-webfont.woff2') format('woff2'),
@@ -87,7 +87,6 @@ $GRID_SPACE: 12px;
     font-weight: normal;
     font-style: italic;
 }
-
 @font-face {
     font-family: 'Core Sans GS';
     src: url('coresansgs75-webfont.woff2') format('woff2'),
@@ -95,6 +94,27 @@ $GRID_SPACE: 12px;
     font-weight: normal;
     font-style: normal; 
 }
+
+@font-face {
+    font-family: 'Gotham Rounded';
+    src: url('GothamRounded-Medium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Gotham Rounded';
+    src: url('GothamRounded-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Gotham Rounded'; 
+    src: url('GothamRounded-Light.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
