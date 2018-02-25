@@ -16,6 +16,7 @@ BDB.Map = (function () {
   let areMarkersHidden = false;
   let mapZoomLevel; 
   let startInMarker = false;
+  let isGeolocated = false;
 
   // "Main Brazil" Bounding Box
   //   [lat, long]
@@ -68,10 +69,10 @@ BDB.Map = (function () {
         position: google.maps.ControlPosition.RIGHT_CENTER
       }
     });
-    setMarker();
-    setRadius();
+    setUserMarker();
+    setUserRadius();
     if (pinUser) {
-      updateMarkerPosition(gpos);
+      updateUserMarkerPosition(gpos);
     }
  
     setupAutocomplete();
@@ -166,7 +167,7 @@ BDB.Map = (function () {
     };
     _infoWindow = new InfoBox(myOptions);
   };
-  let updateMarkerPosition = function (gposition) {
+  let updateUserMarkerPosition = function (gposition) {
     if (map) {
       geolocationMarker.setPosition(gposition);
       geolocationRadius.setCenter(gposition);
@@ -176,7 +177,7 @@ BDB.Map = (function () {
   let updateUserPosition = function (coords, center = true, convert = true) {
     let gpos = convertToGmaps(coords, convert);
     
-    updateMarkerPosition(gpos);
+    updateUserMarkerPosition(gpos);
     
     if (geolocationRadius) {
       geolocationRadius.setVisible(true);
@@ -189,21 +190,24 @@ BDB.Map = (function () {
       }
     }
   };
-
-  let setMarker = function () {
+  let setUserMarker = function () {
     geolocationMarker = new google.maps.Marker({
       optimized: false, // more smooth in new Beta Renderer
       map: map,
       clickable: false,
-      icon: {
-        url: '/img/current_position.svg', // url
-        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
-        origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
-      }
     });
+    setUserMarkerIcon();
   };
-  let setRadius = function () {
+  let setUserMarkerIcon = function(){
+    let iconName = (isGeolocated) ? 'current' : 'last';
+    geolocationMarker.setIcon({
+      url: `/img/${iconName}_position.svg`, // url
+      scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
+      origin: new google.maps.Point(0, 0), // origin
+      anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
+    });
+  }
+  let setUserRadius = function () {
     geolocationRadius = new google.maps.Circle({
       map: map,
       clickable: false,
@@ -214,13 +218,21 @@ BDB.Map = (function () {
     });
   };
 
-  let geolocate = function (options = false) {
+  let geolocate = function (options = {}) {
+    BDB.Geolocation.getLocation();
+
     document.addEventListener('geolocation:done', function (result) {
       if (result.detail.status) {
+        if (!isGeolocated){
+          isGeolocated = true;
+          setUserMarkerIcon();
+        }
         updateUserPosition(result.detail.response, result.detail.center);  
+      }else{
+        isGeolocated = false;
+        setUserMarkerIcon();
       }
     });
-    BDB.Geolocation.getLocation(options);
   };
 
   let setupAutocomplete = function () {
@@ -289,16 +301,9 @@ BDB.Map = (function () {
         // Check previous user permission for geolocation
         BDB.Geolocation.checkPermission().then(permission => {
           if (permission.state === 'granted') {
-            BDB.Geolocation.getLocation().then(function (result) {
-              // initMap(result.response, 17); 
-              updateUserPosition(result.response);
-            }, function (error) {
-              // initMap(coords, zoom);
-            }); 
+            geolocate();
           }
-        });
-
-        
+        });        
       });
     },
     startInLocation: function(coords){
@@ -314,7 +319,7 @@ BDB.Map = (function () {
 
       return imgUrl;
     },
-    getGeolocation: function (options = false) {
+    getGeolocation: function (options = {}) {
       geolocate(options);
     },
     showBikeLayer: function () {
