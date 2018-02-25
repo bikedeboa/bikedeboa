@@ -3,11 +3,13 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <title>Dados</title>
+        <title>bike de boa | dados</title>
+        <meta property="og:title" content="bike de boa | dados" />
 
-        <!-- Google Fonts (async) -->
-        <link async href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-        <link async href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png?v=m2dAvrr4RB">
+        <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png?v=m2dAvrr4RB" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png?v=m2dAvrr4RB" sizes="16x16">
 
         <!-- Google Maps API -->
         <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8&libraries=places&language=pt-BR" type="text/javascript"></script> -->
@@ -27,6 +29,21 @@
             ga = function() {};            
           }
         </script>
+
+        <script>
+          WebFontConfig = {
+            google: {
+              families: ['Quicksand:500,500i,700']
+            }
+          };
+
+          (function (d) {
+            var wf = d.createElement('script'), s = d.scripts[0];
+            wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+            wf.async = true;
+            s.parentNode.insertBefore(wf, s);
+          })(document);
+        </script> 
 
         <!-- CSS (async) -->
         <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
@@ -69,8 +86,12 @@
         <script src="https://use.fontawesome.com/9c52cfba3f.js"></script>
 
         <style>
+          body::-webkit-scrollbar {
+              display: initial;
+          }
+
           body {
-            font-family: "Roboto", Arial, sans-serif;
+            /* font-family: "Roboto", Arial, sans-serif; */
             padding: 24px;
             overflow: auto;
             padding-top: 60px;
@@ -79,7 +100,7 @@
 
           h2 {
             font-size: 16px;
-            width: 60%;
+            /* width: 60%; */
             color: #828b90;
           }
 
@@ -89,6 +110,11 @@
 
           #userBtn {
             right: 24px;
+          }
+
+          #spinnerOverlay {
+            position: fixed;
+            z-index: 3;
           }
 
           tbody > tr:not(.detail-view) {
@@ -116,7 +142,7 @@
           }
 
           th {
-            text-align: center;
+            text-align: left;
           }
 
           .col-reviews {
@@ -136,10 +162,13 @@
           }
 
           td.col-timestamp,
-          td.col-description,
           td.col-full-text,
           td.col-address {
             font-size: 0.8em;
+          }
+          
+          td.col-description {
+            font-size: 1.2em;
           }
 
           .col-id {
@@ -285,11 +314,11 @@
               Bicicletários
             </a>
           </li>
-          <li role="presentation" class="restricted-access">
+          <li role="presentation">
             <a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-users"></i> -->
               Avaliações
-            </a>
+            </a> 
           </li>
           <li role="presentation" class="restricted-access">
             <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
@@ -309,6 +338,12 @@
               Log
             </a>
           </li>
+          <li role="presentation" class="restricted-access">
+            <a href="#importador" aria-controls="importador" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-list"></i> -->
+              Importador de KML
+            </a>
+          </li>
         </ul>
 
         <!-- Tab panes -->
@@ -322,16 +357,15 @@
             </h2>
 
             <table
-              id="localsTable"
               data-classes="table table-no-bordered"
-              data-striped="true"
               data-search="true"
-              data-show-toggle="true"
+              data-search-align="left"
+              data-iconsPrefix="fa" 
               data-show-columns="true"
               data-show-export="true"
               data-detail-view="true"
               data-detail-formatter="genericDetailsFormatter"
-              data-row-style="rowStyle"
+              data-row-style="styleRows"
               data-show-footer="false"
               data-pagination="true"
               data-paginationVAlign="both"
@@ -352,10 +386,8 @@
             </h2>
 
             <table
-              id="revisionsTable"
               data-classes="table table-no-bordered"
               data-search="true"
-              data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
               data-detail-view="true"
@@ -373,10 +405,8 @@
             </h2>
 
             <table
-              id="usersTable"
               data-classes="table table-no-bordered"
               data-search="true"
-              data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
               data-detail-view="true"
@@ -394,10 +424,8 @@
             </h2>
 
             <table
-              id="reviewsTable"
               data-classes="table table-no-bordered"
               data-search="true"
-              data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
               data-show-export="true"
@@ -420,13 +448,9 @@
               Carregando...
             </h2>
 
-            <!-- <div id="logTable"></div> -->
-
             <table
-              id="logTable"
               data-classes="table table-no-bordered"
               data-search="true"
-              data-show-toggle="true"
               data-show-columns="true"
               data-show-footer="false"
               data-show-export="true"
@@ -440,8 +464,57 @@
               data-sticky-header="false">
             </table>
           </div>
+          
+          
+          <!-- Importador de dados -->
+
+          <div role="tabpanel" class="tab-pane fade" id="importador" class="restricted-access">
+            <p style="margin-top: 2em;">
+              <input id="kmlFileInput" type="file" name="kmlFileInput" accept=".kml" />
+            </p>
+
+            <div id="kmlFileImportResults"></div>
+             
+            <table
+              data-classes="table table-no-bordered"
+              data-search="true"
+              data-show-columns="true" 
+              data-show-footer="false"
+              data-pagination="true"
+              data-paginationVAlign="both"
+              data-show-pagination-switch="true"
+              data-sidePagination="client"
+              data-showPaginationSwitch="true"
+              data-detail-view="true"
+              data-detail-formatter="genericDetailsFormatter"
+              data-sticky-header="true">
+            </table>
+
+            <hr>
+
+            <div style="margin-top: 2em;"> 
+              <p>
+                <label for="kmlFileImport_datasourceid">Fonte dos dados:</label>
+                <select id="kmlFileImport_datasourceid"> </select>
+              </p>
+              
+              <button id="kmlFileImport" class="btn btn-action green" disabled>
+                <i class="fa fa-cloud-upload"></i> Importar 
+              </button>
+            </div>
+          </div>
         </div>
       </section>
+
+      <div id="spinnerOverlay">
+        <div class="spinnerContainer">
+          <img alt="Carregando..." src="/img/spinner.svg" />
+      
+          <p id="globalSpinnerLabel"> </p>
+      
+          <progress id="globalProgressBar" value="0" max="100"></progress>
+        </div>
+      </div>
 
       <script>
         // Generic function to display in textual form all the properties of a table entry
@@ -520,19 +593,21 @@
           return html;
         }
 
-        function rowStyle(row, index) {
-          // const classes = ['active', 'success', 'info', 'warning', 'danger'];
-          if (row.text && row.text.length > 0 &&
-              row.structureType != null &&
-              row.isPublic != null) {
-            return {
-              // classes: 'success'
-            };
-          } else {
-            return {
-              // classes: 'warning'
-            };
-          }
+        function styleRows(row, index) {
+          // classes = ['active', 'success', 'info', 'warning', 'danger']
+          // if (row.text && row.text.length > 0 &&
+          //     row.structureType != null &&
+          //     row.isPublic != null) {
+          //   return {
+          //     classes: 'success'
+          //   };
+          // } else {
+          //   return {
+          //     classes: 'warning'
+          //   };
+          // }
+
+          return {classes: ''};
         }
 
 
@@ -545,10 +620,24 @@
           return ret;
         }
 
+        function photoColFormatter(value) { 
+          let ret;
+          
+          if (value) {
+            ret = '<img src="' + value + '" style="width: 50px; height: 50px;"/>';
+          }
+          
+          return ret;
+        }
+
         function timestampColFormatter(value) {
           return value && new Date(value).toLocaleString('pt-BR');
         }
-        
+
+        function dataSourceColFormatter(value) {
+          return value && value.name;
+        }
+
         function booleanColFormatter(value) {
           if (value === 0) {
             return 'não';
@@ -586,7 +675,8 @@
           // }
 
           $('#locals h2').html('Carregando...');
-
+          
+          $('#locals table').bootstrapTable('destroy');
           $('#locals').addClass('loading');
             
           Database.getPlaces( () => {
@@ -615,59 +705,34 @@
               }
             });
 
-            $('#locals table').bootstrapTable({
+            $('#locals table').bootstrapTable({ 
               columns: [
-                {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin
-                },
-                { 
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
-                },
-                {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-                },
-                {
-                  field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
-                },
-                {
-                  field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea'
-                },
-                {
-                  field: 'lat', title: 'lat', sortable: true, visible: false,
-                },
-                {
-                  field: 'lng', title: 'lng', sortable: true, visible: false,
-                },
-                {
-                  field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Exclusivo'} ]",
-                },
-                {
-                  field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]",
-                },
-                {
-                  field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'')
-                },
-                {
-                  field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews'
-                },
-                {
-                  field: 'average', title: 'Média', sortable: true, visible: true,
-                },
-                {
-                  field: 'views', title: 'Visualizações', sortable: true, visible: true,
-                },
-                {
-                  field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false
-                },
-                {
-                  field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin
-                },
-                {
-                  field: 'operate', title: '', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin
-                }
+                { field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin },
+                { field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false },
+                { field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter' },
+                { field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin },
+                { field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea' },
+                { field: 'city', title: 'Cidade', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'state', title: 'Estado', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'country', title: 'País', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'lat', title: 'lat', sortable: true, visible: false, },
+                { field: 'lng', title: 'lng', sortable: true, visible: false, },
+                { field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Publico'}, {'value': '0', 'text': 'Privado'} ]", },
+                { field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': "[{'value': '1', 'text': 'Coberto'}, {'value': '0', 'text': 'Não coberto'} ]", },
+                { field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin, 'editable-type': 'select', 'editable-source': JSON.stringify(structureTypes).replace(/\"/g, '\'') },
+                { field: 'reviews', title: 'Avaliações', sortable: true, class: 'col-reviews' },
+                { field: 'average', title: 'Média', sortable: true, visible: true, },
+                { field: 'views', title: 'Visualizações', sortable: true, visible: true, },
+                { field: 'slots', title: 'Vagas', sortable: true, visible: false },
+                { field: 'isPaid', title: 'Pago?', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'DataSource', title: 'Fonte dos dados', sortable: true, editable: !!BDB.User.isAdmin, visible: false, formatter: dataSourceColFormatter },
+                { field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false },
+                { field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin },
+                { field: 'operate', title: 'Ações', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin }
               ],
               data: markers,
-              sortName: 'id', sortOrder: 'desc'
+              sortName: 'id', sortOrder: 'desc',
+              singleSelect: !!BDB.User.isAdmin ? true : false
             });
           }, null, null, true);
         }
@@ -677,6 +742,7 @@
             return;
           }
 
+          $('#users table').bootstrapTable('destroy');
           $('#users').addClass('loading');
 
           BDB.Database.customAPICall('get','user').then(data => {
@@ -689,39 +755,17 @@
 
             $('#users table').bootstrapTable({
               columns: [
-                {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id',
-                },
-                {
-                  field: 'username', title: 'Usuário', sortable: true, class: 'col-title', visible: false
-                },
-                {
-                  field: 'fullname', title: 'Nome completo', sortable: true, editable: !!BDB.User.isAdmin
-                },
-                {
-                  field: 'role', title: 'Cargo', sortable: true, editable: !!BDB.User.isAdmin
-                },
-                {
-                  field: 'email', title: 'Email', sortable: true, editable: !!BDB.User.isAdmin
-                },
-                {
-                  field: 'Reviews.length', title: 'Avaliações', sortable: true
-                },
-                {
-                  field: 'Locals.length', title: 'Bicicletários', sortable: true,
-                },
-                {
-                  field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin, visible: false
-                },
-                {
-                  field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin, visible: false
-                },
-                {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
-                },
-                {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-                },
+                { field: 'id', title: 'ID', sortable: true, class: 'col-id', },
+                { field: 'username', title: 'Usuário', sortable: true, class: 'col-title', visible: false },
+                { field: 'fullname', title: 'Nome completo', sortable: true, editable: !!BDB.User.isAdmin },
+                { field: 'role', title: 'Cargo', sortable: true, editable: !!BDB.User.isAdmin },
+                { field: 'email', title: 'Email', sortable: true, editable: !!BDB.User.isAdmin },
+                { field: 'Reviews.length', title: 'Avaliações', sortable: true },
+                { field: 'Locals.length', title: 'Bicicletários', sortable: true, },
+                { field: 'facebook_id', title: 'ID Facebook', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'google_id', title: 'ID Google', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false },
+                { field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter' },
               ],
               data: users,
               sortName: 'id', sortOrder: 'desc'
@@ -734,6 +778,7 @@
             return;
           }
 
+          $('#reviews table').bootstrapTable('destroy');
           $('#reviews').addClass('loading');
 
           BDB.Database.customAPICall('get','review').then( data => {
@@ -746,27 +791,13 @@
             
             $('#reviews table').bootstrapTable({
               columns: [
-                {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false
-                },
-                {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-                },
-                {
-                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
-                },
-                {
-                  field: 'User.fullname', title: 'Usuário', sortable: true,
-                },
-                {
-                  field: 'rating', title: 'Nota', sortable: true, editable: !!BDB.User.isAdmin
-                },
-                {
-                  field: 'Tags', title: 'Tags', sortable: true, formatter: 'tagsListColFormatter', class: 'col-address'
-                },
-                {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
-                },
+                { field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false },
+                { field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter' },
+                { field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title', },
+                { field: 'User.fullname', title: 'Usuário', sortable: true, },
+                { field: 'rating', title: 'Nota', sortable: true, editable: !!BDB.User.isAdmin },
+                { field: 'Tags', title: 'Tags', sortable: true, formatter: 'tagsListColFormatter', class: 'col-address' },
+                { field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false },
               ],
               data: reviews,
               sortName: 'createdAt', sortOrder: 'desc'
@@ -795,27 +826,13 @@
 
             $('#revisions table').bootstrapTable({
               columns: [
-                {
-                  field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false
-                },
-                {
-                  field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter'
-                },
-                {
-                  field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title',
-                },
-                {
-                  field: 'local_id', title: 'ID Bicicletário', sortable: true, visible: false,
-                },
-                {
-                  field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false,
-                },
-                {
-                  field: 'comments', title: 'Mensagem', sortable: true, class: 'col-fulltext',
-                },
-                {
-                  field: 'operate', title: '', align: 'center', events: logTableOperateEvents, formatter: operateFormatter
-                }
+                { field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false },
+                { field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter' },
+                { field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title', },
+                { field: 'local_id', title: 'ID Bicicletário', sortable: true, visible: false, },
+                { field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false, },
+                { field: 'comments', title: 'Mensagem', sortable: true, class: 'col-fulltext', },
+                { field: 'operate', title: '', align: 'center', events: logTableOperateEvents, formatter: operateFormatter }
               ],
               data: revisions,
               sortName: 'id', sortOrder: 'desc'
@@ -826,7 +843,7 @@
         window.logTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BDB.Database.customAPICall('delete', `revision/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `revision/${row.id}`).then( () => {
                 updateRevisionTable(true);
               });
             }
@@ -836,7 +853,7 @@
         window.localsTableOperateEvents = {
           'click .remove': function (e, value, row, index) {
             if (confirm('Tem certeza?')) {
-              BDB.Database.customAPICall('delete', `local/${row.id}`, null, () => {
+              BDB.Database.customAPICall('delete', `local/${row.id}`).then( () => {
                 updateLocalsTable(true);
               });
             }
@@ -856,7 +873,12 @@
             return;
           }
 
-          BDB.Database.customAPICall('get','log').then(data => {
+          $('#logs table').bootstrapTable('destroy');
+          $('#logs').addClass('loading');
+
+          BDB.Database.customAPICall('get','log').then( data => {
+            $('#logs').removeClass('loading');
+
             log = data;
 
             $('#logs h2').html(`<span class="text-muted">${data.length} resultados</span>`);
@@ -864,33 +886,15 @@
 
             $('#logs table').bootstrapTable({
               columns: [
-                {
-                  field: 'updatedAt', title: 'updatedAt', sortable: true, formatter: 'timestampColFormatter', visible: false,
-                },
-                {
-                  field: 'createdAt', title: 'createdAt', sortable: true, formatter: 'timestampColFormatter'
-                },
-                {
-                  field: 'user', title: 'user', sortable: true
-                },
-                {
-                  field: 'ip_origin', title: 'IP', sortable: true, visible: false
-                },
-                {
-                  field: 'role', title: 'role', sortable: true, visible: false,
-                },
-                {
-                  field: 'endpoint', title: 'endpoint', sortable: true, formatter: 'endpointNameColFormatter'
-                },
-                {
-                  field: 'method', title: 'method', sortable: true
-                },
-                {
-                  field: 'id', title: 'id', sortable: true, visible: false,
-                },
-                {
-                  field: 'body', title: 'body', sortable: true, formatter: 'jsonColFormatter'
-                },
+                { field: 'updatedAt', title: 'updatedAt', sortable: true, formatter: 'timestampColFormatter', visible: false, },
+                { field: 'createdAt', title: 'createdAt', sortable: true, formatter: 'timestampColFormatter' },
+                { field: 'user', title: 'user', sortable: true },
+                { field: 'ip_origin', title: 'IP', sortable: true, visible: false },
+                { field: 'role', title: 'role', sortable: true, visible: false, },
+                { field: 'endpoint', title: 'endpoint', sortable: true, formatter: 'endpointNameColFormatter' },
+                { field: 'method', title: 'method', sortable: true },
+                { field: 'id', title: 'id', sortable: true, visible: false, },
+                { field: 'body', title: 'body', sortable: true, formatter: 'jsonColFormatter' },
               ],
               data: log,
               sortName: 'createdAt', sortOrder: 'desc'
@@ -898,30 +902,743 @@
           }, true);
         }
 
-        function init() {
-          showSpinner();
+        function extractFromCDATA(str) {
+          let ret;
 
-          Database.authenticate(() => {
-            updateLocalsTable();
-            hideSpinner();
+          // Extract CDATA content
+          // Example: <![CDATA[Garimpo da Mary Arte & Decoração]]>
+          //   regex capture group 1: Garimpo da Mary Arte & Decoração
+          const regex = /^<!\[CDATA\[(.*?)\]\]>/s;
+          const result = regex.exec(str);
+          if (result && result[1]) {
+            ret = result[1];
+          } else {
+            // console.error('ERROR on extractFromCDATA: regex failed');
+            ret = str;
+          }
+
+          return ret;
+        }
+
+        function removeHTML(str) {
+          if (str) {
+            return str.replace(/<[^>]*>/gs, "");
+          } else {
+            return str;
+          }
+        }
+
+        function removeWhitespaces(str) {
+          if (str) {
+            return str.replace(/\s/g, '');
+          } else {
+            return str;
+          }
+        }
+
+        function processDescription(tmp) {
+          tmp.description = extractFromCDATA(tmp.description);
+          tmp.description = removeHTML(tmp.description);
+
+          /////////////////
+          // Magic stuff //
+          /////////////////
+          const str = tmp.description.toLowerCase();
+
+          const fusionTableShit = '![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
+          if (tmp.description.indexOf(fusionTableShit) > 0) {
+            tmp.description = tmp.description.split(fusionTableShit)[1];
+          }
+
+          // 'X vagas/bicicletas/lugares' => X slots
+          regex = /(\d+)\s(vaga|bicicleta|lugar)/s;
+          result = regex.exec(str);
+          if (result && result[1]) {
+            tmp.slots = result[1];
+            _importResults.tagsDetected++;
+          }
+
+          // 'X us invetidos' => X*2 slots
+          regex = /(\d+)\s(us invertidos)/s;
+          result = regex.exec(str);
+          if (result && result[1]) {
+            tmp.slots = parseInt(result[1]) * 2;
+            _importResults.tagsDetected++;
+          }
+
+          // Coberto?
+          if (str.indexOf('descoberto') > 0
+            || str.indexOf('descoberta') > 0
+            || str.indexOf('sem cobertura') > 0
+            || str.indexOf('sem coberta') > 0
+            || str.indexOf('não coberto') > 0
+            || str.indexOf('não coberta') > 0
+            || str.indexOf('nao coberta') > 0
+            || str.indexOf('nao é coberta') > 0
+            || str.indexOf('nao e coberta') > 0
+            || str.indexOf('não é coberto') > 0
+            || str.indexOf('nao e coberto') > 0
+            || str.indexOf('nao é coberto') > 0
+            || str.indexOf('ar livre') > 0
+            || str.indexOf('com abrigo') > 0
+            || str.indexOf('sob o sol') > 0
+            || str.indexOf('local aberto') > 0
+            || str.indexOf('céu aberto') > 0
+            || str.indexOf('ceu aberto') > 0) {
+            tmp.isCovered = false;
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('coberto') > 0
+            || str.indexOf('coberta') > 0
+            || str.indexOf('subsolo') > 0
+            || str.indexOf('subterrânea') > 0
+            || str.indexOf('subterranea') > 0
+            || str.indexOf('subterraneo') > 0
+            || str.indexOf('subterrâneo') > 0) {
+            tmp.isCovered = true;
+            _importResults.tagsDetected++;
+          }
+
+          // Gratuito?
+          if (str.indexOf('gratuito') > 0) {
+            tmp.isPaid = false;
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('pago') > 0
+            || str.indexOf('custa') > 0) {
+            tmp.isPaid = true;
+            _importResults.tagsDetected++;
+            // tmp.isPublic = false; // será?
+          }
+
+          // Público?
+          if (str.indexOf('privado') > 0
+            || str.indexOf('funcionários') > 0
+            || str.indexOf('moradores') > 0
+            || str.indexOf('sócios') > 0
+            || str.indexOf('restrito para') > 0
+            || str.indexOf('exclusivo para') > 0
+            || str.indexOf('apenas para') > 0) {
+            tmp.isPublic = false;
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('publico') > 0
+            || str.indexOf('público') > 0
+            || str.indexOf('na rua') > 0
+            || str.indexOf('canteiro central') > 0
+            || str.indexOf('calçada') > 0) {
+            tmp.isPublic = true;
+            _importResults.tagsDetected++;
+          }
+
+          // Tipo de bicicletário
+          // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+          if (str.indexOf('u invertido') > 0
+            || str.indexOf('us invertidos') > 0
+            || str.indexOf('sheffield') > 0
+            || str.indexOf('em r') > 0
+            || str.indexOf('tipo r') > 0
+            || str.indexOf('em u') > 0
+            || str.indexOf('tipo u') > 0
+            || str.indexOf('suporte em u') > 0) {
+            tmp.structureType = 'uinvertido';
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('açougue') > 0
+            || str.indexOf('suspenso') > 0) {
+            tmp.structureType = 'suspenso';
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('entorta-roda') > 0
+            || str.indexOf('entorta roda') > 0
+            || str.indexOf('entorta aro') > 0
+            || str.indexOf('entorta-aro') > 0
+            || str.indexOf('entorta raio') > 0
+            || str.indexOf('de roda') > 0) {
+            tmp.structureType = 'deroda';
+            _importResults.tagsDetected++;
+          }
+
+          // tmp.structureType = /^tipo\s([\w])/
+        }
+
+        function testIfImageExists(url) {
+          return new Promise(function (resolve, reject) {
+            let img = new Image();
+            img.crossOrigin = 'https://www.bikedeboa.com.br';
+
+            img.onload = function () {
+              resolve(url);
+            }
+            img.onerror = function () {
+              reject(url);
+            }
+
+            img.src = url;
+          })
+        }
+
+        function updateKmlImportResults() {
+          document.getElementById("kmlFileImportResults").innerHTML = `
+                  <div class="big-numbers">
+                    <div class="big-numbers--col"> 
+                      <div class="big-numbers--number">${_importResults.places.length}</div>
+                      <div class="big-numbers--label">bicicletários</div>
+                    </div>
+                    <div class="big-numbers--col">
+                      <div class="big-numbers--number">${_importResults.tagsDetected}</div>
+                      <div class="big-numbers--label">tags preenchidas automaticamente</div>
+                    </div>
+                    <div class="big-numbers--col">
+                      <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
+                      <div class="big-numbers--label">fotos com link quebrado</div>
+                    </div>
+                  </div>
+                `;
+        }
+
+        function uploadImportedPlacesToBackend() {
+          return new Promise((resolve, reject) => {
+            const max = _importResults.places.length;
+            // const max = 5;
+
+            // 
+            function importPlace_recursive(i = 0) {
+
+              if (i < max) {
+                let m = _importResults.places[i];
+
+                // Fill custom fields
+                //   Data Source: points to a DataSource, which indicates where the data came from
+                //   isAnonymous: tells the backend to ignore the loggedUser when setting the author
+                m.datasource_id = _importResults.places_datasourceid;
+                m.isAnonymous = true;
+
+                // Progress spinner
+                updateSpinnerProgress(i / max);
+                $('#globalSpinnerLabel').text(`${i}/${max}`);
+                console.warn(`${i} of ${max}`);
+
+                // Retrieves full addresses
+                BDB.Geolocation.reverseGeocode(m.lat, m.lng)
+                  .then((addressObj) => {
+                    console.debug(m.lat, m.lng, m.id);
+                    console.debug(addressObj);
+
+                    m.address = addressObj.address;
+                    m.city = addressObj.city;
+                    m.state = addressObj.state;
+                    m.country = addressObj.country;
+
+                    function next() {
+                      // Sends it over to the backend
+                      BDB.Database.customAPICall('POST', 'local', m)
+                        .then(data => {
+                          m.id = data.id;
+                          importPlace_recursive(i + 1);
+                        })
+                        .catch(data => {
+                          console.error('Error when creating local');
+                          console.error(m);
+                          reject(data);
+                        })
+                    }
+
+                    // If it has a photo and it's a valid link (validated when loading the KML file),
+                    //   resize it just like a normal user-submitted photo and get it's blob to send
+                    //   to the backend
+                    if (m.photo) {
+                      resizeImage(m.photo)
+                        .then(resizedBlob => {
+                          m.photo = resizedBlob;
+                          next();
+                        })
+                        .catch(() => {
+                          console.warn('Error when retrieving image', m.photo);
+                          console.warn('Continuing...');
+                          next();
+                          // reject(i);
+                        })
+                    } else {
+                      next();
+                    }
+
+                  })
+                  .catch(status => {
+                    switch (status) {
+                      case 'OVER_QUERY_LIMIT':
+                        // Google Maps quota limits the frequency of calls of the service. We just keep trying until it works.
+                        setTimeout(() => {
+                          importPlace_recursive(i);
+                        }, 2000);
+
+                        break;
+                      case 'ZERO_RESULTS':
+                        // There's probably something very wrong with the data, since Google Geocoding ALWAYS finds something
+                        console.error(`ERROR on reverse geocoding: no results for ${m.lat}, ${m.lng}`);
+                        reject()
+                        break;
+                    }
+                  });
+              } else {
+                resolve();
+              }
+            };
+
+            BDB.Geolocation
+              .init()
+              .then(() => {
+                importPlace_recursive(0);
+              })
           });
         }
 
-        document.addEventListener('bikedeboa.login', function(e) {
-          if (BDB.User.isAdmin) {
-            // Force table refresh
-            $('#localsTable').bootstrapTable('destroy');
+        function init() {
+          // showSpinner();
+
+          Database.authenticate(() => {
+            // Initial view is the Locals view
             updateLocalsTable();
 
-            Database.getAllTags();
+            // hideSpinner();
+          });
 
-            $('.restricted-access').removeClass('restricted-access');
+          //
+          // Callbacks
+          //
+
+          $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
+            const tabName = e.target.getAttribute('aria-controls');
+            switch (tabName) {
+              case 'locals':
+                updateLocalsTable();
+                break;
+              case 'revisions':
+                updateRevisionTable();
+                break;
+              case 'logs':
+                updateLogTable();
+                break;
+              case 'users':
+                updateUsersTable();
+                break;
+              case 'reviews':
+                updateReviewsTable();
+                break;
+            }
+          });
+
+          $('body').on('click', 'tbody tr td', e => {
+            if (e.target == e.currentTarget) {
+              // console.log('details');
+              $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
+            }
+          });
+
+          function updateUser(field, row, oldValue, $el) {
+            const userId = row.id;
+            let dataToUpdate = {};
+            dataToUpdate[field] = row[field];
+
+            // Send the updated data through the API
+            if (dataToUpdate) {
+              console.log('updating:', dataToUpdate);
+              BDB.Database.customAPICall('put', `user/${userId}`, dataToUpdate);
+            }
           }
-        });
 
-        document.addEventListener('bikedeboa.logout', function(e) {
-          document.location.reload();
-        });
+          function updateLocal(field, row, oldValue, $el) {
+            const localId = row.id;
+            let dataToUpdate = {};
+
+            if (field === 'isPublic' || 'isCovered') {
+              row[field] = row[field] === '1' ? true : false;
+            } else if (field === 'photo') {
+              row['photoUrl'] = row[field];
+              field = 'photoUrl';
+            }
+
+            dataToUpdate[field] = row[field];
+
+            // Send the updated data through the API
+            if (dataToUpdate) {
+              console.log('updating:', dataToUpdate);
+              BDB.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
+            }
+          }
+
+          $('body').on('editable-save.bs.table', (e, field, row, oldValue, $el) => {
+            if (row.username) {
+              updateUser(field, row, oldValue, $el);
+            } else {
+              updateLocal(field, row, oldValue, $el);
+            }
+
+          });
+
+          document.addEventListener('bikedeboa.login', function (e) {
+            if (BDB.User.isAdmin) {
+              // Force table refresh
+              updateLocalsTable();
+
+              Database.getAllTags();
+
+              // Fill DataSource options for KML import 
+              BDB.Database.customAPICall('get', 'datasource').then(data => {
+                data.forEach(d => {
+                  $('#kmlFileImport_datasourceid').append($('<option>', {
+                    value: d.id,
+                    text: d.name
+                  }));
+                })
+              });
+
+              $('.restricted-access').removeClass('restricted-access');
+            }
+          });
+
+          document.addEventListener('bikedeboa.logout', function (e) {
+            document.location.reload();
+          });
+
+          $('#kmlFileImport').on('click', () => {
+            if (_importResults.places) {
+              swal({
+                title: 'Importar dados pro banco',
+                text: `Você está importando <b>${_importResults.places.length}</b> bicicletários permanentemente pro banco de dados do bike de boa. Tem certeza que deseja continuar?`,
+                // type: 'warning',
+                showCancelButton: true,
+              })
+                .then(() => {
+                  showSpinner('Importando...', true);
+
+                  $('#import table').bootstrapTable('destroy');
+
+                  window._importResults.places_datasourceid = $('#kmlFileImport_datasourceid').val();
+
+                  uploadImportedPlacesToBackend()
+                    .then(() => {
+                      hideSpinner();
+                      swal({
+                        title: 'Importação feita com sucesso',
+                        text: `<b>${_importResults.places.length}</b> bicicletários criados.`,
+                        type: 'success',
+                      });
+                    })
+                    .catch(() => {
+                      hideSpinner();
+
+                      swal({
+                        text: `Algo deu errado na importação. Quer reverter as modificações que já foram feitas?`,
+                        type: 'warning',
+                        showCancelButton: true,
+                      })
+                        .then(() => {
+                          showSpinner('Revertendo...', true);
+
+                          // Find out which places were successfuly submited
+                          let placesToDelete = [];
+                          _importResults.places.forEach(m => {
+                            if (m.id) {
+                              placesToDelete.push(m);
+                            }
+                          });
+
+                          // Show progress UI
+                          let i = 0;
+                          function step() {
+                            i++;
+                            updateSpinnerProgress(i / placesToDelete.length);
+                            $('#globalSpinnerLabel').text(`Revertendo... ${i}/${placesToDelete.length}`);
+
+                            if (i === placesToDelete.length - 1) {
+                              hideSpinner();
+                            }
+                          }
+
+                          // Create one DELETE API call for each one, and let the browser manage the calls
+                          placesToDelete.forEach(m => {
+                            console.log(`Deleting ${m.id}...`);
+                            BDB.Database.customAPICall('DELETE', `local/${m.id}`)
+                              .then(() => {
+                                console.log(`SUCCESS. ${m.id} deleted.`);
+                                step();
+                              })
+                              .catch(() => {
+                                console.log(`ERROR. ${m.id} NOT deleted.`);
+                                step();
+                              });
+                          })
+                        })
+                        .catch(() => {
+                          // Nothing.
+                        })
+                    })
+                })
+                .catch(() => {
+                  // Nothing.
+                })
+
+            }
+          });
+
+          $('#kmlFileInput').on('change', () => {
+            window._importResults = {
+              places: [],
+              tagsDetected: 0,
+              brokenUrls: 0,
+              totalUrls: 0,
+            };
+
+            var file = document.getElementById("kmlFileInput").files[0];
+            if (file) {
+              var reader = new FileReader();
+              reader.readAsText(file, "UTF-8");
+              reader.onload = function (evt) {
+                const txt = evt.target.result
+                const contentContainer = document.getElementById('fileContents');
+
+                parser = new DOMParser();
+                window.xmlDoc = parser.parseFromString(txt, "text/xml");
+
+                console.log(xmlDoc);
+
+                let data = [];
+                let tags = [...xmlDoc.getElementsByTagName("Placemark")];
+                tags.forEach(p => {
+                  let tmp = {
+                    'isCovered': null,
+                    'hasFee': null,
+                    'isPublic': null,
+                    'address': null,
+                    'structureType': null,
+                    'slots': null,
+                    'isPaid': null
+                  };
+
+                  let regex, result;
+
+                  const children = [...p.children];
+                  children.forEach(c => {
+                    switch (c.tagName) {
+                      case 'name':
+                        tmp.text = c.innerHTML;
+
+                        if (tmp.text.toLowerCase().indexOf('bikerio') > 0) {
+                          // @todo: break, don't process this guy
+                          //break;
+                          console.log('BIKERIO!!!', tmp.text);
+                        }
+
+                        // Transporte Ativo: remove special code in front of all names
+                        // Example: BC0137 - Bicicletário Lagoon
+                        //   regex capture group 1: BC0137
+                        //   regex capture group 2: Bicicletário Lagoon 
+                        regex = /^(BC[\d]*)\s\-\s(.*)/s;
+                        result = regex.exec(tmp.text);
+                        if (result && result[0] && result[1]) {
+                          tmp.taCode = result[1];
+                          tmp.text = result[2];
+                        }
+
+                        tmp.text = extractFromCDATA(tmp.text);
+                      case 'description':
+                        tmp.description = c.innerHTML;
+                        processDescription(tmp);
+                        break;
+                      case 'styleUrl':
+                        break;
+                      case 'ExtendedData':
+                        const extData = [...c.children];
+                        extData.forEach(ext => {
+                          if (!ext.attributes[0] || !ext.children[0] || !ext.children[0].innerHTML) {
+                            return;
+                          }
+
+                          const name = ext.attributes[0].nodeValue;
+                          const valueRaw = ext.children[0].innerHTML
+                          const value = valueRaw.toLowerCase();
+
+                          switch (name) {
+                            case 'Foto':
+                            case 'gx_media_links':
+                              _importResults.totalUrls++;
+                              testIfImageExists(valueRaw)
+                                .then(() => {
+                                  tmp.photo = valueRaw;
+
+                                  updateKmlImportResults();
+                                })
+                                .catch(() => {
+                                  _importResults.brokenUrls++;
+                                  // console.warn('image URL is broken: ', valueRaw);
+
+                                  updateKmlImportResults();
+                                })
+                              break;
+
+                            case 'Descrição':
+                            case 'descrição':
+                              // Fortaleza 
+                              tmp.description = value;
+                              processDescription(tmp);
+                              break;
+
+                            //////////////////////////////////////////////////
+                            // Transporte Ativo Fusion Maps specific field //
+                            //////////////////////////////////////////////////
+                            case 'BC_slots':
+                              tmp.slots = value;
+                              _importResults.tagsDetected++;
+                              break;
+                            case 'BC_covered':
+                              if (tmp.isCovered === 'yes') {
+                                tmp.isCovered = true;
+                                _importResults.tagsDetected++;
+                              } else if (tmp.isCovered === 'no') {
+                                tmp.isCovered = false;
+                                _importResults.tagsDetected++;
+                              }
+                              break;
+                              break;
+                            case 'BC_type':
+                              // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+                              switch (value) {
+                                case 'açougue':
+                                case 'metrôrio':
+                                  tmp.structureType = 'suspenso';
+                                  _importResults.tagsDetected++;
+                                  break;
+                                case 'grelha':
+                                case 'holandês':
+                                case 'jujubinha':
+                                case 'de roda':
+                                case 'trincheira':
+                                  tmp.structureType = 'deroda';
+                                  _importResults.tagsDetected++;
+                                  break;
+                                case 'pente':
+                                case 'sulamerica':
+                                case 'pescocinho':
+                                case 'transcarioca':
+                                case 'm':
+                                  tmp.structureType = 'other';
+                                  _importResults.tagsDetected++;
+                                  break;
+                                case 'u invertido':
+                                case 'u invertido quiosque':
+                                case 'r':
+                                  tmp.structureType = 'uinvertido';
+                                  _importResults.tagsDetected++;
+                                  break;
+                                default:
+                                  console.warn('tipo nao identificado:', value);
+                                  break;
+                              }
+                              break;
+                            case 'BC_paid':
+                              tmp.isPaid = value;
+                              _importResults.tagsDetected++;
+                              break;
+
+                            ///////////// 
+                            // Default //
+                            /////////////
+                            default:
+                              // Any other tag that we haven't identified yet
+                              tmp[name] = value;
+                          }
+                        });
+                      case 'Point':
+                        if (c.children && c.children[0]) {
+                          // lat and lng are inverted on purporse
+                          const [lng, lat] = c.children[0].innerHTML.split(',');
+                          tmp.lat = removeWhitespaces(lat);
+                          tmp.lng = removeWhitespaces(lng);
+                        }
+                        break;
+
+                      ///////////// 
+                      // Default //
+                      /////////////
+                      default:
+                        // Any other tag that we haven't identified yet
+                        tmp[c.tagName] = c.innerHTML;
+                    }
+
+                  });
+
+                  if (tmp.lat && tmp.lng) {
+                    data.push(tmp);
+                  } else {
+                    console.warn('Missing required fields, skipping element ', tmp);
+                  }
+
+                })
+
+                // Save data globally
+                _importResults.places = data;
+
+                // @todo move this to global
+                let structureTypes = [];
+                for (let i = 0; i < STRUCTURE_NAMES.length; i++) {
+                  structureTypes.push({ value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i] });
+                }
+
+                updateKmlImportResults();
+
+                $('#importador table').bootstrapTable({
+                  columns: [
+                    {
+                      field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin
+                    },
+                    {
+                      field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin,
+                      'editable-type': 'textarea', visible: false,
+                    },
+                    {
+                      field: 'lat', title: 'lat', sortable: true, visible: false,
+                    },
+                    {
+                      field: 'lng', title: 'lng', sortable: true, visible: false,
+                    },
+                    {
+                      field: 'slots', title: 'Vagas', sortable: true,
+                    },
+                    {
+                      field: 'isPublic', title: 'Público?', sortable: true, editable: !!BDB.User.isAdmin,
+                      'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Publico'}, {'value': false, 'text': 'Privado'} ]",
+                    },
+                    {
+                      field: 'isCovered', title: 'Coberto?', sortable: true, editable: !!BDB.User.isAdmin,
+                      'editable-type': 'select', 'editable-source': "[{'value': true, 'text': 'Coberto'}, {'value': false, 'text': 'Não coberto'} ]",
+                    },
+                    {
+                      field: 'structureType', title: 'Tipo', sortable: true, editable: !!BDB.User.isAdmin
+                    },
+                    {
+                      field: 'isPaid', title: 'Pago?', sortable: true, editable: !!BDB.User.isAdmin
+                    },
+                    {
+                      field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin,
+                      'editable-type': 'textarea',
+                    },
+                    {
+                      field: 'photo', title: 'Foto', sortable: true, visible: !!BDB.User.isAdmin, formatter: 'photoColFormatter'
+                    }
+                  ],
+                  data: data,
+                  sortName: 'text'
+                });
+
+                if (_importResults.places.length > 0) {
+                  $('#kmlFileImport').attr('disabled', false);
+                }
+              }
+
+              reader.onerror = function (evt) {
+                document.getElementById("fileContents").innerHTML = "error reading file";
+              }
+            }
+
+          });
+
+        }
 
 
         /////////////////////
@@ -938,80 +1655,11 @@
         let ga = function() {};
 
 
+        // BootstrapTables extesion
         $.fn.editable.defaults.toggle = 'dblclick';
 
 
         init();
-
-        //
-        // Triggers
-        //
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', e => {
-          const tabName = e.target.getAttribute('aria-controls');
-          switch (tabName) {
-          case 'revisions':
-            updateRevisionTable();
-            break;
-          case 'logs':
-            updateLogTable();
-            break;
-          case 'users':
-            updateUsersTable();
-            break;
-          case 'reviews':
-            updateReviewsTable();
-            break;
-          }
-        });
-
-        $('body').on('click', 'tbody tr td', e => {
-          if (e.target == e.currentTarget) {
-            console.log('details');
-            $(e.currentTarget).siblings().find('.detail-icon').trigger('click');
-          }
-        });
-
-        function updateUser(field, row, oldValue, $el) {
-          const userId = row.id;
-          let dataToUpdate = {};
-          dataToUpdate[field] = row[field];
-
-          // Send the updated data through the API
-          if (dataToUpdate) {
-            console.log('updating:', dataToUpdate);
-            BDB.Database.customAPICall('put', `user/${userId}`, dataToUpdate);
-          }
-        }
-
-        function updateLocal(field, row, oldValue, $el) {
-          const localId = row.id;
-          let dataToUpdate = {};
-
-          if (field === 'isPublic' || 'isCovered') {
-            row[field] = row[field]==='1' ? true : false;
-          } else if (field === 'photo') {
-            row['photoUrl'] = row[field];
-            field = 'photoUrl';
-          }
-
-          dataToUpdate[field] = row[field];
-
-          // Send the updated data through the API
-          if (dataToUpdate) {
-            console.log('updating:', dataToUpdate);
-            BDB.Database.customAPICall('put', `local/${localId}`, dataToUpdate);
-          }
-        }
-
-        $('body').on('editable-save.bs.table', (e, field, row, oldValue, $el) => {
-          if (row.username) {
-            updateUser(field, row, oldValue, $el);
-          } else {
-            updateLocal(field, row, oldValue, $el);
-          }
-
-        });
 
 
       </script>

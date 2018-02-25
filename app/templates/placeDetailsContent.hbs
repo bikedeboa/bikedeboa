@@ -67,16 +67,18 @@
                 {{/if}}
             </div>
             {{else}}
-            {{#if isAdmin}}
-                <div>
-                <div class="icon-label">
-                    Sem informação sobre cobertura
-                    {{#if canModify}}
-                        <button class="editPlaceBtn link-button">
-                        (editar)
-                        </button>
-                    {{/if}}
-                </div>
+            {{#if canModify}}
+                <div class="missing-info-container">
+                    {{!-- <img alt="" src="/img/icon_shrug.svg"/> --}}
+                    <div class="missing-info-placeholder">?</div>
+                    <div class="icon-label">
+                        É coberto?
+                        <div>
+                            <button class="editPlaceBtn link-button">
+                            (responder)
+                            </button>
+                        </div>
+                    </div>
                 </div>
             {{/if}}
             {{/unless}}
@@ -103,16 +105,18 @@
                 {{/if}}
                 </div>
             {{else}}
-            {{#if isAdmin}}
-                <div>
-                <div class="icon-label">
-                    Sem informação sobre restrição de acesso
-                    {{#if canModify}}
-                    <button class="editPlaceBtn link-button">
-                        (editar)
-                    </button>
-                    {{/if}}
-                </div>
+            {{#if canModify}}
+                <div class="missing-info-container">
+                    {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
+                    <div class="missing-info-placeholder">?</div>
+                    <div class="icon-label">
+                        É público?
+                        <div>
+                            <button class="editPlaceBtn link-button">
+                                (responder)
+                            </button>
+                        </div>
+                    </div>
                 </div>
             {{/if}}
             {{/unless}}
@@ -177,14 +181,18 @@
                 </div>
             </div>
             {{else}}
-            {{#if isAdmin}}
-                <div class="icon-label"> 
-                Sem informação sobre tipo de bicicletário
-                {{#if canModify}}
-                    <button class="editPlaceBtn link-button">
-                    (editar)
-                    </button>
-                {{/if}}
+            {{#if canModify}}
+                <div class="missing-info-container">
+                    {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
+                    <div class="missing-info-placeholder">?</div>
+                    <div class="icon-label"> 
+                        Que tipo é?
+                        <div>
+                            <button class="editPlaceBtn link-button">
+                            (responder)
+                            </button>
+                        </div>
+                    </div>
                 </div>
             {{/if}}
             {{/if}} 
@@ -196,57 +204,57 @@
             <meta itemprop="ratingValue" content="{{average}}"/>
             <meta itemprop="reviewCount" content="{{reviews}}"/>
 
+            {{#if savedRatingContent}}
+                <div class="savedRating">
+                    <img src="{{userThumbUrl}}" /> Sua avaliação:
+                    <b data-color="{{color}}">
+                        {{{savedRatingContent}}}
+                    </b>
+                    <button class="ghost openReviewPanelBtn">Editar</button>
+                </div>
+            {{/if}}
+
             {{#if numReviews}}
-            <div class="numreviews">{{numReviews}}</div>
+                <div class="numreviews">{{numReviews}}</div>
             {{/if}}
 
             {{#unless average}}
-            <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
             {{/unless}}
 
             <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-            {{#if average}}
-                <span class="average">{{average}}</span>
+                {{#if average}}
+                    <span class="average">{{average}}</span>
 
-                <fieldset id="ratingDisplay" class="rating disabled">
-                    <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                    <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
-                    <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                    <label class="full-star" data-value="4" for="placeDetails_star4"></label>
-                    <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                    <label class="full-star" data-value="3" for="placeDetails_star3"></label>
-                    <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                    <label class="full-star" data-value="2" for="placeDetails_star2"></label>
-                    <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                    <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                </fieldset>
-                
-                {{#unless savedRating}}
-                <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
-                {{/unless}}
-            {{/if}}
+                    <fieldset id="ratingDisplay" class="rating disabled">
+                        <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                        <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
+                        <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                        <label class="full-star" data-value="4" for="placeDetails_star4"></label>
+                        <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                        <label class="full-star" data-value="3" for="placeDetails_star3"></label>
+                        <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                        <label class="full-star" data-value="2" for="placeDetails_star2"></label>
+                        <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                        <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                    </fieldset>
+                    
+                    {{#unless savedRating}}
+                    <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
+                    {{/unless}}
+                {{/if}}
             </div>
 
             {{#if average}}
-            {{#if tags}}
-                <div class="tagsContainer">
-                    {{{tags}}}
-                </div>
-            {{else}}
-                <div class="tagsContainer loading" style="position: relative;">
-                    Carregando... 
-                </div>
-            {{/if}}
-            {{/if}}
-
-            {{#if savedRatingContent}} 
-                <div class="savedRating">
-                <img src="{{userThumbUrl}}" /> Sua avaliação:
-                <b data-color="{{color}}">
-                    {{{savedRatingContent}}}
-                </b>
-                <button class="ghost openReviewPanelBtn">Editar</button>
-                </div>
+                {{#if tags}}
+                    <div class="tagsContainer">
+                        {{{tags}}}
+                    </div>
+                {{else}}
+                    <div class="tagsContainer loading" style="position: relative;">
+                        Carregando... 
+                    </div>
+                {{/if}}
             {{/if}}
         </section>
 
@@ -254,6 +262,13 @@
 
         <section class="description">
         <ul class="details-list">
+            {{#if description}}
+            <li>
+                <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
+                <div itemprop="description">{{{description}}}</div>
+            </li>
+            {{/if}}
+
             {{#if createdTimeAgo}}
             <li>
                 <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
@@ -265,11 +280,18 @@
             </li>
             {{/if}}
 
-            {{#if description}}
-            <li>
-                <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
-                <div itemprop="description">{{{description}}}</div>
-            </li>
+            {{#if isPaid}}
+                <li>
+                    <span class="details-list-icon glyphicon glyphicon-usd"></span>
+                    <div> {{{isPaid}}} </div>
+                </li>
+            {{/if}}
+
+            {{#if slots}}
+                <li>
+                    <span class="details-list-icon glyphicon glyphicon-th"></span>
+                    <div> {{{slots}}} vagas </div>
+                </li>
             {{/if}}
 
             {{#if views}}
@@ -279,11 +301,13 @@
             </li>
             {{/if}}
 
+
             <li>
             <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
             <div itemprop="address">{{{address}}}</div>
             </li>
         </ul>
+        
         <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
             <meta itemprop="latitude" content="{{lat}}" />
             <meta itemprop="longitude" content="{{lng}}" />
@@ -296,32 +320,44 @@
             </section>
         {{/if}}
 
+        {{#if dataSourceName}} 
+            <ul class="details-list">
+                <li>
+                    <span class="details-list-icon svg-icon" alt="" src=""></span>
+                    <div style="opacity: .5; font-size: .8em; ">
+                        Importado de
+                        <a class="openDataSourceDialog"> {{dataSourceName}}</a> 
+                    </div>
+                </li>
+            </ul>
+        {{/if}}
+
     </div>
 
     <div class="modal-footer">
     {{#unless savedRatingContent}}
         <section class="rating-input-container">
-        <h2>
-            {{#if userThumbUrl}}
-            <div>
-                <img src="{{userThumbUrl}}" class="avatar"/>
-            </div>
-            {{/if}}
-            Dê sua nota para este bicicletário
-        </h2>
+            <h2>
+                {{#if userThumbUrl}}
+                    <div>
+                        <img src="{{userThumbUrl}}" class="avatar"/>
+                    </div>
+                {{/if}}
+                Dê sua nota para este bicicletário
+            </h2>
 
-        <fieldset class="rating rating-big empty">
-            <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
-            <label class="full-star" data-value="5" for="placeDetails_star5_input"></label> 
-            <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
-            <label class="full-star" data-value="4" for="placeDetails_star4_input"></label>
-            <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
-            <label class="full-star" data-value="3" for="placeDetails_star3_input"></label>
-            <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
-            <label class="full-star" data-value="2" for="placeDetails_star2_input"></label>
-            <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
-            <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-        </fieldset>
+            <fieldset class="rating rating-big empty">
+                <input disabled type="radio" id="placeDetails_star5_input" name="placeDetails_rating_input" value="5" />
+                <label class="full-star" data-value="5" for="placeDetails_star5_input"></label> 
+                <input disabled type="radio" id="placeDetails_star4_input" name="placeDetails_rating_input" value="4" />
+                <label class="full-star" data-value="4" for="placeDetails_star4_input"></label>
+                <input disabled type="radio" id="placeDetails_star3_input" name="placeDetails_rating_input" value="3" />
+                <label class="full-star" data-value="3" for="placeDetails_star3_input"></label>
+                <input disabled type="radio" id="placeDetails_star2_input" name="placeDetails_rating_input" value="2" />
+                <label class="full-star" data-value="2" for="placeDetails_star2_input"></label>
+                <input disabled type="radio" id="placeDetails_star1_input" name="placeDetails_rating_input" value="1" />
+                <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+            </fieldset>
         </section>
     {{/unless}}
     </div>

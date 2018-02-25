@@ -465,15 +465,15 @@ BDB.Database = {
         // Alphabetically sort by tag names
         // @todo temp: filter out 'Coberto' while I haven't deleted this tag from the DB
         tags = data
-        .filter( tag => tag.name !== 'Coberto' )
-        .sort((a, b) => {
-          var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-          if (nameA < nameB)
-            return -1;
-          if (nameA > nameB)
-            return 1;
-          return 0;
-        });
+          .filter( tag => tag.name !== 'Coberto' )
+          .sort((a, b) => {
+            var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+            if (nameA < nameB)
+              return -1;
+            if (nameA > nameB)
+              return 1;
+            return 0;
+          });
 
         // Update id<->tagname maps
         idToTag = {};
@@ -494,18 +494,18 @@ BDB.Database = {
         }
       }
     })
-    .fail(() => {
-      requestFailHandler();
+      .fail(() => {
+        requestFailHandler();
 
-      if (failCB && typeof failCB === 'function') {
-        failCB();
-      }
-    })
-    .always(() => {
-      if (alwaysCB && typeof alwaysCB === 'function') {
-        alwaysCB();
-      }
-    });
+        if (failCB && typeof failCB === 'function') {
+          failCB();
+        }
+      })
+      .always(() => {
+        if (alwaysCB && typeof alwaysCB === 'function') {
+          alwaysCB();
+        }
+      });
   },
 
   getPlaces: function(successCB, failCB, alwaysCB, getFullData = false) {
@@ -552,18 +552,18 @@ BDB.Database = {
         successCB(markers);
       }
     })
-    .fail(() => {
-      requestFailHandler();
+      .fail(() => {
+        requestFailHandler();
 
-      if (failCB && typeof failCB === 'function') {
-        failCB();
-      }
-    })
-    .always(() => {
-      if (alwaysCB && typeof alwaysCB === 'function') {
-        alwaysCB();
-      }
-    });
+        if (failCB && typeof failCB === 'function') {
+          failCB();
+        }
+      })
+      .always(() => {
+        if (alwaysCB && typeof alwaysCB === 'function') {
+          alwaysCB();
+        }
+      });
   },
 
   waitAuthentication: function(callback) {
@@ -591,11 +591,18 @@ BDB.Database = {
             console.debug('Got place detail:');
             console.debug(data);
 
-            // Combine detailed data with what we had
-            let updatedMarker = markers.find(m => { return m.id === placeId; });
-            Object.assign(updatedMarker, data);
+            let updatedMarker;
+            if (markers) {
+              // Combine detailed data with what we had
+              updatedMarker = markers.find(m => { return m.id === placeId; });
+              Object.assign(updatedMarker, data);
+            } else {
+              // Markers weren't loaded yet (it's a deeplink)
+              updatedMarker = data;
+              markers = [updatedMarker];
+            }
 
-            // Set flag
+            // Set flag 
             updatedMarker._hasDetails = true;
 
             // Update offline-stored markers with new state
@@ -604,11 +611,11 @@ BDB.Database = {
             resolve(updatedMarker);
           }
         })
-        .fail(() => {
-          requestFailHandler();
+          .fail(() => {
+            requestFailHandler();
 
-          reject();
-        })
+            reject();
+          })
       }
 
       this.waitAuthentication(justDoIt);

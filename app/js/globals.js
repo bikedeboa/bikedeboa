@@ -26,8 +26,8 @@ const MARKER_SIZE_MULTIPLIER = 1.5;
 
 const MARKER_W = 20 * MARKER_SIZE_MULTIPLIER;
 const MARKER_H = 26 * MARKER_SIZE_MULTIPLIER;
-const MARKER_W_MINI = 12; 
-const MARKER_H_MINI = 12;
+const MARKER_W_MINI = 16; 
+const MARKER_H_MINI = 16;
 const CURRENT_LOCATION_MARKER_W = 20;
 const CURRENT_LOCATION_MARKER_H = 20; 
 const MARKER_ICON_GREEN = '/img/pin_green.svg';
@@ -38,7 +38,7 @@ const MARKER_ICON_GREEN_MINI = '/img/pin_green_mini.svg';
 const MARKER_ICON_YELLOW_MINI = '/img/pin_yellow_mini.svg';
 const MARKER_ICON_RED_MINI = '/img/pin_red_mini.svg';
 const MARKER_ICON_GRAY_MINI = '/img/pin_gray_mini.svg';
-const PHOTO_UPLOAD_MAX_W = 1000;
+const PHOTO_UPLOAD_MAX_W = 1000; 
 const PHOTO_UPLOAD_MAX_H = 1000;
 
 const MAX_RECENT_SEARCHES = 7;
