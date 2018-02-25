@@ -676,15 +676,32 @@ $(() => {
       _newMarkerTemp = null;
     }
 
-    // Reset form fields
-    // @todo replace this to use a rendered template
-    place.text = $('#newPlaceModal #titleInput').val();
-    // place.isPublic = $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val();
-    place.isPublic = $('#newPlaceModal .acess-types-group .active').data('value') === 'public';
-    place.isCovered = $('#newPlaceModal .covered-group .active').data('value') === 'covered';
-    place.structureType = $('#newPlaceModal .custom-radio-group .active').data('value');
+    const container = $('#newPlaceModal');
+    const formFields = {
+      text: container.find('#titleInput').val(),
+      public: container.find('.acess-types-group .active').data('value'),
+      covered: container.find('.covered-group .active').data('value'),
+      structureType: container.find('.custom-radio-group .active').data('value'),
+      description: container.find('#descriptionInput').val()
+    }
+
+    place.text = formFields.text;
+    place.structureType = formFields.structureType;
+    place.description = formFields.description;
     place.photo = _uploadingPhotoBlob;
-    place.description = $('#newPlaceModal #descriptionInput').val();
+    _uploadingPhotoBlob = '';
+
+    if (formFields.covered) {
+      place.isCovered = formFields.covered === 'covered';
+    } else {
+      place.isCovered = null; 
+    }
+
+    if (formFields.public) {
+      place.isPublic = formFields.public === 'public';
+    } else {
+      place.isPublic = null;
+    }
 
     const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
@@ -731,23 +748,12 @@ $(() => {
               confirmButtonText: 'Avaliar outra hora',
               showCloseButton: true,
               onOpen: () => { 
-                // $('.post-create-modal .rating-input-container, .swal2-confirm')
-                //   .css({ opacity: 0 })
-                //   .velocity('transition.slideDownIn', { delay: 400 });
-
                 $('.post-create-modal .rating-input-container .full-star').on('click', e => {
                   openedMarker = newMarker;
                   openReviewModal($(e.target).data('value'));
                 });
               }
             });
-            // openLocal(newMarker, () => {
-            //   // $('.rating-input-container').velocity('callout.bounce');
-            //   $('.openReviewPanelBtn').tooltip('show');
-            //   setTimeout(() => { 
-            //     $('.openReviewPanelBtn').tooltip('hide');
-            //   }, 5000);
-            // });
           }
         }
       }); 
@@ -795,27 +801,10 @@ $(() => {
 
   // @todo clean up this mess
   function openNewOrEditPlaceModal() {
-    if ($('#newPlaceModal').length === 0) {
-      $('body').append(BDB.templates.newPlaceModal());
-    }
+    $('#newPlaceModal').remove();
+    $('body').append(BDB.templates.newPlaceModal());
     
-    // Reset fields
-    _uploadingPhotoBlob = '';
-    $('#newPlaceModal #titleInput').val('');
-    $('#newPlaceModal .typeIcon').removeClass('active');
-    // $('#newPlaceModal input[name=isPublicRadioGrp]').prop('checked',false);
-    $('#newPlaceModal #photoInputBg').attr('src', '');
-    $('#newPlaceModal #descriptionInput').val('');
-    $('#newPlaceModal .description.collapsable').removeClass('expanded');
-    
-    $('#newPlaceModal #photoInput+label').removeClass('photo-input--edit-mode');
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
-    $('#newPlaceModal .minimap-container').toggle(!!openedMarker);
-    $('#newPlaceModal #cancelEditPlaceBtn').toggle(!!openedMarker);
-    
-    $('#newPlaceModal .photoInputDisclaimer').toggle(!openedMarker); 
-
-    // $('#newPlaceModal .tagsContainer button').removeClass('active');
 
     // Not creating a new one, but editing
     if (openedMarker) {
@@ -825,6 +814,10 @@ $(() => {
       setView('Editar bicicletário', '/editar');
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
+
+      $('#newPlaceModal .minimap-container').show();
+      $('#newPlaceModal #cancelEditPlaceBtn').show();
+      $('#newPlaceModal .photoInputDisclaimer').show(); 
 
       $('#newPlaceModal #titleInput').val(m.text);
       $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
