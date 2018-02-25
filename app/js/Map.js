@@ -609,10 +609,10 @@ BDB.Map = (function () {
             },
           ];
           let clustererOptions = {
-              maxZoom: 10,
-              minimumClusterSize: 1,
-              styles: clustererStyles,
-              gridSize: 50
+            maxZoom: 10,
+            minimumClusterSize: 1,
+            styles: clustererStyles,
+            gridSize: 60
           };
           if (_isMobile) {
             clustererOptions.maxZoom = 15;

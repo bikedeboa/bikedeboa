@@ -975,6 +975,7 @@ $(() => {
         ga('send', 'event', 'Local', 'delete', ''+openedMarker.id);
 
         showSpinner();
+        
         BDB.Database.deletePlace(openedMarker.id, () => {
           goHome();
           BDB.Database.getPlaces( () => {
