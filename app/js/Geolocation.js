@@ -149,9 +149,19 @@ BDB.Geolocation = (function(){
         });
         return fallback;
       }
-
     },
-    reverseGeocode : function(lat, lng) {
+    searchAdress: function(address) {
+      return new Promise(function (resolve, reject) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+          if (status === 'OK') {
+            resolve(results[0]);
+          } else {
+            reject();
+          }
+        });
+      });
+    },
+    reverseGeocode: function(lat, lng) {
       return new Promise(function (resolve, reject) {
         const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
 

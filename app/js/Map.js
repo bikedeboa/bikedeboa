@@ -245,7 +245,6 @@ BDB.Map = (function () {
     let autocomplete = new google.maps.places.Autocomplete(inputElem, options);
 
     autocomplete.addListener('place_changed', () => {
-
       const place = autocomplete.getPlace();
       if (!place.geometry) {
         console.error('Autocomplete\'s returned place contains no geometry');
@@ -304,6 +303,23 @@ BDB.Map = (function () {
             geolocate();
           }
         });        
+      });
+    },
+    searchAndCenter: function(address) {
+      return new Promise(function (resolve, reject) {
+        BDB.Geolocation.searchAdress(address)
+          .then( result => {
+            map.panTo(result.geometry.location); 
+            
+            if (result.geometry.viewport) {
+              map.fitBounds(result.geometry.viewport);
+            } else { 
+              map.setZoom(17);  // Why 17? Because it looks good.
+            }
+            
+            resolve();
+          })
+          .catch(reject);
       });
     },
     startInLocation: function(coords){

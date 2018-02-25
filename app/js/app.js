@@ -962,6 +962,22 @@ $(() => {
     }
   }
 
+  function getTopCities() {
+    // Count how many places each city has
+    let cities = {};
+    markers.forEach(m => {
+      if (m.city) {
+        cities[m.city] = cities[m.city] + 1 || 1;
+      }
+    });
+    
+    // Convert map into array and sort descrescently
+    let citiesArray = Object.keys(cities).map(c => [c, cities[c]]);
+    citiesArray.sort((a, b) => b[1] - a[1]);
+
+    return citiesArray;
+  }
+
   function deletePlace() {
     if (openedMarker) {
       swal({
@@ -1231,6 +1247,7 @@ $(() => {
   function enterLocationSearchMode() {
     let templateData = {};
     templateData.recentSearches = getRecentSearches();
+    templateData.topCities = getTopCities();//.slice(0,5); 
 
     ////////////////////////////////
     // Render handlebars template //
@@ -1242,8 +1259,6 @@ $(() => {
       const id = parseInt($target.data('recentsearchid'));
       const item = getRecentSearches()[id];
 
-      // $('#locationQueryInput').val(item.name);
-
       map.panTo(item.pos);
       if (item.viewport) {
         map.fitBounds(item.viewport);
@@ -1252,13 +1267,21 @@ $(() => {
       }
 
       exitLocationSearchMode();
+    });
 
-      // $('#locationQueryInput').val(term).focus();
+    $('#search-overlay .top-cities button').off('click').on('click', e => {
+      const $target = $(e.currentTarget);
+      const cityName = $target.data('cityname');
+
+      BDB.Map.searchAndCenter(cityName) 
+        .then( () => {
+          exitLocationSearchMode();
+        }) 
     });
 
     $('body').addClass('search-mode'); 
     $('#search-overlay').addClass('showThis');
-    $('#search-overlay .recent-searches li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, queue: false }); 
+    $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST }); 
     $('.hamburger-button').addClass('back-mode');
 
     $('.hamburger-button.back-mode').one('click', () => {

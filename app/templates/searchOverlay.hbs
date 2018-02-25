@@ -1,12 +1,26 @@
 <!-- Content that shows in Search mode, like recent searches, ... -->
 
-<!-- <h2>Buscas Recentes</h2> -->
-<ul class="recent-searches">
-{{#each recentSearches}}
-    <li>
-    <button data-recentsearchid="{{@index}}">
-        <span class="glyphicon glyphicon-time"></span> {{{this.name}}}
-    </button>
-    </li>
-{{/each}}
-</ul>
+<div>
+    <!-- <h2>Buscas Recentes</h2> -->
+    <ul class="recent-searches">
+        {{#each recentSearches}}
+            <li>
+            <button data-recentsearchid="{{@index}}">
+                <span class="glyphicon glyphicon-time"></span> {{{this.name}}}
+            </button>
+            </li>
+        {{/each}}
+    </ul>
+
+    <h2> Principais Cidades </h2>
+    <ul class="top-cities">
+        {{#each topCities}}
+            <li>
+                <button data-cityname="{{{this.[0]}}}">
+                    <span class="glyphicon glyphicon-map-marker"></span> {{{this.[0]}}}
+                    <span style="float: right;">{{{this.[1]}}}</span>
+                </button>
+            </li>
+        {{/each}}
+    </ul>
+</div>
