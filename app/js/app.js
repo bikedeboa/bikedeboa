@@ -966,14 +966,19 @@ $(() => {
     // Count how many places each city has
     let cities = {};
     markers.forEach(m => {
-      if (m.city) {
-        cities[m.city] = cities[m.city] + 1 || 1;
+      if (m.city && m.state) {
+        // We merge the city and state names to create a unique identifier
+        const key = `${m.city},${m.state}`;
+        cities[key] = cities[key] + 1 || 1;
       }
     });
     
     // Convert map into array and sort descrescently
     let citiesArray = Object.keys(cities).map(c => [c, cities[c]]);
     citiesArray.sort((a, b) => b[1] - a[1]);
+    
+    // Unmerge city and state
+    citiesArray = citiesArray.map(c => [c[0].split(','), c[1]]);
 
     return citiesArray;
   }
@@ -1793,9 +1798,9 @@ $(() => {
     });
     if (!_isMobile) {
       // Hide our panel if the user clicked anywhere outside
-      // $('#locationQueryInput').on('blur', e => { 
-      //   exitLocationSearchMode();
-      // });
+      $('#locationQueryInput').on('blur', e => { 
+        exitLocationSearchMode();
+      });
        
       // Hide our panel if the Google Autocomplete panel is opened
       $('#locationQueryInput').on('input change paste', e => {

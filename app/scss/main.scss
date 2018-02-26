@@ -343,8 +343,22 @@ p {
       overflow: hidden;
       text-overflow: ellipsis;
 
+      display: flex;
+
+      .top-cities--name {
+        flex: 3;
+
+        span {
+          display: block;
+          font-weight: normal;
+          font-size: 14px;
+          color: $gray;
+        }
+      }
+
       .top-cities--nbr {
         opacity: .5;
+        flex: 1;
       }
 
       &:focus,
@@ -395,16 +409,20 @@ p {
   }
 
   .modal-footer {
+    padding: $GRID_SPACE*3 $GRID_SPACE*3;
+    color: white;
+    background: $green;
+
     img {
       max-width: 10%;
       align-self: flex-start;
       height: auto;
       padding-bottom: $GRID_SPACE;
     }
-     
-    padding: $GRID_SPACE*3 $GRID_SPACE*3;
-    color: white;
-    background: $green;
+
+    h2 {
+      margin-top: 0;
+    }
   }
 }
 
@@ -1352,11 +1370,10 @@ a.unstyled-link {
 }
 
 .illustration {
-  // width: 60px; 
-  // height: auto;
   margin: 0 auto;
   display: block;
-  margin-bottom: 2em; 
+  margin-bottom: 3em; 
+  width: 70%;
 }
 
 #aboutModal,
@@ -3910,6 +3927,18 @@ body.modal-open {
 
     .userBtn--user-name {
       display: none;
+    }
+  }
+
+  #topCitiesModal {
+    .top-cities {
+      li {
+          width: 100%;
+
+          &:nth-child(odd) {
+            padding-right: 0;
+          }
+      }
     }
   }
 
