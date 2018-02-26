@@ -1953,6 +1953,7 @@ $(() => {
       $('#topCitiesModal').modal('hide');
       BDB.Map.searchAndCenter(cityName) 
         .then(() => {
+          goHome(); 
           exitLocationSearchMode();
         })
     });
