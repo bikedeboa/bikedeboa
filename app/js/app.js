@@ -1231,7 +1231,12 @@ $(() => {
   }
 
   function getRecentSearches() {
-    return JSON.parse(localStorage.getItem('recentSearches')).slice(0, MAX_RECENT_SEARCHES);
+    let recentSearches = JSON.parse(localStorage.getItem('recentSearches'));
+    if (recentSearches) {
+      recentSearches = recentSearches.slice(0, MAX_RECENT_SEARCHES);
+    }
+    
+    return recentSearches;
   }
 
   function addToRecentSearches(searchItem) {
