@@ -1,7 +1,7 @@
 <!-- Content that shows in Search mode, like recent searches, ... -->
 
 <div>
-    <h2>Buscas recentes</h2>
+    <h2>Buscas Recentes</h2>
     <ul class="recent-searches">
         {{#each recentSearches}}
             <li>
@@ -17,8 +17,12 @@
         {{#each topCities}} 
             <li>
                 <button class="goToCityBtn" data-cityname="{{{this.[0]}}}">
-                    <img class="svg-icon" alt="" src="/img/icon_city.svg" /> {{{this.[0]}}}
-                    <span style="float: right;">{{{this.[1]}}}</span> 
+                    <span class="top-cities--name">
+                        <img class="svg-icon" alt="" src="/img/icon_city.svg" /> {{{this.[0]}}}
+                    </span>
+                    <span class="top-cities--nbr">
+                        ({{{this.[1]}}})
+                    </span> 
                 </button>
             </li>
         {{/each}}

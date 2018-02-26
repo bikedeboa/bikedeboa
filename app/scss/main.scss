@@ -343,6 +343,10 @@ p {
       overflow: hidden;
       text-overflow: ellipsis;
 
+      .top-cities--nbr {
+        opacity: .5;
+      }
+
       &:focus,
       &:active,
       &:hover {
@@ -360,13 +364,47 @@ p {
 
 #topCitiesModal {
   .top-cities {
-    font-size: 16px;
+    font-size: 18px;
     color: $black;
 
-    li button {
-      padding: $GRID_SPACE 0; 
-      margin: 0;
+    li {
+      width: 48%;
+      display: inline-block;
+
+      &:nth-child(odd) {
+        padding-right: 4%;
+      }
+
+      button {
+        padding: $GRID_SPACE 0; 
+        margin: 0;
+
+        .top-cities--name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-right: 4px;
+          font-weight: bold;
+        }
+  
+        .top-cities--nbr {
+          color: $gray;
+          font-size: inherit;
+        }
+      }
     }
+  }
+
+  .modal-footer {
+    img {
+      max-width: 10%;
+      align-self: flex-start;
+      height: auto;
+      padding-bottom: $GRID_SPACE;
+    }
+     
+    padding: $GRID_SPACE*3 $GRID_SPACE*3;
+    color: white;
+    background: $green;
   }
 }
 
@@ -2117,7 +2155,7 @@ body.modal-open {
         margin: 0;
         font-family: $bodyFont;
         color: white;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: bold;
         margin-bottom: .5em;
       }

@@ -12,27 +12,37 @@
                         <img class="illustration" alt="" src="/img/art2.svg"/>
  
                         <p>
-                            Estas são as principais cidades que já estão mapeadas no bike de boa:
+                            Estas são cidades brasileiras que já tem bicicletários mapeadas no bike de boa:
                         </p>
 
                         <ul class="top-cities">
                             {{#each topCities}}
                                 <li>
                                     <button class="goToCityBtn" data-cityname="{{{this.[0]}}}">
-                                        <img class="svg-icon" alt="" src="/img/icon_city.svg" /> {{{this.[0]}}} 
-                                        <span style="float: right;">{{{this.[1]}}}</span>
+                                        <span class="top-cities--name">
+                                            {{!-- <img class="svg-icon" alt="" src="/img/icon_city.svg" /> --}}
+                                            {{{this.[0]}}} 
+                                        </span>
+                                        <span class="top-cities--nbr">
+                                            ({{{this.[1]}}}) 
+                                        </span>
                                     </button>
                                 </li>
                             {{/each}}
                         </ul>
-
-                        <hr>
-
-                        <p>
-                            Não encontrou a sua cidade? Este é um mapa colaborativo, onde todas informações são enviadas pelos próprios usuários. Ajude você também enviando os bicicletários da sua cidade, e divulgue o site na sua comunidade para que todos ajudem e se beneficiem.
-                        </p>
-
                     </article>
+                </div>
+
+                <div class="modal-footer">
+                    <img alt="" src="/img/icon_add_pin.svg">
+
+                    <h2> 
+                        Não encontrou a sua cidade?
+                    </h2>
+
+                    <p>
+                        Este é um mapa colaborativo, onde todas informações são enviadas pelos próprios usuários. Ajude você também enviando os bicicletários da sua cidade, e divulgue o site na sua comunidade para que todos ajudem e se beneficiem.
+                    </p>
                 </div>
             </div>
         </div>
