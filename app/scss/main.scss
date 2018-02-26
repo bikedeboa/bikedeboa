@@ -22,7 +22,7 @@ $lightestPurple: #9688DC;
 // Grays
 $black: #333;
 $paleWhite: #fafafa;
-$gray: #828b90; 
+$gray: #828b90;
 $lightGray: #b3b3b3;
 $lighterGray: #e6e6e6;
 $lightestGray: #F3F3F3;
@@ -1313,6 +1313,14 @@ a.unstyled-link {
   }
 }
 
+.illustration {
+  // width: 60px; 
+  // height: auto;
+  margin: 0 auto;
+  display: block;
+  margin-bottom: 2em; 
+}
+
 #aboutModal,
 #guideModal {
   $leading: 18px;
@@ -1357,13 +1365,6 @@ a.unstyled-link {
       height: 28px;
       vertical-align: bottom;
     }
-  }
-
-  .illustration {
-    // width: 60px; 
-    // height: auto;
-    margin: 0 auto;
-    display: block;
   }
 
   p {
