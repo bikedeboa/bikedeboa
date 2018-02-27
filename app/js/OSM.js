@@ -173,10 +173,10 @@ BDB.OSM = {
 
     const queryStr = `
         [out:json][timeout:25];
+        area["name"="Brasil"]->.boundaryarea;
         (
-          node["amenity"="bicycle_parking"](${_overpassQLBoundingBox});
-          //way["amenity"="bicycle_parking"]({{bbox}});
-          //relation["amenity"="bicycle_parking"]({{bbox}});
+          //node["amenity"="bicycle_parking"](${_overpassQLBoundingBox});
+          node["amenity"="bicycle_parking"](area.boundaryarea);
         );
         out body;
         >;
