@@ -62,11 +62,11 @@ let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
  
 // Production: opt-out of the Experimental new renderer and base map style
 // https://developers.google.com/maps/documentation/javascript/releases
-if (BDB_ENV === 'prod') {  
+// if (BDB_ENV === 'prod') {  
   // GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
   GOOGLE_MAPS_ID += '&v=3.31';
-}
-
+// }
+ 
 
 // SASS
 gulp.task('sass', () => {

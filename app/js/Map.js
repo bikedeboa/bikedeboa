@@ -90,6 +90,8 @@ BDB.Map = (function () {
     }
     mapZoomChanged();
 
+    setupBikeLayer(); 
+
     //native Event Dispatcher 
     let event = new Event('map:ready');
     document.dispatchEvent(event);
@@ -265,12 +267,22 @@ BDB.Map = (function () {
   };
   let setupBikeLayer = function () {
     if (!bikeLayer) {
-      bikeLayer = new google.maps.BicyclingLayer();
-      map.data.map = null;
-      map.data.loadGeoJson('/geojson/ciclovias_portoalegre.json');
-      map.data.setStyle({
-        strokeColor: 'green',
-        strokeWeight: 5
+      // Google Maps Bike Layer (sucks)
+      // bikeLayer = new google.maps.BicyclingLayer();
+       
+      // Custom, locally loaded GeoJSONs
+      // map.data.map = null;  
+      map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 30 KB
+      map.data.loadGeoJson('/geojson/ciclovias_florianopolis_osm.min.json'); // 30 KB
+      map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 41 KB
+      map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 227 KB
+      map.data.setStyle({  
+        // strokeColor: '#cde9c8', //super light green
+        // strokeColor: '#2cd978', // light green
+        strokeColor: '#00b800', // dark green
+        strokeWeight: 5,
+        strokeOpacity: 0.5,
+        clickable: false,
       });
     }
   };
@@ -340,11 +352,17 @@ BDB.Map = (function () {
     },
     showBikeLayer: function () {
       setupBikeLayer();
-      bikeLayer.setMap(map);
+      
+      if (bikeLayer) {
+        bikeLayer.setMap(map);
+      }
     },
     hideBikeLayer: function () {
-      map.setOptions({ styles: _gmapsCustomStyle });
-      bikeLayer.setMap(null);
+      if (bikeLayer) {
+        map.setOptions({ styles: _gmapsCustomStyle });
+        bikeLayer.setMap(null);
+      }
+
       map.data.setMap(null);
     },
     //return this to app.js to apply markers 
