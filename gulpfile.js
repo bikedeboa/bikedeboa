@@ -190,8 +190,8 @@ gulp.task('generate-service-worker', function(callback) {
     // Runtime caching Handler options: https://googlechromelabs.github.io/sw-toolbox/api.html#handlers
     runtimeCaching: [
       // Network First: good for API requests where you always want the freshest data when it is available, but would
-      //   rather have stale data than no data. 
-      {
+      //   rather have stale data than no data. (Will NEVER prioritize cache over network, which is slower but safer)
+      { 
         urlPattern: /\.(?:png|jpg|jpeg|svg)$/, handler: 'networkFirst', options: {
           cache: {
             maxEntries: 50,
@@ -199,28 +199,41 @@ gulp.task('generate-service-worker', function(callback) {
           }
         }
       }, 
-      { urlPattern: /herokuapp.com\/local\/light/, handler: 'networkFirst'},
+      { urlPattern: /herokuapp.com\/local\/light$/, handler: 'networkFirst'},
       { urlPattern: /herokuapp.com\/local\/\d+/, handler: 'networkFirst'},  
-      { urlPattern: /ajax\.googleapis\.com\//, handler: 'networkFirst'},
+      
+      // webfont.js
+      { urlPattern: /ajax\.googleapis\.com\//, handler: 'networkFirst'}, 
+      
+      // Google Maps scripts 
+      { urlPattern: /maps\.googleapis\.com\/maps-api-v3/, handler: 'networkFirst'}, 
+      
+      // Google Maps tiles, etc. 
       {
-        urlPattern: /maps\.googleapis\.com\//, handler: 'networkFirst', options: {
+        urlPattern: /maps\.googleapis\.com\/maps\//, handler: 'networkFirst', options: {
           cache: {
-            maxEntries: 100,
+            maxEntries: 50,
             name: 'google-maps-api'
           }
         }
       }, 
 
-      // Fastest: both network and cache will be tried. CAUTION: cache might be used, so they might be outdated!
-      { urlPattern: /\/geojson\/.*.json/, handler: 'fastest'}, 
+
+      // Fastest: both network and cache will be tried, and will use the fastest one (most of the cases it's the cache).
+      //   Whenever the network call is successful, the cache is updated.
+      // CAUTION: data might be outdated!
+      { urlPattern: /\/geojson\/.*.json$/, handler: 'fastest'}, 
       { urlPattern: /fonts\.googleapis\.com\//, handler: 'fastest' }, 
-      { urlPattern: /herokuapp.com\/stats/, handler: 'fastest' },
+      { urlPattern: /herokuapp.com\/stats$/, handler: 'fastest' },
+      { urlPattern: /herokuapp.com\/tag$/, handler: 'fastest' }, 
 
+
+      // Network Only: no caching will be done. For calls that don't make any sense if we're offline.
+      { urlPattern: /herokuapp.com\/token$/, handler: 'networkOnly' }, 
+
+      
       // Cache First: rather heavy calls that can totally be outdated and there's no problem. Use with EXTREME caution!
-      { urlPattern: /herokuapp.com\/tag/, handler: 'cacheFirst' },
-
-      // Network Only: no caching will be done. These don't make sense if we're offline.
-      { urlPattern: /herokuapp.com\/token/, handler: 'networkOnly' },
+      // - none - 
     ],
   }, callback);
 });
