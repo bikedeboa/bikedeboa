@@ -689,8 +689,8 @@
             // $('[aria-controls="locals"]').append(`<span class="text-muted"> (${markers.length})</span>`);
 
             let structureTypes = [];
-            for(let i=0; i < STRUCTURE_NAMES.length; i++) {
-              structureTypes.push({value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i]});
+            for (var [key, value] of structure_map.entries()) {
+              structureTypes.push({value: key, text: value});
             }
 
             // Massage data for BootstrapTable
@@ -1581,8 +1581,8 @@
 
                 // @todo move this to global
                 let structureTypes = [];
-                for (let i = 0; i < STRUCTURE_NAMES.length; i++) {
-                  structureTypes.push({ value: STRUCTURE_CODES[i], text: STRUCTURE_NAMES[i] });
+                for (var [key, value] of structure_map.entries()) {
+                  structureTypes.push({value: key, text: value});
                 }
 
                 updateKmlImportResults();

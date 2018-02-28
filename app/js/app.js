@@ -221,7 +221,7 @@ $(() => {
     }
     if (m.structureType) {
       templateData.structureTypeCode = m.structureType;
-      templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+      templateData.structureTypeLabel = structure_map.get(m.structureType);
     }
     templateData.structureTypeIcon = structureTypeIcon;
 
@@ -2559,8 +2559,8 @@ $(() => {
 
     // Set up Hello.js, the Social Login lib
     hello.init({
-      facebook: FACEBOOK_CLIENT_ID,
-      google: GOOGLE_CLIENT_ID, 
+      facebook: '<FACEBOOK_CLIENT_ID>',
+      google: '<GOOGLE_CLIENT_ID>', 
         // windows: WINDOWS_CLIENT_ID,
     },{
       // redirect_uri: window.location.origin
