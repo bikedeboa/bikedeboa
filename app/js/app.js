@@ -2338,7 +2338,10 @@ $(() => {
     BDB.User.logout();
 
     // UI
-    $('#userBtn').hide();
+    if (!_isMobile){
+      $('#userBtn').hide();  
+    }
+    $('#userBtn .avatar').attr('src', $("#userBtn .avatar").data('src'));
     $('#topbarLoginBtn').css('visibility','visible');
     // $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
     $('#userBtn').removeClass('admin');
