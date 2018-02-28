@@ -197,12 +197,12 @@ body.offline {
   #locationSearch,
   .howToInstallBtn,
   #filterBtn,
-  #geolocationBtn,
+  // #geolocationBtn,  
   #userBtn, 
-  #loginBtn,
-  .top-toolbar,
+  .loginBtn,
+  .createRevisionBtn,
   .rating-input-container,
-  .minimap,
+  // .minimap,
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
   .openReviewPanelBtn, 
@@ -210,11 +210,11 @@ body.offline {
     display: none !important;
   }
 
-  #map {
-    background: url(/img/blank_map.jpg); 
-    background-size: cover; 
-    background-position: 50% 50%;
-  }
+  // #map {
+  //   background: url(/img/blank_map.jpg); 
+  //   background-size: cover; 
+  //   background-position: 50% 50%;
+  // }
 }
 
 body.webview-app,
@@ -3910,6 +3910,13 @@ body.modal-open {
     }
   }
 
+  #toast-container {
+    & > div {
+      width: 100% !important;
+      margin: 0;
+    }
+  }
+
   #userBtn {
     top: 12px;
     right: 12px;
@@ -4999,11 +5006,21 @@ body.modal-open {
 
 // toastr.js Customizations
 #toast-container {
+  // animation: slideIn .2s $coolEaseOut;
+
   & > div {
     font-family: $bodyFont;
     opacity: 0.95;
     padding: $GRID_SPACE*2 $GRID_SPACE*2 $GRID_SPACE*2 50px; 
+    // font-weight: bold;
+  }
+
+  .toast-title {
     font-weight: bold;
+    /* text-transform: uppercase; */
+    margin-top: .5em;
+    margin-bottom: .25em;
+    font-size: 18px;
   }
 
   & > .toast-success {
@@ -5011,7 +5028,9 @@ body.modal-open {
   }
 
   & > .toast-info {
-    background-color: $purple;
+    background-color: $purple; 
+    padding: $GRID_SPACE;
+    background-image: none !important;
   }
 
   & > .toast-warning {

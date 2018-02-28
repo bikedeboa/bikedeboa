@@ -169,10 +169,10 @@ window.setOfflineMode = () => {
   _isOffline = true;
   $('body').addClass('offline');
 
-  console.log(map);
-  if (map) { 
+  if (BDB.Map.getMap()) {  
     // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
     // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
+    toastr['info']('Você está offline'); 
   } else {
     $('#reloadBtn').on('click', () => {
       showSpinner()

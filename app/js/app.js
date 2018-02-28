@@ -2527,9 +2527,10 @@ $(() => {
  
     // Set up Toastr, the messaging lib
     toastr.options = {
-      'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
+      // 'positionClass': _isMobile ? 'toast-bottom-center' : 'toast-bottom-left',
+      'positionClass': 'toast-bottom-center',
       'closeButton': false,
-      'progressBar': false,
+      'progressBar': false
     };
 
     // Sidenav (hamburger and filter menus)

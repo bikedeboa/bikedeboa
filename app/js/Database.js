@@ -120,7 +120,7 @@ BDB.Database = {
           }, 2000);
         } else {
           // Failed after multiple attemps: we're officialy offline!
-          // setOfflineMode(); 
+          setOfflineMode(); 
         }
       }
     });
