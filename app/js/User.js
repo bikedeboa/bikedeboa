@@ -72,7 +72,6 @@ BDB.User = {
                 
                 toastr['success'](`${prevPlaces.length} bicicletários salvos.`, '');
 
-                self._deletePlacesFromCookies();
                 self.fetchPlaces();
               }).catch( err => {
                 ga('send', 'event', 'Login', 'import places FAIL', `${this.profile.name} failed to import ${prevPlaces.length} places`);
@@ -90,7 +89,7 @@ BDB.User = {
                   toastr['success'](`${data.numImports} avaliações salvas.`, '');
                 }
 
-                self._deleteReviewsFromCookies();
+                self._deleteReviewsFromLocalStorage();
                 self.fetchReviews();
               }).catch( err => {
                 ga('send', 'event', 'Login', 'import reviews FAIL', `${this.profile.name} failed to import ${prevReviews.length} reviews`);
@@ -101,7 +100,7 @@ BDB.User = {
         }).catch(dismiss => {
           // if (dismiss === 'cancel') {
           //   self._deletePlacesFromCookies();
-          //   self._deleteReviewsFromCookies(); 
+          //   self._deleteReviewsFromLocalStorage(); 
           // }
         });
     }
@@ -141,7 +140,8 @@ BDB.User = {
         }
       );
     } else {
-      this.reviews = Cookies.getJSON('bikedeboa_reviews') || [];
+      cookieToLocalstorage('bikedeboa_reviews');
+      this.reviews = JSON.parse(localStorage.getItem('bikedeboa_reviews')) || [];
       this._populateReviewsPlaces();
     }
   },
@@ -156,19 +156,6 @@ BDB.User = {
           // this._populateReviewsPlaces();
         }
       );
-    } else {
-      const cookies = Cookies.getJSON();
-      const placesIds = Object.keys(cookies)
-        .filter( i => i.indexOf('bikedeboa_local_') >= 0 )
-        .map( i => i.split('bikedeboa_local_')[1] );
-
-      for(let i=0; i < placesIds.length; i++) { 
-        const id = parseInt(placesIds[i]);
-        const marker = BDB.Places.getMarkerById(id);
-        if (marker) {
-          this.places.push(marker);
-        }
-      }
     }
   },
 
@@ -188,7 +175,7 @@ BDB.User = {
     }
   },
 
-  _saveReviewToCookie: function (reviewObj) {
+  _saveReviewToLocalStorage: function (reviewObj) {
     const reviews = this.reviews;
 
     // Search for previously saved review
@@ -214,35 +201,19 @@ BDB.User = {
       });
     }
 
-    Cookies.set('bikedeboa_reviews', reviews, { expires: 365 });
+    localStorage.setItem('bikedeboa_reviews', JSON.stringify(reviews));
   },
 
-  _deleteReviewsFromCookies: function () {
-    Cookies.remove('bikedeboa_reviews');
-  },
-
-  _deletePlacesFromCookies: function () {
-    for(let i=0; i < this.places.length; i++) { 
-      Cookies.remove(`bikedeboa_local_${this.places[i].id}`);
-    }
+  _deleteReviewsFromLocalStorage: function () {
+    localStorage.removeItem('bikedeboa_reviews');
   },
 
   saveReview: function (reviewObj) {
     if (!this.isLoggedIn) {
-      this._saveReviewToCookie(reviewObj);
+      this._saveReviewToLocalStorage(reviewObj);
     }
   },
-
-  _savePlaceToCookie(placeId) {
-    // User has 24 hours to edit that pin
-    Cookies.set(`bikedeboa_local_${placeId}`, { expires: 1 });
-  },
-
   saveNewPlace: function (placeId) {
-    if (!this.isLoggedIn) {
-      this._savePlaceToCookie(placeId);
-    }
-
     this.fetchPlaces();
-  },
+  }
 };
