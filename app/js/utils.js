@@ -44,21 +44,19 @@ window.toggleSpinner = () => {
 };
 
 window.showSpinner = function (label, showProgress) {
-  console.debug('show spinner');
-
-  $('#globalProgressBar').toggle(!!showProgress);
-  if (showProgress) {
-    updateSpinnerProgress(0);
-  }
-
-  if (label) {
-    $('#globalSpinnerLabel').html(label);
-  }
-  $('#spinnerOverlay:hidden').velocity('transition.fadeIn', {complete: () => {
-    // if (callback && typeof callback === 'function') {
-    //   callback();
-    // }
-  }});
+  return new Promise((resolve, reject) => {
+    console.debug('show spinner');
+  
+    $('#globalProgressBar').toggle(!!showProgress);
+    if (showProgress) {
+      updateSpinnerProgress(0);
+    }
+  
+    if (label) {
+      $('#globalSpinnerLabel').html(label);
+    }
+    $('#spinnerOverlay:hidden').velocity('transition.fadeIn', {complete: resolve});
+  });
 };
 
 window.hideSpinner = callback => {
@@ -177,9 +175,10 @@ window.setOfflineMode = () => {
     // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
   } else {
     $('#reloadBtn').on('click', () => {
-      showSpinner('', () => {
-        window.location.reload();
-      });
+      showSpinner()
+        .then( () => {
+          window.location.reload();
+        });
     })
 
     $('#offline-overlay').addClass('showThis'); 

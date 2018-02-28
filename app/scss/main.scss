@@ -205,12 +205,13 @@ body.offline {
   .minimap,
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
+  .openReviewPanelBtn, 
   #placeDetailsContent .photo-container.hasImage.loading {
     display: none !important;
   }
 
   #map {
-    background: url(/img/blank_map.jpg);
+    background: url(/img/blank_map.jpg); 
     background-size: cover; 
     background-position: 50% 50%;
   }
