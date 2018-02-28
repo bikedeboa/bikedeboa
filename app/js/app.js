@@ -2277,7 +2277,10 @@ $(() => {
   function onSocialLogin(auth) {
     console.debug('auth', auth);
 
-    $('#userBtn').addClass('loading');
+    // Dont add this unnecessary visual noise if on mobile
+    if (!_isMobile) {
+      $('#userBtn').addClass('loading');
+    }
 
     if (window._isLoginDialogOpened) {
       swal.close(); 

@@ -194,8 +194,8 @@ gulp.task('generate-service-worker', function(callback) {
       { urlPattern: /herokuapp.com\/local\/light/, handler: 'networkFirst'},
       { urlPattern: /herokuapp.com\/local\/\d+/, handler: 'networkFirst'},  
       { urlPattern: /herokuapp.com\/stats/, handler: 'networkFirst'},
-      { urlPattern: /ajax\.googleapis\.com\//, handler: 'networkFirst' },
-      { urlPattern: /maps\.googleapis\.com\//, handler: 'networkFirst' }, 
+      { urlPattern: /ajax\.googleapis\.com\//, handler: 'networkFirst'},
+      { urlPattern: /maps\.googleapis\.com\//, handler: 'networkFirst'}, 
 
       // Fastest: both network and cache will be tried. CAUTION: cache might be used, so they might be outdated!
       { urlPattern: /\/geojson\/.*.json/, handler: 'fastest'}, 

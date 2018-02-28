@@ -33,13 +33,20 @@ BDB.Map = (function () {
 
 
   let initMap = function (coords, zoomValue, pinUser, resolve, reject) {
+    // By default, $.getScript() sets the cache setting to false.This appends a timestamped query parameter to the 
+    //  request URL to ensure that the browser downloads the script each time it is requested.You can override this 
+    //  feature by setting the cache property globally using $.ajaxSetup():
+    $.ajaxSetup({
+      cache: true
+    });
+
     // Dynamically inject Google Map's lib
     $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
       $.getScript('/lib/infobox.min.js', () => {
         $.getScript('/lib/markerclusterer.min.js', () => {
           // $.getScript('/lib/markerwithlabel.min.js', () => {
             initMap_continue(coords, zoomValue, pinUser, resolve, reject);
-          // });
+          // }); 
         });
       });
     } 
