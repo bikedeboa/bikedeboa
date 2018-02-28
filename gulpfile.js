@@ -174,7 +174,8 @@ gulp.task('generate-service-worker', function(callback) {
       'assets/img/pin_green.svg',
       'assets/img/pin_yellow.svg',
       'assets/img/current_position.svg',
-      'assets/img/back_arrow.svg',
+      'assets/img/icon_back.svg',
+      'assets/img/icon_back_white.svg',
       'assets/img/blank_map.jpg',
     ], 
     stripPrefixMulti: {
@@ -190,16 +191,30 @@ gulp.task('generate-service-worker', function(callback) {
     runtimeCaching: [
       // Network First: good for API requests where you always want the freshest data when it is available, but would
       //   rather have stale data than no data. 
-      { urlPattern: /\.(?:png|jpg|jpeg|svg)$/, handler: 'networkFirst'}, 
+      {
+        urlPattern: /\.(?:png|jpg|jpeg|svg)$/, handler: 'networkFirst', options: {
+          cache: {
+            maxEntries: 50,
+            name: 'bdb-images'
+          }
+        }
+      }, 
       { urlPattern: /herokuapp.com\/local\/light/, handler: 'networkFirst'},
       { urlPattern: /herokuapp.com\/local\/\d+/, handler: 'networkFirst'},  
-      { urlPattern: /herokuapp.com\/stats/, handler: 'networkFirst'},
       { urlPattern: /ajax\.googleapis\.com\//, handler: 'networkFirst'},
-      { urlPattern: /maps\.googleapis\.com\//, handler: 'networkFirst'}, 
+      {
+        urlPattern: /maps\.googleapis\.com\//, handler: 'networkFirst', options: {
+          cache: {
+            maxEntries: 100,
+            name: 'google-maps-api'
+          }
+        }
+      }, 
 
       // Fastest: both network and cache will be tried. CAUTION: cache might be used, so they might be outdated!
       { urlPattern: /\/geojson\/.*.json/, handler: 'fastest'}, 
       { urlPattern: /fonts\.googleapis\.com\//, handler: 'fastest' }, 
+      { urlPattern: /herokuapp.com\/stats/, handler: 'fastest' },
 
       // Cache First: rather heavy calls that can totally be outdated and there's no problem. Use with EXTREME caution!
       { urlPattern: /herokuapp.com\/tag/, handler: 'cacheFirst' },
