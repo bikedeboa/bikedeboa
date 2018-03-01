@@ -11,19 +11,19 @@ BDB.Session = {
   ///////////////////
 
   setPromoBannerViewed: function() {
-    Cookies.set('bikedeboa_promobanner_questionario', 'true', { expires: 365 }); 
+    localStorage.setItem('bikedeboa_promobanner_questionario', true);
   },
 
   getPromoBannerViewed: function() {
-    return Cookies.get('bikedeboa_promobanner_questionario');
+    return localStorage.getItem('bikedeboa_promobanner_questionario');
   },
 
   setWelcomeMessageViewed: function() {
-    Cookies.set('bikedeboa__has_seen_welcome_message', 'true'); 
+    localStorage.setItem('bikedeboa__has_seen_welcome_message', 'true'); 
   },
 
   hasUserSeenWelcomeMessage: function() {
-    const hasSeenWelcomeMessage = !!Cookies.get('bikedeboa__has_seen_welcome_message');
+    const hasSeenWelcomeMessage = !!localStorage.getItem('bikedeboa__has_seen_welcome_message');
 
     return hasSeenWelcomeMessage;
   }

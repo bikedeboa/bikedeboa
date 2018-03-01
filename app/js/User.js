@@ -141,7 +141,8 @@ BDB.User = {
         }
       );
     } else {
-      this.reviews = Cookies.getJSON('bikedeboa_reviews') || [];
+      //this.reviews = Cookies.getJSON('bikedeboa_reviews') || [];
+      this.reviews = JSON.parse(localStorage.getItem('bikedeboa_reviews')) || [];
       this._populateReviewsPlaces();
     }
   },
@@ -214,11 +215,13 @@ BDB.User = {
       });
     }
 
-    Cookies.set('bikedeboa_reviews', reviews, { expires: 365 });
+    //Cookies.set('bikedeboa_reviews', reviews, { expires: 365 });
+    localStorage.setItem('bikedeboa_reviews', JSON.stringify(reviews));
   },
 
   _deleteReviewsFromCookies: function () {
-    Cookies.remove('bikedeboa_reviews');
+    //Cookies.remove('bikedeboa_reviews');
+    localStorage.removeItem('bikedeboa_reviews');
   },
 
   _deletePlacesFromCookies: function () {
