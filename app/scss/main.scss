@@ -13,6 +13,7 @@ $yellow: #F6C913;
 $darkYellow: #F6C913; 
 $red: #FF8265;
 $strongRed: #FF6541;
+$lightRed: #ffbcad;
 $purple: #533FB4;
 $palePurple: #705EC7;
 $darkPurple: #3821AA; 
@@ -5040,6 +5041,11 @@ body.modal-open {
 
 // Marker Clusterer
 .cluster {
+  transition: filter 0.2s ease;
+  &:hover {
+    filter: brightness(1.05);
+  }
+
   img {
     width: 100%;
     height: 100%;
