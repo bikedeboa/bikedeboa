@@ -2407,7 +2407,21 @@ $(() => {
 
       handleRouting(true);
 
-      BDB.Database.authenticate();
+      let attemptsLeft = MAX_AUTHENTICATION_ATTEMPTS;
+      const onFail = () => {
+        attemptsLeft--;
+        if (attemptsLeft > 0) {
+          console.error(`Authentication failed, ${attemptsLeft} attempts left. Trying again in 2s...`);
+          setTimeout(() => {
+            BDB.Database.authenticate().catch(onFail);
+          }, 2000);
+        } else {
+          // Failed after multiple attemps: we're officialy offline!
+          setOfflineMode();
+        }
+      }
+      BDB.Database.authenticate()
+        .catch(onFail);
       BDB.Database.getAllTags();
     }
 
@@ -2423,6 +2437,43 @@ $(() => {
     //   }
     // }
   } 
+
+  function setOfflineMode() {
+    _forceOffline = true;
+    updateOnlineStatus();
+  }
+
+  function updateOnlineStatus(e) {
+    if (!_forceOffline) {
+      _isOffline = !navigator.onLine;
+    } else {
+      _isOffline = true; 
+      _forceOffline = null;
+    }
+
+    if (_isOffline) {
+      $('body').addClass('offline');
+  
+      if (BDB.Map.getMap()) {
+        // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
+        // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
+        toastr['info']('Você está offline');
+      } else {
+        $('#offline-overlay').addClass('showThis');
+        
+        $('#reloadBtn').on('click', () => {
+          showSpinner()
+            .then(() => {
+              window.location.reload();
+            });
+        });
+      }
+    } else if (_isOffline === false) { 
+      $('body').removeClass('offline');
+      $('#offline-overlay').removeClass('showThis');
+    }
+
+  }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
@@ -2440,6 +2491,11 @@ $(() => {
       $('body').addClass('webview-app');
       ga('send', 'event', 'Misc', 'launched from native app'); 
     }
+
+    // Online Status
+    // updateOnlineStatus();
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
 
     const isMobileListener = window.matchMedia('(max-width: ${MOBILE_MAX_WIDTH})');
     isMobileListener.addListener((isMobileListener) => {

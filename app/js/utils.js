@@ -165,27 +165,6 @@ window.autoGrowTextArea = function(element) {
   }
 };
 
-window.setOfflineMode = () => {
-  _isOffline = true;
-  $('body').addClass('offline');
-
-  if (BDB.Map.getMap()) {  
-    // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
-    // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
-    toastr['info']('Você está offline'); 
-  } else {
-    $('#reloadBtn').on('click', () => {
-      showSpinner()
-        .then( () => {
-          window.location.reload();
-        });
-    })
-
-    $('#offline-overlay').addClass('showThis'); 
-  }
-
-}
-
 window.resizeImage = function (blob) {
   return new Promise((resolve, reject) => {
     let canvas = document.createElement('canvas');

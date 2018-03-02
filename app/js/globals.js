@@ -67,6 +67,8 @@ let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX
 const _isLocalhost = BDB_ENV === 'localhost';
 const _isTouchDevice = ('ontouchstart' in window || navigator.msMaxTouchPoints);
 
+const MAX_AUTHENTICATION_ATTEMPTS = 3;
+
 /////////////
 // Globals //
 /////////////
@@ -101,5 +103,6 @@ let _deferredPWAPrompt;
 let _loginMutexBlocked;
 let _isFeatherlightOpen;
 let _routePendingData;
+let _forceOffline;
 
 let templates = {};

@@ -177,6 +177,8 @@ gulp.task('generate-service-worker', function(callback) {
       'assets/img/icon_back.svg',
       'assets/img/icon_back_white.svg',
       'assets/img/blank_map.jpg',
+      'assets/img/cluster_medium.png',
+      'assets/img/cluster_big.png',
     ], 
     stripPrefixMulti: {
       'dist/': '/', 
