@@ -15,6 +15,7 @@ BDB.Session = {
   },
 
   getPromoBannerViewed: function() {
+    cookieToLocalstorage('bikedeboa_promobanner_questionario');
     return localStorage.getItem('bikedeboa_promobanner_questionario');
   },
 
@@ -23,8 +24,8 @@ BDB.Session = {
   },
 
   hasUserSeenWelcomeMessage: function() {
-    const hasSeenWelcomeMessage = !!localStorage.getItem('bikedeboa__has_seen_welcome_message');
+    cookieToLocalstorage('bikedeboa__has_seen_welcome_message');
 
-    return hasSeenWelcomeMessage;
+    return !!localStorage.getItem('bikedeboa__has_seen_welcome_message');
   }
 };

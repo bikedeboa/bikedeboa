@@ -24,6 +24,13 @@ window.getCookieContent = function(name) {
   return false;
 };
 
+//retrocompatability, delete this after a few months. 
+window.cookieToLocalstorage = function(name){
+  if (!localStorage.getItem(name) && getCookie(name)){
+        localStorage.setItem(name, getCookieContent(name));
+  }
+}
+
 
 window.createdAtToDaysAgo = createdAtStr => {
   const createdAtDate = Date.parse(createdAtStr);
