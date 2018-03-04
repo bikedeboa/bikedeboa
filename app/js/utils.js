@@ -12,6 +12,19 @@ BDB.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
 
+window.getCookieContent = function(name) {
+  let cookies = document.cookie.split(';');
+
+  for( let cookie of cookies ){
+    let checkCookie = cookie.split("=");
+    if (checkCookie[0].indexOf(name) == 1){
+     return checkCookie[1];
+    }
+  }  
+  return false;
+};
+
+
 window.createdAtToDaysAgo = createdAtStr => {
   const createdAtDate = Date.parse(createdAtStr);
   const msAgo = Date.now() - createdAtDate;

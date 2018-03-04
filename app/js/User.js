@@ -140,6 +140,10 @@ BDB.User = {
         }
       );
     } else {
+      //retrocompatability, delete this after a few months. 
+      if (!localStorage.getItem('bikedeboa_reviews') && getCookie('bikedeboa_reviews')){
+        localStorage.setItem('bikedeboa_reviews', getCookie('bikedeboa_reviews'));
+      }
       this.reviews = JSON.parse(localStorage.getItem('bikedeboa_reviews')) || [];
       this._populateReviewsPlaces();
     }

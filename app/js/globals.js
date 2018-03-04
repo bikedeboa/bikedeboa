@@ -32,14 +32,14 @@ const STAGGER_SLOW = 100 * ANIMATIONS_MULTIPLIER;
 const STAGGER_NORMAL = 75 * ANIMATIONS_MULTIPLIER;
 const STAGGER_FAST = 50 * ANIMATIONS_MULTIPLIER;
 
-let structure_map = new Map();
+let STRUCTURE_MAP = new Map();
 
-structure_map.set('uinvertido','U Invertido');
-structure_map.set('deroda','De Roda',);
-structure_map.set('trave','Trave');
-structure_map.set('suspenso','Suspenso');
-structure_map.set('grade','Grade');
-structure_map.set('other','Outro');
+STRUCTURE_MAP.set('uinvertido','U Invertido');
+STRUCTURE_MAP.set('deroda','De Roda',);
+STRUCTURE_MAP.set('trave','Trave');
+STRUCTURE_MAP.set('suspenso','Suspenso');
+STRUCTURE_MAP.set('grade','Grade');
+STRUCTURE_MAP.set('other','Outro');
 
 const BDB_ENV = '<BDB_ENV>';
 

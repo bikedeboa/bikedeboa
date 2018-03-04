@@ -221,7 +221,7 @@ $(() => {
     }
     if (m.structureType) {
       templateData.structureTypeCode = m.structureType;
-      templateData.structureTypeLabel = structure_map.get(m.structureType);
+      templateData.structureTypeLabel = STRUCTURE_MAP.get(m.structureType);
     }
     templateData.structureTypeIcon = structureTypeIcon;
 

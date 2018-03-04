@@ -556,7 +556,7 @@ BDB.Map = (function () {
                   attrs.push(m.isPublic ? 'Público' : 'Privado');
                 }
                 if (m.structureType) {
-                  attrs.push(structure_map.get(m.structureType));
+                  attrs.push(STRUCTURE_MAP.get(m.structureType));
                 }
                 if (m.isCovered != null) {
                   attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
