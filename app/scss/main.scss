@@ -3446,7 +3446,16 @@ body.modal-open {
   }
 }
 
-// Google Maps API Customizations
+
+////////////////////////////////////
+// Google Maps API Customizations //
+////////////////////////////////////
+
+// Zoom controls
+.gm-bundled-control .gmnoprint > div {
+  border-radius: 20px;
+}
+
 // Autocomplete results dropdown
 .pac-container {
   border-bottom-left-radius: 5px;
@@ -3462,7 +3471,7 @@ body.modal-open {
 
   .pac-item {
       font-size: 12px;
-      display: block;
+      display: block; 
       padding: 10px;
       cursor: pointer;
       border: none;
