@@ -97,8 +97,6 @@ BDB.Map = (function () {
     }
     mapZoomChanged();
 
-    setupBikeLayer(); 
-
     //native Event Dispatcher 
     let event = new Event('map:ready');
     document.dispatchEvent(event);
@@ -279,11 +277,12 @@ BDB.Map = (function () {
        
       // Custom, locally loaded GeoJSONs
       // map.data.map = null;  
-      map.data.loadGeoJson('/geojson/ciclovias_florianopolis_osm.min.json'); // 30 KB
-      map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 41 KB
-      map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 228 KB
-      map.data.loadGeoJson('/geojson/ciclovias_recife.min.json'); // 11 KB
-      // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 228 KB
+      map.data.loadGeoJson('/geojson/ciclovias_florianopolis_osm.min.json'); // 99 KB
+      map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 203 KB
+      map.data.loadGeoJson('/geojson/ciclovias_recife_osm.min.json'); // 68 KB 
+      map.data.loadGeoJson('/geojson/ciclovias_grandeportoalegre_osm.min.json'); // 369 KB
+      // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
+      // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
 
       map.data.setStyle({  
         // strokeColor: '#cde9c8', //super light green

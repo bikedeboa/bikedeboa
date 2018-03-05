@@ -1407,6 +1407,8 @@ $(() => {
       //get gMap instance to be used by functions to still referer to map here (mainly markers);
       map = BDB.Map.getMap();
       BDB.Map.updateMarkers();
+
+      BDB.Map.showBikeLayer();
     });
 
     $(document).on("autocomplete:done", function (e) {
@@ -1487,17 +1489,17 @@ $(() => {
       setView('', '/filtros'); 
     }));
 
-    $('#show-bike-layer').on('change', e => {
-      const $target = $(e.currentTarget);
+    // $('#show-bike-layer').on('change', e => {
+    //   const $target = $(e.currentTarget);
 
-      if ($target.is(':checked')) {
-        ga('send', 'event', 'Filter', 'bike layer - SHOW');
-        showBikeLayer();
-      } else {
-        ga('send', 'event', 'Filter', 'bike layer - HIDE');
-        hideBikeLayer();
-      }
-    });
+    //   if ($target.is(':checked')) {
+    //     ga('send', 'event', 'Filter', 'bike layer - SHOW');
+    //     showBikeLayer();
+    //   } else {
+    //     ga('send', 'event', 'Filter', 'bike layer - HIDE');
+    //     hideBikeLayer();
+    //   }
+    // });
 
     $('.facebook-social-link').on('click', () => {
       ga('send', 'event', 'Misc', 'facebook link click');
