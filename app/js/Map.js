@@ -17,6 +17,8 @@ BDB.Map = (function () {
   let mapZoomLevel; 
   let startInMarker = false;
   let isGeolocated = false;
+  let directionsRenderer;
+  let directionsService;
 
   // "Main Brazil" Bounding Box
   //   [lat, long]
@@ -96,6 +98,32 @@ BDB.Map = (function () {
       google.maps.event.addListener(map, 'zoom_changed', mapZoomChanged);
     }
     mapZoomChanged();
+
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      map: BDB.Map.getMap(),
+      hideRouteList: true,
+      draggable: false,
+      preserveViewport: true,
+      suppressMarkers: true,
+      suppressBicyclingLayer: true,
+      suppressInfoWindows: true,
+      polylineOptions: {
+        clickable: false,
+        strokeColor: '#533FB4', // purple
+        strokeOpacity: 0,
+        fillOpacity: 0,
+        icons: [{
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillOpacity: .5, 
+            scale: 2
+          },
+          offset: '0',
+          repeat: '10px'
+        }]
+      }
+    });
+    directionsService = new google.maps.DirectionsService;
 
     //native Event Dispatcher 
     let event = new Event('map:ready');
@@ -509,50 +537,39 @@ BDB.Map = (function () {
       map.panToBounds(bounds);
     },
     showDirectionsToNearestPlace: function() {
-      const directionsDisplay = new google.maps.DirectionsRenderer({
-        map: BDB.Map.getMap(),
-        hideRouteList: true,
-        draggable: false,
-        preserveViewport: true,
-        suppressMarkers: true,
-        suppressBicyclingLayer: true,
-        suppressInfoWindows: true,
-        polylineOptions: {
-          clickable: false,
-          strokeColor: '#30bb6a',
-          strokeOpacity: 0,
-          fillOpacity: 0,
-          icons: [{
-            icon: {
-              path: google.maps.SymbolPath.CIRCLE,
-              fillOpacity: .5,
-              scale: 2
-            },
-            offset: '0',
-            repeat: '10px' 
-          }]
-        }
-      });
-      const directionsService = new google.maps.DirectionsService;
-
+      const nearest = BDB.Map.getListOfPlaces('nearest', 1)[0];
+      this.showDirectionsToPlace({ lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) });
+    },
+    showDirectionsToPlace: function(dest, forceLongDistance = false) {
       const travelMode = 'WALKING';
       // const travelMode = 'BICYCLING'; 
 
       const currentPos = BDB.Geolocation.getCurrentPosition();
-      const dest = BDB.Map.getListOfPlaces('nearest', 1)[0];
+      if (!currentPos) {
+        return;
+      }
+      
+      const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, dest.lat(), dest.lng());
 
-      directionsService.route({
-        origin: { lat: currentPos.latitude, lng: currentPos.longitude },
-        destination: { lat: parseFloat(dest.lat), lng: parseFloat(dest.lng) },
+      console.log(distanceKm);
 
-        travelMode: google.maps.TravelMode[travelMode]
-      }, function (response, status) {
-        if (status == 'OK') {
-          directionsDisplay.setDirections(response); 
-        } else {
-          console.error('Directions request failed due to ' + status);
-        }
-      });
+      if (!forceLongDistance && distanceKm > MAX_KM_TO_CALCULATE_ITINERARY) {
+        console.warn('Wont calculate directions, too far away:', distanceKm);
+        return; 
+      } else {
+        directionsService.route({ 
+          origin: { lat: currentPos.latitude, lng: currentPos.longitude },
+          destination: dest,
+          travelMode: google.maps.TravelMode[travelMode]
+        }, function (response, status) {
+          if (status == 'OK') {
+            directionsRenderer.setDirections(response); 
+          } else {
+            console.error('Directions request failed due to ' + status);
+          }
+        });
+      }
+
     },
     updateMarkers: function () {
       this.clearMarkers();
@@ -684,6 +701,8 @@ BDB.Map = (function () {
                     ga('send', 'event', 'Local', 'infobox opened', m.id);
 
                     map.panTo(newMarker.getPosition());
+
+                    BDB.Map.showDirectionsToPlace(newMarker.position); 
 
                     _infoWindow.setContent(contentString);
                     _infoWindow.open(map, newMarker);
