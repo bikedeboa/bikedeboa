@@ -147,7 +147,8 @@ gulp.task('html', () => {
 
 // Service Worker (sw-precache)
 gulp.task('generate-service-worker', function(callback) {
-  swPrecache.write(`dist/service-worker.js`, {
+  swPrecache.write('dist/service-worker.js', {
+    // Files to be precached to be available offline.
     staticFileGlobs: [
       'dist/**/*.{js,css}',
       'dist/*.html', 
@@ -164,28 +165,29 @@ gulp.task('generate-service-worker', function(callback) {
       'public/lib/featherlight.min.css',
       'assets/img/icon_*.svg',
       'assets/img/tipo_*.svg',
-      'assets/img/icon_back.svg', 
-      'assets/img/icon_back_white.svg',
+      'assets/img/pin_*.svg', 
       'assets/img/spinner.svg',
-      'assets/img/pin_gray.svg', 
-      'assets/img/pin_red.svg',
-      'assets/img/pin_green.svg',
-      'assets/img/pin_yellow.svg',
       'assets/img/current_position.svg',
       'assets/img/last_position.svg',
       'assets/img/blank_map.jpg',
       'assets/img/cluster_medium.png',
       'assets/img/cluster_big.png',
     ], 
+
+    // Maps multiple strings to be stripped and replaced from the beginning of URL paths at runtime. Use this option 
+    //   when you have multiple discrepancies between relative paths at build time and the same path at run time. 
+    //   If stripPrefix and replacePrefix are not equal to '', they are automatically added to this option.
     stripPrefixMulti: {
       'dist/': '/', 
       'assets/': '/', 
       'fonts/': '/', 
       'public/': '/'
     },
+
     // Sets an HTML document to use as a fallback for URLs not found in the sw-precache cache. 
     //  This fallback URL needs to be cached via staticFileGlobs or dynamicUrlToDependencies otherwise it won't work.
     navigateFallback: '/index.html',
+    
     // Runtime caching Handler options: https://googlechromelabs.github.io/sw-toolbox/api.html#handlers
     runtimeCaching: [
       // Network First: good for API requests where you always want the freshest data when it is available, but would
