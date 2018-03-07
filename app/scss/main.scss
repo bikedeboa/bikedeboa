@@ -2350,6 +2350,14 @@ body.modal-open {
         }
     }
 
+    .stickyFooterBtn {
+      padding: $GRID_SPACE 0;
+      text-align: center;
+      position: sticky;
+      bottom: 0;
+      background: white;
+    }
+
     .photoInputDisclaimer {
       text-align: center;
       display: block;
@@ -3909,6 +3917,14 @@ body.modal-open {
     }
   }
 
+  #newPlaceModal {
+    .stickyFooterBtn {
+      display: none;
+    }
+  }
+
+
+
   #locationSearch {
     #locationQueryInput { 
       height: 48px;
@@ -4071,6 +4087,15 @@ body.modal-open {
     // transform: translateY(0);
   }
 
+  body.modal-open.newPlaceModal #top-mobile-bar {
+    .saveNewPlaceBtn {
+      display: block;
+      right: $GRID_SPACE/2;
+      position: absolute;
+      width: auto;
+    }
+  }
+
   #top-mobile-bar,
   #bottom-mobile-bar {
     display: block;
@@ -4090,11 +4115,15 @@ body.modal-open {
     right: 0;
     z-index: 1052; //under sweetalert dialogs
 
+    .saveNewPlaceBtn {
+      display: none;
+    }
+
     #top-mobile-bar-title { 
       float: left;
       margin: 0;
       padding: 0;
-      font-size: 1.5em;
+      font-size: 16px;
       font-family: $headingFont;
       line-height: 50px;
       max-width: calc(100% - 100px);

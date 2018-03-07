@@ -799,7 +799,7 @@ $(() => {
 
     // console.log('validating');
 
-    $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', !isOk);
+    $('#newPlaceModal .saveNewPlaceBtn').prop('disabled', !isOk);
   }
 
   // @todo clean up this mess
@@ -823,7 +823,7 @@ $(() => {
       $('#newPlaceModal .photoInputDisclaimer').show(); 
 
       $('#newPlaceModal #titleInput').val(m.text);
-      $('#newPlaceModal #saveNewPlaceBtn').prop('disabled', false);
+      $('#newPlaceModal .saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal .custom-radio-group [data-value="${m.structureType}"]`).addClass('active');
       if (m.isPublic != null) {
         $(`#newPlaceModal .acess-types-group [data-value="${m.isPublic ? 'public' : 'private'}"]`).addClass('active');
@@ -894,7 +894,7 @@ $(() => {
       autoGrowTextArea(e.currentTarget); 
     });
 
-    $('#saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
+    $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
 
     // Edit only buttons
     if (openedMarker) {
@@ -946,11 +946,11 @@ $(() => {
     // Finally, display the modal
     const showModal = () => {
       // We can only set the nav title after the modal has been opened
-      setPageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+      updatePageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
 
       $('#newPlaceModal')
         .one('shown.bs.modal', () => {
-          $('#titleInput').focus();
+          // $('#titleInput').focus();
         })
         .modal('show');
     };
@@ -1317,24 +1317,15 @@ $(() => {
     $('.hamburger-button').removeClass('back-mode'); 
   }
 
-  function setPageTitle(text) { 
-    text = text || '';
-
-    // console.log('setPageTitle', text);
+  function updatePageTitle(text) { 
+    text = text || 'bike de boa';
 
     // Header that imitates native mobile navbar
-    if (_isDeeplink && openedMarker) {
-      $('#top-mobile-bar-title').text('bike de boa');
-    } else {
-      $('#top-mobile-bar-title').text(openedMarker ? '' : text); 
-    }
+    $('#top-mobile-bar-title').text(_isDeeplink ? openedMarker : 'bike de boa');
 
     // Basic website metatags
-    if (!text || text.length == 0) {
-      text = 'bike de boa';
-    }
     document.title = text; 
-    $('meta[name="og:title"]').attr('content', text);
+    $('meta[property="og:title"]').attr('content', text);  
     
     // Set every URL as canonical, otherwise Google thinks some are duplicates. Gotta index 'em all!
     $('link[rel="canonical"]').attr('href', window.location.href); 
@@ -1343,7 +1334,7 @@ $(() => {
     if (openedMarker) {
       // Open Graph Picture
       if (openedMarker.photo) {
-        $('meta[name="og:image"]').attr('content', openedMarker.photo);
+        $('meta[property="og:image"]').attr('content', openedMarker.photo);
       } 
 
       // Dynamic description (Open Graph and others)
@@ -1354,6 +1345,10 @@ $(() => {
         $('meta[property="og:description"]').attr('content', desc); 
         $('meta[name="description"]').attr('content', desc); 
       }
+    } else {
+      $('meta[property="og:image"]').attr('content', '');
+      $('meta[property="og:description"]').attr('content', '');
+      $('meta[name="description"]').attr('content', ''); 
     }
   }
 
@@ -1758,11 +1753,15 @@ $(() => {
         .velocity((_isMobile ? 'transition.slideUpIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
         .velocity({display: 'table-cell'}); 
 
+      const openingModalEl = $(e.currentTarget);
+
       // Set mobile navbar with modal's title
-      const openingModalTitle = $(e.currentTarget).find('.view-name').text();
+      const openingModalTitle = openingModalEl.find('.view-name').text();
       if (openingModalTitle) {
-        setPageTitle(openingModalTitle);
+        updatePageTitle(openingModalTitle);
       }
+
+      $('body').addClass(openingModalEl.attr('id'));
 
       // Mobile optimizations
       if (_isMobile) {
@@ -1770,15 +1769,18 @@ $(() => {
       } else {
         hideUI();
 
-        if ($(e.currentTarget).hasClass('clean-modal')) {
+        if (openingModalEl.hasClass('clean-modal')) {
           $('body').addClass('clean-modal-open');
         }
       }
     });
 
     $('body').on('hide.bs.modal', '.modal', e => {
-      // Doesnt work :()
-      // $('.modal-dialog').velocity((_isMobile ? 'transition.slideDownOut' : 'transition.slideUpOut'), {queue: true})
+      const closingModalEl = $(e.currentTarget);
+
+      updatePageTitle();
+      
+      $('body').removeClass(closingModalEl.attr('id'));
 
       if (_isMobile) { 
         // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
