@@ -508,6 +508,52 @@ BDB.Map = (function () {
       map.fitBounds(bounds);
       map.panToBounds(bounds);
     },
+    showDirectionsToNearestPlace: function() {
+      const directionsDisplay = new google.maps.DirectionsRenderer({
+        map: BDB.Map.getMap(),
+        hideRouteList: true,
+        draggable: false,
+        preserveViewport: true,
+        suppressMarkers: true,
+        suppressBicyclingLayer: true,
+        suppressInfoWindows: true,
+        polylineOptions: {
+          clickable: false,
+          strokeColor: '#30bb6a',
+          strokeOpacity: 0,
+          fillOpacity: 0,
+          icons: [{
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillOpacity: .5,
+              scale: 2
+            },
+            offset: '0',
+            repeat: '10px' 
+          }]
+        }
+      });
+      const directionsService = new google.maps.DirectionsService;
+
+      const travelMode = 'WALKING';
+      // const travelMode = 'BICYCLING'; 
+
+      const currentPos = BDB.Geolocation.getCurrentPosition();
+      const dest = BDB.Map.getListOfPlaces('nearest', 1)[0];
+
+      directionsService.route({
+        origin: { lat: currentPos.latitude, lng: currentPos.longitude },
+        destination: { lat: parseFloat(dest.lat), lng: parseFloat(dest.lng) },
+
+        travelMode: google.maps.TravelMode[travelMode]
+      }, function (response, status) {
+        if (status == 'OK') {
+          directionsDisplay.setDirections(response); 
+        } else {
+          console.error('Directions request failed due to ' + status);
+        }
+      });
+    },
     updateMarkers: function () {
       this.clearMarkers();
 
