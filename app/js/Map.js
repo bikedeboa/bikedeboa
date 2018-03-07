@@ -45,7 +45,7 @@ BDB.Map = (function () {
       $.getScript('/lib/infobox.min.js', () => {
         $.getScript('/lib/markerclusterer.min.js', () => {
           // $.getScript('/lib/markerwithlabel.min.js', () => {
-            initMap_continue(coords, zoomValue, pinUser, resolve, reject);
+          initMap_continue(coords, zoomValue, pinUser, resolve, reject);
           // }); 
         });
       });
@@ -136,7 +136,7 @@ BDB.Map = (function () {
       let centerInfo = {
         isCenterWithinBounds: isPosWithinBounds(map.getCenter()),
         isViewWithinBounds: (map.getBounds()) ? map.getBounds().intersects(mapBounds) : isPosWithinBounds(map.getCenter())
-      }
+      };
       let event = new CustomEvent('map:outofbounds', { detail: centerInfo });
       document.dispatchEvent(event);
 
@@ -182,7 +182,7 @@ BDB.Map = (function () {
     }
   };
   let updateUserPosition = function (coords, center = true, convert = true) {
-    let gpos = convertToGmaps(coords, convert);
+    let gpos = convertToGmaps(coords, convert); 
     
     updateUserMarkerPosition(gpos);
     
@@ -213,7 +213,7 @@ BDB.Map = (function () {
       origin: new google.maps.Point(0, 0), // origin
       anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
     });
-  }
+  };
   let setUserRadius = function () {
     geolocationRadius = new google.maps.Circle({
       map: map,
@@ -303,7 +303,7 @@ BDB.Map = (function () {
         tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
       }
     }
-  }
+  };
   return {
     init: function (_markerClickCallback) {
       return new Promise((resolve, reject) => {
@@ -439,6 +439,74 @@ BDB.Map = (function () {
         setMarkersIcon('mini');
         areMarkersHidden = true;
       }
+    },
+    getListOfPlaces: function (orderBy, maxPlaces = 50) {
+      let markersToShow;
+      switch (orderBy) {
+      case 'nearest': { 
+        // if (!_userCurrentPosition) {
+        //   showSpinner('Localizando...');
+
+        //   geolocate(true).then(() => {
+        //     // hideSpinner();
+
+        //     openNearbyPlacesModal(orderBy);
+        //   }).catch(() => {
+        //     console.error('Cant open nearby places, geolocation failed.');
+
+        //     // hideSpinner();
+
+        //     switchToMap();
+        //   });
+        //   return;
+        // }
+
+        // @todo do this properly
+        const positionToCompare = BDB.Geolocation.getCurrentPosition();
+
+        // Use nearest places
+        for (let i = 0; i < markers.length; i++) {
+          const m = markers[i];
+
+          m.distance = distanceInKmBetweenEarthCoordinates(
+            positionToCompare.latitude,
+            positionToCompare.longitude, 
+            m.lat,
+            m.lng);
+        }
+        markersToShow = markers.sort((a, b) => { return a.distance - b.distance; });
+        markersToShow = markersToShow.slice(0, maxPlaces);
+        break;
+      }
+      case 'updatedAt':
+        // Most recently updated places
+        // @todo bring this info from getAll endpoint
+        markersToShow = markers.sort((a, b) => { return b.updatedAt - a.updatedAt; });
+        markersToShow = markersToShow.slice(0, maxPlaces);
+        break;
+      case 'best':
+        // Best rated places
+        markersToShow = markers.sort((a, b) => {
+          return (b.average * 1000 + b.reviews * 1) - (a.average * 1000 + a.reviews * 1);
+        });
+        markersToShow = markersToShow.slice(0, maxPlaces);
+        break;
+      }
+
+      return markersToShow;
+    },
+    fitToNearestPlace: function() {
+      let bounds = new google.maps.LatLngBounds();
+
+      bounds.extend(convertToGmaps(BDB.Geolocation.getCurrentPosition()));  
+
+      var nearest = this.getListOfPlaces('nearest', 1)[0];
+      console.log('nearest place:', nearest); 
+      var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) }
+      bounds.extend(nearestPos);
+
+      map.fitBounds(bounds);
+      map.panToBounds(bounds);
     },
     updateMarkers: function () {
       this.clearMarkers();
@@ -670,5 +738,5 @@ BDB.Map = (function () {
         }
       }
     }
-  }
+  };
 })();

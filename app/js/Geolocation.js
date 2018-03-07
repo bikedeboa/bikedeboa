@@ -210,8 +210,11 @@ BDB.Geolocation = (function(){
         });
       });
     },
-    clearWatch : function(){
+    clearWatch: function() {
       clearGeoWatch();
+    },
+    getCurrentPosition: function() {
+      return currentPosition;
     }
   }
 })();
