@@ -415,6 +415,9 @@ $(() => {
             if (openedMarker && openedMarker.id === updatedMarker.id) {
               openDetailsModal(updatedMarker, callback); 
             }
+          })
+          .catch( () => {
+            $('.tagsContainer.loading').remove();
           });
       }
     }
@@ -425,9 +428,9 @@ $(() => {
       .then(marker => {
         _deeplinkMarker = marker;
 
-        if (tags) { 
-          openDetailsModal(marker, callback);
-        } else {
+        openDetailsModal(marker, callback);
+ 
+        if (!tags) { 
           $(document).on('tags:loaded', () => {
             openDetailsModal(marker, callback);
           });
