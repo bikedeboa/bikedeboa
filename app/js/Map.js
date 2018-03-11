@@ -115,7 +115,7 @@ BDB.Map = (function () {
         icons: [{
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            fillOpacity: .5, 
+            fillOpacity: 1, 
             scale: 2
           },
           offset: '0',
@@ -541,14 +541,14 @@ BDB.Map = (function () {
       this.showDirectionsToPlace({ lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) });
     },
     showDirectionsToPlace: function(dest, forceLongDistance = false) {
-      const travelMode = 'WALKING';
-      // const travelMode = 'BICYCLING'; 
+      // const travelMode = 'WALKING';
+      const travelMode = 'BICYCLING'; 
 
       const currentPos = BDB.Geolocation.getCurrentPosition();
       if (!currentPos) {
         return;
       }
-      
+
       const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, dest.lat(), dest.lng());
 
       console.log(distanceKm);
