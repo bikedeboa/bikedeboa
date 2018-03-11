@@ -107,15 +107,39 @@
 
                     <section>
                         <div class="description collapsable">
-                            <h2>
-                                Mais Informações <span style="font-size: 10px;">(opcional)</span>
-                            </h2>
+                            <div>
+                                <h2>
+                                    Mais informações
+                                </h2>
+                                
+                                <p>
+                                    Informações práticas (máx. 250 caracteres)
+                                </p> 
+                                
+                                <textarea
+                                    id="descriptionInput"
+                                    maxlength="250" 
+                                    type="text"
+                                    class="text-input"
+                                    name="description"
+                                    placeholder="Ex: horários de funcionamento, como acessar o local, serviços adicionais disponíveis."
+                                    data-hj-whitelist></textarea>
+                            </div>
 
-                            <p>
-                            Exemplo: horário de funcionamento, como acessar o local, serviços adicionais disponíveis, etc. (máx. 250 caracteres)
-                            </p>
+                            <div>
+                                Número de vagas:
+                                <input id="slotsInput" type="number" name="slots" min="0">
+                            </div>
 
-                            <textarea id="descriptionInput" maxlength="250" type="text" class="text-input" name="description" placeholder="Digite aqui" data-hj-whitelist></textarea>
+                            <div>
+                                Precisa pagar?
+                                <select id="isPaidInput" name="select">
+                                    <option value="dontknow" selected>Não sei</option>
+                                    <option value="yes">Sim</option>
+                                    <option value="no">Não</option>
+                                </select>
+                            </div>
+
                         </div>
                     </section>
 

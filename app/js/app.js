@@ -689,12 +689,15 @@ $(() => {
       public: container.find('.acess-types-group .active').data('value'),
       covered: container.find('.covered-group .active').data('value'),
       structureType: container.find('.custom-radio-group .active').data('value'),
-      description: container.find('#descriptionInput').val()
+      slots: container.find('#slotsInput').val(),
+      isPaid: container.find('#isPaidInput').val(),
     }
 
     place.text = formFields.text;
     place.structureType = formFields.structureType;
     place.description = formFields.description;
+    place.slots = formFields.slots;
+
     place.photo = _uploadingPhotoBlob;
     _uploadingPhotoBlob = '';
 
@@ -710,6 +713,10 @@ $(() => {
       place.isPublic = null;
     }
 
+    if (formFields.isPaid && formFields.isPaid !== 'dontknow') {
+      place.isPaid = formFields.isPaid === 'yes';
+    }
+ 
     const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
         BDB.User.saveNewPlace(newPlace.id);
@@ -813,6 +820,8 @@ $(() => {
     
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
 
+    $('#newPlaceModal .minimap-container').toggle(!!openedMarker);  
+
     // Not creating a new one, but editing
     if (openedMarker) {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
@@ -822,7 +831,6 @@ $(() => {
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
-      $('#newPlaceModal .minimap-container').show();
       $('#newPlaceModal #cancelEditPlaceBtn').show();
       $('#newPlaceModal .photoInputDisclaimer').show(); 
 
@@ -838,6 +846,8 @@ $(() => {
       // $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
       $('#newPlaceModal #descriptionInput').val(m.description);
+      $('#newPlaceModal #slotsInput').val(m.slots);
+      $('#newPlaceModal #isPaidInput').val(m.isPaid);
 
       // Minimap
       // @todo generalize this
