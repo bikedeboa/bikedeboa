@@ -1318,10 +1318,14 @@ $(() => {
   }
 
   function updatePageTitle(text) { 
-    text = text || 'bike de boa';
-
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar-title').text(_isDeeplink ? openedMarker : 'bike de boa');
+    if (_isDeeplink && openedMarker) {
+      $('#top-mobile-bar-title').text('bike de boa');
+    } else {
+      $('#top-mobile-bar-title').text(openedMarker ? '' : text);
+    }
+
+    text = text || 'bike de boa';
 
     // Basic website metatags
     document.title = text; 
