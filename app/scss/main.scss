@@ -2165,9 +2165,7 @@ body.modal-open {
 
     section.rating-input-container {
       text-align: center;
-      // border-top: $separatorBorderStyle;
-      padding: $GRID_SPACE*3 0;
-      // background: $paleWhite;
+      padding: $GRID_SPACE*4 0;
       background: $greenGradient;
 
       h2 {
@@ -4162,42 +4160,42 @@ body.modal-open {
     }
   }
 
-  #bottom-mobile-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1052; //under sweetalert dialogs
+  // #bottom-mobile-bar {
+  //     position: fixed;
+  //     bottom: 0;
+  //     left: 0;
+  //     right: 0;
+  //     z-index: 1052; //under sweetalert dialogs
 
-      box-shadow: 0 -20px 30px white;
+  //     box-shadow: 0 -20px 30px white;
 
-      transform: translateY(20px);
+  //     transform: translateY(20px);
     
-      #floating-cta-container {
-        background: white;
-        // border-top: 1px solid $lighterGray;
-      }
+  //     #floating-cta-container {
+  //       background: white;
+  //       // border-top: 1px solid $lighterGray;
+  //     }
 
-      button {
-        // Explanation on the reason for the string interpolation:
-        //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-        width: calc(100% - #{$GRID_SPACE});
-        margin: $GRID_SPACE/2;
-        font-weight: 700;
-        @include roundedCorners;
-        text-transform: uppercase;
-        background: $greenGradient;
-      } 
+  //     button {
+  //       // Explanation on the reason for the string interpolation:
+  //       //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+  //       width: calc(100% - #{$GRID_SPACE});
+  //       margin: $GRID_SPACE/2;
+  //       font-weight: 700;
+  //       @include roundedCorners;
+  //       text-transform: uppercase;
+  //       background: $greenGradient;
+  //     } 
 
-      // &:before {
-      //   content: '';
-      //   width: 100%;
-      //   height: 50px;
-      //   display: block;
-      //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-      //   pointer-events: none;
-      // }
-  }
+  //     // &:before {
+  //     //   content: '';
+  //     //   width: 100%;
+  //     //   height: 50px;
+  //     //   display: block;
+  //     //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+  //     //   pointer-events: none;
+  //     // }
+  // }
 
   #placeDetailsContent {
     hr {
@@ -4205,9 +4203,9 @@ body.modal-open {
       margin-right: -12px;
     }
 
-    .modal-footer {
-      display: none;
-    }
+    // .modal-footer {
+    //   display: none;
+    // }
 
     .tagDisplayContainer {
       width: calc(50% - #{$GRID_SPACE});
