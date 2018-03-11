@@ -662,7 +662,7 @@ $(() => {
     openedMarker = null;
     
     goHome();
-    showSpinner('Salvando...', true);
+    showSpinner('Salvando...', _uploadingPhotoBlob ? true : false);
 
     let place = {};
 
@@ -731,8 +731,8 @@ $(() => {
               type: 'success',
               html:
                 `<section class="rating-input-container">
-                  <p>
-                    Quer já deixar sua avaliação?
+                  <p> 
+                    Que tal já deixar sua avaliação?
                   </p>  
 
                   <fieldset class="rating empty">
@@ -2577,7 +2577,7 @@ $(() => {
       cancelButtonClass: 'btn',
       buttonsStyling: false,
       allowOutsideClick: true,
-      animation: false
+      animation: true 
     });
 
     // Set up Featherlight - photo lightbox lib

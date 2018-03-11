@@ -108,6 +108,17 @@ $GRID_SPACE: 12px;
     opacity: 1;
   }
 }
+@keyframes slideOut {
+  from { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  to {
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4977,6 +4988,16 @@ body.modal-open {
 }
 
 // Sweet Alert 2 Customizations
+
+
+.swal2-show,
+.swal2-hide {
+  animation: slideIn .2s $coolEaseOut;
+}
+.swal2-hide {
+  animation: slideOut .2s $coolEaseOut;
+  // animation-direction: reverse;
+}
 
 .swal2-modal {
   padding: 5% !important;
