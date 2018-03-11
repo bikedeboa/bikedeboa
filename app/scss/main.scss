@@ -2137,7 +2137,7 @@ body.modal-open {
     }
 
     .text-input {
-        padding: 10px;
+        padding: $GRID_SPACE;
         width: 100%;
     }
 
@@ -2474,9 +2474,12 @@ body.modal-open {
           }
 
           textarea {
-              resize: none;
-              margin: $GRID_SPACE 0;
-              border: 3px solid $lighterGray;
+            resize: none;
+          }
+
+          textarea, input, select {
+            margin: $GRID_SPACE 0;
+            border: 3px solid $lighterGray;
           }
 
           &:not(.expanded) { 
@@ -4102,6 +4105,7 @@ body.modal-open {
       right: $GRID_SPACE/2;
       position: absolute;
       width: auto;
+      font-weight: bold;
     }
   }
 
