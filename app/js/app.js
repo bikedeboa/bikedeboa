@@ -662,7 +662,7 @@ $(() => {
     openedMarker = null;
     
     goHome();
-    showSpinner('Salvando...', true);
+    showSpinner('Salvando...', _uploadingPhotoBlob ? true : false);
 
     let place = {};
 
@@ -731,8 +731,8 @@ $(() => {
               type: 'success',
               html:
                 `<section class="rating-input-container">
-                  <p>
-                    Quer já deixar sua avaliação?
+                  <p> 
+                    Que tal já deixar sua avaliação?
                   </p>  
 
                   <fieldset class="rating empty">
@@ -1318,10 +1318,14 @@ $(() => {
   }
 
   function updatePageTitle(text) { 
-    text = text || 'bike de boa';
-
     // Header that imitates native mobile navbar
-    $('#top-mobile-bar-title').text(_isDeeplink ? openedMarker : 'bike de boa');
+    if (_isDeeplink && openedMarker) {
+      $('#top-mobile-bar-title').text('bike de boa');
+    } else {
+      $('#top-mobile-bar-title').text(openedMarker ? '' : text);
+    }
+
+    text = text || 'bike de boa';
 
     // Basic website metatags
     document.title = text; 
@@ -2573,7 +2577,7 @@ $(() => {
       cancelButtonClass: 'btn',
       buttonsStyling: false,
       allowOutsideClick: true,
-      animation: false
+      animation: true 
     });
 
     // Set up Featherlight - photo lightbox lib

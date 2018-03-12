@@ -69,6 +69,8 @@ const _isTouchDevice = ('ontouchstart' in window || navigator.msMaxTouchPoints);
 
 const MAX_AUTHENTICATION_ATTEMPTS = 3;
 
+const MAX_KM_TO_CALCULATE_ITINERARY = 20;
+
 /////////////
 // Globals //
 /////////////
