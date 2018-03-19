@@ -187,6 +187,7 @@ gulp.task('generate-service-worker', function(callback) {
     // Sets an HTML document to use as a fallback for URLs not found in the sw-precache cache. 
     //  This fallback URL needs to be cached via staticFileGlobs or dynamicUrlToDependencies otherwise it won't work.
     navigateFallback: '/index.html',
+    navigateFallbackWhitelist: [/^\/b\//],
     
     // Runtime caching Handler options: https://googlechromelabs.github.io/sw-toolbox/api.html#handlers
     runtimeCaching: [
