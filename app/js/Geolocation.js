@@ -34,7 +34,7 @@ BDB.Geolocation = (function(){
     // set default options to geolocate
     let defaults = {
       enableHighAccuracy: true,
-      timeout: 10000,
+      // timeout: 10000, //dont think we need that, since it doesnt block the UI like before
       maximumAge: 500
     };
 
