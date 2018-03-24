@@ -1653,32 +1653,34 @@ $(() => {
       let result = e.detail;
       $('#geolocationBtn').removeClass('loading');
 
-      if (result.status && result.center){
-        ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
-        return false;
-      }
-
-      ga('send', 'event', 'Geolocation', result.response.message ? `fail - ${result.response.message}`: 'fail - no_message');
-
-      switch(result.response.code) {
-      case 1:
-        // PERMISSION_DENIED
-        if (_isFacebookBrowser) {
-          toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
-        } else {
-          toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
+      if (result.statusOk) {
+        if (result.center) {
+          console.log('Geolocation init');
+          ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
         }
-        break; 
-      case 2:
-        // POSITION_UNAVAILABLE
-        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-        break;
-      case 3:
-        // TIMEOUT
-        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-        break;
+      } else {
+        console.error('Geolocation failed', result.response.message);
+        ga('send', 'event', 'Geolocation', result.response.message ? `fail - ${result.response.message}`: 'fail - no_message');
+  
+        switch(result.response.code) {
+        case 1:
+          // PERMISSION_DENIED
+          if (_isFacebookBrowser) {
+            toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
+          } else {
+            toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
+          }
+          break; 
+        case 2:
+          // POSITION_UNAVAILABLE
+          toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+          break;
+        case 3:
+          // TIMEOUT
+          toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+          break;
+        }
       }
-      
     });
     
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
