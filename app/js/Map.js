@@ -326,6 +326,17 @@ BDB.Map = (function () {
       }
     }
   };
+  let searchAdress = function(address) {
+    return new Promise(function (resolve, reject) {
+      geocoder.geocode({ 'address': address }, function (results, status) {
+        if (status === 'OK') {
+          resolve(results[0]);
+        } else {
+          reject();
+        }
+      });
+    });
+  };
   return {
     init: function (coords, zoom, elId, getLocation, _markerClickCallback) {
       let options = Object.assign({isUserLocation : false}, {coords, zoom, elId});
@@ -357,7 +368,7 @@ BDB.Map = (function () {
     },
     searchAndCenter: function(address) {
       return new Promise(function (resolve, reject) {
-        searchAdress(address)
+        searchAdress(address) 
           .then( result => {
             map.panTo(result.geometry.location); 
             
@@ -410,17 +421,6 @@ BDB.Map = (function () {
     },
     getMap: function(){
       return map;
-    },
-    searchAdress: function(address) {
-      return new Promise(function (resolve, reject) {
-        geocoder.geocode({ 'address': address }, function (results, status) {
-          if (status === 'OK') {
-            resolve(results[0]);
-          } else {
-            reject();
-          }
-        });
-      });
     },
     reverseGeocode: function(lat, lng) {
       return new Promise(function (resolve, reject) {
