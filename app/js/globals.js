@@ -20,6 +20,9 @@ function getSimulatedDelay () {
 // Constants //
 ///////////////
 
+//DEFAULT_COORDS is pointing to Porto Alegre
+const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
+
 const N_MOCK_PICS = 14;
 
 const MARKER_SIZE_MULTIPLIER = 1.5;

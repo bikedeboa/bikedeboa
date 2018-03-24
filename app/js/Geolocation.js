@@ -1,12 +1,12 @@
 var BDB = BDB || {};
 
 BDB.Geolocation = (function(){
-  let portoAlegreCenter = { latitude: -30.0346, longitude: -51.2177 };
-  let currentPosition = portoAlegreCenter;
   let positionWatcher;
   let geocoder;
+  let currentPosition = false; 
 
-  let setCurrentPosition = function(position){
+  let persistLocation = function(position){
+    currentPosition = position;
     let newstring = JSON.stringify(position,[
       'latitude',
       'longitude'])
@@ -16,16 +16,15 @@ BDB.Geolocation = (function(){
             'altitude', 
             'speed', 
             'altitudeAccuracy']);*/
-    currentPosition = position;
     localStorage.setItem("BDB.LatestPosition", newstring);
-  };
-    
-  let getFromLocalStorage = function(){
+  }; 
+  
+  let retrieveLocation = function(){
     let stringPos = localStorage.getItem("BDB.LatestPosition");
     let pos = JSON.parse(stringPos);
     if (pos && typeof pos === 'object'){
       currentPosition = pos;
-      return true;
+      return currentPosition;
     } else {
       return false;
     }
@@ -61,7 +60,7 @@ BDB.Geolocation = (function(){
               result.status = true;
               result.center = true;
               result.response = position.coords;
-              setCurrentPosition(result.response);
+              persistLocation(result.response);
               geoWatch(settings);
               resolve(result);
             },
@@ -94,7 +93,7 @@ BDB.Geolocation = (function(){
         center: false,
         response : position.coords
       };
-      setCurrentPosition(position.coords);
+      persistLocation(position.coords);
       geolocateDone(result);
     },function(error){
       let result = {
@@ -111,34 +110,14 @@ BDB.Geolocation = (function(){
     }
   }; 
   return {
-    init: function () {
-      return new Promise((resolve, reject) => {
-        function next() {
-          geocoder = new google.maps.Geocoder();
-          resolve();
-        }
-  
-        if (!window.google) { 
-          BDB.Map.init()
-            .then(next)
-            .catch(next)
-        } else {
-          next(); 
-        }
-      });
-    },
     getLastestLocation: function(){
-      getFromLocalStorage();
-      return currentPosition;
-    },
-    isDefaultLocation: function(){
-      return !getFromLocalStorage();
+      return retrieveLocation();
     },
     getLocation : function(options = false){
       return geolocate(options);
     },
     forceLocation : function(coords){
-      setCurrentPosition(coords);
+      persistLocation(coords);
     },
     checkPermission : function(){
       if (navigator.permissions) {
@@ -150,67 +129,7 @@ BDB.Geolocation = (function(){
         return fallback;
       }
     },
-    searchAdress: function(address) {
-      return new Promise(function (resolve, reject) {
-        geocoder.geocode({ 'address': address }, function (results, status) {
-          if (status === 'OK') {
-            resolve(results[0]);
-          } else {
-            reject();
-          }
-        });
-      });
-    },
-    reverseGeocode: function(lat, lng) {
-      return new Promise(function (resolve, reject) {
-        const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
-
-        geocoder.geocode({'location': latlng}, function(results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            if (results[0]) {
-              const r = results[0].address_components;
-              const formattedAddress = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`
-              let city, state, country;
-
-              r.forEach(address => {
-                address.types.forEach(type => {
-                  if (type === 'locality' || type === 'administrative_area_level_2') {
-                    if (city && city != address.long_name) {
-                      console.warn('reverseGeocode: conflicting city names:', city, address.long_name);
-                    }  
-                    city = address.long_name;
-                  } else if (type === "administrative_area_level_1") {
-                    if (state && state != address.long_name) {
-                      console.warn('reverseGeocode: conflicting state names:', state, address.long_name);
-                    }
-                    state = address.long_name;
-                  } else if (type === "country") {
-                    if (country && country != address.long_name) {
-                      console.warn('reverseGeocode: conflicting country names:', country, address.long_name);
-                    }
-                    country = address.long_name;
-                  }
-                })
-              });
-
-              resolve({
-                address: formattedAddress,
-                city: city,
-                state: state,
-                country: country
-              });
-            } else {
-              console.error('No results found');
-              reject();
-            }
-          } else {
-            console.error('Geocoder failed due to: ' + status);
-            reject(status);
-          }
-        });
-      });
-    },
-    clearWatch: function() {
+    clearWatch : function(){
       clearGeoWatch();
     },
     getCurrentPosition: function() {
