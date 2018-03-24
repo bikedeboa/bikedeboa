@@ -1653,7 +1653,7 @@ $(() => {
       let result = e.detail;
       $('#geolocationBtn').removeClass('loading');
 
-      if (result.statusOk) {
+      if (result.success) {
         if (result.center) {
           console.log('Geolocation init');
           ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
