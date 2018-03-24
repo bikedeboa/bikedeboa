@@ -34,21 +34,21 @@ BDB.Geolocation = (function(){
     // set default options to geolocate
     let defaults = {
       enableHighAccuracy: true,
-      timeout: 10000,
+      // timeout: 10000, //dont think we need that, since it doesnt block the UI like before
       maximumAge: 500
     };
 
     let settings = Object.assign({}, defaults, param);
 
     let result = {
-      status : false,
+      success : false,
       center : false,
       response : {}
     }
 
     let Location = new Promise(function(resolve,reject){
       if (positionWatcher){
-        result.status = true;
+        result.success = true;
         result.center = true;
         result.response = currentPosition;
         resolve(result);
@@ -57,7 +57,7 @@ BDB.Geolocation = (function(){
           clearGeoWatch();
           navigator.geolocation.getCurrentPosition(
             position => {
-              result.status = true;
+              result.success = true;
               result.center = true;
               result.response = position.coords;
               persistLocation(result.response);
@@ -87,17 +87,17 @@ BDB.Geolocation = (function(){
     document.dispatchEvent(event);
   };
   let geoWatch = function(options){
-    positionWatcher = navigator.geolocation.watchPosition(function(position){
+    positionWatcher = navigator.geolocation.watchPosition(position => {
       let result = {
-        status: true,
+        success: true,
         center: false,
         response : position.coords
       };
       persistLocation(position.coords);
       geolocateDone(result);
-    },function(error){
+    }, error => {
       let result = {
-        status: false,
+        success: false,
         center: false,
         response : error
       };

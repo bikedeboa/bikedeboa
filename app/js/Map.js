@@ -251,7 +251,7 @@ BDB.Map = (function () {
     BDB.Geolocation.getLocation();
 
     document.addEventListener('geolocation:done', function (result) {
-      if (result.detail.status) {
+      if (result.detail.success) {
         if (!isGeolocated){
           isGeolocated = true;
           setUserMarkerIcon();
