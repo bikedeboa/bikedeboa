@@ -105,42 +105,44 @@
                         </div>
                     </section> 
 
-                    <section>
-                        <div class="description collapsable">
-                            <div>
-                                <h2>
-                                    Mais informações
-                                </h2>
-                                
-                                <p>
-                                    Informações práticas (máx. 250 caracteres)
-                                </p> 
-                                
-                                <textarea
-                                    id="descriptionInput"
-                                    maxlength="250" 
-                                    type="text"
-                                    class="text-input"
-                                    name="description"
-                                    placeholder="Ex: horários de funcionamento, como acessar o local, serviços adicionais disponíveis."
-                                    data-hj-whitelist></textarea>
-                            </div>
+                    <section class="extraInfo">
+                            <h2>
+                                Mais informações
+                            </h2>
 
                             <div>
-                                Número de vagas:
+                                <div>
+                                    <b>Custo</b>
+                                </div>
+                                <select id="isPaidInput" name="select">
+                                    <option value="dontknow" selected>Não sei</option>
+                                    <option value="yes">Pago</option>
+                                    <option value="no">Gratuito</option>
+                                </select> 
+                            </div>
+                            
+                            <div>
+                                <div>
+                                    <b>Número de vagas</b>
+                                </div>
                                 <input id="slotsInput" type="number" name="slots" min="0">
                             </div>
 
                             <div>
-                                Precisa pagar?
-                                <select id="isPaidInput" name="select">
-                                    <option value="dontknow" selected>Não sei</option>
-                                    <option value="yes">Sim</option>
-                                    <option value="no">Não</option>
-                                </select>
+                                <div>
+                                    <b>Informações práticas</b>
+                                </div>
+                            
+                                <textarea
+                                    id="descriptionInput"
+                                    maxlength="250"
+                                    type="text"
+                                    class="text-input"
+                                    name="description"
+                                    placeholder="Ex: horários, como acessar, serviços adicionais, ..." 
+                                    data-hj-whitelist></textarea>
                             </div>
 
-                        </div>
                     </section>
 
                     <section class="minimap-container">
