@@ -114,7 +114,7 @@ $(() => {
       templateData.dataSourceName = m.DataSource.name;
     }
  
-    if (m.isPaid) {
+    if (m.isPaid !== null) {
       if (m.isPaid === true) {
         templateData.isPaid = 'Pago';
       } else {
@@ -689,6 +689,7 @@ $(() => {
       public: container.find('.acess-types-group .active').data('value'),
       covered: container.find('.covered-group .active').data('value'),
       structureType: container.find('.custom-radio-group .active').data('value'),
+      description: container.find('#descriptionInput').val(),
       slots: container.find('#slotsInput').val(),
       isPaid: container.find('#isPaidInput').val(),
     }
@@ -714,7 +715,7 @@ $(() => {
     }
 
     if (formFields.isPaid && formFields.isPaid !== 'dontknow') {
-      place.isPaid = formFields.isPaid === 'yes';
+      place.isPaid = (formFields.isPaid === 'yes');
     }
  
     const onPlaceSaved = newPlace => {
@@ -822,6 +823,8 @@ $(() => {
 
     $('#newPlaceModal .minimap-container').toggle(!!openedMarker);  
 
+    initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
+
     // Not creating a new one, but editing
     if (openedMarker) {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
@@ -837,17 +840,20 @@ $(() => {
       $('#newPlaceModal #titleInput').val(m.text);
       $('#newPlaceModal .saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal .custom-radio-group [data-value="${m.structureType}"]`).addClass('active');
-      if (m.isPublic != null) {
+      if (m.isPublic !== null) {
         $(`#newPlaceModal .acess-types-group [data-value="${m.isPublic ? 'public' : 'private'}"]`).addClass('active');
       }
-      if (m.isCovered != null) { 
+      if (m.isCovered !== null) { 
         $(`#newPlaceModal .covered-group [data-value="${m.isCovered ? 'covered' : 'uncovered'}"]`).addClass('active');
       }
+      if (m.isPaid !== null && m.isPaid !== 'dontknow') { 
+        $('#newPlaceModal #isPaidInput').val(m.isPaid ? 'yes' : 'no');
+      }
+      
       // $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
       $('#newPlaceModal #descriptionInput').val(m.description);
       $('#newPlaceModal #slotsInput').val(m.slots);
-      $('#newPlaceModal #isPaidInput').val(m.isPaid);
 
       // Minimap
       // @todo generalize this
@@ -868,8 +874,6 @@ $(() => {
     } else {
       setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
-
-      initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
 
       $('#access-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
         ga('send', 'event', 'Misc', 'tooltip - new pin access help');
@@ -2371,7 +2375,6 @@ $(() => {
     }
     $('#userBtn .avatar').attr('src', $("#userBtn .avatar").data('src'));
     $('#topbarLoginBtn').css('visibility','visible');
-    // $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
     $('#userBtn').removeClass('admin');
     $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();

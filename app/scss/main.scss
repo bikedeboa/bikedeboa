@@ -176,6 +176,8 @@ body {
     overflow: hidden;
     font-family: $bodyFont;
     background-color: $lightestGray;
+
+    // font-size: 16px;
 }
 
 // Completely hide occasional scrollbars for smoother transitions
@@ -2142,8 +2144,7 @@ body.modal-open {
     }
 
     #titleInput {
-        border: 0;
-        border-bottom: 2px solid $lighterGray;
+        border: 2px solid $lighterGray;
         font-weight: 700;
         // font-size: 30px;
         letter-spacing: -0.01em; 
@@ -2185,21 +2186,21 @@ body.modal-open {
         color: white;
         font-size: 14px;
         font-weight: bold;
-        margin-bottom: .5em;
+        margin-bottom: .5em; 
       }
     }
 
-    .description {
-        margin: $GRID_SPACE 0 $GRID_SPACE*2;
-        color: $black;
+    // .extraInfo {
+    //     margin: $GRID_SPACE 0 $GRID_SPACE*2;
+    //     color: $black;
 
-        h2 {
-            margin-top: 0; 
-            font-size: 16px;
-            text-align: center;
-            color: $lightGray;
-        }
-    }
+    //     h2 {
+    //         margin-top: 0; 
+    //         font-size: 16px;
+    //         text-align: center;
+    //         color: $lightGray;
+    //     }
+    // }
 }
 
 
@@ -2312,9 +2313,11 @@ body.modal-open {
       text-align: center;
 
       .typeIcon {
-        width: 32%;
-        margin: 0 6%;
-        max-width: 128px;
+        width: 49%;
+        padding-left: 12%;
+        padding-right: 12%;
+        // margin: 0 6%;
+        // max-width: 128px;
       }
     }
 
@@ -2446,8 +2449,25 @@ body.modal-open {
       }
     }
 
-    .description {
+    .extraInfo {
       padding-top: 0;
+
+      textarea {
+        resize: none;
+      }
+
+      textarea, input, select {
+        margin: $GRID_SPACE 0;
+        border: 3px solid $lighterGray;
+      }
+
+      input[type='number'] {
+        padding: $GRID_SPACE/2 $GRID_SPACE;
+      }
+
+      p {
+          margin: $GRID_SPACE*2 0 0;
+      }
 
       &.collapsable {
           margin: 0;
@@ -2467,19 +2487,6 @@ body.modal-open {
                   content: "\e252";
                   font-size: 14px;
               }
-          }
-
-          p {
-              margin: $GRID_SPACE*2 0 0;
-          }
-
-          textarea {
-            resize: none;
-          }
-
-          textarea, input, select {
-            margin: $GRID_SPACE 0;
-            border: 3px solid $lighterGray;
           }
 
           &:not(.expanded) { 
@@ -2538,10 +2545,10 @@ body.modal-open {
         margin-bottom: 10px;
     }
 
-    .custom-radio-group {
-        max-width: 400px;
-        margin: 0 auto;
-    }
+    // .custom-radio-group {
+    //     max-width: 400px;
+    //     margin: 0 auto;
+    // }
 
     .typeIcon {
         width: 32%;
@@ -2565,6 +2572,15 @@ body.modal-open {
           font-weight: 700;
           user-select: none; 
           margin-bottom: 2px;
+
+          transition: all 0.3s ease;
+
+          // Explanation on the reason for the string interpolation:
+          //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+          margin-top: calc(#{$GRID_SPACE} - 2px);
+          margin-bottom: 0;
+          border: 2px solid transparent;
+          border-radius: 25px;
         }
 
         img {
@@ -2583,17 +2599,12 @@ body.modal-open {
 
             .icon-label {
               color: $green;
-              // Explanation on the reason for the string interpolation:
-              //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-              margin-top: calc(#{$GRID_SPACE} - 2px);
-              margin-bottom: 0;
-              border: 2px solid;
-              border-radius: 25px;
+              border-color: $green;
             }
         }
 
         &:hover {
-            background-color: hsla(120,90%,95%,1);
+            background-color: $paleWhite;
             opacity: 1;
         }
 
@@ -3514,13 +3525,12 @@ body.modal-open {
   //     color: $lightGray;
   // }
 
-  /* Overrides marker */
-  /* .pac-icon {
-      background-image: url(/img/pin_gray.png) !important;
-      background-size: 100%;
-      background-repeat: no-repeat;
-      background-position: 0px;
-  } */
+  /* Overrides marker icon */
+  .pac-icon {
+    background-image: url(/img/icon_pin.svg);
+    background-size: 19px;
+    background-position: -2px 0px !important;
+  }
 }
 
 .welcome-message-container {

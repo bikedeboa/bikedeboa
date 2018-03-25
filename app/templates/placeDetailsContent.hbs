@@ -260,7 +260,7 @@
 
         <hr>
 
-        <section class="description">
+        <section class="extraInfo">
         <ul class="details-list">
             {{#if description}}
             <li>
@@ -271,7 +271,7 @@
 
             {{#if createdTimeAgo}}
             <li>
-                <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg"> 
                 {{#if author}}
                 <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
                 {{else}}
@@ -282,19 +282,19 @@
 
             {{#if isPaid}}
                 <li>
-                    <span class="details-list-icon glyphicon glyphicon-usd"></span>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_money.svg"> 
                     <div> {{{isPaid}}} </div>
                 </li>
             {{/if}}
 
             {{#if slots}}
                 <li>
-                    <span class="details-list-icon glyphicon glyphicon-th"></span>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_bike.svg">
                     <div> {{{slots}}} vagas </div>
                 </li>
             {{/if}}
 
-            {{#if views}}
+            {{#if views}} 
             <li>
                 <img class="details-list-icon svg-icon" alt="" src="/img/icon_views.svg">
                 <div>{{{views}}} visualizações</div>
@@ -303,7 +303,7 @@
 
 
             <li>
-            <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
+            <img class="details-list-icon svg-icon" alt="" src="/img/icon_pin.svg">
             <div itemprop="address">{{{address}}}</div>
             </li>
         </ul>
