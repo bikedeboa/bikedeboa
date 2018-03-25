@@ -957,7 +957,7 @@ $(() => {
       //   swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       // }
     });
-    $('.description.collapsable').off('click').on('click', e => {
+    $('.collapsable').off('click').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
     }); 
 
