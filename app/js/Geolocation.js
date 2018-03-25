@@ -86,7 +86,13 @@ BDB.Geolocation = (function(){
     let event = new CustomEvent('geolocation:done', {detail: response});
     document.dispatchEvent(event);
   };
-  let geoWatch = function(options){
+  let geoWatch = function(options = {}){
+    let defaults = {
+      enableHighAccuracy: true,
+      maximumAge: 500
+    };
+    let settings = Object.assign({}, defaults, options);
+
     positionWatcher = navigator.geolocation.watchPosition(position => {
       let result = {
         success: true,
@@ -102,7 +108,7 @@ BDB.Geolocation = (function(){
         response : error
       };
       geolocateDone(result);
-    }, null, options);
+    }, null, settings);
   };
   let clearGeoWatch = function(){
     if (positionWatcher) {
@@ -112,6 +118,9 @@ BDB.Geolocation = (function(){
   return {
     getLastestLocation: function(){
       return retrieveLocation();
+    },
+    startWatch: function(){
+      geoWatch();
     },
     getLocation : function(options = false){
       return geolocate(options);

@@ -344,13 +344,12 @@ BDB.Map = (function () {
           setMapElement(options);
 
           // if a coord is passed to the map so do not check for automatic geolocation check.
-          if (getLocation){
-            BDB.Geolocation.checkPermission().then(permission => {
-              if (permission.state === 'granted') {
-                geolocate();
-              }
-            });
-          }
+          BDB.Geolocation.checkPermission().then(permission => {
+            if (permission.state === 'granted') {
+              BDB.Geolocation.startWatch();
+            }
+          });
+          
         });             
     },
     searchAndCenter: function(address) {
