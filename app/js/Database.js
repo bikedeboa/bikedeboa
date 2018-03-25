@@ -83,7 +83,7 @@ BDB.Database = {
     this.authenticate();
   },
 
-  authenticate: function(callback) {
+  authenticate: function() {
     return new Promise((resolve, reject) => {
       const self = this;
 
