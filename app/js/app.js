@@ -950,7 +950,7 @@ $(() => {
     // Finally, display the modal
     const showModal = () => {
       // We can only set the nav title after the modal has been opened
-      updatePageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+      updatePageTitleAndMetatags(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
 
       $('#newPlaceModal')
         .one('shown.bs.modal', () => {
@@ -1321,7 +1321,7 @@ $(() => {
     $('.hamburger-button').removeClass('back-mode'); 
   }
 
-  function updatePageTitle(text) { 
+  function updatePageTitleAndMetatags(text) { 
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
@@ -1329,10 +1329,10 @@ $(() => {
       $('#top-mobile-bar-title').text(openedMarker ? '' : text);
     }
 
-    text = text || 'bike de boa';
+    text = text || 'bike de boa'; 
 
     // Basic website metatags
-    document.title = text; 
+    document.title = text;
     $('meta[property="og:title"]').attr('content', text);  
     
     // Set every URL as canonical, otherwise Google thinks some are duplicates. Gotta index 'em all!
@@ -1357,6 +1357,12 @@ $(() => {
       $('meta[property="og:image"]').attr('content', '');
       $('meta[property="og:description"]').attr('content', '');
       $('meta[name="description"]').attr('content', ''); 
+    }
+ 
+    if (window.performance && _isDeeplink && openedMarker) {
+      const timeSincePageLoad = Math.round(performance.now());
+      // console.log('timeSincePageLoad', timeSincePageLoad);  
+      ga('send', 'timing', 'Data', 'place deeplink metatags ready', timeSincePageLoad);
     }
   }
 
@@ -1766,9 +1772,7 @@ $(() => {
 
       // Set mobile navbar with modal's title
       const openingModalTitle = openingModalEl.find('.view-name').text();
-      if (openingModalTitle) {
-        updatePageTitle(openingModalTitle);
-      }
+      updatePageTitleAndMetatags(openingModalTitle);
 
       $('body').addClass(openingModalEl.attr('id'));
 
@@ -1787,7 +1791,7 @@ $(() => {
     $('body').on('hide.bs.modal', '.modal', e => {
       const closingModalEl = $(e.currentTarget);
 
-      updatePageTitle();
+      updatePageTitleAndMetatags();
       
       $('body').removeClass(closingModalEl.attr('id'));
 
@@ -2124,6 +2128,8 @@ $(() => {
       switch(urlBreakdown[1]) {
       case 'novo':
       case 'editar':
+      case 'nav':
+      case 'filtros':
       case 'foto':
         window.location.pathname = '';
         break;
@@ -2496,6 +2502,45 @@ $(() => {
 
   }
 
+  function initMenus() {
+    const sidenavHideCallback = () => {
+      // @todo explain this
+      setView('bike de boa', '/', true);
+    };
+
+    // Delay loading of those to optimize startup
+    if (_isMobile) {
+      $('body').append(BDB.templates.hamburgerMenu());
+
+      try {
+        _hamburgerMenu = new SideNav(
+          'hamburger-menu',
+          {
+            hideCallback: sidenavHideCallback
+          }
+        );
+      } catch (err) {
+        _hamburgerMenu = null;
+      }
+    } else {
+      $('body').append(BDB.templates.filterMenu());
+       
+      try {
+        _filterMenu = new SideNav(
+          'filter-menu',
+          {
+            inverted: true,
+            hideCallback: sidenavHideCallback
+            /*fixed: true*/
+          }
+        );
+      } catch (err) {
+        _filterMenu = null;
+      }
+    }
+
+  }
+
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
   function setup() {
     // Detect if webapp was launched from mobile homescreen (for Android and iOS)
@@ -2540,6 +2585,8 @@ $(() => {
     _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
 
     _initGlobalCallbacks();
+
+    initMenus();
 
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
@@ -2609,30 +2656,6 @@ $(() => {
       'closeButton': false,
       'progressBar': false
     };
-
-    // Sidenav (hamburger and filter menus)
-    const sidenavHideCallback = () => {
-      // @todo explain this
-      setView('bike de boa', '/', true);
-    };
-    try {
-      _hamburgerMenu = new SideNav(
-        'hamburger-menu',
-        {
-          hideCallback: sidenavHideCallback
-        }
-      );
-      _filterMenu = new SideNav(
-        'filter-menu',
-        {
-          inverted: true,
-          hideCallback: sidenavHideCallback
-          /*fixed: true*/
-        }
-      );
-    } catch (err) {
-      _hamburgerMenu = _filterMenu = null;
-    }
 
     // Set up Hello.js, the Social Login lib
     hello.init({

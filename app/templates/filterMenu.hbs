@@ -1,0 +1,133 @@
+<aside id="filter-menu" class="js-side-nav side-nav side-nav-inverted side-nav-fixed">
+    <nav class="js-side-nav-container side-nav__container">
+    <button class="js-menu-hide side-nav__hide">
+        Feito
+    </button> 
+    
+    <header class="side-nav__header">
+        <h2>
+        Filtros
+        </h2>
+        <button id="clear-filters-btn" class="link-button">(limpar todos)</button>
+
+        <!-- <div class="setting-checkbox-container">
+            <input type="checkbox" id="show-bike-layer">
+            <label for="show-bike-layer">
+            Mostrar ciclovias e ciclofaixas
+            <a id="ciclovias-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto top" role="button" tabindex="0" data-title="Combinamos dados de várias fontes pra trazer o estado mais atualizado possível das ciclovias, mas mesmo assim pode não estar super de acordo com a realidade. Nos dá um toque se reparar em algo. :)"></a>
+            </label>
+        </div> -->
+    </header>
+
+    <div class="side-nav__content">
+
+        <div>
+        <h3>Avaliações</h3>
+        <ul>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_rating_good" data-prop="rating" data-value="good">
+                <label for="filter_rating_good"><img alt="" src="/img/pin_green.png"/> Excelentes</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_rating_medium" data-prop="rating" data-value="medium">
+                <label for="filter_rating_medium"><img alt="" src="/img/pin_yellow.png"/> Médios</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_rating_bad" data-prop="rating" data-value="bad">
+                <label for="filter_rating_bad"><img alt="" src="/img/pin_red.png"/> Ruins</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_rating_none" data-prop="rating" data-value="none">
+                <label for="filter_rating_none"><img alt="" src="/img/pin_gray.png"/> Sem avaliação</label>
+            </li>
+        </ul>
+        </div>
+
+        <!-- <hr> -->
+        
+        <div>
+        <h3>Acesso</h3>
+        <ul>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_public" data-prop="isPublic" data-value="true">
+                <label for="filter_public">Públicos</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_private" data-prop="isPublic" data-value="false">
+                <label for="filter_private">Privados</label>
+            </li>
+        </ul>
+        </div>
+
+        <!-- <hr> -->
+
+        <div>
+        <h3>Tipos de Bicicletário</h3>
+        <ul>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_structure_deroda" data-prop="structureType" data-value="deroda">
+                <label for="filter_structure_deroda">De roda</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_structure_uinvertido" data-prop="structureType" data-value="uinvertido">
+                <label for="filter_structure_uinvertido">U Invertido</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_structure_suspenso" data-prop="structureType" data-value="suspenso">
+                <label for="filter_structure_suspenso">Suspenso</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_structure_grade" data-prop="structureType" data-value="grade">
+                <label for="filter_structure_grade">Grade</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_structure_trave" data-prop="structureType" data-value="trave">
+                <label for="filter_structure_trave">Trave</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_structure_other" data-prop="structureType" data-value="other">
+                <label for="filter_structure_other">Outros</label>
+            </li>
+        </ul>
+        </div>
+
+        <!-- <hr> -->
+
+        <div>
+        <h3>Cobertura</h3>
+        <ul>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_covered" data-prop="isCovered" data-value="true">
+                <label for="filter_covered">Coberto</label>
+            </li>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_uncovered" data-prop="isCovered" data-value="false">
+                <label for="filter_uncovered">Não coberto</label>
+            </li>
+        </ul>
+        </div>
+
+        <div>
+        <h3>Outros</h3>
+        <ul>
+            <li>
+                <input type="checkbox" class="filter-checkbox" id="filter_withPhoto" data-prop="hasPhoto" data-value="with">
+                <label for="filter_withPhoto">Com foto</label>
+            </li>
+            <li> 
+                <input type="checkbox" class="filter-checkbox" id="filter_withoutPhoto" data-prop="hasPhoto" data-value="without">
+                <label for="filter_withoutPhoto">Sem foto</label>
+            </li>
+        </ul>
+        </div>
+        
+    </div>
+
+    <!-- <footer>
+        <div id="filter-results-counter-container">
+        <span class="glyphicon glyphicon-chevron-left"></span> Mostrando <span id="filter-results-counter"></span> de <span id="filter-results-total"></span> bicicletários.
+        </div>
+    </footer> -->
+
+    </nav>
+</aside>
