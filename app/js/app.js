@@ -1454,7 +1454,7 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-      BDB.Map.init(start_coords, zoom, "map", getGeolocation); 
+      BDB.Map.init(start_coords, zoom, "map", getGeolocation, openLocal); 
 
       if (!_isTouchDevice) {
         $('.caption-tooltip').tooltip({

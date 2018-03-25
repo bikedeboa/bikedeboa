@@ -317,45 +317,58 @@ BDB.Map = (function () {
     }
   };
   let setMarkersIcon = function(scale) {
-      const tempMarkers = markerClusterer && markerClusterer.getMarkers();
-      if (tempMarkers && Array.isArray(tempMarkers)) {
-        let m;
-        for (let i = 0; i < tempMarkers.length; i++) {
-          m = markers[i];
-          tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
-        }
+    const tempMarkers = markerClusterer && markerClusterer.getMarkers();
+    if (tempMarkers && Array.isArray(tempMarkers)) {
+      let m;
+      for (let i = 0; i < tempMarkers.length; i++) {
+        m = markers[i];
+        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
       }
+    }
+  };
+  let searchAdress = function(address) {
+    return new Promise(function (resolve, reject) {
+      geocoder.geocode({ 'address': address }, function (results, status) {
+        if (status === 'OK') {
+          resolve(results[0]);
+        } else {
+          reject();
+        }
+      });
+    });
   };
   return {
-    init: function (coords, zoom, elId, getLocation) {
-        let options = Object.assign({isUserLocation : false}, {coords, zoom, elId});
+    init: function (coords, zoom, elId, getLocation, _markerClickCallback) {
+      let options = Object.assign({isUserLocation : false}, {coords, zoom, elId});
 
-        loadScripts().then(()=>{
-          // enabling search address and reverse geocoder
-          geocoder = new google.maps.Geocoder();
+      loadScripts().then(()=>{
+        // enabling search address and reverse geocoder
+        geocoder = new google.maps.Geocoder();
 
-          // chech localStorage to see if there is a saved location;
-          if (getLocation){
-            options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
-            options.zoom = 15;
-            options.isUserLocation = true;
-          }
+        // chech localStorage to see if there is a saved location;
+        if (getLocation){
+          options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
+          options.zoom = 15;
+          options.isUserLocation = true;
+        }
 
-          setMapElement(options);
+        markerClickCallback = _markerClickCallback;
 
-          // if a coord is passed to the map so do not check for automatic geolocation check.
-          if (getLocation){
-            BDB.Geolocation.checkPermission().then(permission => {
-              if (permission.state === 'granted') {
-                geolocate();
-              }
-            });
-          }
-        });             
+        setMapElement(options);
+
+        // if a coord is passed to the map so do not check for automatic geolocation check.
+        if (getLocation){
+          BDB.Geolocation.checkPermission().then(permission => {
+            if (permission.state === 'granted') {
+              geolocate();
+            }
+          });
+        }
+      });             
     },
     searchAndCenter: function(address) {
       return new Promise(function (resolve, reject) {
-        searchAdress(address)
+        searchAdress(address) 
           .then( result => {
             map.panTo(result.geometry.location); 
             
@@ -409,17 +422,6 @@ BDB.Map = (function () {
     getMap: function(){
       return map;
     },
-    searchAdress: function(address) {
-      return new Promise(function (resolve, reject) {
-        geocoder.geocode({ 'address': address }, function (results, status) {
-          if (status === 'OK') {
-            resolve(results[0]);
-          } else {
-            reject();
-          }
-        });
-      });
-    },
     reverseGeocode: function(lat, lng) {
       return new Promise(function (resolve, reject) {
         const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
@@ -428,7 +430,7 @@ BDB.Map = (function () {
           if (status === google.maps.GeocoderStatus.OK) {
             if (results[0]) {
               const r = results[0].address_components;
-              const formattedAddress = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`
+              const formattedAddress = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`;
               let city, state, country;
 
               r.forEach(address => {
@@ -438,18 +440,18 @@ BDB.Map = (function () {
                       console.warn('reverseGeocode: conflicting city names:', city, address.long_name);
                     }  
                     city = address.long_name;
-                  } else if (type === "administrative_area_level_1") {
+                  } else if (type === 'administrative_area_level_1') {
                     if (state && state != address.long_name) {
                       console.warn('reverseGeocode: conflicting state names:', state, address.long_name);
                     }
                     state = address.long_name;
-                  } else if (type === "country") {
+                  } else if (type === 'country') {
                     if (country && country != address.long_name) {
                       console.warn('reverseGeocode: conflicting country names:', country, address.long_name);
                     }
                     country = address.long_name;
                   }
-                })
+                });
               });
 
               resolve({
@@ -585,7 +587,7 @@ BDB.Map = (function () {
 
       var nearest = this.getListOfPlaces('nearest', 1)[0];
       console.log('nearest place:', nearest); 
-      var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) }
+      var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
       bounds.extend(nearestPos);
 
       map.fitBounds(bounds);
