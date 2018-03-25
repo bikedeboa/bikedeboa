@@ -8,66 +8,60 @@ BDB.Map = (function () {
   let mapBounds;
   let geolocationMarker;
   let geolocationRadius;
-  // let geolocationInitialized;
-  // let positionWatcher;
   let bikeLayer;
+  let mapZoomLevel; 
+  let isGeolocated = false;
   let markerClickCallback;
   let markerClusterer;
   let areMarkersHidden = false;
-  let mapZoomLevel; 
-  let startInMarker = false;
-  let isGeolocated = false;
   let directionsRenderer;
   let directionsService;
 
-  // "Main Brazil" Bounding Box
-  //   [lat, long]
-  // SW [[-34.0526594796, -61.3037107971],
-  // SE [-34.0526594796, -34.3652340941],
-  // NE [0.1757808338, -34.3652340941],
-  // NW [0.1757808338, -61.3037107971]]]
+  // to do:  move this to configuration
+  let mapBoundsCoords = { 
+    sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, 
+    ne: { lat: '0.1757808338', lng: '-34.3652340941' } 
+  };
 
-  // Rio Grande do Sul Bounding Box
-  // let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
-
-  // "Main Brazil"
-  let _mapBoundsCoords = { sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, ne: { lat: '0.1757808338', lng: '-34.3652340941' } };
-
-
-  let initMap = function (coords, zoomValue, pinUser, resolve, reject) {
-    // By default, $.getScript() sets the cache setting to false.This appends a timestamped query parameter to the 
-    //  request URL to ensure that the browser downloads the script each time it is requested.You can override this 
-    //  feature by setting the cache property globally using $.ajaxSetup():
+  // function that must be called on map.init(), returns a promise.
+  let loadScripts = function(){
+    /*By default, $.getScript() sets the cache setting to false.This appends a timestamped query parameter to the 
+     request URL to ensure that the browser downloads the script each time it is requested.You can override this 
+     feature by setting the cache property globally using $.ajaxSetup():*/
+    
     $.ajaxSetup({
       cache: true
     });
 
+    return new Promise((resolve, reject) => {
     // Dynamically inject Google Map's lib
-    $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
-      $.getScript('/lib/infobox.min.js', () => {
-        $.getScript('/lib/markerclusterer.min.js', () => {
-          // $.getScript('/lib/markerwithlabel.min.js', () => {
-          initMap_continue(coords, zoomValue, pinUser, resolve, reject);
-          // }); 
+    // todo: apply reject behaviour.
+      $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
+        $.getScript('/lib/infobox.min.js', () => {
+          $.getScript('/lib/markerclusterer.min.js', () => {
+            resolve();
+          });
         });
       });
-    } 
-    );
+    });
   };
 
-  let initMap_continue = function (coords, zoomValue, pinUser, resolve, reject) {
-    const mapEl = document.getElementById('map');
+  let setMapElement = function(options) {
 
-    if (!mapEl) {
+    let {coords, zoom, isUserLocation, elId} = options;
+
+    const DOM_EL = document.getElementById(elId);
+
+    if (!elId) {
       console.warn('Map initialization stopped: no #map element found');
-      reject();
       return;
     }
 
     let gpos = convertToGmaps(coords);
-    map = new google.maps.Map(mapEl, { 
+    
+    map = new google.maps.Map(DOM_EL, { 
       center: gpos,
-      zoom: zoomValue,
+      zoom,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -78,29 +72,29 @@ BDB.Map = (function () {
         position: google.maps.ControlPosition.RIGHT_CENTER
       }
     });
+
     setUserMarker();
     setUserRadius();
-    if (pinUser) {
+
+    if (isUserLocation) {
       updateUserMarkerPosition(gpos);
     }
  
-    setupAutocomplete();
-    BDB.Geolocation.init();
-    
-    setMapBounds();
-    
+    setupAutocomplete();  
+    setMapBounds(); 
     setInfoBox();
+    mapCenterChanged();
+    mapZoomChanged();
+    setupBikeLayer(); 
     
     map.addListener('center_changed', mapCenterChanged);
-    mapCenterChanged();
-
+  
     if (!_isMobile) {
       google.maps.event.addListener(map, 'zoom_changed', mapZoomChanged);
     }
-    mapZoomChanged();
 
     directionsRenderer = new google.maps.DirectionsRenderer({
-      map: BDB.Map.getMap(),
+      map: map,
       hideRouteList: true,
       draggable: false,
       preserveViewport: true,
@@ -128,8 +122,6 @@ BDB.Map = (function () {
     //native Event Dispatcher 
     let event = new Event('map:ready');
     document.dispatchEvent(event);
-
-    resolve();
   };
 
   let convertToGmaps = function (obj, convert = true) {
@@ -144,6 +136,7 @@ BDB.Map = (function () {
       return obj;
     }
   };
+  
   let mapZoomChanged = function () {
     const prevZoomLevel = mapZoomLevel;
 
@@ -151,10 +144,11 @@ BDB.Map = (function () {
 
     if (!prevZoomLevel || prevZoomLevel !== mapZoomLevel) { 
       if (!_activeFilters) {
-        setMarkersIcon(mapZoomLevel); 
+        //setMarkersIcon(mapZoomLevel); 
       }
     }
   };
+  
   let mapCenterChanged = function () {
     clearTimeout(_centerChangedTimeout);
     _centerChangedTimeout = setTimeout(() => {
@@ -176,11 +170,12 @@ BDB.Map = (function () {
   };
   let setMapBounds = function () {
     mapBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
-      new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
+      new google.maps.LatLng(mapBoundsCoords.sw.lat, mapBoundsCoords.sw.lng),
+      new google.maps.LatLng(mapBoundsCoords.ne.lat, mapBoundsCoords.ne.lng)
     );
   };
   let setInfoBox = function () {
+    // remove jquery reference.
     // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 400;
     const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
     const myOptions = {
@@ -252,12 +247,11 @@ BDB.Map = (function () {
       strokeOpacity: '0'
     });
   };
-
   let geolocate = function (options = {}) {
     BDB.Geolocation.getLocation();
 
     document.addEventListener('geolocation:done', function (result) {
-      if (result.detail.status) {
+      if (result.detail.success) {
         if (!isGeolocated){
           isGeolocated = true;
           setUserMarkerIcon();
@@ -332,30 +326,49 @@ BDB.Map = (function () {
       }
     }
   };
+  let searchAdress = function(address) {
+    return new Promise(function (resolve, reject) {
+      geocoder.geocode({ 'address': address }, function (results, status) {
+        if (status === 'OK') {
+          resolve(results[0]);
+        } else {
+          reject();
+        }
+      });
+    });
+  };
   return {
-    init: function (_markerClickCallback) {
-      return new Promise((resolve, reject) => {
-        let isDefaultLocation = (!startInMarker) ? BDB.Geolocation.isDefaultLocation() : true;
-        let zoom = (isDefaultLocation && !startInMarker) ? 15 : 17; 
-        let coords =  BDB.Geolocation.getLastestLocation();
+    init: function (coords, zoom, elId, getLocation, _markerClickCallback) {
+      let options = Object.assign({isUserLocation : false}, {coords, zoom, elId});
+
+      loadScripts().then(()=>{
+        // enabling search address and reverse geocoder
+        geocoder = new google.maps.Geocoder();
+
+        // chech localStorage to see if there is a saved location;
+        if (getLocation){
+          options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
+          options.zoom = 15;
+          options.isUserLocation = true;
+        }
 
         markerClickCallback = _markerClickCallback;
 
-        initMap(coords, zoom, !isDefaultLocation, resolve, reject);
-        if (startInMarker){
-          return false;
+        setMapElement(options);
+
+        // if a coord is passed to the map so do not check for automatic geolocation check.
+        if (getLocation){
+          BDB.Geolocation.checkPermission().then(permission => {
+            if (permission.state === 'granted') {
+              geolocate();
+            }
+          });
         }
-        // Check previous user permission for geolocation
-        BDB.Geolocation.checkPermission().then(permission => {
-          if (permission.state === 'granted') {
-            geolocate();
-          }
-        });        
-      });
+      });             
     },
     searchAndCenter: function(address) {
       return new Promise(function (resolve, reject) {
-        BDB.Geolocation.searchAdress(address)
+        searchAdress(address) 
           .then( result => {
             map.panTo(result.geometry.location); 
             
@@ -369,13 +382,6 @@ BDB.Map = (function () {
           })
           .catch(reject);
       });
-    },
-    startInLocation: function(coords){
-      startInMarker = true;
-      BDB.Geolocation.forceLocation(coords);
-    },
-    getMarkers: function() {
-      return markerClusterer.getMarkers();
     },
     getStaticImgMap: function (staticImgDimensions, pinColor, lat, lng, customStyle, zoom = false) {
       let zoomStr = (zoom) ? `zoom=${zoom}&` : '';
@@ -401,10 +407,6 @@ BDB.Map = (function () {
 
       map.data.setMap(null);
     },
-    //return this to app.js to apply markers 
-    getMap: function () {
-      return map;
-    },
     checkBounds: function () {
       if (map) {
         return isPosWithinBounds(map.getCenter());
@@ -412,10 +414,65 @@ BDB.Map = (function () {
         return false;
       }
     },
-    goToPortoAlegre: function () {
-      map.setCenter({ lat: -30.0346, lng: -51.2177 });
+    goToCoords: function (coords) {
+      map.setCenter(convertToGmaps(coords));
       map.setZoom(12);
       BDB.Geolocation.clearWatch();
+    },
+    getMap: function(){
+      return map;
+    },
+    reverseGeocode: function(lat, lng) {
+      return new Promise(function (resolve, reject) {
+        const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+              const r = results[0].address_components;
+              const formattedAddress = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`;
+              let city, state, country;
+
+              r.forEach(address => {
+                address.types.forEach(type => {
+                  if (type === 'locality' || type === 'administrative_area_level_2') {
+                    if (city && city != address.long_name) {
+                      console.warn('reverseGeocode: conflicting city names:', city, address.long_name);
+                    }  
+                    city = address.long_name;
+                  } else if (type === 'administrative_area_level_1') {
+                    if (state && state != address.long_name) {
+                      console.warn('reverseGeocode: conflicting state names:', state, address.long_name);
+                    }
+                    state = address.long_name;
+                  } else if (type === 'country') {
+                    if (country && country != address.long_name) {
+                      console.warn('reverseGeocode: conflicting country names:', country, address.long_name);
+                    }
+                    country = address.long_name;
+                  }
+                });
+              });
+
+              resolve({
+                address: formattedAddress,
+                city: city,
+                state: state,
+                country: country
+              });
+            } else {
+              console.error('No results found');
+              reject();
+            }
+          } else {
+            console.error('Geocoder failed due to: ' + status);
+            reject(status);
+          }
+        });
+      });
+    },
+    getMarkers: function() {
+      return markerClusterer.getMarkers();
     },
     clearMarkers: function () {
       // Deletes all markers in the array by removing references to them.
@@ -530,7 +587,7 @@ BDB.Map = (function () {
 
       var nearest = this.getListOfPlaces('nearest', 1)[0];
       console.log('nearest place:', nearest); 
-      var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) }
+      var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
       bounds.extend(nearestPos);
 
       map.fitBounds(bounds);

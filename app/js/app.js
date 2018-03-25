@@ -2,6 +2,10 @@
 /* eslint-env node, jquery */
 
 $(() => {
+  let start_coords = DEFAULT_COORDS;
+  let zoom = 15;
+  let getGeolocation = true;
+
   function openShareDialog() {
     // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
     const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
@@ -564,7 +568,7 @@ $(() => {
         
         // Saves this position for later
         _newMarkerTemp = {lat: mapCenter.lat(), lng: mapCenter.lng()};
-        BDB.Geolocation.reverseGeocode(_newMarkerTemp.lat, _newMarkerTemp.lng)
+        BDB.Map.reverseGeocode(_newMarkerTemp.lat, _newMarkerTemp.lng)
           .then( (addressObj) => {
             // console.log('Resolved location address:');
             // console.log(address);
@@ -1450,8 +1454,7 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-
-      BDB.Map.init(openLocal); 
+      BDB.Map.init(start_coords, zoom, "map", getGeolocation, openLocal); 
 
       if (!_isTouchDevice) {
         $('.caption-tooltip').tooltip({
@@ -1633,7 +1636,7 @@ $(() => {
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
-      BDB.Map.goToPortoAlegre();
+      BDB.Map.goToCoords(DEFAULT_COORDS);
     }));
 
     
@@ -1650,32 +1653,34 @@ $(() => {
       let result = e.detail;
       $('#geolocationBtn').removeClass('loading');
 
-      if (result.status && result.center){
-        ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
-        return false;
-      }
-
-      ga('send', 'event', 'Geolocation', result.response.message ? `fail - ${result.response.message}`: 'fail - no_message');
-
-      switch(result.response.code) {
-      case 1:
-        // PERMISSION_DENIED
-        if (_isFacebookBrowser) {
-          toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
-        } else {
-          toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
+      if (result.success) {
+        if (result.center) {
+          console.log('Geolocation init');
+          ga('send', 'event', 'Geolocation', 'init', `${result.response.latitude},${result.response.longitude}`);
         }
-        break; 
-      case 2:
-        // POSITION_UNAVAILABLE
-        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-        break;
-      case 3:
-        // TIMEOUT
-        toastr['warning']('Não foi possível recuperar sua posição do GPS.');
-        break;
+      } else {
+        console.error('Geolocation failed', result.response.message);
+        ga('send', 'event', 'Geolocation', result.response.message ? `fail - ${result.response.message}`: 'fail - no_message');
+  
+        switch(result.response.code) {
+        case 1:
+          // PERMISSION_DENIED
+          if (_isFacebookBrowser) {
+            toastr['warning']('Seu navegador parece não suportar essa função, que pena.');
+          } else {
+            toastr['warning']('Seu GPS está desabilitado, ou seu navegador parece não suportar essa função.');
+          }
+          break; 
+        case 2:
+          // POSITION_UNAVAILABLE
+          toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+          break;
+        case 3:
+          // TIMEOUT
+          toastr['warning']('Não foi possível recuperar sua posição do GPS.');
+          break;
+        }
       }
-      
     });
     
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
@@ -2157,7 +2162,9 @@ $(() => {
                   latitude : parseFloat(_deeplinkMarker.lat),
                   longitude: parseFloat(_deeplinkMarker.lng)
                 }
-                BDB.Map.startInLocation(coords);  
+                start_coords = coords;  
+                zoom = 17;
+                getGeolocation = false;
               }  
               if (!_isMobile) {
                 $(document).trigger('LoadMap');
