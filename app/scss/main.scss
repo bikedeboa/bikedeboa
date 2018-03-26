@@ -718,6 +718,9 @@ body.deeplink {
 .modal {
     -webkit-overflow-scrolling: auto !important;
     overflow-y: auto !important;
+
+    bottom: unset;
+    position: absolute;
 }
 
 .obfuscate {
