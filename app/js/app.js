@@ -1425,7 +1425,7 @@ $(() => {
       BDB.Map.showBikeLayer();
     });
 
-    $(document).on("autocomplete:done", function (e) {
+    $(document).on('autocomplete:done', function (e) {
       let place = e.detail
 
       addToRecentSearches({
@@ -1530,58 +1530,11 @@ $(() => {
       ga('send', 'event', 'Misc', 'medium link click');
     });
 
-    $('.openContributionsBtn').on('click', queueUiCallback.bind(this, () => {
+    $('body').on('click', '.openContributionsBtn', queueUiCallback.bind(this, () => {
       hideAll();
       setView('Contribuições', '/contribuicoes', true);
     }));
  
-    $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
-      // @todo having to call these two ones here is bizarre
-      hideAll();
-      goHome();
-
-      // setView('Login Administrador', '/login', true);
-      // login(true);
-
-      openLoginDialog();
-    }));
-    
-    $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
-      hideAll();
-      ga('send', 'event', 'Misc', 'about opened');
-      setView('Sobre', '/sobre', true);
-    }));
-
-    $('body').on('click', '.facebookLoginBtn', () => {
-      hideAll();
-      hello('facebook').login({scope: 'email'});
-    }); 
-
-    $('body').on('click', '.googleLoginBtn', () => {
-      hideAll();
-      hello('google').login({scope: 'email'}); 
-    });
-
-    $('body').on('click', '.logoutBtn', () => { 
-      hideAll();
-      hello.logout('facebook');
-      hello.logout('google');
-    }); 
-
-    $('.howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
-      hideAll();
-
-      ga('send', 'event', 'Misc', 'how-to-install opened');
-      setView('Como instalar o app', '/como-instalar', true);
-    }));
-
-    $('.open-faq-btn').on('click', queueUiCallback.bind(this, () => {
-      hideAll();
-
-      ga('send', 'event', 'Misc', 'faq opened');
-      setView('Perguntas frequentes', '/faq', true);
-    }));
-
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Misc', 'faq opened');
@@ -1596,51 +1549,6 @@ $(() => {
 
       ga('send', 'event', 'Misc', 'about data opened');
       setView('Sobre nossos dados', '/sobre-nossos-dados', true);
-    }));
-
-    $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
-      // @todo having to call these two ones here is bizarre
-      hideAll();
-      goHome();
-
-      ga('send', 'event', 'Misc', 'contact opened');
-      
-      swal({
-        title: 'Contato',
-        html:
-          `
-            <div style="text-align: center; font-size: 30px;">
-              <p>
-                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
-                </a> 
-
-                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
-                </a>
-
-                <a href="mailto:bikedeboa@gmail.com">
-                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
-                </a>
-              </p>
-            </div> 
-
-            <hr>
-
-            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
-            <div style="text-align: center;">
-              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
-            </div>
-          `,
-      });
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
@@ -1707,27 +1615,6 @@ $(() => {
     }));
 
 
-    /////////////
-    // Filters //
-    ///////////// 
-
-    $('#clear-filters-btn').on('click', () => {
-      $('.filter-checkbox:checked').prop('checked', false);
-
-      ga('send', 'event', 'Filter', 'clear filters');
-      
-      updateFilters();
-    });
-
-    $('.filter-checkbox').on('change', e => {
-      // ga('send', 'event', 'Misc', 'launched with display=standalone');
-      const $target = $(e.currentTarget);
-
-      ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(':checked') ? 'ON' : 'OFF'}`);
-
-      queueUiCallback(updateFilters);
-    }); 
-
     $('body').on('click', '.back-button', e => {
       // If was creating a new local
       // @todo Do this check better
@@ -1767,7 +1654,8 @@ $(() => {
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
       $('.modal-dialog')
-        .velocity((_isMobile ? 'transition.slideUpIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
+        // .velocity((_isMobile ? 'transition.slideRightBigIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
+        .velocity((_isMobile ? 'transition.slideRightIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
         .velocity({display: 'table-cell'}); 
 
       const openingModalEl = $(e.currentTarget);
@@ -2489,6 +2377,8 @@ $(() => {
         toastr['info']('Você está offline');
       } else {
         $('#offline-overlay').addClass('showThis');
+
+        $('#geolocationBtn').hide();
         
         $('#reloadBtn').on('click', () => {
           showSpinner()
@@ -2504,6 +2394,100 @@ $(() => {
 
   }
 
+  function initNavCallbacks() {
+    $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
+      hideAll();
+      goHome();
+
+      // setView('Login Administrador', '/login', true);
+      // login(true);
+
+      openLoginDialog();
+    })); 
+
+    $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
+      hideAll();
+      ga('send', 'event', 'Misc', 'about opened');
+      setView('Sobre', '/sobre', true);
+    }));
+
+    $('.facebookLoginBtn').on('click', () => {
+      hideAll();
+      hello('facebook').login({ scope: 'email' });
+    });
+
+    $('.googleLoginBtn').on('click', () => {
+      hideAll();
+      hello('google').login({ scope: 'email' });
+    });
+
+    $('.logoutBtn').on('click', () => {
+      hideAll();
+      hello.logout('facebook');
+      hello.logout('google');
+    });
+
+    $('.howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
+      hideAll();
+
+      ga('send', 'event', 'Misc', 'how-to-install opened');
+      setView('Como instalar o app', '/como-instalar', true);
+    }));
+
+    $('.open-faq-btn').on('click', queueUiCallback.bind(this, () => {
+      hideAll();
+
+      ga('send', 'event', 'Misc', 'faq opened');
+      setView('Perguntas frequentes', '/faq', true);
+    }));
+
+    $('body').on('click', '.contact-btn', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
+      hideAll();
+      goHome();
+
+      ga('send', 'event', 'Misc', 'contact opened');
+
+      swal({
+        title: 'Contato',
+        html:
+          `
+            <div style="text-align: center; font-size: 30px;">
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
+                </a> 
+
+                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
+                </a>
+
+                <a href="mailto:bikedeboa@gmail.com">
+                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
+                </a>
+              </p>
+            </div> 
+
+            <hr>
+
+            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
+            <div style="text-align: center;">
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
+            </div>
+          `,
+      });
+    }));
+  }
+
   function initMenus() {
     const sidenavHideCallback = () => {
       // @todo explain this
@@ -2514,33 +2498,43 @@ $(() => {
     if (_isMobile) {
       $('body').append(BDB.templates.hamburgerMenu());
 
-      try {
-        _hamburgerMenu = new SideNav(
-          'hamburger-menu',
-          {
-            hideCallback: sidenavHideCallback
-          }
-        );
-      } catch (err) {
-        _hamburgerMenu = null;
-      }
+      _hamburgerMenu = new SideNav(
+        'hamburger-menu',
+        {
+          hideCallback: sidenavHideCallback
+        }
+      );
     } else {
       $('body').append(BDB.templates.filterMenu());
+
+      $('#clear-filters-btn').on('click', () => {
+        $('.filter-checkbox:checked').prop('checked', false);
+
+        ga('send', 'event', 'Filter', 'clear filters');
+
+        updateFilters();
+      });
+
+      $('.filter-checkbox').on('change', e => {
+        // ga('send', 'event', 'Misc', 'launched with display=standalone');
+        const $target = $(e.currentTarget);
+
+        ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(':checked') ? 'ON' : 'OFF'}`);
+
+        queueUiCallback(updateFilters);
+      }); 
        
-      try {
-        _filterMenu = new SideNav(
-          'filter-menu',
-          {
-            inverted: true,
-            hideCallback: sidenavHideCallback
-            /*fixed: true*/
-          }
-        );
-      } catch (err) {
-        _filterMenu = null;
-      }
+      _filterMenu = new SideNav(
+        'filter-menu',
+        {
+          inverted: true,
+          hideCallback: sidenavHideCallback
+          /*fixed: true*/
+        }
+      );
     }
 
+    initNavCallbacks();
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
