@@ -88,48 +88,31 @@ $(() => {
       console.error('Trying to open details modal without a marker.');
       return;
     }
+    
+    if (addLocationMode) {
+      return;
+    }
 
     openedMarker = marker;
     const m = openedMarker;
  
-    if (addLocationMode) {
-      return false;
+    let templateData = {
+      title: m.text,
+      address: m.address,
+      description: m.description,
+      author: m.User && m.User.fullname,
+      views: m.views,
+      reviews: m.reviews,
+      lat: m.lat,
+      lng: m.lng,
+      slots: m.slots
     }
-
-    ga('send', 'event', 'Local', 'view', ''+m.id);
-
-    let templateData = {};
-
-    templateData.title = m.text;
-    templateData.address = m.address;
-    templateData.description = m.description;
-    templateData.author = m.User && m.User.fullname;
-    templateData.views = m.views;
-    templateData.reviews = m.reviews;
-    templateData.lat = m.lat;
-    templateData.lng = m.lng;
-    templateData.slots = m.slots;
     
-    if (m.DataSource) {
-      templateData.dataSourceName = m.DataSource.name;
-    }
- 
-    if (m.isPaid) {
-      if (m.isPaid === true) {
-        templateData.isPaid = 'Pago';
-      } else {
-        templateData.isPaid = 'Gratuito';
-      }
-    }
-
-    if (m.createdAt) {
-      templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
-    }
-
     // Average
     templateData.pinColor = getColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
+    // Minimap
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
   
@@ -178,6 +161,7 @@ $(() => {
     
     // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
+    // User permissions
     if (BDB.User.isAdmin) {
       templateData.isAdmin = true;
       templateData.canModify = true;
@@ -187,7 +171,26 @@ $(() => {
       }
     }
 
-    // Route button 
+    // Data source
+    if (m.DataSource) {
+      templateData.dataSourceName = m.DataSource.name;
+    }
+
+    // Is paid
+    if (m.isPaid) {
+      if (m.isPaid === true) {
+        templateData.isPaid = 'Pago';
+      } else {
+        templateData.isPaid = 'Gratuito';
+      }
+    }
+
+    // Created at
+    if (m.createdAt) {
+      templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+    }
+
+    // Show directions button 
     // templateData.gmapsRedirectUrl = `https://maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
     templateData.gmapsRedirectUrl = `https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}&travelmode=bicycling`; 
 
@@ -207,6 +210,7 @@ $(() => {
       templateData.noIsPublicData = true;
     }
 
+    // Is covered?
     if (m.isCovered != null) {
       templateData.isCovered = m.isCovered === true;
     } else {
@@ -242,11 +246,12 @@ $(() => {
         stars += '<span class="glyphicon glyphicon-star"></span>';
       }
       templateData.savedRatingContent = rating + stars;
+    } else {
+      if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+        templateData.userThumbUrl = BDB.User.profile.thumbnail; 
+      }
     }
 
-    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
-      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-    }
 
 
     ////////////////////////////////
@@ -305,10 +310,23 @@ $(() => {
       }
     }));
 
-    // Display the modal
+    // RENDER
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
 
+      // Analytics stuff
+      ga('send', 'event', 'Local', 'view', '' + m.id);
+      const userCurrentPosition = BDB.Geolocation.getCurrentPosition();
+      if (userCurrentPosition) {
+        const distanceKm = distanceInKmBetweenEarthCoordinates(
+          userCurrentPosition.latitude, userCurrentPosition.longitude, openedMarker.lat, openedMarker.lng);
+        const distanceMeters = distanceKm * 1000;
+
+        console.log(`[Analytics] Local / distance from user (m) / ${distanceMeters}`);
+        ga('send', 'event', 'Local', 'distance from user (m)', null, distanceMeters);
+      }
+
+      // Modal stuff
       $('#placeDetailsModal')
         .one('show.bs.modal', () => { 
           // Global states
@@ -356,7 +374,7 @@ $(() => {
 
     // Tooltips
     if(!_isTouchDevice) {
-      $('#placeDetailsContent .full-star').tooltip({
+      $('#placeDetailsContent .full-star').tooltip({ 
         toggle: 'tooltip',
         placement: 'bottom', 
         'delay': {'show': 0, 'hide': 100}
@@ -651,14 +669,10 @@ $(() => {
   }
 
   function showUI() {
-    // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
-    // $('#addPlace').velocity('transition.slideUpIn');
     $('.cool-hide').removeClass('cool-hidden');
   }
 
   function hideUI() {
-    // $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
-    // $('#addPlace').velocity('transition.slideDownOut');
     $('.cool-hide').addClass('cool-hidden');
   }
 
@@ -1654,9 +1668,8 @@ $(() => {
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
       $('.modal-dialog')
-        // .velocity((_isMobile ? 'transition.slideRightBigIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
         .velocity((_isMobile ? 'transition.slideRightIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
-        .velocity({display: 'table-cell'}); 
+        .velocity({display: 'table-cell'});
 
       const openingModalEl = $(e.currentTarget);
 

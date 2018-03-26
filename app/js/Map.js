@@ -608,7 +608,7 @@ BDB.Map = (function () {
 
       const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, dest.lat(), dest.lng());
 
-      console.log(distanceKm);
+      // console.log(distanceKm); 
 
       if (!forceLongDistance && distanceKm > MAX_KM_TO_CALCULATE_ITINERARY) {
         console.warn('Wont calculate directions, too far away:', distanceKm);
