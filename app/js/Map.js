@@ -250,19 +250,13 @@ BDB.Map = (function () {
   let geolocate = function (options = {}) {
     BDB.Geolocation.getLocation();
 
-    $(document).one('geolocation:done', result => {
+    document.addEventListener('geolocation:done', function (result) {
       if (result.detail.success) {
         if (!isGeolocated){
           isGeolocated = true;
           setUserMarkerIcon();
         }
-        
-        if (options.isInitializingGeolocation) {
-          result.detail.center = false;
-          BDB.Map.fitToNearestPlace();
-        }
-
-        updateUserPosition(result.detail.response, result.detail.center);
+        updateUserPosition(result.detail.response, result.detail.center);  
       }else{
         isGeolocated = false;
         setUserMarkerIcon();
@@ -366,7 +360,7 @@ BDB.Map = (function () {
         if (getLocation){
           BDB.Geolocation.checkPermission().then(permission => {
             if (permission.state === 'granted') {
-              geolocate({isInitializingGeolocation: true});
+              geolocate();
             }
           });
         }
@@ -592,6 +586,7 @@ BDB.Map = (function () {
       bounds.extend(convertToGmaps(BDB.Geolocation.getCurrentPosition()));  
 
       var nearest = this.getListOfPlaces('nearest', 1)[0];
+      console.log('nearest place:', nearest); 
       var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
       bounds.extend(nearestPos);
 
