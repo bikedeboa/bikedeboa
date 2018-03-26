@@ -583,7 +583,9 @@ $(() => {
           const mapCenter = map.getCenter();
           openedMarker.lat = mapCenter.lat();
           openedMarker.lng = mapCenter.lng();
-          openNewOrEditPlaceModal();
+          
+          // Will be automatically triggered on toggleLocationInputMode()
+          // openNewOrEditPlaceModal();
         } else {
           if (BDB.Map.checkBounds()) {
             openNewOrEditPlaceModal();
