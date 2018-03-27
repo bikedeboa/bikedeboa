@@ -1560,7 +1560,7 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
-    position: fixed;
+    position: absolute;
     bottom: 76px;
     right: 0px;
 
@@ -1589,7 +1589,7 @@ a.unstyled-link {
 }
 
 #addPlace {
-    position: fixed;
+    position: absolute;
     bottom: 14px;
     right: 0px;
     margin: 0 $GRID_SPACE $GRID_SPACE;
@@ -1661,7 +1661,7 @@ a.unstyled-link {
 }
 
 #filterBtn {
-    position: fixed;
+    position: absolute;
     bottom: 138px;
     right: 0px;
 
@@ -3627,10 +3627,13 @@ body.modal-open {
 }
 
 .infoBox {
+  height: 90px;
   background: white;
-  @include shadow(1);
   display: flex;
   margin-top: $GRID_SPACE*2;
+  cursor: pointer;
+  
+  @include shadow(1);
 
   animation: slideIn .2s $coolEaseOut;
 
@@ -3646,7 +3649,7 @@ body.modal-open {
 
   .infobox--img {
     width: 100px;
-    height: 75px;
+    // height: 90px;
     position: relative;
     background: $lightestGrey;
 
@@ -4316,25 +4319,37 @@ body.modal-open {
     }
   }
 
+  .map-action-buttons {
+    transition: all 0.2s;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    &.move-up {
+      transform: translateY(-90px);
+    }
+  }
+
   .infoBox {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+
+
     .infobox--content {
-      margin-right: 35px;
+      margin-right: 35px; 
     }
 
     .infobox--label {
       display: none;
     }
 
-    // .infobox--arrow {
-    //   display: block;
-
-    //   position: absolute;
-    //   top: -13px;
-    //   left: calc(50% - 10px);
-    //   font-size: 20px;
-    //   color: white; 
-    //   text-shadow: 1px -2px 3px rgba(0,0,0,.15);
-    // }
+    .infobox--arrow {
+      display: none;
+    }
 
     .infobox--caret {
       display: block;
