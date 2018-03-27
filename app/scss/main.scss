@@ -120,6 +120,30 @@ $GRID_SPACE: 12px;
   }
 }
 
+@keyframes slideInDown {
+  from { 
+    transform: translateY(3px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDownBig {
+  from { 
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4332,12 +4356,13 @@ body.modal-open {
 
   .infoBox {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 10px;
+    right: 10px;
+    bottom: 6px;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-
+    animation: slideInDownBig .2s $coolEaseOut;
 
     .infobox--content {
       margin-right: 35px; 
@@ -4360,6 +4385,13 @@ body.modal-open {
       right: 12px;
       top: calc(50% - 10px); 
       font-size: 20px;
+    }
+
+    .infobox--img {
+      img {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
     }
   }
 
