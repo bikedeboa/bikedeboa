@@ -185,9 +185,6 @@ BDB.Map = (function () {
       zIndex: null,
       boxStyle: {
         width: `${infoboxWidth}px`,
-        // height: _isMobile ? '75px' : '100px',
-        height: '75px',
-        cursor: 'pointer',
       },
       // closeBoxMargin: '10px 2px 2px 2px',
       closeBoxURL: '',
@@ -764,26 +761,27 @@ BDB.Map = (function () {
 
                     map.panTo(newMarker.getPosition());
 
-                    BDB.Map.showDirectionsToPlace(newMarker.position); 
+                    BDB.Map.showDirectionsToPlace(newMarker.position);
 
-                    _infoWindow.setContent(contentString);
-                    _infoWindow.open(map, newMarker);
-                    _infoWindow.addListener('domready', () => {
-                      // Show spinner while thumbnail is loading
-                      // $('.infobox--img img').off('load').on('load', e => {
-                      //   $(e.target).parent().removeClass('loading');
-                      // });
+                    if (_infoWindow && _infoWindow.remove) {
+                      _infoWindow.remove();
+                    }
 
-                      $('.infoBox').off('click').on('click', () => {
-                        markerClickCallback(markers[i], () => {
-                          _infoWindow.close();
-                        });
+                    $('body').append(`<div class="infoBox"> ${contentString} </div>`);
+                    $('.map-action-buttons').addClass('move-up');
+
+                    _infoWindow = $('.infoBox');
+                    _infoWindow.off('click').on('click', () => {
+                      markerClickCallback(markers[i], () => {
+                        _infoWindow.remove();
+                        $('.map-action-buttons').removeClass('move-up');
                       });
                     });
                   });
 
                   map.addListener('click', () => {
-                    _infoWindow.close();
+                    _infoWindow.remove();
+                    $('.map-action-buttons').removeClass('move-up');
                   });
                 } else {
                   // No infobox, directly opens the details modal
