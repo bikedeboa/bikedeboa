@@ -355,7 +355,7 @@ BDB.Map = (function () {
         if (getLocation){
           options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
           options.zoom = 15;
-          options.isUserLocation = true;
+          options.isUserLocation = BDB.Geolocation.getLastestLocation() ? true : false;
         }
 
         markerClickCallback = _markerClickCallback;
