@@ -16,6 +16,7 @@ BDB.Map = (function () {
   let areMarkersHidden = false;
   let directionsRenderer;
   let directionsService;
+  let infoWindow;
 
   // to do:  move this to configuration
   let mapBoundsCoords = { 
@@ -91,6 +92,12 @@ BDB.Map = (function () {
   
     if (!_isMobile) {
       google.maps.event.addListener(map, 'zoom_changed', mapZoomChanged);
+    } else {
+      google.maps.event.addListener(map, 'click', () => {
+        if (infoWindow && infoWindow.reset) {
+          infoWindow.reset();
+        }
+      });
     }
 
     directionsRenderer = new google.maps.DirectionsRenderer({
@@ -192,7 +199,7 @@ BDB.Map = (function () {
       pane: 'floatPane',
       enableEventPropagation: false,
     };
-    _infoWindow = new InfoBox(myOptions);
+    infoWindow = new InfoBox(myOptions);
   };
   let updateUserMarkerPosition = function (gposition) {
     if (map) {
@@ -682,6 +689,13 @@ BDB.Map = (function () {
                 origin: new google.maps.Point(0, 0), // origin
                 anchor: new google.maps.Point((MARKER_W * scale) / 2, (MARKER_H - MARKER_H / 10) * scale), // anchor
               };
+              
+              m.iconSelected = { 
+                url: iconType, // url
+                scaledSize: new google.maps.Size((MARKER_W * 1.5), (MARKER_H * 1.5)), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point((MARKER_W * 1.5) / 2, (MARKER_H - MARKER_H / 10) * 1.5), // anchor
+              }
 
               m.iconMini = {
                 url: iconTypeMini, // url
@@ -689,6 +703,7 @@ BDB.Map = (function () {
                 origin: new google.maps.Point(0, 0), // origin
                 anchor: new google.maps.Point((MARKER_W_MINI * scale) / 2, (MARKER_H_MINI * scale) / 2), // anchor
               };
+
             }
 
             // Average might come with crazy floating point value
@@ -759,29 +774,37 @@ BDB.Map = (function () {
                   newMarker.addListener('click', () => {
                     ga('send', 'event', 'Local', 'infobox opened', m.id);
 
+                    // Close previous, if any 
+                    if (infoWindow && infoWindow.reset) {
+                      infoWindow.reset(); 
+                    }
+
                     map.panTo(newMarker.getPosition());
+                    newMarker.setIcon(m.iconSelected);
+                    m.originalZIndex = newMarker.getZIndex();
+                    newMarker.setZIndex(9999);
 
                     BDB.Map.showDirectionsToPlace(newMarker.position);
 
-                    if (_infoWindow && _infoWindow.remove) {
-                      _infoWindow.remove();
-                    }
-
                     $('body').append(`<div class="infoBox"> ${contentString} </div>`);
-                    $('.map-action-buttons').addClass('move-up');
+                    // $('.map-action-buttons').addClass('move-up');
 
-                    _infoWindow = $('.infoBox');
-                    _infoWindow.off('click').on('click', () => {
+                    infoWindow = $('.infoBox');
+                    infoWindow.off('click').on('click', () => {
                       markerClickCallback(markers[i], () => {
-                        _infoWindow.remove();
-                        $('.map-action-buttons').removeClass('move-up');
+                        infoWindow.reset();
                       });
                     });
-                  });
 
-                  map.addListener('click', () => {
-                    _infoWindow.remove();
-                    $('.map-action-buttons').removeClass('move-up');
+                    infoWindow.reset = function() {
+                      console.log('deselect previous');
+                      
+                      this.remove();
+                      // $('.map-action-buttons').removeClass('move-up');
+
+                      newMarker.setIcon(m.icon);
+                      newMarker.setZIndex(m.originalZIndex);
+                    }
                   });
                 } else {
                   // No infobox, directly opens the details modal
@@ -793,9 +816,9 @@ BDB.Map = (function () {
                   newMarker.addListener('mouseover', () => {
                     ga('send', 'event', 'Local', 'infobox opened', m.id);
 
-                    _infoWindow.setContent(contentString);
-                    _infoWindow.open(map, newMarker);
-                    _infoWindow.addListener('domready', () => {
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, newMarker);
+                    infoWindow.addListener('domready', () => {
                       $('.infobox--img img').off('load').on('load', e => {
                         $(e.target).parent().removeClass('loading');
                       });
@@ -803,7 +826,7 @@ BDB.Map = (function () {
                   });
 
                   newMarker.addListener('mouseout', () => {
-                    _infoWindow.close();
+                    infoWindow.close();
                   });
                 }
 
