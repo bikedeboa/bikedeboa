@@ -250,13 +250,19 @@ BDB.Map = (function () {
   let geolocate = function (options = {}) {
     BDB.Geolocation.getLocation();
 
-    document.addEventListener('geolocation:done', function (result) {
+    $(document).one('geolocation:done', result => {
       if (result.detail.success) {
         if (!isGeolocated){
           isGeolocated = true;
           setUserMarkerIcon();
         }
-        updateUserPosition(result.detail.response, result.detail.center);  
+        
+        if (options.isInitializingGeolocation) {
+          result.detail.center = false;
+          BDB.Map.fitToNearestPlace();
+        }
+
+        updateUserPosition(result.detail.response, result.detail.center);
       }else{
         isGeolocated = false;
         setUserMarkerIcon();
@@ -349,7 +355,7 @@ BDB.Map = (function () {
         if (getLocation){
           options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
           options.zoom = 15;
-          options.isUserLocation = true;
+          options.isUserLocation = !!BDB.Geolocation.getLastestLocation();
         }
 
         markerClickCallback = _markerClickCallback;
@@ -360,7 +366,7 @@ BDB.Map = (function () {
         if (getLocation){
           BDB.Geolocation.checkPermission().then(permission => {
             if (permission.state === 'granted') {
-              geolocate();
+              geolocate({isInitializingGeolocation: true});
             }
           });
         }
@@ -586,7 +592,6 @@ BDB.Map = (function () {
       bounds.extend(convertToGmaps(BDB.Geolocation.getCurrentPosition()));  
 
       var nearest = this.getListOfPlaces('nearest', 1)[0];
-      console.log('nearest place:', nearest); 
       var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
       bounds.extend(nearestPos);
 
@@ -608,7 +613,7 @@ BDB.Map = (function () {
 
       const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, dest.lat(), dest.lng());
 
-      console.log(distanceKm);
+      // console.log(distanceKm); 
 
       if (!forceLongDistance && distanceKm > MAX_KM_TO_CALCULATE_ITINERARY) {
         console.warn('Wont calculate directions, too far away:', distanceKm);

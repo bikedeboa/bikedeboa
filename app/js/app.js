@@ -88,48 +88,31 @@ $(() => {
       console.error('Trying to open details modal without a marker.');
       return;
     }
+    
+    if (addLocationMode) {
+      return;
+    }
 
     openedMarker = marker;
     const m = openedMarker;
  
-    if (addLocationMode) {
-      return false;
+    let templateData = {
+      title: m.text,
+      address: m.address,
+      description: m.description,
+      author: m.User && m.User.fullname,
+      views: m.views,
+      reviews: m.reviews,
+      lat: m.lat,
+      lng: m.lng,
+      slots: m.slots
     }
-
-    ga('send', 'event', 'Local', 'view', ''+m.id);
-
-    let templateData = {};
-
-    templateData.title = m.text;
-    templateData.address = m.address;
-    templateData.description = m.description;
-    templateData.author = m.User && m.User.fullname;
-    templateData.views = m.views;
-    templateData.reviews = m.reviews;
-    templateData.lat = m.lat;
-    templateData.lng = m.lng;
-    templateData.slots = m.slots;
     
-    if (m.DataSource) {
-      templateData.dataSourceName = m.DataSource.name;
-    }
- 
-    if (m.isPaid !== null) {
-      if (m.isPaid === true) {
-        templateData.isPaid = 'Pago';
-      } else {
-        templateData.isPaid = 'Gratuito';
-      }
-    }
-
-    if (m.createdAt) {
-      templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
-    }
-
     // Average
     templateData.pinColor = getColorFromAverage(m.average);
     templateData.average = formatAverage(m.average);
 
+    // Minimap
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
     templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
   
@@ -178,6 +161,7 @@ $(() => {
     
     // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
 
+    // User permissions
     if (BDB.User.isAdmin) {
       templateData.isAdmin = true;
       templateData.canModify = true;
@@ -187,7 +171,26 @@ $(() => {
       }
     }
 
-    // Route button 
+    // Data source
+    if (m.DataSource) {
+      templateData.dataSourceName = m.DataSource.name;
+    }
+
+    // Is paid
+    if (m.isPaid !== null) {
+      if (m.isPaid === true) {
+        templateData.isPaid = 'Pago';
+      } else {
+        templateData.isPaid = 'Gratuito';
+      }
+    }
+
+    // Created at
+    if (m.createdAt) {
+      templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
+    }
+
+    // Show directions button 
     // templateData.gmapsRedirectUrl = `https://maps.google.com/maps/preview?daddr=${m.lat},${m.lng}&dirflg=b`;
     templateData.gmapsRedirectUrl = `https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}&travelmode=bicycling`; 
 
@@ -207,6 +210,7 @@ $(() => {
       templateData.noIsPublicData = true;
     }
 
+    // Is covered?
     if (m.isCovered != null) {
       templateData.isCovered = m.isCovered === true;
     } else {
@@ -242,11 +246,12 @@ $(() => {
         stars += '<span class="glyphicon glyphicon-star"></span>';
       }
       templateData.savedRatingContent = rating + stars;
+    } else {
+      if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+        templateData.userThumbUrl = BDB.User.profile.thumbnail; 
+      }
     }
 
-    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
-      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-    }
 
 
     ////////////////////////////////
@@ -305,10 +310,23 @@ $(() => {
       }
     }));
 
-    // Display the modal
+    // RENDER
     if (!$('#placeDetailsModal').is(':visible')) {
       // $('section, .modal-footer').css({opacity: 0});
 
+      // Analytics stuff
+      ga('send', 'event', 'Local', 'view', '' + m.id);
+      const userCurrentPosition = BDB.Geolocation.getCurrentPosition();
+      if (userCurrentPosition) {
+        const distanceKm = distanceInKmBetweenEarthCoordinates(
+          userCurrentPosition.latitude, userCurrentPosition.longitude, openedMarker.lat, openedMarker.lng);
+        const distanceMeters = distanceKm * 1000;
+
+        console.log(`[Analytics] Local / distance from user (m) / ${distanceMeters}`);
+        ga('send', 'event', 'Local', 'distance from user (m)', null, distanceMeters);
+      }
+
+      // Modal stuff
       $('#placeDetailsModal')
         .one('show.bs.modal', () => { 
           // Global states
@@ -356,7 +374,7 @@ $(() => {
 
     // Tooltips
     if(!_isTouchDevice) {
-      $('#placeDetailsContent .full-star').tooltip({
+      $('#placeDetailsContent .full-star').tooltip({ 
         toggle: 'tooltip',
         placement: 'bottom', 
         'delay': {'show': 0, 'hide': 100}
@@ -583,7 +601,9 @@ $(() => {
           const mapCenter = map.getCenter();
           openedMarker.lat = mapCenter.lat();
           openedMarker.lng = mapCenter.lng();
-          openNewOrEditPlaceModal();
+          
+          // Will be automatically triggered on toggleLocationInputMode()
+          // openNewOrEditPlaceModal();
         } else {
           if (BDB.Map.checkBounds()) {
             openNewOrEditPlaceModal();
@@ -649,14 +669,10 @@ $(() => {
   }
 
   function showUI() {
-    // $('#locationSearch').velocity('transition.slideDownIn', {queue: false});
-    // $('#addPlace').velocity('transition.slideUpIn');
     $('.cool-hide').removeClass('cool-hidden');
   }
 
   function hideUI() {
-    // $('#locationSearch').velocity('transition.slideUpOut', {queue: false});
-    // $('#addPlace').velocity('transition.slideDownOut');
     $('.cool-hide').addClass('cool-hidden');
   }
 
@@ -964,7 +980,7 @@ $(() => {
     // Finally, display the modal
     const showModal = () => {
       // We can only set the nav title after the modal has been opened
-      updatePageTitle(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+      updatePageTitleAndMetatags(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
 
       $('#newPlaceModal')
         .one('shown.bs.modal', () => {
@@ -1335,7 +1351,7 @@ $(() => {
     $('.hamburger-button').removeClass('back-mode'); 
   }
 
-  function updatePageTitle(text) { 
+  function updatePageTitleAndMetatags(text) { 
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
@@ -1343,10 +1359,10 @@ $(() => {
       $('#top-mobile-bar-title').text(openedMarker ? '' : text);
     }
 
-    text = text || 'bike de boa';
+    text = text || 'bike de boa'; 
 
     // Basic website metatags
-    document.title = text; 
+    document.title = text;
     $('meta[property="og:title"]').attr('content', text);  
     
     // Set every URL as canonical, otherwise Google thinks some are duplicates. Gotta index 'em all!
@@ -1371,6 +1387,12 @@ $(() => {
       $('meta[property="og:image"]').attr('content', '');
       $('meta[property="og:description"]').attr('content', '');
       $('meta[name="description"]').attr('content', ''); 
+    }
+ 
+    if (window.performance && _isDeeplink && openedMarker) {
+      const timeSincePageLoad = Math.round(performance.now());
+      // console.log('timeSincePageLoad', timeSincePageLoad);  
+      ga('send', 'timing', 'Data', 'place deeplink metatags ready', timeSincePageLoad);
     }
   }
 
@@ -1431,7 +1453,7 @@ $(() => {
       BDB.Map.showBikeLayer();
     });
 
-    $(document).on("autocomplete:done", function (e) {
+    $(document).on('autocomplete:done', function (e) {
       let place = e.detail
 
       addToRecentSearches({
@@ -1536,58 +1558,11 @@ $(() => {
       ga('send', 'event', 'Misc', 'medium link click');
     });
 
-    $('.openContributionsBtn').on('click', queueUiCallback.bind(this, () => {
+    $('body').on('click', '.openContributionsBtn', queueUiCallback.bind(this, () => {
       hideAll();
       setView('Contribuições', '/contribuicoes', true);
     }));
  
-    $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
-      // @todo having to call these two ones here is bizarre
-      hideAll();
-      goHome();
-
-      // setView('Login Administrador', '/login', true);
-      // login(true);
-
-      openLoginDialog();
-    }));
-    
-    $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
-      hideAll();
-      ga('send', 'event', 'Misc', 'about opened');
-      setView('Sobre', '/sobre', true);
-    }));
-
-    $('body').on('click', '.facebookLoginBtn', () => {
-      hideAll();
-      hello('facebook').login({scope: 'email'});
-    }); 
-
-    $('body').on('click', '.googleLoginBtn', () => {
-      hideAll();
-      hello('google').login({scope: 'email'}); 
-    });
-
-    $('body').on('click', '.logoutBtn', () => { 
-      hideAll();
-      hello.logout('facebook');
-      hello.logout('google');
-    }); 
-
-    $('.howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
-      hideAll();
-
-      ga('send', 'event', 'Misc', 'how-to-install opened');
-      setView('Como instalar o app', '/como-instalar', true);
-    }));
-
-    $('.open-faq-btn').on('click', queueUiCallback.bind(this, () => {
-      hideAll();
-
-      ga('send', 'event', 'Misc', 'faq opened');
-      setView('Perguntas frequentes', '/faq', true);
-    }));
-
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Misc', 'faq opened');
@@ -1602,51 +1577,6 @@ $(() => {
 
       ga('send', 'event', 'Misc', 'about data opened');
       setView('Sobre nossos dados', '/sobre-nossos-dados', true);
-    }));
-
-    $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
-      // @todo having to call these two ones here is bizarre
-      hideAll();
-      goHome();
-
-      ga('send', 'event', 'Misc', 'contact opened');
-      
-      swal({
-        title: 'Contato',
-        html:
-          `
-            <div style="text-align: center; font-size: 30px;">
-              <p>
-                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
-                </a> 
-
-                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
-                </a>
-
-                <a href="mailto:bikedeboa@gmail.com">
-                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
-                </a>
-              </p>
-            </div> 
-
-            <hr>
-
-            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
-            <div style="text-align: center;">
-              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
-            </div>
-          `,
-      });
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
@@ -1713,27 +1643,6 @@ $(() => {
     }));
 
 
-    /////////////
-    // Filters //
-    ///////////// 
-
-    $('#clear-filters-btn').on('click', () => {
-      $('.filter-checkbox:checked').prop('checked', false);
-
-      ga('send', 'event', 'Filter', 'clear filters');
-      
-      updateFilters();
-    });
-
-    $('.filter-checkbox').on('change', e => {
-      // ga('send', 'event', 'Misc', 'launched with display=standalone');
-      const $target = $(e.currentTarget);
-
-      ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(':checked') ? 'ON' : 'OFF'}`);
-
-      queueUiCallback(updateFilters);
-    }); 
-
     $('body').on('click', '.back-button', e => {
       // If was creating a new local
       // @todo Do this check better
@@ -1773,16 +1682,14 @@ $(() => {
     $('body').on('show.bs.modal', '.modal', e => {
       // Replace bootstrap modal animation with Velocity.js
       $('.modal-dialog')
-        .velocity((_isMobile ? 'transition.slideUpIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
-        .velocity({display: 'table-cell'}); 
+        .velocity((_isMobile ? 'transition.slideRightIn' : 'transition.slideDownIn'), {duration: MODAL_TRANSITION_IN_DURATION})
+        .velocity({display: 'table-cell'});
 
       const openingModalEl = $(e.currentTarget);
 
       // Set mobile navbar with modal's title
       const openingModalTitle = openingModalEl.find('.view-name').text();
-      if (openingModalTitle) {
-        updatePageTitle(openingModalTitle);
-      }
+      updatePageTitleAndMetatags(openingModalTitle);
 
       $('body').addClass(openingModalEl.attr('id'));
 
@@ -1801,7 +1708,7 @@ $(() => {
     $('body').on('hide.bs.modal', '.modal', e => {
       const closingModalEl = $(e.currentTarget);
 
-      updatePageTitle();
+      updatePageTitleAndMetatags();
       
       $('body').removeClass(closingModalEl.attr('id'));
 
@@ -2138,6 +2045,8 @@ $(() => {
       switch(urlBreakdown[1]) {
       case 'novo':
       case 'editar':
+      case 'nav':
+      case 'filtros':
       case 'foto':
         window.location.pathname = '';
         break;
@@ -2494,6 +2403,8 @@ $(() => {
         toastr['info']('Você está offline');
       } else {
         $('#offline-overlay').addClass('showThis');
+
+        $('#geolocationBtn').hide();
         
         $('#reloadBtn').on('click', () => {
           showSpinner()
@@ -2507,6 +2418,149 @@ $(() => {
       $('#offline-overlay').removeClass('showThis');
     }
 
+  }
+
+  function initNavCallbacks() {
+    $('.loginBtn').on('click', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
+      hideAll();
+      goHome();
+
+      // setView('Login Administrador', '/login', true);
+      // login(true);
+
+      openLoginDialog();
+    })); 
+
+    $('.openAboutBtn').on('click', queueUiCallback.bind(this, () => {
+      hideAll();
+      ga('send', 'event', 'Misc', 'about opened');
+      setView('Sobre', '/sobre', true);
+    }));
+
+    $('.facebookLoginBtn').on('click', () => {
+      hideAll();
+      hello('facebook').login({ scope: 'email' });
+    });
+
+    $('.googleLoginBtn').on('click', () => {
+      hideAll();
+      hello('google').login({ scope: 'email' });
+    });
+
+    $('.logoutBtn').on('click', () => {
+      hideAll();
+      hello.logout('facebook');
+      hello.logout('google');
+    });
+
+    $('.howToInstallBtn').on('click', queueUiCallback.bind(this, () => {
+      hideAll();
+
+      ga('send', 'event', 'Misc', 'how-to-install opened');
+      setView('Como instalar o app', '/como-instalar', true);
+    }));
+
+    $('.open-faq-btn').on('click', queueUiCallback.bind(this, () => {
+      hideAll();
+
+      ga('send', 'event', 'Misc', 'faq opened');
+      setView('Perguntas frequentes', '/faq', true);
+    }));
+
+    $('body').on('click', '.contact-btn', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
+      hideAll();
+      goHome();
+
+      ga('send', 'event', 'Misc', 'contact opened');
+
+      swal({
+        title: 'Contato',
+        html:
+          `
+            <div style="text-align: center; font-size: 30px;">
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
+                </a> 
+
+                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
+                </a>
+
+                <a href="mailto:bikedeboa@gmail.com">
+                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
+                </a>
+              </p>
+            </div> 
+
+            <hr>
+
+            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
+            <div style="text-align: center;">
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
+            </div>
+          `,
+      });
+    }));
+  }
+
+  function initMenus() {
+    const sidenavHideCallback = () => {
+      // @todo explain this
+      setView('bike de boa', '/', true);
+    };
+
+    // Delay loading of those to optimize startup
+    if (_isMobile) {
+      $('body').append(BDB.templates.hamburgerMenu());
+
+      _hamburgerMenu = new SideNav(
+        'hamburger-menu',
+        {
+          hideCallback: sidenavHideCallback
+        }
+      );
+    } else {
+      $('body').append(BDB.templates.filterMenu());
+
+      $('#clear-filters-btn').on('click', () => {
+        $('.filter-checkbox:checked').prop('checked', false);
+
+        ga('send', 'event', 'Filter', 'clear filters');
+
+        updateFilters();
+      });
+
+      $('.filter-checkbox').on('change', e => {
+        // ga('send', 'event', 'Misc', 'launched with display=standalone');
+        const $target = $(e.currentTarget);
+
+        ga('send', 'event', 'Filter', `${$target.data('prop')} ${$target.data('value')} ${$target.is(':checked') ? 'ON' : 'OFF'}`);
+
+        queueUiCallback(updateFilters);
+      }); 
+       
+      _filterMenu = new SideNav(
+        'filter-menu',
+        {
+          inverted: true,
+          hideCallback: sidenavHideCallback
+          /*fixed: true*/
+        }
+      );
+    }
+
+    initNavCallbacks();
   }
 
   // Setup must only be called *once*, differently than init() that may be called to reset the app state.
@@ -2553,6 +2607,8 @@ $(() => {
     _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
 
     _initGlobalCallbacks();
+
+    initMenus();
 
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
@@ -2622,30 +2678,6 @@ $(() => {
       'closeButton': false,
       'progressBar': false
     };
-
-    // Sidenav (hamburger and filter menus)
-    const sidenavHideCallback = () => {
-      // @todo explain this
-      setView('bike de boa', '/', true);
-    };
-    try {
-      _hamburgerMenu = new SideNav(
-        'hamburger-menu',
-        {
-          hideCallback: sidenavHideCallback
-        }
-      );
-      _filterMenu = new SideNav(
-        'filter-menu',
-        {
-          inverted: true,
-          hideCallback: sidenavHideCallback
-          /*fixed: true*/
-        }
-      );
-    } catch (err) {
-      _hamburgerMenu = _filterMenu = null;
-    }
 
     // Set up Hello.js, the Social Login lib
     hello.init({

@@ -224,10 +224,14 @@ body.offline {
     display: none !important;
   }
 
+  #map {
+    background: url(/img/blank_map.jpg);
+    background-size: cover; 
+    background-position: 50% 50%;
+  }
+
   // #map {
-  //   background: url(/img/blank_map.jpg); 
-  //   background-size: cover; 
-  //   background-position: 50% 50%;
+  //   filter: grayscale(100%); 
   // }
 }
 
@@ -720,6 +724,9 @@ body.deeplink {
 .modal {
     -webkit-overflow-scrolling: auto !important;
     overflow-y: auto !important;
+
+    bottom: unset;
+    position: absolute;
 }
 
 .obfuscate {
@@ -3434,11 +3441,10 @@ body.modal-open {
 
   #clear-filters-btn {
     opacity: 0;
-    font-size: 13px;
+    font-size: 16px;
     border: none;
-    color: gray;
+    color: $green;
     font-weight: bold;
-    text-decoration: underline;
   }
 
   #filter-results-counter-container {
