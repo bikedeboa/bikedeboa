@@ -846,7 +846,7 @@ $(() => {
       if (m.isCovered !== null) { 
         $(`#newPlaceModal .covered-group [data-value="${m.isCovered ? 'covered' : 'uncovered'}"]`).addClass('active');
       }
-      if (m.isPaid !== null && m.isPaid !== 'dontknow') { 
+      if (m.isPaid !== null) {
         $('#newPlaceModal #isPaidInput').val(m.isPaid ? 'yes' : 'no');
       }
       
