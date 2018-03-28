@@ -184,7 +184,8 @@ BDB.Map = (function () {
   let setInfoBox = function () {
     // remove jquery reference.
     // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 400;
-    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
+    // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
+    const infoboxWidth = 320;
     const myOptions = {
       maxWidth: 0,
       pixelOffset: new google.maps.Size(-infoboxWidth / 2, 0),

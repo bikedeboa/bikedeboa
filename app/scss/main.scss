@@ -3679,10 +3679,12 @@ body.modal-open {
 }
 
 .infoBox {
-  height: 90px;
+  height: 110px;
+  // width: 320px; //set on JS
   background: white;
   display: flex;
   margin-top: $GRID_SPACE*2;
+  border-radius: 5px;
   cursor: pointer;
   
   @include shadow(1);
@@ -3700,10 +3702,12 @@ body.modal-open {
   }
 
   .infobox--img {
-    width: 100px;
-    // height: 90px;
+    // width: 100px;
     position: relative;
-    background: $lightestGrey;
+    flex: 1 0 30%;
+    // padding: 6px 0 6px 6px;
+    // background: $lightestGrey;
+    /* background: white; */
 
     img {
       object-fit: cover;
@@ -3714,14 +3718,14 @@ body.modal-open {
 
   .infobox--content {
     // margin: 10px;
-    margin: 5px 10px 0;
+    margin: 20px 12px auto;
     overflow: hidden;
     width: 100%;
 
     h2 {
       font-family: $headingFont;
       font-weight: 700;
-      font-size: 20px;
+      font-size: 16px;
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
@@ -4387,14 +4391,15 @@ body.modal-open {
     position: absolute;
     left: 10px;
     right: 10px;
-    bottom: 6px;
-    border-radius: 5px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+    bottom: 12px;
+    
+    // box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+    box-shadow: 0 10px 30px rgba(200,200,200,1); 
 
     animation: slideInDownBig .2s $coolEaseOut;
 
     .infobox--content {
-      margin-right: 35px; 
+      margin-right: $GRID_SPACE*3; 
     }
 
     .infobox--label {
