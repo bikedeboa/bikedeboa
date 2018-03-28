@@ -657,14 +657,17 @@ BDB.Map = (function () {
             case 'red':
               iconType = MARKER_ICON_RED;
               iconTypeMini = MARKER_ICON_RED_MINI;
+              scale = 0.6;
               break;
             case 'yellow':
               iconType = MARKER_ICON_YELLOW;
               iconTypeMini = MARKER_ICON_YELLOW_MINI;
+              scale = 0.8;
               break;
             case 'green':
               iconType = MARKER_ICON_GREEN;
               iconTypeMini = MARKER_ICON_GREEN_MINI;
+              scale = 1;
               break;
             case 'gray':
             default:
@@ -674,9 +677,9 @@ BDB.Map = (function () {
               break;
             }
 
-            if (!scale) {
-              scale = 0.5 + (m.average / 10);
-            }
+            // if (!scale) {
+            //   scale = 0.5 + (m.average / 10);
+            // }
 
             if (map) {
               m.icon = {
@@ -711,7 +714,13 @@ BDB.Map = (function () {
                     lat: parseFloat(m.lat),
                     lng: parseFloat(m.lng)
                   },
-                  // map: map,
+                  // label: {
+                  //   text: m.average ? m.average.toString() : '-', 
+                  //   color: 'white',
+                  //   fontFamily: 'Quicksand',
+                  //   fontSize: '12px', 
+                  //   fontWeight: 'bold'
+                  // },
                   icon: m.icon,
                   zIndex: i, //markers should be ordered by average
                   // opacity: 0.1 + (m.average/5).
