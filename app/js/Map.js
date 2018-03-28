@@ -639,9 +639,9 @@ BDB.Map = (function () {
       // Markers from Database
       if (markers && markers.length > 0) {
         // Order by average so best ones will have higher z-index
-        // markers = markers.sort((a, b) => {
-        //   return a.average - b.average;
-        // });
+        markers = markers.sort((a, b) => {
+          return a.average - b.average;
+        });
 
         let gmarkers = [];
 
@@ -652,12 +652,12 @@ BDB.Map = (function () {
             // Icon and Scaling
             let scale;
             let iconType, iconTypeMini;
-            let color = getColorFromAverage(m.average);
+            let color = getColorFromAverageAdvanced(m.average);
             switch (color) {
             case 'red':
               iconType = MARKER_ICON_RED;
               iconTypeMini = MARKER_ICON_RED_MINI;
-              scale = 0.6;
+              scale = 0.65;
               break;
             case 'yellow':
               iconType = MARKER_ICON_YELLOW;
@@ -666,6 +666,16 @@ BDB.Map = (function () {
               break;
             case 'green':
               iconType = MARKER_ICON_GREEN;
+              iconTypeMini = MARKER_ICON_GREEN_MINI;
+              scale = 1;
+              break;
+            case 'greenDark':
+              iconType = MARKER_ICON_GREEN_DARK;
+              iconTypeMini = MARKER_ICON_GREEN_MINI;
+              scale = 1;
+              break;
+            case 'greenLight':
+              iconType = MARKER_ICON_GREEN_LIGHT;
               iconTypeMini = MARKER_ICON_GREEN_MINI;
               scale = 1;
               break;

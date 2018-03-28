@@ -296,12 +296,43 @@ window.getColorFromAverage = function(average) {
   if (average) {
     if (!average || average === 0) {
       color = 'gray';
-    } else if (average > 0 && average <= 2) {
+    } else if (average > 0 && average <= 3) {
       color = 'red';
-    } else if (average > 2 && average < 3.5) {
+    } else if (average > 3 && average < 3.7) {
       color = 'yellow';
-    } else if (average >= 3.5) {
+    } else if (average >= 3.7) {
       color = 'green';
+
+    } else {
+      color = 'gray';
+    }
+  } else {
+    color = 'gray';
+  }
+
+  return color;
+};
+
+window.getColorFromAverageAdvanced = function (average) {
+  if (typeof average === 'string') {
+    average = parseFloat(average);
+  }
+
+  let color;
+
+  if (average) {
+    if (!average || average === 0) {
+      color = 'gray';
+    } else if (average > 0 && average <= 3) {
+      color = 'red';
+    } else if (average > 3 && average < 3.7) {
+      color = 'yellow';
+    } else if (average >= 3.7 && average < 4) {
+      color = 'greenLight';
+    } else if (average >= 4 && average < 4.3) {
+      color = 'green';
+    } else if (average >= 4.3) {
+      color = 'greenDark';
     } else {
       color = 'gray';
     }

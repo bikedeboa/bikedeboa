@@ -34,6 +34,8 @@ const MARKER_H_MINI = 16;
 const CURRENT_LOCATION_MARKER_W = 20;
 const CURRENT_LOCATION_MARKER_H = 20; 
 const MARKER_ICON_GREEN = '/img/pin_green.svg';
+const MARKER_ICON_GREEN_LIGHT = '/img/pin_green_light.svg';
+const MARKER_ICON_GREEN_DARK = '/img/pin_green_dark.svg';
 const MARKER_ICON_YELLOW = '/img/pin_yellow.svg';
 const MARKER_ICON_RED = '/img/pin_red.svg';
 const MARKER_ICON_GRAY = '/img/pin_gray.svg';
@@ -42,7 +44,7 @@ const MARKER_ICON_YELLOW_MINI = '/img/pin_yellow_mini.svg';
 const MARKER_ICON_RED_MINI = '/img/pin_red_mini.svg';
 const MARKER_ICON_GRAY_MINI = '/img/pin_gray_mini.svg';
 const PHOTO_UPLOAD_MAX_W = 1000; 
-const PHOTO_UPLOAD_MAX_H = 1000;
+const PHOTO_UPLOAD_MAX_H = 1000; 
 
 const MAX_RECENT_SEARCHES = 3;
 const MAX_TOP_CITIES = 5;
