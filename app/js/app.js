@@ -177,7 +177,7 @@ $(() => {
     }
 
     // Is paid
-    if (m.isPaid) {
+    if (m.isPaid !== null) {
       if (m.isPaid === true) {
         templateData.isPaid = 'Pago';
       } else {
@@ -705,12 +705,16 @@ $(() => {
       public: container.find('.acess-types-group .active').data('value'),
       covered: container.find('.covered-group .active').data('value'),
       structureType: container.find('.custom-radio-group .active').data('value'),
-      description: container.find('#descriptionInput').val()
+      description: container.find('#descriptionInput').val(),
+      slots: container.find('#slotsInput').val(),
+      isPaid: container.find('#isPaidInput').val(),
     }
 
     place.text = formFields.text;
     place.structureType = formFields.structureType;
     place.description = formFields.description;
+    place.slots = formFields.slots;
+
     place.photo = _uploadingPhotoBlob;
     _uploadingPhotoBlob = '';
 
@@ -726,6 +730,10 @@ $(() => {
       place.isPublic = null;
     }
 
+    if (formFields.isPaid && formFields.isPaid !== 'dontknow') {
+      place.isPaid = (formFields.isPaid === 'yes');
+    }
+ 
     const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
         BDB.User.saveNewPlace(newPlace.id);
@@ -829,6 +837,10 @@ $(() => {
     
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
 
+    $('#newPlaceModal .minimap-container').toggle(!!openedMarker);  
+
+    initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
+
     // Not creating a new one, but editing
     if (openedMarker) {
       // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
@@ -838,22 +850,26 @@ $(() => {
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
-      $('#newPlaceModal .minimap-container').show();
       $('#newPlaceModal #cancelEditPlaceBtn').show();
       $('#newPlaceModal .photoInputDisclaimer').show(); 
 
       $('#newPlaceModal #titleInput').val(m.text);
       $('#newPlaceModal .saveNewPlaceBtn').prop('disabled', false);
       $(`#newPlaceModal .custom-radio-group [data-value="${m.structureType}"]`).addClass('active');
-      if (m.isPublic != null) {
+      if (m.isPublic !== null) {
         $(`#newPlaceModal .acess-types-group [data-value="${m.isPublic ? 'public' : 'private'}"]`).addClass('active');
       }
-      if (m.isCovered != null) { 
+      if (m.isCovered !== null) { 
         $(`#newPlaceModal .covered-group [data-value="${m.isCovered ? 'covered' : 'uncovered'}"]`).addClass('active');
       }
+      if (m.isPaid !== null) {
+        $('#newPlaceModal #isPaidInput').val(m.isPaid ? 'yes' : 'no');
+      }
+      
       // $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
       $('#newPlaceModal #photoInputBg').attr('src', m.photo);
       $('#newPlaceModal #descriptionInput').val(m.description);
+      $('#newPlaceModal #slotsInput').val(m.slots);
 
       // Minimap
       // @todo generalize this
@@ -874,8 +890,6 @@ $(() => {
     } else {
       setView('Novo bicicletário', '/novo');
       ga('send', 'event', 'Local', 'create - pending');
-
-      initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
 
       $('#access-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
         ga('send', 'event', 'Misc', 'tooltip - new pin access help');
@@ -959,7 +973,7 @@ $(() => {
       //   swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       // }
     });
-    $('.description.collapsable').off('click').on('click', e => {
+    $('.collapsable').off('click').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
     }); 
 
@@ -2270,7 +2284,6 @@ $(() => {
     }
     $('#userBtn .avatar').attr('src', $("#userBtn .avatar").data('src'));
     $('#topbarLoginBtn').css('visibility','visible');
-    // $('#userBtn .avatar').attr('src', '/img/icon_user_big.svg');
     $('#userBtn').removeClass('admin');
     $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();
