@@ -120,6 +120,30 @@ $GRID_SPACE: 12px;
   }
 }
 
+@keyframes slideInDown {
+  from { 
+    transform: translateY(3px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDownBig {
+  from { 
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1562,7 +1586,7 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
-    position: fixed;
+    position: absolute;
     bottom: 76px;
     right: 0px;
 
@@ -1591,7 +1615,7 @@ a.unstyled-link {
 }
 
 #addPlace {
-    position: fixed;
+    position: absolute;
     bottom: 14px;
     right: 0px;
     margin: 0 $GRID_SPACE $GRID_SPACE;
@@ -1663,7 +1687,7 @@ a.unstyled-link {
 }
 
 #filterBtn {
-    position: fixed;
+    position: absolute;
     bottom: 138px;
     right: 0px;
 
@@ -3655,10 +3679,15 @@ body.modal-open {
 }
 
 .infoBox {
+  height: 110px;
+  // width: 320px; //set on JS
   background: white;
-  @include shadow(1);
   display: flex;
   margin-top: $GRID_SPACE*2;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  @include shadow(1);
 
   animation: slideIn .2s $coolEaseOut;
 
@@ -3673,10 +3702,12 @@ body.modal-open {
   }
 
   .infobox--img {
-    width: 100px;
-    height: 75px;
+    // width: 100px;
     position: relative;
-    background: $lightestGrey;
+    flex: 1 0 30%;
+    // padding: 6px 0 6px 6px;
+    // background: $lightestGrey;
+    /* background: white; */
 
     img {
       object-fit: cover;
@@ -3687,14 +3718,14 @@ body.modal-open {
 
   .infobox--content {
     // margin: 10px;
-    margin: 5px 10px 0;
+    margin: 20px 12px auto;
     overflow: hidden;
     width: 100%;
 
     h2 {
       font-family: $headingFont;
       font-weight: 700;
-      font-size: 20px;
+      font-size: 16px;
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
@@ -4345,25 +4376,39 @@ body.modal-open {
     }
   }
 
+  .map-action-buttons {
+    transition: all 0.2s;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    &.move-up {
+      transform: translateY(-90px);
+    }
+  }
+
   .infoBox {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 12px;
+    
+    // box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+    box-shadow: 0 10px 30px rgba(200,200,200,1); 
+
+    animation: slideInDownBig .2s $coolEaseOut;
+
     .infobox--content {
-      margin-right: 35px;
+      margin-right: $GRID_SPACE*3; 
     }
 
     .infobox--label {
       display: none;
     }
 
-    // .infobox--arrow {
-    //   display: block;
-
-    //   position: absolute;
-    //   top: -13px;
-    //   left: calc(50% - 10px);
-    //   font-size: 20px;
-    //   color: white; 
-    //   text-shadow: 1px -2px 3px rgba(0,0,0,.15);
-    // }
+    .infobox--arrow {
+      display: none;
+    }
 
     .infobox--caret {
       display: block;
@@ -4374,6 +4419,13 @@ body.modal-open {
       right: 12px;
       top: calc(50% - 10px); 
       font-size: 20px;
+    }
+
+    .infobox--img {
+      img {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
     }
   }
 
