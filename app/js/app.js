@@ -1442,7 +1442,7 @@ $(() => {
     }
   }
 
-  function _initGlobalCallbacks() {
+  function initGlobalCallbacks() {
     //set Map Initialization 
     $(document).on('map:ready', function () {
       hideSpinner();
@@ -2438,17 +2438,17 @@ $(() => {
       setView('Sobre', '/sobre', true);
     }));
 
-    $('.facebookLoginBtn').on('click', () => {
+    $('body').on('click', '.facebookLoginBtn', () => {
       hideAll();
       hello('facebook').login({ scope: 'email' });
     });
 
-    $('.googleLoginBtn').on('click', () => {
+    $('body').on('click', '.googleLoginBtn', () => {
       hideAll();
       hello('google').login({ scope: 'email' });
     });
 
-    $('.logoutBtn').on('click', () => {
+    $('body').on('click', '.logoutBtn', () => {
       hideAll();
       hello.logout('facebook');
       hello.logout('google');
@@ -2468,7 +2468,7 @@ $(() => {
       setView('Perguntas frequentes', '/faq', true);
     }));
 
-    $('body').on('click', '.contact-btn', queueUiCallback.bind(this, () => {
+    $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
       // @todo having to call these two ones here is bizarre
       hideAll();
       goHome();
@@ -2559,7 +2559,8 @@ $(() => {
         }
       );
     }
-
+ 
+    initGlobalCallbacks();
     initNavCallbacks();
   }
 
@@ -2605,8 +2606,6 @@ $(() => {
     // thanks to: https://stackoverflow.com/questions/31569518/how-to-detect-facebook-in-app-browser
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     _isFacebookBrowser = (userAgent.indexOf('FBAN') > -1) || (userAgent.indexOf('FBAV') > -1);
-
-    _initGlobalCallbacks();
 
     initMenus();
 
