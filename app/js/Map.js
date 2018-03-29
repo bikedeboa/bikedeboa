@@ -16,6 +16,7 @@ BDB.Map = (function () {
   let areMarkersHidden = false;
   let directionsRenderer;
   let directionsService;
+  let infoWindow;
 
   // to do:  move this to configuration
   let mapBoundsCoords = { 
@@ -91,6 +92,12 @@ BDB.Map = (function () {
   
     if (!_isMobile) {
       google.maps.event.addListener(map, 'zoom_changed', mapZoomChanged);
+    } else {
+      google.maps.event.addListener(map, 'click', () => {
+        if (infoWindow && infoWindow.reset) {
+          infoWindow.reset();
+        }
+      });
     }
 
     directionsRenderer = new google.maps.DirectionsRenderer({
@@ -177,7 +184,8 @@ BDB.Map = (function () {
   let setInfoBox = function () {
     // remove jquery reference.
     // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 400;
-    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
+    // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
+    const infoboxWidth = 320;
     const myOptions = {
       maxWidth: 0,
       pixelOffset: new google.maps.Size(-infoboxWidth / 2, 0),
@@ -185,9 +193,6 @@ BDB.Map = (function () {
       zIndex: null,
       boxStyle: {
         width: `${infoboxWidth}px`,
-        // height: _isMobile ? '75px' : '100px',
-        height: '75px',
-        cursor: 'pointer',
       },
       // closeBoxMargin: '10px 2px 2px 2px',
       closeBoxURL: '',
@@ -195,7 +200,7 @@ BDB.Map = (function () {
       pane: 'floatPane',
       enableEventPropagation: false,
     };
-    _infoWindow = new InfoBox(myOptions);
+    infoWindow = new InfoBox(myOptions);
   };
   let updateUserMarkerPosition = function (gposition) {
     if (map) {
@@ -250,13 +255,19 @@ BDB.Map = (function () {
   let geolocate = function (options = {}) {
     BDB.Geolocation.getLocation();
 
-    document.addEventListener('geolocation:done', function (result) {
+    $(document).one('geolocation:done', result => {
       if (result.detail.success) {
         if (!isGeolocated){
           isGeolocated = true;
           setUserMarkerIcon();
         }
-        updateUserPosition(result.detail.response, result.detail.center);  
+        
+        if (options.isInitializingGeolocation) {
+          result.detail.center = false;
+          BDB.Map.fitToNearestPlace();
+        }
+
+        updateUserPosition(result.detail.response, result.detail.center);
       }else{
         isGeolocated = false;
         setUserMarkerIcon();
@@ -349,7 +360,7 @@ BDB.Map = (function () {
         if (getLocation){
           options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
           options.zoom = 15;
-          options.isUserLocation = true;
+          options.isUserLocation = !!BDB.Geolocation.getLastestLocation();
         }
 
         markerClickCallback = _markerClickCallback;
@@ -360,7 +371,7 @@ BDB.Map = (function () {
         if (getLocation){
           BDB.Geolocation.checkPermission().then(permission => {
             if (permission.state === 'granted') {
-              geolocate();
+              geolocate({isInitializingGeolocation: true});
             }
           });
         }
@@ -586,7 +597,6 @@ BDB.Map = (function () {
       bounds.extend(convertToGmaps(BDB.Geolocation.getCurrentPosition()));  
 
       var nearest = this.getListOfPlaces('nearest', 1)[0];
-      console.log('nearest place:', nearest); 
       var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
       bounds.extend(nearestPos);
 
@@ -608,7 +618,7 @@ BDB.Map = (function () {
 
       const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, dest.lat(), dest.lng());
 
-      console.log(distanceKm);
+      // console.log(distanceKm); 
 
       if (!forceLongDistance && distanceKm > MAX_KM_TO_CALCULATE_ITINERARY) {
         console.warn('Wont calculate directions, too far away:', distanceKm);
@@ -652,14 +662,17 @@ BDB.Map = (function () {
             case 'red':
               iconType = MARKER_ICON_RED;
               iconTypeMini = MARKER_ICON_RED_MINI;
+              scale = 0.6;
               break;
             case 'yellow':
               iconType = MARKER_ICON_YELLOW;
               iconTypeMini = MARKER_ICON_YELLOW_MINI;
+              scale = 0.8;
               break;
             case 'green':
               iconType = MARKER_ICON_GREEN;
               iconTypeMini = MARKER_ICON_GREEN_MINI;
+              scale = 1;
               break;
             case 'gray':
             default:
@@ -669,9 +682,9 @@ BDB.Map = (function () {
               break;
             }
 
-            if (!scale) {
-              scale = 0.5 + (m.average / 10);
-            }
+            // if (!scale) {
+            //   scale = 0.5 + (m.average / 10);
+            // }
 
             if (map) {
               m.icon = {
@@ -680,6 +693,13 @@ BDB.Map = (function () {
                 origin: new google.maps.Point(0, 0), // origin
                 anchor: new google.maps.Point((MARKER_W * scale) / 2, (MARKER_H - MARKER_H / 10) * scale), // anchor
               };
+              
+              m.iconSelected = { 
+                url: iconType, // url
+                scaledSize: new google.maps.Size((MARKER_W * 1.5), (MARKER_H * 1.5)), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point((MARKER_W * 1.5) / 2, (MARKER_H - MARKER_H / 10) * 1.5), // anchor
+              }
 
               m.iconMini = {
                 url: iconTypeMini, // url
@@ -687,6 +707,7 @@ BDB.Map = (function () {
                 origin: new google.maps.Point(0, 0), // origin
                 anchor: new google.maps.Point((MARKER_W_MINI * scale) / 2, (MARKER_H_MINI * scale) / 2), // anchor
               };
+
             }
 
             // Average might come with crazy floating point value
@@ -706,7 +727,13 @@ BDB.Map = (function () {
                     lat: parseFloat(m.lat),
                     lng: parseFloat(m.lng)
                   },
-                  // map: map,
+                  // label: {
+                  //   text: m.average ? m.average.toString() : '-', 
+                  //   color: 'white',
+                  //   fontFamily: 'Quicksand',
+                  //   fontSize: '12px', 
+                  //   fontWeight: 'bold'
+                  // },
                   icon: m.icon,
                   zIndex: i, //markers should be ordered by average
                   // opacity: 0.1 + (m.average/5).
@@ -757,28 +784,35 @@ BDB.Map = (function () {
                   newMarker.addListener('click', () => {
                     ga('send', 'event', 'Local', 'infobox opened', m.id);
 
+                    // Close previous, if any 
+                    if (infoWindow && infoWindow.reset) {
+                      infoWindow.reset(); 
+                    }
+
                     map.panTo(newMarker.getPosition());
+                    newMarker.setIcon(m.iconSelected);
+                    m.originalZIndex = newMarker.getZIndex();
+                    newMarker.setZIndex(9999);
 
-                    BDB.Map.showDirectionsToPlace(newMarker.position); 
+                    BDB.Map.showDirectionsToPlace(newMarker.position);
 
-                    _infoWindow.setContent(contentString);
-                    _infoWindow.open(map, newMarker);
-                    _infoWindow.addListener('domready', () => {
-                      // Show spinner while thumbnail is loading
-                      // $('.infobox--img img').off('load').on('load', e => {
-                      //   $(e.target).parent().removeClass('loading');
-                      // });
+                    $('body').append(`<div class="infoBox"> ${contentString} </div>`);
+                    // $('.map-action-buttons').addClass('move-up');
 
-                      $('.infoBox').off('click').on('click', () => {
-                        markerClickCallback(markers[i], () => {
-                          _infoWindow.close();
-                        });
+                    infoWindow = $('.infoBox');
+                    infoWindow.off('click').on('click', () => {
+                      markerClickCallback(markers[i], () => {
+                        infoWindow.reset();
                       });
                     });
-                  });
 
-                  map.addListener('click', () => {
-                    _infoWindow.close();
+                    infoWindow.reset = function() {
+                      this.remove();
+                      // $('.map-action-buttons').removeClass('move-up');
+
+                      newMarker.setIcon(m.icon);
+                      newMarker.setZIndex(m.originalZIndex);
+                    }
                   });
                 } else {
                   // No infobox, directly opens the details modal
@@ -790,9 +824,9 @@ BDB.Map = (function () {
                   newMarker.addListener('mouseover', () => {
                     ga('send', 'event', 'Local', 'infobox opened', m.id);
 
-                    _infoWindow.setContent(contentString);
-                    _infoWindow.open(map, newMarker);
-                    _infoWindow.addListener('domready', () => {
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, newMarker);
+                    infoWindow.addListener('domready', () => {
                       $('.infobox--img img').off('load').on('load', e => {
                         $(e.target).parent().removeClass('loading');
                       });
@@ -800,7 +834,7 @@ BDB.Map = (function () {
                   });
 
                   newMarker.addListener('mouseout', () => {
-                    _infoWindow.close();
+                    infoWindow.close();
                   });
                 }
 
