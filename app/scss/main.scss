@@ -3717,8 +3717,8 @@ body.modal-open {
   } 
 
   .infobox--content {
-    // margin: 10px;
-    margin: 20px 12px auto;
+    // margin: 20px 12px auto;
+    margin: auto 12px;
     overflow: hidden;
     width: 100%;
 
@@ -3729,13 +3729,16 @@ body.modal-open {
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
+      max-height: 2.5em;
       overflow: hidden;
     }
 
     .rating-display-container {
       margin-top: 8px;
+      margin-bottom: 2px;
     }
 
     .numreviews {

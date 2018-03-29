@@ -807,8 +807,6 @@ BDB.Map = (function () {
                     });
 
                     infoWindow.reset = function() {
-                      console.log('deselect previous');
-                      
                       this.remove();
                       // $('.map-action-buttons').removeClass('move-up');
 
