@@ -5070,7 +5070,8 @@ body.modal-open {
   background: $green !important; 
 
   .swal2-content, 
-  a {
+  .swal2-close,
+  a { 
     color: white !important;
   }
 
