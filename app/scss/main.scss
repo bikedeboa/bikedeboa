@@ -103,16 +103,21 @@ $GRID_SPACE: 12px;
     font-style: normal;
 }
 @font-face {
-    font-family: 'Gotham Rounded';
-    src: url('GothamRounded-Bold.otf') format('opentype');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'Gotham Rounded';
+  src: url('GothamRounded-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
 }
 @font-face {
-    font-family: 'Gotham Rounded'; 
-    src: url('GothamRounded-Light.otf') format('opentype');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'Gotham Rounded'; 
+  src: url('GothamRounded-Light.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+    font-family: 'Proxima Nova Soft';
+    src: url('ProximaNovaSoft-Regular.otf') format('opentype');
 }
 
 
