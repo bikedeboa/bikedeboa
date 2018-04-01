@@ -1016,7 +1016,7 @@ a.unstyled-link {
         opacity: 1;
         visibility: visible;
 
-        height: 20px;
+        height: 25px;
         position: absolute;
         right: 10px;
         top: 50%;
@@ -2031,6 +2031,10 @@ body.search-mode {
 
   #locationSearch {
     box-shadow: none;
+  }
+
+  #locationSearch #clearLocationQueryBtn {
+    right: 10px;
   }
 }
 
@@ -4000,13 +4004,12 @@ body.modal-open {
     }
   }
 
-
-
   #locationSearch {
     #locationQueryInput { 
       height: 48px;
       padding: 0 90px 0 60px; 
     }
+    
     #clearLocationQueryBtn {
       right: 40px;
       height: 48px;
