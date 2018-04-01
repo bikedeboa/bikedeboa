@@ -75,7 +75,7 @@ $(() => {
         const $tooltipEl = $(e.currentTarget);
         swal({
           customClass: 'tooltip-modal',
-          html: $tooltipEl.data('title'),
+          html: $tooltipEl.data('title'), 
           showConfirmButton: false,
           showCloseButton: true
         });
@@ -2612,6 +2612,9 @@ $(() => {
     // Bind trigger for history changes
     History.Adapter.bind(window, 'statechange', () => {
       const state = History.getState();
+      
+      // Always close any open dialog if a navigation is triggered 
+      swal.close();
 
       if (_isFeatherlightOpen) {
         const openLightbox = $.featherlight.current();
