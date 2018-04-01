@@ -11,7 +11,6 @@ BDB.Database = {
   isAuthenticated: false,  
   _authToken: '',
   _headers: {},
-  _authenticationAttemptsLeft: 3,
   _isAuthenticated: false,
  
   _currentIDToAdd: 1306,
@@ -84,45 +83,36 @@ BDB.Database = {
     this.authenticate();
   },
 
-  authenticate: function(callback) {
-    const self = this;
+  authenticate: function() {
+    return new Promise((resolve, reject) => {
+      const self = this;
 
-    $.ajax({
-      type: 'post',
-      headers: self._headers,
-      url: self.API_URL + '/token',
-      data: {
-        username: 'client',
-        password: 'deboanalagoa'
-      },
-      success: function(data) {
-        if (data.token && data.token.length > 0) {
-          console.debug('API connected.');
+      $.ajax({
+        type: 'post',
+        headers: self._headers,
+        url: self.API_URL + '/token',
+        data: {
+          username: 'client',
+          password: 'deboanalagoa'
+        },
+        success: function(data) {
+          if (data.token && data.token.length > 0) {
+            console.debug('API connected.');
 
-          // Set headers for future calls 
-          self.isAuthenticated = true;
-          self._authToken = data.token;
-          self._headers['x-access-token'] = data.token;
+            // Set headers for future calls 
+            self.isAuthenticated = true;
+            self._authToken = data.token;
+            self._headers['x-access-token'] = data.token;
 
-          if (callback && typeof callback === 'function') {
-            callback();
+            resolve();
           }
-        }
-      },
-      error: function(data) {
-        ga('send', 'event', 'Login', 'client authentication fail');
+        },
+        error: function(data) {
+          ga('send', 'event', 'Login', 'client authentication fail');
 
-        BDB.Database._authenticationAttemptsLeft--;
-        if (BDB.Database._authenticationAttemptsLeft > 0) {
-          console.error(`Authentication failed, ${BDB.Database._authenticationAttemptsLeft} attempts left. Trying again in 2s...`);
-          setTimeout( () => {
-            self.authenticate(callback);
-          }, 2000);
-        } else {
-          // Permanently failed
-          // setOfflineMode();
+          reject();
         }
-      }
+      });
     });
   },
 
@@ -581,44 +571,41 @@ BDB.Database = {
     console.debug('Getting place detail...');
  
     return new Promise((resolve, reject) => {
-      function justDoIt() {
-        $.ajax({
-          type: 'get',
-          headers: self._headers,
-          url: self.API_URL + '/local/' + placeId
-        }).done(function (data) {
-          if (data) {
-            console.debug('Got place detail:');
-            console.debug(data);
+      $.ajax({
+        type: 'get',
+        headers: self._headers,
+        url: self.API_URL + '/local/' + placeId
+      }).done(function (data) {
+        if (data) {
+          console.debug('Got place detail:');
+          console.debug(data);
 
-            let updatedMarker;
-            if (markers) {
-              // Combine detailed data with what we had
-              updatedMarker = markers.find(m => { return m.id === placeId; });
-              Object.assign(updatedMarker, data);
-            } else {
-              // Markers weren't loaded yet (it's a deeplink)
-              updatedMarker = data;
-              markers = [updatedMarker];
-            }
-
-            // Set flag 
-            updatedMarker._hasDetails = true;
-
-            // Update offline-stored markers with new state
-            BDB.saveMarkersToLocalStorage(markers);
-
-            resolve(updatedMarker);
+          let updatedMarker;
+          if (markers) {
+            // Combine detailed data with what we had
+            updatedMarker = markers.find(m => { return m.id === placeId; });
+            Object.assign(updatedMarker, data);
+          } else {
+            // Markers weren't loaded yet (it's a deeplink)
+            updatedMarker = data;
+            markers = [updatedMarker];
           }
+
+          // Set flag 
+          updatedMarker._hasDetails = true;
+
+          // Update offline-stored markers with new state
+          BDB.saveMarkersToLocalStorage(markers);
+
+          resolve(updatedMarker);
+        }
+      })
+        .fail(() => {
+          // requestFailHandler();
+          toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
+
+          reject();
         })
-          .fail(() => {
-            requestFailHandler();
-
-            reject();
-          })
-      }
-
-      this.waitAuthentication(justDoIt);
     });
   },
 };

@@ -9,13 +9,13 @@
     <section class="top-toolbar">
     <meta itemprop="map" content="{{{gmapsRedirectUrl}}}">
     <a href="{{{gmapsRedirectUrl}}}" target="_blank" rel="noopener" class="toolbar-item directionsBtn unstyled-link">
-        <img alt="" class="toolbar-item-icon" src="/img/route.svg">
+        <img alt="" class="toolbar-item-icon" src="/img/icon_route.svg">
         <label>Como chegar</label>
     </a>
 
     <!-- <button class="toolbar-item openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa.">
-        <img alt="" class="toolbar-item-icon" src="/img/review.svg">
-        <label>Avaliar</label>
+        <img alt="" class="toolbar-item-icon" src="/img/icon_review.svg">
+        <label>Avaliar</label> 
     </button> -->
 
     <button class="toolbar-item shareBtn" tabindex="0">
@@ -142,7 +142,8 @@
                         <a id="deroda-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>De Roda</h2>
                         <p>Pode ter várias formas. Os mais comuns são pequenos triângulos ou semi-círculos.</p>
                         <p>A qualidade da estrutura varia bastante. Alguns são frágeis e mal fixados no chão, outros são mais rígidos e confiáveis.</p>
-                        <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro.</p>
+                        <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro, o que
+                        lhes rendeu o apelido carinhoso de 'entorta-roda' entre os ciclistas.</p>
                         <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
                         <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
                         "></a>
@@ -155,16 +156,13 @@
                         "></a> 
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'suspenso'}}
-                        <a id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Suspenso</h2>
-                        <p>Normalmente lembra uma goleira com ganchos para pendurar a bicicleta, ou apenas gancho na parede.</p>
-                        <p>Cuidado que alguns deste tipo só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares.</p>
-                        <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
+                        <a id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Suspenso</h2> <p> Também conhecido como 'varal', normalmente lembra uma goleira com ganchos para pendurar a bicicleta. Às vezes se trata de simples ganchos na parede. </p> <p> Cuidado que alguns destes só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares. </p> <p> Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro. Pessoas com um pouco de dificuldade motora, como pessoas de mais idade ou muito jovens, podem ter dificuldade de usá-lo. </p>
                         <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
                         "></a>
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'grade'}}
                         <a id="grade-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Grade</h2>
-                        <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações, e alguns são rígidos e bem fixados, outros não.</p>
+                        <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações: alguns são rígidos e bem fixados, já outros são bem menos confiáveis.</p>
                         <p>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda, por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.</p>
                         <p>Prefira sempre <b>prender pelo quadro da bicicleta<b>.</p>
                         <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
@@ -172,9 +170,10 @@
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'other'}}
                         <a id="other-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Outro</h2>
-                        <p>Um bicicletário diferentão, ou nem é bicicletário de fato.</p>
+                        <p> Alguns bicicletários são diferentões e não se encaixam em nenhuma categoria. Alguns nem foram feitos pra serem bicicletários
+                        de fato, mas acabam sendo usados assim.</p> 
                         <p>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.</p>
-                        <p>Sempre prenda sua bicicleta pelo quadro e o mais próximo possível desse objeto.</p>
+                        <p>Sempre prenda sua bicicleta pelo quadro e o mais próximo possível desse objeto.</p> 
                         <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
                         "></a>
                         {{/ifCond}}  
@@ -260,18 +259,18 @@
 
         <hr>
 
-        <section class="description">
+        <section class="extraInfo">
         <ul class="details-list">
             {{#if description}}
             <li>
-                <span class="details-list-icon glyphicon glyphicon-info-sign"></span>
+                <img class="details-list-icon svg-icon" alt="" src="/img/icon_info.svg" style="opacity: .5;">
                 <div itemprop="description">{{{description}}}</div>
             </li>
             {{/if}}
 
             {{#if createdTimeAgo}}
             <li>
-                <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg" style="opacity: .6;">
+                <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg"> 
                 {{#if author}}
                 <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
                 {{else}}
@@ -282,19 +281,19 @@
 
             {{#if isPaid}}
                 <li>
-                    <span class="details-list-icon glyphicon glyphicon-usd"></span>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_money.svg"> 
                     <div> {{{isPaid}}} </div>
                 </li>
             {{/if}}
 
             {{#if slots}}
                 <li>
-                    <span class="details-list-icon glyphicon glyphicon-th"></span>
+                    <img class="details-list-icon svg-icon" alt="" src="/img/icon_bike.svg">
                     <div> {{{slots}}} vagas </div>
                 </li>
             {{/if}}
 
-            {{#if views}}
+            {{#if views}} 
             <li>
                 <img class="details-list-icon svg-icon" alt="" src="/img/icon_views.svg">
                 <div>{{{views}}} visualizações</div>
@@ -303,7 +302,7 @@
 
 
             <li>
-            <img class="details-list-icon svg-icon" alt="" src="/img/pin_gray.svg">
+            <img class="details-list-icon svg-icon" alt="" src="/img/icon_pin.svg">
             <div itemprop="address">{{{address}}}</div>
             </li>
         </ul>
@@ -343,7 +342,7 @@
                         <img src="{{userThumbUrl}}" class="avatar"/>
                     </div>
                 {{/if}}
-                Dê sua nota para este bicicletário
+                Dê sua nota para este bicicletário:
             </h2>
 
             <fieldset class="rating rating-big empty">

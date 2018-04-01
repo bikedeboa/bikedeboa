@@ -1,0 +1,50 @@
+<!-- Data Modal -->
+<div id="topCitiesModal" data-keyboard="false" class="modal fade" tabindex="-1">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title view-name">Cidades mapeadas</h1>
+                </div>
+
+                <div class="modal-body">
+                    <article>
+                        <img class="illustration" alt="" src="/img/art2.svg"/>
+ 
+                        <ul class="top-cities">
+                            {{#each topCities}}
+                                <li>
+                                    <button class="goToCityBtn" data-cityname="{{{this.[0]}}}">
+                                        <span class="top-cities--name">
+                                            {{!-- <img class="svg-icon" alt="" src="/img/icon_city.svg" /> --}}
+                                            {{{this.[0].[0]}}} 
+
+                                            <span>
+                                                {{{this.[0].[1]}}}
+                                            </span>
+                                        </span>
+                                        <span class="top-cities--nbr">
+                                            {{{this.[1]}}}
+                                        </span>
+                                    </button>
+                                </li>
+                            {{/each}}
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="modal-footer">
+                    <img alt="" src="/img/icon_add_pin.svg">
+
+                    <h2> 
+                        Não encontrou a sua cidade?
+                    </h2>
+
+                    <p>
+                        Este é um mapa colaborativo, onde todas informações são enviadas pelos próprios usuários. Ajude você também enviando os bicicletários da sua cidade, e divulgue o site na sua comunidade para que todos ajudem e se beneficiem.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

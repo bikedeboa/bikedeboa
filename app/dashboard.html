@@ -390,6 +390,7 @@
               data-search="true"
               data-show-columns="true"
               data-show-footer="false"
+              data-show-export="true"
               data-detail-view="true"
               data-detail-formatter="genericDetailsFormatter"
               data-sticky-header="false">
@@ -410,6 +411,7 @@
               data-show-columns="true"
               data-show-footer="false"
               data-detail-view="true"
+              data-show-export="true"
               data-detail-formatter="genericDetailsFormatter"
               data-sticky-header="false">
             </table>
@@ -482,6 +484,7 @@
               data-show-footer="false"
               data-pagination="true"
               data-paginationVAlign="both"
+              data-show-export="true"
               data-show-pagination-switch="true"
               data-sidePagination="client"
               data-showPaginationSwitch="true"
@@ -792,6 +795,8 @@
             $('#reviews table').bootstrapTable({
               columns: [
                 { field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: false },
+                { field: 'local_id', title: 'ID do bicicletário', sortable: true, class: 'col-id', visible: false },
+                { field: 'user_id', title: 'ID do usuário', sortable: true, class: 'col-id', visible: false }, 
                 { field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter' },
                 { field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title', },
                 { field: 'User.fullname', title: 'Usuário', sortable: true, },
@@ -1191,12 +1196,13 @@
         function init() {
           // showSpinner();
 
-          Database.authenticate(() => {
-            // Initial view is the Locals view
-            updateLocalsTable();
+          Database.authenticate()
+            .then(() => {
+              // Initial view is the Locals view
+              updateLocalsTable();
 
-            // hideSpinner();
-          });
+              // hideSpinner();
+            });
 
           //
           // Callbacks

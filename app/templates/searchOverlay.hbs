@@ -1,12 +1,37 @@
 <!-- Content that shows in Search mode, like recent searches, ... -->
 
-<!-- <h2>Buscas Recentes</h2> -->
-<ul class="recent-searches">
-{{#each recentSearches}}
-    <li>
-    <button data-recentsearchid="{{@index}}">
-        <span class="glyphicon glyphicon-time"></span> {{{this.name}}}
-    </button>
-    </li>
-{{/each}}
-</ul>
+<div>
+    {{#if recentSearches}}
+        <h2>Buscas Recentes</h2>
+        <ul class="recent-searches">
+            {{#each recentSearches}}
+                <li>
+                <button class="goToRecentSearchBtn" data-recentsearchid="{{@index}}">
+                    <span class="glyphicon glyphicon-time"></span> {{{this.name}}}
+                </button>
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+
+    <h2> Principais Cidades </h2>
+    <ul class="top-cities">
+        {{#each topCities}} 
+            <li>
+                <button class="goToCityBtn" data-cityname="{{{this.[0]}}}">
+                    <span class="top-cities--name">
+                        <img class="svg-icon" alt="" src="/img/icon_city.svg" /> {{{this.[0].[0]}}}
+                    </span>
+                    <span class="top-cities--nbr">
+                        {{{this.[1]}}}
+                    </span> 
+                </button>
+            </li>
+        {{/each}}
+        <li>
+            <button class="openTopCitiesModal">
+                <span style="margin-left: 32px;">Ver mais...</span> 
+            </button> 
+        </li>
+    </ul>
+</div>

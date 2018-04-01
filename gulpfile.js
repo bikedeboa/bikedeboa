@@ -62,11 +62,11 @@ let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
  
 // Production: opt-out of the Experimental new renderer and base map style
 // https://developers.google.com/maps/documentation/javascript/releases
-if (BDB_ENV === 'prod') {  
+// if (BDB_ENV === 'prod') {  
   // GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
   GOOGLE_MAPS_ID += '&v=3.31';
-}
-
+// }
+ 
 
 // SASS
 gulp.task('sass', () => {
@@ -147,36 +147,96 @@ gulp.task('html', () => {
 
 // Service Worker (sw-precache)
 gulp.task('generate-service-worker', function(callback) {
-  swPrecache.write(`dist/service-worker.js`, {
+  swPrecache.write('dist/service-worker.js', {
+    // Files to be precached to be available offline.
     staticFileGlobs: [
       'dist/**/*.{js,css}',
       'dist/*.html', 
       // 'dist/*.json', 
       // 'assets/**/*.{svg,png,jpg}',
       // 'dist/**/*.{ttf,woff,woff2}',
-      'fonts/glyphicons-halflings-regular.ttf',
-      'fonts/glyphicons-halflings-regular.woff',
-      'fonts/glyphicons-halflings-regular.woff2',
-      'public/manifest.json',
-      'assets/img/icon_search.svg',
-      'assets/img/icon_add_pin.svg',
-      'assets/img/icon_geolocation.svg',
-      'assets/img/icon_filter.svg',
-      'assets/img/icon_hamburger.svg',
-      'assets/img/icon_user_big.svg',
+      'dist/fonts/glyphicons-halflings-regular.ttf',
+      'dist/fonts/glyphicons-halflings-regular.woff',
+      'dist/fonts/glyphicons-halflings-regular.woff2',
+      'public/manifest.json', 
+      'public/lib/infobox.min.js',
+      'public/lib/markerclusterer.min.js',
+      'public/lib/featherlight.min.js',
+      'public/lib/featherlight.min.css',
+      'assets/img/icon_*.svg',
+      'assets/img/tipo_*.svg',
+      'assets/img/pin_*.svg', 
       'assets/img/spinner.svg',
+      'assets/img/current_position.svg',
+      'assets/img/last_position.svg',
+      'assets/img/blank_map.jpg',
+      'assets/img/cluster_medium.png',
+      'assets/img/cluster_big.png',
     ], 
+
+    // Maps multiple strings to be stripped and replaced from the beginning of URL paths at runtime. Use this option 
+    //   when you have multiple discrepancies between relative paths at build time and the same path at run time. 
+    //   If stripPrefix and replacePrefix are not equal to '', they are automatically added to this option.
     stripPrefixMulti: {
       'dist/': '/', 
       'assets/': '/', 
       'fonts/': '/', 
       'public/': '/'
     },
-    // If handleFetch is false (i.e. because this is called from generate-service-worker-dev), then
-    // the service worker will precache resources but won't actually serve them.
-    // This allows you to test precaching behavior without worry about the cache preventing your
-    // local changes from being picked up during the development cycle.
-    handleFetch: true
+
+    // Sets an HTML document to use as a fallback for URLs not found in the sw-precache cache. 
+    //  This fallback URL needs to be cached via staticFileGlobs or dynamicUrlToDependencies otherwise it won't work.
+    navigateFallback: '/index.html',
+    navigateFallbackWhitelist: [/^\/b\//],
+    
+    // Runtime caching Handler options: https://googlechromelabs.github.io/sw-toolbox/api.html#handlers
+    runtimeCaching: [
+      // Network First: good for API requests where you always want the freshest data when it is available, but would
+      //   rather have stale data than no data. (Will NEVER prioritize cache over network, which is slower but safer)
+      { 
+        urlPattern: /\.(?:png|jpg|jpeg|svg)$/, handler: 'networkFirst', options: {
+          cache: {
+            maxEntries: 50,
+            name: 'bdb-images'
+          }
+        }
+      }, 
+      { urlPattern: /herokuapp.com\/local\/light$/, handler: 'networkFirst'},
+      { urlPattern: /herokuapp.com\/local\/\d+/, handler: 'networkFirst'},  
+      
+      // webfont.js
+      { urlPattern: /ajax\.googleapis\.com\//, handler: 'networkFirst'}, 
+      
+      // Google Maps scripts 
+      { urlPattern: /maps\.googleapis\.com\/maps-api-v3/, handler: 'networkFirst'}, 
+      
+      // Google Maps tiles, etc. 
+      {
+        urlPattern: /maps\.googleapis\.com\/maps\//, handler: 'networkFirst', options: {
+          cache: {
+            maxEntries: 50,
+            name: 'google-maps-api'
+          }
+        }
+      }, 
+
+
+      // Fastest: both network and cache will be tried, and will use the fastest one (most of the cases it's the cache).
+      //   Whenever the network call is successful, the cache is updated.
+      // CAUTION: data might be outdated!
+      { urlPattern: /\/geojson\/.*.json$/, handler: 'fastest'}, 
+      { urlPattern: /fonts\.googleapis\.com\//, handler: 'fastest' }, 
+      { urlPattern: /herokuapp.com\/stats$/, handler: 'fastest' },
+      { urlPattern: /herokuapp.com\/tag$/, handler: 'fastest' }, 
+
+
+      // Network Only: no caching will be done. For calls that don't make any sense if we're offline.
+      { urlPattern: /herokuapp.com\/token$/, handler: 'networkOnly' }, 
+
+      
+      // Cache First: rather heavy calls that can totally be outdated and there's no problem. Use with EXTREME caution!
+      // - none - 
+    ],
   }, callback);
 });
 
@@ -194,7 +254,7 @@ gulp.task('bower', function() {
   // grab vendor js files from bower_components, minify and push in DEST_PATH
     .pipe(jsFilter)
   // .pipe(gulp.dest(DEST_PATH + '/js/'))
-  // .pipe(concat('vendors.min.js'))
+    // .pipe(concat('vendors.min.js')) 
     .pipe(rename({dirname: ''}))
     .pipe(production(uglify()))
   // .pipe(rename({

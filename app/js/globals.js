@@ -20,6 +20,9 @@ function getSimulatedDelay () {
 // Constants //
 ///////////////
 
+//DEFAULT_COORDS is pointing to Porto Alegre
+const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
+
 const N_MOCK_PICS = 14;
 
 const MARKER_SIZE_MULTIPLIER = 1.5;
@@ -41,7 +44,8 @@ const MARKER_ICON_GRAY_MINI = '/img/pin_gray_mini.svg';
 const PHOTO_UPLOAD_MAX_W = 1000; 
 const PHOTO_UPLOAD_MAX_H = 1000;
 
-const MAX_RECENT_SEARCHES = 7;
+const MAX_RECENT_SEARCHES = 3;
+const MAX_TOP_CITIES = 5;
 
 const ANIMATIONS_MULTIPLIER = 1;
 const MODAL_TRANSITION_IN_DURATION = 700 * ANIMATIONS_MULTIPLIER;
@@ -66,6 +70,10 @@ let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX
 const _isLocalhost = BDB_ENV === 'localhost';
 const _isTouchDevice = ('ontouchstart' in window || navigator.msMaxTouchPoints);
 
+const MAX_AUTHENTICATION_ATTEMPTS = 3;
+
+const MAX_KM_TO_CALCULATE_ITINERARY = 20;
+
 /////////////
 // Globals //
 /////////////
@@ -88,7 +96,6 @@ let _filterMenu;
 let _updatingReview;
 let _isFacebookBrowser;
 let _activeFilters;
-let _infoWindow;
 let _isOffline;
 let _currentView;
 let _isDeeplink = false;
@@ -100,5 +107,6 @@ let _deferredPWAPrompt;
 let _loginMutexBlocked;
 let _isFeatherlightOpen;
 let _routePendingData;
+let _forceOffline;
 
 let templates = {};
