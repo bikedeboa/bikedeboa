@@ -214,8 +214,7 @@ body {
 }
 
 // Completely hide occasional scrollbars for smoother transitions
-body::-webkit-scrollbar,
-.modal-dialog::-webkit-scrollbar {
+body::-webkit-scrollbar {
     display: none;
 }
 
@@ -600,25 +599,27 @@ p {
   align-items: center;
   
   .media-link {
-    opacity: 0.7;
     border: 0;
     padding: 2%;
     width: 28%; 
     // flex: 1; 
 
-    backface-visibility: hidden;
+    // Desktop-only version
+    @media screen and (min-width: $MOBILE_MAX_WIDTH) {
+      filter: grayscale(100%);
+      opacity: 0.7;
+      backface-visibility: hidden;
 
-    filter: grayscale(100%);
-    
-    transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
 
-    &:hover,
-    &:focus {
-      opacity: 1;
-      text-decoration: none;
-      border: 0;
-      transform: scale(1.1);
-      filter: none;
+      &:hover,
+      &:focus {
+        opacity: 1;
+        text-decoration: none;
+        border: 0;
+        transform: scale(1.1);
+        filter: none;
+      }
     }
 
   }
@@ -1437,7 +1438,6 @@ a.unstyled-link {
   margin: 0 auto;
   display: block;
   margin-bottom: 3em; 
-  width: 70%;
 }
 
 #aboutModal,
@@ -1484,11 +1484,6 @@ a.unstyled-link {
       height: 28px;
       vertical-align: bottom;
     }
-  }
-
-  p {
-    font-size: $leading;
-    line-height: 1.6em;
   }
 
   p.subtitle {
@@ -5104,6 +5099,15 @@ body.modal-open {
 }
 
 .tooltip-modal {
+  box-shadow: none !important;
+  background: $green !important; 
+
+  .swal2-content, 
+  .swal2-close,
+  a { 
+    color: white !important;
+  }
+
   p {
     text-align: left;
     font-size: 14px;
