@@ -44,7 +44,8 @@ $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
 $easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
-$spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
+$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,8 +73,8 @@ $GRID_SPACE: 12px;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @keyframes bounceAndGlow {
-  from { opacity: 0.7; transform: translate(-50%,-100%);}
-  to { opacity: 1; transform: translate(-50%,-110%);}
+  from { opacity: 1; transform: translate(-50%,-100%);}
+  to { opacity: .8; transform: translate(-50%,-115%);}
 }
 
 @keyframes pulse {
@@ -179,9 +180,17 @@ $GRID_SPACE: 12px;
   border-radius: 5px;
 }
 
-@mixin defaultButtonHover {
-  transform: translateY(-1px);
-  box-shadow: 0px 6px 10px rgba(0,0,0,.2);
+@mixin shadowButtonHover {
+  transition: all .2s;
+  
+  &:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0px 6px 10px rgba(0,0,0,.2);
+  } 
+}
+
+@mixin greenGlowButton {
+  box-shadow: 0 2px 10px rgba(85, 188, 106, 0.1);
 }
 
 
@@ -272,12 +281,12 @@ body.position-pin-mode {
     //     pointer-events: none;
     // }
 
-    .js-menu-show-hamburger-menu,
-    #userBtn {
-      // background-color: $lightGray;
-      opacity: 0.5;
-      pointer-events: none;
-    }
+    // .js-menu-show-hamburger-menu,
+    // #userBtn {
+    //   // background-color: $lightGray;
+    //   opacity: 0.5;
+    //   pointer-events: none;
+    // }
 }
 
 body.showMarkerLabels {
@@ -836,6 +845,7 @@ a.unstyled-link {
 .svg-icon {
   height: 1em;
   max-width: 1em;  
+  vertical-align: sub;
 }
 
 
@@ -852,7 +862,7 @@ a.unstyled-link {
     white-space: nowrap;
 
     img {
-      vertical-align: text-top;
+      vertical-align: sub;
       margin-right: 3px;
       width: 25px;
       max-width: none;
@@ -901,6 +911,7 @@ a.unstyled-link {
   &.cool-hidden {
     opacity: 0;
     transform: translateY(-20px);
+    pointer-events: none;
   } 
 
   & > button {
@@ -978,6 +989,7 @@ a.unstyled-link {
     &.cool-hidden {
       opacity: 0;
       transform: translateY(-20px);
+      pointer-events: none;
     }
  
     #locationQueryInput {
@@ -1081,13 +1093,17 @@ a.unstyled-link {
       margin: 0;
 
       font-size: 22px;
-      line-height: normal;
+      // line-height: normal;
       
-      color: $green;
-      user-select: none;
-      letter-spacing: -0.02em;
-      font-weight: bold;
-      font-family: $headingFont;
+      // color: $green;
+      // user-select: none;
+      // letter-spacing: -0.02em;
+      // font-weight: bold;
+      // font-family: $headingFont;
+
+      img {
+        width: 130px;
+      }
   }
 
 
@@ -1115,6 +1131,7 @@ a.unstyled-link {
       &.cool-hidden {
         opacity: 0;
         transform: translateY(-20px);
+        pointer-events: none;
       } 
 
       .navbar-de-boa--list {
@@ -1202,6 +1219,7 @@ a.unstyled-link {
     width: 100%;
     // float: right;
     padding: 0;
+    font-weight: bold;
   }
 
   .guide-img-row {
@@ -1665,23 +1683,31 @@ a.unstyled-link {
 
     &.active {
         background: $black;
-        width: auto;
-        border-radius: 25px;
-        left: 50%;
-        transform: translateX(-50%);
+        // width: auto;
+        // border-radius: 25px;
+        // // left: 50%;
+        // // transform: translateX(-50%);
 
-        // transition: background 0.5s ease-out, width 0.5s ease-out;
+        // // transition: background 0.5s ease-out, width 0.5s ease-out;
+        transition: all 0.3s $coolEaseOut;
 
         img {
             display: none;
         }
         
+        // &:after {
+        //     content: '✕ Cancelar';
+        //     // color: $green;
+        //     color: white;
+        //     font-size: 18px;
+        //     padding: 0 $GRID_SPACE;
+        // }
+        
         &:after {
-            content: '✕ Cancelar';
-            // color: $green;
+            content: '✕';
             color: white;
-            font-size: 18px;
-            padding: 0 $GRID_SPACE;
+            font-size: 18px; 
+            padding: 4px;
         }
     }
 }
@@ -1777,91 +1803,86 @@ a.unstyled-link {
 }
 
 #newPlaceholderContainer {
+    #newPlaceholderConfirmBtn {
+        display: none;
+        
+        position: absolute;
+        bottom: 26px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 25px;
+        font-size: 18px;
+        padding: $GRID_SPACE $GRID_SPACE*2;
+        
+        @include greenGlowButton();
+        // @include shadowButtonHover();
+ 
+        // background: $greenGradient;
+        // border: 0px;
+        // text-align: center;
+        // font-size: 18px;
+        // left: 0;
+        // right: 0;
+        // bottom: 0;
+        // width: 100%;
+        // border-radius: 0;
+        // height: 80px;
+    }
+
     #newPlaceholder {
         position: absolute;
         top: 20%;
         left: 50%;
         transform: translate(-50%,-100%);
+        width: 90px;
+        height: auto;
+        
         opacity: 0;
-        background: transparent;
-        border: none;
+        // background: transparent;
+        // border: none;
         pointer-events: none;
+        z-index: 2;
 
-        transition: top 0.5s ease;
-
-        img {
-            width: 90px;
-            height: auto;
-        }
+        transition: top 0.5s ease-out;
 
         &.active {
             pointer-events: initial;
             top: 50%;
             opacity: 1;
 
-            animation: bounceAndGlow 0.5s infinite alternate;
+            animation: bounceAndGlow 0.4s $easeOutQuadratic infinite alternate;
         }
 
         &.invalid {
             animation: none;
             filter: grayscale(1);
         }
-
-        // &:after {
-        //     content: 'Aqui';
-        //     position: absolute;
-        //     left: 50%;
-        //     bottom: 46px;
-        //     color: white;
-        //     font-size: 12px;
-        //     width: 75px;
-        //     line-height: 1em;
-        //     text-transform: uppercase;
-        //     font-family: $headingFont;
-        //     transform: translateX(-50%);
-        // }
-
     }
-    // #newPlaceholderShadow {
-    //     position: absolute;
-    //     top: 50%;
-    //     left: 50%;
-    //     transform: translate(-50%,-50%);
-    //     z-index: 1;
-    //     width: 10px;
-    //     height: 5px;
-    //     border-radius: 50%;
-    //     background-color: rgb(20,20,20);
-    //     opacity: 0.5;
-    //     display: none;
-
-    //     // animation: pulse 0.5s infinite alternate-reverse;
-    // }
 
     #newPlaceholderTarget {
         position: absolute;
-        top: calc(50% - 9px);
+        top: calc(50% - 3px);
         left: 50%;
         transform: translateX(-50%);
         z-index: 1;
         width: 30px;
         height: auto;
-        opacity: 0.5;
+        // opacity: 0.5;
         display: none;
+        
+        // animation: pulse 0.4s $easeOutQuadratic infinite alternate-reverse;
     }
 
-    &:hover {
-        #newPlaceholder.active {
-            animation: none;
-        }
+    // &:hover {
+    //     #newPlaceholder.active {
+    //         animation: none;
+    //     }
 
-        #newPlaceholderTarget {
-            opacity: 1;
-        }
-    }
+    //     #newPlaceholderTarget {
+    //         opacity: 1;
+    //     }
+    // }
 }
-
-
 
 
 .modal-backdrop {
@@ -2125,7 +2146,7 @@ body.modal-open {
         h1 {
           font-weight: 700;
           font-size: 30px;
-          line-height: 30px;
+          line-height: 1.2em;
           margin-top: $GRID_SPACE*2;
           letter-spacing: -0.01em; 
 
@@ -2698,13 +2719,17 @@ body.modal-open {
 
 .ghost {
     padding: 5px 10px;
-    border: 1px solid $black;
-    color: $black;
+    border: 2px solid $green;
+    color: $green;
     margin: 5px auto;
     font-size: 16px;
     border-radius: 25px;
     vertical-align: middle;
+    
     background: transparent;
+    
+    // background: white;
+    // @include greenGlowButton();
 
     transition: all .2s;
     
@@ -2763,12 +2788,16 @@ body.modal-open {
     }
 
     .missing-info-container {
-      opacity: .5;
-      
       .missing-info-placeholder {
+        opacity: .5;
         font-size: 100px; 
         line-height: 100px;
         color: $gray;
+      }
+
+      button {
+        font-weight: bold;
+        color: $green;
       }
     }
 
@@ -2843,7 +2872,7 @@ body.modal-open {
 
       .numreviews + .openReviewPanelBtn {
         margin-top: 12px;
-        font-style: 16px;
+        font-size: 16px;
       }
     }
 
@@ -2917,10 +2946,12 @@ body.modal-open {
       margin-top: $GRID_SPACE;
 
       .minimap { 
-          width: 100%;
           min-height: 50px;
           background: $lightestGray;
-          // border-radius: 15px;
+          // Explanation on the reason for the string interpolation:
+          //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+          width: calc(100% - #{$GRID_SPACE*2});
+          margin-left: $GRID_SPACE;
 
           &.close-modal {
             cursor: pointer;
@@ -3009,11 +3040,7 @@ body.modal-open {
   @include roundedCorners;
   font-weight: bold;
 
-  transition: .2s;
-
-  &:hover:not([disabled]) {
-    @include defaultButtonHover;
-  }
+  @include shadowButtonHover;
   
   &:before {
     content: "";
@@ -3163,11 +3190,7 @@ body.modal-open {
     @include roundedCorners;
     padding: 20px;
 
-    transition: all .2s;
-
-    &:hover:not([disabled]) {
-      @include defaultButtonHover;
-    }
+    @include shadowButtonHover;
 }
 
 .btn-footer {
@@ -3271,9 +3294,7 @@ body.modal-open {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  // justify-content: flex-end;
   border-bottom: 1px solid $lighterGray;
-  // background: $paleWhite;
 
   hr {
     // border-left: 1px solid #eee; 
@@ -3285,7 +3306,6 @@ body.modal-open {
   .toolbar-item {
     text-align: center;
     cursor: pointer;
-    filter: grayscale(100%);
     border: 0;
     background: none;
     color: $green;
@@ -3293,21 +3313,21 @@ body.modal-open {
     padding: $GRID_SPACE 0 $GRID_SPACE/2;
     // min-width: 110px;
 
+    filter: grayscale(100%);
+
     border-left: 1px solid $lighterGray;
     &:first-child {
       border: 0;
     }
 
     backface-visibility: hidden;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    
-    transition: filter 0.2s ease-out, background .2s ease-out;
+    transition: all 0.2s ease;
 
     .toolbar-item-icon {
       width: 25px;
       height: 25px;
 
-      transition: transform .35s $spotifyBounce;
+      transition: transform .35s $spotifyBounceEase;
 
       &.glyphicon {
         font-size: 20px;
@@ -3318,7 +3338,6 @@ body.modal-open {
     label {
       display: block;
       text-transform: uppercase; 
-      font-weight: 700;
       padding: 5px;
       pointer-events: none;
       margin: 0;
@@ -3331,7 +3350,7 @@ body.modal-open {
       background: $paleWhite;
 
       .toolbar-item-icon {
-        transform: scale(1.1);
+        transform: scale(1.2);
       }
     }
   }
@@ -3541,12 +3560,10 @@ body.modal-open {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   box-shadow: 0 5px 30px rgba(0,0,0,.15);
-  padding: $GRID_SPACE/2;
+  padding-right: $GRID_SPACE;
 
   .pac-item-query {
-      font-size: 17px;
-      // font-family: $headingFont;
-      display: inline-block;
+      font-size: 16px;
   }
 
   .pac-item {
@@ -3562,6 +3579,8 @@ body.modal-open {
       padding-left: 22px;
       font-family: $bodyFont;
       line-height: 1em;
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
 
   // Custom Google Autocomplete search results for mobile
@@ -3730,12 +3749,9 @@ body.modal-open {
       font-family: $headingFont;
       font-weight: 700;
       font-size: 16px;
-      letter-spacing: -0.01em; 
-      line-height: normal;
+      letter-spacing: -0.02em; 
+      line-height: 1.2em;
       margin: 0;
-      // white-space: nowrap;
-      // text-overflow: ellipsis;
-      // overflow: hidden;
       max-height: 2.5em;
       overflow: hidden;
     }
@@ -4587,61 +4603,93 @@ body.modal-open {
 .rating {
     display: inline-block;
     vertical-align: middle;
-}
-.rating > input {
-    display: none;
-}
-.rating {
-  & > label:before {
-    margin: 0 2px;
-    font-size: 34px;
-    // font-family: FontAwesome;
-    font-family: $bootstrapFont;
-    content: "\e006";
-    display: inline-block;
-    background-repeat: no-repeat;
-    // width: 30px;
-    // height: 30px;
-    transition: color 0.2s ease, text-shadow 0.2s ease,;
+    
+    & > input {
+        display: none;
+    }
 
-    // content: '';
-    // background-image: url(/img/icon_star_gray.svg);
-    // background-size: 100%;
-  }
+    & > label {
+        color: $lighterGray; 
+        float: right;
+        margin: 0;
+        
+        &:before {
+          margin: 0 2px;
+          font-size: 34px;
+          font-family: $bootstrapFont;
+          display: inline-block;
+          // content: "\e006";
+          
+          transition: color 0.2s ease, text-shadow 0.2s ease,;
+      
+          content: '';
+          background-image: url(/img/icon_star_gray.svg);
+          // background-image: url(/img/icon_star_empty.svg);
+          background-size: 100%;
+          width: 30px;
+          height: 30px;
+          background-repeat: no-repeat;
+        }
+    }
 
-  &.rating-big > label:before {
-    font-size: 35px;
-    margin: 0 10px;
+    &:not(.disabled) > label {
+        cursor: pointer;
+    }
+  
+    &.rating-big > label:before {
+      font-size: 35px;
+      margin: 0 10px;
+    }
+
+    &.empty > label:before {
+      content: '';
+      // background-image: url(/img/icon_star_empty.svg);
+        
+      // hollow star
+      // content: "\e007";
+      
+      // empty gray star
+      // content: "\e006";
+    }
+    
+    // & > .half:before {
+    //     // content: "\f089";
+    //     background-image: url(/img/icon_star_half.svg);
+    //     position: absolute;
+    // }
+
+    & > input:checked ~ label:before {
+        // color: #eabb2f;
+        background-image: url(/img/icon_star.svg);
+    }    
+}
+
+.rating-display-container {
+  &[data-color="green"] > .rating > input:checked ~ label:before,
+  &[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+  &[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+      // color: $green;
+      background-image: url(/img/icon_star_green.svg);
+    }
+    
+    &[data-color="yellow"] > .rating > input:checked ~ label:before,
+    &[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+    &[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+      // color: $yellow;
+      background-image: url(/img/icon_star_yellow.svg);
+  } 
+
+  &[data-color="red"] > .rating > input:checked ~ label:before,
+  &[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+  &[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+      // color: $red;
+      background-image: url(/img/icon_star_red.svg);
   }
-} 
+}
 
 .loading-skeleton .rating > label:before {
     opacity: 0.5;
 }
-
-.rating.empty > label:before {
-    // background-image: url(/img/icon_star_empty.svg);
-    
-    // hollow star
-    // content: "\e007";
-    
-    // empty gray star
-    content: "\e006";
-}
-.rating > .half:before {
-    content: "\f089";
-    position: absolute;
-}
-.rating > label {
-    color: $lighterGray; 
-    float: right;
-    margin: 0;
-}
-
-.rating:not(.disabled) > label {  
-    cursor: pointer;
-}
-
 
 [data-color="green"], .color-green {
   color: $green;
@@ -4669,33 +4717,13 @@ body.modal-open {
   background-color: $red;
 }
 
-.rating > input:checked ~ label:before {
-    color: #eabb2f;
-    // background-image: url(/img/icon_star.svg);
-}
-
-.rating-display-container[data-color="green"] > .rating > input:checked ~ label:before,
-.rating-display-container[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.rating-display-container[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    color: $green;
-}
-.rating-display-container[data-color="yellow"] > .rating > input:checked ~ label:before,
-.rating-display-container[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.rating-display-container[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    color: $yellow;
-} 
-.rating-display-container[data-color="red"] > .rating > input:checked ~ label:before,
-.rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    color: $red;
-}
-
 // Only use hover effects on desktop
 @media screen and (min-width: $MOBILE_MAX_WIDTH) {
   .rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
   .rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
-      color: #eabb2f;
-      // background-image: url(/img/icon_star.svg);
+      // color: #eabb2f;
+      
+      background-image: url(/img/icon_star.svg);
   }
 
   .rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
@@ -4705,10 +4733,12 @@ body.modal-open {
   .rating:not(.disabled) > label:hover ~ input:checked ~ label:before, /* lighten current selection */
   .rating:not(.disabled) > input:checked ~ label:hover ~ label:before {
       // color: #f1d274 !important;
-      color: #eabb2f !important;
-      text-shadow: 0 0 10px gold; 
-      content: "\e006";
-      // background-image: url(/img/icon_star_light.svg) !important;
+       
+      // color: #eabb2f !important;
+      // text-shadow: 0 0 10px gold; 
+      // content: "\e006";
+      
+      // background-image: url(/img/icon_star_hover.svg) !important;
   }
 }
 
@@ -4757,11 +4787,11 @@ body.modal-open {
 }
 
 .rating-display-mini {
-  $mini-size: 12px;
+  $mini-size: 14px;
 
   .average,
   .rating>label:before {
-    font-size: $mini-size;
+    font-size: $mini-size; 
   }
 
   .rating>label:before {
@@ -4883,12 +4913,12 @@ body.modal-open {
 
     cursor: pointer;
 
-    background: url(/img/icon_hamburger.svg) 13px 13px no-repeat;
-    background-size: 22px;
+    // background: url(/img/icon_hamburger.svg) 13px 13px no-repeat;
+    // background-size: 22px;
 
-    &.back-mode {
-      background-image: url(/img/icon_back.svg);
-    }
+    // &.back-mode {
+    //   background-image: url(/img/icon_back.svg);
+    // }
 }
 
 .side-nav {
@@ -5138,11 +5168,7 @@ body.modal-open {
     font-weight: 700;  
     min-width: 90px;
     
-    transition: all .2s;
-    
-    &:hover:not([disabled]) {
-      @include defaultButtonHover;
-    }
+    @include shadowButtonHover;
     
     &:active {
       outline: 0;
@@ -5225,3 +5251,61 @@ body.modal-open {
   max-height: 26px;
   margin: 0;
 }
+
+.hamburger-button {
+  transition-property: opacity, filter;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+  background-color: transparent;
+
+  &.back-mode .hamburger-inner {
+    transform: rotate(-180deg);
+  }
+  &.back-mode .hamburger-inner::before {
+    transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
+  }
+  &.back-mode .hamburger-inner::after {
+    transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
+  }
+ 
+  .hamburger-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block; 
+    position: relative;
+  }
+  
+  .hamburger-inner {
+    display: block;
+    top: 50%;
+    margin-top: -2px;
+
+    &,
+    &::before,
+    &::after {
+      width: 20px;
+      height: 4px;
+      background-color: $green;
+      border-radius: 25px;
+      position: absolute;
+      transition-property: transform;
+      transition-duration: 0.2s;
+      transition-timing-function: ease;
+    }
+      
+    &::before, &::after {
+      content: "";
+      display: block;
+    }
+    &::before {
+      top: -7px;
+    }
+    &::after {
+      bottom: -7px;
+    }
+  }
+  
+}
+
+
+

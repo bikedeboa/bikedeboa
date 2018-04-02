@@ -576,11 +576,18 @@ $(() => {
 
     if (isTurningOn) {
       $('body').addClass('position-pin-mode');
+
+      hideUI();
+
+      $('.hamburger-button').addClass('back-mode');
+      $('.hamburger-button.back-mode').one('click', () => {
+        toggleLocationInputMode();
+      });
       
       // Change Maps style that shows Points of Interest
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
-      $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
+      $('#newPlaceholderConfirmBtn').on('click', queueUiCallback.bind(this, () => {
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
         
@@ -644,7 +651,10 @@ $(() => {
 
       map.setOptions({styles: _gmapsCustomStyle});
 
-      $('#newPlaceholder').off('click');
+      showUI();
+      $('.hamburger-button').removeClass('back-mode'); 
+      $('.hamburger-button.back-mode').off('click');
+      $('#newPlaceholderConfirmBtn').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
       
@@ -655,12 +665,16 @@ $(() => {
     }
 
     BDB.Map.toggleMarkers();
-    $('#addPlace').toggleClass('active');
+    if (_isMobile) {
+      $('#addPlace').toggle();
+    } else {
+      $('#addPlace').toggleClass('active');
+    }
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
-    $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
-    $('#geolocationBtn').toggle();
+    $('#newPlaceholderConfirmBtn').toggle();
+    // $('#geolocationBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
