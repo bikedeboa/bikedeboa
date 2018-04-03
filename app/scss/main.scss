@@ -39,6 +39,8 @@ $bootstrapBackdropColor: $paleWhite;
 $bootstrapBackdropOpacity: 0.8;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
 $greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
+// $greenGradient: linear-gradient(-45deg, $green 0%, $yellowGreen 100%);
+// $greenGradient: linear-gradient(-45deg, $green 0%, #cedc13 100%);
 
 $filtersHightlightColor: $palePurple;
 
@@ -78,13 +80,8 @@ $GRID_SPACE: 12px;
 }
 
 @keyframes pulse {
-  from { opacity: 0.4;}
-  to { opacity: 0.6;}
-}
-
-@keyframes pulseSubtle {
-  from { opacity: 0.8;}
-  to { opacity: 1;}
+  from { opacity: 0.6;}
+  to { opacity: 0.4;}
 }
 
 @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -286,8 +283,31 @@ body.position-pin-mode {
     //   opacity: 0.5;
     //   pointer-events: none;
     // }
-}
 
+    #map {
+      &:before,
+      &:after {
+          content: '';
+          position: fixed;
+          left: 0;
+          right: 0;
+          height: 80px;
+          z-index: 1;
+          opacity: 1;
+      }
+  
+      &:before {
+          top: 0;
+          background: linear-gradient(white,transparent);
+      }
+  
+      &:after {
+          bottom: 0;
+          background: linear-gradient(transparent,white);
+      }
+    }
+}
+ 
 body.showMarkerLabels {
   .markerLabel {
     display: block !important;
@@ -1599,7 +1619,7 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
-    position: absolute;
+    position: fixed;
     bottom: 76px;
     right: 0px;
 
@@ -1628,12 +1648,12 @@ a.unstyled-link {
 }
 
 #addPlace {
-    position: absolute;
+    position: fixed;
     bottom: 14px;
     right: 0px;
     margin: 0 $GRID_SPACE $GRID_SPACE;
 
-    background: linear-gradient(45deg, $green 0, $lightGreen 100%);
+    background: $greenGradient;
     border: 0;
     // border-radius: 50%;
     cursor: pointer;
@@ -1648,9 +1668,6 @@ a.unstyled-link {
     text-align: left;
     overflow: hidden;
     transition: width .5s $coolEaseOut, background .2s;
-
-    // transition: background 0.2s ease-out, width 0.5s ease-out;
-    // opacity: 0;
 
     img {
         width: 22px;
@@ -1678,25 +1695,11 @@ a.unstyled-link {
 
     &.active {
         background: $black;
-        // width: auto;
-        // border-radius: 25px;
-        // // left: 50%;
-        // // transform: translateX(-50%);
-
-        // // transition: background 0.5s ease-out, width 0.5s ease-out;
         transition: all 0.3s $coolEaseOut;
 
         img {
             display: none;
         }
-        
-        // &:after {
-        //     content: '✕ Cancelar';
-        //     // color: $green;
-        //     color: white;
-        //     font-size: 18px;
-        //     padding: 0 $GRID_SPACE;
-        // }
         
         &:after {
             content: '✕';
@@ -1708,7 +1711,7 @@ a.unstyled-link {
 }
 
 #filterBtn {
-    position: absolute;
+    position: fixed;
     bottom: 138px;
     right: 0px;
 
@@ -1808,20 +1811,13 @@ a.unstyled-link {
         border-radius: 25px;
         font-size: 18px;
         padding: $GRID_SPACE $GRID_SPACE*2;
+
+        background: $greenGradient;
+
+        @include shadow(3);
         
-        @include greenGlowButton();
+        // @include greenGlowButton(); 
         // @include shadowButtonHover();
- 
-        // background: $greenGradient;
-        // border: 0px;
-        // text-align: center;
-        // font-size: 18px;
-        // left: 0;
-        // right: 0;
-        // bottom: 0;
-        // width: 100%;
-        // border-radius: 0;
-        // height: 80px;
     }
 
     #newPlaceholder {
@@ -1833,12 +1829,10 @@ a.unstyled-link {
         height: auto;
         
         opacity: 0;
-        // background: transparent;
-        // border: none;
         pointer-events: none;
         z-index: 2;
 
-        transition: top 0.5s ease-out;
+        transition: top 0.5s $easeOutQuadratic;
 
         &.active {
             pointer-events: initial;
@@ -1865,7 +1859,13 @@ a.unstyled-link {
         // opacity: 0.5;
         display: none;
         
-        // animation: pulse 0.4s $easeOutQuadratic infinite alternate-reverse;
+        pointer-events: none;
+        
+        @keyframes pulseSubtle {
+          from { opacity: 1;}
+          to { opacity: .8;}
+        }
+        animation: pulseSubtle 0.4s $easeOutQuadratic infinite alternate;
     }
 
     // &:hover {
