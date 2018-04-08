@@ -246,10 +246,12 @@ $(() => {
         stars += '<span class="glyphicon glyphicon-star"></span>';
       }
       templateData.savedRatingContent = rating + stars;
+    } 
+
+    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
     } else {
-      if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
-        templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-      }
+      templateData.userThumbUrl = '/img/icon_user.svg';
     }
 
 
