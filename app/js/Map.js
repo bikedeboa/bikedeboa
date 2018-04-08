@@ -8,64 +8,61 @@ BDB.Map = (function () {
   let mapBounds;
   let geolocationMarker;
   let geolocationRadius;
-  // let geolocationInitialized;
-  // let positionWatcher;
   let bikeLayer;
+  let mapZoomLevel; 
+  let isGeolocated = false;
   let markerClickCallback;
   let markerClusterer;
   let areMarkersHidden = false;
-  let mapZoomLevel; 
-  let startInMarker = false;
-  let isGeolocated = false;
+  let directionsRenderer;
+  let directionsService;
+  let infoWindow;
 
-  // "Main Brazil" Bounding Box
-  //   [lat, long]
-  // SW [[-34.0526594796, -61.3037107971],
-  // SE [-34.0526594796, -34.3652340941],
-  // NE [0.1757808338, -34.3652340941],
-  // NW [0.1757808338, -61.3037107971]]]
+  // to do:  move this to configuration
+  let mapBoundsCoords = { 
+    sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, 
+    ne: { lat: '0.1757808338', lng: '-34.3652340941' } 
+  };
 
-  // Rio Grande do Sul Bounding Box
-  // let _mapBoundsCoords = {sw: {lat:"-33.815031097046436", lng:'-57.6784069268823'}, ne: {lat: '-27.048660701748112', lng:'-49.5485241143823'}};
-
-  // "Main Brazil"
-  let _mapBoundsCoords = { sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, ne: { lat: '0.1757808338', lng: '-34.3652340941' } };
-
-
-  let initMap = function (coords, zoomValue, pinUser, resolve, reject) {
-    // By default, $.getScript() sets the cache setting to false.This appends a timestamped query parameter to the 
-    //  request URL to ensure that the browser downloads the script each time it is requested.You can override this 
-    //  feature by setting the cache property globally using $.ajaxSetup():
+  // function that must be called on map.init(), returns a promise.
+  let loadScripts = function(){
+    /*By default, $.getScript() sets the cache setting to false.This appends a timestamped query parameter to the 
+     request URL to ensure that the browser downloads the script each time it is requested.You can override this 
+     feature by setting the cache property globally using $.ajaxSetup():*/
+    
     $.ajaxSetup({
       cache: true
     });
 
+    return new Promise((resolve, reject) => {
     // Dynamically inject Google Map's lib
-    $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
-      $.getScript('/lib/infobox.min.js', () => {
-        $.getScript('/lib/markerclusterer.min.js', () => {
-          // $.getScript('/lib/markerwithlabel.min.js', () => {
-            initMap_continue(coords, zoomValue, pinUser, resolve, reject);
-          // }); 
+    // todo: apply reject behaviour.
+      $.getScript('https://maps.googleapis.com/maps/api/js?key=<GOOGLE_MAPS_ID>&libraries=places&language=pt-BR', () => {
+        $.getScript('/lib/infobox.min.js', () => {
+          $.getScript('/lib/markerclusterer.min.js', () => {
+            resolve();
+          });
         });
       });
-    } 
-    );
+    });
   };
 
-  let initMap_continue = function (coords, zoomValue, pinUser, resolve, reject) {
-    const mapEl = document.getElementById('map');
+  let setMapElement = function(options) {
 
-    if (!mapEl) {
+    let {coords, zoom, isUserLocation, elId} = options;
+
+    const DOM_EL = document.getElementById(elId);
+
+    if (!elId) {
       console.warn('Map initialization stopped: no #map element found');
-      reject();
       return;
     }
 
     let gpos = convertToGmaps(coords);
-    map = new google.maps.Map(mapEl, { 
+    
+    map = new google.maps.Map(DOM_EL, { 
       center: gpos,
-      zoom: zoomValue,
+      zoom,
       disableDefaultUI: true,
       scaleControl: false,
       clickableIcons: false,
@@ -76,34 +73,62 @@ BDB.Map = (function () {
         position: google.maps.ControlPosition.RIGHT_CENTER
       }
     });
+
     setUserMarker();
     setUserRadius();
-    if (pinUser) {
+
+    if (isUserLocation) {
       updateUserMarkerPosition(gpos);
     }
  
-    setupAutocomplete();
-    BDB.Geolocation.init();
-    
-    setMapBounds();
-    
+    setupAutocomplete();  
+    setMapBounds(); 
     setInfoBox();
+    mapCenterChanged();
+    mapZoomChanged();
+    setupBikeLayer(); 
     
     map.addListener('center_changed', mapCenterChanged);
-    mapCenterChanged();
-
+  
     if (!_isMobile) {
       google.maps.event.addListener(map, 'zoom_changed', mapZoomChanged);
+    } else {
+      google.maps.event.addListener(map, 'click', () => {
+        if (infoWindow && infoWindow.reset) {
+          infoWindow.reset();
+        }
+      });
     }
-    mapZoomChanged();
 
-    setupBikeLayer(); 
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      map: map,
+      hideRouteList: true,
+      draggable: false,
+      preserveViewport: true,
+      suppressMarkers: true,
+      suppressBicyclingLayer: true,
+      suppressInfoWindows: true,
+      polylineOptions: {
+        clickable: false,
+        strokeColor: '#533FB4', // purple
+        strokeOpacity: 0,
+        fillOpacity: 0,
+        icons: [{
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillOpacity: 1, 
+            scale: 2
+          },
+          offset: '0',
+          repeat: '10px'
+        }]
+      }
+    });
+    directionsService = new google.maps.DirectionsService;
 
     //native Event Dispatcher 
     let event = new Event('map:ready');
     document.dispatchEvent(event);
-
-    resolve();
   };
 
   let convertToGmaps = function (obj, convert = true) {
@@ -118,6 +143,7 @@ BDB.Map = (function () {
       return obj;
     }
   };
+  
   let mapZoomChanged = function () {
     const prevZoomLevel = mapZoomLevel;
 
@@ -125,10 +151,11 @@ BDB.Map = (function () {
 
     if (!prevZoomLevel || prevZoomLevel !== mapZoomLevel) { 
       if (!_activeFilters) {
-        setMarkersIcon(mapZoomLevel); 
+        //setMarkersIcon(mapZoomLevel); 
       }
     }
   };
+  
   let mapCenterChanged = function () {
     clearTimeout(_centerChangedTimeout);
     _centerChangedTimeout = setTimeout(() => {
@@ -138,7 +165,7 @@ BDB.Map = (function () {
       let centerInfo = {
         isCenterWithinBounds: isPosWithinBounds(map.getCenter()),
         isViewWithinBounds: (map.getBounds()) ? map.getBounds().intersects(mapBounds) : isPosWithinBounds(map.getCenter())
-      }
+      };
       let event = new CustomEvent('map:outofbounds', { detail: centerInfo });
       document.dispatchEvent(event);
 
@@ -150,13 +177,15 @@ BDB.Map = (function () {
   };
   let setMapBounds = function () {
     mapBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(_mapBoundsCoords.sw.lat, _mapBoundsCoords.sw.lng),
-      new google.maps.LatLng(_mapBoundsCoords.ne.lat, _mapBoundsCoords.ne.lng)
+      new google.maps.LatLng(mapBoundsCoords.sw.lat, mapBoundsCoords.sw.lng),
+      new google.maps.LatLng(mapBoundsCoords.ne.lat, mapBoundsCoords.ne.lng)
     );
   };
   let setInfoBox = function () {
+    // remove jquery reference.
     // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 400;
-    const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
+    // const infoboxWidth = _isMobile ? $(window).width() * 0.95 : 300;
+    const infoboxWidth = 320;
     const myOptions = {
       maxWidth: 0,
       pixelOffset: new google.maps.Size(-infoboxWidth / 2, 0),
@@ -164,9 +193,6 @@ BDB.Map = (function () {
       zIndex: null,
       boxStyle: {
         width: `${infoboxWidth}px`,
-        // height: _isMobile ? '75px' : '100px',
-        height: '75px',
-        cursor: 'pointer',
       },
       // closeBoxMargin: '10px 2px 2px 2px',
       closeBoxURL: '',
@@ -174,7 +200,7 @@ BDB.Map = (function () {
       pane: 'floatPane',
       enableEventPropagation: false,
     };
-    _infoWindow = new InfoBox(myOptions);
+    infoWindow = new InfoBox(myOptions);
   };
   let updateUserMarkerPosition = function (gposition) {
     if (map) {
@@ -184,7 +210,7 @@ BDB.Map = (function () {
     }
   };
   let updateUserPosition = function (coords, center = true, convert = true) {
-    let gpos = convertToGmaps(coords, convert);
+    let gpos = convertToGmaps(coords, convert); 
     
     updateUserMarkerPosition(gpos);
     
@@ -215,7 +241,7 @@ BDB.Map = (function () {
       origin: new google.maps.Point(0, 0), // origin
       anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
     });
-  }
+  };
   let setUserRadius = function () {
     geolocationRadius = new google.maps.Circle({
       map: map,
@@ -226,17 +252,22 @@ BDB.Map = (function () {
       strokeOpacity: '0'
     });
   };
-
   let geolocate = function (options = {}) {
     BDB.Geolocation.getLocation();
 
-    document.addEventListener('geolocation:done', function (result) {
-      if (result.detail.status) {
+    $(document).one('geolocation:done', result => {
+      if (result.detail.success) {
         if (!isGeolocated){
           isGeolocated = true;
           setUserMarkerIcon();
         }
-        updateUserPosition(result.detail.response, result.detail.center);  
+        
+        if (options.isInitializingGeolocation) {
+          result.detail.center = false;
+          BDB.Map.fitToNearestPlace();
+        }
+
+        updateUserPosition(result.detail.response, result.detail.center);
       }else{
         isGeolocated = false;
         setUserMarkerIcon();
@@ -279,11 +310,12 @@ BDB.Map = (function () {
        
       // Custom, locally loaded GeoJSONs
       // map.data.map = null;  
-      map.data.loadGeoJson('/geojson/ciclovias_florianopolis_osm.min.json'); // 30 KB
-      map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 41 KB
-      map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 228 KB
-      map.data.loadGeoJson('/geojson/ciclovias_recife.min.json'); // 11 KB
-      // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 228 KB
+      map.data.loadGeoJson('/geojson/ciclovias_florianopolis_osm.min.json'); // 99 KB
+      map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 203 KB
+      map.data.loadGeoJson('/geojson/ciclovias_recife_osm.min.json'); // 68 KB 
+      map.data.loadGeoJson('/geojson/ciclovias_grandeportoalegre_osm.min.json'); // 369 KB
+      // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
+      // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
 
       map.data.setStyle({  
         // strokeColor: '#cde9c8', //super light green
@@ -304,31 +336,50 @@ BDB.Map = (function () {
         tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
       }
     }
-  }
+  };
+  let searchAdress = function(address) {
+    return new Promise(function (resolve, reject) {
+      geocoder.geocode({ 'address': address }, function (results, status) {
+        if (status === 'OK') {
+          resolve(results[0]);
+        } else {
+          reject();
+        }
+      });
+    });
+  };
   return {
-    init: function (_markerClickCallback) {
-      return new Promise((resolve, reject) => {
-        let isDefaultLocation = (!startInMarker) ? BDB.Geolocation.isDefaultLocation() : true;
-        let zoom = (isDefaultLocation && !startInMarker) ? 15 : 17; 
-        let coords =  BDB.Geolocation.getLastestLocation();
+    init: function (coords, zoom, elId, getLocation, _markerClickCallback) {
+      let options = Object.assign({isUserLocation : false}, {coords, zoom, elId});
+
+      loadScripts().then(()=>{
+        // enabling search address and reverse geocoder
+        geocoder = new google.maps.Geocoder();
+
+        // chech localStorage to see if there is a saved location;
+        if (getLocation){
+          options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
+          options.zoom = 15;
+          options.isUserLocation = !!BDB.Geolocation.getLastestLocation();
+        }
 
         markerClickCallback = _markerClickCallback;
 
-        initMap(coords, zoom, !isDefaultLocation, resolve, reject);
-        if (startInMarker){
-          return false;
+        setMapElement(options);
+
+        // if a coord is passed to the map so do not check for automatic geolocation check.
+        if (getLocation){
+          BDB.Geolocation.checkPermission().then(permission => {
+            if (permission.state === 'granted') {
+              geolocate({isInitializingGeolocation: true});
+            }
+          });
         }
-        // Check previous user permission for geolocation
-        BDB.Geolocation.checkPermission().then(permission => {
-          if (permission.state === 'granted') {
-            geolocate();
-          }
-        });        
-      });
+      });             
     },
     searchAndCenter: function(address) {
       return new Promise(function (resolve, reject) {
-        BDB.Geolocation.searchAdress(address)
+        searchAdress(address) 
           .then( result => {
             map.panTo(result.geometry.location); 
             
@@ -342,13 +393,6 @@ BDB.Map = (function () {
           })
           .catch(reject);
       });
-    },
-    startInLocation: function(coords){
-      startInMarker = true;
-      BDB.Geolocation.forceLocation(coords);
-    },
-    getMarkers: function() {
-      return markerClusterer.getMarkers();
     },
     getStaticImgMap: function (staticImgDimensions, pinColor, lat, lng, customStyle, zoom = false) {
       let zoomStr = (zoom) ? `zoom=${zoom}&` : '';
@@ -374,10 +418,6 @@ BDB.Map = (function () {
 
       map.data.setMap(null);
     },
-    //return this to app.js to apply markers 
-    getMap: function () {
-      return map;
-    },
     checkBounds: function () {
       if (map) {
         return isPosWithinBounds(map.getCenter());
@@ -385,10 +425,65 @@ BDB.Map = (function () {
         return false;
       }
     },
-    goToPortoAlegre: function () {
-      map.setCenter({ lat: -30.0346, lng: -51.2177 });
+    goToCoords: function (coords) {
+      map.setCenter(convertToGmaps(coords));
       map.setZoom(12);
       BDB.Geolocation.clearWatch();
+    },
+    getMap: function(){
+      return map;
+    },
+    reverseGeocode: function(lat, lng) {
+      return new Promise(function (resolve, reject) {
+        const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+              const r = results[0].address_components;
+              const formattedAddress = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`;
+              let city, state, country;
+
+              r.forEach(address => {
+                address.types.forEach(type => {
+                  if (type === 'locality' || type === 'administrative_area_level_2') {
+                    if (city && city != address.long_name) {
+                      console.warn('reverseGeocode: conflicting city names:', city, address.long_name);
+                    }  
+                    city = address.long_name;
+                  } else if (type === 'administrative_area_level_1') {
+                    if (state && state != address.long_name) {
+                      console.warn('reverseGeocode: conflicting state names:', state, address.long_name);
+                    }
+                    state = address.long_name;
+                  } else if (type === 'country') {
+                    if (country && country != address.long_name) {
+                      console.warn('reverseGeocode: conflicting country names:', country, address.long_name);
+                    }
+                    country = address.long_name;
+                  }
+                });
+              });
+
+              resolve({
+                address: formattedAddress,
+                city: city,
+                state: state,
+                country: country
+              });
+            } else {
+              console.error('No results found');
+              reject();
+            }
+          } else {
+            console.error('Geocoder failed due to: ' + status);
+            reject(status);
+          }
+        });
+      });
+    },
+    getMarkers: function() {
+      return markerClusterer.getMarkers();
     },
     clearMarkers: function () {
       // Deletes all markers in the array by removing references to them.
@@ -441,6 +536,108 @@ BDB.Map = (function () {
         areMarkersHidden = true;
       }
     },
+    getListOfPlaces: function (orderBy, maxPlaces = 50) {
+      let markersToShow;
+      switch (orderBy) {
+      case 'nearest': { 
+        // if (!_userCurrentPosition) {
+        //   showSpinner('Localizando...');
+
+        //   geolocate(true).then(() => {
+        //     // hideSpinner();
+
+        //     openNearbyPlacesModal(orderBy);
+        //   }).catch(() => {
+        //     console.error('Cant open nearby places, geolocation failed.');
+
+        //     // hideSpinner();
+
+        //     switchToMap();
+        //   });
+        //   return;
+        // }
+
+        // @todo do this properly
+        const positionToCompare = BDB.Geolocation.getCurrentPosition();
+
+        // Use nearest places
+        for (let i = 0; i < markers.length; i++) {
+          const m = markers[i];
+
+          m.distance = distanceInKmBetweenEarthCoordinates(
+            positionToCompare.latitude,
+            positionToCompare.longitude, 
+            m.lat,
+            m.lng);
+        }
+        markersToShow = markers.sort((a, b) => { return a.distance - b.distance; });
+        markersToShow = markersToShow.slice(0, maxPlaces);
+        break;
+      }
+      case 'updatedAt':
+        // Most recently updated places
+        // @todo bring this info from getAll endpoint
+        markersToShow = markers.sort((a, b) => { return b.updatedAt - a.updatedAt; });
+        markersToShow = markersToShow.slice(0, maxPlaces);
+        break;
+      case 'best':
+        // Best rated places
+        markersToShow = markers.sort((a, b) => {
+          return (b.average * 1000 + b.reviews * 1) - (a.average * 1000 + a.reviews * 1);
+        });
+        markersToShow = markersToShow.slice(0, maxPlaces);
+        break;
+      }
+
+      return markersToShow;
+    },
+    fitToNearestPlace: function() {
+      let bounds = new google.maps.LatLngBounds();
+
+      bounds.extend(convertToGmaps(BDB.Geolocation.getCurrentPosition()));  
+
+      var nearest = this.getListOfPlaces('nearest', 1)[0];
+      var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
+      bounds.extend(nearestPos);
+
+      map.fitBounds(bounds);
+      map.panToBounds(bounds);
+    },
+    showDirectionsToNearestPlace: function() {
+      const nearest = BDB.Map.getListOfPlaces('nearest', 1)[0];
+      this.showDirectionsToPlace({ lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) });
+    },
+    showDirectionsToPlace: function(dest, forceLongDistance = false) {
+      // const travelMode = 'WALKING';
+      const travelMode = 'BICYCLING'; 
+
+      const currentPos = BDB.Geolocation.getCurrentPosition();
+      if (!currentPos) {
+        return;
+      }
+
+      const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, dest.lat(), dest.lng());
+
+      // console.log(distanceKm); 
+
+      if (!forceLongDistance && distanceKm > MAX_KM_TO_CALCULATE_ITINERARY) {
+        console.warn('Wont calculate directions, too far away:', distanceKm);
+        return; 
+      } else {
+        directionsService.route({ 
+          origin: { lat: currentPos.latitude, lng: currentPos.longitude },
+          destination: dest,
+          travelMode: google.maps.TravelMode[travelMode]
+        }, function (response, status) {
+          if (status == 'OK') {
+            directionsRenderer.setDirections(response); 
+          } else {
+            console.error('Directions request failed due to ' + status);
+          }
+        });
+      }
+
+    },
     updateMarkers: function () {
       this.clearMarkers();
 
@@ -465,14 +662,17 @@ BDB.Map = (function () {
             case 'red':
               iconType = MARKER_ICON_RED;
               iconTypeMini = MARKER_ICON_RED_MINI;
+              scale = 0.6;
               break;
             case 'yellow':
               iconType = MARKER_ICON_YELLOW;
               iconTypeMini = MARKER_ICON_YELLOW_MINI;
+              scale = 0.8;
               break;
             case 'green':
               iconType = MARKER_ICON_GREEN;
               iconTypeMini = MARKER_ICON_GREEN_MINI;
+              scale = 1;
               break;
             case 'gray':
             default:
@@ -482,9 +682,9 @@ BDB.Map = (function () {
               break;
             }
 
-            if (!scale) {
-              scale = 0.5 + (m.average / 10);
-            }
+            // if (!scale) {
+            //   scale = 0.5 + (m.average / 10);
+            // }
 
             if (map) {
               m.icon = {
@@ -493,6 +693,13 @@ BDB.Map = (function () {
                 origin: new google.maps.Point(0, 0), // origin
                 anchor: new google.maps.Point((MARKER_W * scale) / 2, (MARKER_H - MARKER_H / 10) * scale), // anchor
               };
+              
+              m.iconSelected = { 
+                url: iconType, // url
+                scaledSize: new google.maps.Size((MARKER_W * 1.5), (MARKER_H * 1.5)), // scaled size
+                origin: new google.maps.Point(0, 0), // origin
+                anchor: new google.maps.Point((MARKER_W * 1.5) / 2, (MARKER_H - MARKER_H / 10) * 1.5), // anchor
+              }
 
               m.iconMini = {
                 url: iconTypeMini, // url
@@ -500,6 +707,7 @@ BDB.Map = (function () {
                 origin: new google.maps.Point(0, 0), // origin
                 anchor: new google.maps.Point((MARKER_W_MINI * scale) / 2, (MARKER_H_MINI * scale) / 2), // anchor
               };
+
             }
 
             // Average might come with crazy floating point value
@@ -519,7 +727,13 @@ BDB.Map = (function () {
                     lat: parseFloat(m.lat),
                     lng: parseFloat(m.lng)
                   },
-                  // map: map,
+                  // label: {
+                  //   text: m.average ? m.average.toString() : '-', 
+                  //   color: 'white',
+                  //   fontFamily: 'Quicksand',
+                  //   fontSize: '12px', 
+                  //   fontWeight: 'bold'
+                  // },
                   icon: m.icon,
                   zIndex: i, //markers should be ordered by average
                   // opacity: 0.1 + (m.average/5).
@@ -570,26 +784,35 @@ BDB.Map = (function () {
                   newMarker.addListener('click', () => {
                     ga('send', 'event', 'Local', 'infobox opened', m.id);
 
+                    // Close previous, if any 
+                    if (infoWindow && infoWindow.reset) {
+                      infoWindow.reset(); 
+                    }
+
                     map.panTo(newMarker.getPosition());
+                    newMarker.setIcon(m.iconSelected);
+                    m.originalZIndex = newMarker.getZIndex();
+                    newMarker.setZIndex(9999);
 
-                    _infoWindow.setContent(contentString);
-                    _infoWindow.open(map, newMarker);
-                    _infoWindow.addListener('domready', () => {
-                      // Show spinner while thumbnail is loading
-                      // $('.infobox--img img').off('load').on('load', e => {
-                      //   $(e.target).parent().removeClass('loading');
-                      // });
+                    BDB.Map.showDirectionsToPlace(newMarker.position);
 
-                      $('.infoBox').off('click').on('click', () => {
-                        markerClickCallback(markers[i], () => {
-                          _infoWindow.close();
-                        });
+                    $('body').append(`<div class="infoBox"> ${contentString} </div>`);
+                    // $('.map-action-buttons').addClass('move-up');
+
+                    infoWindow = $('.infoBox');
+                    infoWindow.off('click').on('click', () => {
+                      markerClickCallback(markers[i], () => {
+                        infoWindow.reset();
                       });
                     });
-                  });
 
-                  map.addListener('click', () => {
-                    _infoWindow.close();
+                    infoWindow.reset = function() {
+                      this.remove();
+                      // $('.map-action-buttons').removeClass('move-up');
+
+                      newMarker.setIcon(m.icon);
+                      newMarker.setZIndex(m.originalZIndex);
+                    }
                   });
                 } else {
                   // No infobox, directly opens the details modal
@@ -601,9 +824,9 @@ BDB.Map = (function () {
                   newMarker.addListener('mouseover', () => {
                     ga('send', 'event', 'Local', 'infobox opened', m.id);
 
-                    _infoWindow.setContent(contentString);
-                    _infoWindow.open(map, newMarker);
-                    _infoWindow.addListener('domready', () => {
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, newMarker);
+                    infoWindow.addListener('domready', () => {
                       $('.infobox--img img').off('load').on('load', e => {
                         $(e.target).parent().removeClass('loading');
                       });
@@ -611,7 +834,7 @@ BDB.Map = (function () {
                   });
 
                   newMarker.addListener('mouseout', () => {
-                    _infoWindow.close();
+                    infoWindow.close();
                   });
                 }
 
@@ -671,5 +894,5 @@ BDB.Map = (function () {
         }
       }
     }
-  }
+  };
 })();

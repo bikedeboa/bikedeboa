@@ -16,20 +16,50 @@ window.getCookieContent = function(name) {
   let cookies = document.cookie.split(';');
 
   for( let cookie of cookies ){
+<<<<<<< HEAD
     let checkCookie = cookie.split('=');
     if (checkCookie[0].indexOf(name) >= 0) {
       return checkCookie[1];
+=======
+    let checkCookie = cookie.split("=");
+    if (checkCookie[0] == name){
+     return checkCookie[1];
+>>>>>>> adab38181edec6137cc6e437a9be9e98565a442e
     }
   }  
   return false;
 };
 
+<<<<<<< HEAD
 //retrocompatability, delete this after a few months. 
 window.cookieToLocalstorage = function(name) {
   if (!localStorage.getItem(name) && getCookieContent(name)){
     localStorage.setItem(name, getCookieContent(name));
   }
 };
+=======
+// Thanks to: https://stackoverflow.com/questions/2144386/how-to-delete-a-cookie
+window.eraseCookie = function(name){
+      let expiryDate = new Date();
+      expiryDate.setTime(expiryDate.getTime() - 86400 * 1000);
+      let cookieString = `${name}=0`;
+      cookieString += ';max-age=0';
+      cookieString += ';expires=' + expiryDate.toUTCString();
+      document.cookie = cookieString;
+};
+//retrocompatability, delete this after a few months. 
+window.cookieToLocalstorage = function(name){
+  if (!localStorage.getItem(name) && getCookieContent(name)){
+
+    let content = decodeURIComponent(getCookieContent(name));
+    if(content){
+      localStorage.setItem(name, content);  
+      eraseCookie(name);
+    }
+    
+  }
+}
+>>>>>>> adab38181edec6137cc6e437a9be9e98565a442e
 
 
 window.createdAtToDaysAgo = createdAtStr => {
@@ -185,26 +215,25 @@ window.autoGrowTextArea = function(element) {
   }
 };
 
-window.setOfflineMode = () => {
-  _isOffline = true;
-  $('body').addClass('offline');
+window.performanceMeasureStart = function() {
+  window.performanceT0 = performance.now();
+}
 
-  if (BDB.Map.getMap()) {  
-    // toastr['info']('Mas fica à vontade, os bicicletários da última vez que você acessou estão salvos.', 'Você está offline');
-    // toastr['info']('Mas fica à vontade, você pode continuar usando o bike de boa.', 'Você está offline');
-    toastr['info']('Você está offline'); 
+window.performanceMeasureEnd = function() {
+  if (!window.performanceT0) {
+    console.error('[PERFORMANCE] ERROR: you should call performanceMeasureStart() first.');
+    return;
   } else {
-    $('#reloadBtn').on('click', () => {
-      showSpinner()
-        .then( () => {
-          window.location.reload();
-        });
-    });
-
-    $('#offline-overlay').addClass('showThis'); 
+    const msPassed = performance.now() - window.performanceT0;
+    
+    console.log(`[PERFORMANCE] ${msPassed}ms elapsed`);
+  
+    window.performanceT0 = undefined;
+  
+    return msPassed;
   }
-
-};
+  
+}
 
 window.resizeImage = function (blob) {
   return new Promise((resolve, reject) => {
@@ -352,6 +381,30 @@ window.swCachedCallback = function() {
 
   // toastr['success']('A partir de agora você pode explorar os bicicletários mesmo sem Internet.', 'Webapp salvo offline');
 };
+<<<<<<< HEAD
+=======
+
+
+// Thanks https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates
+function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+  function degreesToRadians(degrees) {
+    return degrees * Math.PI / 180;
+  }
+
+  var earthRadiusKm = 6371;
+
+  var dLat = degreesToRadians(lat2 - lat1);
+  var dLon = degreesToRadians(lon2 - lon1);
+
+  lat1 = degreesToRadians(lat1);
+  lat2 = degreesToRadians(lat2);
+
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return earthRadiusKm * c;
+}
+>>>>>>> adab38181edec6137cc6e437a9be9e98565a442e
 
 
 // Confettiful

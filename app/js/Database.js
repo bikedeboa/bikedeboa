@@ -11,7 +11,6 @@ BDB.Database = {
   isAuthenticated: false,  
   _authToken: '',
   _headers: {},
-  _authenticationAttemptsLeft: 3,
   _isAuthenticated: false,
  
   _currentIDToAdd: 1306,
@@ -84,45 +83,36 @@ BDB.Database = {
     this.authenticate();
   },
 
-  authenticate: function(callback) {
-    const self = this;
+  authenticate: function() {
+    return new Promise((resolve, reject) => {
+      const self = this;
 
-    $.ajax({
-      type: 'post',
-      headers: self._headers,
-      url: self.API_URL + '/token',
-      data: {
-        username: 'client',
-        password: 'deboanalagoa'
-      },
-      success: function(data) {
-        if (data.token && data.token.length > 0) {
-          console.debug('API connected.');
+      $.ajax({
+        type: 'post',
+        headers: self._headers,
+        url: self.API_URL + '/token',
+        data: {
+          username: 'client',
+          password: 'deboanalagoa'
+        },
+        success: function(data) {
+          if (data.token && data.token.length > 0) {
+            console.debug('API connected.');
 
-          // Set headers for future calls 
-          self.isAuthenticated = true;
-          self._authToken = data.token;
-          self._headers['x-access-token'] = data.token;
+            // Set headers for future calls 
+            self.isAuthenticated = true;
+            self._authToken = data.token;
+            self._headers['x-access-token'] = data.token;
 
-          if (callback && typeof callback === 'function') {
-            callback();
+            resolve();
           }
-        }
-      },
-      error: function(data) {
-        ga('send', 'event', 'Login', 'client authentication fail');
+        },
+        error: function(data) {
+          ga('send', 'event', 'Login', 'client authentication fail');
 
-        BDB.Database._authenticationAttemptsLeft--;
-        if (BDB.Database._authenticationAttemptsLeft > 0) {
-          console.error(`Authentication failed, ${BDB.Database._authenticationAttemptsLeft} attempts left. Trying again in 2s...`);
-          setTimeout( () => {
-            self.authenticate(callback);
-          }, 2000);
-        } else {
-          // Failed after multiple attemps: we're officialy offline!
-          setOfflineMode(); 
+          reject();
         }
-      }
+      });
     });
   },
 
@@ -611,7 +601,8 @@ BDB.Database = {
         }
       })
         .fail(() => {
-          requestFailHandler();
+          // requestFailHandler();
+          toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
 
           reject();
         })

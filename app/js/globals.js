@@ -2,6 +2,9 @@
 // Constants //
 ///////////////
 
+//DEFAULT_COORDS is pointing to Porto Alegre
+const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
+
 const N_MOCK_PICS = 14;
 
 const MARKER_SIZE_MULTIPLIER = 1.5;
@@ -50,6 +53,10 @@ let _isMobile = window.matchMedia && window.matchMedia(`(max-width: ${MOBILE_MAX
 const _isLocalhost = BDB_ENV === 'localhost';
 const _isTouchDevice = ('ontouchstart' in window || navigator.msMaxTouchPoints);
 
+const MAX_AUTHENTICATION_ATTEMPTS = 3;
+
+const MAX_KM_TO_CALCULATE_ITINERARY = 20;
+
 /////////////
 // Globals //
 /////////////
@@ -72,7 +79,6 @@ let _filterMenu;
 let _updatingReview;
 let _isFacebookBrowser;
 let _activeFilters;
-let _infoWindow;
 let _isOffline;
 let _currentView;
 let _isDeeplink = false;
@@ -84,5 +90,6 @@ let _deferredPWAPrompt;
 let _loginMutexBlocked;
 let _isFeatherlightOpen;
 let _routePendingData;
+let _forceOffline;
 
 let templates = {};

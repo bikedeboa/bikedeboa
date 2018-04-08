@@ -105,18 +105,45 @@
                         </div>
                     </section> 
 
-                    <section>
-                        <div class="description collapsable">
-                            <h2>
-                                Mais Informações <span style="font-size: 10px;">(opcional)</span>
-                            </h2>
+                    <section> 
+                            <div class="extraInfo collapsable">
+                                <h2>
+                                    Mais informações
+                                </h2>
 
-                            <p>
-                            Exemplo: horário de funcionamento, como acessar o local, serviços adicionais disponíveis, etc. (máx. 250 caracteres)
-                            </p>
+                                <div>
+                                    <label>
+                                        Custo
+                                    </label>
+                                    <select id="isPaidInput" name="select">
+                                        <option value="dontknow" selected>Não sei</option>
+                                        <option value="yes">Pago</option>
+                                        <option value="no">Gratuito</option>
+                                    </select> 
+                                </div>
+                                
+                                <div>
+                                    <label>
+                                        Número de vagas
+                                    </label>
+                                    <input id="slotsInput" type="number" name="slots" min="0">
+                                </div>
 
-                            <textarea id="descriptionInput" maxlength="250" type="text" class="text-input" name="description" placeholder="Digite aqui" data-hj-whitelist></textarea>
-                        </div>
+                                <div>
+                                    <label>
+                                        Informações práticas
+                                    </label>
+                                
+                                    <textarea
+                                        id="descriptionInput"
+                                        maxlength="250"
+                                        type="text"
+                                        class="text-input"
+                                        name="description"
+                                        placeholder="Ex: horários, como acessar, serviços adicionais, ..." 
+                                        data-hj-whitelist></textarea>
+                                </div>
+                            </div>
                     </section>
 
                     <section class="minimap-container">
@@ -127,8 +154,8 @@
                         </div>
                     </section>
 
-                    <div style="padding: 16px 0; text-align: center; position: sticky; bottom: 0; background: white;">
-                        <button id="saveNewPlaceBtn" class="btn border btn-footer btn-action green">SALVAR</button>
+                    <div class="stickyFooterBtn">
+                        <button class="saveNewPlaceBtn btn border btn-footer btn-action green">SALVAR</button>
                         {{!-- <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button> --}}
                     </div>
                 </div>

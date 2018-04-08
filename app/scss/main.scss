@@ -13,6 +13,7 @@ $yellow: #F6C913;
 $darkYellow: #F6C913; 
 $red: #FF8265;
 $strongRed: #FF6541;
+$lightRed: #ffbcad;
 $purple: #533FB4;
 $palePurple: #705EC7;
 $darkPurple: #3821AA; 
@@ -107,6 +108,41 @@ $GRID_SPACE: 12px;
     opacity: 1;
   }
 }
+@keyframes slideOut {
+  from { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  to {
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInDown {
+  from { 
+    transform: translateY(3px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDownBig {
+  from { 
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,11 +200,12 @@ body {
     overflow: hidden;
     font-family: $bodyFont;
     background-color: $lightestGray;
+
+    // font-size: 16px;
 }
 
 // Completely hide occasional scrollbars for smoother transitions
-body::-webkit-scrollbar,
-.modal-dialog::-webkit-scrollbar {
+body::-webkit-scrollbar {
     display: none;
 }
 
@@ -210,10 +247,14 @@ body.offline {
     display: none !important;
   }
 
+  #map {
+    background: url(/img/blank_map.jpg);
+    background-size: cover; 
+    background-position: 50% 50%;
+  }
+
   // #map {
-  //   background: url(/img/blank_map.jpg); 
-  //   background-size: cover; 
-  //   background-position: 50% 50%;
+  //   filter: grayscale(100%); 
   // }
 }
 
@@ -549,25 +590,27 @@ p {
   align-items: center;
   
   .media-link {
-    opacity: 0.7;
     border: 0;
     padding: 2%;
     width: 28%; 
     // flex: 1; 
 
-    backface-visibility: hidden;
+    // Desktop-only version
+    @media screen and (min-width: $MOBILE_MAX_WIDTH) {
+      filter: grayscale(100%);
+      opacity: 0.7;
+      backface-visibility: hidden;
 
-    filter: grayscale(100%);
-    
-    transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
 
-    &:hover,
-    &:focus {
-      opacity: 1;
-      text-decoration: none;
-      border: 0;
-      transform: scale(1.1);
-      filter: none;
+      &:hover,
+      &:focus {
+        opacity: 1;
+        text-decoration: none;
+        border: 0;
+        transform: scale(1.1);
+        filter: none;
+      }
     }
 
   }
@@ -706,6 +749,9 @@ body.deeplink {
 .modal {
     -webkit-overflow-scrolling: auto !important;
     overflow-y: auto !important;
+
+    bottom: unset;
+    position: absolute;
 }
 
 .obfuscate {
@@ -1374,7 +1420,6 @@ a.unstyled-link {
   margin: 0 auto;
   display: block;
   margin-bottom: 3em; 
-  width: 70%;
 }
 
 #aboutModal,
@@ -1421,11 +1466,6 @@ a.unstyled-link {
       height: 28px;
       vertical-align: bottom;
     }
-  }
-
-  p {
-    font-size: $leading;
-    line-height: 1.6em;
   }
 
   p.subtitle {
@@ -1541,7 +1581,7 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
-    position: fixed;
+    position: absolute;
     bottom: 76px;
     right: 0px;
 
@@ -1570,7 +1610,7 @@ a.unstyled-link {
 }
 
 #addPlace {
-    position: fixed;
+    position: absolute;
     bottom: 14px;
     right: 0px;
     margin: 0 $GRID_SPACE $GRID_SPACE;
@@ -1642,7 +1682,7 @@ a.unstyled-link {
 }
 
 #filterBtn {
-    position: fixed;
+    position: absolute;
     bottom: 138px;
     right: 0px;
 
@@ -2125,27 +2165,26 @@ body.modal-open {
     }
 
     .text-input {
-        padding: 10px;
+        padding: $GRID_SPACE;
         width: 100%;
     }
 
     #titleInput {
-        border: 0;
-        border-bottom: 2px solid $lighterGray;
         font-weight: 700;
         // font-size: 30px;
         letter-spacing: -0.01em; 
         // @include roundedCorners;
         // font-size: 30px;
 
+        border: 3px solid $lighterGray;
+        border-radius: 5px;
+
         &:valid {
           border-color: $lightGreen;
-          border-width: 3px;
         }
 
         &:invalid {
           border-color: $lighterGray;
-          border-width: 3px;
         }
     }
 
@@ -2164,9 +2203,7 @@ body.modal-open {
 
     section.rating-input-container {
       text-align: center;
-      // border-top: $separatorBorderStyle;
-      padding: $GRID_SPACE*3 0;
-      // background: $paleWhite;
+      padding: $GRID_SPACE*4 0;
       background: $greenGradient;
 
       h2 {
@@ -2175,21 +2212,21 @@ body.modal-open {
         color: white;
         font-size: 14px;
         font-weight: bold;
-        margin-bottom: .5em;
+        margin-bottom: .5em; 
       }
     }
 
-    .description {
-        margin: $GRID_SPACE 0 $GRID_SPACE*2;
-        color: $black;
+    // .extraInfo {
+    //     margin: $GRID_SPACE 0 $GRID_SPACE*2;
+    //     color: $black;
 
-        h2 {
-            margin-top: 0; 
-            font-size: 16px;
-            text-align: center;
-            color: $lightGray;
-        }
-    }
+    //     h2 {
+    //         margin-top: 0; 
+    //         font-size: 16px;
+    //         text-align: center;
+    //         color: $lightGray;
+    //     }
+    // }
 }
 
 
@@ -2302,9 +2339,11 @@ body.modal-open {
       text-align: center;
 
       .typeIcon {
-        width: 32%;
-        margin: 0 6%;
-        max-width: 128px;
+        width: 49%;
+        padding-left: 12%;
+        padding-right: 12%;
+        // margin: 0 6%;
+        // max-width: 128px;
       }
     }
 
@@ -2347,6 +2386,14 @@ body.modal-open {
         .minimap {
           width: 100%;
         }
+    }
+
+    .stickyFooterBtn {
+      padding: $GRID_SPACE 0;
+      text-align: center;
+      position: sticky;
+      bottom: 0;
+      background: white;
     }
 
     .photoInputDisclaimer {
@@ -2428,12 +2475,41 @@ body.modal-open {
       }
     }
 
-    .description {
+    .extraInfo {
       padding-top: 0;
+
+      label {
+        display: block;
+        font-weight: bold;
+      }
+      
+      textarea {
+        resize: none;
+      }
+
+      select {
+        text-indent: $GRID_SPACE/2;
+        background: white; 
+      }
+
+      textarea, input, select {
+        margin: 0 0 $GRID_SPACE 0;
+        border: 3px solid $lighterGray;
+        border-radius: 5px;
+        width: 100%;
+      }
+
+      input[type='number'] {
+        padding: $GRID_SPACE/2 $GRID_SPACE;
+      }
+
+      p {
+          margin: $GRID_SPACE*2 0 0;
+      }
 
       &.collapsable {
           margin: 0;
-          max-height: 49px;
+          max-height: 60px;
           overflow: hidden;
           position: relative;
 
@@ -2446,19 +2522,9 @@ body.modal-open {
               
               &:after {
                   font-family: $bootstrapFont;
-                  content: "\e252";
+                  content: '\e252';
                   font-size: 14px;
               }
-          }
-
-          p {
-              margin: $GRID_SPACE*2 0 0;
-          }
-
-          textarea {
-              resize: none;
-              margin: $GRID_SPACE 0;
-              border: 3px solid $lighterGray;
           }
 
           &:not(.expanded) { 
@@ -2474,8 +2540,9 @@ body.modal-open {
           max-height: 500px;
 
           h2:after {
-              content: "\e253";
-          }
+              // content: '\e253';
+              content: '';
+          } 
       }
     }
 }
@@ -2517,10 +2584,10 @@ body.modal-open {
         margin-bottom: 10px;
     }
 
-    .custom-radio-group {
-        max-width: 400px;
-        margin: 0 auto;
-    }
+    // .custom-radio-group {
+    //     max-width: 400px;
+    //     margin: 0 auto;
+    // }
 
     .typeIcon {
         width: 32%;
@@ -2544,6 +2611,15 @@ body.modal-open {
           font-weight: 700;
           user-select: none; 
           margin-bottom: 2px;
+
+          transition: all 0.3s ease;
+
+          // Explanation on the reason for the string interpolation:
+          //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+          margin-top: calc(#{$GRID_SPACE} - 2px);
+          margin-bottom: 0;
+          border: 2px solid transparent;
+          border-radius: 25px;
         }
 
         img {
@@ -2562,17 +2638,12 @@ body.modal-open {
 
             .icon-label {
               color: $green;
-              // Explanation on the reason for the string interpolation:
-              //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-              margin-top: calc(#{$GRID_SPACE} - 2px);
-              margin-bottom: 0;
-              border: 2px solid;
-              border-radius: 25px;
+              border-color: $green;
             }
         }
 
         &:hover {
-            background-color: hsla(120,90%,95%,1);
+            background-color: $paleWhite;
             opacity: 1;
         }
 
@@ -2834,6 +2905,8 @@ body.modal-open {
     }
 
     .minimap-container {
+      margin-top: $GRID_SPACE;
+
       .minimap { 
           width: 100%;
           min-height: 50px;
@@ -3387,11 +3460,10 @@ body.modal-open {
 
   #clear-filters-btn {
     opacity: 0;
-    font-size: 13px;
+    font-size: 16px;
     border: none;
-    color: gray;
+    color: $green;
     font-weight: bold;
-    text-decoration: underline;
   }
 
   #filter-results-counter-container {
@@ -3445,7 +3517,16 @@ body.modal-open {
   }
 }
 
-// Google Maps API Customizations
+
+////////////////////////////////////
+// Google Maps API Customizations //
+////////////////////////////////////
+
+// Zoom controls
+.gm-bundled-control .gmnoprint > div {
+  border-radius: 20px;
+}
+
 // Autocomplete results dropdown
 .pac-container {
   border-bottom-left-radius: 5px;
@@ -3461,7 +3542,7 @@ body.modal-open {
 
   .pac-item {
       font-size: 12px;
-      display: block;
+      display: block; 
       padding: 10px;
       cursor: pointer;
       border: none;
@@ -3484,13 +3565,12 @@ body.modal-open {
   //     color: $lightGray;
   // }
 
-  /* Overrides marker */
-  /* .pac-icon {
-      background-image: url(/img/pin_gray.png) !important;
-      background-size: 100%;
-      background-repeat: no-repeat;
-      background-position: 0px;
-  } */
+  /* Overrides marker icon */
+  .pac-icon {
+    background-image: url(/img/icon_pin.svg);
+    background-size: 19px;
+    background-position: -2px 0px !important;
+  }
 }
 
 .welcome-message-container {
@@ -3594,10 +3674,15 @@ body.modal-open {
 }
 
 .infoBox {
+  height: 110px;
+  // width: 320px; //set on JS
   background: white;
-  @include shadow(1);
   display: flex;
   margin-top: $GRID_SPACE*2;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  @include shadow(1);
 
   animation: slideIn .2s $coolEaseOut;
 
@@ -3612,10 +3697,12 @@ body.modal-open {
   }
 
   .infobox--img {
-    width: 100px;
-    height: 75px;
+    // width: 100px;
     position: relative;
-    background: $lightestGrey;
+    flex: 1 0 30%;
+    // padding: 6px 0 6px 6px;
+    // background: $lightestGrey;
+    /* background: white; */
 
     img {
       object-fit: cover;
@@ -3625,25 +3712,28 @@ body.modal-open {
   } 
 
   .infobox--content {
-    // margin: 10px;
-    margin: 5px 10px 0;
+    // margin: 20px 12px auto;
+    margin: auto 12px;
     overflow: hidden;
     width: 100%;
 
     h2 {
       font-family: $headingFont;
       font-weight: 700;
-      font-size: 20px;
+      font-size: 16px;
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
+      max-height: 2.5em;
       overflow: hidden;
     }
 
     .rating-display-container {
       margin-top: 8px;
+      margin-bottom: 2px;
     }
 
     .numreviews {
@@ -3899,6 +3989,14 @@ body.modal-open {
     }
   }
 
+  #newPlaceModal {
+    .stickyFooterBtn {
+      display: none;
+    }
+  }
+
+
+
   #locationSearch {
     #locationQueryInput { 
       height: 48px;
@@ -4061,6 +4159,16 @@ body.modal-open {
     // transform: translateY(0);
   }
 
+  body.modal-open.newPlaceModal #top-mobile-bar {
+    .saveNewPlaceBtn {
+      display: block;
+      right: $GRID_SPACE/2;
+      position: absolute;
+      width: auto;
+      font-weight: bold;
+    }
+  }
+
   #top-mobile-bar,
   #bottom-mobile-bar {
     display: block;
@@ -4080,11 +4188,15 @@ body.modal-open {
     right: 0;
     z-index: 1052; //under sweetalert dialogs
 
+    .saveNewPlaceBtn {
+      display: none;
+    }
+
     #top-mobile-bar-title { 
       float: left;
       margin: 0;
       padding: 0;
-      font-size: 1.5em;
+      font-size: 16px;
       font-family: $headingFont;
       line-height: 50px;
       max-width: calc(100% - 100px);
@@ -4123,42 +4235,42 @@ body.modal-open {
     }
   }
 
-  #bottom-mobile-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1052; //under sweetalert dialogs
+  // #bottom-mobile-bar {
+  //     position: fixed;
+  //     bottom: 0;
+  //     left: 0;
+  //     right: 0;
+  //     z-index: 1052; //under sweetalert dialogs
 
-      box-shadow: 0 -20px 30px white;
+  //     box-shadow: 0 -20px 30px white;
 
-      transform: translateY(20px);
+  //     transform: translateY(20px);
     
-      #floating-cta-container {
-        background: white;
-        // border-top: 1px solid $lighterGray;
-      }
+  //     #floating-cta-container {
+  //       background: white;
+  //       // border-top: 1px solid $lighterGray;
+  //     }
 
-      button {
-        // Explanation on the reason for the string interpolation:
-        //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-        width: calc(100% - #{$GRID_SPACE});
-        margin: $GRID_SPACE/2;
-        font-weight: 700;
-        @include roundedCorners;
-        text-transform: uppercase;
-        background: $greenGradient;
-      } 
+  //     button {
+  //       // Explanation on the reason for the string interpolation:
+  //       //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+  //       width: calc(100% - #{$GRID_SPACE});
+  //       margin: $GRID_SPACE/2;
+  //       font-weight: 700;
+  //       @include roundedCorners;
+  //       text-transform: uppercase;
+  //       background: $greenGradient;
+  //     } 
 
-      // &:before {
-      //   content: '';
-      //   width: 100%;
-      //   height: 50px;
-      //   display: block;
-      //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-      //   pointer-events: none;
-      // }
-  }
+  //     // &:before {
+  //     //   content: '';
+  //     //   width: 100%;
+  //     //   height: 50px;
+  //     //   display: block;
+  //     //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+  //     //   pointer-events: none;
+  //     // }
+  // }
 
   #placeDetailsContent {
     hr {
@@ -4166,9 +4278,9 @@ body.modal-open {
       margin-right: -12px;
     }
 
-    .modal-footer {
-      display: none;
-    }
+    // .modal-footer {
+    //   display: none;
+    // }
 
     .tagDisplayContainer {
       width: calc(50% - #{$GRID_SPACE});
@@ -4262,25 +4374,39 @@ body.modal-open {
     }
   }
 
+  .map-action-buttons {
+    transition: all 0.2s;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    &.move-up {
+      transform: translateY(-90px);
+    }
+  }
+
   .infoBox {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 12px;
+    
+    // box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
+    box-shadow: 0 10px 30px rgba(200,200,200,1); 
+
+    animation: slideInDownBig .2s $coolEaseOut;
+
     .infobox--content {
-      margin-right: 35px;
+      margin-right: $GRID_SPACE*3; 
     }
 
     .infobox--label {
       display: none;
     }
 
-    // .infobox--arrow {
-    //   display: block;
-
-    //   position: absolute;
-    //   top: -13px;
-    //   left: calc(50% - 10px);
-    //   font-size: 20px;
-    //   color: white; 
-    //   text-shadow: 1px -2px 3px rgba(0,0,0,.15);
-    // }
+    .infobox--arrow {
+      display: none;
+    }
 
     .infobox--caret {
       display: block;
@@ -4291,6 +4417,13 @@ body.modal-open {
       right: 12px;
       top: calc(50% - 10px); 
       font-size: 20px;
+    }
+
+    .infobox--img {
+      img {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
     }
   }
 
@@ -4933,6 +5066,15 @@ body.modal-open {
 }
 
 .tooltip-modal {
+  box-shadow: none !important;
+  background: $green !important; 
+
+  .swal2-content, 
+  .swal2-close,
+  a { 
+    color: white !important;
+  }
+
   p {
     text-align: left;
     font-size: 14px;
@@ -4940,6 +5082,16 @@ body.modal-open {
 }
 
 // Sweet Alert 2 Customizations
+
+
+.swal2-show,
+.swal2-hide {
+  animation: slideIn .2s $coolEaseOut;
+}
+.swal2-hide {
+  animation: slideOut .2s $coolEaseOut;
+  // animation-direction: reverse;
+}
 
 .swal2-modal {
   padding: 5% !important;
@@ -5040,6 +5192,11 @@ body.modal-open {
 
 // Marker Clusterer
 .cluster {
+  transition: filter 0.2s ease;
+  &:hover {
+    filter: brightness(1.05);
+  }
+
   img {
     width: 100%;
     height: 100%;

@@ -1196,12 +1196,13 @@
         function init() {
           // showSpinner();
 
-          Database.authenticate(() => {
-            // Initial view is the Locals view
-            updateLocalsTable();
+          Database.authenticate()
+            .then(() => {
+              // Initial view is the Locals view
+              updateLocalsTable();
 
-            // hideSpinner();
-          });
+              // hideSpinner();
+            });
 
           //
           // Callbacks
