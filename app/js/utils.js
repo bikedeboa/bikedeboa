@@ -23,6 +23,8 @@ window.getCookieContent = function(name) {
   }  
   return false;
 };
+
+// Thanks to: https://stackoverflow.com/questions/2144386/how-to-delete-a-cookie
 window.eraseCookie = function(name){
       let expiryDate = new Date();
       expiryDate.setTime(expiryDate.getTime() - 86400 * 1000);
