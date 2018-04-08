@@ -16,28 +16,14 @@ window.getCookieContent = function(name) {
   let cookies = document.cookie.split(';');
 
   for( let cookie of cookies ){
-<<<<<<< HEAD
-    let checkCookie = cookie.split('=');
-    if (checkCookie[0].indexOf(name) >= 0) {
-      return checkCookie[1];
-=======
     let checkCookie = cookie.split("=");
     if (checkCookie[0] == name){
      return checkCookie[1];
->>>>>>> adab38181edec6137cc6e437a9be9e98565a442e
-    }
+    } 
   }  
   return false;
 };
 
-<<<<<<< HEAD
-//retrocompatability, delete this after a few months. 
-window.cookieToLocalstorage = function(name) {
-  if (!localStorage.getItem(name) && getCookieContent(name)){
-    localStorage.setItem(name, getCookieContent(name));
-  }
-};
-=======
 // Thanks to: https://stackoverflow.com/questions/2144386/how-to-delete-a-cookie
 window.eraseCookie = function(name){
       let expiryDate = new Date();
@@ -59,7 +45,6 @@ window.cookieToLocalstorage = function(name){
     
   }
 }
->>>>>>> adab38181edec6137cc6e437a9be9e98565a442e
 
 
 window.createdAtToDaysAgo = createdAtStr => {
@@ -381,8 +366,6 @@ window.swCachedCallback = function() {
 
   // toastr['success']('A partir de agora você pode explorar os bicicletários mesmo sem Internet.', 'Webapp salvo offline');
 };
-<<<<<<< HEAD
-=======
 
 
 // Thanks https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates
@@ -404,7 +387,6 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return earthRadiusKm * c;
 }
->>>>>>> adab38181edec6137cc6e437a9be9e98565a442e
 
 
 // Confettiful
