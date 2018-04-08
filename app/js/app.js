@@ -320,7 +320,7 @@ $(() => {
       if (userCurrentPosition) {
         const distanceKm = distanceInKmBetweenEarthCoordinates(
           userCurrentPosition.latitude, userCurrentPosition.longitude, openedMarker.lat, openedMarker.lng);
-        const distanceMeters = distanceKm * 1000;
+        const distanceMeters = parseInt(distanceKm * 1000);
 
         console.log(`[Analytics] Local / distance from user (m) / ${distanceMeters}`);
         ga('send', 'event', 'Local', 'distance from user (m)', null, distanceMeters);
