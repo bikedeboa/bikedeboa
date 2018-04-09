@@ -322,8 +322,8 @@ $(() => {
           userCurrentPosition.latitude, userCurrentPosition.longitude, openedMarker.lat, openedMarker.lng);
         const distanceMeters = parseInt(distanceKm * 1000);
 
-        console.log(`[Analytics] Local / distance from user (m) / ${distanceMeters}`);
-        ga('send', 'event', 'Local', 'distance from user (m)', null, distanceMeters);
+        console.log(`[Analytics] Local / distance from user (m) = ${parseInt(distanceMeters)}`);
+        ga('send', 'event', 'Local', 'distance from user (m)', null, parseInt(distanceMeters));
       }
 
       // Modal stuff
