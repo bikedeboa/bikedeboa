@@ -591,23 +591,42 @@ BDB.Map = (function () {
 
       return markersToShow;
     },
-    fitToNearestPlace: function() {
-      let bounds = new google.maps.LatLngBounds();
-
-      bounds.extend(convertToGmaps(BDB.Geolocation.getCurrentPosition()));  
+    fitToNearestPlace: function(forceLongDistance = false) {
+      const currentPos = BDB.Geolocation.getCurrentPosition();
+      if (!currentPos) {
+        console.error('fitToNearestPlace(): dont have current pos');
+        return;
+      } 
 
       var nearest = this.getListOfPlaces('nearest', 1)[0];
       var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
-      bounds.extend(nearestPos);
 
-      map.fitBounds(bounds);
-      map.panToBounds(bounds);
+      const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, nearestPos.lat, nearestPos.lng);
+      const distanceMeters = distanceKm / 1000;
+
+      // console.log(distanceKm); 
+      console.log(`[Analytics] Misc / distance to nearest pin (m) = ${parseInt(distanceMeters)}`);
+      ga('send', 'event', 'Misc', 'distance to nearest pin (m)', null, parseInt(distanceMeters));
+
+      if (!forceLongDistance && distanceKm > MAX_KM_TO_FIT_TO_VIEWPORT) {
+        console.warn('fitToNearestPlace(): wont do it, too far away:', distanceKm);
+        return;
+      } else {
+        let bounds = new google.maps.LatLngBounds();
+        bounds.extend(convertToGmaps(currentPos));  
+        bounds.extend(nearestPos);
+        map.fitBounds(bounds);
+        map.panToBounds(bounds);
+
+        // Also already shows itinerary to this nearest place
+        // this.showDirectionsToPlace(nearestPos);
+      }
     },
     showDirectionsToNearestPlace: function() {
       const nearest = BDB.Map.getListOfPlaces('nearest', 1)[0];
       this.showDirectionsToPlace({ lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) });
     },
-    showDirectionsToPlace: function(dest, forceLongDistance = false) {
+    showDirectionsToPlace: function(destGPos, forceLongDistance = false) {
       // const travelMode = 'WALKING';
       const travelMode = 'BICYCLING'; 
 
@@ -616,7 +635,7 @@ BDB.Map = (function () {
         return;
       }
 
-      const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, dest.lat(), dest.lng());
+      const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, destGPos.lat(), destGPos.lng());
 
       // console.log(distanceKm); 
 
@@ -626,7 +645,7 @@ BDB.Map = (function () {
       } else {
         directionsService.route({ 
           origin: { lat: currentPos.latitude, lng: currentPos.longitude },
-          destination: dest,
+          destination: destGPos,
           travelMode: google.maps.TravelMode[travelMode]
         }, function (response, status) {
           if (status == 'OK') {
