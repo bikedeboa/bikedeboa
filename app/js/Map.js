@@ -602,8 +602,11 @@ BDB.Map = (function () {
       var nearestPos = { lat: parseFloat(nearest.lat), lng: parseFloat(nearest.lng) };
 
       const distanceKm = distanceInKmBetweenEarthCoordinates(currentPos.latitude, currentPos.longitude, nearestPos.lat, nearestPos.lng);
+      const distanceMeters = distanceKm / 1000;
 
       // console.log(distanceKm); 
+      console.log(`[Analytics] Misc / distance to nearest pin (m) = ${parseInt(distanceMeters)}`);
+      ga('send', 'event', 'Misc', 'distance to nearest pin (m)', null, parseInt(distanceMeters));
 
       if (!forceLongDistance && distanceKm > MAX_KM_TO_FIT_TO_VIEWPORT) {
         console.warn('fitToNearestPlace(): wont do it, too far away:', distanceKm);

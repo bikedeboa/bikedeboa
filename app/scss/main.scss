@@ -3723,6 +3723,9 @@ body.modal-open {
       object-fit: cover;
       width: 100%;
       height: 100%;
+
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
     }
   } 
 
@@ -4462,13 +4465,6 @@ body.modal-open {
       right: 12px;
       top: calc(50% - 10px); 
       font-size: 20px;
-    }
-
-    .infobox--img {
-      img {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-      }
     }
   }
 
