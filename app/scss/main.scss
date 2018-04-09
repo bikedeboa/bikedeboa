@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $green: #30bb6a;
+$greenAlt: #51CC82;
 $darkGreen: #00b800;
 $darkerGreen: #04883A;
 $lightGreen: #2cd978;
@@ -945,8 +946,8 @@ a.unstyled-link {
 
   &.admin {
     .avatar {
-      border-color: gold;
-      box-shadow: 0 0px 5px gold;
+      border: 3px solid gold;
+      box-shadow: 0 0px 10px gold;
     }
   }
 
@@ -1089,6 +1090,7 @@ a.unstyled-link {
     }
 }
 
+// Desktop-only
 @media screen and (min-width: $MOBILE_MAX_WIDTH) {
   #userBtn {
     display: none;
@@ -1832,6 +1834,8 @@ a.unstyled-link {
         pointer-events: none;
         z-index: 2;
 
+        filter: grayscale(100%);
+        
         transition: top 0.5s $easeOutQuadratic;
 
         &.active {
@@ -1964,7 +1968,6 @@ a.unstyled-link {
   animation: pulse 0.5s infinite alternate;
 }
 
-#top-mobile-bar,
 .modal-header {
   background: $lightGreen;
   color: white;
@@ -2041,7 +2044,8 @@ body.search-mode {
   //   transition: opacity 0.2s ease;
   // }
 
-  #userBtn { 
+  #userBtn,
+  #search-button { 
     display: none;
   }
 
@@ -2063,18 +2067,6 @@ body.clean-modal-open {
 
 #close-modal-btn {
   display: none;
-}
-
-body.transparent-mobile-topbar {
-  #top-mobile-bar {
-    box-shadow: none;
-    background: linear-gradient(rgba(0,0,0,0.5), transparent);
-    position: absolute;
-  }
-
-  .modal .modal-content {
-    padding-top: 0;
-  }
 }
 
 body.modal-open {
@@ -3554,7 +3546,7 @@ body.modal-open {
 .pac-container {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  box-shadow: 0 5px 30px rgba(0,0,0,.15);
+  box-shadow: 0 5px 30px rgba(0,0,0,.3);
   padding-right: $GRID_SPACE;
 
   .pac-item-query {
@@ -3944,18 +3936,6 @@ body.modal-open {
     }
   }
 
-
-  body.modal-open {
-    #list-view {
-      display: none;
-    }
-
-    #map, #addPlace, #geolocationBtn {
-      opacity: 0;
-      pointer-events: none;
-    }
-  }
-
   .modal {
     &:before {
       content: ''
@@ -4013,7 +3993,7 @@ body.modal-open {
     .stickyFooterBtn {
       display: none;
     }
-  }
+  } 
 
   #locationSearch {
     #locationQueryInput { 
@@ -4035,18 +4015,22 @@ body.modal-open {
   }
 
   #userBtn {
-    top: 12px;
-    right: 12px;
+    top: 0;
+    right: $GRID_SPACE/2;
+
+    // z-index: 1052; // over everything, under sweetalert dialogs
 
     & > button {
-      padding: 0;
+      padding: 13px;
       
       .avatar {
-          border: 0;
+          // border: 3px solid white;
+          background: none;
+          border: none;
           box-shadow: none; 
-          width: 25px;
-          height: 25px;
-          margin: 8px;
+          width: 24px;
+          height: 24px;
+          margin: 0;
       }
     }
 
@@ -4163,14 +4147,86 @@ body.modal-open {
     }
   }
 
-  body.modal-open {
-    #close-modal-btn {
-      display: none;
+
+  body.position-pin-mode { 
+    // #top-mobile-bar {
+    //   display: none;
+    // }
+    #top-mobile-bar {
+      background: white;
     }
   }
 
-  body.details-view:not(.already-reviewed) #bottom-mobile-bar,
-  body.modal-open #top-mobile-bar {
+  body.transparent-mobile-topbar {
+    #top-mobile-bar {
+      box-shadow: none;
+      background: linear-gradient(rgba(0,0,0,0.5), transparent);
+      position: absolute;
+    }
+
+    .modal .modal-content {
+      padding-top: 0;
+    }
+  }
+
+
+  #locationSearch {
+    opacity: 0;
+    pointer-events: none;
+
+    width: 100%;
+    top: 0;
+    max-width: none;
+  }
+
+  body.search-mode {
+    #locationSearch {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  body.modal-open {
+    #map,
+    #addPlace,
+    #geolocationBtn,
+    .search-button {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #close-modal-btn,
+    .search-button,
+    #list-view {
+      display: none;
+    }
+
+    #top-mobile-bar {
+      background: white;
+      
+      .top-mobile-bar-title {
+        color: $black;
+      }
+    }
+
+    #top-mobile-bar,
+    .hamburger-button {
+      z-index: 1052; // over everything, under sweetalert dialogs
+    }
+
+    &.newPlaceModal #top-mobile-bar {
+      .saveNewPlaceBtn {
+        display: block;
+        right: $GRID_SPACE/2;
+        position: absolute;
+        width: auto;
+        font-weight: bold;
+      }
+    }
+  }
+
+  body.details-view:not(.already-reviewed) #bottom-mobile-bar {
+  // body.modal-open #top-mobile-bar {
     visibility: visible;
     pointer-events: auto;
     opacity: 1;
@@ -4178,17 +4234,7 @@ body.modal-open {
     // transform: translateY(0);
   }
 
-  body.modal-open.newPlaceModal #top-mobile-bar {
-    .saveNewPlaceBtn {
-      display: block;
-      right: $GRID_SPACE/2;
-      position: absolute;
-      width: auto;
-      font-weight: bold;
-    }
-  }
-
-  #top-mobile-bar,
+  // #top-mobile-bar,
   #bottom-mobile-bar {
     display: block;
     visibility: hidden;
@@ -4199,26 +4245,43 @@ body.modal-open {
   }
 
   #top-mobile-bar {
-    border: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    display: block;
+    
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1052; //under sweetalert dialogs
+    height: 48px;
+    // background: $green;
+    // background: $lightGreen;
+    background: $greenGradient;
+
+    // border: 0;
+    // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-bottom: 1px solid $lighterGray;
+    
+    // z-index: 1052; // over everything, under sweetalert dialogs
 
     .saveNewPlaceBtn {
       display: none;
     }
 
+    .search-button {
+      right: 52px;
+      position: fixed;
+      padding: 14px;
+      height: 48px;
+    }
+
     #top-mobile-bar-title { 
-      float: left;
+      text-align: center;
       margin: 0;
       padding: 0;
       font-size: 16px;
       font-family: $headingFont;
       line-height: 50px;
       max-width: calc(100% - 100px);
+      color: white;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -4253,43 +4316,6 @@ body.modal-open {
       // }
     }
   }
-
-  // #bottom-mobile-bar {
-  //     position: fixed;
-  //     bottom: 0;
-  //     left: 0;
-  //     right: 0;
-  //     z-index: 1052; //under sweetalert dialogs
-
-  //     box-shadow: 0 -20px 30px white;
-
-  //     transform: translateY(20px);
-    
-  //     #floating-cta-container {
-  //       background: white;
-  //       // border-top: 1px solid $lighterGray;
-  //     }
-
-  //     button {
-  //       // Explanation on the reason for the string interpolation:
-  //       //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-  //       width: calc(100% - #{$GRID_SPACE});
-  //       margin: $GRID_SPACE/2;
-  //       font-weight: 700;
-  //       @include roundedCorners;
-  //       text-transform: uppercase;
-  //       background: $greenGradient;
-  //     } 
-
-  //     // &:before {
-  //     //   content: '';
-  //     //   width: 100%;
-  //     //   height: 50px;
-  //     //   display: block;
-  //     //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-  //     //   pointer-events: none;
-  //     // }
-  // }
 
   #placeDetailsContent {
     hr {
@@ -4406,9 +4432,9 @@ body.modal-open {
 
   .infoBox {
     position: absolute;
-    left: 10px;
-    right: 10px;
-    bottom: 12px;
+    left: $GRID_SPACE;
+    right: $GRID_SPACE;
+    bottom: $GRID_SPACE*2;
     
     // box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
     box-shadow: 0 10px 30px rgba(200,200,200,1); 
@@ -4896,24 +4922,81 @@ body.modal-open {
 
 
 .hamburger-button {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    width: 48px;
-    height: 48px;
-    color: white;
-    border: none;
-    margin: 0;
-    padding: 13px;
+  position: fixed;
+  top: 0px;
+  left: $GRID_SPACE/2;
+  width: 48px;
+  height: 48px;
+  color: white;
+  border: none;
+  margin: 0;
+  padding: 14px;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    // background: url(/img/icon_hamburger.svg) 13px 13px no-repeat;
-    // background-size: 22px;
+  // z-index: 1052; // over everything, under sweetalert dialogs
 
-    // &.back-mode {
-    //   background-image: url(/img/icon_back.svg);
-    // }
+  transition-property: opacity, filter;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+  background-color: transparent;
+
+  &.back-mode .hamburger-inner {
+    &,
+    &::before,
+    &::after {
+      background-color: $green;
+    }
+  }
+
+  &.back-mode .hamburger-inner {
+    transform: rotate(-180deg);
+  }
+  &.back-mode .hamburger-inner::before {
+    transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
+  }
+  &.back-mode .hamburger-inner::after {
+    transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
+  }
+ 
+  .hamburger-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block; 
+    position: relative;
+  }
+  
+  .hamburger-inner {
+    display: block;
+    top: 50%;
+    margin-top: -2px;
+
+    &,
+    &::before,
+    &::after {
+      width: 20px;
+      height: 3px;
+      // background-color: $green;
+      background-color: white;
+      border-radius: 25px;
+      position: absolute;
+      transition-property: transform, background-color;
+      transition-duration: 0.2s;
+      transition-timing-function: ease;
+    }
+      
+    &::before, &::after {
+      content: "";
+      display: block;
+    }
+    &::before {
+      top: -7px;
+    }
+    &::after {
+      bottom: -7px;
+    }
+  }
+  
 }
 
 .side-nav {
@@ -4970,8 +5053,8 @@ body.modal-open {
     position: absolute;
     left: 0;
     top: 0;
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     font-size: 20px;
     background: none;
     border: none;
@@ -5229,7 +5312,7 @@ body.modal-open {
   img {
     width: 100%;
     height: 100%;
-  }
+  } 
   
   div {
     font-family: $bodyFont !important;
@@ -5255,61 +5338,5 @@ body.modal-open {
   max-height: 26px;
   margin: 0;
 }
-
-.hamburger-button {
-  transition-property: opacity, filter;
-  transition-duration: 0.2s;
-  transition-timing-function: linear;
-  background-color: transparent;
-
-  &.back-mode .hamburger-inner {
-    transform: rotate(-180deg);
-  }
-  &.back-mode .hamburger-inner::before {
-    transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
-  }
-  &.back-mode .hamburger-inner::after {
-    transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
-  }
- 
-  .hamburger-box {
-    width: 20px;
-    height: 20px;
-    display: inline-block; 
-    position: relative;
-  }
-  
-  .hamburger-inner {
-    display: block;
-    top: 50%;
-    margin-top: -2px;
-
-    &,
-    &::before,
-    &::after {
-      width: 20px;
-      height: 4px;
-      background-color: $green;
-      border-radius: 25px;
-      position: absolute;
-      transition-property: transform;
-      transition-duration: 0.2s;
-      transition-timing-function: ease;
-    }
-      
-    &::before, &::after {
-      content: "";
-      display: block;
-    }
-    &::before {
-      top: -7px;
-    }
-    &::after {
-      bottom: -7px;
-    }
-  }
-  
-}
-
 
 
