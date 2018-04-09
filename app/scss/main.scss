@@ -4,6 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $green: #30bb6a;
+$greenAlt: #51CC82;
 $darkGreen: #00b800;
 $darkerGreen: #04883A;
 $lightGreen: #2cd978;
@@ -39,12 +40,15 @@ $bootstrapBackdropColor: $paleWhite;
 $bootstrapBackdropOpacity: 0.8;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
 $greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
+// $greenGradient: linear-gradient(-45deg, $green 0%, $yellowGreen 100%);
+// $greenGradient: linear-gradient(-45deg, $green 0%, #cedc13 100%);
 
 $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
 $easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
-$spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
+$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,18 +76,13 @@ $GRID_SPACE: 12px;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @keyframes bounceAndGlow {
-  from { opacity: 0.7; transform: translate(-50%,-100%);}
-  to { opacity: 1; transform: translate(-50%,-110%);}
+  from { opacity: 1; transform: translate(-50%,-100%);}
+  to { opacity: .8; transform: translate(-50%,-115%);}
 }
 
 @keyframes pulse {
-  from { opacity: 0.4;}
-  to { opacity: 0.6;}
-}
-
-@keyframes pulseSubtle {
-  from { opacity: 0.8;}
-  to { opacity: 1;}
+  from { opacity: 0.6;}
+  to { opacity: 0.4;}
 }
 
 @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -179,9 +178,17 @@ $GRID_SPACE: 12px;
   border-radius: 5px;
 }
 
-@mixin defaultButtonHover {
-  transform: translateY(-1px);
-  box-shadow: 0px 6px 10px rgba(0,0,0,.2);
+@mixin shadowButtonHover {
+  transition: all .2s;
+  
+  &:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0px 6px 10px rgba(0,0,0,.2);
+  } 
+}
+
+@mixin greenGlowButton {
+  box-shadow: 0 2px 10px rgba(85, 188, 106, 0.1);
 }
 
 
@@ -271,14 +278,37 @@ body.position-pin-mode {
     //     pointer-events: none;
     // }
 
-    .js-menu-show-hamburger-menu,
-    #userBtn {
-      // background-color: $lightGray;
-      opacity: 0.5;
-      pointer-events: none;
+    // .js-menu-show-hamburger-menu,
+    // #userBtn {
+    //   // background-color: $lightGray;
+    //   opacity: 0.5;
+    //   pointer-events: none;
+    // }
+
+    #map {
+      &:before,
+      &:after {
+          content: '';
+          position: fixed;
+          left: 0;
+          right: 0;
+          height: 80px;
+          z-index: 1;
+          opacity: 1;
+      }
+  
+      &:before {
+          top: 0;
+          background: linear-gradient(white,transparent);
+      }
+  
+      &:after {
+          bottom: 0;
+          background: linear-gradient(transparent,white);
+      }
     }
 }
-
+ 
 body.showMarkerLabels {
   .markerLabel {
     display: block !important;
@@ -837,6 +867,7 @@ a.unstyled-link {
 .svg-icon {
   height: 1em;
   max-width: 1em;  
+  vertical-align: sub;
 }
 
 
@@ -853,7 +884,7 @@ a.unstyled-link {
     white-space: nowrap;
 
     img {
-      vertical-align: text-top;
+      vertical-align: sub;
       margin-right: 3px;
       width: 25px;
       max-width: none;
@@ -902,6 +933,7 @@ a.unstyled-link {
   &.cool-hidden {
     opacity: 0;
     transform: translateY(-20px);
+    pointer-events: none;
   } 
 
   & > button {
@@ -914,8 +946,8 @@ a.unstyled-link {
 
   &.admin {
     .avatar {
-      border-color: gold;
-      box-shadow: 0 0px 5px gold;
+      border: 3px solid gold;
+      box-shadow: 0 0px 10px gold;
     }
   }
 
@@ -979,6 +1011,7 @@ a.unstyled-link {
     &.cool-hidden {
       opacity: 0;
       transform: translateY(-20px);
+      pointer-events: none;
     }
  
     #locationQueryInput {
@@ -1017,7 +1050,7 @@ a.unstyled-link {
         opacity: 1;
         visibility: visible;
 
-        height: 20px;
+        height: 25px;
         position: absolute;
         right: 10px;
         top: 50%;
@@ -1057,6 +1090,7 @@ a.unstyled-link {
     }
 }
 
+// Desktop-only
 @media screen and (min-width: $MOBILE_MAX_WIDTH) {
   #userBtn {
     display: none;
@@ -1082,13 +1116,17 @@ a.unstyled-link {
       margin: 0;
 
       font-size: 22px;
-      line-height: normal;
+      // line-height: normal;
       
-      color: $green;
-      user-select: none;
-      letter-spacing: -0.02em;
-      font-weight: bold;
-      font-family: $headingFont;
+      // color: $green;
+      // user-select: none;
+      // letter-spacing: -0.02em;
+      // font-weight: bold;
+      // font-family: $headingFont;
+
+      img {
+        width: 130px;
+      }
   }
 
 
@@ -1116,6 +1154,7 @@ a.unstyled-link {
       &.cool-hidden {
         opacity: 0;
         transform: translateY(-20px);
+        pointer-events: none;
       } 
 
       .navbar-de-boa--list {
@@ -1203,6 +1242,7 @@ a.unstyled-link {
     width: 100%;
     // float: right;
     padding: 0;
+    font-weight: bold;
   }
 
   .guide-img-row {
@@ -1581,7 +1621,7 @@ a.unstyled-link {
 } 
 
 #geolocationBtn {
-    position: absolute;
+    position: fixed;
     bottom: 76px;
     right: 0px;
 
@@ -1610,12 +1650,12 @@ a.unstyled-link {
 }
 
 #addPlace {
-    position: absolute;
+    position: fixed;
     bottom: 14px;
     right: 0px;
     margin: 0 $GRID_SPACE $GRID_SPACE;
 
-    background: linear-gradient(45deg, $green 0, $lightGreen 100%);
+    background: $greenGradient;
     border: 0;
     // border-radius: 50%;
     cursor: pointer;
@@ -1630,9 +1670,6 @@ a.unstyled-link {
     text-align: left;
     overflow: hidden;
     transition: width .5s $coolEaseOut, background .2s;
-
-    // transition: background 0.2s ease-out, width 0.5s ease-out;
-    // opacity: 0;
 
     img {
         width: 22px;
@@ -1660,29 +1697,23 @@ a.unstyled-link {
 
     &.active {
         background: $black;
-        width: auto;
-        border-radius: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-
-        // transition: background 0.5s ease-out, width 0.5s ease-out;
+        transition: all 0.3s $coolEaseOut;
 
         img {
             display: none;
         }
         
         &:after {
-            content: '✕ Cancelar';
-            // color: $green;
+            content: '✕';
             color: white;
-            font-size: 18px;
-            padding: 0 $GRID_SPACE;
+            font-size: 18px; 
+            padding: 4px;
         }
     }
 }
 
 #filterBtn {
-    position: absolute;
+    position: fixed;
     bottom: 138px;
     right: 0px;
 
@@ -1772,91 +1803,85 @@ a.unstyled-link {
 }
 
 #newPlaceholderContainer {
+    #newPlaceholderConfirmBtn {
+        display: none;
+        
+        position: absolute;
+        bottom: 26px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 25px;
+        font-size: 18px;
+        padding: $GRID_SPACE $GRID_SPACE*2;
+
+        background: $greenGradient;
+
+        @include shadow(3);
+        
+        // @include greenGlowButton(); 
+        // @include shadowButtonHover();
+    }
+
     #newPlaceholder {
         position: absolute;
         top: 20%;
         left: 50%;
         transform: translate(-50%,-100%);
+        width: 90px;
+        height: auto;
+        
         opacity: 0;
-        background: transparent;
-        border: none;
         pointer-events: none;
+        z-index: 2;
 
-        transition: top 0.5s ease;
-
-        img {
-            width: 90px;
-            height: auto;
-        }
+        filter: grayscale(100%);
+        
+        transition: top 0.5s $easeOutQuadratic;
 
         &.active {
             pointer-events: initial;
             top: 50%;
             opacity: 1;
 
-            animation: bounceAndGlow 0.5s infinite alternate;
+            animation: bounceAndGlow 0.4s $easeOutQuadratic infinite alternate;
         }
 
         &.invalid {
             animation: none;
             filter: grayscale(1);
         }
-
-        // &:after {
-        //     content: 'Aqui';
-        //     position: absolute;
-        //     left: 50%;
-        //     bottom: 46px;
-        //     color: white;
-        //     font-size: 12px;
-        //     width: 75px;
-        //     line-height: 1em;
-        //     text-transform: uppercase;
-        //     font-family: $headingFont;
-        //     transform: translateX(-50%);
-        // }
-
     }
-    // #newPlaceholderShadow {
-    //     position: absolute;
-    //     top: 50%;
-    //     left: 50%;
-    //     transform: translate(-50%,-50%);
-    //     z-index: 1;
-    //     width: 10px;
-    //     height: 5px;
-    //     border-radius: 50%;
-    //     background-color: rgb(20,20,20);
-    //     opacity: 0.5;
-    //     display: none;
-
-    //     // animation: pulse 0.5s infinite alternate-reverse;
-    // }
 
     #newPlaceholderTarget {
         position: absolute;
-        top: calc(50% - 9px);
+        top: calc(50% - 3px);
         left: 50%;
         transform: translateX(-50%);
         z-index: 1;
         width: 30px;
         height: auto;
-        opacity: 0.5;
+        // opacity: 0.5;
         display: none;
+        
+        pointer-events: none;
+        
+        @keyframes pulseSubtle {
+          from { opacity: 1;}
+          to { opacity: .8;}
+        }
+        animation: pulseSubtle 0.4s $easeOutQuadratic infinite alternate;
     }
 
-    &:hover {
-        #newPlaceholder.active {
-            animation: none;
-        }
+    // &:hover {
+    //     #newPlaceholder.active {
+    //         animation: none;
+    //     }
 
-        #newPlaceholderTarget {
-            opacity: 1;
-        }
-    }
+    //     #newPlaceholderTarget {
+    //         opacity: 1;
+    //     }
+    // }
 }
-
-
 
 
 .modal-backdrop {
@@ -1943,7 +1968,6 @@ a.unstyled-link {
   animation: pulse 0.5s infinite alternate;
 }
 
-#top-mobile-bar,
 .modal-header {
   background: $lightGreen;
   color: white;
@@ -2020,12 +2044,17 @@ body.search-mode {
   //   transition: opacity 0.2s ease;
   // }
 
-  #userBtn { 
+  #userBtn,
+  #search-button { 
     display: none;
   }
 
   #locationSearch {
     box-shadow: none;
+  }
+
+  #locationSearch #clearLocationQueryBtn {
+    right: 10px;
   }
 }
 
@@ -2038,18 +2067,6 @@ body.clean-modal-open {
 
 #close-modal-btn {
   display: none;
-}
-
-body.transparent-mobile-topbar {
-  #top-mobile-bar {
-    box-shadow: none;
-    background: linear-gradient(rgba(0,0,0,0.5), transparent);
-    position: absolute;
-  }
-
-  .modal .modal-content {
-    padding-top: 0;
-  }
 }
 
 body.modal-open {
@@ -2116,7 +2133,7 @@ body.modal-open {
         h1 {
           font-weight: 700;
           font-size: 30px;
-          line-height: 30px;
+          line-height: 1.2em;
           margin-top: $GRID_SPACE*2;
           letter-spacing: -0.01em; 
 
@@ -2689,13 +2706,17 @@ body.modal-open {
 
 .ghost {
     padding: 5px 10px;
-    border: 1px solid $black;
-    color: $black;
+    border: 2px solid $green;
+    color: $green;
     margin: 5px auto;
     font-size: 16px;
     border-radius: 25px;
     vertical-align: middle;
+    
     background: transparent;
+    
+    // background: white;
+    // @include greenGlowButton();
 
     transition: all .2s;
     
@@ -2754,12 +2775,16 @@ body.modal-open {
     }
 
     .missing-info-container {
-      opacity: .5;
-      
       .missing-info-placeholder {
+        opacity: .5;
         font-size: 100px; 
         line-height: 100px;
         color: $gray;
+      }
+
+      button {
+        font-weight: bold;
+        color: $green;
       }
     }
 
@@ -2834,7 +2859,7 @@ body.modal-open {
 
       .numreviews + .openReviewPanelBtn {
         margin-top: 12px;
-        font-style: 16px;
+        font-size: 16px;
       }
     }
 
@@ -2908,10 +2933,12 @@ body.modal-open {
       margin-top: $GRID_SPACE;
 
       .minimap { 
-          width: 100%;
           min-height: 50px;
           background: $lightestGray;
-          // border-radius: 15px;
+          // Explanation on the reason for the string interpolation:
+          //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+          width: calc(100% - #{$GRID_SPACE*2});
+          margin-left: $GRID_SPACE;
 
           &.close-modal {
             cursor: pointer;
@@ -3000,11 +3027,7 @@ body.modal-open {
   @include roundedCorners;
   font-weight: bold;
 
-  transition: .2s;
-
-  &:hover:not([disabled]) {
-    @include defaultButtonHover;
-  }
+  @include shadowButtonHover;
   
   &:before {
     content: "";
@@ -3154,11 +3177,7 @@ body.modal-open {
     @include roundedCorners;
     padding: 20px;
 
-    transition: all .2s;
-
-    &:hover:not([disabled]) {
-      @include defaultButtonHover;
-    }
+    @include shadowButtonHover;
 }
 
 .btn-footer {
@@ -3262,9 +3281,7 @@ body.modal-open {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  // justify-content: flex-end;
   border-bottom: 1px solid $lighterGray;
-  // background: $paleWhite;
 
   hr {
     // border-left: 1px solid #eee; 
@@ -3276,7 +3293,6 @@ body.modal-open {
   .toolbar-item {
     text-align: center;
     cursor: pointer;
-    filter: grayscale(100%);
     border: 0;
     background: none;
     color: $green;
@@ -3284,21 +3300,21 @@ body.modal-open {
     padding: $GRID_SPACE 0 $GRID_SPACE/2;
     // min-width: 110px;
 
+    filter: grayscale(100%);
+
     border-left: 1px solid $lighterGray;
     &:first-child {
       border: 0;
     }
 
     backface-visibility: hidden;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    
-    transition: filter 0.2s ease-out, background .2s ease-out;
+    transition: all 0.2s ease;
 
     .toolbar-item-icon {
       width: 25px;
       height: 25px;
 
-      transition: transform .35s $spotifyBounce;
+      transition: transform .35s $spotifyBounceEase;
 
       &.glyphicon {
         font-size: 20px;
@@ -3309,7 +3325,6 @@ body.modal-open {
     label {
       display: block;
       text-transform: uppercase; 
-      font-weight: 700;
       padding: 5px;
       pointer-events: none;
       margin: 0;
@@ -3322,7 +3337,7 @@ body.modal-open {
       background: $paleWhite;
 
       .toolbar-item-icon {
-        transform: scale(1.1);
+        transform: scale(1.2);
       }
     }
   }
@@ -3531,13 +3546,11 @@ body.modal-open {
 .pac-container {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  box-shadow: 0 5px 30px rgba(0,0,0,.15);
-  padding: $GRID_SPACE/2;
+  box-shadow: 0 5px 30px rgba(0,0,0,.3);
+  padding-right: $GRID_SPACE;
 
   .pac-item-query {
-      font-size: 17px;
-      // font-family: $headingFont;
-      display: inline-block;
+      font-size: 16px;
   }
 
   .pac-item {
@@ -3553,6 +3566,8 @@ body.modal-open {
       padding-left: 22px;
       font-family: $bodyFont;
       line-height: 1em;
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
 
   // Custom Google Autocomplete search results for mobile
@@ -3724,12 +3739,9 @@ body.modal-open {
       font-family: $headingFont;
       font-weight: 700;
       font-size: 16px;
-      letter-spacing: -0.01em; 
-      line-height: normal;
+      letter-spacing: -0.02em; 
+      line-height: 1.2em;
       margin: 0;
-      // white-space: nowrap;
-      // text-overflow: ellipsis;
-      // overflow: hidden;
       max-height: 2.5em;
       overflow: hidden;
     }
@@ -3927,18 +3939,6 @@ body.modal-open {
     }
   }
 
-
-  body.modal-open {
-    #list-view {
-      display: none;
-    }
-
-    #map, #addPlace, #geolocationBtn {
-      opacity: 0;
-      pointer-events: none;
-    }
-  }
-
   .modal {
     &:before {
       content: ''
@@ -3996,15 +3996,14 @@ body.modal-open {
     .stickyFooterBtn {
       display: none;
     }
-  }
-
-
+  } 
 
   #locationSearch {
     #locationQueryInput { 
       height: 48px;
       padding: 0 90px 0 60px; 
     }
+    
     #clearLocationQueryBtn {
       right: 40px;
       height: 48px;
@@ -4019,18 +4018,22 @@ body.modal-open {
   }
 
   #userBtn {
-    top: 12px;
-    right: 12px;
+    top: 0;
+    right: $GRID_SPACE/2;
+
+    // z-index: 1052; // over everything, under sweetalert dialogs
 
     & > button {
-      padding: 0;
+      padding: 13px;
       
       .avatar {
-          border: 0;
+          // border: 3px solid white;
+          background: none;
+          border: none;
           box-shadow: none; 
-          width: 25px;
-          height: 25px;
-          margin: 8px;
+          width: 24px;
+          height: 24px;
+          margin: 0;
       }
     }
 
@@ -4147,14 +4150,86 @@ body.modal-open {
     }
   }
 
-  body.modal-open {
-    #close-modal-btn {
-      display: none;
+
+  body.position-pin-mode { 
+    // #top-mobile-bar {
+    //   display: none;
+    // }
+    #top-mobile-bar {
+      background: white;
     }
   }
 
-  body.details-view:not(.already-reviewed) #bottom-mobile-bar,
-  body.modal-open #top-mobile-bar {
+  body.transparent-mobile-topbar {
+    #top-mobile-bar {
+      box-shadow: none;
+      background: linear-gradient(rgba(0,0,0,0.5), transparent);
+      position: absolute;
+    }
+
+    .modal .modal-content {
+      padding-top: 0;
+    }
+  }
+
+
+  #locationSearch {
+    opacity: 0;
+    pointer-events: none;
+
+    width: 100%;
+    top: 0;
+    max-width: none;
+  }
+
+  body.search-mode {
+    #locationSearch {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  body.modal-open {
+    #map,
+    #addPlace,
+    #geolocationBtn,
+    .search-button {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #close-modal-btn,
+    .search-button,
+    #list-view {
+      display: none;
+    }
+
+    #top-mobile-bar {
+      background: white;
+      
+      .top-mobile-bar-title {
+        color: $black;
+      }
+    }
+
+    #top-mobile-bar,
+    .hamburger-button {
+      z-index: 1052; // over everything, under sweetalert dialogs
+    }
+
+    &.newPlaceModal #top-mobile-bar {
+      .saveNewPlaceBtn {
+        display: block;
+        right: $GRID_SPACE/2;
+        position: absolute;
+        width: auto;
+        font-weight: bold;
+      }
+    }
+  }
+
+  body.details-view:not(.already-reviewed) #bottom-mobile-bar {
+  // body.modal-open #top-mobile-bar {
     visibility: visible;
     pointer-events: auto;
     opacity: 1;
@@ -4162,17 +4237,7 @@ body.modal-open {
     // transform: translateY(0);
   }
 
-  body.modal-open.newPlaceModal #top-mobile-bar {
-    .saveNewPlaceBtn {
-      display: block;
-      right: $GRID_SPACE/2;
-      position: absolute;
-      width: auto;
-      font-weight: bold;
-    }
-  }
-
-  #top-mobile-bar,
+  // #top-mobile-bar,
   #bottom-mobile-bar {
     display: block;
     visibility: hidden;
@@ -4183,26 +4248,43 @@ body.modal-open {
   }
 
   #top-mobile-bar {
-    border: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    display: block;
+    
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1052; //under sweetalert dialogs
+    height: 48px;
+    // background: $green;
+    // background: $lightGreen;
+    background: $greenGradient;
+
+    // border: 0;
+    // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-bottom: 1px solid $lighterGray;
+    
+    // z-index: 1052; // over everything, under sweetalert dialogs
 
     .saveNewPlaceBtn {
       display: none;
     }
 
+    .search-button {
+      right: 52px;
+      position: fixed;
+      padding: 14px;
+      height: 48px;
+    }
+
     #top-mobile-bar-title { 
-      float: left;
+      text-align: center;
       margin: 0;
       padding: 0;
       font-size: 16px;
       font-family: $headingFont;
       line-height: 50px;
       max-width: calc(100% - 100px);
+      color: white;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -4237,43 +4319,6 @@ body.modal-open {
       // }
     }
   }
-
-  // #bottom-mobile-bar {
-  //     position: fixed;
-  //     bottom: 0;
-  //     left: 0;
-  //     right: 0;
-  //     z-index: 1052; //under sweetalert dialogs
-
-  //     box-shadow: 0 -20px 30px white;
-
-  //     transform: translateY(20px);
-    
-  //     #floating-cta-container {
-  //       background: white;
-  //       // border-top: 1px solid $lighterGray;
-  //     }
-
-  //     button {
-  //       // Explanation on the reason for the string interpolation:
-  //       //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-  //       width: calc(100% - #{$GRID_SPACE});
-  //       margin: $GRID_SPACE/2;
-  //       font-weight: 700;
-  //       @include roundedCorners;
-  //       text-transform: uppercase;
-  //       background: $greenGradient;
-  //     } 
-
-  //     // &:before {
-  //     //   content: '';
-  //     //   width: 100%;
-  //     //   height: 50px;
-  //     //   display: block;
-  //     //   background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
-  //     //   pointer-events: none;
-  //     // }
-  // }
 
   #placeDetailsContent {
     hr {
@@ -4390,9 +4435,9 @@ body.modal-open {
 
   .infoBox {
     position: absolute;
-    left: 10px;
-    right: 10px;
-    bottom: 12px;
+    left: $GRID_SPACE;
+    right: $GRID_SPACE;
+    bottom: $GRID_SPACE*2;
     
     // box-shadow: 0 10px 20px rgba(0,0,0,0.2); 
     box-shadow: 0 10px 30px rgba(200,200,200,1); 
@@ -4575,61 +4620,93 @@ body.modal-open {
 .rating {
     display: inline-block;
     vertical-align: middle;
-}
-.rating > input {
-    display: none;
-}
-.rating {
-  & > label:before {
-    margin: 0 2px;
-    font-size: 34px;
-    // font-family: FontAwesome;
-    font-family: $bootstrapFont;
-    content: "\e006";
-    display: inline-block;
-    background-repeat: no-repeat;
-    // width: 30px;
-    // height: 30px;
-    transition: color 0.2s ease, text-shadow 0.2s ease,;
+    
+    & > input {
+        display: none;
+    }
 
-    // content: '';
-    // background-image: url(/img/icon_star_gray.svg);
-    // background-size: 100%;
-  }
+    & > label {
+        color: $lighterGray; 
+        float: right;
+        margin: 0;
+        
+        &:before {
+          margin: 0 2px;
+          font-size: 34px;
+          font-family: $bootstrapFont;
+          display: inline-block;
+          // content: "\e006";
+          
+          transition: color 0.2s ease, text-shadow 0.2s ease,;
+      
+          content: '';
+          background-image: url(/img/icon_star_gray.svg);
+          // background-image: url(/img/icon_star_empty.svg);
+          background-size: 100%;
+          width: 30px;
+          height: 30px;
+          background-repeat: no-repeat;
+        }
+    }
 
-  &.rating-big > label:before {
-    font-size: 35px;
-    margin: 0 10px;
+    &:not(.disabled) > label {
+        cursor: pointer;
+    }
+  
+    &.rating-big > label:before {
+      font-size: 35px;
+      margin: 0 10px;
+    }
+
+    &.empty > label:before {
+      content: '';
+      // background-image: url(/img/icon_star_empty.svg);
+        
+      // hollow star
+      // content: "\e007";
+      
+      // empty gray star
+      // content: "\e006";
+    }
+    
+    // & > .half:before {
+    //     // content: "\f089";
+    //     background-image: url(/img/icon_star_half.svg);
+    //     position: absolute;
+    // }
+
+    & > input:checked ~ label:before {
+        // color: #eabb2f;
+        background-image: url(/img/icon_star.svg);
+    }    
+}
+
+.rating-display-container {
+  &[data-color="green"] > .rating > input:checked ~ label:before,
+  &[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+  &[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+      // color: $green;
+      background-image: url(/img/icon_star_green.svg);
+    }
+    
+    &[data-color="yellow"] > .rating > input:checked ~ label:before,
+    &[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+    &[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+      // color: $yellow;
+      background-image: url(/img/icon_star_yellow.svg);
+  } 
+
+  &[data-color="red"] > .rating > input:checked ~ label:before,
+  &[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
+  &[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
+      // color: $red;
+      background-image: url(/img/icon_star_red.svg);
   }
-} 
+}
 
 .loading-skeleton .rating > label:before {
     opacity: 0.5;
 }
-
-.rating.empty > label:before {
-    // background-image: url(/img/icon_star_empty.svg);
-    
-    // hollow star
-    // content: "\e007";
-    
-    // empty gray star
-    content: "\e006";
-}
-.rating > .half:before {
-    content: "\f089";
-    position: absolute;
-}
-.rating > label {
-    color: $lighterGray; 
-    float: right;
-    margin: 0;
-}
-
-.rating:not(.disabled) > label {  
-    cursor: pointer;
-}
-
 
 [data-color="green"], .color-green {
   color: $green;
@@ -4657,33 +4734,13 @@ body.modal-open {
   background-color: $red;
 }
 
-.rating > input:checked ~ label:before {
-    color: #eabb2f;
-    // background-image: url(/img/icon_star.svg);
-}
-
-.rating-display-container[data-color="green"] > .rating > input:checked ~ label:before,
-.rating-display-container[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.rating-display-container[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    color: $green;
-}
-.rating-display-container[data-color="yellow"] > .rating > input:checked ~ label:before,
-.rating-display-container[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.rating-display-container[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    color: $yellow;
-} 
-.rating-display-container[data-color="red"] > .rating > input:checked ~ label:before,
-.rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-.rating-display-container[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-    color: $red;
-}
-
 // Only use hover effects on desktop
 @media screen and (min-width: $MOBILE_MAX_WIDTH) {
   .rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
   .rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
-      color: #eabb2f;
-      // background-image: url(/img/icon_star.svg);
+      // color: #eabb2f;
+      
+      background-image: url(/img/icon_star.svg);
   }
 
   .rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
@@ -4693,10 +4750,12 @@ body.modal-open {
   .rating:not(.disabled) > label:hover ~ input:checked ~ label:before, /* lighten current selection */
   .rating:not(.disabled) > input:checked ~ label:hover ~ label:before {
       // color: #f1d274 !important;
-      color: #eabb2f !important;
-      text-shadow: 0 0 10px gold; 
-      content: "\e006";
-      // background-image: url(/img/icon_star_light.svg) !important;
+       
+      // color: #eabb2f !important;
+      // text-shadow: 0 0 10px gold; 
+      // content: "\e006";
+      
+      // background-image: url(/img/icon_star_hover.svg) !important;
   }
 }
 
@@ -4745,11 +4804,11 @@ body.modal-open {
 }
 
 .rating-display-mini {
-  $mini-size: 12px;
+  $mini-size: 14px;
 
   .average,
   .rating>label:before {
-    font-size: $mini-size;
+    font-size: $mini-size; 
   }
 
   .rating>label:before {
@@ -4859,24 +4918,81 @@ body.modal-open {
 
 
 .hamburger-button {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    width: 48px;
-    height: 48px;
-    color: white;
-    border: none;
-    margin: 0;
-    padding: 13px;
+  position: fixed;
+  top: 0px;
+  left: $GRID_SPACE/2;
+  width: 48px;
+  height: 48px;
+  color: white;
+  border: none;
+  margin: 0;
+  padding: 14px;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    background: url(/img/icon_hamburger.svg) 13px 13px no-repeat;
-    background-size: 22px;
+  // z-index: 1052; // over everything, under sweetalert dialogs
 
-    &.back-mode {
-      background-image: url(/img/icon_back.svg);
+  transition-property: opacity, filter;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+  background-color: transparent;
+
+  &.back-mode .hamburger-inner {
+    &,
+    &::before,
+    &::after {
+      background-color: $green;
     }
+  }
+
+  &.back-mode .hamburger-inner {
+    transform: rotate(-180deg);
+  }
+  &.back-mode .hamburger-inner::before {
+    transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
+  }
+  &.back-mode .hamburger-inner::after {
+    transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
+  }
+ 
+  .hamburger-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block; 
+    position: relative;
+  }
+  
+  .hamburger-inner {
+    display: block;
+    top: 50%;
+    margin-top: -2px;
+
+    &,
+    &::before,
+    &::after {
+      width: 20px;
+      height: 3px;
+      // background-color: $green;
+      background-color: white;
+      border-radius: 25px;
+      position: absolute;
+      transition-property: transform, background-color;
+      transition-duration: 0.2s;
+      transition-timing-function: ease;
+    }
+      
+    &::before, &::after {
+      content: "";
+      display: block;
+    }
+    &::before {
+      top: -7px;
+    }
+    &::after {
+      bottom: -7px;
+    }
+  }
+  
 }
 
 .side-nav {
@@ -4933,8 +5049,8 @@ body.modal-open {
     position: absolute;
     left: 0;
     top: 0;
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     font-size: 20px;
     background: none;
     border: none;
@@ -5135,11 +5251,7 @@ body.modal-open {
     font-weight: 700;  
     min-width: 90px;
     
-    transition: all .2s;
-    
-    &:hover:not([disabled]) {
-      @include defaultButtonHover;
-    }
+    @include shadowButtonHover;
     
     &:active {
       outline: 0;
@@ -5196,7 +5308,7 @@ body.modal-open {
   img {
     width: 100%;
     height: 100%;
-  }
+  } 
   
   div {
     font-family: $bodyFont !important;
@@ -5222,3 +5334,5 @@ body.modal-open {
   max-height: 26px;
   margin: 0;
 }
+
+

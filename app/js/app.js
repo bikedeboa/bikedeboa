@@ -576,11 +576,18 @@ $(() => {
 
     if (isTurningOn) {
       $('body').addClass('position-pin-mode');
+
+      hideUI();
+
+      $('.hamburger-button').addClass('back-mode');
+      $('.hamburger-button.back-mode').one('click', () => {
+        toggleLocationInputMode();
+      });
       
       // Change Maps style that shows Points of Interest
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
-      $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
+      $('#newPlaceholderConfirmBtn').on('click', queueUiCallback.bind(this, () => {
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
         
@@ -644,7 +651,10 @@ $(() => {
 
       map.setOptions({styles: _gmapsCustomStyle});
 
-      $('#newPlaceholder').off('click');
+      showUI();
+      $('.hamburger-button').removeClass('back-mode'); 
+      $('.hamburger-button.back-mode').off('click');
+      $('#newPlaceholderConfirmBtn').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
       
@@ -655,12 +665,16 @@ $(() => {
     }
 
     BDB.Map.toggleMarkers();
-    $('#addPlace').toggleClass('active');
+    if (_isMobile) {
+      $('#addPlace').toggle();
+    } else {
+      $('#addPlace').toggleClass('active');
+    }
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
-    $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
-    $('#geolocationBtn').toggle();
+    $('#newPlaceholderConfirmBtn').toggle();
+    // $('#geolocationBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -1351,7 +1365,7 @@ $(() => {
     $('.hamburger-button').removeClass('back-mode'); 
   }
 
-  function updatePageTitleAndMetatags(text) { 
+  function updatePageTitleAndMetatags(text = 'bike de boa') { 
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
@@ -1359,7 +1373,7 @@ $(() => {
       $('#top-mobile-bar-title').text(openedMarker ? '' : text);
     }
 
-    text = text || 'bike de boa'; 
+    // text = text || 'bike de boa'; 
 
     // Basic website metatags
     document.title = text;
@@ -1643,29 +1657,6 @@ $(() => {
     }));
 
 
-    $('body').on('click', '.back-button', e => {
-      // If was creating a new local
-      // @todo Do this check better
-      if (_isMobile && History.getState().title === 'Novo bicicletário') {
-        swal({
-          text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#FF8265',
-          confirmButtonText: 'Descartar', 
-          allowOutsideClick: false
-        }).then(() => {
-          // returnToPreviousView();
-          goHome();
-        }
-        );
-      } else {
-        // returnToPreviousView();
-        goHome();
-      }
-    });
-
-        
     /////////////////////
     // Modal callbacks //
     /////////////////////
@@ -1696,6 +1687,28 @@ $(() => {
       // Mobile optimizations
       if (_isMobile) {
         // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
+        $('.hamburger-button').addClass('back-mode');
+        $('.hamburger-button.back-mode').one('click', () => {
+          // If was creating a new local
+          // @todo Do this check better
+          if (_isMobile && History.getState().title === 'Novo bicicletário') {
+            swal({
+              text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#FF8265',
+              confirmButtonText: 'Descartar',
+              allowOutsideClick: false
+            }).then(() => {
+              // returnToPreviousView();
+              goHome();
+            }
+            );
+          } else {
+            // returnToPreviousView();
+            goHome();
+          }
+        });
       } else {
         hideUI();
 
@@ -1716,6 +1729,9 @@ $(() => {
         // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
         $('body').removeClass('transparent-mobile-topbar');
 
+        $('.hamburger-button').removeClass('back-mode');
+        $('.hamburger-button.back-mode').off('click');
+
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {
           google.maps.event.trigger(map, 'resize');
@@ -1733,7 +1749,8 @@ $(() => {
     // Location Search //
     /////////////////////
 
-    $('#locationQueryInput').on('focus', e => { 
+    // $('#locationQueryInput').on('focus', e => { 
+    $('.search-button, #locationQueryInput').on('click', e => { 
       if ($('#locationQueryInput').val().length === 0) {
         enterLocationSearchMode();
       }

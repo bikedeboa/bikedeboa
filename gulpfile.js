@@ -64,7 +64,7 @@ let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
 // https://developers.google.com/maps/documentation/javascript/releases
 // if (BDB_ENV === 'prod') {  
   // GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
-  GOOGLE_MAPS_ID += '&v=3.31';
+  // GOOGLE_MAPS_ID += '&v=3.31';
 // }
  
 
