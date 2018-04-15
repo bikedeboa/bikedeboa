@@ -1,21 +1,3 @@
-///////////
-// Utils //
-///////////
-
-function createMapFromArrays(a, b) {
-  let ret = {};
-  a.forEach( (val, i) => {
-    ret[val] = b[i];
-  });
-
-  return ret;
-}
-
-function getSimulatedDelay () {
-  return Math.floor(Math.random() * 2000) + 500;
-}
-
-
 ///////////////
 // Constants //
 ///////////////
@@ -53,14 +35,15 @@ const STAGGER_SLOW = 100 * ANIMATIONS_MULTIPLIER;
 const STAGGER_NORMAL = 75 * ANIMATIONS_MULTIPLIER;
 const STAGGER_FAST = 50 * ANIMATIONS_MULTIPLIER;
 
-const STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
-const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
-const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
+let STRUCTURE_MAP = new Map();
 
-const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
-const FACEBOOK_CLIENT_ID = '<FACEBOOK_CLIENT_ID>';
-const GOOGLE_CLIENT_ID = '<GOOGLE_CLIENT_ID>';
+STRUCTURE_MAP.set('uinvertido','U Invertido');
+STRUCTURE_MAP.set('deroda','De Roda',);
+STRUCTURE_MAP.set('trave','Trave');
+STRUCTURE_MAP.set('suspenso','Suspenso');
+STRUCTURE_MAP.set('grade','Grade');
+STRUCTURE_MAP.set('other','Outro');
+
 const BDB_ENV = '<BDB_ENV>';
 
 const MOBILE_MAX_WIDTH = '430px'; 

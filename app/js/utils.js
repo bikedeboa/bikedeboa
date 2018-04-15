@@ -12,6 +12,41 @@ BDB.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
 
+window.getCookieContent = function(name) {
+  let cookies = document.cookie.split(';');
+
+  for( let cookie of cookies ){
+    let checkCookie = cookie.split("=");
+    if (checkCookie[0] == name){
+     return checkCookie[1];
+    } 
+  }  
+  return false;
+};
+
+// Thanks to: https://stackoverflow.com/questions/2144386/how-to-delete-a-cookie
+window.eraseCookie = function(name){
+      let expiryDate = new Date();
+      expiryDate.setTime(expiryDate.getTime() - 86400 * 1000);
+      let cookieString = `${name}=0`;
+      cookieString += ';max-age=0';
+      cookieString += ';expires=' + expiryDate.toUTCString();
+      document.cookie = cookieString;
+};
+//retrocompatability, delete this after a few months. 
+window.cookieToLocalstorage = function(name){
+  if (!localStorage.getItem(name) && getCookieContent(name)){
+
+    let content = decodeURIComponent(getCookieContent(name));
+    if(content){
+      localStorage.setItem(name, content);  
+      eraseCookie(name);
+    }
+    
+  }
+}
+
+
 window.createdAtToDaysAgo = createdAtStr => {
   const createdAtDate = Date.parse(createdAtStr);
   const msAgo = Date.now() - createdAtDate;

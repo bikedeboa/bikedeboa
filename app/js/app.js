@@ -229,7 +229,7 @@ $(() => {
     }
     if (m.structureType) {
       templateData.structureTypeCode = m.structureType;
-      templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
+      templateData.structureTypeLabel = STRUCTURE_MAP.get(m.structureType);
     }
     templateData.structureTypeIcon = structureTypeIcon;
 
@@ -246,10 +246,12 @@ $(() => {
         stars += '<span class="glyphicon glyphicon-star"></span>';
       }
       templateData.savedRatingContent = rating + stars;
+    } 
+
+    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
     } else {
-      if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
-        templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-      }
+      templateData.userThumbUrl = '/img/icon_user.svg';
     }
 
 
@@ -2700,8 +2702,8 @@ $(() => {
 
     // Set up Hello.js, the Social Login lib
     hello.init({
-      facebook: FACEBOOK_CLIENT_ID,
-      google: GOOGLE_CLIENT_ID, 
+      facebook: '<FACEBOOK_CLIENT_ID>',
+      google: '<GOOGLE_CLIENT_ID>', 
         // windows: WINDOWS_CLIENT_ID,
     },{
       // redirect_uri: window.location.origin
