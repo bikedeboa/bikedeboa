@@ -63,8 +63,8 @@ $bootstrapFont: 'Glyphicons Halflings';
 $separatorBorderStyle: 2px dotted $lightestGray;
 
 $MOBILE_MAX_WIDTH: 430px;
-$MOBILE_NAVBAR_HEIGHT: 50px;
-$MOBILE_BOTTOMBAR_HEIGHT: 50px;
+$MOBILE_NAVBAR_HEIGHT: 56px;
+$MOBILE_BOTTOMBAR_HEIGHT: 56px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
 $GRID_SPACE: 12px;
@@ -238,7 +238,7 @@ body.offline {
   // border: 5px solid $green;
 
   #addPlace,
-  #locationSearch,
+  // #locationSearch,
   .howToInstallBtn,
   #filterBtn,
   // #geolocationBtn,  
@@ -247,11 +247,14 @@ body.offline {
   .createRevisionBtn,
   .rating-input-container,
   // .minimap,
+  .search-button,
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
   .openReviewPanelBtn, 
   #placeDetailsContent .photo-container.hasImage.loading {
-    display: none !important;
+    // display: none !important;
+    opacity: 0.4 !important;
+    user-select: none;
   }
 
   #map {
@@ -273,18 +276,6 @@ body.pwa-installed {
 }
 
 body.position-pin-mode { 
-    // .js-menu-show-hamburger-menu {
-    //     opacity: 0.5;
-    //     pointer-events: none;
-    // }
-
-    // .js-menu-show-hamburger-menu,
-    // #userBtn {
-    //   // background-color: $lightGray;
-    //   opacity: 0.5;
-    //   pointer-events: none;
-    // }
-
     #map {
       &:before,
       &:after {
@@ -749,6 +740,10 @@ body.deeplink {
 }
 
 #map {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+
     width: 100vw;
     // height: 100vh;
     height: 100%;
@@ -762,12 +757,6 @@ body.deeplink {
       transform: translateY(-20px);
       pointer-events: none;
     }
-}
-
-#map {
-  position: fixed !important;
-  top: 0;
-  left: 0;
 }
 
 #bottom-navbar {
@@ -946,8 +935,8 @@ a.unstyled-link {
 
   &.admin {
     .avatar {
-      border: 3px solid gold;
-      box-shadow: 0 0px 10px gold;
+      border: 2px solid gold;
+      box-shadow: 0px 2px 20px gold;
     }
   }
 
@@ -1831,15 +1820,14 @@ a.unstyled-link {
         height: auto;
         
         opacity: 0;
-        pointer-events: none;
         z-index: 2;
+        pointer-events: none;
 
         filter: grayscale(100%);
         
         transition: top 0.5s $easeOutQuadratic;
 
         &.active {
-            pointer-events: initial;
             top: 50%;
             opacity: 1;
 
@@ -2054,7 +2042,10 @@ body.search-mode {
   }
 
   #locationSearch #clearLocationQueryBtn {
-    right: 10px;
+    // right: 10px;
+    left: 48px;
+    top: 4px;
+    opacity: .5;
   }
 }
 
@@ -3084,8 +3075,10 @@ body.modal-open {
 
 .post-create-modal {
     .swal2-confirm {
+      // Need !important to override swal2 default styles
       background: transparent !important;
-      color: $gray !important;
+      color: $lightGreen !important;
+      font-weight: 100 !important;
     }
 }
 
@@ -3924,6 +3917,19 @@ body.modal-open {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
+  *:focus,
+  *:active {
+    outline: none;
+  }
+
+  #map {
+    top: $MOBILE_NAVBAR_HEIGHT;
+    
+    // Explanation on the reason for the string interpolation:
+    //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+    height: calc(100% - #{$MOBILE_NAVBAR_HEIGHT});
+  }
+
   .navbar-de-boa {
     display: none;
   } 
@@ -4000,8 +4006,9 @@ body.modal-open {
 
   #locationSearch {
     #locationQueryInput { 
-      height: 48px;
-      padding: 0 90px 0 60px; 
+      height: $MOBILE_NAVBAR_HEIGHT;
+      padding: 0 $GRID_SPACE 0 88px;
+      border-radius: 0;
     }
     
     #clearLocationQueryBtn {
@@ -4018,7 +4025,7 @@ body.modal-open {
   }
 
   #userBtn {
-    top: 0;
+    top: 4px;
     right: $GRID_SPACE/2;
 
     // z-index: 1052; // over everything, under sweetalert dialogs
@@ -4036,6 +4043,15 @@ body.modal-open {
           margin: 0;
       }
     }
+
+    &.admin > button {
+      padding: 11px;
+
+      .avatar {
+        width: 28px;
+        height: 28px;
+      }
+    } 
 
     .userBtn--user-name {
       display: none;
@@ -4152,26 +4168,27 @@ body.modal-open {
 
 
   body.position-pin-mode { 
-    // #top-mobile-bar {
-    //   display: none;
-    // }
+    .hamburger-button {
+      .hamburger-inner,
+      .hamburger-inner::before,
+      .hamburger-inner::after {
+        background-color: white;
+      }
+    }
+
     #top-mobile-bar {
-      background: white;
+      height: 76px;
+      // background: white;
+      
+      #top-mobile-bar-title {
+        color: white;
+      }
+
+      .search-button {
+        display: none; 
+      }
     }
   }
-
-  body.transparent-mobile-topbar {
-    #top-mobile-bar {
-      box-shadow: none;
-      background: linear-gradient(rgba(0,0,0,0.5), transparent);
-      position: absolute;
-    }
-
-    .modal .modal-content {
-      padding-top: 0;
-    }
-  }
-
 
   #locationSearch {
     opacity: 0;
@@ -4207,8 +4224,31 @@ body.modal-open {
     #top-mobile-bar {
       background: white;
       
-      .top-mobile-bar-title {
+      #top-mobile-bar-title {
         color: $black;
+      }
+    }
+
+    &.transparent-mobile-topbar {
+      #top-mobile-bar {
+        background: linear-gradient(rgba(0,0,0,0.5), transparent);
+        position: absolute;
+        box-shadow: none;
+        border: none;
+      }
+
+      .hamburger-button {
+        position: absolute;
+
+        .hamburger-inner,
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+          background-color: white;
+        }
+      }
+
+      .modal .modal-content {
+        padding-top: 0;
       }
     }
 
@@ -4220,10 +4260,12 @@ body.modal-open {
     &.newPlaceModal #top-mobile-bar {
       .saveNewPlaceBtn {
         display: block;
+        top: 4px;
         right: $GRID_SPACE/2;
         position: absolute;
         width: auto;
         font-weight: bold;
+        color: $green;
       }
     }
   }
@@ -4248,13 +4290,14 @@ body.modal-open {
   }
 
   #top-mobile-bar {
-    display: block;
+    display: flex;
+    align-items: center;
     
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 48px;
+    height: $MOBILE_NAVBAR_HEIGHT;
     // background: $green;
     // background: $lightGreen;
     background: $greenGradient;
@@ -4262,6 +4305,9 @@ body.modal-open {
     // border: 0;
     // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     border-bottom: 1px solid $lighterGray;
+
+    transition: all .3s ease-out;
+    will-change: height;
     
     // z-index: 1052; // over everything, under sweetalert dialogs
 
@@ -4270,6 +4316,7 @@ body.modal-open {
     }
 
     .search-button {
+      top: 4px;
       right: 52px;
       position: fixed;
       padding: 14px;
@@ -4277,23 +4324,25 @@ body.modal-open {
     }
 
     #top-mobile-bar-title { 
-      text-align: center;
+      text-align: left;
       margin: 0;
+      margin-left: $GRID_SPACE*4 + $GRID_SPACE;
       padding: 0;
       font-size: 16px;
       font-family: $headingFont;
-      line-height: 50px;
-      max-width: calc(100% - 100px);
+      max-width: calc(100% - #{$GRID_SPACE*4 + $GRID_SPACE*3});
       color: white;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      line-height: 1.2em;
+      
+      // white-space: nowrap;
+      // text-overflow: ellipsis;
+      // overflow: hidden;
     }
 
     button {
       display: inline-block;
-      height: $MOBILE_NAVBAR_HEIGHT;
-      width: $MOBILE_NAVBAR_HEIGHT;
+      height: 48px;
+      width: 48px;
       background: transparent;
       border: 0;
 
@@ -4919,7 +4968,7 @@ body.modal-open {
 
 .hamburger-button {
   position: fixed;
-  top: 0px;
+  top: 4px;
   left: $GRID_SPACE/2;
   width: 48px;
   height: 48px;
@@ -5047,8 +5096,8 @@ body.modal-open {
 
   .side-nav__hide {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 5px;
+    top: 5px;
     width: 48px;
     height: 48px;
     font-size: 20px;

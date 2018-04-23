@@ -576,19 +576,23 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
+      updatePageTitleAndMetatags('Mova o mapa para adicionar no lugar desejado');
+
       $('body').addClass('position-pin-mode');
 
       hideUI();
 
       $('.hamburger-button').addClass('back-mode');
-      $('.hamburger-button.back-mode').one('click', () => {
+      $('.hamburger-button.back-mode').one('click.exitPositionPinMode', () => {
         toggleLocationInputMode();
       });
-      
+
       // Change Maps style that shows Points of Interest
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
       $('#newPlaceholderConfirmBtn').on('click', queueUiCallback.bind(this, () => {
+        toggleLocationInputMode();
+        
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
         
@@ -632,8 +636,6 @@ $(() => {
             });
           }
         }
-
-        toggleLocationInputMode();
       }));
 
       // ESC button cancels locationinput
@@ -649,12 +651,13 @@ $(() => {
       // }
     } else {
       // Turning OFF
+      updatePageTitleAndMetatags(); 
 
-      map.setOptions({styles: _gmapsCustomStyle});
+      map.setOptions({styles: _gmapsCustomStyle}); 
 
       showUI();
+      $('.hamburger-button.back-mode').off('click.exitPositionPinMode');
       $('.hamburger-button').removeClass('back-mode'); 
-      $('.hamburger-button.back-mode').off('click');
       $('#newPlaceholderConfirmBtn').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
@@ -772,6 +775,7 @@ $(() => {
               title: 'Bicicletário criado',
               customClass: 'post-create-modal',
               type: 'success',
+
               html:
                 `<section class="rating-input-container">
                   <p> 
@@ -790,9 +794,11 @@ $(() => {
                       <input disabled type="radio" id="star1_input" name="rating_input" value="1" />
                       <label class="full-star" data-value="1" for="star1"></label>
                   </fieldset>
+
+                  <hr>
               </section>`,
               confirmButtonText: 'Avaliar outra hora',
-              showCloseButton: true,
+              showCloseButton: false, 
               onOpen: () => { 
                 $('.post-create-modal .rating-input-container .full-star').on('click', e => {
                   openedMarker = newMarker;
@@ -1355,7 +1361,7 @@ $(() => {
     $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, duration: 500 }); 
     $('.hamburger-button').addClass('back-mode');
 
-    $('.hamburger-button.back-mode').one('click', () => {
+    $('.hamburger-button.back-mode').one('click.exitLocationSearch', () => {
       exitLocationSearchMode();
     });
   }
@@ -1591,7 +1597,7 @@ $(() => {
       hideAll();
 
       ga('send', 'event', 'Misc', 'about data opened');
-      setView('Sobre nossos dados', '/sobre-nossos-dados', true);
+      setView('Dados', '/sobre-nossos-dados', true);
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
@@ -1689,7 +1695,7 @@ $(() => {
       if (_isMobile) {
         // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
         $('.hamburger-button').addClass('back-mode');
-        $('.hamburger-button.back-mode').one('click', () => {
+        $('.hamburger-button.back-mode').one('click.cancelCreation', () => {
           // If was creating a new local
           // @todo Do this check better
           if (_isMobile && History.getState().title === 'Novo bicicletário') {
@@ -1730,8 +1736,8 @@ $(() => {
         // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
         $('body').removeClass('transparent-mobile-topbar');
 
+        $('.hamburger-button.back-mode').off('click.cancelCreation');
         $('.hamburger-button').removeClass('back-mode');
-        $('.hamburger-button.back-mode').off('click');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {
