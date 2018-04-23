@@ -1831,15 +1831,14 @@ a.unstyled-link {
         height: auto;
         
         opacity: 0;
-        pointer-events: none;
         z-index: 2;
+        pointer-events: none;
 
         filter: grayscale(100%);
         
         transition: top 0.5s $easeOutQuadratic;
 
         &.active {
-            pointer-events: initial;
             top: 50%;
             opacity: 1;
 
