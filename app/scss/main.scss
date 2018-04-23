@@ -63,8 +63,8 @@ $bootstrapFont: 'Glyphicons Halflings';
 $separatorBorderStyle: 2px dotted $lightestGray;
 
 $MOBILE_MAX_WIDTH: 430px;
-$MOBILE_NAVBAR_HEIGHT: 50px;
-$MOBILE_BOTTOMBAR_HEIGHT: 50px;
+$MOBILE_NAVBAR_HEIGHT: 56px;
+$MOBILE_BOTTOMBAR_HEIGHT: 56px;
 $MODAL_BODY_MINHEIGHT_PADDING: $MOBILE_NAVBAR_HEIGHT;
 
 $GRID_SPACE: 12px;
@@ -946,8 +946,8 @@ a.unstyled-link {
 
   &.admin {
     .avatar {
-      border: 3px solid gold;
-      box-shadow: 0 0px 10px gold;
+      border: 2px solid gold;
+      box-shadow: 0px 2px 20px gold;
     }
   }
 
@@ -4000,8 +4000,9 @@ body.modal-open {
 
   #locationSearch {
     #locationQueryInput { 
-      height: 48px;
+      height: $MOBILE_NAVBAR_HEIGHT;
       padding: 0 90px 0 60px; 
+      border-radius: 0;
     }
     
     #clearLocationQueryBtn {
@@ -4018,7 +4019,7 @@ body.modal-open {
   }
 
   #userBtn {
-    top: 0;
+    top: 4px;
     right: $GRID_SPACE/2;
 
     // z-index: 1052; // over everything, under sweetalert dialogs
@@ -4036,6 +4037,15 @@ body.modal-open {
           margin: 0;
       }
     }
+
+    &.admin > button {
+      padding: 11px;
+      
+      .avatar {
+        width: 28px;
+        height: 28px;
+      }
+    } 
 
     .userBtn--user-name {
       display: none;
@@ -4254,7 +4264,7 @@ body.modal-open {
     top: 0;
     left: 0;
     right: 0;
-    height: 48px;
+    height: $MOBILE_NAVBAR_HEIGHT;
     // background: $green;
     // background: $lightGreen;
     background: $greenGradient;
@@ -4270,6 +4280,7 @@ body.modal-open {
     }
 
     .search-button {
+      top: 4px;
       right: 52px;
       position: fixed;
       padding: 14px;
@@ -4282,7 +4293,7 @@ body.modal-open {
       padding: 0;
       font-size: 16px;
       font-family: $headingFont;
-      line-height: 50px;
+      line-height: $MOBILE_NAVBAR_HEIGHT;
       max-width: calc(100% - 100px);
       color: white;
       white-space: nowrap;
@@ -4292,8 +4303,8 @@ body.modal-open {
 
     button {
       display: inline-block;
-      height: $MOBILE_NAVBAR_HEIGHT;
-      width: $MOBILE_NAVBAR_HEIGHT;
+      height: 48px;
+      width: 48px;
       background: transparent;
       border: 0;
 
@@ -4919,7 +4930,7 @@ body.modal-open {
 
 .hamburger-button {
   position: fixed;
-  top: 0px;
+  top: 4px;
   left: $GRID_SPACE/2;
   width: 48px;
   height: 48px;
@@ -5047,8 +5058,8 @@ body.modal-open {
 
   .side-nav__hide {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 5px;
+    top: 5px;
     width: 48px;
     height: 48px;
     font-size: 20px;
