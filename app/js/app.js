@@ -117,7 +117,7 @@ $(() => {
     templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
   
     // Tags
-    if (tags && m.tags && m.tags.length > 0) {
+    if (tags && m.tags) {
       const MAX_TAG_COUNT = m.reviews;
       const MIN_TAG_OPACITY = 0.3;
 
@@ -133,7 +133,8 @@ $(() => {
 
       // templateData.tags = m.tags
       templateData.tags = allTags 
-        .sort((a, b) => {return b.count - a.count;})
+        // .sort((a, b) => {return b.count - a.count;})
+        .sort((a, b) => {return b.name - a.name;})
         .map(t => {
           // Tag opacity is proportional to count
           // @todo refactor this to take into account Handlebars native support for arrays
