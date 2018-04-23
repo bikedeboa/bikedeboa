@@ -238,7 +238,7 @@ body.offline {
   // border: 5px solid $green;
 
   #addPlace,
-  #locationSearch,
+  // #locationSearch,
   .howToInstallBtn,
   #filterBtn,
   // #geolocationBtn,  
@@ -247,11 +247,14 @@ body.offline {
   .createRevisionBtn,
   .rating-input-container,
   // .minimap,
+  .search-button,
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
   .openReviewPanelBtn, 
   #placeDetailsContent .photo-container.hasImage.loading {
-    display: none !important;
+    // display: none !important;
+    opacity: 0.4 !important;
+    user-select: none;
   }
 
   #map {
@@ -749,6 +752,10 @@ body.deeplink {
 }
 
 #map {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+
     width: 100vw;
     // height: 100vh;
     height: 100%;
@@ -762,12 +769,6 @@ body.deeplink {
       transform: translateY(-20px);
       pointer-events: none;
     }
-}
-
-#map {
-  position: fixed !important;
-  top: 0;
-  left: 0;
 }
 
 #bottom-navbar {
@@ -3931,6 +3932,14 @@ body.modal-open {
     outline: none;
   }
 
+  #map {
+    top: $MOBILE_NAVBAR_HEIGHT;
+    
+    // Explanation on the reason for the string interpolation:
+    //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+    height: calc(100% - #{$MOBILE_NAVBAR_HEIGHT});
+  }
+
   .navbar-de-boa {
     display: none;
   } 
@@ -4247,10 +4256,12 @@ body.modal-open {
     &.newPlaceModal #top-mobile-bar {
       .saveNewPlaceBtn {
         display: block;
+        top: 4px;
         right: $GRID_SPACE/2;
         position: absolute;
         width: auto;
         font-weight: bold;
+        color: $green;
       }
     }
   }
