@@ -2054,7 +2054,10 @@ body.search-mode {
   }
 
   #locationSearch #clearLocationQueryBtn {
-    right: 10px;
+    // right: 10px;
+    left: 48px;
+    top: 4px;
+    opacity: .5;
   }
 }
 
@@ -4006,7 +4009,7 @@ body.modal-open {
   #locationSearch {
     #locationQueryInput { 
       height: $MOBILE_NAVBAR_HEIGHT;
-      padding: 0 90px 0 60px; 
+      padding: 0 $GRID_SPACE 0 88px;
       border-radius: 0;
     }
     
@@ -4175,19 +4178,6 @@ body.modal-open {
     }
   }
 
-  body.transparent-mobile-topbar {
-    #top-mobile-bar {
-      box-shadow: none;
-      background: linear-gradient(rgba(0,0,0,0.5), transparent);
-      position: absolute;
-    }
-
-    .modal .modal-content {
-      padding-top: 0;
-    }
-  }
-
-
   #locationSearch {
     opacity: 0;
     pointer-events: none;
@@ -4224,6 +4214,29 @@ body.modal-open {
       
       .top-mobile-bar-title {
         color: $black;
+      }
+    }
+
+    &.transparent-mobile-topbar {
+      #top-mobile-bar {
+        background: linear-gradient(rgba(0,0,0,0.5), transparent);
+        position: absolute;
+        box-shadow: none;
+        border: none;
+      }
+
+      .hamburger-button {
+        position: absolute;
+
+        .hamburger-inner,
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+          background-color: white;
+        }
+      }
+
+      .modal .modal-content {
+        padding-top: 0;
       }
     }
 
