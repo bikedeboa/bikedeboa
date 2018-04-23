@@ -3924,6 +3924,11 @@ body.modal-open {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 @media screen and (max-width: $MOBILE_MAX_WIDTH) {
+  *:focus,
+  *:active {
+    outline: none;
+  }
+
   .navbar-de-boa {
     display: none;
   } 
@@ -4040,7 +4045,7 @@ body.modal-open {
 
     &.admin > button {
       padding: 11px;
-      
+
       .avatar {
         width: 28px;
         height: 28px;
