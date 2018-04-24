@@ -28,12 +28,14 @@
         <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
         <label>Editar</label>
         </button>
-
-        <button class="deletePlaceBtn toolbar-item">
-        <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
-        <label>Excluir</label>
-        </button>
     {{else}}
+        {{#if canDelete}}
+            <button class="deletePlaceBtn toolbar-item">
+                <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
+                <label>Excluir</label>
+            </button>
+        {{/if}}
+
         <button class="createRevisionBtn toolbar-item">
         <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
         <label>Sugerir correção</label>
@@ -70,7 +72,7 @@
             {{#if canModify}}
                 <div class="missing-info-container">
                     {{!-- <img alt="" src="/img/icon_shrug.svg"/> --}}
-                    <div class="missing-info-placeholder">?</div>
+                    {{!-- <div class="missing-info-placeholder">?</div> --}}
                     <div class="icon-label">
                         É coberto?
                         <div>
@@ -108,9 +110,9 @@
             {{#if canModify}}
                 <div class="missing-info-container">
                     {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
-                    <div class="missing-info-placeholder">?</div>
+                    {{!-- <div class="missing-info-placeholder">?</div> --}}
                     <div class="icon-label">
-                        É público?
+                        Como é o acesso?
                         <div>
                             <button class="editPlaceBtn link-button">
                                 Responder
@@ -183,7 +185,7 @@
             {{#if canModify}}
                 <div class="missing-info-container">
                     {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
-                    <div class="missing-info-placeholder">?</div>
+                    {{!-- <div class="missing-info-placeholder">?</div> --}}
                     <div class="icon-label"> 
                         Que tipo é?
                         <div>
@@ -203,13 +205,20 @@
             <meta itemprop="ratingValue" content="{{average}}"/>
             <meta itemprop="reviewCount" content="{{reviews}}"/>
 
-            {{#if savedRatingContent}}
+            {{#if savedRating}}
                 <div class="savedRating">
-                    <img src="{{userThumbUrl}}" /> Sua avaliação:
-                    <b data-color="{{color}}">
-                        {{{savedRatingContent}}}
-                    </b>
-                    <button class="ghost openReviewPanelBtn">Editar</button>
+                    <h5>Sua avaliação</h5> 
+
+                    <div>
+                        <img alt="" src="{{userThumbUrl}}" />
+                        
+                        <span data-color="{{color}}">
+                            {{{savedRating}}}
+                            {{{savedRatingStars}}}
+                        </span>
+                        
+                        <button class="ghost openReviewPanelBtn">Editar</button>
+                    </div>
                 </div>
             {{/if}}
 
@@ -334,12 +343,12 @@
     </div>
 
     <div class="modal-footer">
-    {{#unless savedRatingContent}}
+    {{#unless savedRating}}
         <section class="rating-input-container">
             <h2>
                 {{#if userThumbUrl}}
                     <div>
-                        <img src="{{userThumbUrl}}" class="avatar"/>
+                        <img src="{{userThumbUrl}}" class="avatar" alt=""/>
                     </div>
                 {{/if}}
                 Dê sua nota para este bicicletário:

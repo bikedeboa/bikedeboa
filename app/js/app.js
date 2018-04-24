@@ -83,6 +83,12 @@ $(() => {
     }
   }
 
+  function refreshOpenDetailsModal() {
+    if (openedMarker) {
+      openDetailsModal(openedMarker);
+    }
+  }
+
   function openDetailsModal(marker, callback) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
@@ -160,17 +166,10 @@ $(() => {
       templateData.numReviews = `${m.reviews} avaliações`;
     }
     
-    // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
-
     // User permissions
-    if (BDB.User.isAdmin) {
-      templateData.isAdmin = true;
-      templateData.canModify = true;
-    } else {
-      if (BDB.User.checkEditPermission(m.id)) {
-        templateData.canModify = true;
-      }
-    }
+    templateData.canModify = BDB.User.isLoggedIn;
+    templateData.isAdmin = BDB.User.isAdmin;
+    templateData.canDelete = BDB.User.isLoggedIn && m.canLoggedUserDelete;
 
     // Data source
     if (m.DataSource) {
@@ -237,20 +236,20 @@ $(() => {
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
-      const rating = previousReview.rating;
+      templateData.savedRating = previousReview.rating;
       
-      templateData.color = getColorFromAverage(rating);
+      templateData.color = getColorFromAverage(templateData.savedRating);
 
       // @todo modularize this method
       let stars = '';
-      for (let s = 0; s < parseInt(rating); s++) {
+      for (let s = 0; s < parseInt(templateData.savedRating); s++) {
         stars += '<span class="glyphicon glyphicon-star"></span>';
       }
-      templateData.savedRatingContent = rating + stars;
-    } else {
-      if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
-        templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-      }
+      templateData.savedRatingStars = stars;
+    }
+
+    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
     }
 
 
@@ -2287,9 +2286,11 @@ $(() => {
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(profile); 
+        BDB.User.login(profile).then(() => {
+          refreshOpenDetailsModal();
 
-        document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+          document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+        })
       }).catch( error => {
         console.error('Error on social login', error); 
         toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!');

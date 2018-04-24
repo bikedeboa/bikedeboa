@@ -2766,8 +2766,13 @@ body.modal-open {
     }
 
     .missing-info-container {
+      opacity: .8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       .missing-info-placeholder {
-        opacity: .5;
+        // opacity: .5;
         font-size: 100px; 
         line-height: 100px;
         color: $gray;
@@ -2776,6 +2781,11 @@ body.modal-open {
       button {
         font-weight: bold;
         color: $green;
+      }
+
+      .icon-label {
+        font-weight: 100;
+        color: $lightGray;
       }
     }
 
@@ -2811,21 +2821,18 @@ body.modal-open {
 #placeDetailsContent {
     .review {
       .savedRating {
-          text-align: left;
+          text-align: center;
           color: $gray;
           font-weight: 400;
-          margin-top: $GRID_SPACE;
           font-size: 14px;
           line-height: 14px;
           background: $paleWhite;
-          padding: $GRID_SPACE/2 $GRID_SPACE;
+          padding: $GRID_SPACE;
           vertical-align: middle;
 
           button {
             font-size: 12px;
-            margin: 0;
             margin-left: 6px;
-            float: right; 
           }
 
           img {
@@ -5026,8 +5033,8 @@ body.modal-open {
       border-radius: 25px;
       position: absolute;
       transition-property: transform, background-color;
-      transition-duration: 0.2s;
-      transition-timing-function: ease;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-out;
     }
       
     &::before, &::after {

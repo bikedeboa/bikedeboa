@@ -5,17 +5,14 @@ BDB.Database = {
   // G L O B A L S //
   ///////////////////
 
-  // variable replaced by Gulp
-  API_URL: '<DATABASE_URL>', 
-  // API_URL: 'http://localhost:3000', 
+  // Variable replaced by Gulp
+  // API_URL: '<DATABASE_URL>', 
+  API_URL: 'http://localhost:3000', 
   isAuthenticated: false,  
   _authToken: '',
   _headers: {},
   _isAuthenticated: false,
  
-  _currentIDToAdd: 1306,
-
-
   ///////////////////
   // M E T H O D S //
   ///////////////////
