@@ -2221,9 +2221,9 @@ $(() => {
       html: `
         <br> 
  
-        <p>
+        <div>
           Faça login e se torne um colaborador. É rapidinho e você já pode começar a contribuir com o mapa.
-        </p>
+        </div>
 
         <br>
 
