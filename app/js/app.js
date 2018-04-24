@@ -1660,9 +1660,8 @@ $(() => {
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
 
-        $('document').one('bikedeboa.login') {
-
-        }
+        // $('document').one('bikedeboa.login') {
+        // }
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
