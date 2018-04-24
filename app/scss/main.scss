@@ -5262,7 +5262,7 @@ body.modal-open {
 }
 
 .swal2-modal {
-  padding: 5% !important;
+  padding: $GRID_SPACE*4 5% 5% !important;
   font-family: $bodyFont;
   @include shadow(3);
 

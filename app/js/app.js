@@ -285,7 +285,11 @@ $(() => {
     // Init click callbacks
     // $('#checkinBtn').on('click', sendCheckinBtn);
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
-      openReviewModal($(e.target).data('value'));
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+      } else {
+        openReviewModal($(e.target).data('value'));
+      }
     });
     $('.shareBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
@@ -1234,12 +1238,16 @@ $(() => {
       };
 
       const callback = () => {
-        BDB.Database.sendReview(reviewObj, reviewId => {
-          reviewObj.databaseId = reviewId;
-          BDB.User.saveReview(reviewObj);
+        BDB.Database.sendReview(reviewObj)
+          .then( reviewId => {
+            reviewObj.databaseId = reviewId;
+            BDB.User.saveReview(reviewObj);
 
-          resolve();
-        });
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
       }; 
 
       const previousReview = BDB.User.getReviewByPlaceId(m.id);
@@ -1651,6 +1659,10 @@ $(() => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
+
+        $('document').one('bikedeboa.login') {
+
+        }
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
@@ -2199,12 +2211,13 @@ $(() => {
 
     // Returns the dialog promise
     return swal({ 
-      title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
+      // title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
+      title: 'Login/Cadastro', 
       html: `
         <br> 
  
         <p>
-          Fazendo login você pode acessar todas contribuições que já fez e adicionar novos bicicletários no mapa.
+          Faça login e se torne um colaborador. É rapidinho e você já pode começar a contribuir com o mapa.
         </p>
 
         <div>
@@ -2293,7 +2306,7 @@ $(() => {
         })
       }).catch( error => {
         console.error('Error on social login', error); 
-        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!');
+        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise.');
 
         $('#userBtn').removeClass('loading');
       });
@@ -2464,12 +2477,18 @@ $(() => {
     }));
 
     $('body').on('click', '.facebookLoginBtn', () => {
-      hideAll();
+      if (!window._isLoginDialogOpened) {
+        hideAll();
+      }
+
       hello('facebook').login({ scope: 'email' });
     });
 
     $('body').on('click', '.googleLoginBtn', () => {
-      hideAll();
+      if (!window._isLoginDialogOpened) {
+        hideAll();
+      }
+
       hello('google').login({ scope: 'email' });
     });
 
