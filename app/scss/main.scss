@@ -1039,7 +1039,7 @@ a.unstyled-link {
         opacity: 1;
         visibility: visible;
 
-        height: 25px;
+        height: 20px;
         position: absolute;
         right: 10px;
         top: 50%;
@@ -2039,13 +2039,6 @@ body.search-mode {
 
   #locationSearch {
     box-shadow: none;
-  }
-
-  #locationSearch #clearLocationQueryBtn {
-    // right: 10px;
-    left: 48px;
-    top: 4px;
-    opacity: .5;
   }
 }
 
@@ -4210,7 +4203,15 @@ body.modal-open {
     #locationSearch {
       opacity: 1;
       pointer-events: auto;
+       
+      #clearLocationQueryBtn {
+        // right: 10px;
+        left: 48px;
+        top: 4px;
+        opacity: .5;
+      }
     }
+
   }
 
   body.modal-open {
