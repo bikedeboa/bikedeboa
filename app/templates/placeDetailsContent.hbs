@@ -23,24 +23,24 @@
         <label>Compartilhar</label>
     </button>
 
-    {{#if canModify}}
+    {{!-- {{#if canModify}} --}}
         <button class="editPlaceBtn toolbar-item">
         <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
         <label>Editar</label>
         </button>
-    {{else}}
+    {{!-- {{else}} --}}
         {{#if canDelete}}
             <button class="deletePlaceBtn toolbar-item">
                 <img alt="" class="toolbar-item-icon" src="/img/icon_delete.svg">
                 <label>Excluir</label>
             </button>
         {{/if}}
-
+{{!-- 
         <button class="createRevisionBtn toolbar-item">
         <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
         <label>Sugerir correção</label>
-        </button>
-    {{/if}}
+        </button> --}}
+    {{!-- {{/if}} --}}
     </section>
 
     <div class="modal-body">

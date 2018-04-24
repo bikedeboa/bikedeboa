@@ -302,7 +302,13 @@ $(() => {
     $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
+    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+      } else {
+        openNewOrEditPlaceModal();
+      }
+    }));
     $('.deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
     $('.createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
       if (!BDB.User.isLoggedIn) {
@@ -2219,6 +2225,8 @@ $(() => {
           Faça login e se torne um colaborador. É rapidinho e você já pode começar a contribuir com o mapa.
         </p>
 
+        <br>
+
         <div>
           <button class="customLoginBtn facebookLoginBtn">
             Facebook
@@ -2233,14 +2241,9 @@ $(() => {
 
         <br>
 
-        <p style="
-          font-style: italic;
-          font-size: 12px;
-          text-align: center;
-          max-width: 300px;
-          margin: 0 auto;">
-          Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
-        </p>
+        <div style="font-size: 12px; color: #b3b3b3; font-weight: normal;">
+            Exigimos o login para garantir a confiabilidade das contribuições. Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
+        </div>
         `,
       showCloseButton: true,
       showConfirmButton: false,
