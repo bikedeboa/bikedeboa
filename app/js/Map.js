@@ -820,7 +820,7 @@ BDB.Map = (function () {
 
                     infoWindow = $('.infoBox');
                     infoWindow.off('click').on('click', () => {
-                      markerClickCallback(markers[i], () => {
+                      markerClickCallback(m, () => {
                         infoWindow.reset();
                       });
                     });
@@ -836,7 +836,7 @@ BDB.Map = (function () {
                 } else {
                   // No infobox, directly opens the details modal
                   newMarker.addListener('click', () => {
-                    markerClickCallback(markers[i]);
+                    markerClickCallback(m);
                   });
 
                   // Infobox preview on hover

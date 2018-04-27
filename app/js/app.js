@@ -117,7 +117,7 @@ $(() => {
     templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
   
     // Tags
-    if (tags && m.tags && m.tags.length > 0) {
+    if (tags && m.tags) {
       const MAX_TAG_COUNT = m.reviews;
       const MIN_TAG_OPACITY = 0.3;
 
@@ -133,7 +133,8 @@ $(() => {
 
       // templateData.tags = m.tags
       templateData.tags = allTags 
-        .sort((a, b) => {return b.count - a.count;})
+        // .sort((a, b) => {return b.count - a.count;})
+        .sort((a, b) => {return b.name - a.name;})
         .map(t => {
           // Tag opacity is proportional to count
           // @todo refactor this to take into account Handlebars native support for arrays
@@ -575,12 +576,23 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
+      updatePageTitleAndMetatags('Mova o mapa para adicionar no lugar desejado');
+
       $('body').addClass('position-pin-mode');
-      
+
+      hideUI();
+
+      $('.hamburger-button').addClass('back-mode');
+      $('.hamburger-button.back-mode').one('click.exitPositionPinMode', () => {
+        toggleLocationInputMode();
+      });
+
       // Change Maps style that shows Points of Interest
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
-      $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
+      $('#newPlaceholderConfirmBtn').on('click', queueUiCallback.bind(this, () => {
+        toggleLocationInputMode();
+        
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
         
@@ -624,8 +636,6 @@ $(() => {
             });
           }
         }
-
-        toggleLocationInputMode();
       }));
 
       // ESC button cancels locationinput
@@ -641,10 +651,14 @@ $(() => {
       // }
     } else {
       // Turning OFF
+      updatePageTitleAndMetatags(); 
 
-      map.setOptions({styles: _gmapsCustomStyle});
+      map.setOptions({styles: _gmapsCustomStyle}); 
 
-      $('#newPlaceholder').off('click');
+      showUI();
+      $('.hamburger-button.back-mode').off('click.exitPositionPinMode');
+      $('.hamburger-button').removeClass('back-mode'); 
+      $('#newPlaceholderConfirmBtn').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
       
@@ -655,12 +669,16 @@ $(() => {
     }
 
     BDB.Map.toggleMarkers();
-    $('#addPlace').toggleClass('active');
+    if (_isMobile) {
+      $('#addPlace').toggle();
+    } else {
+      $('#addPlace').toggleClass('active');
+    }
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
-    $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
-    $('#geolocationBtn').toggle();
+    $('#newPlaceholderConfirmBtn').toggle();
+    // $('#geolocationBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -757,6 +775,7 @@ $(() => {
               title: 'Bicicletário criado',
               customClass: 'post-create-modal',
               type: 'success',
+
               html:
                 `<section class="rating-input-container">
                   <p> 
@@ -775,9 +794,11 @@ $(() => {
                       <input disabled type="radio" id="star1_input" name="rating_input" value="1" />
                       <label class="full-star" data-value="1" for="star1"></label>
                   </fieldset>
+
+                  <hr>
               </section>`,
               confirmButtonText: 'Avaliar outra hora',
-              showCloseButton: true,
+              showCloseButton: false, 
               onOpen: () => { 
                 $('.post-create-modal .rating-input-container .full-star').on('click', e => {
                   openedMarker = newMarker;
@@ -1340,7 +1361,7 @@ $(() => {
     $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, duration: 500 }); 
     $('.hamburger-button').addClass('back-mode');
 
-    $('.hamburger-button.back-mode').one('click', () => {
+    $('.hamburger-button.back-mode').one('click.exitLocationSearch', () => {
       exitLocationSearchMode();
     });
   }
@@ -1351,7 +1372,7 @@ $(() => {
     $('.hamburger-button').removeClass('back-mode'); 
   }
 
-  function updatePageTitleAndMetatags(text) { 
+  function updatePageTitleAndMetatags(text = 'bike de boa') { 
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
@@ -1359,7 +1380,7 @@ $(() => {
       $('#top-mobile-bar-title').text(openedMarker ? '' : text);
     }
 
-    text = text || 'bike de boa'; 
+    // text = text || 'bike de boa'; 
 
     // Basic website metatags
     document.title = text;
@@ -1576,7 +1597,7 @@ $(() => {
       hideAll();
 
       ga('send', 'event', 'Misc', 'about data opened');
-      setView('Sobre nossos dados', '/sobre-nossos-dados', true);
+      setView('Dados', '/sobre-nossos-dados', true);
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
@@ -1643,29 +1664,6 @@ $(() => {
     }));
 
 
-    $('body').on('click', '.back-button', e => {
-      // If was creating a new local
-      // @todo Do this check better
-      if (_isMobile && History.getState().title === 'Novo bicicletário') {
-        swal({
-          text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#FF8265',
-          confirmButtonText: 'Descartar', 
-          allowOutsideClick: false
-        }).then(() => {
-          // returnToPreviousView();
-          goHome();
-        }
-        );
-      } else {
-        // returnToPreviousView();
-        goHome();
-      }
-    });
-
-        
     /////////////////////
     // Modal callbacks //
     /////////////////////
@@ -1696,6 +1694,28 @@ $(() => {
       // Mobile optimizations
       if (_isMobile) {
         // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
+        $('.hamburger-button').addClass('back-mode');
+        $('.hamburger-button.back-mode').one('click.cancelCreation', () => {
+          // If was creating a new local
+          // @todo Do this check better
+          if (_isMobile && History.getState().title === 'Novo bicicletário') {
+            swal({
+              text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#FF8265',
+              confirmButtonText: 'Descartar',
+              allowOutsideClick: false
+            }).then(() => {
+              // returnToPreviousView();
+              goHome();
+            }
+            );
+          } else {
+            // returnToPreviousView();
+            goHome();
+          }
+        });
       } else {
         hideUI();
 
@@ -1716,6 +1736,9 @@ $(() => {
         // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
         $('body').removeClass('transparent-mobile-topbar');
 
+        $('.hamburger-button.back-mode').off('click.cancelCreation');
+        $('.hamburger-button').removeClass('back-mode');
+
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {
           google.maps.event.trigger(map, 'resize');
@@ -1733,7 +1756,8 @@ $(() => {
     // Location Search //
     /////////////////////
 
-    $('#locationQueryInput').on('focus', e => { 
+    // $('#locationQueryInput').on('focus', e => { 
+    $('.search-button, #locationQueryInput').on('click', e => { 
       if ($('#locationQueryInput').val().length === 0) {
         enterLocationSearchMode();
       }
