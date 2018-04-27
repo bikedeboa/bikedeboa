@@ -1329,13 +1329,14 @@ a.unstyled-link {
   }
 
   .big-numbers--number {
-      font-size: 50px;
-      line-height: 50px;
+      font-size: 54px;
+      line-height: 54px;
       font-weight: bold;
   }
 
   .big-numbers--label { 
-      color: $gray;
+      font-size: 16px
+      // color: $gray;
   }
 }
 
@@ -1465,11 +1466,17 @@ a.unstyled-link {
     background: #F3F3F3;
     padding: 24px;
     margin: auto;
+    border-radius: 5px;
 
     ul {
       list-style: none;
       padding: 0;
       margin: 0;
+
+      li:first-child {
+        margin-bottom: 1em;
+        font-weight: bold;
+      }
 
       li {
         line-height: 1em;
