@@ -1360,7 +1360,11 @@ $(() => {
     $('#search-overlay').addClass('showThis');
     $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, duration: 500 }); 
     $('.hamburger-button').addClass('back-mode');
-    $('#locationQueryInput').focus();
+    
+    // Automatically focus the text search input
+    setTimeout(() => {
+      $('#locationQueryInput').focus();
+    }, 500);
 
     $('.hamburger-button.back-mode').one('click.exitLocationSearch', () => {
       exitLocationSearchMode();
