@@ -148,21 +148,16 @@ gulp.task('html', () => {
 // Service Worker (sw-precache)
 gulp.task('generate-service-worker', function(callback) {
   swPrecache.write('dist/service-worker.js', {
-    // Files to be precached to be available offline.
+    // Files to be precached, which will always be available offline
+    //   Not to be mistaken with Runtime Caching, which may also enable some assets to be available offline
     staticFileGlobs: [
-      'dist/**/*.{js,css}',
-      'dist/*.html', 
       // 'dist/*.json', 
       // 'assets/**/*.{svg,png,jpg}',
-      // 'dist/**/*.{ttf,woff,woff2}',
+      // 'dist/**/*.{ttf,woff,woff2}', 
+      'public/manifest.json', 
       'dist/fonts/glyphicons-halflings-regular.ttf',
       'dist/fonts/glyphicons-halflings-regular.woff',
       'dist/fonts/glyphicons-halflings-regular.woff2',
-      'public/manifest.json', 
-      'public/lib/infobox.min.js',
-      'public/lib/markerclusterer.min.js',
-      'public/lib/featherlight.min.js',
-      'public/lib/featherlight.min.css',
       'assets/img/icon_*.svg',
       'assets/img/tipo_*.svg',
       'assets/img/pin_*.svg', 
@@ -193,6 +188,11 @@ gulp.task('generate-service-worker', function(callback) {
     runtimeCaching: [
       // Network First: good for API requests where you always want the freshest data when it is available, but would
       //   rather have stale data than no data. (Will NEVER prioritize cache over network, which is slower but safer)
+      
+      // All JS, CSS and HTML files
+      { urlPattern: /\.(?:js|css|html)$/, handler: 'networkFirst' }, 
+      
+      // All image asssets
       { 
         urlPattern: /\.(?:png|jpg|jpeg|svg)$/, handler: 'networkFirst', options: {
           cache: {
@@ -201,6 +201,8 @@ gulp.task('generate-service-worker', function(callback) {
           }
         }
       }, 
+      
+      // BDB API Requests
       { urlPattern: /herokuapp.com\/local\/light$/, handler: 'networkFirst'},
       { urlPattern: /herokuapp.com\/local\/\d+/, handler: 'networkFirst'},  
       
