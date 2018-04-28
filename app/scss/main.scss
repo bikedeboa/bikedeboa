@@ -255,6 +255,7 @@ body.offline {
     // display: none !important;
     opacity: 0.4 !important;
     user-select: none;
+    pointer-events: none;
   }
 
   #map {
