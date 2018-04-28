@@ -575,19 +575,19 @@ BDB.Database = {
         type: 'get',
         headers: self._headers,
         url: self.API_URL + '/local/' + placeId
-      }).done(function (data) {
-        if (data) {
+      }).done(function (place) {
+        if (place) {
           console.debug('Got place detail:');
-          console.debug(data);
+          console.debug(place);
 
-          let updatedMarker;
+          let updatedMarker = {};
           if (markers) {
             // Combine detailed data with what we had
-            updatedMarker = markers.find(m => { return m.id === placeId; });
-            Object.assign(updatedMarker, data);
-          } else {
+            const outOfDatePlace = markers.find(m => { return m.id === placeId; });
+            Object.assign(updatedMarker, outOfDatePlace, place); 
+          } else { 
             // Markers weren't loaded yet (it's a deeplink)
-            updatedMarker = data;
+            updatedMarker = place;
             markers = [updatedMarker];
           }
 
