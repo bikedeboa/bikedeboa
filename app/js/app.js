@@ -287,6 +287,10 @@ $(() => {
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openReviewModal($(e.target).data('value'));
+        });
       } else {
         openReviewModal($(e.target).data('value'));
       }
@@ -305,6 +309,10 @@ $(() => {
     $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, () => {
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openNewOrEditPlaceModal();
+        });
       } else {
         openNewOrEditPlaceModal();
       }
@@ -315,6 +323,10 @@ $(() => {
         // @todo fix to not need to close the modal
         hideAll();
         openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openRevisionDialog();
+        });
       } else {
         openRevisionDialog();
       }
@@ -1666,8 +1678,9 @@ $(() => {
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
 
-        // $('document').one('bikedeboa.login') {
-        // }
+        $(document).one('bikedeboa.login', () => {
+          $('#addPlace').click();
+        });
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
@@ -2215,7 +2228,7 @@ $(() => {
     // }
 
     // Returns the dialog promise
-    return swal({ 
+    swal({ 
       // title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
       title: 'Login/Cadastro', 
       html: `
@@ -2250,6 +2263,9 @@ $(() => {
       onOpen: () => {
         window._isLoginDialogOpened = true;
       }
+    }).catch(() => {
+      // Make sure we aren't stacking after-login callbacks
+      $(document).off('bikedeboa.login');
     });
   }
 
@@ -2304,11 +2320,15 @@ $(() => {
         BDB.User.login(profile).then(() => {
           refreshOpenDetailsModal();
 
-          document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+          // document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+          $(document).trigger('bikedeboa.login');
         })
       }).catch( error => {
         console.error('Error on social login', error); 
         toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise.');
+
+        // Make sure we aren't stacking after-login callbacks
+        $(document).off('bikedeboa.login');
 
         $('#userBtn').removeClass('loading');
       });
@@ -2491,7 +2511,6 @@ $(() => {
         hideAll();
       }
 
-      hello('google').login({ scope: 'email' });
     });
 
     $('body').on('click', '.logoutBtn', () => {
