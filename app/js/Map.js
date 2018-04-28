@@ -657,6 +657,9 @@ BDB.Map = (function () {
       }
 
     },
+    removeDirections: function() {
+      directionsRenderer.set('directions', null);
+    },
     updateMarkers: function () {
       this.clearMarkers();
 
@@ -828,6 +831,8 @@ BDB.Map = (function () {
                     infoWindow.reset = function() {
                       this.remove();
                       // $('.map-action-buttons').removeClass('move-up');
+
+                      BDB.Map.removeDirections();
 
                       newMarker.setIcon(m.icon);
                       newMarker.setZIndex(m.originalZIndex);
