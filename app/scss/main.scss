@@ -4333,11 +4333,11 @@ body.modal-open {
     #top-mobile-bar-title { 
       text-align: left;
       margin: 0;
-      margin-left: $GRID_SPACE*4 + $GRID_SPACE;
+      margin-left: $GRID_SPACE*6;
       padding: 0;
       font-size: 16px;
       font-family: $headingFont;
-      max-width: calc(100% - #{$GRID_SPACE*4 + $GRID_SPACE*3});
+      max-width: calc(100% - #{$GRID_SPACE*7});
       color: white;
       line-height: 1.2em;
       
