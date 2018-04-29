@@ -322,11 +322,15 @@ $(() => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
+<<<<<<< Updated upstream
         openLoginDialog(true);
 
         $(document).one('bikedeboa.login', () => {
           openRevisionDialog();
         });
+=======
+        openLoginDialog({showPermissionDisclaimer: true});
+>>>>>>> Stashed changes
       } else {
         openRevisionDialog();
       }
@@ -1610,8 +1614,13 @@ $(() => {
     });
 
     $('body').on('click', '.openContributionsBtn', queueUiCallback.bind(this, () => {
-      hideAll();
-      setView('Contribuições', '/contribuicoes', true);
+      // hideAll();
+
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog();
+      } else {
+        setView('Contribuições', '/contribuicoes', true);
+      }
     }));
  
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
@@ -1681,11 +1690,15 @@ $(() => {
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
+<<<<<<< Updated upstream
         openLoginDialog(true);
 
         $(document).one('bikedeboa.login', () => {
           $('#addPlace').click();
         });
+=======
+        openLoginDialog({showPermissionDisclaimer: true});
+>>>>>>> Stashed changes
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
@@ -2222,7 +2235,9 @@ $(() => {
     return match;
   }
 
-  function openLoginDialog(showPermissionDisclaimer = false) {
+  function openLoginDialog(options = {}) {
+    const showPermissionDisclaimer = options.showPermissionDisclaimer;
+
     // let permissionDisclaimer = '';
     // if (showPermissionDisclaimer) {
     //   permissionDisclaimer = `
@@ -2309,7 +2324,7 @@ $(() => {
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
-        $('#userBtn .openContributionsBtn').attr('disabled', false);
+        // $('#userBtn .openContributionsBtn').attr('disabled', false);
         $('#userBtn .logoutBtn').show(); 
         $('#userBtn .loginBtn').hide();
         if (data.role === 'admin') {
@@ -2353,7 +2368,7 @@ $(() => {
     $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();
     $('.loginBtn').show(); 
-    $('.openContributionsBtn').attr('disabled', true);
+    // $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }

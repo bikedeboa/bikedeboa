@@ -190,7 +190,7 @@ gulp.task('generate-service-worker', function(callback) {
       //   rather have stale data than no data. (Will NEVER prioritize cache over network, which is slower but safer)
       
       // All JS, CSS and HTML files
-      { urlPattern: /\.(?:js|css|html)$/, handler: 'networkFirst' }, 
+      // { urlPattern: /\.(?:js|css|html)$/, handler: 'networkFirst' }, 
       
       // All image asssets
       { 
