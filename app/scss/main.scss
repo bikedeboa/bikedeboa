@@ -255,6 +255,7 @@ body.offline {
     // display: none !important;
     opacity: 0.4 !important;
     user-select: none;
+    pointer-events: none;
   }
 
   #map {
@@ -1039,7 +1040,7 @@ a.unstyled-link {
         opacity: 1;
         visibility: visible;
 
-        height: 25px;
+        height: 20px;
         position: absolute;
         right: 10px;
         top: 50%;
@@ -2047,13 +2048,6 @@ body.search-mode {
   #locationSearch {
     box-shadow: none;
   }
-
-  #locationSearch #clearLocationQueryBtn {
-    // right: 10px;
-    left: 48px;
-    top: 4px;
-    opacity: .5;
-  }
 }
 
 body.clean-modal-open {
@@ -2283,8 +2277,9 @@ body.modal-open {
  
         & img {
             width: 100%;
+            height: 100%;
             object-fit: cover;
-            // object-fit: contain;
+            object-position: 0 66%;
         }
     }
 
@@ -2773,8 +2768,13 @@ body.modal-open {
     }
 
     .missing-info-container {
+      opacity: .8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       .missing-info-placeholder {
-        opacity: .5;
+        // opacity: .5;
         font-size: 100px; 
         line-height: 100px;
         color: $gray;
@@ -2783,6 +2783,11 @@ body.modal-open {
       button {
         font-weight: bold;
         color: $green;
+      }
+
+      .icon-label {
+        font-weight: 100;
+        color: $lightGray;
       }
     }
 
@@ -2818,21 +2823,18 @@ body.modal-open {
 #placeDetailsContent {
     .review {
       .savedRating {
-          text-align: left;
+          text-align: center;
           color: $gray;
           font-weight: 400;
-          margin-top: $GRID_SPACE;
           font-size: 14px;
           line-height: 14px;
           background: $paleWhite;
-          padding: $GRID_SPACE/2 $GRID_SPACE;
+          padding: $GRID_SPACE;
           vertical-align: middle;
 
           button {
             font-size: 12px;
-            margin: 0;
             margin-left: 6px;
-            float: right; 
           }
 
           img {
@@ -4210,7 +4212,15 @@ body.modal-open {
     #locationSearch {
       opacity: 1;
       pointer-events: auto;
+       
+      #clearLocationQueryBtn {
+        // right: 10px;
+        left: 48px;
+        top: 4px;
+        opacity: .5;
+      }
     }
+
   }
 
   body.modal-open {
@@ -4333,11 +4343,11 @@ body.modal-open {
     #top-mobile-bar-title { 
       text-align: left;
       margin: 0;
-      margin-left: $GRID_SPACE*4 + $GRID_SPACE;
+      margin-left: $GRID_SPACE*6;
       padding: 0;
       font-size: 16px;
       font-family: $headingFont;
-      max-width: calc(100% - #{$GRID_SPACE*4 + $GRID_SPACE*3});
+      max-width: calc(100% - #{$GRID_SPACE*7});
       color: white;
       line-height: 1.2em;
       
@@ -5033,8 +5043,8 @@ body.modal-open {
       border-radius: 25px;
       position: absolute;
       transition-property: transform, background-color;
-      transition-duration: 0.2s;
-      transition-timing-function: ease;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-out;
     }
       
     &::before, &::after {
@@ -5262,7 +5272,7 @@ body.modal-open {
 }
 
 .swal2-modal {
-  padding: 5% !important;
+  padding: $GRID_SPACE*4 5% 5% !important;
   font-family: $bodyFont;
   @include shadow(3);
 

@@ -5,7 +5,7 @@ BDB.Database = {
   // G L O B A L S //
   ///////////////////
 
-  // variable replaced by Gulp
+  // Variable replaced by Gulp
   API_URL: '<DATABASE_URL>', 
   // API_URL: 'http://localhost:3000', 
   isAuthenticated: false,  
@@ -13,9 +13,6 @@ BDB.Database = {
   _headers: {},
   _isAuthenticated: false,
  
-  _currentIDToAdd: 1306,
-
-
   ///////////////////
   // M E T H O D S //
   ///////////////////
@@ -273,6 +270,10 @@ BDB.Database = {
         if (callback && typeof callback === 'function') {
           callback();
         }
+      },
+      error: function (e) {
+        requestFailHandler();
+        console.error(e);
       }
     });
   },
@@ -293,32 +294,42 @@ BDB.Database = {
         if (callback && typeof callback === 'function') {
           callback();
         }
+      },
+      error: function (e) {
+        requestFailHandler();
+        console.error(e);
       }
     });
   },
 
-  sendReview: function(reviewObj, callback) {
+  sendReview: function(reviewObj) {
     const self = this;
 
-    $.ajax({
-      type: 'post',
-      headers: self._headers,
-      url: self.API_URL + '/review',
-      data: {
-        idLocal: reviewObj.placeId,
-        rating: reviewObj.rating,
-        tags: reviewObj.tags
-      },
-      success: function(data) {
-        console.debug('Review creation successful.');
-        console.debug(data);
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'post',
+        headers: self._headers,
+        url: self.API_URL + '/review',
+        data: {
+          idLocal: reviewObj.placeId,
+          rating: reviewObj.rating,
+          tags: reviewObj.tags
+        },
+        success: function(data) {
+          console.debug('Review creation successful.');
+          console.debug(data);
 
-        BDB.User.fetchReviews();
+          BDB.User.fetchReviews();
 
-        if (callback && typeof callback === 'function') {
-          callback(data.id);
+          resolve();
+        },
+        error: function (e) {
+          requestFailHandler();
+          console.error(e);
+
+          reject();
         }
-      }
+      });
     });
   },
 
@@ -340,6 +351,10 @@ BDB.Database = {
         if (callback && typeof callback === 'function') {
           callback(data.id);
         }
+      },
+      error: function (e) {
+        requestFailHandler();
+        console.error(e);
       }
     });
   },
