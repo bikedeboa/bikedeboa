@@ -2516,6 +2516,7 @@ $(() => {
         hideAll();
       }
 
+      hello('google').login({ scope: 'email' });
     });
 
     $('body').on('click', '.logoutBtn', () => {
