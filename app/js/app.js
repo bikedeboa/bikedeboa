@@ -83,6 +83,12 @@ $(() => {
     }
   }
 
+  function refreshOpenDetailsModal() {
+    if (openedMarker) {
+      openDetailsModal(openedMarker);
+    }
+  }
+
   function openDetailsModal(marker, callback) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
@@ -160,17 +166,10 @@ $(() => {
       templateData.numReviews = `${m.reviews} avaliações`;
     }
     
-    // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
-
     // User permissions
-    if (BDB.User.isAdmin) {
-      templateData.isAdmin = true;
-      templateData.canModify = true;
-    } else {
-      if (BDB.User.checkEditPermission(m.id)) {
-        templateData.canModify = true;
-      }
-    }
+    templateData.canModify = BDB.User.isLoggedIn;
+    templateData.isAdmin = BDB.User.isAdmin;
+    templateData.canDelete = BDB.User.isLoggedIn && m.canLoggedUserDelete;
 
     // Data source
     if (m.DataSource) {
@@ -237,20 +236,20 @@ $(() => {
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
-      const rating = previousReview.rating;
+      templateData.savedRating = previousReview.rating;
       
-      templateData.color = getColorFromAverage(rating);
+      templateData.color = getColorFromAverage(templateData.savedRating);
 
       // @todo modularize this method
       let stars = '';
-      for (let s = 0; s < parseInt(rating); s++) {
+      for (let s = 0; s < parseInt(templateData.savedRating); s++) {
         stars += '<span class="glyphicon glyphicon-star"></span>';
       }
-      templateData.savedRatingContent = rating + stars;
-    } else {
-      if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
-        templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-      }
+      templateData.savedRatingStars = stars;
+    }
+
+    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
     }
 
 
@@ -286,7 +285,15 @@ $(() => {
     // Init click callbacks
     // $('#checkinBtn').on('click', sendCheckinBtn);
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
-      openReviewModal($(e.target).data('value'));
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openReviewModal($(e.target).data('value'));
+        });
+      } else {
+        openReviewModal($(e.target).data('value'));
+      }
     });
     $('.shareBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
@@ -299,13 +306,27 @@ $(() => {
     $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
+    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openNewOrEditPlaceModal();
+        });
+      } else {
+        openNewOrEditPlaceModal();
+      }
+    }));
     $('.deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
     $('.createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
         openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openRevisionDialog();
+        });
       } else {
         openRevisionDialog();
       }
@@ -1235,12 +1256,16 @@ $(() => {
       };
 
       const callback = () => {
-        BDB.Database.sendReview(reviewObj, reviewId => {
-          reviewObj.databaseId = reviewId;
-          BDB.User.saveReview(reviewObj);
+        BDB.Database.sendReview(reviewObj)
+          .then( reviewId => {
+            reviewObj.databaseId = reviewId;
+            BDB.User.saveReview(reviewObj);
 
-          resolve();
-        });
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
       }; 
 
       const previousReview = BDB.User.getReviewByPlaceId(m.id);
@@ -1657,6 +1682,10 @@ $(() => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          $('#addPlace').click();
+        });
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
@@ -2204,14 +2233,17 @@ $(() => {
     // }
 
     // Returns the dialog promise
-    return swal({ 
-      title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
+    swal({ 
+      // title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
+      title: 'Login/Cadastro', 
       html: `
         <br> 
  
-        <p>
-          Fazendo login você pode acessar todas contribuições que já fez e adicionar novos bicicletários no mapa.
-        </p>
+        <div>
+          Faça login e se torne um colaborador. É rapidinho e você já pode começar a contribuir com o mapa.
+        </div>
+
+        <br>
 
         <div>
           <button class="customLoginBtn facebookLoginBtn">
@@ -2227,20 +2259,18 @@ $(() => {
 
         <br>
 
-        <p style="
-          font-style: italic;
-          font-size: 12px;
-          text-align: center;
-          max-width: 300px;
-          margin: 0 auto;">
-          Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
-        </p>
+        <div style="font-size: 12px; color: #b3b3b3; font-weight: normal;">
+            Exigimos o login para garantir a confiabilidade das contribuições. Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
+        </div>
         `,
       showCloseButton: true,
       showConfirmButton: false,
       onOpen: () => {
         window._isLoginDialogOpened = true;
       }
+    }).catch(() => {
+      // Make sure we aren't stacking after-login callbacks
+      $(document).off('bikedeboa.login');
     });
   }
 
@@ -2292,12 +2322,18 @@ $(() => {
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(profile); 
+        BDB.User.login(profile).then(() => {
+          refreshOpenDetailsModal();
 
-        document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+          // document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+          $(document).trigger('bikedeboa.login');
+        })
       }).catch( error => {
         console.error('Error on social login', error); 
-        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!');
+        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise.');
+
+        // Make sure we aren't stacking after-login callbacks
+        $(document).off('bikedeboa.login');
 
         $('#userBtn').removeClass('loading');
       });
@@ -2468,13 +2504,18 @@ $(() => {
     }));
 
     $('body').on('click', '.facebookLoginBtn', () => {
-      hideAll();
+      if (!window._isLoginDialogOpened) {
+        hideAll();
+      }
+
       hello('facebook').login({ scope: 'email' });
     });
 
     $('body').on('click', '.googleLoginBtn', () => {
-      hideAll();
-      hello('google').login({ scope: 'email' });
+      if (!window._isLoginDialogOpened) {
+        hideAll();
+      }
+
     });
 
     $('body').on('click', '.logoutBtn', () => {

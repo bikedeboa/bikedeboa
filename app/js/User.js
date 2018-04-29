@@ -22,92 +22,98 @@ BDB.User = {
   },
 
   login: function (profile) {
-    const self = this;
+    return new Promise((resolve, reject) => {
+      const self = this;
 
-    if (this.isLoggedIn) {
-      console.log('Already logged in!');
-      return;
-    }
+      if (this.isLoggedIn) {
+        console.log('Already logged in o.O');
+        return;
+      }
 
-    this.isLoggedIn = true;
-    this.profile = profile;
-    this.isAdmin = profile.isAdmin;
+      this.isLoggedIn = true;
+      this.profile = profile;
+      this.isAdmin = profile.isAdmin;
 
-    const prevReviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
-    const prevPlaces = this.places && this.places.length > 0 ? this.places : null;
-    
-    let reviewsStr = '';
-    if (prevReviews) {
-      reviewsStr = `<b>${prevReviews.length} ${prevReviews.length === 1 ? 'avaliação' : 'avaliações'}</b>`; 
-    }
-    let placesStr = ''; 
-    if (prevPlaces) {
-      placesStr = `<b>${prevPlaces.length} ${prevPlaces.length === 1 ? 'bicicletário' : 'bicicletários'}</b>`; 
-    } 
-    
-    const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
-    let message, title;
-    if (this.profile.isNewUser) { 
-      title = 'Bem-vindo(a)'; 
-      message = `
-        Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir. :) Eles serão automaticamente salvos nas suas contribuições.
-      `; 
-    } else {
-      title = 'Oi de novo';
-      message = `
-        Você tinha criado ${dynamicStr} enquanto não estava logado. Massa! Eles serão automaticamente salvos nas suas contribuições.
-      `;
-    }
- 
-    if (prevReviews || prevPlaces) {
-      swal({ 
-        title: title,
-        html: message,
-      })
-        .then(() => {
-          if (prevPlaces) {
-            BDB.Database.importUserPlaces(prevPlaces)
-              .then(() => {
-                ga('send', 'event', 'Login', 'import places', `${this.profile.name} imported ${prevPlaces.length} places`);
-                
-                toastr['success'](`${prevPlaces.length} bicicletários salvos.`, '');
+      const prevReviews = this.reviews && this.reviews.length > 0 ? this.reviews : null;
+      const prevPlaces = this.places && this.places.length > 0 ? this.places : null;
+      
+      let reviewsStr = '';
+      if (prevReviews) {
+        reviewsStr = `<b>${prevReviews.length} ${prevReviews.length === 1 ? 'avaliação' : 'avaliações'}</b>`; 
+      }
+      let placesStr = ''; 
+      if (prevPlaces) {
+        placesStr = `<b>${prevPlaces.length} ${prevPlaces.length === 1 ? 'bicicletário' : 'bicicletários'}</b>`; 
+      } 
+      
+      const dynamicStr = `${reviewsStr} ${reviewsStr && placesStr ? 'e' : ''} ${placesStr}`;
+      let message, title;
+      if (this.profile.isNewUser) { 
+        title = 'Bem-vindo(a)'; 
+        message = `
+          Você tinha criado ${dynamicStr} neste computador. Muito obrigado por contribuir. :) Eles serão automaticamente salvos nas suas contribuições.
+        `; 
+      } else {
+        title = 'Oi de novo';
+        message = `
+          Você tinha criado ${dynamicStr} enquanto não estava logado. Massa! Eles serão automaticamente salvos nas suas contribuições.
+        `;
+      }
+  
+      if (prevReviews || prevPlaces) {
+        swal({ 
+          title: title,
+          html: message,
+        })
+          .then(() => {
+            if (prevPlaces) {
+              BDB.Database.importUserPlaces(prevPlaces)
+                .then(() => {
+                  ga('send', 'event', 'Login', 'import places', `${this.profile.name} imported ${prevPlaces.length} places`);
+                  
+                  toastr['success'](`${prevPlaces.length} bicicletários salvos.`, '');
 
-                self._deletePlacesFromCookies();
-                self.fetchPlaces();
-              }).catch( err => {
-                ga('send', 'event', 'Login', 'import places FAIL', `${this.profile.name} failed to import ${prevPlaces.length} places`);
+                  self._deletePlacesFromCookies();
+                  self.fetchPlaces();
+                }).catch( err => {
+                  ga('send', 'event', 'Login', 'import places FAIL', `${this.profile.name} failed to import ${prevPlaces.length} places`);
 
-                toastr.warning('Alguma coisa deu errado e não foi possível importar seus bicicletários agora :/ Tente novamente mais tarde.')
-              });
-          }
+                  toastr.warning('Alguma coisa deu errado e não foi possível importar seus bicicletários agora :/ Tente novamente mais tarde.')
+                });
+            }
 
-          if (prevReviews) {
-            BDB.Database.importUserReviews(prevReviews)
-              .then(data => {
-                ga('send', 'event', 'Login', 'import reviews', `${this.profile.name} imported ${prevReviews.length} reviews`);
-                
-                if (data.numImports && data.numImports > 0) {
-                  toastr['success'](`${data.numImports} avaliações salvas.`, '');
-                }
+            if (prevReviews) {
+              BDB.Database.importUserReviews(prevReviews)
+                .then(data => {
+                  ga('send', 'event', 'Login', 'import reviews', `${this.profile.name} imported ${prevReviews.length} reviews`);
+                  
+                  if (data.numImports && data.numImports > 0) {
+                    toastr['success'](`${data.numImports} avaliações salvas.`, '');
+                  }
 
-                self._deleteReviewsFromCookies();
-                self.fetchReviews();
-              }).catch( err => {
-                ga('send', 'event', 'Login', 'import reviews FAIL', `${this.profile.name} failed to import ${prevReviews.length} reviews`);
+                  self._deleteReviewsFromCookies();
+                  self.fetchReviews();
+                }).catch( err => {
+                  ga('send', 'event', 'Login', 'import reviews FAIL', `${this.profile.name} failed to import ${prevReviews.length} reviews`);
 
-                toastr.warning('Alguma coisa deu errado e não foi possível importar suas avaliações agora :/ Tente novamente mais tarde.')
-              });
-          }
-        }).catch(dismiss => {
-          // if (dismiss === 'cancel') {
-          //   self._deletePlacesFromCookies();
-          //   self._deleteReviewsFromCookies(); 
-          // }
-        });
-    }
-    
-    this.fetchReviews();
-    this.fetchPlaces();
+                  toastr.warning('Alguma coisa deu errado e não foi possível importar suas avaliações agora :/ Tente novamente mais tarde.')
+                });
+            }
+          }).catch(dismiss => {
+            // if (dismiss === 'cancel') {
+            //   self._deletePlacesFromCookies();
+            //   self._deleteReviewsFromCookies(); 
+            // }
+          });
+      }
+      
+      let reviewsPromise = this.fetchReviews();
+      let placesPromise = this.fetchPlaces();
+
+      Promise.all([reviewsPromise, placesPromise]).then(() => {
+        resolve();
+      });
+    });
   },
 
   logout: function () {
@@ -131,53 +137,55 @@ BDB.User = {
   },
 
   fetchReviews: function () {
-    this.reviews = [];
+    return new Promise((resolve, reject) => {
+      this.reviews = [];
 
-    if (this.isLoggedIn) {
-      BDB.Database.getLoggedUserReviews()
-        .then( data => {
-          this.reviews = data;
-          this._populateReviewsPlaces();
-        }
-      );
-    } else {
-      this.reviews = Cookies.getJSON('bikedeboa_reviews') || [];
-      this._populateReviewsPlaces();
-    }
+      if (this.isLoggedIn) {
+        BDB.Database.getLoggedUserReviews()
+          .then(data => {
+            this.reviews = data;
+            this._populateReviewsPlaces();
+
+            resolve();
+          });
+      } else {
+        this.reviews = Cookies.getJSON('bikedeboa_reviews') || [];
+        this._populateReviewsPlaces();
+
+        resolve();
+      }
+    });
   },
 
   fetchPlaces: function () {
-    this.places = [];
+    return new Promise((resolve, reject) => {
+      this.places = [];
 
-    if (this.isLoggedIn) {
-      BDB.Database.getLoggedUserPlaces()
-        .then( data => {
-          this.places = data;
-          // this._populateReviewsPlaces();
-        }
-      );
-    } else {
-      const cookies = Cookies.getJSON();
-      const placesIds = Object.keys(cookies)
-        .filter( i => i.indexOf('bikedeboa_local_') >= 0 )
-        .map( i => i.split('bikedeboa_local_')[1] );
+      if (this.isLoggedIn) {
+        BDB.Database.getLoggedUserPlaces()
+          .then( data => {
+            this.places = data;
+            // this._populateReviewsPlaces();
 
-      for(let i=0; i < placesIds.length; i++) { 
-        const id = parseInt(placesIds[i]);
-        const marker = BDB.Places.getMarkerById(id);
-        if (marker) {
-          this.places.push(marker);
+            resolve();
+          });
+      } else {
+        const cookies = Cookies.getJSON();
+        const placesIds = Object.keys(cookies)
+          .filter( i => i.indexOf('bikedeboa_local_') >= 0 )
+          .map( i => i.split('bikedeboa_local_')[1] );
+
+        for(let i=0; i < placesIds.length; i++) { 
+          const id = parseInt(placesIds[i]);
+          const marker = BDB.Places.getMarkerById(id);
+          if (marker) {
+            this.places.push(marker);
+          }
         }
+
+        resolve();
       }
-    }
-  },
-
-  checkEditPermission: function (id) {
-    if (id && this.isLoggedIn) {
-      return this.places.find( i => i.id === id );
-    } else {
-      return false;
-    }
+    });
   },
 
   getReviewByPlaceId: function (placeId) {

@@ -1277,7 +1277,7 @@
 
           });
 
-          document.addEventListener('bikedeboa.login', function (e) {
+          $(document).on('bikedeboa.login', e => {
             if (BDB.User.isAdmin) {
               // Force table refresh
               updateLocalsTable();
