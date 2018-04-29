@@ -322,15 +322,11 @@ $(() => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
-<<<<<<< Updated upstream
-        openLoginDialog(true);
+        openLoginDialog({ showPermissionDisclaimer: true });
 
         $(document).one('bikedeboa.login', () => {
           openRevisionDialog();
         });
-=======
-        openLoginDialog({showPermissionDisclaimer: true});
->>>>>>> Stashed changes
       } else {
         openRevisionDialog();
       }
@@ -1690,15 +1686,11 @@ $(() => {
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
-<<<<<<< Updated upstream
-        openLoginDialog(true);
+        openLoginDialog({ showPermissionDisclaimer: true });
 
         $(document).one('bikedeboa.login', () => {
           $('#addPlace').click();
         });
-=======
-        openLoginDialog({showPermissionDisclaimer: true});
->>>>>>> Stashed changes
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
