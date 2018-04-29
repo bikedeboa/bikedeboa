@@ -618,7 +618,14 @@ $(() => {
           // openNewOrEditPlaceModal();
         } else {
           if (BDB.Map.checkBounds()) {
-            openNewOrEditPlaceModal();
+            BDB.Map.getNameSuggestions({ lat: _newMarkerTemp.lat, lng: _newMarkerTemp.lng })
+              .then(nameSuggestions => {
+                // console.log(nameSuggestions); 
+
+                nameSuggestions = nameSuggestions.map( n => n.name );
+                
+                openNewOrEditPlaceModal(nameSuggestions);
+              });
           } else {
             const mapCenter = map.getCenter();
             ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
@@ -852,9 +859,9 @@ $(() => {
   }
 
   // @todo clean up this mess
-  function openNewOrEditPlaceModal() {
+  function openNewOrEditPlaceModal(nameSuggestions) {
     $('#newPlaceModal').remove();
-    $('body').append(BDB.templates.newPlaceModal());
+    $('body').append(BDB.templates.newPlaceModal({nameSuggestions: nameSuggestions}));
     
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
 
@@ -907,6 +914,29 @@ $(() => {
         $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
       }
 
+      $('#cancelEditPlaceBtn').off('click').on('click', () => {
+        hideAll().then(() => {
+          openLocal(openedMarker);
+        });
+      });
+
+      $('#editPlacePositionBtn').off('click').on('click', () => {
+        // Ask to keep opened marker temporarily
+        hideAll(true);
+
+        map.setCenter({
+          lat: parseFloat(openedMarker.lat),
+          lng: parseFloat(openedMarker.lng)
+        });
+
+        // Set minimum map zoom
+        if (map.getZoom() < 19) {
+          map.setZoom(19);
+        }
+
+        toggleLocationInputMode();
+      });
+
       // $('#placeDetailsContent').modal('hide');
     } else {
       setView('Novo bicicletário', '/novo');
@@ -918,13 +948,17 @@ $(() => {
       $('#type-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
         ga('send', 'event', 'Misc', 'tooltip - new pin type help');
       });
+
+      $('.place-suggestion-item').off('click').on('click', e => {
+        $('.text-input-wrapper input').val( $(e.currentTarget).data('name') );
+      });
     }
 
-    // Initialize callbacks
     $('.typeIcon').off('click.radio').on('click.radio', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
 
+      // Automatically scroll to next field
       // const currentStep = $(e.currentTarget).parent().data('form-step');
       // const nextStep = parseInt(currentStep) + 1;
       // const nextStepEl = $(`[data-form-step="${nextStep}"]`);
@@ -951,32 +985,6 @@ $(() => {
 
     $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
 
-    // Edit only buttons
-    if (openedMarker) {
-      $('#cancelEditPlaceBtn').off('click').on('click', () => {
-        hideAll().then(() => {
-          openLocal(openedMarker);
-        });
-      });
-
-      $('#editPlacePositionBtn').off('click').on('click', () => {
-        // Ask to keep opened marker temporarily
-        hideAll(true);
-        
-        map.setCenter({
-          lat: parseFloat(openedMarker.lat),
-          lng: parseFloat(openedMarker.lng)
-        });
-
-        // Set minimum map zoom
-        if (map.getZoom() < 19) {
-          map.setZoom(19);
-        }
-        
-        toggleLocationInputMode();
-      });
-    }
-    
     $('#photoInput').off('change').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
       const self = document.getElementById('photoInput');
