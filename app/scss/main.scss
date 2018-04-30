@@ -1196,6 +1196,39 @@ a.unstyled-link {
   }
 }
 
+.nav-pills {
+  & > li {  
+    text-transform: uppercase;
+    font-weight: bold;
+
+    a {
+      color: $green;
+      text-align: center;
+      padding: $GRID_SPACE/2;
+      // border: 2px solid $green;
+    }
+
+    .badge {
+      background-color: $green;
+    }
+  }
+
+  & > li + li {
+    margin-left: 3px;
+  }
+  
+  & > li.active > a,
+  & > li.active > a:focus,
+  & > li.active > a:hover {
+    background: $green;
+    color: white;
+
+    .badge {
+      color: $green;
+    }
+  }
+}
+
 #messageModal {
     &.success .modal-body {
         background-color: $lightGreen;
@@ -1344,17 +1377,41 @@ a.unstyled-link {
 
     img {
       border-radius: 50%;
-      vertical-align: bottom;
       height: 100px;
       width: 100px;
       margin: 0 auto;
+      margin-bottom: $GRID_SPACE/2;
       display: block;
+
+      &.admin {
+        border: 2px solid $darkYellow;
+        box-shadow: 0 2px 20px $darkYellow;
+      }
     }
   }
 
   .you-are-admin {
     text-align: center;
     color: $darkYellow;
+    margin: $GRID_SPACE 0;
+  }
+
+  .nav-pills {
+    display: flex;
+    margin-top: $GRID_SPACE*2;
+
+    & > li {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .tab-content {
+    margin-top: $GRID_SPACE/2;
+
+    li {
+      border-bottom: 1px solid $lightestGray;
+    }
   }
 
   h3 { 
@@ -1380,13 +1437,14 @@ a.unstyled-link {
 
   .go-to-place-btn {
     border: 0;
+    padding: $GRID_SPACE 0;
     background: transparent;
-    padding: 0;
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 0.5em;
+    color: $black;
     text-align: left;
     width: 100%;
+
+    display: flex;
+    align-items: center;
 
     &:hover,
     &:active,
@@ -1394,10 +1452,26 @@ a.unstyled-link {
       background: $lightestGray; 
     }
 
+    & > span {
+      flex: 1;
+    }
+
+    .go-to-place-btn--photo {
+      width: 40px;
+      height: 40px;
+      flex: 0 1 40px;
+      margin-right: 12px;
+      
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
     .go-to-place-btn--title {
       font-family: $headingFont;
-      font-weight: 700;
-      font-size: 20px;
+      font-size: 18px;
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
@@ -1411,20 +1485,25 @@ a.unstyled-link {
       font-weight: bold;
       display: block;
       margin-top: 2px;
+      font-size: 14px;
     }
 
-    .go-to-place-btn--daysago {
-      float: right;
-    }
+    // .go-to-place-btn--daysago {
+    //   float: right;
+    // }
     
-    .go-to-place-btn--views {
-      display: block;
+    // .go-to-place-btn--views {
+      
+    // }
+
+    .go-to-place-btn--daysago {
+      text-align: right;
     }
 
     .go-to-place-btn--daysago,
     .go-to-place-btn--views {
-      color: $lightGray;
       font-size: 12px;
+      color: $lightGray;
     }
   }
 }
@@ -1460,7 +1539,7 @@ a.unstyled-link {
 
   .about-collaborators {
     font-size: 18px;
-    background: #F3F3F3;
+    background: $lightestGray;
     padding: 24px;
     margin: auto;
     border-radius: 5px;
@@ -3443,7 +3522,7 @@ body.modal-open {
       transition: color 0.2s ease-out, background 0.2s ease-out;
 
       &:hover {
-        background: #f3f3f3;
+        background: $lightestGray;
       }
 
       input:checked + label {
@@ -3710,12 +3789,8 @@ body.modal-open {
   }
 
   .infobox--img {
-    // width: 100px;
     position: relative;
     flex: 1 0 30%;
-    // padding: 6px 0 6px 6px;
-    // background: $lightestGrey;
-    /* background: white; */
 
     img {
       object-fit: cover;
@@ -4739,7 +4814,7 @@ body.modal-open {
 
     & > input:checked ~ label:before {
         // color: #eabb2f;
-        background-image: url(/img/icon_star.svg);
+        background-image: url(/img/icon_star_yellow.svg);
     }    
 }
 
@@ -4802,7 +4877,7 @@ body.modal-open {
   .rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
       // color: #eabb2f;
       
-      background-image: url(/img/icon_star.svg);
+      background-image: url(/img/icon_star_yellow.svg);
   }
 
   .rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
@@ -5153,7 +5228,7 @@ body.modal-open {
 
   .side-nav__footer {
       padding: 8px 16px 0;
-      background: #F3F3F3;
+      background: $lightestGray;
 
       .social-links-list {
         display: flex;

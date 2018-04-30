@@ -1614,6 +1614,10 @@ $(() => {
 
       if (!BDB.User.isLoggedIn) {
         openLoginDialog();
+
+        $(document).one('bikedeboa.login', () => {
+          setView('Contribuições', '/contribuicoes', true);
+        });
       } else {
         setView('Contribuições', '/contribuicoes', true);
       }
@@ -1996,10 +2000,13 @@ $(() => {
 
       for(let i=0; i < templateData.places.length; i++) {
         let p = templateData.places[i];
+
         // Created X days ago
         if (p.createdAt) {
           p.createdTimeAgo = createdAtToDaysAgo(p.createdAt);
         }
+ 
+        p.thumbnailUrl = (p.photo) ? p.photo.replace('images', 'images/thumbs') : ''; 
       }
       
       templateData.places = templateData.places.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
@@ -2183,7 +2190,17 @@ $(() => {
       break;
     case 'contribuicoes':
       hideAll();
-      openContributionsModal();
+
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+ 
+        $(document).one('bikedeboa.login', () => {
+          openContributionsModal();
+        });
+      } else {
+        openContributionsModal();
+      }
+
       break;
     case 'nav':
       _hamburgerMenu.show();
