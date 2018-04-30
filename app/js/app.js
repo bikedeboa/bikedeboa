@@ -2122,7 +2122,7 @@ $(() => {
             _isDeeplink = true;
             $('body').addClass('deeplink');
 
-            // showSpinner();
+            showSpinner('Carregando...');
 
             // Center the map on pin's position
             if (map && _deeplinkMarker) {
@@ -2132,21 +2132,20 @@ $(() => {
                 lng: parseFloat(_deeplinkMarker.lng)
               });
             }
-          }
-
-          if (_isDeeplink) { 
+          
             routerOpenDeeplinkMarker(id, () => {
+              hideSpinner();
+
+              // @todo refactor this
+              let coords = {
+                latitude : parseFloat(_deeplinkMarker.lat),
+                longitude: parseFloat(_deeplinkMarker.lng)
+              }
+              start_coords = coords;  
+              zoom = 17;
+              getGeolocation = false;
+
               // Delay loading of background map for maximum optimized startup
-              //change here.
-              if (_deeplinkMarker){
-                let coords = {
-                  latitude : parseFloat(_deeplinkMarker.lat),
-                  longitude: parseFloat(_deeplinkMarker.lng)
-                }
-                start_coords = coords;  
-                zoom = 17;
-                getGeolocation = false;
-              }  
               if (!_isMobile) {
                 $(document).trigger('LoadMap');
               }
