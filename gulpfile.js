@@ -16,7 +16,6 @@ const fileSizes = require('gulp-size');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const plumber = require('gulp-plumber');
-const mainBowerFiles = require('main-bower-files');
 const filter = require('gulp-filter');
 const flatten = require('gulp-flatten');
 const minifycss = require('gulp-clean-css');
@@ -31,7 +30,6 @@ const declare = require('gulp-declare');
 const merge = require('merge-stream');
 
 
-const BOWER_PATH = './bower_components';
 const DEST_PATH =  'dist';
 
 
@@ -244,55 +242,6 @@ gulp.task('generate-service-worker', function(callback) {
 });
 
 
-// grab libraries files from bower_components, minify and push in DEST_PATH
-gulp.task('bower', function() {
-  var jsFilter = filter('**/*.js', {restore: true}),
-    cssFilter = filter('**/*.css', {restore: true}),
-    fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
-
-  // console.log(mainBowerFiles());
-
-  return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
-
-  // grab vendor js files from bower_components, minify and push in DEST_PATH
-    .pipe(jsFilter)
-  // .pipe(gulp.dest(DEST_PATH + '/js/'))
-    // .pipe(concat('vendors.min.js')) 
-    .pipe(rename({dirname: ''}))
-    .pipe(production(uglify()))
-  // .pipe(rename({
-  //   suffix: ".min"
-  // }))
-    .pipe(fileSizes({title: 'bower lib:', gzip: true, showFiles: true}))
-  // .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
-    .pipe(gulp.dest(DEST_PATH + '/js/lib/'))
-    .pipe(jsFilter.restore)
-
-  // grab vendor css files from bower_components, minify and push in DEST_PATH
-    .pipe(cssFilter)
-    .pipe(concat('vendors.min.css'))
-  // .pipe(gulp.dest(DEST_PATH + '/css'))
-    .pipe(production(minifycss()))
-  // .pipe(rename({
-  //     suffix: ".min"
-  // }))
-    .pipe(fileSizes({title: 'vendors.min.css', gzip: true}))
-    .pipe(gulp.dest(DEST_PATH + '/css'))
-    .pipe(cssFilter.restore);
-
-  // grab vendor font files from bower_components and push in DEST_PATH
-  // .pipe(fontFilter)
-  // .pipe(flatten())
-  // .pipe(gulp.dest(DEST_PATH + '/fonts'));
-});
-
-gulp.task('bower-fonts', function() {
-  return gulp.src('./bower_components/**/*.{ttf,woff,woff2}')
-    .pipe(flatten())
-    .pipe(fileSizes({title: 'bower fonts', gzip: true}))
-    .pipe(gulp.dest(DEST_PATH + '/fonts'));
-});
-
 // Watch Files For Changes
 gulp.task('watch', () => {
   gulp.watch('app/js/*.js', () => {
@@ -325,7 +274,7 @@ gulp.task('server', () => {
 gulp.task('clean', del.bind(null, ['dist']));
  
 gulp.task('build', () => {
-  runSequence(['clean'], ['bower', 'bower-fonts', 'html', 'sass', 'scripts'], ['generate-service-worker'], () => {
+  runSequence(['clean'], ['html', 'sass', 'scripts'], ['generate-service-worker'], () => {
     return gulp.src('dist/**/*').pipe(fileSizes({title: 'total output', gzip: true})); 
   });
 });
