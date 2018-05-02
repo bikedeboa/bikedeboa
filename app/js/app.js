@@ -2113,7 +2113,7 @@ $(() => {
 
     switch (urlBreakdown[1]) {
     case 'b':
-      if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
+      if (urlBreakdown[2] && urlBreakdown[2] !== 'foto') {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
@@ -2122,7 +2122,7 @@ $(() => {
             _isDeeplink = true;
             $('body').addClass('deeplink');
 
-            // showSpinner();
+            showSpinner('Carregando...');
 
             // Center the map on pin's position
             if (map && _deeplinkMarker) {
@@ -2132,21 +2132,20 @@ $(() => {
                 lng: parseFloat(_deeplinkMarker.lng)
               });
             }
-          }
-
-          if (_isDeeplink) { 
+          
             routerOpenDeeplinkMarker(id, () => {
+              hideSpinner();
+
+              // @todo refactor this
+              let coords = {
+                latitude : parseFloat(_deeplinkMarker.lat),
+                longitude: parseFloat(_deeplinkMarker.lng)
+              }
+              start_coords = coords;  
+              zoom = 17;
+              getGeolocation = false;
+
               // Delay loading of background map for maximum optimized startup
-              //change here.
-              if (_deeplinkMarker){
-                let coords = {
-                  latitude : parseFloat(_deeplinkMarker.lat),
-                  longitude: parseFloat(_deeplinkMarker.lng)
-                }
-                start_coords = coords;  
-                zoom = 17;
-                getGeolocation = false;
-              }  
               if (!_isMobile) {
                 $(document).trigger('LoadMap');
               }
@@ -2159,6 +2158,8 @@ $(() => {
           openNotFoundModal(match);
           match = false;
         }
+      } else {
+        window.location.pathname = '';
       }
       break;
     case 'faq':
@@ -2564,7 +2565,7 @@ $(() => {
                   <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
                 </a>
 
-                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                <a class="" target="_blank" rel="noopener" href="https://github.com/bikedeboa">
                   <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
                 </a>
 
@@ -2756,10 +2757,9 @@ $(() => {
     hello.init({
       facebook: FACEBOOK_CLIENT_ID,
       google: GOOGLE_CLIENT_ID, 
-        // windows: WINDOWS_CLIENT_ID,
-    },{
+    }, {
+      redirect_uri: '/redirect.html' 
       // redirect_uri: window.location.origin
-      redirect_uri: '/redirect.html'
     });
     hello.on('auth.login', auth => {
       // Hack to fix what I think is the bug that was causing duplicate user entries

@@ -920,12 +920,6 @@ a.unstyled-link {
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
  
-  &.cool-hidden {
-    opacity: 0;
-    transform: translateY(-20px);
-    pointer-events: none;
-  } 
-
   & > button {
     border: 0;
     padding: 0;
@@ -998,12 +992,6 @@ a.unstyled-link {
 
     transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
     
-    &.cool-hidden {
-      opacity: 0;
-      transform: translateY(-20px);
-      pointer-events: none;
-    }
- 
     #locationQueryInput {
         position: relative;
         width: 100%;
@@ -1141,12 +1129,6 @@ a.unstyled-link {
 
       transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
 
-      &.cool-hidden {
-        opacity: 0;
-        transform: translateY(-20px);
-        pointer-events: none;
-      } 
-
       .navbar-de-boa--list {
         display: flex;
         list-style: none;
@@ -1228,11 +1210,10 @@ a.unstyled-link {
   $offscreenMargin: 100px;
 
   .close-and-filter {
-    text-align: right;
-    width: 100%;
-    // float: right;
+    color: $green;
     padding: 0;
-    font-weight: bold;
+    margin: .5em 0;
+    font-size: 16px;
   }
 
   .guide-img-row {
@@ -1560,6 +1541,9 @@ a.unstyled-link {
   margin-bottom: $GRID_SPACE*2;
 
   .panel {
+      @include shadow(1);
+      margin-bottom: 1em;
+
       .panel-heading {
         padding: 0;
 
@@ -1567,9 +1551,9 @@ a.unstyled-link {
           .panel-title:before {
             position: relative;
             float: right;
-            display: inline-block;
             font-family: $bootstrapFont;
             font-weight: 400;
+            color: $green;
             line-height: 1;
             content: "\e260";
           }
@@ -1583,7 +1567,7 @@ a.unstyled-link {
       .panel-title {
         font-family: $headingFont;
         color: $black;
-        padding: $GRID_SPACE*3 $GRID_SPACE;
+        padding: 1em;
 
         transition: background 0.2s ease-out;
 
@@ -1594,12 +1578,12 @@ a.unstyled-link {
 
       .panel-body {
         border-top: 2px solid $lighterGray;
-        background: $lightestGray;
+        background: $paleWhite;
         padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE*2;
 
         p {
-          font-size: 16px;
-          color: $gray;
+          font-size: 14px;
+          // color: $gray;
         }
       }
   }
@@ -2309,21 +2293,6 @@ body.modal-open {
               opacity: 0.8;
             }
         }
-
-        // &:after {
-        //     position: absolute;
-        //     top: 10px;
-        //     right: 10px;
-        //     color: $black;
-        //     background: rgba(255,255,255,0.8);
-        //     padding: 10px;
-        //     @include roundedCorners;
-        //     font-size: 20px;
-        //     content: "\e096";
-        //     font-family: $bootstrapFont;
-        //     line-height: 1;
-        //     pointer-events: none;
-        // }
     }
 }
 
@@ -4619,6 +4588,23 @@ body.modal-open {
     &:hover {
       background: $lighterGray;
     }
+  }
+}
+
+a[data-featherlight] {
+  img:hover:after {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: $black;
+      background: rgba(255,255,255,0.8);
+      padding: 10px;
+      @include roundedCorners;
+      font-size: 16px;
+      content: "\e096";
+      font-family: $bootstrapFont;
+      line-height: 1;
+      pointer-events: none;
   }
 }
 
