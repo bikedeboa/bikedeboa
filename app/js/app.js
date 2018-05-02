@@ -2757,10 +2757,9 @@ $(() => {
     hello.init({
       facebook: FACEBOOK_CLIENT_ID,
       google: GOOGLE_CLIENT_ID, 
-        // windows: WINDOWS_CLIENT_ID,
-    },{
+    }, {
+      redirect_uri: '/redirect.html' 
       // redirect_uri: window.location.origin
-      redirect_uri: '/redirect.html'
     });
     hello.on('auth.login', auth => {
       // Hack to fix what I think is the bug that was causing duplicate user entries
