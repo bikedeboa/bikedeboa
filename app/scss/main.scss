@@ -1541,6 +1541,9 @@ a.unstyled-link {
   margin-bottom: $GRID_SPACE*2;
 
   .panel {
+      @include shadow(1);
+      margin-bottom: 1em;
+
       .panel-heading {
         padding: 0;
 
@@ -1548,9 +1551,9 @@ a.unstyled-link {
           .panel-title:before {
             position: relative;
             float: right;
-            display: inline-block;
             font-family: $bootstrapFont;
             font-weight: 400;
+            color: $green;
             line-height: 1;
             content: "\e260";
           }
@@ -1564,7 +1567,7 @@ a.unstyled-link {
       .panel-title {
         font-family: $headingFont;
         color: $black;
-        padding: $GRID_SPACE*3 $GRID_SPACE;
+        padding: 1em;
 
         transition: background 0.2s ease-out;
 
@@ -1575,12 +1578,12 @@ a.unstyled-link {
 
       .panel-body {
         border-top: 2px solid $lighterGray;
-        background: $lightestGray;
+        background: $paleWhite;
         padding: $GRID_SPACE $GRID_SPACE $GRID_SPACE*2;
 
         p {
-          font-size: 16px;
-          color: $gray;
+          font-size: 14px;
+          // color: $gray;
         }
       }
   }
