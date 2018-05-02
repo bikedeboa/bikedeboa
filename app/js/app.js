@@ -1728,7 +1728,14 @@ $(() => {
       // Mobile optimizations
       if (_isMobile) {
         // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
+        if ($('body').hasClass('deeplink')) {
+          $('.hamburger-button').addClass('close-icon');
+        } else {
+          $('.hamburger-button').addClass('back-icon');
+        }
+
         $('.hamburger-button').addClass('back-mode');
+
         $('.hamburger-button.back-mode').one('click.cancelCreation', () => {
           // If was creating a new local
           // @todo Do this check better
@@ -1772,6 +1779,8 @@ $(() => {
 
         $('.hamburger-button.back-mode').off('click.cancelCreation');
         $('.hamburger-button').removeClass('back-mode');
+        $('.hamburger-button').removeClass('close-icon');
+        $('.hamburger-button').removeClass('back-icon');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {
@@ -2019,11 +2028,10 @@ $(() => {
     });
   }
 
-  function openGuideModal() {
-    if ($('#guideModal').length === 0) {
-      $('body').append(BDB.templates.guideModal());
-    }
-
+  function openGuideModal(showMapBanner = false) {
+    $('#guideModal').remove();
+    $('body').append(BDB.templates.guideModal({ showMapBanner: showMapBanner}));
+ 
     $('#guideModal').modal('show');
     $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
@@ -2094,12 +2102,12 @@ $(() => {
     // new CountUp("about-stats--views", 0, $('#about-stats--views').data('countupto'), 0, 5).start();
   }
 
-  function handleRouting(initialRouting = false) { 
+  function handleRouting(isInitialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
 
     // Routes that on initial loading should be redirected to the Home
-    if (initialRouting) {
+    if (isInitialRouting) {
       switch(urlBreakdown[1]) {
       case 'novo':
       case 'editar':
@@ -2118,7 +2126,7 @@ $(() => {
         if (id) {
           id = parseInt(id);
 
-          if (initialRouting) {
+          if (isInitialRouting) {
             _isDeeplink = true;
             $('body').addClass('deeplink');
 
@@ -2169,7 +2177,7 @@ $(() => {
       openHowToInstallModal();
       break;
     case 'guia-de-bicicletarios':
-      openGuideModal();
+      openGuideModal(!!isInitialRouting); 
       break;
     case 'sobre':
       openAboutModal();
@@ -2216,7 +2224,7 @@ $(() => {
       break;
     }
 
-    if (match && initialRouting) {
+    if (match && isInitialRouting) {
       _isDeeplink = true;
       $('body').addClass('deeplink');       
     }
