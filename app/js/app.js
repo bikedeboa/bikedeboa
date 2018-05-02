@@ -2113,7 +2113,7 @@ $(() => {
 
     switch (urlBreakdown[1]) {
     case 'b':
-      if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
+      if (urlBreakdown[2] && urlBreakdown[2] !== 'foto') {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
@@ -2158,6 +2158,8 @@ $(() => {
           openNotFoundModal(match);
           match = false;
         }
+      } else {
+        window.location.pathname = '';
       }
       break;
     case 'faq':
@@ -2563,7 +2565,7 @@ $(() => {
                   <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
                 </a>
 
-                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                <a class="" target="_blank" rel="noopener" href="https://github.com/bikedeboa">
                   <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
                 </a>
 
