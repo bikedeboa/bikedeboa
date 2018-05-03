@@ -116,8 +116,6 @@
 
           h2 {
             font-size: 16px;
-            /* width: 60%; */
-            color: #828b90;
           }
 
           #logo {
@@ -214,7 +212,7 @@
           }
 
           section {
-            margin: 60px 0 0;
+            margin: 3em 0 0;
             /*padding: 50px;*/
             /*background-color: rgba(0,0,0,0.02);*/
             /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
@@ -241,7 +239,7 @@
             z-index: 2;
             background: white;
             margin: 0 -24px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
             padding: 12px 24px;
           }
 
@@ -277,7 +275,9 @@
     <body>
       <div class="topbar">
         <h1 id="logo">
-          <a href="/" class="unstyled-link">bike de boa</a> 
+          <a href="/">
+            <img src="/img/logo.svg" alt="bike de boa" />
+          </a>
         </h1>
 
         <div id="userBtn" class="dropdown">
@@ -1096,21 +1096,26 @@
 
         function updateKmlImportResults() {
           document.getElementById("kmlFileImportResults").innerHTML = `
-                  <div class="big-numbers">
-                    <div class="big-numbers--col"> 
-                      <div class="big-numbers--number">${_importResults.places.length}</div>
-                      <div class="big-numbers--label">bicicletários</div>
-                    </div>
-                    <div class="big-numbers--col">
-                      <div class="big-numbers--number">${_importResults.tagsDetected}</div>
-                      <div class="big-numbers--label">tags preenchidas automaticamente</div>
-                    </div>
-                    <div class="big-numbers--col">
-                      <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
-                      <div class="big-numbers--label">fotos com link quebrado</div>
-                    </div>
-                  </div>
-                `;
+            <div class="big-numbers">
+              <div class="big-numbers--col"> 
+                <div class="big-numbers--number">${_importResults.places.length}</div>
+                <div class="big-numbers--label">bicicletários</div>
+              </div>
+              <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.tagsDetected}</div>
+                <div class="big-numbers--label">tags preenchidas automaticamente</div>
+              </div>
+              <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
+                <div class="big-numbers--label">fotos com link quebrado</div>
+              </div>
+            </div>
+            <div>
+              <small>
+                ${_importResults.log}
+              </small>
+            </div>
+          `;
         }
 
         function uploadImportedPlacesToBackend() {
@@ -1405,6 +1410,7 @@
               tagsDetected: 0,
               brokenUrls: 0,
               totalUrls: 0,
+              log: ''
             };
 
             var file = document.getElementById("kmlFileInput").files[0];
@@ -1538,6 +1544,7 @@
                                 case 'sulamerica':
                                 case 'pescocinho':
                                 case 'transcarioca':
+                                case 'misto':
                                 case 'm':
                                   tmp.structureType = 'other';
                                   _importResults.tagsDetected++;
@@ -1549,7 +1556,8 @@
                                   _importResults.tagsDetected++;
                                   break;
                                 default:
-                                  console.warn('tipo nao identificado:', value);
+                                  console.warn('tipo de bicicletario nao identificado:', value);
+                                  // _importResults.log += `Tipo de bicicletário não identificado: ${value}` + '<br>';
                                   break;
                               }
                               break;

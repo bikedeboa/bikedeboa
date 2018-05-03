@@ -2158,8 +2158,6 @@ $(() => {
           openNotFoundModal(match);
           match = false;
         }
-      } else {
-        window.location.pathname = '';
       }
       break;
     case 'faq':
