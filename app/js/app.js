@@ -2128,7 +2128,7 @@ $(() => {
             if (map && _deeplinkMarker) {
               map.setZoom(18);
               map.setCenter({
-                lat: parseFloat(_deeplinkMarker.lat),
+                lat: parseFloat(_deeplin®kMarker.lat),
                 lng: parseFloat(_deeplinkMarker.lng)
               });
             }
@@ -2158,8 +2158,6 @@ $(() => {
           openNotFoundModal(match);
           match = false;
         }
-      } else {
-        window.location.pathname = '';
       }
       break;
     case 'faq':
