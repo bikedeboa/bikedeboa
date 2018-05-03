@@ -11,7 +11,7 @@ This project is a (Progressive) Web App, which means it loads and runs fast accr
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![GitHub Issues](http://img.shields.io/github/issues/bikedeboa/bikedeboa.svg)](https://github.com/bikedeboa/issues)
+[![GitHub Issues](https://img.shields.io/github/issues/bikedeboa/bikedeboa.svg)](https://github.com/bikedeboa/bikedeboa/issues)
 
 ![Screenshot of webapp the main map view](https://i.imgur.com/HxsYdu6.png)
 
