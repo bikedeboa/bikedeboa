@@ -1206,7 +1206,7 @@ a.unstyled-link {
     }
 }
 
-#guideModal {
+.guide-modal {
   $offscreenMargin: 100px;
 
   .close-and-filter {
@@ -1248,9 +1248,7 @@ a.unstyled-link {
   }
 
   .guide-type-img {
-    // height: 300px;
     width: 200px;
-    max-height: 200px;
     padding: 24px;
     padding-top: 0;
   }
@@ -1435,7 +1433,7 @@ a.unstyled-link {
 }
 
 #aboutModal,
-#guideModal {
+.guide-modal {
   $leading: 18px;
 
   #about-social-buttons {
@@ -1970,7 +1968,6 @@ a.unstyled-link {
       font-family: $headingFont;
       padding: $GRID_SPACE*3 $GRID_SPACE*3 $GRID_SPACE;
       font-weight: 700;
-      font-size: 2em;
       letter-spacing: -0.01em;
   }
 }
@@ -3867,7 +3864,18 @@ body.modal-open {
 
 }
 
+.img-mosaic {
+  display: flex !important;
+  align-items: baseline;
+  justify-content: space-evenly;
+  margin: 2em 0;
 
+  // filter: grayscale(100%);
+
+  img {
+    width: 12%;
+  }
+}
 
 
 
@@ -4087,7 +4095,7 @@ body.modal-open {
     }
   }
 
-  #guideModal {
+  .guide-modal {
     .close-and-filter {
       display: none;
     }

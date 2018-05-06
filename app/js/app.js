@@ -1621,6 +1621,12 @@ $(() => {
         setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
       });
     }));
+    $('.js-side-nav-container, body').on('click', '.open-guidetags-btn', queueUiCallback.bind(this, () => {
+      ga('send', 'event', 'Misc', 'faq opened');
+      hideAll().then(() => {
+        setView('O que faz um bicicletário ser seguro', '/guia-seguranca', true);
+      });
+    }));
 
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-aboutdata-btn', queueUiCallback.bind(this, () => {
@@ -2019,20 +2025,20 @@ $(() => {
     });
   }
 
-  function openGuideModal() {
-    if ($('#guideModal').length === 0) {
-      $('body').append(BDB.templates.guideModal());
+  function openGuideTypesModal() { 
+    if ($('#guideTypesModal').length === 0) {
+      $('body').append(BDB.templates.guideTypesModal()); 
     }
 
-    $('#guideModal').modal('show');
-    $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    $('#guideTypesModal').modal('show');
+    $('#guideTypesModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
     // Lazy load gifs when modal is shown
-    $('#guideModal .guide-img-row img').each( (i, v) => {
+    $('#guideTypesModal .guide-img-row img').each( (i, v) => {
       $(v).attr('src', $(v).data('src'));
     });
 
-    $('#guideModal .close-and-filter').off('click').on('click', function() {
+    $('#guideTypesModal .close-and-filter').off('click').on('click', function() {
       const p = $(this).data('prop');
       const v = $(this).data('value'); 
 
@@ -2044,6 +2050,33 @@ $(() => {
       $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked', true);
       updateFilters();
     });
+  } 
+
+  function openGuideTagsModal() {
+    if ($('#guideTagsModal').length === 0) {
+      $('body').append(BDB.templates.guideTagsModal());
+    }
+
+    $('#guideTagsModal').modal('show');
+    $('#guideTagsModal article > *').css({ opacity: 0 }).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+ 
+    // // Lazy load imgs when modal is shown
+    // $('#guideTypesModal .guide-img-row img').each((i, v) => {
+    //   $(v).attr('src', $(v).data('src'));
+    // });
+
+    // $('#guideTypesModal .close-and-filter').off('click').on('click', function () {
+    //   const p = $(this).data('prop');
+    //   const v = $(this).data('value');
+
+    //   // Close modal
+    //   goHome();
+
+    //   // Mark corresponding filter checkbox
+    //   $('.filter-checkbox').prop('checked', false);
+    //   $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked', true);
+    //   updateFilters();
+    // });
   } 
 
   function openNotFoundModal(url){
@@ -2167,7 +2200,10 @@ $(() => {
       openHowToInstallModal();
       break;
     case 'guia-de-bicicletarios':
-      openGuideModal();
+      openGuideTypesModal();
+      break;
+    case 'guia-seguranca':
+      openGuideTagsModal();
       break;
     case 'sobre':
       openAboutModal();
