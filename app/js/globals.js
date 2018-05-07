@@ -58,6 +58,11 @@ const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', '
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
+const TAG_NAMES_PT = ['espaçoso', 'fácil acesso', 'monitorado', 'movimentado', 'reforçado', 'visível'];
+const TAG_NAMES_EN = ['spacious', 'easyaccess', 'monitored', 'bustling', 'strong', 'visible'];
+const TAG_NAMES__PT_TO_EN = createMapFromArrays(TAG_NAMES_PT, TAG_NAMES_EN);
+const TAG_NAMES__EN_TO_PT = createMapFromArrays(TAG_NAMES_EN, TAG_NAMES_PT);
+
 const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 const FACEBOOK_CLIENT_ID = '<FACEBOOK_CLIENT_ID>';
 const GOOGLE_CLIENT_ID = '<GOOGLE_CLIENT_ID>';

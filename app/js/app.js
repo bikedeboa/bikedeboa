@@ -124,8 +124,8 @@ $(() => {
   
     // Tags
     if (tags && m.tags) {
-      const MAX_TAG_COUNT = m.reviews;
-      const MIN_TAG_OPACITY = 0.3;
+      const maxTagCount = m.reviews;
+      const MIN_TAG_OPACITY = 0.2; 
 
       let allTags = [];
       tags.forEach( t => {
@@ -137,24 +137,18 @@ $(() => {
         }
       });
 
-      // templateData.tags = m.tags
       templateData.tags = allTags 
-        // .sort((a, b) => {return b.count - a.count;})
         .sort((a, b) => {return b.name - a.name;})
         .map(t => {
-          // Tag opacity is proportional to count
-          // @todo refactor this to take into account Handlebars native support for arrays
-          const opacity = t.count/MAX_TAG_COUNT + MIN_TAG_OPACITY;
-          // return t.count > 0 ? `<span class="tagDisplay" style="opacity: ${opacity}">${t.name} <span class="tag-count">${t.count}</span></span>` : '';
-          return `
-            <span class="tagDisplayContainer">
-              <span class="tagDisplay" style="opacity: ${opacity}">
-                ${t.name} <span class="tag-count">${t.count}</span>
-              </span>
-            </span>
-          `;
-        })
-        .join('');
+          const opacity = (t.count / maxTagCount) * 0.7 + MIN_TAG_OPACITY;
+          return {
+            name: t.name,
+            englishName: TAG_NAMES__PT_TO_EN[t.name.toLowerCase()],
+            opacity: opacity,
+            isEmpty: t.count == 0,
+            count: parseInt(t.count*100 / maxTagCount)
+          };
+        });
     }
 
     // Reviews, checkins

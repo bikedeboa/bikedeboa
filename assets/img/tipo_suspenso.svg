@@ -5,22 +5,22 @@
 	 width="140.834px" height="147.25px" viewBox="0 0 140.834 147.25" enable-background="new 0 0 140.834 147.25"
 	 xml:space="preserve">
 <defs>
-	<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="20.981" y="6.996" width="78.84" height="133.738">
+	<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="20.983" y="6.997" width="78.841" height="133.737">
 		<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
 	</filter>
 </defs>
-<mask maskUnits="userSpaceOnUse" x="20.981" y="6.996" width="78.84" height="133.738" id="SVGID_1_">
+<mask maskUnits="userSpaceOnUse" x="20.983" y="6.997" width="78.841" height="133.737" id="SVGID_1_">
 	<g filter="url(#Adobe_OpacityMaskFilter)">
 		<g id="XMLID_3_">
 			<g>
-				<path fill="#FFFFFF" d="M3.998-32.575h105.66v199.67H3.998V-32.575z M101.777,1.255h-39.51l39.51,49.42V1.255z"/>
+				<path fill="#FFFFFF" d="M3.998-32.575h105.66v199.671H3.998V-32.575z M101.776,1.255H62.267l39.509,49.42V1.255z"/>
 			</g>
 			<g>
 				
 					<polygon fill="none" stroke="#000000" stroke-width="14.1732" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
-					101.777,50.675 101.777,1.255 62.268,1.255 				"/>
+					101.776,50.675 101.776,1.255 62.268,1.255 				"/>
 				
-					<rect x="3.998" y="-32.575" fill="none" stroke="#000000" stroke-width="14.1732" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" width="105.66" height="199.67"/>
+					<rect x="3.998" y="-32.575" fill="none" stroke="#000000" stroke-width="14.1732" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" width="105.66" height="199.671"/>
 			</g>
 		</g>
 	</g>
@@ -32,12 +32,12 @@
 		<circle fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="74.176" cy="32.645" r="23.679"/>
 	
 		<path fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
-		M74.176,110.019c2.798,0,5.067,2.27,5.067,5.069c0,2.799-2.27,5.067-5.067,5.067c-2.802,0-5.069-2.269-5.069-5.067
-		C69.106,112.288,71.374,110.019,74.176,110.019z"/>
+		M74.176,110.02c2.798,0,5.067,2.27,5.067,5.068s-2.27,5.066-5.067,5.066c-2.802,0-5.069-2.269-5.069-5.066
+		C69.106,112.288,71.374,110.02,74.176,110.02z"/>
 	
 		<path fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
-		M74.176,67.101c4.271,0,7.737,3.465,7.737,7.738s-3.467,7.737-7.737,7.737c-4.276,0-7.739-3.464-7.739-7.737
-		S69.899,67.101,74.176,67.101z"/>
+		M74.176,67.101c4.271,0,7.737,3.465,7.737,7.738c0,4.272-3.467,7.737-7.737,7.737c-4.276,0-7.739-3.465-7.739-7.737
+		C66.437,70.566,69.899,67.101,74.176,67.101z"/>
 	
 		<circle fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="73.913" cy="32.644" r="5.069"/>
 	
@@ -50,13 +50,13 @@
 		<polyline fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
 		69.104,34.243 22.952,51.74 22.952,62.534 	"/>
 	
-		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="67.26" y1="78.312" x2="32.505" y2="101.811"/>
+		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="67.26" y1="78.313" x2="32.505" y2="101.811"/>
 	
 		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="67.728" y1="70.558" x2="40.944" y2="46.011"/>
 	
 		<path fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
-		M29.139,91.475c1.858,0,3.365,1.507,3.365,3.366v12.23c0,1.859-1.507,3.366-3.365,3.366l0,0c-1.859,0-3.366-1.507-3.366-3.366
-		v-12.23C25.772,92.981,27.279,91.475,29.139,91.475L29.139,91.475z"/>
+		M29.139,91.475c1.858,0,3.365,1.508,3.365,3.366v12.229c0,1.859-1.507,3.367-3.365,3.367l0,0c-1.859,0-3.366-1.508-3.366-3.367
+		V94.841C25.772,92.98,27.279,91.475,29.139,91.475L29.139,91.475z"/>
 	
 		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="31.792" y1="48.389" x2="48.638" y2="63.694"/>
 	
@@ -65,9 +65,9 @@
 </g>
 <g>
 	
-		<polygon fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="59.0813,9.8469" points="
+		<polygon fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
 		102.668,52.552 102.668,3.125 63.159,3.125 	"/>
 </g>
 <line fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="102.668" y1="50.661" x2="102.668" y2="143.521"/>
-<line fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="137.752" y1="143.522" x2="3.211" y2="143.522"/>
+<line fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="137.752" y1="143.521" x2="3.211" y2="143.521"/>
 </svg>
