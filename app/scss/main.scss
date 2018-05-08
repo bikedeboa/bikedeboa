@@ -1206,6 +1206,22 @@ a.unstyled-link {
     }
 }
 
+#guideTagsModal {
+  h3 {
+    margin-top: .5em;
+    margin-bottom: 1em;
+  }
+
+  .guide-type-img {
+    width: 80px;
+    padding: 0;
+  }
+
+  section {
+    margin-top: 3em;
+  }
+}
+
 .guide-modal {
   $offscreenMargin: 100px;
 
@@ -5203,8 +5219,8 @@ a[data-featherlight] {
       }
 
       li {
-        height: 48px;
-        line-height: 48px;
+        height: $GRID_SPACE*4;
+        line-height: $GRID_SPACE*2;
         padding: 0 16px;
         cursor: pointer;
 
