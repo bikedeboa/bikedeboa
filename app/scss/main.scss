@@ -588,20 +588,22 @@ p {
 
 .help-tooltip-trigger {
   cursor: pointer;
-  color: $lightGray; 
 
-  transition: color .2s ease;
+  &.glyphicon-question-sign {
+    color: $lightGray; 
+    transition: color .2s ease;
+    
+    & + .tooltip {
+      .tooltip-inner {
+        text-align: left;
+      }
+    }
 
-  
-  & + .tooltip {
-    .tooltip-inner {
-      text-align: left;
+    &:hover {
+      color: $black;
     }
   }
-
-  &:hover {
-    color: $black;
-  }
+  
 }
 
 .media-grid {
@@ -2763,21 +2765,27 @@ body.modal-open {
       }
     }
 
+    .help-tooltip-trigger:hover {
+      .icon-label {
+        text-decoration: underline;
+      }
+    }
+
     .icon-label {
-        margin-top: 10px;
-        color: $gray;
-        font-weight: 700;
-        user-select: none;
-        cursor: default;
+      font-size: 16px;
+      margin-top: 10px;
+      color: $gray;
+      font-weight: 700;
+      user-select: none;
 
-        small {
-          font-weight: 400;
-        }
+      small {
+        font-weight: 400;
+      }
 
-        &.skeleton-box {
-            height: 20px;
-            background: rgba(0,0,0,0.05);
-        }
+      &.skeleton-box {
+          height: 20px;
+          background: rgba(0,0,0,0.05);
+      }
     }
 }
 
@@ -2852,7 +2860,6 @@ body.modal-open {
         text-align: center;
         white-space: nowrap;
         user-select: none;
-        cursor: default;
         color: $black;
 
         .tag-count {
@@ -2873,6 +2880,14 @@ body.modal-open {
         .tag-icon {
           font-size: 2em;
           opacity: .8;
+        }
+
+        &.help-tooltip-trigger {
+          &:hover {
+            .tagDisplayName {
+              text-decoration: underline;
+            }
+          }
         }
 
         .tag-empty {

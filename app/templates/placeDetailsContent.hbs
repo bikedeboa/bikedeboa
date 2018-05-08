@@ -86,25 +86,31 @@
             {{/unless}}
 
             {{#unless noIsPublicData}}
-                <div class="{{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}" itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification">
-                <meta itemprop="name" content="Acesso">
-                {{#if isPublic}}
-                    <img alt="" src="/img/icon_public.svg"/>
-                    <div class="icon-label">
-                        <span itemprop="value">Público</span>
-                        <a id="public-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Público</h2>
-                        <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
-                        <p>Normalmente está em espaço público, como calçadas ou parques.</p>
-                        <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"></a>
-                    </div>
-                {{else}}
-                    <img alt="" src="/img/icon_private.svg"/>
-                    <div class="icon-label">
-                        <span itemprop="value">Privado</span>
-                        <a id="private-access-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="<h2>Bicicletário Privado</h2>
-                        <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"></a> 
-                    </div> 
-                {{/if}}
+                <div id="{{#if isPublic}}public-access-help-tooltip{{else}}private-access-help-tooltip{{/if}}" class="help-tooltip-trigger {{#ifCond isAdmin '&&' noIsPublicData}} missing-info {{/ifCond}}"
+                    itemprop="amenityFeature" itemscope itemtype="http://schema.org/LocationFeatureSpecification"
+                    data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"
+                     {{#if isPublic}}data-title="
+                    <h2>Bicicletário Público</h2>
+                    <p>Pode ser usado em qualquer horário por qualquer pessoa.</p>
+                    <p>Normalmente está em espaço público, como calçadas ou parques.</p>
+                    <p>Pode ter sido instalado por um estabelecimento comercial ou não.</p>"
+                     {{else}}
+                    data-title="<h2>Bicicletário Privado</h2>
+                    <p>O uso é restrito para clientes, funcionários ou moradores e este acesso é controlado.<p>"
+                     {{/if}}
+                >
+                    <meta itemprop="name" content="Acesso">
+                    {{#if isPublic}}
+                        <img alt="" src="/img/icon_public.svg"/>
+                        <div class="icon-label">
+                            <span itemprop="value">Público</span>
+                        </div>
+                    {{else}}
+                        <img alt="" src="/img/icon_private.svg"/>
+                        <div class="icon-label">
+                            <span itemprop="value">Privado</span>
+                        </div> 
+                    {{/if}}
                 </div>
             {{else}}
             {{#if canModify}}
@@ -240,12 +246,16 @@
                 {{#if tags}}
                     <div class="tagsContainer">
                         {{#each tags}}
-                            <div class="tagDisplay" style="opacity: {{opacity}}">
+                            <div class="tagDisplay help-tooltip-trigger" style="opacity: {{opacity}}" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0" data-title="
+                                Isdem diebus Apollinaris Domitiani gener, paulo ante agens palatii Caesaris curam, ad Mesopotamiam missus a socero per militares
+                                numeros immodice scrutabatur.">
                                 <div>
                                     <img alt="" class="svg-icon tag-icon" src="/img/icon_tag_{{englishName}}.svg" />
                                 </div>
                                 <div>
-                                    <span class="{{#if isEmpty}}tag-empty{{/if}}">{{name}}</span>
+                                    <span class="tagDisplayName {{#if isEmpty}}tag-empty{{/if}}">
+                                        {{name}}
+                                    </span>
                                     <span class="tag-count" style="display: block; {{#if isEmpty}}opacity: 0;{{/if}}">{{count}}%</span>
                                 </div>
                                 {{!-- <span class="tag-count">{{count}}</span> --}}
