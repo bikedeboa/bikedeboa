@@ -2174,12 +2174,24 @@ $(() => {
       openFaqModal();
       break;
     case 'como-instalar':
+      if (isInitialRouting) {
+        _isDeeplink = true;
+        $('body').addClass('deeplink');
+      }
       openHowToInstallModal();
       break;
     case 'guia-de-bicicletarios':
+      if (isInitialRouting) {
+        _isDeeplink = true;
+        $('body').addClass('deeplink');
+      }
       openGuideModal(!!isInitialRouting); 
       break;
     case 'sobre':
+      if (isInitialRouting) {
+        _isDeeplink = true;
+        $('body').addClass('deeplink');
+      }
       openAboutModal();
       break;
     case 'sobre-nossos-dados':
@@ -2224,10 +2236,6 @@ $(() => {
       break;
     }
 
-    if (match && isInitialRouting) {
-      _isDeeplink = true;
-      $('body').addClass('deeplink');       
-    }
     return match;
   }
 
