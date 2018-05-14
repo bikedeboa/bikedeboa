@@ -5011,22 +5011,42 @@ a[data-featherlight] {
   transition-timing-function: linear;
   background-color: transparent;
 
-  &.back-mode .hamburger-inner {
-    &,
-    &::before,
-    &::after {
-      background-color: $green;
+  &.back-icon {
+    .hamburger-inner {
+      transform: rotate(-180deg);
+ 
+      &,
+      &::before,
+      &::after {
+        background-color: $green;
+      }
+
+      &::before {
+        transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
+      }
+      &::after {
+        transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
+      }
     }
   }
 
-  &.back-mode .hamburger-inner {
-    transform: rotate(-180deg);
-  }
-  &.back-mode .hamburger-inner::before {
-    transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
-  }
-  &.back-mode .hamburger-inner::after {
-    transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
+  &.close-icon {
+    .hamburger-inner {
+      // transform: rotate(-180deg);
+      background: transparent;
+
+      &::before,
+      &::after {
+        background-color: $green;
+      }
+
+      &::before {
+        transform: translate3d(0px, 7px, 0) rotate(45deg);
+      }
+      &::after {
+        transform: translate3d(0px, -7px, 0) rotate(-45deg);
+      }
+    }
   }
  
   .hamburger-box {
