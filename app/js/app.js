@@ -322,7 +322,7 @@ $(() => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
-        openLoginDialog(true);
+        openLoginDialog({ showPermissionDisclaimer: true });
 
         $(document).one('bikedeboa.login', () => {
           openRevisionDialog();
@@ -1618,8 +1618,17 @@ $(() => {
     });
 
     $('body').on('click', '.openContributionsBtn', queueUiCallback.bind(this, () => {
-      hideAll();
-      setView('Contribuições', '/contribuicoes', true);
+      // hideAll();
+
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog();
+
+        $(document).one('bikedeboa.login', () => {
+          setView('Contribuições', '/contribuicoes', true);
+        });
+      } else {
+        setView('Contribuições', '/contribuicoes', true);
+      }
     }));
  
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
@@ -1689,7 +1698,7 @@ $(() => {
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
-        openLoginDialog(true);
+        openLoginDialog({ showPermissionDisclaimer: true });
 
         $(document).one('bikedeboa.login', () => {
           $('#addPlace').click();
@@ -2008,10 +2017,13 @@ $(() => {
 
       for(let i=0; i < templateData.places.length; i++) {
         let p = templateData.places[i];
+
         // Created X days ago
         if (p.createdAt) {
           p.createdTimeAgo = createdAtToDaysAgo(p.createdAt);
         }
+ 
+        p.thumbnailUrl = (p.photo) ? p.photo.replace('images', 'images/thumbs') : ''; 
       }
       
       templateData.places = templateData.places.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
@@ -2205,7 +2217,17 @@ $(() => {
       break;
     case 'contribuicoes':
       hideAll();
-      openContributionsModal();
+
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+ 
+        $(document).one('bikedeboa.login', () => {
+          openContributionsModal();
+        });
+      } else {
+        openContributionsModal();
+      }
+
       break;
     case 'nav':
       _hamburgerMenu.show();
@@ -2245,7 +2267,9 @@ $(() => {
     return match;
   }
 
-  function openLoginDialog(showPermissionDisclaimer = false) {
+  function openLoginDialog(options = {}) {
+    const showPermissionDisclaimer = options.showPermissionDisclaimer;
+
     // let permissionDisclaimer = '';
     // if (showPermissionDisclaimer) {
     //   permissionDisclaimer = `
@@ -2332,7 +2356,7 @@ $(() => {
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
-        $('#userBtn .openContributionsBtn').attr('disabled', false);
+        // $('#userBtn .openContributionsBtn').attr('disabled', false);
         $('#userBtn .logoutBtn').show(); 
         $('#userBtn .loginBtn').hide();
         if (data.role === 'admin') {
@@ -2376,7 +2400,7 @@ $(() => {
     $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();
     $('.loginBtn').show(); 
-    $('.openContributionsBtn').attr('disabled', true);
+    // $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
