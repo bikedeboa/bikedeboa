@@ -19,6 +19,22 @@
                         <h2>Dê um nome pro bicicletário</h2>
                         <div class="text-input-wrapper">
                             <input required id="titleInput" name="text" type="text" class="text-input" placeholder="Sem nome" data-hj-whitelist>
+
+                            {{#if nameSuggestions}}
+                                <div class="place-suggestions">
+                                    <span class="place-suggestions--title">
+                                        Sugestões
+                                    </span>
+
+                                    <ul class="place-suggestions--list">
+                                        {{#each nameSuggestions}}
+                                            <li class="place-suggestion--item" data-name="{{this}}">
+                                                <a>{{this}}</a>
+                                            </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            {{/if}}
                         </div>
                     </section>
 

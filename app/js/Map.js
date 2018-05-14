@@ -16,6 +16,7 @@ BDB.Map = (function () {
   let areMarkersHidden = false;
   let directionsRenderer;
   let directionsService;
+  let placesService;
   let infoWindow;
 
   // to do:  move this to configuration
@@ -99,6 +100,8 @@ BDB.Map = (function () {
         }
       });
     }
+
+    placesService = new google.maps.places.PlacesService(map);
 
     directionsRenderer = new google.maps.DirectionsRenderer({
       map: map,
@@ -659,6 +662,30 @@ BDB.Map = (function () {
     },
     removeDirections: function() {
       directionsRenderer.set('directions', null);
+    },
+    getNameSuggestions: function (position) {
+      return new Promise((resolve, reject) => {
+        placesService.nearbySearch({
+          location: position,
+          radius: 10, // radius in meters
+          type: 'point_of_interest' // exclude results like street names
+        }, (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // Sort results by distance 
+            for (var i = 0; i < results.length; i++) {
+              results[i].distance = google.maps.geometry.spherical.computeDistanceBetween(
+                map.getCenter(),
+                results[i].geometry.location
+              );
+            }
+            results.sort((a, b) => a.distance - b.distance);
+             
+            resolve(results);
+          } else {
+            reject();
+          }
+        });
+      });
     },
     updateMarkers: function () {
       this.clearMarkers();

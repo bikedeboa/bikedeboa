@@ -238,15 +238,12 @@ body.offline {
   // border: 5px solid $green;
 
   #addPlace,
-  // #locationSearch,
   .howToInstallBtn,
   #filterBtn,
-  // #geolocationBtn,  
   #userBtn, 
   .loginBtn,
   .createRevisionBtn,
   .rating-input-container,
-  // .minimap,
   .search-button,
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
@@ -254,7 +251,6 @@ body.offline {
   #placeDetailsContent .photo-container.hasImage.loading {
     // display: none !important;
     opacity: 0.4 !important;
-    user-select: none;
     pointer-events: none;
   }
 
@@ -1445,7 +1441,7 @@ a.unstyled-link {
 
   .about-collaborators {
     font-size: 18px;
-    background: #F3F3F3;
+    background: $lightestGray;
     padding: 24px;
     margin: auto;
     border-radius: 5px;
@@ -2137,24 +2133,6 @@ body.modal-open {
         font-family: "Raleway", sans-serif;
         font-weight: 700;
         font-size: 20px;
-
-        & > .little-pin {
-            position: absolute;
-            top: 18px;
-            left: 14px;
-            width: 16px;
-            height: 16px;
-            /* background-image: url(/img/pin_green.svg); */
-            /* background-size: 70%; */
-            /* background-repeat: no-repeat; */
-            background-color: $green;
-            border-radius: 50%;
-
-            &.gray {
-                // background-image: url(/img/pin_gray.svg);
-                background: $gray;
-            }
-        }
     }
 
     .text-input {
@@ -2305,8 +2283,7 @@ body.modal-open {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
         h2 {
-          padding: $GRID_SPACE;
-          padding-left: 0;
+          padding-top: $GRID_SPACE;
           font-size: 22px; 
           user-select: none;
           font-weight: bold;
@@ -3060,6 +3037,36 @@ body.modal-open {
     }
 }
 
+.btn-tag {
+    // background: $lightestGray;
+    background: transparent;
+    border: 1px solid $black;
+    border-radius: 25px;
+    margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+    width: calc(33% - #{$GRID_SPACE}); 
+
+    // &:before {
+    //     content: '☐';
+    //     margin-right: 5px;
+    //     font-family: 'Arial';
+    // }
+
+    &.active {
+        background: $green;
+        color: white;
+        box-shadow: none;
+        border: 0;
+
+        &:hover {
+          background: $lightGreen;
+        }
+    } 
+
+    &:hover {
+      background: $lighterGray;
+    }
+}
+
 .review-modal {
     text-align: center;
     
@@ -3067,36 +3074,6 @@ body.modal-open {
       max-width: 400px;
       margin: 24px auto 36px;
       text-align: left;
-    }
-
-    .btn-tag {
-        // background: $lightestGray;
-        background: transparent;
-        border: 1px solid $black;
-        border-radius: 25px;
-        margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-        width: calc(33% - #{$GRID_SPACE}); 
-
-        // &:before {
-        //     content: '☐';
-        //     margin-right: 5px;
-        //     font-family: 'Arial';
-        // }
-
-        &.active {
-            background: $green;
-            color: white;
-            box-shadow: none;
-            border: 0;
- 
-            &:hover {
-              background: $lightGreen;
-            }
-        } 
-
-        &:hover {
-          background: $lighterGray;
-        }
     }
 
     .swal2-cancel,
@@ -3416,7 +3393,7 @@ body.modal-open {
       transition: color 0.2s ease-out, background 0.2s ease-out;
 
       &:hover {
-        background: #f3f3f3;
+        background: $lightestGray;
       }
 
       input:checked + label {
@@ -4511,6 +4488,51 @@ body.modal-open {
     }
   }
 }
+
+.place-suggestions {
+  margin: $GRID_SPACE/2;
+
+  .place-suggestions--title {
+    // display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: uppercase;
+    user-select: none;
+    margin-right: $GRID_SPACE/4;
+    color: $lightGray;
+  }
+
+  .place-suggestions--list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: inline;
+      
+      .place-suggestion--item {
+          display: inline-block;
+          font-weight: 400;
+          font-size: 14px;
+          margin: $GRID_SPACE/2 0;
+          cursor: pointer;
+          
+          a {
+              color: $gray;
+              padding: $GRID_SPACE/2;
+              background: $lightestGray;
+              border-radius: 4px;
+          }
+          
+          &:hover {
+              background: $paleWhite;
+              
+              a {
+                color: $black;
+              }
+          }
+      }
+  }
+}
+
 
 
 
