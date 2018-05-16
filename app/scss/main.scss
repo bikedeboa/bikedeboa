@@ -54,8 +54,10 @@ $spotifyBounce: cubic-bezier(0, 0, 0, 2.41);
 
 // $bodyFont: 'Core Sans G', sans-serif;
 // $headingFont: 'Core Sans GS', sans-serif;
-$bodyFont: 'Gotham Rounded', sans-serif;
-$headingFont: 'Gotham Rounded', sans-serif;
+// $bodyFont: 'Gotham Rounded', sans-serif;
+// $headingFont: 'Gotham Rounded', sans-serif;
+$bodyFont: 'Museo Sans Rounded', sans-serif;
+$headingFont: 'Museo Sans Rounded', sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
@@ -114,6 +116,37 @@ $GRID_SPACE: 12px;
   font-weight: normal;
   font-style: italic;
 }
+
+@font-face {
+    font-family: 'Museo Sans Rounded'; 
+    src: url('museosansrounded-100-webfont.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Museo Sans Rounded';
+    src: url('museosansrounded-300-webfont.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Museo Sans Rounded';
+    src: url('museosansrounded-500-webfont.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+// @font-face { 
+//     font-family: 'Museo Sans Rounded';
+//     src: url('museosansrounded-700-webfont.woff') format('woff');
+//     font-weight: 700;
+//     font-style: normal;
+// }
+// @font-face {
+//     font-family: 'Museo Sans Rounded';
+//     src: url('museosansrounded-900-webfont.woff') format('woff');
+//     font-weight: 900;
+//     font-style: normal;
+// }
 
 @font-face {
     font-family: 'Proxima Nova Soft';
