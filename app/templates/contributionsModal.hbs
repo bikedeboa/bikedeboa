@@ -8,73 +8,91 @@
                 </div> 
 
                 <div class="modal-body">
-                {{#if profile}} 
-                    <h2>
-                    {{#if profile.picture}}<img alt="" src="{{profile.picture}}">{{/if}} Oi <b>{{profile.first_name}}</b> :)
-                    </h2> 
-                    {{#if isAdmin}}
-                    <p class="you-are-admin">
-                        Uhul! Você é <b>admin</b> :D
-                    </p>
+                    {{#if profile}} 
+                        <h2>
+                            {{#if profile.picture}}
+                                <img alt="" class="{{#if isAdmin}}admin{{/if}}" src="{{profile.picture}}">
+                            {{/if}}
+                            
+                            Oie <b>{{profile.first_name}}</b> :)
+                        </h2>
+
+                        {{#if isAdmin}}
+                            <div class="you-are-admin">
+                                <img alt="" class="svg-icon" src="/img/icon_star_yellow.svg"/>Uhul! Você é <b>admin</b> :D
+                            </div>
+                        {{/if}}
                     {{/if}}
-                {{/if}}
 
-                {{#ifCond nreviews '&&' nplaces}}
-                    <div class="big-numbers"> 
-                    <a class="big-numbers--col unstyled-link" href="#avaliacoes">
-                        <div class="big-numbers--number">{{{nreviews}}}</div>
-                        <div class="big-numbers--label">avaliações</div>
-                    </a>
-                    <a class="big-numbers--col unstyled-link" href="#bicicletarios">
-                        <div class="big-numbers--number">{{{nplaces}}}</div>
-                        <div class="big-numbers--label">bicicletários</div>
-                    </a>
+                    <ul class="nav nav-pills" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">
+                                <span class="badge">{{{nreviews}}}</span>
+                                <br>
+                                Avaliações
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#places" aria-controls="places" role="tab" data-toggle="tab">
+                                <span class="badge">{{{nplaces}}}</span>
+                                <br>
+                                Bicicletários
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in active" id="reviews">
+                            <ul>
+                            {{#each reviews}}
+                                <li>
+                                    <button class="go-to-place-btn" data-id="{{placeObj.id}}">
+                                        <span class="go-to-place-btn--title">{{placeObj.text}}</span>
+                                        <span class="go-to-place-btn--rating" data-color="{{color}}">
+                                            {{{ratingContent}}}
+                                        </span>
+                                        <span class="go-to-place-btn--daysago">
+                                            <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
+                                        </span>
+                                    </button>
+                                </li>
+                                {{else}}
+                                    <i>Nenhuma avaliação feita ainda.</i>
+                            {{/each}}
+                            </ul>
+                        </div>
+                        
+                        <div role="tabpanel" class="tab-pane fade" id="places">
+                            <ul>
+                            {{#each places}}
+                                <li>
+                                    <button class="go-to-place-btn" data-id="{{id}}">
+                                        <span class="go-to-place-btn--photo">
+                                            <img alt="" src="{{thumbnailUrl}}"/>
+                                        </span>
+
+                                        <span class="go-to-place-btn--title">{{text}}</span>
+
+                                        <span class="go-to-place-btn--views">
+                                            <img class="details-list-icon svg-icon" alt="" src="/img/icon_views.svg"> {{views}}
+                                        </span>
+
+                                        <span class="go-to-place-btn--daysago">
+                                            <!-- <span class="glyphicon glyphicon-time"></span>  -->
+                                            {{createdTimeAgo}}
+                                        </span>
+                                    </button>
+                                </li>
+                                {{else}}
+                                <i>Nenhum bicicletário criado ainda.</i>
+                            {{/each}}
+                            </ul>
+                        </div>
                     </div>
-                {{/ifCond}}
 
-                <hr>
-
-                <h3 id="avaliacoes">Avaliações</h3>
-                <ul> 
-                    {{#each reviews}}
-                    <li>
-                        <button class="go-to-place-btn" data-id="{{placeObj.id}}">
-                        <span class="go-to-place-btn--daysago">
-                            <!-- <span class="glyphicon glyphicon-time"></span>  -->{{createdTimeAgo}}
-                        </span> 
-                        <span class="go-to-place-btn--title">{{placeObj.text}}</span>
-                        <span class="go-to-place-btn--rating" data-color="{{color}}">
-                            {{{ratingContent}}}
-                        </span> 
-                        </button>
-                    </li>
-                    {{else}}
-                    <i>Nenhuma avaliação feita ainda.</i>
-                    {{/each}}
-                </ul>
-
-                <hr>
-
-                <h3 id="bicicletarios">Bicicletários</h3>
-                <ul> 
-                    {{#each places}}
-                    <li>
-                        <button class="go-to-place-btn" data-id="{{id}}">
-                        <span class="go-to-place-btn--daysago">
-                            <!-- <span class="glyphicon glyphicon-time"></span>  -->
-                            {{createdTimeAgo}}
-                        </span> 
-                        <span class="go-to-place-btn--title">{{text}}</span>
-                        <span class="go-to-place-btn--views">
-                             {{views}} visualizações
-                        </span> 
-                        </button>
-                    </li>
-                    {{else}}
-                    <i>Nenhum bicicletário criado ainda.</i>
-                    {{/each}}
-                </ul>
-
+                    <button class="logoutBtn link-button" style="margin-top: 24px; width: 100%;">
+                        <img alt="" class="svg-icon" src="/img/icon_logout.svg"> Deslogar
+                    </button> 
                 </div>
             </div>
         </div>
