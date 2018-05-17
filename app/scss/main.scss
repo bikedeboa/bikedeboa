@@ -1161,7 +1161,6 @@ a.unstyled-link {
           font-size: 16px;
           font-weight: bold;
           padding: 0 $GRID_SPACE;
-          text-transform: lowercase;
           cursor: pointer;
 
           transition: color 0.2s ease;
@@ -1186,7 +1185,6 @@ a.unstyled-link {
         border: none;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
-        left: -43px;
         width: auto;
 
         // font-size: 18px;

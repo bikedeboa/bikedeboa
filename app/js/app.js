@@ -2052,9 +2052,9 @@ $(() => {
     });
   }
 
-  function openGuideTypesModal() { 
-    $('#guideTypesModal').remove();
-    $('body').append(BDB.templates.guideModal({ showMapBanner: showMapBanner }));
+  function openGuideTypesModal(showMapBanner) { 
+    $('#guideTypesModal').remove(); 
+    $('body').append(BDB.templates.guideTypesModal({ showMapBanner: showMapBanner }));
 
     $('#guideTypesModal').modal('show');
     $('#guideTypesModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
