@@ -16,7 +16,6 @@ const fileSizes = require('gulp-size');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
 const plumber = require('gulp-plumber');
-const mainBowerFiles = require('main-bower-files');
 const filter = require('gulp-filter');
 const flatten = require('gulp-flatten');
 const minifycss = require('gulp-clean-css');
@@ -31,7 +30,6 @@ const declare = require('gulp-declare');
 const merge = require('merge-stream');
 
 
-const BOWER_PATH = './bower_components';
 const DEST_PATH =  'dist';
 
 
@@ -64,7 +62,7 @@ let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
 // https://developers.google.com/maps/documentation/javascript/releases
 // if (BDB_ENV === 'prod') {  
   // GOOGLE_MAPS_ID += '&v=3.exp&use_slippy=true';
-  GOOGLE_MAPS_ID += '&v=3.31';
+  // GOOGLE_MAPS_ID += '&v=3.31';
 // }
  
 
@@ -148,21 +146,16 @@ gulp.task('html', () => {
 // Service Worker (sw-precache)
 gulp.task('generate-service-worker', function(callback) {
   swPrecache.write('dist/service-worker.js', {
-    // Files to be precached to be available offline.
+    // Files to be precached, which will always be available offline
+    //   Not to be mistaken with Runtime Caching, which may also enable some assets to be available offline
     staticFileGlobs: [
-      'dist/**/*.{js,css}',
-      'dist/*.html', 
       // 'dist/*.json', 
       // 'assets/**/*.{svg,png,jpg}',
-      // 'dist/**/*.{ttf,woff,woff2}',
+      // 'dist/**/*.{ttf,woff,woff2}', 
+      'public/manifest.json', 
       'dist/fonts/glyphicons-halflings-regular.ttf',
       'dist/fonts/glyphicons-halflings-regular.woff',
       'dist/fonts/glyphicons-halflings-regular.woff2',
-      'public/manifest.json', 
-      'public/lib/infobox.min.js',
-      'public/lib/markerclusterer.min.js',
-      'public/lib/featherlight.min.js',
-      'public/lib/featherlight.min.css',
       'assets/img/icon_*.svg',
       'assets/img/tipo_*.svg',
       'assets/img/pin_*.svg', 
@@ -193,6 +186,12 @@ gulp.task('generate-service-worker', function(callback) {
     runtimeCaching: [
       // Network First: good for API requests where you always want the freshest data when it is available, but would
       //   rather have stale data than no data. (Will NEVER prioritize cache over network, which is slower but safer)
+      
+      // All JS, CSS and HTML files
+      // @todo understand why code sometimes doesn't get updated even if there's network available
+      // { urlPattern: /\.(?:js|css|html)$/, handler: 'networkFirst' }, 
+      
+      // All image asssets
       { 
         urlPattern: /\.(?:png|jpg|jpeg|svg)$/, handler: 'networkFirst', options: {
           cache: {
@@ -201,6 +200,8 @@ gulp.task('generate-service-worker', function(callback) {
           }
         }
       }, 
+      
+      // BDB API Requests
       { urlPattern: /herokuapp.com\/local\/light$/, handler: 'networkFirst'},
       { urlPattern: /herokuapp.com\/local\/\d+/, handler: 'networkFirst'},  
       
@@ -241,55 +242,6 @@ gulp.task('generate-service-worker', function(callback) {
 });
 
 
-// grab libraries files from bower_components, minify and push in DEST_PATH
-gulp.task('bower', function() {
-  var jsFilter = filter('**/*.js', {restore: true}),
-    cssFilter = filter('**/*.css', {restore: true}),
-    fontFilter = filter(['**/*.eot', '**/*.woff', '**/*.svg', '**/*.ttf'], {restore: true});
-
-  // console.log(mainBowerFiles());
-
-  return gulp.src(mainBowerFiles(), { base: BOWER_PATH })
-
-  // grab vendor js files from bower_components, minify and push in DEST_PATH
-    .pipe(jsFilter)
-  // .pipe(gulp.dest(DEST_PATH + '/js/'))
-    // .pipe(concat('vendors.min.js')) 
-    .pipe(rename({dirname: ''}))
-    .pipe(production(uglify()))
-  // .pipe(rename({
-  //   suffix: ".min"
-  // }))
-    .pipe(fileSizes({title: 'bower lib:', gzip: true, showFiles: true}))
-  // .pipe(fileSizes({title: 'vendors.min.js', gzip: true}))
-    .pipe(gulp.dest(DEST_PATH + '/js/lib/'))
-    .pipe(jsFilter.restore)
-
-  // grab vendor css files from bower_components, minify and push in DEST_PATH
-    .pipe(cssFilter)
-    .pipe(concat('vendors.min.css'))
-  // .pipe(gulp.dest(DEST_PATH + '/css'))
-    .pipe(production(minifycss()))
-  // .pipe(rename({
-  //     suffix: ".min"
-  // }))
-    .pipe(fileSizes({title: 'vendors.min.css', gzip: true}))
-    .pipe(gulp.dest(DEST_PATH + '/css'))
-    .pipe(cssFilter.restore);
-
-  // grab vendor font files from bower_components and push in DEST_PATH
-  // .pipe(fontFilter)
-  // .pipe(flatten())
-  // .pipe(gulp.dest(DEST_PATH + '/fonts'));
-});
-
-gulp.task('bower-fonts', function() {
-  return gulp.src('./bower_components/**/*.{ttf,woff,woff2}')
-    .pipe(flatten())
-    .pipe(fileSizes({title: 'bower fonts', gzip: true}))
-    .pipe(gulp.dest(DEST_PATH + '/fonts'));
-});
-
 // Watch Files For Changes
 gulp.task('watch', () => {
   gulp.watch('app/js/*.js', () => {
@@ -322,7 +274,7 @@ gulp.task('server', () => {
 gulp.task('clean', del.bind(null, ['dist']));
  
 gulp.task('build', () => {
-  runSequence(['clean'], ['bower', 'bower-fonts', 'html', 'sass', 'scripts'], ['generate-service-worker'], () => {
+  runSequence(['clean'], ['html', 'sass', 'scripts'], ['generate-service-worker'], () => {
     return gulp.src('dist/**/*').pipe(fileSizes({title: 'total output', gzip: true})); 
   });
 });

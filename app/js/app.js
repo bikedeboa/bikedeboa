@@ -83,6 +83,12 @@ $(() => {
     }
   }
 
+  function refreshOpenDetailsModal() {
+    if (openedMarker) {
+      openDetailsModal(openedMarker);
+    }
+  }
+
   function openDetailsModal(marker, callback) {
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
@@ -117,7 +123,7 @@ $(() => {
     templateData.mapStaticImg = BDB.Map.getStaticImgMap(staticImgDimensions, templateData.pinColor, m.lat, m.lng);
   
     // Tags
-    if (tags && m.tags && m.tags.length > 0) {
+    if (tags && m.tags) {
       const MAX_TAG_COUNT = m.reviews;
       const MIN_TAG_OPACITY = 0.3;
 
@@ -133,7 +139,8 @@ $(() => {
 
       // templateData.tags = m.tags
       templateData.tags = allTags 
-        .sort((a, b) => {return b.count - a.count;})
+        // .sort((a, b) => {return b.count - a.count;})
+        .sort((a, b) => {return b.name - a.name;})
         .map(t => {
           // Tag opacity is proportional to count
           // @todo refactor this to take into account Handlebars native support for arrays
@@ -159,17 +166,10 @@ $(() => {
       templateData.numReviews = `${m.reviews} avaliações`;
     }
     
-    // templateData.numCheckins = m.checkin && (m.checkin + ' check-ins') || '';
-
     // User permissions
-    if (BDB.User.isAdmin) {
-      templateData.isAdmin = true;
-      templateData.canModify = true;
-    } else {
-      if (BDB.User.checkEditPermission(m.id)) {
-        templateData.canModify = true;
-      }
-    }
+    templateData.canModify = BDB.User.isLoggedIn;
+    templateData.isAdmin = BDB.User.isAdmin;
+    templateData.canDelete = BDB.User.isLoggedIn && m.canLoggedUserDelete;
 
     // Data source
     if (m.DataSource) {
@@ -236,20 +236,20 @@ $(() => {
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
-      const rating = previousReview.rating;
+      templateData.savedRating = previousReview.rating;
       
-      templateData.color = getColorFromAverage(rating);
+      templateData.color = getColorFromAverage(templateData.savedRating);
 
       // @todo modularize this method
       let stars = '';
-      for (let s = 0; s < parseInt(rating); s++) {
+      for (let s = 0; s < parseInt(templateData.savedRating); s++) {
         stars += '<span class="glyphicon glyphicon-star"></span>';
       }
-      templateData.savedRatingContent = rating + stars;
-    } else {
-      if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
-        templateData.userThumbUrl = BDB.User.profile.thumbnail; 
-      }
+      templateData.savedRatingStars = stars;
+    }
+
+    if (BDB.User && BDB.User.profile && BDB.User.profile.thumbnail) {
+      templateData.userThumbUrl = BDB.User.profile.thumbnail; 
     }
 
 
@@ -285,7 +285,15 @@ $(() => {
     // Init click callbacks
     // $('#checkinBtn').on('click', sendCheckinBtn);
     $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
-      openReviewModal($(e.target).data('value'));
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openReviewModal($(e.target).data('value'));
+        });
+      } else {
+        openReviewModal($(e.target).data('value'));
+      }
     });
     $('.shareBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
@@ -298,13 +306,27 @@ $(() => {
     $('.directionsBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
-    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, openNewOrEditPlaceModal));
+    $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openNewOrEditPlaceModal();
+        });
+      } else {
+        openNewOrEditPlaceModal();
+      }
+    }));
     $('.deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
     $('.createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
         openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          openRevisionDialog();
+        });
       } else {
         openRevisionDialog();
       }
@@ -320,10 +342,10 @@ $(() => {
       if (userCurrentPosition) {
         const distanceKm = distanceInKmBetweenEarthCoordinates(
           userCurrentPosition.latitude, userCurrentPosition.longitude, openedMarker.lat, openedMarker.lng);
-        const distanceMeters = distanceKm * 1000;
+        const distanceMeters = parseInt(distanceKm * 1000);
 
-        console.log(`[Analytics] Local / distance from user (m) / ${distanceMeters}`);
-        ga('send', 'event', 'Local', 'distance from user (m)', null, distanceMeters);
+        console.log(`[Analytics] Local / distance from user (m) = ${distanceMeters}`);
+        ga('send', 'event', 'Local', 'distance from user (m)', '', distanceMeters);
       }
 
       // Modal stuff
@@ -575,12 +597,23 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
+      updatePageTitleAndMetatags('Mova o mapa para adicionar no lugar desejado');
+
       $('body').addClass('position-pin-mode');
-      
+
+      hideUI();
+
+      $('.hamburger-button').addClass('back-mode');
+      $('.hamburger-button.back-mode').one('click.exitPositionPinMode', () => {
+        toggleLocationInputMode();
+      });
+
       // Change Maps style that shows Points of Interest
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
-      $('#newPlaceholder').on('click', queueUiCallback.bind(this, () => {
+      $('#newPlaceholderConfirmBtn').on('click', queueUiCallback.bind(this, () => {
+        toggleLocationInputMode();
+        
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
         
@@ -624,8 +657,6 @@ $(() => {
             });
           }
         }
-
-        toggleLocationInputMode();
       }));
 
       // ESC button cancels locationinput
@@ -641,10 +672,14 @@ $(() => {
       // }
     } else {
       // Turning OFF
+      updatePageTitleAndMetatags(); 
 
-      map.setOptions({styles: _gmapsCustomStyle});
+      map.setOptions({styles: _gmapsCustomStyle}); 
 
-      $('#newPlaceholder').off('click');
+      showUI();
+      $('.hamburger-button.back-mode').off('click.exitPositionPinMode');
+      $('.hamburger-button').removeClass('back-mode'); 
+      $('#newPlaceholderConfirmBtn').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
       
@@ -655,12 +690,16 @@ $(() => {
     }
 
     BDB.Map.toggleMarkers();
-    $('#addPlace').toggleClass('active');
+    if (_isMobile) {
+      $('#addPlace').toggle();
+    } else {
+      $('#addPlace').toggleClass('active');
+    }
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
-    $('#newPlaceholderShadow').toggle();
     $('#newPlaceholderTarget').toggle();
-    $('#geolocationBtn').toggle();
+    $('#newPlaceholderConfirmBtn').toggle();
+    // $('#geolocationBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
@@ -757,6 +796,7 @@ $(() => {
               title: 'Bicicletário criado',
               customClass: 'post-create-modal',
               type: 'success',
+
               html:
                 `<section class="rating-input-container">
                   <p> 
@@ -775,9 +815,11 @@ $(() => {
                       <input disabled type="radio" id="star1_input" name="rating_input" value="1" />
                       <label class="full-star" data-value="1" for="star1"></label>
                   </fieldset>
+
+                  <hr>
               </section>`,
               confirmButtonText: 'Avaliar outra hora',
-              showCloseButton: true,
+              showCloseButton: false, 
               onOpen: () => { 
                 $('.post-create-modal .rating-input-container .full-star').on('click', e => {
                   openedMarker = newMarker;
@@ -1214,12 +1256,16 @@ $(() => {
       };
 
       const callback = () => {
-        BDB.Database.sendReview(reviewObj, reviewId => {
-          reviewObj.databaseId = reviewId;
-          BDB.User.saveReview(reviewObj);
+        BDB.Database.sendReview(reviewObj)
+          .then( reviewId => {
+            reviewObj.databaseId = reviewId;
+            BDB.User.saveReview(reviewObj);
 
-          resolve();
-        });
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
       }; 
 
       const previousReview = BDB.User.getReviewByPlaceId(m.id);
@@ -1339,8 +1385,13 @@ $(() => {
     $('#search-overlay').addClass('showThis');
     $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, duration: 500 }); 
     $('.hamburger-button').addClass('back-mode');
+    
+    // Automatically focus the text search input
+    setTimeout(() => {
+      $('#locationQueryInput').focus();
+    }, 500);
 
-    $('.hamburger-button.back-mode').one('click', () => {
+    $('.hamburger-button.back-mode').one('click.exitLocationSearch', () => {
       exitLocationSearchMode();
     });
   }
@@ -1351,7 +1402,7 @@ $(() => {
     $('.hamburger-button').removeClass('back-mode'); 
   }
 
-  function updatePageTitleAndMetatags(text) { 
+  function updatePageTitleAndMetatags(text = 'bike de boa') { 
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
@@ -1359,7 +1410,7 @@ $(() => {
       $('#top-mobile-bar-title').text(openedMarker ? '' : text);
     }
 
-    text = text || 'bike de boa'; 
+    // text = text || 'bike de boa'; 
 
     // Basic website metatags
     document.title = text;
@@ -1576,7 +1627,7 @@ $(() => {
       hideAll();
 
       ga('send', 'event', 'Misc', 'about data opened');
-      setView('Sobre nossos dados', '/sobre-nossos-dados', true);
+      setView('Dados', '/sobre-nossos-dados', true);
     }));
 
     $('.go-to-poa').on('click', queueUiCallback.bind(this, () => {
@@ -1631,6 +1682,10 @@ $(() => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
+
+        $(document).one('bikedeboa.login', () => {
+          $('#addPlace').click();
+        });
       } else {
         // Make sure the new local modal won't think we're editing a local
         if (!$('#addPlace').hasClass('active')) {
@@ -1643,29 +1698,6 @@ $(() => {
     }));
 
 
-    $('body').on('click', '.back-button', e => {
-      // If was creating a new local
-      // @todo Do this check better
-      if (_isMobile && History.getState().title === 'Novo bicicletário') {
-        swal({
-          text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#FF8265',
-          confirmButtonText: 'Descartar', 
-          allowOutsideClick: false
-        }).then(() => {
-          // returnToPreviousView();
-          goHome();
-        }
-        );
-      } else {
-        // returnToPreviousView();
-        goHome();
-      }
-    });
-
-        
     /////////////////////
     // Modal callbacks //
     /////////////////////
@@ -1696,6 +1728,28 @@ $(() => {
       // Mobile optimizations
       if (_isMobile) {
         // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
+        $('.hamburger-button').addClass('back-mode');
+        $('.hamburger-button.back-mode').one('click.cancelCreation', () => {
+          // If was creating a new local
+          // @todo Do this check better
+          if (_isMobile && History.getState().title === 'Novo bicicletário') {
+            swal({
+              text: 'Você estava adicionando um bicicletário. Tem certeza que quer descartá-lo?',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#FF8265',
+              confirmButtonText: 'Descartar',
+              allowOutsideClick: false
+            }).then(() => {
+              // returnToPreviousView();
+              goHome();
+            }
+            );
+          } else {
+            // returnToPreviousView();
+            goHome();
+          }
+        });
       } else {
         hideUI();
 
@@ -1716,6 +1770,9 @@ $(() => {
         // $('#map, #addPlace, #geolocationBtn').removeClass('optimized-hidden');
         $('body').removeClass('transparent-mobile-topbar');
 
+        $('.hamburger-button.back-mode').off('click.cancelCreation');
+        $('.hamburger-button').removeClass('back-mode');
+
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {
           google.maps.event.trigger(map, 'resize');
@@ -1733,7 +1790,8 @@ $(() => {
     // Location Search //
     /////////////////////
 
-    $('#locationQueryInput').on('focus', e => { 
+    // $('#locationQueryInput').on('focus', e => { 
+    $('.search-button, #locationQueryInput').on('click', e => { 
       if ($('#locationQueryInput').val().length === 0) {
         enterLocationSearchMode();
       }
@@ -2055,7 +2113,7 @@ $(() => {
 
     switch (urlBreakdown[1]) {
     case 'b':
-      if (urlBreakdown[2] && urlBreakdown[2]!=='foto') {
+      if (urlBreakdown[2] && urlBreakdown[2] !== 'foto') {
         let id = urlBreakdown[2].split('-')[0];
         if (id) {
           id = parseInt(id);
@@ -2064,7 +2122,7 @@ $(() => {
             _isDeeplink = true;
             $('body').addClass('deeplink');
 
-            // showSpinner();
+            showSpinner('Carregando...');
 
             // Center the map on pin's position
             if (map && _deeplinkMarker) {
@@ -2074,21 +2132,20 @@ $(() => {
                 lng: parseFloat(_deeplinkMarker.lng)
               });
             }
-          }
-
-          if (_isDeeplink) { 
+          
             routerOpenDeeplinkMarker(id, () => {
+              hideSpinner();
+
+              // @todo refactor this
+              let coords = {
+                latitude : parseFloat(_deeplinkMarker.lat),
+                longitude: parseFloat(_deeplinkMarker.lng)
+              }
+              start_coords = coords;  
+              zoom = 17;
+              getGeolocation = false;
+
               // Delay loading of background map for maximum optimized startup
-              //change here.
-              if (_deeplinkMarker){
-                let coords = {
-                  latitude : parseFloat(_deeplinkMarker.lat),
-                  longitude: parseFloat(_deeplinkMarker.lng)
-                }
-                start_coords = coords;  
-                zoom = 17;
-                getGeolocation = false;
-              }  
               if (!_isMobile) {
                 $(document).trigger('LoadMap');
               }
@@ -2101,6 +2158,8 @@ $(() => {
           openNotFoundModal(match);
           match = false;
         }
+      } else {
+        window.location.pathname = '';
       }
       break;
     case 'faq':
@@ -2175,14 +2234,17 @@ $(() => {
     // }
 
     // Returns the dialog promise
-    return swal({ 
-      title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
+    swal({ 
+      // title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
+      title: 'Login/Cadastro', 
       html: `
         <br> 
  
-        <p>
-          Fazendo login você pode acessar todas contribuições que já fez e adicionar novos bicicletários no mapa.
-        </p>
+        <div>
+          Faça login e se torne um colaborador. É rapidinho e você já pode começar a contribuir com o mapa.
+        </div>
+
+        <br>
 
         <div>
           <button class="customLoginBtn facebookLoginBtn">
@@ -2198,20 +2260,18 @@ $(() => {
 
         <br>
 
-        <p style="
-          font-style: italic;
-          font-size: 12px;
-          text-align: center;
-          max-width: 300px;
-          margin: 0 auto;">
-          Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
-        </p>
+        <div style="font-size: 12px; color: #b3b3b3; font-weight: normal;">
+            Exigimos o login para garantir a confiabilidade das contribuições. Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
+        </div>
         `,
       showCloseButton: true,
       showConfirmButton: false,
       onOpen: () => {
         window._isLoginDialogOpened = true;
       }
+    }).catch(() => {
+      // Make sure we aren't stacking after-login callbacks
+      $(document).off('bikedeboa.login');
     });
   }
 
@@ -2263,12 +2323,18 @@ $(() => {
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
         
-        BDB.User.login(profile); 
+        BDB.User.login(profile).then(() => {
+          refreshOpenDetailsModal();
 
-        document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+          // document.dispatchEvent(new CustomEvent('bikedeboa.login'));
+          $(document).trigger('bikedeboa.login');
+        })
       }).catch( error => {
         console.error('Error on social login', error); 
-        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise!');
+        toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise.');
+
+        // Make sure we aren't stacking after-login callbacks
+        $(document).off('bikedeboa.login');
 
         $('#userBtn').removeClass('loading');
       });
@@ -2439,12 +2505,18 @@ $(() => {
     }));
 
     $('body').on('click', '.facebookLoginBtn', () => {
-      hideAll();
+      if (!window._isLoginDialogOpened) {
+        hideAll();
+      }
+
       hello('facebook').login({ scope: 'email' });
     });
 
     $('body').on('click', '.googleLoginBtn', () => {
-      hideAll();
+      if (!window._isLoginDialogOpened) {
+        hideAll();
+      }
+
       hello('google').login({ scope: 'email' });
     });
 
@@ -2493,7 +2565,7 @@ $(() => {
                   <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
                 </a>
 
-                <a class="" target="_blank" rel="noopener" href="https://github.com/cmdalbem/bikedeboa">
+                <a class="" target="_blank" rel="noopener" href="https://github.com/bikedeboa">
                   <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
                 </a>
 
@@ -2685,10 +2757,9 @@ $(() => {
     hello.init({
       facebook: FACEBOOK_CLIENT_ID,
       google: GOOGLE_CLIENT_ID, 
-        // windows: WINDOWS_CLIENT_ID,
-    },{
+    }, {
+      redirect_uri: '/redirect.html' 
       // redirect_uri: window.location.origin
-      redirect_uri: '/redirect.html'
     });
     hello.on('auth.login', auth => {
       // Hack to fix what I think is the bug that was causing duplicate user entries

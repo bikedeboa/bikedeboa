@@ -11,14 +11,14 @@ This project is a (Progressive) Web App, which means it loads and runs fast accr
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![GitHub Issues](http://img.shields.io/github/issues/cmdalbem/bikedeboa.svg)](https://github.com/cmdalbem/bikedeboa/issues)
+[![GitHub Issues](http://img.shields.io/github/issues/bikedeboa/bikedeboa.svg)](https://github.com/bikedeboa/issues)
 
 ![Screenshot of webapp the main map view](https://i.imgur.com/HxsYdu6.png)
 
 ## Data
 
 This web client consumes from an open API. It licensed under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/). It basically means you can use its data to build your own bike app, academic research, as however you want - as long as you give us credit. :)
-* Code: https://github.com/dennerevaldt/bikedeboa-api
+* Code: https://github.com/bikedeboa/bikedeboa-api
 * Documentation: https://bdb-api.herokuapp.com/v1/doc
 
 > If you're not a developer you can still easily access all of our data using our web dashboard at https://www.bikedeboa.com.br/dados. Visualize, search, filter and even download all of our data in several formats. Still not what you need? Let us know!
@@ -27,14 +27,14 @@ This web client consumes from an open API. It licensed under [Creative Commons A
 
 ## Contributing
 
-We have dozens of cool things we want to do, from small bugfixes to whole new features. Our tasks are all neatly documented in the [Github Issues](https://github.com/cmdalbem/bikedeboa/issues) session (sorry, Portuguese only). Please let us know if you'd like to help us. Feel free to propose new stuff as well! :)
+We have dozens of cool things we want to do, from small bugfixes to whole new features. Our tasks are all neatly documented in the [Github Issues](https://github.com/bikedeboa/issues) session (sorry, Portuguese only). Please let us know if you'd like to help us. Feel free to propose new stuff as well! :)
 
 Contributing should be super easy even if you have very basic Front-end skills. The web client was developed with very accessible and popular libraries and frameworks. Still, always feel free to reach to us if you have any questions.
 
 ### Getting started
 
 ```bash
-git clone https://github.com/cmdalbem/bikedeboa.git
+git clone https://github.com/bikedeboa.git
 npm install
 npm start
 ```
