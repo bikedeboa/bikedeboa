@@ -191,6 +191,14 @@ $GRID_SPACE: 12px;
   box-shadow: 0 2px 10px rgba(85, 188, 106, 0.1);
 }
 
+@mixin coolHidden {
+  &.cool-hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+  }
+}
+
 
 
 
@@ -374,12 +382,17 @@ p {
     // text-transform: uppercase;
     font-size: 14px;
     font-weight: bold;
+    color: $gray;
   }
 
   &.showThis {
     opacity: 1; 
     visibility: visible;
     pointer-events: auto;
+  }
+
+  .openTopCitiesModal {
+    color: $green;
   }
 
 }
@@ -463,6 +476,7 @@ p {
         .top-cities--nbr {
           color: $gray;
           font-size: inherit;
+          text-align: right;
         }
       }
     }
@@ -915,6 +929,8 @@ a.unstyled-link {
   right: $GRID_SPACE;
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
+
+  @include coolHidden;
  
   & > button {
     border: 0;
@@ -981,6 +997,8 @@ a.unstyled-link {
     max-width: 400px;
     width: calc(100% - 20px); 
     // z-index: 1;
+
+    @include coolHidden;
 
     transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
     
@@ -1119,6 +1137,8 @@ a.unstyled-link {
       //   border-left: 1px solid $lightestGray;
       // }
 
+      @include coolHidden;
+
       transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
 
       .navbar-de-boa--list {
@@ -1176,33 +1196,34 @@ a.unstyled-link {
 
 .nav-pills {
   & > li {  
-    text-transform: uppercase;
-    font-weight: bold;
-
     a {
       color: $green;
       text-align: center;
-      padding: $GRID_SPACE/2;
-      // border: 2px solid $green;
+      padding: $GRID_SPACE;
+      border-radius: 0;
+      border-bottom: 2px solid $lightestGray; 
     }
 
     .badge {
       background-color: $green;
+      color: white;
     }
   }
 
-  & > li + li {
-    margin-left: 3px;
+  .nav-pills>li+li {
+    margin: 0;
   }
-  
+
   & > li.active > a,
   & > li.active > a:focus,
   & > li.active > a:hover {
-    background: $green;
-    color: white;
+    color: $green;
+    border-bottom: 2px solid $green;
+    background: transparent;
 
     .badge {
-      color: $green;
+      background: $green;
+      color: white;
     }
   }
 }
@@ -2083,18 +2104,7 @@ a.unstyled-link {
   }
 }
 
-body.search-mode {
-  // #map,
-  // #addPlace,
-  // .login-display,
-  // #filterBtn,
-  // #geolocationBtn {
-  //   opacity: 0;
-  //   user-select: none;
-
-  //   transition: opacity 0.2s ease;
-  // }
-
+body.search-mode { 
   #userBtn,
   #search-button { 
     display: none;
@@ -4202,6 +4212,11 @@ body.modal-open {
       }
     }
 
+    #userBtn,
+    #search-button { 
+      display: none;
+    }
+
     #top-mobile-bar {
       height: 76px;
       // background: white;
@@ -4238,6 +4253,13 @@ body.modal-open {
       }
     }
 
+    .hamburger-button {
+      .hamburger-inner,
+      .hamburger-inner::before,
+      .hamburger-inner::after {
+        background-color: $green;
+      }
+    }
   }
 
   body.modal-open {
@@ -4564,7 +4586,7 @@ body.modal-open {
   margin: $GRID_SPACE/2;
 
   .place-suggestions--title {
-    // display: inline-block;
+    display: block;
     font-size: 12px;
     font-weight: normal;
     text-transform: uppercase;
@@ -4582,19 +4604,24 @@ body.modal-open {
       .place-suggestion--item {
           display: inline-block;
           font-weight: 400;
-          font-size: 14px;
-          margin: $GRID_SPACE/2 0;
+          font-size: 12px;
+          padding: $GRID_SPACE/2;
+          background: $lightestGray;
+          border-radius: 4px;
+          margin: 0;
           cursor: pointer;
+          max-width: 150px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: $gray;
           
           a {
               color: $gray;
-              padding: $GRID_SPACE/2;
-              background: $lightestGray;
-              border-radius: 4px;
           }
           
           &:hover {
-              background: $paleWhite;
+              // background: $paleWhite;
               
               a {
                 color: $black;

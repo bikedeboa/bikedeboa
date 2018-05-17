@@ -604,6 +604,7 @@ $(() => {
       hideUI();
 
       $('.hamburger-button').addClass('back-mode');
+      $('.hamburger-button').addClass('back-icon');
       $('.hamburger-button.back-mode').one('click.exitPositionPinMode', () => {
         toggleLocationInputMode();
       });
@@ -641,11 +642,15 @@ $(() => {
           if (BDB.Map.checkBounds()) {
             BDB.Map.getNameSuggestions({ lat: _newMarkerTemp.lat, lng: _newMarkerTemp.lng })
               .then(nameSuggestions => {
-                // console.log(nameSuggestions); 
+                nameSuggestions = nameSuggestions.slice(0, MAX_NAME_SUGGESTIONS);
 
                 nameSuggestions = nameSuggestions.map( n => n.name );
                 
                 openNewOrEditPlaceModal(nameSuggestions);
+              })
+              .catch(error => {
+                console.error(error);
+                openNewOrEditPlaceModal();
               });
           } else {
             const mapCenter = map.getCenter();
@@ -686,6 +691,7 @@ $(() => {
       showUI();
       $('.hamburger-button.back-mode').off('click.exitPositionPinMode');
       $('.hamburger-button').removeClass('back-mode'); 
+      $('.hamburger-button').removeClass('back-icon'); 
       $('#newPlaceholderConfirmBtn').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
@@ -970,7 +976,7 @@ $(() => {
         ga('send', 'event', 'Misc', 'tooltip - new pin type help');
       });
 
-      $('.place-suggestion-item').off('click').on('click', e => {
+      $('.place-suggestion--item').off('click').on('click', e => {
         $('.text-input-wrapper input').val( $(e.currentTarget).data('name') );
       });
     }
@@ -1393,6 +1399,7 @@ $(() => {
     $('#search-overlay').addClass('showThis');
     $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, duration: 500 }); 
     $('.hamburger-button').addClass('back-mode');
+    $('.hamburger-button').addClass('back-icon');
     
     // Automatically focus the text search input
     setTimeout(() => {
@@ -1407,7 +1414,9 @@ $(() => {
   function exitLocationSearchMode() {
     $('body').removeClass('search-mode');
     $('#search-overlay').removeClass('showThis');
+    $('.hamburger-button.back-mode').off('click.exitLocationSearch');
     $('.hamburger-button').removeClass('back-mode'); 
+    $('.hamburger-button').removeClass('back-icon'); 
   }
 
   function updatePageTitleAndMetatags(text = 'bike de boa') { 
@@ -1775,8 +1784,6 @@ $(() => {
           }
         });
       } else {
-        hideUI();
-
         if (openingModalEl.hasClass('clean-modal')) {
           $('body').addClass('clean-modal-open');
         }
@@ -1805,8 +1812,6 @@ $(() => {
           map.setCenter(map.getCenter());
         }
       } else {
-        showUI();
-        
         $('body').removeClass('clean-modal-open');
       }
     }); 

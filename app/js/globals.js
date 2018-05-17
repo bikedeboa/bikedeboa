@@ -75,6 +75,9 @@ const MAX_AUTHENTICATION_ATTEMPTS = 3;
 const MAX_KM_TO_CALCULATE_ITINERARY = 20;
 const MAX_KM_TO_FIT_TO_VIEWPORT = 2;
 
+const MAX_NAME_SUGGESTIONS = 5;
+
+
 /////////////
 // Globals //
 /////////////
