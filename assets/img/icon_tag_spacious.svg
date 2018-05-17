@@ -3,12 +3,14 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
 <style type="text/css">
-	.st0{font-family:'GothamRounded-Bold';}
-	.st1{font-size:62.0178px;}
+	.st0{enable-background:new    ;}
 </style>
 <g>
 	<path d="M50,5C25.2,5,5,25.2,5,50s20.2,45,45,45s45-20.2,45-45S74.8,5,50,5z M50,85c-19.3,0-35-15.7-35-35s15.7-35,35-35
 		s35,15.7,35,35S69.3,85,50,85z"/>
-	<text transform="matrix(1 0 0 1 30.043 72.25)" class="st0 st1">P</text>
+	<g class="st0">
+		<path d="M35.3,33.6c0-2.7,2.1-4.8,4.8-4.8h13c10.4,0,16.6,6.1,16.6,15V44c0,10-7.8,15.3-17.5,15.3h-7.3v8.6c0,2.7-2.1,4.8-4.8,4.8
+			s-4.8-2.1-4.8-4.8V33.6z M52.4,50.7c4.8,0,7.6-2.9,7.6-6.6V44c0-4.3-3-6.6-7.8-6.6h-7.4v13.3H52.4z"/>
+	</g>
 </g>
 </svg>
