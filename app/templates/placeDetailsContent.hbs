@@ -254,18 +254,28 @@
                     {{/if}}
                 </div>
 
-                {{#if average}}
-                    {{#if tags}}
-                        <div class="tagsContainer">
-                            {{{tags}}}
-                        </div>
-                    {{else}}
-                        <div class="tagsContainer loading" style="position: relative;">
-                            Carregando... 
-                        </div>
-                    {{/if}}
+            {{#if average}}
+                {{#if tags}}
+                    <div class="tagsContainer">
+                        {{#each tags}}
+                            <div class="tagDisplay" style="opacity: {{opacity}}">
+                                <div>
+                                    <img alt="" class="svg-icon tag-icon" src="/img/icon_tag_{{englishName}}.svg" />
+                                </div>
+                                <div>
+                                    <span class="{{#if isEmpty}}tag-empty{{/if}}">{{name}}</span>
+                                    <span class="tag-count" style="display: block; {{#if isEmpty}}opacity: 0;{{/if}}">{{count}}%</span>
+                                </div>
+                                {{!-- <span class="tag-count">{{count}}</span> --}}
+                            </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <div class="tagsContainer loading" style="position: relative;">
+                        Carregando... 
+                    </div>
                 {{/if}}
-            </div>
+            {{/if}}
         </section>
 
         <hr>

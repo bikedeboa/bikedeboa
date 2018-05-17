@@ -4,15 +4,15 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="140.834px" height="147.25px" viewBox="0 0 140.834 147.25" enable-background="new 0 0 140.834 147.25"
 	 xml:space="preserve">
-<line fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="137.708" y1="143.522" x2="3.167" y2="143.522"/>
-<path fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="78.775,9.8469" d="
-	M45.966,140.521v-33.177c0-12.677,10.277-22.956,22.953-22.956l0,0c12.678,0,22.955,10.279,22.955,22.956v33.177"/>
+<line fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="137.708" y1="143.521" x2="3.167" y2="143.521"/>
+<path fill="none" stroke="#47B870" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
+	M45.966,140.521v-33.178c0-12.677,10.277-22.955,22.953-22.955l0,0c12.678,0,22.955,10.278,22.955,22.955v33.178"/>
 <defs>
-	<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="3.549" y="61.715" width="133.738" height="78.839">
+	<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="3.549" y="61.716" width="133.738" height="78.842">
 		<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
 	</filter>
 </defs>
-<mask maskUnits="userSpaceOnUse" x="3.549" y="61.715" width="133.738" height="78.839" id="SVGID_1_">
+<mask maskUnits="userSpaceOnUse" x="3.549" y="61.716" width="133.738" height="78.842" id="SVGID_1_">
 	<g filter="url(#Adobe_OpacityMaskFilter)">
 		<g id="XMLID_2_">
 			<g>
@@ -21,8 +21,8 @@
 			<g>
 				
 					<path fill="none" stroke="#000000" stroke-width="14.1732" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
-					M45.971,140.282v-33.18c0-12.67,10.27-22.95,22.949-22.95c6.341,0,12.08,2.57,16.23,6.72c4.15,4.16,6.72,9.89,6.72,16.23v33.18"
-					/>
+					M45.971,140.282v-33.181c0-12.67,10.27-22.949,22.949-22.949c6.341,0,12.08,2.57,16.229,6.72c4.15,4.16,6.721,9.89,6.721,16.229
+					v33.181"/>
 				
 					<polygon fill="none" stroke="#000000" stroke-width="14.1732" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
 					147.21,158.872 -4.45,154.542 -4.45,45.872 147.21,45.872 				"/>
@@ -34,7 +34,7 @@
 	
 		<circle fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="29.196" cy="114.909" r="23.678"/>
 	
-		<circle fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="111.639" cy="114.909" r="23.679"/>
+		<circle fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="111.64" cy="114.909" r="23.679"/>
 	
 		<circle fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" cx="29.196" cy="114.909" r="5.068"/>
 	
@@ -46,9 +46,9 @@
 	
 		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="29.196" y1="109.839" x2="69.446" y2="107.169"/>
 	
-		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="29.196" y1="119.976" x2="69.446" y2="122.646"/>
+		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="29.196" y1="119.977" x2="69.446" y2="122.646"/>
 	
-		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="24.608" y1="112.763" x2="46.058" y2="78.542"/>
+		<line fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="24.608" y1="112.764" x2="46.058" y2="78.542"/>
 	
 		<polyline fill="none" stroke="#E5E5E5" stroke-width="3.9387" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
 		110.04,109.839 92.542,63.685 81.749,63.685 	"/>
