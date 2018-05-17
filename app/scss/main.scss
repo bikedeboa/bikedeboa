@@ -191,6 +191,14 @@ $GRID_SPACE: 12px;
   box-shadow: 0 2px 10px rgba(85, 188, 106, 0.1);
 }
 
+@mixin coolHidden {
+  &.cool-hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+  }
+}
+
 
 
 
@@ -238,15 +246,12 @@ body.offline {
   // border: 5px solid $green;
 
   #addPlace,
-  // #locationSearch,
   .howToInstallBtn,
   #filterBtn,
-  // #geolocationBtn,  
   #userBtn, 
   .loginBtn,
   .createRevisionBtn,
   .rating-input-container,
-  // .minimap,
   .search-button,
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
@@ -254,7 +259,6 @@ body.offline {
   #placeDetailsContent .photo-container.hasImage.loading {
     // display: none !important;
     opacity: 0.4 !important;
-    user-select: none;
     pointer-events: none;
   }
 
@@ -378,12 +382,17 @@ p {
     // text-transform: uppercase;
     font-size: 14px;
     font-weight: bold;
+    color: $gray;
   }
 
   &.showThis {
     opacity: 1; 
     visibility: visible;
     pointer-events: auto;
+  }
+
+  .openTopCitiesModal {
+    color: $green;
   }
 
 }
@@ -467,6 +476,7 @@ p {
         .top-cities--nbr {
           color: $gray;
           font-size: inherit;
+          text-align: right;
         }
       }
     }
@@ -919,6 +929,8 @@ a.unstyled-link {
   right: $GRID_SPACE;
 
   transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
+
+  @include coolHidden;
  
   & > button {
     border: 0;
@@ -971,10 +983,6 @@ a.unstyled-link {
   }
 }
 
-.logoutBtn {
-  display: none;
-}
-
 #locationQueryBtn {
     display: none;
 }
@@ -989,6 +997,8 @@ a.unstyled-link {
     max-width: 400px;
     width: calc(100% - 20px); 
     // z-index: 1;
+
+    @include coolHidden;
 
     transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
     
@@ -1127,6 +1137,8 @@ a.unstyled-link {
       //   border-left: 1px solid $lightestGray;
       // }
 
+      @include coolHidden;
+
       transition: transform 0.3s $coolEaseOut, opacity 0.2s ease-in-out;
 
       .navbar-de-boa--list {
@@ -1179,6 +1191,40 @@ a.unstyled-link {
 
         // font-size: 18px;
       }
+  }
+}
+
+.nav-pills {
+  & > li {  
+    a {
+      color: $green;
+      text-align: center;
+      padding: $GRID_SPACE;
+      border-radius: 0;
+      border-bottom: 2px solid $lightestGray; 
+    }
+
+    .badge {
+      background-color: $green;
+      color: white;
+    }
+  }
+
+  .nav-pills>li+li {
+    margin: 0;
+  }
+
+  & > li.active > a,
+  & > li.active > a:focus,
+  & > li.active > a:hover {
+    color: $green;
+    border-bottom: 2px solid $green;
+    background: transparent;
+
+    .badge {
+      background: $green;
+      color: white;
+    }
   }
 }
 
@@ -1343,17 +1389,41 @@ a.unstyled-link {
 
     img {
       border-radius: 50%;
-      vertical-align: bottom;
       height: 100px;
       width: 100px;
       margin: 0 auto;
+      margin-bottom: $GRID_SPACE/2;
       display: block;
+
+      &.admin {
+        border: 2px solid $darkYellow;
+        box-shadow: 0 2px 20px $darkYellow;
+      }
     }
   }
 
   .you-are-admin {
     text-align: center;
     color: $darkYellow;
+    margin: $GRID_SPACE 0;
+  }
+
+  .nav-pills {
+    display: flex;
+    margin-top: $GRID_SPACE*2;
+
+    & > li {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .tab-content {
+    margin-top: $GRID_SPACE/2;
+
+    li {
+      border-bottom: 1px solid $lightestGray;
+    }
   }
 
   h3 { 
@@ -1379,13 +1449,14 @@ a.unstyled-link {
 
   .go-to-place-btn {
     border: 0;
+    padding: $GRID_SPACE 0;
     background: transparent;
-    padding: 0;
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 0.5em;
+    color: $black;
     text-align: left;
     width: 100%;
+
+    display: flex;
+    align-items: center;
 
     &:hover,
     &:active,
@@ -1393,10 +1464,26 @@ a.unstyled-link {
       background: $lightestGray; 
     }
 
+    & > span {
+      flex: 1;
+    }
+
+    .go-to-place-btn--photo {
+      width: 40px;
+      height: 40px;
+      flex: 0 1 40px;
+      margin-right: 12px;
+      
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
     .go-to-place-btn--title {
       font-family: $headingFont;
-      font-weight: 700;
-      font-size: 20px;
+      font-size: 18px;
       letter-spacing: -0.01em; 
       line-height: normal;
       margin: 0;
@@ -1410,20 +1497,25 @@ a.unstyled-link {
       font-weight: bold;
       display: block;
       margin-top: 2px;
+      font-size: 14px;
     }
 
-    .go-to-place-btn--daysago {
-      float: right;
-    }
+    // .go-to-place-btn--daysago {
+    //   float: right;
+    // }
     
-    .go-to-place-btn--views {
-      display: block;
+    // .go-to-place-btn--views {
+      
+    // }
+
+    .go-to-place-btn--daysago {
+      text-align: right;
     }
 
     .go-to-place-btn--daysago,
     .go-to-place-btn--views {
-      color: $lightGray;
       font-size: 12px;
+      color: $lightGray;
     }
   }
 }
@@ -1459,7 +1551,7 @@ a.unstyled-link {
 
   .about-collaborators {
     font-size: 18px;
-    background: #F3F3F3;
+    background: $lightestGray;
     padding: 24px;
     margin: auto;
     border-radius: 5px;
@@ -2025,18 +2117,7 @@ a.unstyled-link {
   }
 }
 
-body.search-mode {
-  // #map,
-  // #addPlace,
-  // .login-display,
-  // #filterBtn,
-  // #geolocationBtn {
-  //   opacity: 0;
-  //   user-select: none;
-
-  //   transition: opacity 0.2s ease;
-  // }
-
+body.search-mode { 
   #userBtn,
   #search-button { 
     display: none;
@@ -2150,24 +2231,6 @@ body.modal-open {
         font-family: "Raleway", sans-serif;
         font-weight: 700;
         font-size: 20px;
-
-        & > .little-pin {
-            position: absolute;
-            top: 18px;
-            left: 14px;
-            width: 16px;
-            height: 16px;
-            /* background-image: url(/img/pin_green.svg); */
-            /* background-size: 70%; */
-            /* background-repeat: no-repeat; */
-            background-color: $green;
-            border-radius: 50%;
-
-            &.gray {
-                // background-image: url(/img/pin_gray.svg);
-                background: $gray;
-            }
-        }
     }
 
     .text-input {
@@ -2318,8 +2381,7 @@ body.modal-open {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
         h2 {
-          padding: $GRID_SPACE;
-          padding-left: 0;
+          padding-top: $GRID_SPACE;
           font-size: 22px; 
           user-select: none;
           font-weight: bold;
@@ -3089,36 +3151,6 @@ body.modal-open {
       text-align: left;
     }
 
-    .btn-tag {
-        // background: $lightestGray;
-        background: transparent;
-        border: 1px solid $black;
-        border-radius: 25px;
-        margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-        width: calc(33% - #{$GRID_SPACE}); 
-
-        // &:before {
-        //     content: '☐';
-        //     margin-right: 5px;
-        //     font-family: 'Arial';
-        // }
-
-        &.active {
-            background: $green;
-            color: white;
-            box-shadow: none;
-            border: 0;
- 
-            &:hover {
-              background: $lightGreen;
-            }
-        } 
-
-        &:hover {
-          background: $lighterGray;
-        }
-    }
-
     .swal2-cancel,
     .swal2-confirm {
       width: 100%;
@@ -3133,6 +3165,29 @@ body.modal-open {
       font-size: 13px;
       color: $gray;
       font-style: italic;
+    }
+
+    .tagDisplay {
+      background: transparent;
+      border: 1px solid $black;
+      border-radius: 25px;
+      margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+      width: calc(33% - #{$GRID_SPACE}); 
+
+      &.active {
+          background: $green;
+          color: white;
+          box-shadow: none;
+          border: 0;
+
+          &:hover {
+            background: $lightGreen;
+          }
+      } 
+
+      &:hover {
+        background: $lighterGray;
+      }
     }
 }
 
@@ -3436,7 +3491,7 @@ body.modal-open {
       transition: color 0.2s ease-out, background 0.2s ease-out;
 
       &:hover {
-        background: #f3f3f3;
+        background: $lightestGray;
       }
 
       input:checked + label {
@@ -3703,12 +3758,8 @@ body.modal-open {
   }
 
   .infobox--img {
-    // width: 100px;
     position: relative;
     flex: 1 0 30%;
-    // padding: 6px 0 6px 6px;
-    // background: $lightestGrey;
-    /* background: white; */
 
     img {
       object-fit: cover;
@@ -4143,7 +4194,7 @@ body.modal-open {
       display: none;
     }
 
-    .btn-tag {
+    .tagDisplay {
       width: calc(50% - #{$GRID_SPACE});
     }
   }
@@ -4185,6 +4236,11 @@ body.modal-open {
       }
     }
 
+    #userBtn,
+    #search-button { 
+      display: none;
+    }
+
     #top-mobile-bar {
       height: 76px;
       // background: white;
@@ -4221,6 +4277,13 @@ body.modal-open {
       }
     }
 
+    .hamburger-button {
+      .hamburger-inner,
+      .hamburger-inner::before,
+      .hamburger-inner::after {
+        background-color: $green;
+      }
+    }
   }
 
   body.modal-open {
@@ -4545,6 +4608,56 @@ body.modal-open {
   }
 }
 
+.place-suggestions {
+  margin: $GRID_SPACE/2;
+
+  .place-suggestions--title {
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: uppercase;
+    user-select: none;
+    margin-right: $GRID_SPACE/4;
+    color: $lightGray;
+  }
+
+  .place-suggestions--list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: inline;
+      
+      .place-suggestion--item {
+          display: inline-block;
+          font-weight: 400;
+          font-size: 12px;
+          padding: $GRID_SPACE/2;
+          background: $lightestGray;
+          border-radius: 4px;
+          margin: 0;
+          cursor: pointer;
+          max-width: 150px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: $gray;
+          
+          a {
+              color: $gray;
+          }
+          
+          &:hover {
+              // background: $paleWhite;
+              
+              a {
+                color: $black;
+              }
+          }
+      }
+  }
+}
+
+
 
 
 
@@ -4762,7 +4875,7 @@ a[data-featherlight] {
 
     & > input:checked ~ label:before {
         // color: #eabb2f;
-        background-image: url(/img/icon_star.svg);
+        background-image: url(/img/icon_star_yellow.svg);
     }    
 }
 
@@ -4825,7 +4938,7 @@ a[data-featherlight] {
   .rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
       // color: #eabb2f;
       
-      background-image: url(/img/icon_star.svg);
+      background-image: url(/img/icon_star_yellow.svg);
   }
 
   .rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
@@ -5022,22 +5135,42 @@ a[data-featherlight] {
   transition-timing-function: linear;
   background-color: transparent;
 
-  &.back-mode .hamburger-inner {
-    &,
-    &::before,
-    &::after {
-      background-color: $green;
+  &.back-icon {
+    .hamburger-inner {
+      transform: rotate(-180deg);
+ 
+      &,
+      &::before,
+      &::after {
+        background-color: $green;
+      }
+
+      &::before {
+        transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
+      }
+      &::after {
+        transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
+      }
     }
   }
 
-  &.back-mode .hamburger-inner {
-    transform: rotate(-180deg);
-  }
-  &.back-mode .hamburger-inner::before {
-    transform: translate3d(6px, 3px, 0) rotate(45deg) scale(0.7, 1);
-  }
-  &.back-mode .hamburger-inner::after {
-    transform: translate3d(6px, -3px, 0) rotate(-45deg) scale(0.7, 1);
+  &.close-icon {
+    .hamburger-inner {
+      // transform: rotate(-180deg);
+      background: transparent;
+
+      &::before,
+      &::after {
+        background-color: $green;
+      }
+
+      &::before {
+        transform: translate3d(0px, 7px, 0) rotate(45deg);
+      }
+      &::after {
+        transform: translate3d(0px, -7px, 0) rotate(-45deg);
+      }
+    }
   }
  
   .hamburger-box {
@@ -5176,7 +5309,7 @@ a[data-featherlight] {
 
   .side-nav__footer {
       padding: 8px 16px 0;
-      background: #F3F3F3;
+      background: $lightestGray;
 
       .social-links-list {
         display: flex;

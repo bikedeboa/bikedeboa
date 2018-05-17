@@ -207,34 +207,33 @@
 
             {{#if numReviews}}
                 <div class="numreviews">{{numReviews}}</div>
-            {{/if}}
+            {{/if}} 
+                {{#unless average}}
+                    <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
+                {{/unless}}
 
-            {{#unless average}}
-                <button class="ghost openReviewPanelBtn" tabindex="0" data-toggle="tooltip" data-trigger="manual" data-placement="auto" title="Avalie este bicicletário e ajude outros usuários a saber se ele é de boa! ;)">Avaliar</button>
-            {{/unless}}
+                <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
+                    {{#if average}}
+                        <span class="average">{{average}}</span>
 
-            <div class="rating-display-container" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-                {{#if average}}
-                    <span class="average">{{average}}</span>
-
-                    <fieldset id="ratingDisplay" class="rating disabled">
-                        <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
-                        <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
-                        <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
-                        <label class="full-star" data-value="4" for="placeDetails_star4"></label>
-                        <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
-                        <label class="full-star" data-value="3" for="placeDetails_star3"></label>
-                        <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
-                        <label class="full-star" data-value="2" for="placeDetails_star2"></label>
-                        <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
-                        <label class="full-star" data-value="1" for="placeDetails_star1"></label>
-                    </fieldset>
-                    
-                    {{#unless savedRating}}
-                    <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
-                    {{/unless}}
-                {{/if}}
-            </div>
+                        <fieldset id="ratingDisplay" class="rating disabled">
+                            <input disabled type="radio" id="placeDetails_star5" name="placeDetails_rating" value="5" />
+                            <label class="full-star" data-value="5" for="placeDetails_star5"></label> 
+                            <input disabled type="radio" id="placeDetails_star4" name="placeDetails_rating" value="4" />
+                            <label class="full-star" data-value="4" for="placeDetails_star4"></label>
+                            <input disabled type="radio" id="placeDetails_star3" name="placeDetails_rating" value="3" />
+                            <label class="full-star" data-value="3" for="placeDetails_star3"></label>
+                            <input disabled type="radio" id="placeDetails_star2" name="placeDetails_rating" value="2" />
+                            <label class="full-star" data-value="2" for="placeDetails_star2"></label>
+                            <input disabled type="radio" id="placeDetails_star1" name="placeDetails_rating" value="1" />
+                            <label class="full-star" data-value="1" for="placeDetails_star1"></label>
+                        </fieldset>
+                        
+                        {{#unless savedRating}}
+                        <button id="new-review-btn" class="ghost openReviewPanelBtn">Avaliar</button>
+                        {{/unless}}
+                    {{/if}}
+                </div>
 
             {{#if average}}
                 {{#if tags}}
@@ -259,7 +258,7 @@
                 {{/if}}
 
                 {{#if savedRating}}
-                    <div class="savedRating">
+                    <div class="savedRating"> 
                         <h5>Sua avaliação:</h5> 
 
                         <div>
