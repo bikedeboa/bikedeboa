@@ -1318,7 +1318,6 @@ a.unstyled-link {
   }
 
   .guide-references-list {
-    font-size: 18px;
     list-style: none;
     padding: 0;
     margin-top: -.5em;
@@ -1332,7 +1331,6 @@ a.unstyled-link {
 
       .references-label { 
         display: block;
-        font-size: 16px;
         line-height: 16px;
         font-style: italic;
         color: $gray;
@@ -4132,7 +4130,8 @@ body.modal-open {
     display: none;
   }
 
-  #aboutModal {
+  #aboutModal,
+  .guide-modal {
     $leading: 16px;
 
     .illustation {
