@@ -18,22 +18,22 @@ window.createdAtToDaysAgo = createdAtStr => {
 
   const monthsAgo = Math.floor(msAgo/(1000*60*60*24*30));
   if (monthsAgo) {
-    return `${monthsAgo} ${monthsAgo > 1 ? 'meses' : 'mês'} atrás`;
+    return `${monthsAgo} ${monthsAgo > 1 ? 'meses' : 'mês'}`;
   }
   
   const daysAgo = Math.floor(msAgo/(1000*60*60*24));
   if (daysAgo) {
-    return `${daysAgo} dia${daysAgo > 1 ? 's' : ''} atrás`;
+    return `${daysAgo} dia${daysAgo > 1 ? 's' : ''}`;
   }
 
   const hoursAgo = Math.floor(msAgo/(1000*60*60));
   if (hoursAgo) {
-    return `${hoursAgo} hora${hoursAgo > 1 ? 's' : ''} atrás`;
+    return `${hoursAgo} hora${hoursAgo > 1 ? 's' : ''}`;
   }
 
   const minsAgo = Math.floor(msAgo/(1000*60));
   if (minsAgo) {
-    return `${minsAgo} minuto${minsAgo > 1 ? 's' : ''} atrás`;
+    return `${minsAgo} minuto${minsAgo > 1 ? 's' : ''}`;
   }
 
   return 'agora há pouco';
