@@ -1203,7 +1203,7 @@ $(() => {
         //   } 
         // });
         toastr['success']('Avaliação salva. Valeu!'); 
-        promptPWAInstallPopup();
+        // promptPWAInstallPopup();
       }
 
       // Update marker data
@@ -1877,34 +1877,34 @@ $(() => {
     });
   }
 
-  function promptPWAInstallPopup() { 
-    // Deferred prompt handling based on:
-    //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
-    if (_deferredPWAPrompt !== undefined) {
-      // The user has had a postive interaction with our app and Chrome
-      // has tried to prompt previously, so let's show the prompt.
-      _deferredPWAPrompt.prompt(); 
+  // function promptPWAInstallPopup() { 
+  //   // Deferred prompt handling based on:
+  //   //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
+  //   if (_deferredPWAPrompt !== undefined) {
+  //     // The user has had a postive interaction with our app and Chrome
+  //     // has tried to prompt previously, so let's show the prompt.
+  //     _deferredPWAPrompt.prompt(); 
 
-      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
-      e.userChoice.then(function(choiceResult) {
-        // console.log(choiceResult.outcome); 
-        if(choiceResult.outcome == 'dismissed') {
-          // User cancelled home screen install
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
-        }
-        else {
-          // User added to home screen
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
-        }
-      });
+  //     ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
+  //     e.userChoice.then(function(choiceResult) {
+  //       // console.log(choiceResult.outcome); 
+  //       if(choiceResult.outcome == 'dismissed') {
+  //         // User cancelled home screen install
+  //         ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+  //       }
+  //       else {
+  //         // User added to home screen
+  //         ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+  //       }
+  //     });
 
-      _deferredPWAPrompt = false;
+  //     _deferredPWAPrompt = false;
 
-      return true;
-    } else {
-      return false;
-    }
-  }
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   function openHowToInstallModal() {
     // const hasNativePromptWorked = promptPWAInstallPopup(); 
@@ -2346,7 +2346,7 @@ $(() => {
         fullname: profile.name,
         email: profile.email 
       }).then( data => { 
-        promptPWAInstallPopup();
+        // promptPWAInstallPopup();
 
         // UI
         $('#topbarLoginBtn').css('visibility','hidden'); 
@@ -2834,14 +2834,27 @@ $(() => {
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
-    // window.addEventListener('beforeinstallprompt', e => {
-    //   e.preventDefault();
-    //   _deferredPWAPrompt = e;
-    
-    //   $('.howToInstallBtn').css({'font-weight': 'bold'});
-    
-    //   return false;
-    // });
+    window.addEventListener('beforeinstallprompt', e => {
+      // Prevents automatic banner
+      // e.preventDefault();
+      // _deferredPWAPrompt = e;
+      // $('.howToInstallBtn').css({'font-weight': 'bold'});
+
+      // Force to always prompt
+      e.prompt();
+
+      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped'); 
+      e.userChoice.then(function(choiceResult) {
+        if(choiceResult.outcome == 'dismissed') {
+          // User cancelled home screen install
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+        }
+        else {
+          // User added to home screen
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+        }
+      });
+    });
   }
 
 
