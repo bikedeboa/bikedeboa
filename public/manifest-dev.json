@@ -2,6 +2,7 @@
   "name": "bike de boa",
   "short_name": "bike de boa",
   "start_url": "/?utm_source=homescreen",
+  "scope": "/", 
   "lang": "pt-br",
   "display": "standalone",
   "orientation": "portrait",
@@ -9,14 +10,6 @@
   "theme_color": "#30bb6a",
   "description": "Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais.",
   "icons": [{
-    "src": "/favicons-dev/favicon-16x16.png?v=m2dAvrr4RB",
-    "sizes": "16x16",
-    "type": "image/png"
-  }, {
-    "src": "/favicons-dev/favicon-32x32.png?v=m2dAvrr4RB",
-    "sizes": "32x32",
-    "type": "image/png"
-  }, {
     "src": "/favicons-dev/icon-192x192.png?v=m2dAvrr4RB",
     "sizes": "192x192",
     "type": "image/png"

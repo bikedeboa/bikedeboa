@@ -152,7 +152,10 @@ gulp.task('generate-service-worker', function(callback) {
       // 'dist/*.json', 
       // 'assets/**/*.{svg,png,jpg}',
       // 'dist/**/*.{ttf,woff,woff2}', 
-      'public/manifest.json', 
+      // 'dist/**/*.{js,css,html}', 
+      // 'public/lib/infobox.min.js', 
+      // 'public/lib/markerclusterer.min.js', 
+      'public/*.{json}', 
       'dist/fonts/glyphicons-halflings-regular.ttf',
       'dist/fonts/glyphicons-halflings-regular.woff',
       'dist/fonts/glyphicons-halflings-regular.woff2',
@@ -189,7 +192,7 @@ gulp.task('generate-service-worker', function(callback) {
       
       // All JS, CSS and HTML files
       // @todo understand why code sometimes doesn't get updated even if there's network available
-      // { urlPattern: /\.(?:js|css|html)$/, handler: 'networkFirst' }, 
+      // { urlPattern: /\.(?:js|css|html)$/, handler: 'networkFirst' },
       
       // All image asssets
       { 
