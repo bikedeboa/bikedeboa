@@ -23,7 +23,7 @@
         <meta name="google-site-verification" content="ftQlKcMOfc5iuPkN6xINweO31I0WNRE4s9zDbQT9iTY" />
 
         <!-- Progressive Webapp Manifest -->
-        <link rel="manifest" href="/manifest.json" type="application/manifest+json">
+        <link rel="manifest" href="/manifest.json" type="application/manifest+json"> 
 
         <!-- Favicons -->
         <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png?v=m2dAvrr4RB">
@@ -51,21 +51,24 @@
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/> 
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.5.0/sweetalert2.min.css"/>
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.19.2/sweetalert2.min.css"/>
-        <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.gallery.min.css"/> -->
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.19.2/sweetalert2.min.css"/> -->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.min.css"/>
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.gallery.min.css"/> -->
         
         <link rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
-  
 
-        <!-- JS --> 
+        
+        <!-- Polyfill for ES6 Promises for IE11, UC Browser and Android browser support -->
+        <script defer src="https://cdn.jsdelivr.net/npm/promise-polyfill@7.1.0/dist/promise.min.js"></script>
+        
+        <!-- JS | deferred --> 
         <script defer src="https://code.jquery.com/jquery-3.3.1.min.js"></script> 
         <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/native.history.min.js"></script> 
-        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.5.0/sweetalert2.min.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.5.0/sweetalert2.min.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/hellojs/2.0.0-4/hello.all.js"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.1/velocity.min.js"></script> 
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
@@ -74,13 +77,10 @@
         <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.gallery.min.js"/> -->
         <!-- <script defer src="/lib/countUp.min.js"></script> -->
 
-        <!-- Polyfill for ES6 Promises for IE11, UC Browser and Android browser support -->
-        <script defer src="https://cdn.jsdelivr.net/npm/promise-polyfill@7.1.0/dist/promise.min.js"></script>
-
-        
+        <!-- JS | Main -->
         <script defer src="/js/app.min.js"></script>
 
-        <!-- Service Worker -->
+        <!-- JS | async (not needed in bootup) -->
         <script defer async src="/service-worker-registration.js"></script> 
     </head> 
 
@@ -146,7 +146,7 @@
 
           <div id="geolocationBtn" title="Onde estou?" class="caption-tooltip active">
             <div>
-              <img src="/img/icon_geolocation.svg">
+              <img src="/img/icon_geolocation.svg" alt="">
             </div>
           </div> 
         </div>
@@ -274,28 +274,10 @@
         </div>
 
         <div id="userBtn" class="dropdown cool-hide">
-          <button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img class="avatar" data-src="/img/icon_user_white.svg" src="/img/icon_user_white.svg">
+          <button class="openContributionsBtn">
+            <img class="avatar" data-src="/img/icon_user_white.svg" src="/img/icon_user_white.svg" alt="">
             <span class="userBtn--user-name"></span>
           </button>
-
-          <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-            <li>
-              <button class="openContributionsBtn" disabled>
-                <img src="/img/icon_list.svg"> Contribuições
-              </button>
-            </li>
-            
-            <li role="separator" class="divider openProfileDivider"> </li>  
-            
-            <li>
-              <button class="loginBtn"><img src="/img/icon_login.svg"> Login</button>
-            </li>
-            
-            <li>
-              <button class="logoutBtn"><img src="/img/icon_logout.svg"> Logout</button>
-            </li>
-          </ul>
         </div>
 
         <div class="welcome-message-container">

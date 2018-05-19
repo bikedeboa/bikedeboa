@@ -124,8 +124,8 @@ $(() => {
   
     // Tags
     if (tags && m.tags) {
-      const MAX_TAG_COUNT = m.reviews;
-      const MIN_TAG_OPACITY = 0.3;
+      const maxTagCount = m.reviews;
+      const MIN_TAG_OPACITY = 0.2; 
 
       let allTags = [];
       tags.forEach( t => {
@@ -137,24 +137,18 @@ $(() => {
         }
       });
 
-      // templateData.tags = m.tags
       templateData.tags = allTags 
-        // .sort((a, b) => {return b.count - a.count;})
         .sort((a, b) => {return b.name - a.name;})
         .map(t => {
-          // Tag opacity is proportional to count
-          // @todo refactor this to take into account Handlebars native support for arrays
-          const opacity = t.count/MAX_TAG_COUNT + MIN_TAG_OPACITY;
-          // return t.count > 0 ? `<span class="tagDisplay" style="opacity: ${opacity}">${t.name} <span class="tag-count">${t.count}</span></span>` : '';
-          return `
-            <span class="tagDisplayContainer">
-              <span class="tagDisplay" style="opacity: ${opacity}">
-                ${t.name} <span class="tag-count">${t.count}</span>
-              </span>
-            </span>
-          `;
-        })
-        .join('');
+          const opacity = (t.count / maxTagCount) * 0.7 + MIN_TAG_OPACITY;
+          return {
+            name: t.name,
+            englishName: TAG_NAMES__PT_TO_EN[t.name.toLowerCase()],
+            opacity: opacity,
+            isEmpty: t.count == 0,
+            count: parseInt(t.count*100 / maxTagCount)
+          };
+        });
     }
 
     // Reviews, checkins
@@ -322,7 +316,7 @@ $(() => {
       if (!BDB.User.isLoggedIn) {
         // @todo fix to not need to close the modal
         hideAll();
-        openLoginDialog(true);
+        openLoginDialog({ showPermissionDisclaimer: true });
 
         $(document).one('bikedeboa.login', () => {
           openRevisionDialog();
@@ -604,6 +598,7 @@ $(() => {
       hideUI();
 
       $('.hamburger-button').addClass('back-mode');
+      $('.hamburger-button').addClass('back-icon');
       $('.hamburger-button.back-mode').one('click.exitPositionPinMode', () => {
         toggleLocationInputMode();
       });
@@ -639,7 +634,18 @@ $(() => {
           // openNewOrEditPlaceModal();
         } else {
           if (BDB.Map.checkBounds()) {
-            openNewOrEditPlaceModal();
+            BDB.Map.getNameSuggestions({ lat: _newMarkerTemp.lat, lng: _newMarkerTemp.lng })
+              .then(nameSuggestions => {
+                nameSuggestions = nameSuggestions.slice(0, MAX_NAME_SUGGESTIONS);
+
+                nameSuggestions = nameSuggestions.map( n => n.name );
+                
+                openNewOrEditPlaceModal(nameSuggestions);
+              })
+              .catch(error => {
+                console.error(error);
+                openNewOrEditPlaceModal();
+              });
           } else {
             const mapCenter = map.getCenter();
             ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
@@ -679,6 +685,7 @@ $(() => {
       showUI();
       $('.hamburger-button.back-mode').off('click.exitPositionPinMode');
       $('.hamburger-button').removeClass('back-mode'); 
+      $('.hamburger-button').removeClass('back-icon'); 
       $('#newPlaceholderConfirmBtn').off('click');
       $(document).off('keyup.disableInput');
       $('body').removeClass('position-pin-mode');
@@ -873,9 +880,9 @@ $(() => {
   }
 
   // @todo clean up this mess
-  function openNewOrEditPlaceModal() {
+  function openNewOrEditPlaceModal(nameSuggestions) {
     $('#newPlaceModal').remove();
-    $('body').append(BDB.templates.newPlaceModal());
+    $('body').append(BDB.templates.newPlaceModal({nameSuggestions: nameSuggestions}));
     
     $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
 
@@ -928,6 +935,29 @@ $(() => {
         $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
       }
 
+      $('#cancelEditPlaceBtn').off('click').on('click', () => {
+        hideAll().then(() => {
+          openLocal(openedMarker);
+        });
+      });
+
+      $('#editPlacePositionBtn').off('click').on('click', () => {
+        // Ask to keep opened marker temporarily
+        hideAll(true);
+
+        map.setCenter({
+          lat: parseFloat(openedMarker.lat),
+          lng: parseFloat(openedMarker.lng)
+        });
+
+        // Set minimum map zoom
+        if (map.getZoom() < 19) {
+          map.setZoom(19);
+        }
+
+        toggleLocationInputMode();
+      });
+
       // $('#placeDetailsContent').modal('hide');
     } else {
       setView('Novo bicicletário', '/novo');
@@ -939,13 +969,17 @@ $(() => {
       $('#type-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
         ga('send', 'event', 'Misc', 'tooltip - new pin type help');
       });
+
+      $('.place-suggestion--item').off('click').on('click', e => {
+        $('.text-input-wrapper input').val( $(e.currentTarget).data('name') );
+      });
     }
 
-    // Initialize callbacks
     $('.typeIcon').off('click.radio').on('click.radio', e => {
       $(e.currentTarget).siblings('.typeIcon').removeClass('active');
       $(e.currentTarget).addClass('active');
 
+      // Automatically scroll to next field
       // const currentStep = $(e.currentTarget).parent().data('form-step');
       // const nextStep = parseInt(currentStep) + 1;
       // const nextStepEl = $(`[data-form-step="${nextStep}"]`);
@@ -972,32 +1006,6 @@ $(() => {
 
     $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
 
-    // Edit only buttons
-    if (openedMarker) {
-      $('#cancelEditPlaceBtn').off('click').on('click', () => {
-        hideAll().then(() => {
-          openLocal(openedMarker);
-        });
-      });
-
-      $('#editPlacePositionBtn').off('click').on('click', () => {
-        // Ask to keep opened marker temporarily
-        hideAll(true);
-        
-        map.setCenter({
-          lat: parseFloat(openedMarker.lat),
-          lng: parseFloat(openedMarker.lng)
-        });
-
-        // Set minimum map zoom
-        if (map.getZoom() < 19) {
-          map.setZoom(19);
-        }
-        
-        toggleLocationInputMode();
-      });
-    }
-    
     $('#photoInput').off('change').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
       const self = document.getElementById('photoInput');
@@ -1195,7 +1203,7 @@ $(() => {
         //   } 
         // });
         toastr['success']('Avaliação salva. Valeu!'); 
-        promptPWAInstallPopup();
+        // promptPWAInstallPopup();
       }
 
       // Update marker data
@@ -1385,6 +1393,7 @@ $(() => {
     $('#search-overlay').addClass('showThis');
     $('#search-overlay h2, #search-overlay li').velocity('transition.slideUpIn', { stagger: STAGGER_FAST, duration: 500 }); 
     $('.hamburger-button').addClass('back-mode');
+    $('.hamburger-button').addClass('back-icon');
     
     // Automatically focus the text search input
     setTimeout(() => {
@@ -1399,7 +1408,9 @@ $(() => {
   function exitLocationSearchMode() {
     $('body').removeClass('search-mode');
     $('#search-overlay').removeClass('showThis');
+    $('.hamburger-button.back-mode').off('click.exitLocationSearch');
     $('.hamburger-button').removeClass('back-mode'); 
+    $('.hamburger-button').removeClass('back-icon'); 
   }
 
   function updatePageTitleAndMetatags(text = 'bike de boa') { 
@@ -1610,8 +1621,17 @@ $(() => {
     });
 
     $('body').on('click', '.openContributionsBtn', queueUiCallback.bind(this, () => {
-      hideAll();
-      setView('Contribuições', '/contribuicoes', true);
+      // hideAll();
+
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog();
+
+        $(document).one('bikedeboa.login', () => {
+          setView('Contribuições', '/contribuicoes', true);
+        });
+      } else {
+        setView('Contribuições', '/contribuicoes', true);
+      }
     }));
  
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
@@ -1681,7 +1701,7 @@ $(() => {
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
-        openLoginDialog(true);
+        openLoginDialog({ showPermissionDisclaimer: true });
 
         $(document).one('bikedeboa.login', () => {
           $('#addPlace').click();
@@ -1728,7 +1748,14 @@ $(() => {
       // Mobile optimizations
       if (_isMobile) {
         // $('#map, #addPlace, #geolocationBtn').addClass('optimized-hidden');
+        if ($('body').hasClass('deeplink')) {
+          $('.hamburger-button').addClass('close-icon');
+        } else {
+          $('.hamburger-button').addClass('back-icon');
+        }
+
         $('.hamburger-button').addClass('back-mode');
+
         $('.hamburger-button.back-mode').one('click.cancelCreation', () => {
           // If was creating a new local
           // @todo Do this check better
@@ -1751,8 +1778,6 @@ $(() => {
           }
         });
       } else {
-        hideUI();
-
         if (openingModalEl.hasClass('clean-modal')) {
           $('body').addClass('clean-modal-open');
         }
@@ -1772,6 +1797,8 @@ $(() => {
 
         $('.hamburger-button.back-mode').off('click.cancelCreation');
         $('.hamburger-button').removeClass('back-mode');
+        $('.hamburger-button').removeClass('close-icon');
+        $('.hamburger-button').removeClass('back-icon');
 
         // Fix thanks to https://stackoverflow.com/questions/4064275/how-to-deal-with-google-map-inside-of-a-hidden-div-updated-picture
         if (map) {
@@ -1779,8 +1806,6 @@ $(() => {
           map.setCenter(map.getCenter());
         }
       } else {
-        showUI();
-        
         $('body').removeClass('clean-modal-open');
       }
     }); 
@@ -1852,34 +1877,34 @@ $(() => {
     });
   }
 
-  function promptPWAInstallPopup() { 
-    // Deferred prompt handling based on:
-    //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
-    if (_deferredPWAPrompt !== undefined) {
-      // The user has had a postive interaction with our app and Chrome
-      // has tried to prompt previously, so let's show the prompt.
-      _deferredPWAPrompt.prompt(); 
+  // function promptPWAInstallPopup() { 
+  //   // Deferred prompt handling based on:
+  //   //   https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
+  //   if (_deferredPWAPrompt !== undefined) {
+  //     // The user has had a postive interaction with our app and Chrome
+  //     // has tried to prompt previously, so let's show the prompt.
+  //     _deferredPWAPrompt.prompt(); 
 
-      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
-      e.userChoice.then(function(choiceResult) {
-        // console.log(choiceResult.outcome); 
-        if(choiceResult.outcome == 'dismissed') {
-          // User cancelled home screen install
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
-        }
-        else {
-          // User added to home screen
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
-        }
-      });
+  //     ga('send', 'event', 'Misc', 'beforeinstallprompt - popped');
+  //     e.userChoice.then(function(choiceResult) {
+  //       // console.log(choiceResult.outcome); 
+  //       if(choiceResult.outcome == 'dismissed') {
+  //         // User cancelled home screen install
+  //         ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+  //       }
+  //       else {
+  //         // User added to home screen
+  //         ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+  //       }
+  //     });
 
-      _deferredPWAPrompt = false;
+  //     _deferredPWAPrompt = false;
 
-      return true;
-    } else {
-      return false;
-    }
-  }
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   function openHowToInstallModal() {
     // const hasNativePromptWorked = promptPWAInstallPopup(); 
@@ -1991,10 +2016,13 @@ $(() => {
 
       for(let i=0; i < templateData.places.length; i++) {
         let p = templateData.places[i];
+
         // Created X days ago
         if (p.createdAt) {
           p.createdTimeAgo = createdAtToDaysAgo(p.createdAt);
         }
+ 
+        p.thumbnailUrl = (p.photo) ? p.photo.replace('images', 'images/thumbs') : ''; 
       }
       
       templateData.places = templateData.places.sort( (a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
@@ -2019,11 +2047,10 @@ $(() => {
     });
   }
 
-  function openGuideModal() {
-    if ($('#guideModal').length === 0) {
-      $('body').append(BDB.templates.guideModal());
-    }
-
+  function openGuideModal(showMapBanner = false) {
+    $('#guideModal').remove();
+    $('body').append(BDB.templates.guideModal({ showMapBanner: showMapBanner}));
+ 
     $('#guideModal').modal('show');
     $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
 
@@ -2094,12 +2121,12 @@ $(() => {
     // new CountUp("about-stats--views", 0, $('#about-stats--views').data('countupto'), 0, 5).start();
   }
 
-  function handleRouting(initialRouting = false) { 
+  function handleRouting(isInitialRouting = false) { 
     const urlBreakdown = window.location.pathname.split('/');
     let match = urlBreakdown[1];
 
     // Routes that on initial loading should be redirected to the Home
-    if (initialRouting) {
+    if (isInitialRouting) {
       switch(urlBreakdown[1]) {
       case 'novo':
       case 'editar':
@@ -2118,7 +2145,7 @@ $(() => {
         if (id) {
           id = parseInt(id);
 
-          if (initialRouting) {
+          if (isInitialRouting) {
             _isDeeplink = true;
             $('body').addClass('deeplink');
 
@@ -2158,20 +2185,30 @@ $(() => {
           openNotFoundModal(match);
           match = false;
         }
-      } else {
-        window.location.pathname = '';
       }
       break;
     case 'faq':
       openFaqModal();
       break;
     case 'como-instalar':
+      if (isInitialRouting) {
+        _isDeeplink = true;
+        $('body').addClass('deeplink');
+      }
       openHowToInstallModal();
       break;
     case 'guia-de-bicicletarios':
-      openGuideModal();
+      if (isInitialRouting) {
+        _isDeeplink = true;
+        $('body').addClass('deeplink');
+      }
+      openGuideModal(!!isInitialRouting); 
       break;
     case 'sobre':
+      if (isInitialRouting) {
+        _isDeeplink = true;
+        $('body').addClass('deeplink');
+      }
       openAboutModal();
       break;
     case 'sobre-nossos-dados':
@@ -2179,7 +2216,17 @@ $(() => {
       break;
     case 'contribuicoes':
       hideAll();
-      openContributionsModal();
+
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog(true);
+ 
+        $(document).one('bikedeboa.login', () => {
+          openContributionsModal();
+        });
+      } else {
+        openContributionsModal();
+      }
+
       break;
     case 'nav':
       _hamburgerMenu.show();
@@ -2216,14 +2263,12 @@ $(() => {
       break;
     }
 
-    if (match && initialRouting) {
-      _isDeeplink = true;
-      $('body').addClass('deeplink');       
-    }
     return match;
   }
 
-  function openLoginDialog(showPermissionDisclaimer = false) {
+  function openLoginDialog(options = {}) {
+    const showPermissionDisclaimer = options.showPermissionDisclaimer;
+
     // let permissionDisclaimer = '';
     // if (showPermissionDisclaimer) {
     //   permissionDisclaimer = `
@@ -2301,7 +2346,7 @@ $(() => {
         fullname: profile.name,
         email: profile.email 
       }).then( data => { 
-        promptPWAInstallPopup();
+        // promptPWAInstallPopup();
 
         // UI
         $('#topbarLoginBtn').css('visibility','hidden'); 
@@ -2310,7 +2355,7 @@ $(() => {
         $('#userBtn').removeClass('loading');
         $('#userBtn .avatar').attr('src', profile.thumbnail);
         // $('.openContributionsBtn, .openProfileDivider').show();
-        $('#userBtn .openContributionsBtn').attr('disabled', false);
+        // $('#userBtn .openContributionsBtn').attr('disabled', false);
         $('#userBtn .logoutBtn').show(); 
         $('#userBtn .loginBtn').hide();
         if (data.role === 'admin') {
@@ -2354,7 +2399,7 @@ $(() => {
     $('#userBtn .userBtn--user-name').text('');
     $('.logoutBtn').hide();
     $('.loginBtn').show(); 
-    $('.openContributionsBtn').attr('disabled', true);
+    // $('.openContributionsBtn').attr('disabled', true);
 
     document.dispatchEvent(new CustomEvent('bikedeboa.logout'));
   }
@@ -2789,14 +2834,27 @@ $(() => {
 
     // Intercepts Progressive Web App event
     // source: https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
-    // window.addEventListener('beforeinstallprompt', e => {
-    //   e.preventDefault();
-    //   _deferredPWAPrompt = e;
-    
-    //   $('.howToInstallBtn').css({'font-weight': 'bold'});
-    
-    //   return false;
-    // });
+    window.addEventListener('beforeinstallprompt', e => {
+      // Prevents automatic banner
+      // e.preventDefault();
+      // _deferredPWAPrompt = e;
+      // $('.howToInstallBtn').css({'font-weight': 'bold'});
+
+      // Force to always prompt
+      e.prompt();
+
+      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped'); 
+      e.userChoice.then(function(choiceResult) {
+        if(choiceResult.outcome == 'dismissed') {
+          // User cancelled home screen install
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+        }
+        else {
+          // User added to home screen
+          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+        }
+      });
+    });
   }
 
 

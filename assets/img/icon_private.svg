@@ -6,15 +6,15 @@
 	 xml:space="preserve">
 <g>
 	
-		<polyline fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="110.0894,11.009" points="
-		3.388,143.668 3.388,86.097 3.388,40.727 49.233,3.314 94.096,39.542 94.096,86.097 94.096,143.668 	"/>
+		<polyline fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
+		3.388,143.668 3.388,86.098 3.388,40.727 49.233,3.314 94.097,39.542 94.097,86.098 94.097,143.668 	"/>
 	
-		<path fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-dasharray="68.624,6.8624" d="
+		<path fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="
 		M18.932,139.012"/>
 	
 		<line fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.388" y1="143.916" x2="136.94" y2="143.916"/>
 	
-		<line fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.388" y1="101.524" x2="136.94" y2="101.27"/>
+		<line fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.388" y1="101.523" x2="136.94" y2="101.27"/>
 	
 		<line fill="none" stroke="#47B970" stroke-width="5.6693" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="124.004" y1="85.66" x2="124.004" y2="142.927"/>
 	

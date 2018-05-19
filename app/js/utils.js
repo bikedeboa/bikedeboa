@@ -18,22 +18,22 @@ window.createdAtToDaysAgo = createdAtStr => {
 
   const monthsAgo = Math.floor(msAgo/(1000*60*60*24*30));
   if (monthsAgo) {
-    return `${monthsAgo} ${monthsAgo > 1 ? 'meses' : 'mês'} atrás`;
+    return `${monthsAgo} ${monthsAgo > 1 ? 'meses' : 'mês'}`;
   }
   
   const daysAgo = Math.floor(msAgo/(1000*60*60*24));
   if (daysAgo) {
-    return `${daysAgo} dia${daysAgo > 1 ? 's' : ''} atrás`;
+    return `${daysAgo} dia${daysAgo > 1 ? 's' : ''}`;
   }
 
   const hoursAgo = Math.floor(msAgo/(1000*60*60));
   if (hoursAgo) {
-    return `${hoursAgo} hora${hoursAgo > 1 ? 's' : ''} atrás`;
+    return `${hoursAgo} hora${hoursAgo > 1 ? 's' : ''}`;
   }
 
   const minsAgo = Math.floor(msAgo/(1000*60));
   if (minsAgo) {
-    return `${minsAgo} minuto${minsAgo > 1 ? 's' : ''} atrás`;
+    return `${minsAgo} minuto${minsAgo > 1 ? 's' : ''}`;
   }
 
   return 'agora há pouco';
@@ -351,7 +351,21 @@ function distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
     Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return earthRadiusKm * c;
-}
+};
+
+//  https://developer.mozilla.org/en-US/docs/Web/API/Background_Tasks_API#Example
+window.requestIdleCallback = window.requestIdleCallback || function (handler) {
+  let startTime = Date.now();
+
+  return setTimeout(function () {
+    handler({
+      didTimeout: false,
+      timeRemaining: function () {
+        return Math.max(0, 50.0 - (Date.now() - startTime));
+      }
+    });
+  }, 1);
+};
 
 
 // Confettiful

@@ -45,24 +45,40 @@
           })(document);
         </script> 
 
-        <!-- CSS (async) -->
-        <link async rel="stylesheet" type="text/css" href="/css/vendors.min.css"/>
-        <link async rel="stylesheet" type="text/css" href="/css/main.min.css"/> 
-
-        <!-- JS --> 
-        <script src="/js/lib/jquery.js"></script> 
-        <script src="/js/lib/bootstrap.js"></script>
-        <script src="/js/lib/handlebars.js"></script>
-        <script src="/js/lib/js.cookie.js"></script>
-        <script src="/js/lib/native.history.js"></script>
-        <script src="/js/lib/sweetalert2.js"></script>
-        <script src="/js/lib/hello.all.js"></script>
-        <script src="/js/lib/toastr.js"></script> 
-        <script src="/js/lib/velocity.js"></script> 
-        <script src="/js/lib/velocity.ui.js"></script>
-        <script src="/js/lib/hello.all.js"></script>
-        <script src="/lib/featherlight.min.js"></script>
-        <script src="/js/app.min.js"></script>
+        <!-- CSS -->
+        <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.5.0/sweetalert2.min.css"
+        />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.19.2/sweetalert2.min.css"
+        />
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.gallery.min.css"/> -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.min.css"
+        />
+        
+        <link rel="stylesheet" type="text/css" href="/css/main.min.css" />
+        
+        
+        <!-- JS -->
+        <script  src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script  src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+        <script  src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/native.history.min.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.5.0/sweetalert2.min.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/hellojs/2.0.0-4/hello.all.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.min.js"></script>
+        <!-- <script  src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.19.2/sweetalert2.min.js"></script> -->
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.gallery.min.js"/> -->
+        <!-- <script  src="/lib/countUp.min.js"></script> -->
+        
+        <!-- Polyfill for ES6 Promises for IE11, UC Browser and Android browser support -->
+        <script  src="https://cdn.jsdelivr.net/npm/promise-polyfill@7.1.0/dist/promise.min.js"></script>
+        
+        <script  src="/js/app.min.js"></script>
 
         <!-- Bootstrap Extended Tables -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
@@ -100,8 +116,6 @@
 
           h2 {
             font-size: 16px;
-            /* width: 60%; */
-            color: #828b90;
           }
 
           #logo {
@@ -198,7 +212,7 @@
           }
 
           section {
-            margin: 60px 0 0;
+            margin: 3em 0 0;
             /*padding: 50px;*/
             /*background-color: rgba(0,0,0,0.02);*/
             /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
@@ -225,22 +239,12 @@
             z-index: 2;
             background: white;
             margin: 0 -24px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
-            padding: 12px 24px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            padding: 12px 24px 0;
           }
 
           .navbar-default {
             background-color: #30bb6a;
-          }
-
-          .nav-pills > li {
-            /*font-size: 1.8em;*/
-            text-transform: uppercase;
-            font-weight: bold;
-          }
-
-          .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
-            background: #30bb6a;
           }
 
           .tab-content h2 {
@@ -261,7 +265,9 @@
     <body>
       <div class="topbar">
         <h1 id="logo">
-          <a href="/" class="unstyled-link">bike de boa</a> 
+          <a href="/">
+            <img src="/img/logo.svg" alt="bike de boa" />
+          </a>
         </h1>
 
         <div id="userBtn" class="dropdown">
@@ -1080,21 +1086,26 @@
 
         function updateKmlImportResults() {
           document.getElementById("kmlFileImportResults").innerHTML = `
-                  <div class="big-numbers">
-                    <div class="big-numbers--col"> 
-                      <div class="big-numbers--number">${_importResults.places.length}</div>
-                      <div class="big-numbers--label">bicicletários</div>
-                    </div>
-                    <div class="big-numbers--col">
-                      <div class="big-numbers--number">${_importResults.tagsDetected}</div>
-                      <div class="big-numbers--label">tags preenchidas automaticamente</div>
-                    </div>
-                    <div class="big-numbers--col">
-                      <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
-                      <div class="big-numbers--label">fotos com link quebrado</div>
-                    </div>
-                  </div>
-                `;
+            <div class="big-numbers">
+              <div class="big-numbers--col"> 
+                <div class="big-numbers--number">${_importResults.places.length}</div>
+                <div class="big-numbers--label">bicicletários</div>
+              </div>
+              <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.tagsDetected}</div>
+                <div class="big-numbers--label">tags preenchidas automaticamente</div>
+              </div>
+              <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
+                <div class="big-numbers--label">fotos com link quebrado</div>
+              </div>
+            </div>
+            <div>
+              <small>
+                ${_importResults.log}
+              </small>
+            </div>
+          `;
         }
 
         function uploadImportedPlacesToBackend() {
@@ -1389,6 +1400,7 @@
               tagsDetected: 0,
               brokenUrls: 0,
               totalUrls: 0,
+              log: ''
             };
 
             var file = document.getElementById("kmlFileInput").files[0];
@@ -1522,6 +1534,7 @@
                                 case 'sulamerica':
                                 case 'pescocinho':
                                 case 'transcarioca':
+                                case 'misto':
                                 case 'm':
                                   tmp.structureType = 'other';
                                   _importResults.tagsDetected++;
@@ -1533,7 +1546,8 @@
                                   _importResults.tagsDetected++;
                                   break;
                                 default:
-                                  console.warn('tipo nao identificado:', value);
+                                  console.warn('tipo de bicicletario nao identificado:', value);
+                                  // _importResults.log += `Tipo de bicicletário não identificado: ${value}` + '<br>';
                                   break;
                               }
                               break;

@@ -16,6 +16,7 @@ BDB.Map = (function () {
   let areMarkersHidden = false;
   let directionsRenderer;
   let directionsService;
+  let placesService;
   let infoWindow;
 
   // to do:  move this to configuration
@@ -48,10 +49,8 @@ BDB.Map = (function () {
   };
 
   let setMapElement = function(options) {
-
     let {coords, zoom, isUserLocation, elId} = options;
-
-    const DOM_EL = document.getElementById(elId);
+    const mapElem = document.getElementById(elId);
 
     if (!elId) {
       console.warn('Map initialization stopped: no #map element found');
@@ -60,7 +59,7 @@ BDB.Map = (function () {
 
     let gpos = convertToGmaps(coords);
     
-    map = new google.maps.Map(DOM_EL, { 
+    map = new google.maps.Map(mapElem, { 
       center: gpos,
       zoom,
       disableDefaultUI: true,
@@ -74,6 +73,11 @@ BDB.Map = (function () {
       }
     });
 
+    mapBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(mapBoundsCoords.sw.lat, mapBoundsCoords.sw.lng),
+      new google.maps.LatLng(mapBoundsCoords.ne.lat, mapBoundsCoords.ne.lng)
+    );
+
     setUserMarker();
     setUserRadius();
 
@@ -81,12 +85,9 @@ BDB.Map = (function () {
       updateUserMarkerPosition(gpos);
     }
  
-    setupAutocomplete();  
-    setMapBounds(); 
     setInfoBox();
     mapCenterChanged();
     mapZoomChanged();
-    setupBikeLayer(); 
     
     map.addListener('center_changed', mapCenterChanged);
   
@@ -97,36 +98,19 @@ BDB.Map = (function () {
         if (infoWindow && infoWindow.reset) {
           infoWindow.reset();
         }
-      });
+      }); 
     }
 
-    directionsRenderer = new google.maps.DirectionsRenderer({
-      map: map,
-      hideRouteList: true,
-      draggable: false,
-      preserveViewport: true,
-      suppressMarkers: true,
-      suppressBicyclingLayer: true,
-      suppressInfoWindows: true,
-      polylineOptions: {
-        clickable: false,
-        strokeColor: '#533FB4', // purple
-        strokeOpacity: 0,
-        fillOpacity: 0,
-        icons: [{
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillOpacity: 1, 
-            scale: 2
-          },
-          offset: '0',
-          repeat: '10px'
-        }]
-      }
-    });
-    directionsService = new google.maps.DirectionsService;
+    placesService = new google.maps.places.PlacesService(map);
 
-    //native Event Dispatcher 
+    // Defer initializations not needed in startup
+    window.addEventListener('load', function () {
+      setupDirections();
+      setupAutocomplete();
+      setupBikeLayer();
+    });
+
+    // Native Event Dispatcher 
     let event = new Event('map:ready');
     document.dispatchEvent(event);
   };
@@ -174,12 +158,6 @@ BDB.Map = (function () {
   let isPosWithinBounds = function (pos) {
     const ret = mapBounds.contains(pos);
     return ret;
-  };
-  let setMapBounds = function () {
-    mapBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(mapBoundsCoords.sw.lat, mapBoundsCoords.sw.lng),
-      new google.maps.LatLng(mapBoundsCoords.ne.lat, mapBoundsCoords.ne.lng)
-    );
   };
   let setInfoBox = function () {
     // remove jquery reference.
@@ -275,6 +253,34 @@ BDB.Map = (function () {
     });
   };
 
+  let setupDirections = function () {
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      map: map,
+      hideRouteList: true,
+      draggable: false,
+      preserveViewport: true,
+      suppressMarkers: true,
+      suppressBicyclingLayer: true,
+      suppressInfoWindows: true,
+      polylineOptions: {
+        clickable: false,
+        strokeColor: '#533FB4', // purple
+        strokeOpacity: 0,
+        fillOpacity: 0,
+        icons: [{
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillOpacity: 1,
+            scale: 2
+          },
+          offset: '0',
+          repeat: '10px'
+        }]
+      }
+    });
+    directionsService = new google.maps.DirectionsService;
+  };
+
   let setupAutocomplete = function () {
     const inputElem = document.getElementById('locationQueryInput');
     // Limits the search to the our bounding box
@@ -314,8 +320,8 @@ BDB.Map = (function () {
       map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 203 KB
       map.data.loadGeoJson('/geojson/ciclovias_recife_osm.min.json'); // 68 KB 
       map.data.loadGeoJson('/geojson/ciclovias_grandeportoalegre_osm.min.json'); // 369 KB
-      // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
       // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
+      // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
 
       map.data.setStyle({  
         // strokeColor: '#cde9c8', //super light green
@@ -659,6 +665,30 @@ BDB.Map = (function () {
     },
     removeDirections: function() {
       directionsRenderer.set('directions', null);
+    },
+    getNameSuggestions: function (position) {
+      return new Promise((resolve, reject) => {
+        placesService.nearbySearch({
+          location: position,
+          radius: 10, // radius in meters
+          type: 'point_of_interest' // exclude results like street names
+        }, (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // Sort results by distance 
+            for (var i = 0; i < results.length; i++) {
+              results[i].distance = google.maps.geometry.spherical.computeDistanceBetween(
+                map.getCenter(),
+                results[i].geometry.location
+              );
+            }
+            results.sort((a, b) => a.distance - b.distance);
+             
+            resolve(results);
+          } else {
+            reject();
+          }
+        });
+      });
     },
     updateMarkers: function () {
       this.clearMarkers();
