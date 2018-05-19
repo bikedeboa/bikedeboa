@@ -2690,6 +2690,7 @@ $(() => {
     if (navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
       $('body').addClass('pwa-installed');
       ga('send', 'event', 'Misc', 'launched with display=standalone');
+      ga('send', 'event', 'PWA', 'launched with display=standalone');
     }
 
     // Check if it's the Native App version
@@ -2844,16 +2845,22 @@ $(() => {
       e.prompt();
 
       ga('send', 'event', 'Misc', 'beforeinstallprompt - popped'); 
+      ga('send', 'event', 'PWA', 'beforeinstallprompt - popped'); 
       e.userChoice.then(function(choiceResult) {
         if(choiceResult.outcome == 'dismissed') {
           // User cancelled home screen install
           ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
+          ga('send', 'event', 'PWA', 'beforeinstallprompt - refused');
         }
         else {
           // User added to home screen
           ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+          ga('send', 'event', 'PWA', 'beforeinstallprompt - accepted');
         }
       });
+    });
+    window.addEventListener('appinstalled', e => {
+      ga('send', 'event', 'PWA', 'appinstalled');
     });
   }
 
