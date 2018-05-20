@@ -60,7 +60,7 @@ $bodyFont: "Quicksand", sans-serif;
 $headingFont: 'Quicksand', sans-serif;
 $bootstrapFont: 'Glyphicons Halflings';
 
-$separatorBorderStyle: 2px dotted $lightestGray;
+$separatorBorderStyle: 2px dotted $lighterGray;
 
 $MOBILE_MAX_WIDTH: 430px;
 $MOBILE_NAVBAR_HEIGHT: 56px;
@@ -2304,11 +2304,6 @@ body.modal-open {
 
     // transition: max-height 0.5s ease;
 
-    &.photoInputContainer {
-        border: 3px dotted $lightGrey;
-        height: 130px;
-    }
-
     &.skeleton-box {
       display: block;
       height: 170px;
@@ -2359,20 +2354,76 @@ body.modal-open {
     }
 }
 
-#newPlaceModal {
-    .modal-body {
-      padding-top: 0;
+.photo-input--container {
+  height: 120px;
+  background: none;
+
+  #photoInputBg {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    opacity: .5;
+    pointer-events: none;
+  }
+
+  .photo-input--label {
+    border: 3px dotted $green;
+    border-radius: 7px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+
+    &:hover,
+    &:focus,
+    &:active {
+      opacity: .7; 
     }
 
+    &.photo-input--edit-mode {
+      border: none;
+      background: $paleWhite
+    }
+
+    .photo-input--content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+  
+      color: $green;
+  
+      img {
+        width: 40px;
+      }
+    }
+  }
+
+
+  .photo-input {
+    opacity: 0;
+    overflow: hidden; 
+    z-index: -1;
+    position: absolute;
+    top: -999px;
+    left: -999px;
+  }
+}
+
+#newPlaceModal {
     section {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
         h2 {
           padding-top: $GRID_SPACE;
-          font-size: 22px; 
+          font-size: 16px; 
           user-select: none;
           font-weight: bold;
         }
+    }
+
+    section + section {
+      border-top: $separatorBorderStyle;
     }
 
     .covered-group,
@@ -2392,7 +2443,7 @@ body.modal-open {
         display: none;
     }
 
-    .photo-container img {
+    .photo-container > img {
         // opacity: 0.8;
         object-fit: contain;
         width: 100%;
@@ -2402,26 +2453,15 @@ body.modal-open {
     .minimap-container {
         position: relative;
 
-        button {
-          background-image: url(/img/icon_edit.svg);
-          background-size: 50%;
-          background-repeat: no-repeat;
-          background-position: 50% 50%;
-          background-color: white;
+        #editPlacePositionBtn {
           position: absolute;
-          top: 5px;
-          right: 5px;
-          border-radius: 50%;
-          opacity: .8;
-          filter: grayscale(100%);
-          @include shadow(2);
+          top: 20px;
+          right: 0;
+          color: $green;
+          font-weight: bold;
+          text-transform: uppercase;
 
           transition: all 0.2s ease-out;
-
-          &:hover {
-            filter: none;
-            opacity: 1
-          }
         }
 
         .minimap {
@@ -2435,85 +2475,6 @@ body.modal-open {
       position: sticky;
       bottom: 0;
       background: white;
-    }
-
-    .photoInputDisclaimer {
-      text-align: center;
-      display: block;
-      position: absolute;
-      opacity: 0.3;
-      font-size: 12px;
-      top: 85px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-    }
-
-    #photoInput {
-      opacity: 0;
-      overflow: hidden;
-      z-index: -1;
-      position: absolute;
-      top: -999px;
-      left: -999px;
-
-      & + label {
-          position: absolute;
-          top: 50%;
-          left: calc(50% - 60px);
-          transform: translate(-50%,-50%);
-          background: url(/img/icon_photo.svg);
-          background-size: 100%;
-          width: 50px;
-          height: 42px;
-          background-repeat: no-repeat;
-          margin: 0;
-          cursor: pointer;
-          filter: grayscale(100%);
-
-          // transition: all 0.2s ease-out;
-
-          &:after {
-              content: 'Adicionar foto';
-              position: relative;
-              top: 12px;
-              left: 118px;
-              width: 130px;
-              display: block;
-              transform: translate(-50%);
-              font-weight: 700;
-              text-transform: uppercase;
-              font-size: 13px;
-              color: $green;
-          }
-
-          &.photo-input--edit-mode {
-            background-image: url(/img/icon_edit.svg);
-            background-size: 50%;
-            background-repeat: no-repeat;
-            background-position: 50% 50%;
-            background-color: white;
-            left: 50%;
-            opacity: .8;
-            transform: none;
-            top: 10px;
-            right: 10px;
-            left: auto;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-
-            &:after {
-              display: none;
-            }
-          }
-      }
-
-      & + label:hover,
-      & + label:focus {
-          opacity: 1;
-          filter: none;
-      }
     }
 
     .extraInfo {
@@ -2642,7 +2603,8 @@ body.modal-open {
         border-radius: 15px;
         padding: $GRID_SPACE 3%;
         position: relative;
-        filter: grayscale(100%) brightness(.8);
+        // filter: grayscale(100%) brightness(.8);
+        filter: grayscale(100%);
         opacity: 0.9;
         text-align: center;
 
@@ -4044,7 +4006,7 @@ body.modal-open {
   #newPlaceModal {
     .stickyFooterBtn {
       display: none;
-    }
+    } 
   } 
 
   #locationSearch {
@@ -4592,13 +4554,13 @@ body.modal-open {
 }
 
 .place-suggestions {
-  margin: $GRID_SPACE/2;
+  margin: $GRID_SPACE/2 0;
 
   .place-suggestions--title {
     display: block;
     font-size: 12px;
     font-weight: normal;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     user-select: none;
     margin-right: $GRID_SPACE/4;
     color: $lightGray;

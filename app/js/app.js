@@ -301,14 +301,27 @@ $(() => {
       ga('send', 'event', 'Local', 'directions', ''+openedMarker.id);
     });
     $('.editPlaceBtn').off('click').on('click', queueUiCallback.bind(this, () => {
+      function openIt() {
+        if (openedMarker && $('#placeDetailsModal').is(':visible')) {
+          // Case when we're coming from the Place Details screen
+          $('#placeDetailsModal')
+            .one('hidden.bs.modal', () => {
+              openNewOrEditPlaceModal(); 
+            })
+            .modal('hide');
+        } else {
+          openNewOrEditPlaceModal();
+        }
+      }
+
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
 
         $(document).one('bikedeboa.login', () => {
-          openNewOrEditPlaceModal();
+          openIt();
         });
       } else {
-        openNewOrEditPlaceModal();
+        openIt();
       }
     }));
     $('.deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
@@ -865,83 +878,59 @@ $(() => {
     hideSpinner();
   }
 
-  function validateNewPlaceForm() {
-    const textOk = $('#newPlaceModal #titleInput').is(':valid');
-    const isOk =
-      textOk &&
-      // $('#newPlaceModal input:radio[name=isPublicRadioGrp]:checked').val() &&
-      $('#newPlaceModal .acess-types-group .active').data('value') &&
-      $('#newPlaceModal .covered-group .active').data('value') &&
-      $('#newPlaceModal .custom-radio-group .active').data('value');
-
-    // console.log('validating');
-
-    $('#newPlaceModal .saveNewPlaceBtn').prop('disabled', !isOk);
-  }
-
-  // @todo clean up this mess
   function openNewOrEditPlaceModal(nameSuggestions) {
-    $('#newPlaceModal').remove();
-    $('body').append(BDB.templates.newPlaceModal({nameSuggestions: nameSuggestions}));
-    
-    $('#newPlaceModal h1').html(openedMarker ? 'Editando bicicletário' : 'Novo bicicletário'); 
+    let templateData = {
+      nameSuggestions: nameSuggestions,
+      editMode: !!openedMarker
+    }
 
-    $('#newPlaceModal .minimap-container').toggle(!!openedMarker);  
-
-    initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
-
-    // Not creating a new one, but editing
+    // Edit mode?
     if (openedMarker) {
-      // @todo refactor all of this, probably separate into different functions for NEW and EDIT modes
-      const m = openedMarker;
-
       setView('Editar bicicletário', '/editar');
+      
+      const m = openedMarker;
 
       ga('send', 'event', 'Local', 'update - pending', ''+m.id);
 
-      $('#newPlaceModal #cancelEditPlaceBtn').show();
-      $('#newPlaceModal .photoInputDisclaimer').show(); 
-
-      $('#newPlaceModal #titleInput').val(m.text);
-      $('#newPlaceModal .saveNewPlaceBtn').prop('disabled', false);
-      $(`#newPlaceModal .custom-radio-group [data-value="${m.structureType}"]`).addClass('active');
       if (m.isPublic !== null) {
-        $(`#newPlaceModal .acess-types-group [data-value="${m.isPublic ? 'public' : 'private'}"]`).addClass('active');
+        templateData.accessType = m.isPublic ? 'public' : 'private';
       }
       if (m.isCovered !== null) { 
-        $(`#newPlaceModal .covered-group [data-value="${m.isCovered ? 'covered' : 'uncovered'}"]`).addClass('active');
+        templateData.coverType = m.isCovered ? 'covered' : 'uncovered';
       }
       if (m.isPaid !== null) {
-        $('#newPlaceModal #isPaidInput').val(m.isPaid ? 'yes' : 'no');
+        templateData.costType = m.isPaid ? 'paid' : 'free';
       }
+
+      templateData.placeTitle = m.text;
+      templateData.rackType = m.structureType;
+      templateData.photoUrl = m.photo;
+      templateData.description = m.description;
+      templateData.slots = m.slots;
+      templateData.hasExtraInfo = !!(m.slots || m.description || (m.isPaid !== null));
       
-      // $(`#newPlaceModal input[name=isPublicRadioGrp][value="${m.isPublic}"]`).prop('checked', true);
-      $('#newPlaceModal #photoInputBg').attr('src', m.photo);
-      $('#newPlaceModal #descriptionInput').val(m.description);
-      $('#newPlaceModal #slotsInput').val(m.slots);
-
-      // Minimap
-      // @todo generalize this
       const staticImgDimensions = _isMobile ? '400x100' : '1000x100';
-      const minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getColorFromAverage(m.average), m.lat, m.lng, 20);
-      $('#newPlaceModal .minimap').attr('src', minimapUrl);
+      templateData.minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getColorFromAverage(m.average), m.lat, m.lng, 20);
+    } else {
+      setView('Novo bicicletário', '/novo');
+      ga('send', 'event', 'Local', 'create - pending');
+    }
 
-      // More info section
-      if (m.description && m.description.length > 0) {
-        $('#newPlaceModal .description').addClass('expanded');
-      }
 
-      if (openedMarker.photo.length > 0) {
-        $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
-      }
+    ////////////////////////////////
+    // Render handlebars template // 
+    ////////////////////////////////
+    $('#newPlaceModal').remove();
+    $('body').append(BDB.templates.newPlaceModal(templateData));
 
-      $('#cancelEditPlaceBtn').off('click').on('click', () => {
+    if (openedMarker) {
+      $('#cancelEditPlaceBtn').on('click', () => {
         hideAll().then(() => {
           openLocal(openedMarker);
         });
       });
 
-      $('#editPlacePositionBtn').off('click').on('click', () => {
+      $('#editPlacePositionBtn').on('click', () => {
         // Ask to keep opened marker temporarily
         hideAll(true);
 
@@ -957,12 +946,7 @@ $(() => {
 
         toggleLocationInputMode();
       });
-
-      // $('#placeDetailsContent').modal('hide');
     } else {
-      setView('Novo bicicletário', '/novo');
-      ga('send', 'event', 'Local', 'create - pending');
-
       $('#access-general-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
         ga('send', 'event', 'Misc', 'tooltip - new pin access help');
       });
@@ -970,8 +954,8 @@ $(() => {
         ga('send', 'event', 'Misc', 'tooltip - new pin type help');
       });
 
-      $('.place-suggestion--item').off('click').on('click', e => {
-        $('.text-input-wrapper input').val( $(e.currentTarget).data('name') );
+      $('.place-suggestion--item').on('click', e => {
+        $('.text-input-wrapper input').val($(e.currentTarget).data('name'));
       });
     }
 
@@ -991,22 +975,16 @@ $(() => {
       //   scrollTop: $(e.currentTarget).parent().offset().top
       // });
     });
-    
-    // this has to be AFTER the typeIcon click trigger
-    // $('#newPlaceModal input, #newPlaceModal .typeIcon')
-    //   .off('change.validate input.validate click.validate')
-    //   .on(' change.validate input.validate click.validate', () => {
-    //     validateNewPlaceForm();
-    //   });
-    // validateNewPlaceForm();
-    
-    $('#newPlaceModal textarea').off('keyup').on('keyup', e => {
+
+    initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
+
+    $('#newPlaceModal textarea').on('keyup', e => {
       autoGrowTextArea(e.currentTarget); 
     });
 
-    $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
-
-    $('#photoInput').off('change').on('change', e => {
+    $('.saveNewPlaceBtn').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
+ 
+    $('#photoInput').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
       const self = document.getElementById('photoInput');
       const files = self.files ;
@@ -1023,30 +1001,20 @@ $(() => {
       //   swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
       // }
     });
-    $('.collapsable').off('click').on('click', e => {
+    
+    $('.collapsable').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
     }); 
 
-    // Finally, display the modal
-    const showModal = () => {
-      // We can only set the nav title after the modal has been opened
-      updatePageTitleAndMetatags(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
+    
+    // We can only set the nav title after the modal has been opened
+    updatePageTitleAndMetatags(openedMarker ? 'Editar bicicletário' : 'Novo bicicletário');
 
-      $('#newPlaceModal')
-        .one('shown.bs.modal', () => {
-          // $('#titleInput').focus();
-        })
-        .modal('show');
-    };
-    if (openedMarker && $('#placeDetailsModal').is(':visible')) {
-      $('#placeDetailsModal')
-        .one('hidden.bs.modal', () => { 
-          showModal();
-        })
-        .modal('hide'); 
-    } else {
-      showModal();
-    }
+    $('#newPlaceModal')
+      // .one('shown.bs.modal', () => {
+      //   $('#titleInput').focus();
+      // })
+      .modal('show');
   }
 
   function getTopCities() {
