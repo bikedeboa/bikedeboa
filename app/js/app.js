@@ -2092,24 +2092,6 @@ $(() => {
     if (!_isMobile) {
       $('#guideTagsModal article > *').css({ opacity: 0 }).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
     }
- 
-    // // Lazy load imgs when modal is shown
-    // $('#guideTypesModal .guide-img-row img').each((i, v) => {
-    //   $(v).attr('src', $(v).data('src'));
-    // });
-
-    // $('#guideTypesModal .close-and-filter').off('click').on('click', function () {
-    //   const p = $(this).data('prop');
-    //   const v = $(this).data('value');
-
-    //   // Close modal
-    //   goHome();
-
-    //   // Mark corresponding filter checkbox
-    //   $('.filter-checkbox').prop('checked', false);
-    //   $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked', true);
-    //   updateFilters();
-    // });
   } 
 
   function openNotFoundModal(url){
