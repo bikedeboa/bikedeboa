@@ -1507,15 +1507,44 @@ a.unstyled-link {
 }
 
 #dataModal {
-  h2 {
-    font-size: 30px;
-    font-weight: bold;
-  }
+  .data-modal--block {
+    display: flex !important;
+    align-items: center;
+    margin: 2em 0;
+    background: $green;
+    color: white;
+    border-radius: 5px;
+    padding: $GRID_SPACE $GRID_SPACE*2;
 
-  section {
-    p {
-      margin-left: 40px;
-      color: $gray;
+    &:active,
+    &:focus,
+    &:hover {
+      background: $lightGreen;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .data-modal--block-icon {
+      padding-right: $GRID_SPACE*2;
+
+      img {
+        width: 64px;
+      }
+    }
+
+    .data-modal--block-content {
+      p {
+        font-size: 14px;
+        line-height: 1.3em;
+      }
+    }
+
+    .data-modal--block-arrow {
+      font-size: 20px;
+      padding-left: $GRID_SPACE*2;
     }
   }
 }
@@ -4064,6 +4093,18 @@ body.modal-open {
     & > div {
       width: 100% !important;
       margin: 0;
+    }
+  }
+
+  #dataModal {
+    .data-modal--block-icon {
+      display: none;
+    }
+
+    .data-modal--block-content {
+      p {
+        font-size: 12px;
+      }
     }
   }
 
