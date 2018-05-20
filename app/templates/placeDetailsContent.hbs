@@ -1,9 +1,26 @@
 <!-- View Details Modal -->
 <section itemscope itemtype="http://schema.org/ParkingFacility">
     {{#if photoUrl}}
-    <section class="photo-container hasImage loading {{#ifCond isAdmin '&&!' photoUrl}} missing-info {{/ifCond}}">
-        <a href="#" data-featherlight="{{photoUrl}}"><img alt="" src="{{photoUrl}}" itemprop="image"/></a>
-    </section>
+        <section class="photo-container hasImage loading">
+            <a href="#" data-featherlight="{{photoUrl}}">
+                <img alt="" src="{{photoUrl}}" itemprop="image"/>
+            </a>
+        </section>
+    {{else}}
+        {{#if canModify}}
+            <section class="photo-container photo-input--container loading">
+                <img class="photoInputBg" alt="" src="{{streetViewImgUrl}}"/>
+            
+                <div class="photo-input--label photo-input--edit-mode editPlaceBtn">
+                    <div class="photo-input--calltoaction">
+                        <img src="/img/icon_photo_white.svg" alt="">
+                        <div> 
+                            Adicionar foto
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {{/if}}
     {{/if}}
 
     <section class="top-toolbar">
@@ -24,8 +41,8 @@
     </button>
 
         <button class="editPlaceBtn toolbar-item">
-        <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
-        <label>Editar</label>
+            <img alt="" class="toolbar-item-icon" src="/img/icon_edit.svg">
+            <label>Editar</label>
         </button>
         {{#if canDelete}}
             <button class="deletePlaceBtn toolbar-item">
@@ -197,23 +214,6 @@
             <meta itemprop="ratingValue" content="{{average}}"/>
             <meta itemprop="reviewCount" content="{{reviews}}"/>
 
-            {{#if savedRating}}
-                <div class="savedRating">
-                    <h5>Sua avaliação</h5> 
-
-                    <div>
-                        <img alt="" src="{{userThumbUrl}}" />
-                        
-                        <span data-color="{{color}}">
-                            {{{savedRating}}}
-                            {{{savedRatingStars}}}
-                        </span>
-                        
-                        <button class="ghost openReviewPanelBtn">Editar</button>
-                    </div>
-                </div>
-            {{/if}}
-
             <div>
                 {{#if numReviews}}
                     <div class="numreviews">{{numReviews}}</div>
@@ -267,6 +267,23 @@
                         Carregando... 
                     </div>
                 {{/if}}
+            {{/if}}
+
+            {{#if savedRating}}
+                <div class="savedRating">
+                    <h5>Sua avaliação</h5> 
+
+                    <div>
+                        <img alt="" src="{{userThumbUrl}}" />
+                        
+                        <span data-color="{{color}}">
+                            {{{savedRating}}}
+                            {{{savedRatingStars}}}
+                        </span>
+                        
+                        <button class="ghost openReviewPanelBtn">Editar</button>
+                    </div>
+                </div>
             {{/if}}
         </section>
 

@@ -256,7 +256,7 @@ body.offline {
   #about-social-buttons,
   #hamburger-menu .side-nav__footer,
   .openReviewPanelBtn, 
-  #placeDetailsContent .photo-container.hasImage.loading {
+  #placeDetailsContent .photo-container.loading {
     // display: none !important;
     opacity: 0.4 !important;
     pointer-events: none;
@@ -2292,7 +2292,7 @@ body.modal-open {
     // background-image: url(/img/bg_header.png);
     background: $lightestGray;
     // overflow: visible;
-    height: 70px;
+    height: 160px;
 
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -2355,16 +2355,18 @@ body.modal-open {
 }
 
 .photo-input--container {
-  height: 120px;
+  height: 160px;
   background: none;
 
+  .photoInputBg,
   #photoInputBg {
     position: absolute;
     top: 0;
     height: 100%;
-    opacity: .5;
+    width: 100%;
+    // opacity: .5;
     pointer-events: none;
-  }
+  } 
 
   .photo-input--label {
     border: 3px dotted $green;
@@ -2372,6 +2374,7 @@ body.modal-open {
     width: 100%;
     height: 100%;
     cursor: pointer;
+    position: relative;
 
     &:hover,
     &:focus,
@@ -2380,11 +2383,22 @@ body.modal-open {
     }
 
     &.photo-input--edit-mode {
-      border: none;
-      background: $paleWhite
+      border: none; 
+      background: rgba(0,0,0,0.1);
+      
+      .photo-input--calltoaction {
+        color: white;
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
+        opacity: 1; 
+        background: rgba(0,0,0,0.2);
+      }
     }
 
-    .photo-input--content {
+    .photo-input--calltoaction {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -2397,6 +2411,7 @@ body.modal-open {
         width: 40px;
       }
     }
+
   }
 
 
