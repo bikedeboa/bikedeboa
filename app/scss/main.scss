@@ -57,11 +57,10 @@ $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // $bodyFont: 'Core Sans G', sans-serif;
-// $headingFont: 'Core Sans GS', sans-serif;
 // $bodyFont: 'Gotham Rounded', sans-serif;
-// $headingFont: 'Gotham Rounded', sans-serif;
-$bodyFont: 'Museo Sans Rounded', sans-serif;
-$headingFont: 'Museo Sans Rounded', sans-serif;
+// $bodyFont: 'ProximaNovaSoft', sans-serif;
+$bodyFont: 'MuseoSansRounded', sans-serif;
+$headingFont: $bodyFont;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
@@ -75,89 +74,115 @@ $GRID_SPACE: 12px;
 
 @font-face {
     font-family: 'Core Sans G';
-    src: url('CoreSansG45-webfont.woff2') format('woff2'),
-         url('CoreSansG45-webfont.woff') format('woff');
+    src: url('/fonts/CoreSansG45-webfont.woff2') format('woff2'),
+         url('/fonts/CoreSansG45-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'Core Sans G';
-    src: url('CoreSansG65-webfont.woff2') format('woff2'),
-         url('CoreSansG65-webfont.woff') format('woff');
+    src: url('/fonts/CoreSansG65-webfont.woff2') format('woff2'),
+         url('/fonts/CoreSansG65-webfont.woff') format('woff');
     font-weight: bold;
     font-style: normal;
 }
 @font-face {
     font-family: 'Core Sans G'; 
-    src: url('CoreSansG45It-webfont.woff2') format('woff2'),
-         url('CoreSansG45It-webfont.woff') format('woff');
+    src: url('/fonts/CoreSansG45It-webfont.woff2') format('woff2'),
+         url('/fonts/CoreSansG45It-webfont.woff') format('woff');
     font-weight: normal;
     font-style: italic;
 }
 @font-face {
     font-family: 'Core Sans GS';
-    src: url('coresansgs75-webfont.woff2') format('woff2'),
-         url('coresansgs75-webfont.woff') format('woff');
+    src: url('/fonts/coresansgs75-webfont.woff2') format('woff2'),
+         url('/fonts/coresansgs75-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal; 
 }
 
 @font-face {
     font-family: 'Gotham Rounded';
-    src: url('GothamRounded-Medium.otf') format('opentype');
+    src: url('/fonts/GothamRounded-Medium.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
   font-family: 'Gotham Rounded';
-  src: url('GothamRounded-Bold.otf') format('opentype');
+  src: url('/fonts/GothamRounded-Bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
   font-family: 'Gotham Rounded'; 
-  src: url('GothamRounded-Light.otf') format('opentype');
+  src: url('/fonts/GothamRounded-Light.otf') format('opentype');
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
-    font-family: 'Museo Sans Rounded'; 
-    src: url('museosansrounded-100-webfont.woff') format('woff');
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-100-webfont.woff') format('woff'),
+    url('/fonts/museosansrounded-100-webfont.ttf') format('opentype');
     font-weight: 100;
     font-style: normal;
 }
 @font-face {
-    font-family: 'Museo Sans Rounded';
-    src: url('museosansrounded-300-webfont.woff') format('woff');
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-300-webfont.woff') format('woff'),
+      url('/fonts/museosansrounded-300-webfont.ttf') format('opentype');
     font-weight: 300;
     font-style: normal;
 }
 @font-face {
-    font-family: 'Museo Sans Rounded';
-    src: url('museosansrounded-500-webfont.woff') format('woff');
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-500-webfont.woff') format('woff'),
+      url('/fonts/museosansrounded-500-webfont.ttf') format('opentype');
     font-weight: 500;
     font-style: normal;
+} 
+@font-face { 
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-700-webfont.woff') format('woff'),
+     url('/fonts/museosansrounded-700-webfont.ttf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
 }
-// @font-face { 
-//     font-family: 'Museo Sans Rounded';
-//     src: url('museosansrounded-700-webfont.woff') format('woff');
-//     font-weight: 700;
-//     font-style: normal;
-// }
+@font-face {
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-900-webfont.woff') format('woff'),
+     url('/fonts/museosansrounded-900-webfont.ttf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ProximaNovaSoft';
+    src: url('/fonts/proxima-nova-soft-bold-webfont.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
 // @font-face {
-//     font-family: 'Museo Sans Rounded';
-//     src: url('museosansrounded-900-webfont.woff') format('woff');
-//     font-weight: 900;
+//     font-family: 'ProximaNovaSoft';
+//     src: url('/fonts/proxima-nova-soft-semibold-webfont.woff') format('woff');
+//     font-weight: bold;
 //     font-style: normal;
 // }
 
 @font-face {
-    font-family: 'Proxima Nova Soft';
-    src: url('ProximaNovaSoft-Regular.otf') format('opentype');
+    font-family: 'ProximaNovaSoft';
+    src: url('/fonts/proxima-nova-soft-medium-webfont.woff') format('woff');
+    font-weight: medium;
+    font-style: normal;
 }
 
-
+@font-face {
+    font-family: 'ProximaNovaSoft';
+    src: url('/fonts/proxima-nova-soft-regular-webfont.woff') format('woff');
+    font-weight: regular;
+    font-style: normal;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
