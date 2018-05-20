@@ -1252,13 +1252,18 @@ a.unstyled-link {
 
 #guideTagsModal {
   h3 {
-    margin-top: .5em;
+    font-weight: bold;
+    margin-top: 0;
     margin-bottom: 1em;
   }
 
   .guide-type-img {
-    width: 80px;
+    width: 200px;
     padding: 0;
+  }
+
+  .img-mosaic img {
+    width: 8%;
   }
 
   section {
