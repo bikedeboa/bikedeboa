@@ -103,10 +103,11 @@ BDB.Map = (function () {
 
     placesService = new google.maps.places.PlacesService(map);
 
+    setupDirections();
+    setupAutocomplete();
+    
     // Defer initializations not needed in startup
     window.addEventListener('load', function () {
-      setupDirections();
-      setupAutocomplete();
       setupBikeLayer();
     });
 
