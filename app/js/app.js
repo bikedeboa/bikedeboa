@@ -325,19 +325,6 @@ $(() => {
       }
     }));
     $('.deletePlaceBtn').off('click').on('click', queueUiCallback.bind(this, deletePlace));
-    $('.createRevisionBtn').off('click').on('click', queueUiCallback.bind(this, () => {
-      if (!BDB.User.isLoggedIn) {
-        // @todo fix to not need to close the modal
-        hideAll();
-        openLoginDialog({ showPermissionDisclaimer: true });
-
-        $(document).one('bikedeboa.login', () => {
-          openRevisionDialog();
-        });
-      } else {
-        openRevisionDialog();
-      }
-    }));
 
     // RENDER
     if (!$('#placeDetailsModal').is(':visible')) {
@@ -1251,41 +1238,6 @@ $(() => {
       } else {
         callback();
       }
-    });
-  }
-
-  function openRevisionDialog() {
-    swal({ 
-      // title: 'Sugerir correção',
-      customClass: 'revision-modal',
-      html:
-        `<p>
-          Este bicicletário está desatualizado ou está faltando uma informação importante? Nos ajude a manter o mapeamento sempre atualizado e útil pra todo mundo. :)
-        </p>
-
-        <p>
-          <textarea id="revisionText" maxlength="250" onload="autoGrowTextArea(this)" 
-          onkeyup="autoGrowTextArea(this)" type="text" class="text-input" placeholder="Sua sugestão"></textarea>
-        </p>
-
-        <p class="disclaimer">
-          Para qualquer comentário sobre o site em geral, entre em <a class="external-link contact-btn"> <img src="/img/icon_mail.svg" class="icon-mail" /> contato</a>!
-        </p>`,
-      confirmButtonText: 'Enviar',
-      showCloseButton: true
-    }).then(() => {
-      showSpinner();
-
-      const revisionObj = {
-        placeId: openedMarker.id,
-        content: $('#revisionText').val()
-      };
-
-      BDB.Database.sendRevision(revisionObj, revisionId => {
-        hideSpinner();
-        swal('Sugestão enviada', `Obrigado por contribuir com o bike de boa! Sua sugestão será 
-          avaliada pelo nosso time de colaboradores o mais rápido possível.`, 'success');
-      });
     });
   }
 
