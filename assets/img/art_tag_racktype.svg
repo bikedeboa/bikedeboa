@@ -1,43 +1,87 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#DEFFED;}
-	.st1{fill:none;stroke:#144F2C;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;}
-	.st2{fill:none;stroke:#144F2C;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
-</style>
-<title>Artboard 1 copy 106</title>
-<g id="chpeu">
-	<path class="st0" d="M108.5,93.6c-5.2,1.9-10.5-0.4-8.7-7.3c2-7.7-2.7-21.3,2.4-23.1s9.1,7.7,10.5,14.7
-		C114.2,84.9,113.7,91.7,108.5,93.6z"/>
-	<path class="st0" d="M41.8,49.2c11.4-5.6,24.9-5.2,35.9,1.1c6.7,3.8,12.1,9.6,15.5,16.5c9.3,19-12.8,30.9-32,40.2
-		c-9.6,4.7-24.7,11.8-34,8.7s-16.9-4.7-21.6-14.2C-3.5,82.4,22.7,58.5,41.8,49.2z"/>
-	<g>
-		<line class="st1" x1="15.3" y1="87.6" x2="13.4" y2="87.6"/>
-		<polyline class="st1" points="93.8,87.6 71.8,87.6 19.4,87.6 		"/>
-		<line class="st1" x1="105.2" y1="87.6" x2="98.4" y2="87.6"/>
-		<path class="st1" d="M43.6,87.6V63.4C43.6,54.9,50.5,48,59,48c0,0,0,0,0,0l0,0c8.5,0,15.4,6.9,15.4,15.4c0,0,0,0,0,0v24.3"/>
-	</g>
-	<g>
-		<g>
-			<circle class="st2" cx="32.3" cy="68.1" r="15.9"/>
-			<circle class="st2" cx="87.7" cy="68.1" r="15.9"/>
-			<circle class="st2" cx="32.3" cy="68.1" r="3.4"/>
-			<path class="st2" d="M64.5,68.1c0,2.9-2.3,5.2-5.2,5.2c-2.9,0-5.2-2.3-5.2-5.2c0-2.9,2.3-5.2,5.2-5.2c0,0,0,0,0,0
-				C62.2,62.9,64.5,65.2,64.5,68.1z"/>
-			<circle class="st2" cx="87.7" cy="67.9" r="3.4"/>
-			<line class="st2" x1="32.3" y1="64.7" x2="59.3" y2="62.9"/>
-			<line class="st2" x1="32.3" y1="71.5" x2="59.3" y2="73.3"/>
-			<line class="st2" x1="29.2" y1="66.6" x2="43.6" y2="43.7"/>
-			<polyline class="st2" points="86.6,64.7 74.8,33.7 67.6,33.7 			"/>
-			<line class="st2" x1="57" y1="63.4" x2="41.2" y2="40.1"/>
-			<line class="st2" x1="62.2" y1="63.8" x2="78.7" y2="45.8"/>
-			<path class="st2" d="M48.2,37.8c0,1.2-1,2.3-2.3,2.3l0,0h-8.2c-1.2,0-2.3-1-2.3-2.3l0,0c0-1.2,1-2.3,2.3-2.3H46
-				C47.2,35.6,48.2,36.6,48.2,37.8L48.2,37.8L48.2,37.8z"/>
-			<line class="st2" x1="77.1" y1="39.6" x2="66.8" y2="50.9"/>
-			<path class="st2" d="M43.6,43.7c0,0,11.4,19.3,23.2,7.3"/>
-		</g>
-	</g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="120" height="120" viewBox="0 0 120 120">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2, .cls-3, .cls-5, .cls-7 {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #000;
+      }
+
+      .cls-2 {
+        stroke-width: 12px;
+      }
+
+      .cls-3 {
+        stroke-width: 14.17px;
+      }
+
+      .cls-4 {
+        fill: #deffed;
+      }
+
+      .cls-5, .cls-7 {
+        stroke: #144f2c;
+      }
+
+      .cls-5 {
+        stroke-width: 3px;
+      }
+
+      .cls-6 {
+        mask: url(#mask);
+      }
+
+      .cls-7 {
+        stroke-width: 2.5px;
+      }
+    </style>
+    <mask id="mask" x="-19.32" y="-1.71" width="159.9" height="122.75" maskUnits="userSpaceOnUse">
+      <g id="SVGID">
+        <g id="_Group_" data-name="&lt;Group&gt;">
+          <polygon class="cls-1" points="133.5 5.37 133.5 113.95 -12.23 109.79 -12.23 5.37 133.5 5.37"/>
+          <g>
+            <path class="cls-2" d="M43.58,85.1V62.84a15.4,15.4,0,1,1,30.8,0V85.1"/>
+            <polygon class="cls-3" points="133.5 113.95 -12.23 109.79 -12.23 5.37 133.5 5.37 133.5 113.95"/>
+          </g>
+        </g>
+      </g>
+    </mask>
+  </defs>
+  <title>Artboard 1 copy 106</title>
+  <g id="chpeu">
+    <path class="cls-4" d="M107.89,60.2c-4.43,3-8.74,3.21-11.74-1.23S88.43,45,92.87,42s10.49,2.42,13.49,6.85S112.33,57.2,107.89,60.2Z"/>
+    <path class="cls-4" d="M51.4,38.64a29,29,0,0,1,27,.8A28.57,28.57,0,0,1,90,51.83C97,66.13,80.41,75,66,82c-7.19,3.5-18.51,8.89-25.51,6.51S27.81,85,24.33,77.84C17.37,63.54,37,45.64,51.4,38.64Z"/>
+    <g>
+      <line class="cls-5" x1="15.29" y1="87.64" x2="13.43" y2="87.64"/>
+      <polyline class="cls-5" points="93.78 87.64 71.76 87.64 19.4 87.64"/>
+      <line class="cls-5" x1="105.15" y1="87.64" x2="98.44" y2="87.64"/>
+      <path class="cls-5" d="M43.58,87.64V63.36A15.39,15.39,0,0,1,59,48h0a15.4,15.4,0,0,1,15.41,15.4V87.64"/>
+    </g>
+    <g class="cls-6">
+      <g>
+        <circle class="cls-7" cx="32.32" cy="68.08" r="15.89"/>
+        <circle class="cls-7" cx="87.65" cy="68.08" r="15.89"/>
+        <circle class="cls-7" cx="32.32" cy="68.08" r="3.4"/>
+        <path class="cls-7" d="M64.53,68.08a5.2,5.2,0,1,1-5.19-5.2A5.2,5.2,0,0,1,64.53,68.08Z"/>
+        <circle class="cls-7" cx="87.65" cy="67.9" r="3.4"/>
+        <line class="cls-7" x1="32.32" y1="64.67" x2="59.33" y2="62.88"/>
+        <line class="cls-7" x1="32.32" y1="71.48" x2="59.33" y2="73.27"/>
+        <line class="cls-7" x1="29.24" y1="66.64" x2="43.64" y2="43.67"/>
+        <polyline class="cls-7" points="86.58 64.67 74.83 33.7 67.59 33.7"/>
+        <line class="cls-7" x1="57" y1="63.44" x2="41.23" y2="40.11"/>
+        <line class="cls-7" x1="62.21" y1="63.75" x2="78.68" y2="45.77"/>
+        <path class="cls-7" d="M48.17,37.85a2.26,2.26,0,0,1-2.26,2.26H37.7a2.26,2.26,0,0,1-2.26-2.26h0a2.27,2.27,0,0,1,2.26-2.26h8.21a2.26,2.26,0,0,1,2.26,2.26Z"/>
+        <line class="cls-7" x1="77.09" y1="39.63" x2="66.81" y2="50.94"/>
+        <path class="cls-7" d="M43.64,43.67S55,63,66.81,50.94"/>
+      </g>
+    </g>
+  </g>
 </svg>
