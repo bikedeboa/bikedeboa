@@ -1167,9 +1167,9 @@ a.unstyled-link {
 
           transition: color 0.2s ease;
 
-          // a {
-          //   color: $gray;
-          // }
+          a {
+            color: $black;
+          }
 
           &:hover > a {
             color: $green;
