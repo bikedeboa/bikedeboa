@@ -62,6 +62,8 @@ $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lightestGray;
 
+$DESKTOP_NAVBAR_HEIGHT: 60px;
+
 $MOBILE_MAX_WIDTH: 430px;
 $MOBILE_NAVBAR_HEIGHT: 56px;
 $MOBILE_BOTTOMBAR_HEIGHT: 56px;
@@ -1129,7 +1131,7 @@ a.unstyled-link {
       right: 0;
       width: 100%;
       background: white;
-      height: 60px;
+      height: $DESKTOP_NAVBAR_HEIGHT;
 
       box-shadow: 0 0 15px rgba(0,0,0,.1);
 
@@ -1161,14 +1163,13 @@ a.unstyled-link {
           font-size: 16px;
           font-weight: bold;
           padding: 0 $GRID_SPACE;
-          text-transform: lowercase;
           cursor: pointer;
 
           transition: color 0.2s ease;
 
-          // a {
-          //   color: $gray;
-          // }
+          a {
+            color: $black;
+          }
 
           &:hover > a {
             color: $green;
@@ -1186,7 +1187,6 @@ a.unstyled-link {
         border: none;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
-        left: -43px;
         width: auto;
 
         // font-size: 18px;
@@ -1252,7 +1252,24 @@ a.unstyled-link {
     }
 }
 
-#guideModal {
+#guideTagsModal {
+  h3 {
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .guide-type-img {
+    width: 150px;
+    padding: 0;
+  }
+
+  section {
+    margin-top: 2em;
+  }
+}
+
+.guide-modal {
   $offscreenMargin: 100px;
 
   .close-and-filter {
@@ -1294,9 +1311,7 @@ a.unstyled-link {
   }
 
   .guide-type-img {
-    // height: 300px;
     width: 200px;
-    max-height: 200px;
     padding: 24px;
     padding-top: 0;
   }
@@ -1306,7 +1321,6 @@ a.unstyled-link {
   }
 
   .guide-references-list {
-    font-size: 18px;
     list-style: none;
     padding: 0;
     margin-top: -.5em;
@@ -1320,7 +1334,6 @@ a.unstyled-link {
 
       .references-label { 
         display: block;
-        font-size: 16px;
         line-height: 16px;
         font-style: italic;
         color: $gray;
@@ -1556,7 +1569,7 @@ a.unstyled-link {
 }
 
 #aboutModal,
-#guideModal {
+.guide-modal {
   $leading: 18px;
 
   #about-social-buttons {
@@ -1610,16 +1623,17 @@ a.unstyled-link {
   p.subtitle {
     font-size: 24px;
     // font-style: italic;
-    margin-bottom: 3em;
+    margin-bottom: 2em;
   }
 
   h1 {
-    color: $green;
+    // color: $green;
     font-size: $leading*1.5*2;
     margin-top: 1.5em;
     margin-bottom: .5em;
     letter-spacing: -0.02em;
-    color: $green;
+    line-height: 1.2em; 
+    font-weight: bold;
   }
  
   h2 {
@@ -2091,7 +2105,6 @@ a.unstyled-link {
       font-family: $headingFont;
       padding: $GRID_SPACE*3 $GRID_SPACE*3 $GRID_SPACE;
       font-weight: 700;
-      font-size: 2em;
       letter-spacing: -0.01em;
   }
 }
@@ -2111,17 +2124,7 @@ a.unstyled-link {
     // right: auto; 
 }
 
-.clean-modal {
-  .modal-header {
-    background: transparent;
-    border: 0;
-    color: $black;
-
-    h1 {
-      padding: 0;
-    }
-  }
-
+.fullscreen-modal {
   .modal-content {
     box-shadow: none;
     background: transparent;
@@ -2144,13 +2147,6 @@ body.search-mode {
   }
 }
 
-body.clean-modal-open {
-  .modal-backdrop.in {
-    opacity: .93 ;
-  }
-}
-
-
 #close-modal-btn {
   display: none;
 }
@@ -2162,8 +2158,8 @@ body.modal-open {
     display: block;
     position: fixed;
     color: $black;
-    top: $GRID_SPACE;
-    right: $GRID_SPACE*2;
+    top: $GRID_SPACE*4;
+    left: calc(50% + 300px + 23px);
     font-size: 30px; 
     line-height: 22px;
     border: 0;
@@ -2178,6 +2174,24 @@ body.modal-open {
     &:hover {
       background: $lighterGray;
     }
+  }
+}
+
+body.fullscreen-modal-open {
+  .modal-backdrop.in {
+    opacity: .93 ;
+  }
+
+  .navbar-de-boa,
+  #userBtn {
+    // Over the modal default zindex
+    z-index: 1051;
+  }
+
+  #close-modal-btn { 
+    top: calc(#{$DESKTOP_NAVBAR_HEIGHT} + #{$GRID_SPACE}*2);
+    right: $GRID_SPACE*2;
+    left: auto;
   }
 }
 
@@ -3158,36 +3172,6 @@ body.modal-open {
     }
 }
 
-.btn-tag {
-    // background: $lightestGray;
-    background: transparent;
-    border: 1px solid $black;
-    border-radius: 25px;
-    margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-    width: calc(33% - #{$GRID_SPACE}); 
-
-    // &:before {
-    //     content: '☐';
-    //     margin-right: 5px;
-    //     font-family: 'Arial';
-    // }
-
-    &.active {
-        background: $green;
-        color: white;
-        box-shadow: none;
-        border: 0;
-
-        &:hover {
-          background: $lightGreen;
-        }
-    } 
-
-    &:hover {
-      background: $lighterGray;
-    }
-}
-
 .review-modal {
     text-align: center;
     
@@ -3211,6 +3195,29 @@ body.modal-open {
       font-size: 13px;
       color: $gray;
       font-style: italic;
+    }
+
+    .tagDisplay {
+      background: transparent;
+      border: 1px solid $black;
+      border-radius: 25px;
+      margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+      width: calc(33% - #{$GRID_SPACE}); 
+
+      &.active {
+          background: $green;
+          color: white;
+          box-shadow: none;
+          border: 0;
+
+          &:hover {
+            background: $lightGreen;
+          }
+      } 
+
+      &:hover {
+        background: $lighterGray;
+      }
     }
 }
 
@@ -3371,11 +3378,6 @@ body.modal-open {
 
     filter: grayscale(100%);
 
-    border-left: 1px solid $lighterGray;
-    &:first-child {
-      border: 0;
-    }
-
     backface-visibility: hidden;
     transition: all 0.2s ease;
 
@@ -3409,6 +3411,10 @@ body.modal-open {
         transform: scale(1.2);
       }
     }
+  }
+
+  .toolbar-item + .toolbar-item {
+    border-left: 1px solid $lighterGray;
   }
 
 }
@@ -3961,7 +3967,18 @@ body.modal-open {
 
 }
 
+.img-mosaic {
+  display: flex !important;
+  align-items: baseline;
+  justify-content: space-evenly;
+  margin: 4em 0; 
 
+  // filter: grayscale(100%);
+
+  img {
+    width: 12%;
+  }
+}
 
 
 
@@ -4006,8 +4023,8 @@ body.modal-open {
     display: none;
   } 
 
-  .clean-modal {
-    article {
+  .fullscreen-modal {
+    article { 
       margin-left: inherit;
       margin-right: inherit;
     }
@@ -4022,8 +4039,20 @@ body.modal-open {
       content: ''
     }
 
+    .modal-header,
     .modal-body {
       padding: $GRID_SPACE*2 $GRID_SPACE;
+    }
+
+    .modal-header {
+      background: transparent;
+      border: 0;
+      color: $black;
+
+      h1 {
+        padding: 0;
+        margin: 0;
+      }
     }
 
     .modal-dialog {
@@ -4042,10 +4071,6 @@ body.modal-open {
       padding-top: $MOBILE_NAVBAR_HEIGHT;
       // padding-bottom: 70px;
       margin: 0;
-    }
-
-    .modal-header {
-      display: none;
     }
 
     .title {
@@ -4158,7 +4183,8 @@ body.modal-open {
     display: none;
   }
 
-  #aboutModal {
+  #aboutModal,
+  .guide-modal {
     $leading: 16px;
 
     .illustation {
@@ -4177,8 +4203,8 @@ body.modal-open {
     }
 
     h1 {
-      font-size: $leading*1.618*2;
-      margin-top: 2em;
+      font-size: $leading*1.618*1.5;
+      // margin-top: 2em;
       margin-bottom: .5em;
     }
 
@@ -4193,7 +4219,7 @@ body.modal-open {
     }
   }
 
-  #guideModal {
+  .guide-modal {
     .close-and-filter {
       display: none;
     }
@@ -4218,7 +4244,7 @@ body.modal-open {
       display: none;
     }
 
-    .btn-tag {
+    .tagDisplay {
       width: calc(50% - #{$GRID_SPACE});
     }
   }
@@ -4501,6 +4527,7 @@ body.modal-open {
     }
 
     .tagsContainer {
+      margin-top: 2em;
       justify-content: flex-start;
 
       .tagDisplay {
@@ -5376,8 +5403,8 @@ a[data-featherlight] {
       }
 
       li {
-        height: 48px;
-        line-height: 48px;
+        height: $GRID_SPACE*4;
+        line-height: $GRID_SPACE*2;
         padding: 0 16px;
         cursor: pointer;
 
