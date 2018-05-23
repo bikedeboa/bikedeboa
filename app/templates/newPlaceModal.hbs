@@ -3,22 +3,41 @@
     <div class="vertical-alignment-helper">
         <div class="modal-dialog vertical-align-center">
             <div class="modal-content">
-                <div class="photo-container photoInputContainer">
-                    <input id="photoInput" type="file" name="photoInput" accept="image/*">
-                    <label for="photoInput"></label>
-
-                    <span class="photoInputDisclaimer">
-                        Você pode adicionar uma foto mais tarde se quiser ;)
-                    </span>
- 
-                    <img alt="" id="photoInputBg" />
-                </div>
-
                 <div class="modal-body">
+                    <div class="photo-container photo-input--container">
+                        <input id="photoInput" class="photo-input" type="file" name="photoInput" accept="image/*">
+                
+                        <img alt="" id="photoInputBg" src="{{{photoUrl}}}" />
+
+                        <label class="photo-input--label {{#if photoUrl}}photo-input--edit-mode{{/if}}" for="photoInput">
+                            <div class="photo-input--calltoaction">
+                                {{#if photoUrl}}
+                                    <img src="/img/icon_edit.svg" alt="" />
+                                    <div>
+                                        Editar foto
+                                    </div> 
+                                {{else}}
+                                    <img src="/img/icon_photo.svg" alt="" />
+                                    <div>
+                                        Adicionar foto
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </label>
+                    </div>
+
                     <section>
                         <h2>Dê um nome pro bicicletário</h2>
                         <div class="text-input-wrapper">
-                            <input required id="titleInput" name="text" type="text" class="text-input" placeholder="Sem nome" data-hj-whitelist>
+                            <input
+                                required
+                                id="titleInput"
+                                name="text"
+                                type="text"
+                                class="text-input data-hj-whitelist"
+                                placeholder="Sem nome"
+                                value={{{placeTitle}}}
+                            >
 
                             {{#if nameSuggestions}}
                                 <div class="place-suggestions">
@@ -47,16 +66,24 @@
                         </h2>
 
                         <div class="covered-group" data-form-step="2">
-                            <div data-value="covered" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="covered"
+                                class="typeIcon {{#ifCond coverType '===' 'covered'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/icon_covered.svg"/>
                                 <div class="icon-label">
-                                Coberto
+                                    Coberto
                                 </div>
                             </div>
-                            <div data-value="uncovered" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="uncovered"
+                                class="typeIcon {{#ifCond coverType '===' 'uncovered'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/icon_uncovered.svg"/>
-                                <div class="icon-label">
-                                Não coberto
+                                <div class="icon-label"> 
+                                    Não coberto
                                 </div>
                             </div>
                         </div>
@@ -70,27 +97,51 @@
                         </h2> 
 
                         <div class="custom-radio-group" data-form-step="1">
-                            <div data-value="deroda" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="deroda"
+                                class="typeIcon {{#ifCond rackType '===' 'deroda'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/tipo_deroda.svg"/>
                                 <div class="icon-label">De Roda</div>
                             </div>
-                            <div data-value="uinvertido" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="uinvertido"
+                                class="typeIcon {{#ifCond rackType '===' 'uinvertido'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/tipo_uinvertido.svg"/>
                                 <div class="icon-label">U Invertido</div>
                             </div>
-                            <div data-value="suspenso" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="suspenso"
+                                class="typeIcon {{#ifCond rackType '===' 'suspenso'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/tipo_suspenso.svg"/>
                                 <div class="icon-label">Suspenso</div>
                             </div>
-                            <div data-value="grade" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="grade"
+                                class="typeIcon {{#ifCond rackType '===' 'grade'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/tipo_grade.svg"/>
                                 <div class="icon-label">Grade</div>
                             </div>
-                            <div data-value="trave" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="trave"
+                                class="typeIcon {{#ifCond rackType '===' 'trave'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/tipo_trave.svg"/>
                                 <div class="icon-label">Trave</div>
                             </div>
-                            <div data-value="other" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="other"
+                                class="typeIcon {{#ifCond rackType '===' 'other'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/tipo_other.svg"/>
                                 <div class="icon-label">Outro</div>
                             </div>
@@ -106,23 +157,31 @@
                         </h2>
 
                         <div class="acess-types-group" data-form-step="2">
-                            <div data-value="public" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="public"
+                                class="typeIcon {{#ifCond accessType '===' 'public'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/icon_public.svg"/>
                                 <div class="icon-label">
-                                Público
+                                    Público
                                 </div>
                             </div>
-                            <div data-value="private" class="typeIcon" tab-index="0">
+                            <div
+                                data-value="private"
+                                class="typeIcon {{#ifCond accessType '===' 'private'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
                                 <img alt="" src="/img/icon_private.svg"/>
                                 <div class="icon-label">
-                                Privado
+                                    Privado
                                 </div>
                             </div>
                         </div>
                     </section> 
 
                     <section> 
-                            <div class="extraInfo collapsable">
+                            <div class="extraInfo collapsable {{#if hasExtraInfo}}expanded{{/if}}">
                                 <h2>
                                     Mais informações
                                 </h2>
@@ -132,9 +191,21 @@
                                         Custo
                                     </label>
                                     <select id="isPaidInput" name="select">
-                                        <option value="dontknow" selected>Não sei</option>
-                                        <option value="yes">Pago</option>
-                                        <option value="no">Gratuito</option>
+                                        <option
+                                            value="dontknow"
+                                            {{#unless costType}}selected{{/unless}}>
+                                            Não sei
+                                        </option>
+                                        <option
+                                            value="yes" 
+                                            {{#ifCond costType '===' 'paid'}}selected{{/ifCond}}>
+                                            Pago
+                                        </option>
+                                        <option
+                                            value="no"
+                                            {{#ifCond costType '===' 'free'}}selected{{/ifCond}}>
+                                            Gratuito
+                                        </option>
                                     </select> 
                                 </div>
                                 
@@ -142,7 +213,7 @@
                                     <label>
                                         Número de vagas
                                     </label>
-                                    <input id="slotsInput" type="number" name="slots" min="0">
+                                    <input id="slotsInput" type="number" name="slots" min="0" value="{{{slots}}}">
                                 </div>
 
                                 <div>
@@ -152,27 +223,37 @@
                                 
                                     <textarea
                                         id="descriptionInput"
-                                        maxlength="250"
+                                        maxlength="250"  
                                         type="text"
-                                        class="text-input"
+                                        class="text-input data-hj-whitelist"
                                         name="description"
                                         placeholder="Ex: horários, como acessar, serviços adicionais, ..." 
-                                        data-hj-whitelist></textarea>
+                                    >{{{description}}}</textarea>
                                 </div>
                             </div>
                     </section>
 
-                    <section class="minimap-container">
-                        <h2>Localização</h2> 
-                        <div>
-                            <img alt="" class="minimap" src="" />
-                            <button id="editPlacePositionBtn" class="btn link-button"></button>
-                        </div>
-                    </section>
+                    {{#if editMode}}
+                        <section class="minimap-container">
+                            <h2>Localização</h2> 
+                            <div>
+                                <img class="minimap" src="{{{minimapUrl}}}" alt=""/>
+                                <button id="editPlacePositionBtn" class="btn link-button">
+                                    Editar 
+                                </button>
+                            </div>
+                        </section>
+                    {{/if}}
 
                     <div class="stickyFooterBtn">
-                        <button class="saveNewPlaceBtn btn border btn-footer btn-action green">SALVAR</button>
-                        {{!-- <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button> --}}
+                        <button
+                            class="saveNewPlaceBtn btn border btn-footer btn-action green"
+                        >
+                            SALVAR
+                        </button>
+                        {{#if editMode}}
+                            {{!-- <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button> --}}
+                        {{/if}}
                     </div>
                 </div>
             </div>
