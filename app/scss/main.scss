@@ -2278,12 +2278,16 @@ body.fullscreen-modal-open {
         border: 3px solid $lighterGray;
         border-radius: 5px;
 
-        &:valid {
-          border-color: $lightGreen;
-        }
+        // &:valid {
+        //   border-color: $lightGreen;
+        // }
 
-        &:invalid {
-          border-color: $lighterGray;
+        // &:invalid {
+        //   border-color: $lighterGray;
+        // }
+
+        &::-webkit-input-placeholder {
+          color: $lightGray;
         }
     }
 
@@ -2398,7 +2402,7 @@ body.fullscreen-modal-open {
 }
 
 .photo-input--container {
-  height: 160px;
+  height: 180px;
   background: none;
 
   .photoInputBg,
@@ -2406,7 +2410,8 @@ body.fullscreen-modal-open {
     position: absolute;
     top: 0;
     width: 100%;
-    // opacity: .5;
+    height: 100%;
+    object-fit: cover;
     pointer-events: none;
   } 
 
@@ -2421,12 +2426,14 @@ body.fullscreen-modal-open {
     &:hover,
     &:focus,
     &:active {
-      opacity: .7; 
+      // opacity: .7;
+      background: rgba(0,0,0,0.03);
     }
 
     &.photo-input--edit-mode {
       border: none; 
       background: rgba(0,0,0,0.1);
+      opacity: .9;
       
       .photo-input--calltoaction {
         color: white;
