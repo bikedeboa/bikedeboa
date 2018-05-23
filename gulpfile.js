@@ -121,7 +121,7 @@ gulp.task('scripts', () => {
     // })
     // .pipe(gulp.dest('dist/js'))
     // .pipe(rename('app.min.js'))
-    .pipe(production(uglify()))
+    .pipe(production(uglify())) 
     .pipe(sourcemaps.write('maps'))
     .pipe(fileSizes({ title: 'app.min.js', gzip: true }))
     .pipe(gulp.dest('dist/js'));

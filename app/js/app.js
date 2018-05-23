@@ -387,7 +387,6 @@ $(() => {
         .modal('show');
     } else { 
       // Just fade new detailed content in
-      // $('#placeDetailsContent .photo-container, #placeDetailsContent .tagsContainer').velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false});
       $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description')
         .velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false, duration: 2000});
     } 
@@ -1069,7 +1068,7 @@ $(() => {
 
       return `
         <button  
-            class="btn btn-tag ${isPrepoped ? 'active' : ''}"
+            class="btn tagDisplay ${isPrepoped ? 'active' : ''}"
             data-toggle="button"
             data-value="${t.id}">
           ${t.name}
@@ -1337,11 +1336,14 @@ $(() => {
     $('.hamburger-button').removeClass('back-icon'); 
   }
 
-  function updatePageTitleAndMetatags(text = 'bike de boa') { 
+  function updatePageTitleAndMetatags(text) {
+    text = 'bike de boa';
+
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
     } else {
+      // $('#top-mobile-bar-title').text(openedMarker ? '' : text);
       $('#top-mobile-bar-title').text(openedMarker ? '' : text);
     }
 
@@ -1565,6 +1567,12 @@ $(() => {
         setView('Guia de bicicletários', '/guia-de-bicicletarios', true);
       });
     }));
+    $('.js-side-nav-container, body').on('click', '.open-guidetags-btn', queueUiCallback.bind(this, () => {
+      ga('send', 'event', 'Misc', 'faq opened');
+      hideAll().then(() => {
+        setView('O que faz um bicicletário ser seguro', '/guia-seguranca', true);
+      });
+    }));
 
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-aboutdata-btn', queueUiCallback.bind(this, () => {
@@ -1702,8 +1710,8 @@ $(() => {
           }
         });
       } else {
-        if (openingModalEl.hasClass('clean-modal')) {
-          $('body').addClass('clean-modal-open');
+        if (openingModalEl.hasClass('fullscreen-modal')) {
+          $('body').addClass('fullscreen-modal-open');
         }
       }
     });
@@ -1730,7 +1738,7 @@ $(() => {
           map.setCenter(map.getCenter());
         }
       } else {
-        $('body').removeClass('clean-modal-open');
+        $('body').removeClass('fullscreen-modal-open');
       }
     }); 
     
@@ -1854,15 +1862,11 @@ $(() => {
       $('body').append(BDB.templates.howToInstallModal());
     }
 
-    // Lazy load gifs when modal is shown
-    // $('#howToInstallModal .tutorial-gif').each((i, v) => {
-    //   $(v).attr('src', $(v).data('src'));
-    // });
-
     $('#howToInstallModal').modal('show');
 
-    $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-    // }
+    if (!_isMobile) {
+      $('#howToInstallModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
   }
 
   function openFaqModal() { 
@@ -1871,7 +1875,9 @@ $(() => {
     }
 
     $('#faqModal').modal('show');
-    $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    if (!_isMobile) {
+      $('#faqModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
 
     $('#faq-accordion').off('show.bs.collapse').on('show.bs.collapse', e => {
       const questionTitle = $(e.target).parent().find('.panel-title').text();
@@ -1888,7 +1894,9 @@ $(() => {
     }
 
     $('#topCitiesModal').modal('show');
-    $('#topCitiesModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    if (!_isMobile) {
+      $('#topCitiesModal .panel').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
 
     $('.goToCityBtn').off('click').on('click', e => {
       const $target = $(e.currentTarget);
@@ -1971,19 +1979,21 @@ $(() => {
     });
   }
 
-  function openGuideModal(showMapBanner = false) {
-    $('#guideModal').remove();
-    $('body').append(BDB.templates.guideModal({ showMapBanner: showMapBanner}));
- 
-    $('#guideModal').modal('show');
-    $('#guideModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+  function openGuideTypesModal(showMapBanner) { 
+    $('#guideTypesModal').remove(); 
+    $('body').append(BDB.templates.guideTypesModal({ showMapBanner: showMapBanner }));
+
+    $('#guideTypesModal').modal('show');
+    if (!_isMobile) {
+      $('#guideTypesModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
 
     // Lazy load gifs when modal is shown
-    $('#guideModal .guide-img-row img').each( (i, v) => {
+    $('#guideTypesModal .guide-img-row img').each( (i, v) => {
       $(v).attr('src', $(v).data('src'));
     });
 
-    $('#guideModal .close-and-filter').off('click').on('click', function() {
+    $('#guideTypesModal .close-and-filter').off('click').on('click', function() {
       const p = $(this).data('prop');
       const v = $(this).data('value'); 
 
@@ -1995,6 +2005,17 @@ $(() => {
       $(`.filter-checkbox[data-prop="${p}"][data-value="${v}"`).prop('checked', true);
       updateFilters();
     });
+  } 
+
+  function openGuideTagsModal() {
+    if ($('#guideTagsModal').length === 0) {
+      $('body').append(BDB.templates.guideTagsModal());
+    }
+
+    $('#guideTagsModal').modal('show');
+    if (!_isMobile) {
+      $('#guideTagsModal article > *').css({ opacity: 0 }).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
   } 
 
   function openNotFoundModal(url){
@@ -2009,7 +2030,9 @@ $(() => {
     }
 
     $('#dataModal').modal('show');
-    $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    if (!_isMobile) {
+      $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
   } 
 
   function openAboutModal() {
@@ -2023,7 +2046,9 @@ $(() => {
     });
 
     $('#aboutModal').modal('show');
-    $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    if (!_isMobile) {
+      $('#aboutModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+    }
 
     BDB.Database.customAPICall('get', 'stats')
       .then(data => {
@@ -2126,7 +2151,10 @@ $(() => {
         _isDeeplink = true;
         $('body').addClass('deeplink');
       }
-      openGuideModal(!!isInitialRouting); 
+      openGuideTypesModal(!!isInitialRouting);   
+      break;
+    case 'guia-seguranca':
+      openGuideTagsModal();
       break;
     case 'sobre':
       if (isInitialRouting) {

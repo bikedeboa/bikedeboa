@@ -137,7 +137,7 @@
                 {{#if structureTypeIcon}}
                     <img alt="" id="placeDetails_structureType_icon" src="{{structureTypeIcon}}"/>
                 {{/if}}
-                <div class="icon-label" id="placeDetails_structureType">
+                <div class="icon-label" id="placeDetails_structureType"> 
                         <meta itemprop="name" content="Tipo">
                         <span itemprop="value">{{{structureTypeLabel}}}</span>
 
@@ -146,7 +146,7 @@
                         <p>Em forma de U ou semi-círculo, normalmente é uma estrutura reforçada e bem fixada no chão.</p>
                         <p>Dá pra prender a bicicleta de várias formas, mas prefira sempre <b>prender pelo quadro da bicicleta</b>.</p>
                         <p>É frequentemente considerado o melhor tipo de bicicletário, oferece segurança e estabilidade e permite usar trava U-lock.</p>
-                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletário</a></p>
                         "></a>
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'deroda'}}
@@ -156,19 +156,19 @@
                         <p>A menos que se use uma trava flexível, normalmente só dá pra prender a bicicleta pela roda. Alguns destes bicicletários não oferecem boa estabilidade e podem danificar a roda, os raios ou o câmbio traseiro, o que
                         lhes rendeu o apelido carinhoso de 'entorta-roda' entre os ciclistas.</p>
                         <p>Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro.</p>
-                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletário</a></p>
                         "></a>
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'trave'}}
                         <a id="trave-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Trave</h2>
                         <p>Normalmente um poste de luz ou placa de trânsito.</p>
                         <p>Dá pra prender a bicicleta de varias formas, mas o melhor é <b>prender pelo quadro da bicicleta</b> e o mais próximo possível do poste. Alguns problemas comuns são deixar uma folga e a trava correr no poste e a bicicleta cair no chão. Cuidado também pra não prender em um poste baixo onde a bicicleta possa ser roubada passando por cima do poste.</p>
-                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletário</a></p>
                         "></a> 
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'suspenso'}}
                         <a id="suspenso-type-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" data-title="<h2>Suspenso</h2> <p> Também conhecido como 'varal', normalmente lembra uma goleira com ganchos para pendurar a bicicleta. Às vezes se trata de simples ganchos na parede. </p> <p> Cuidado que alguns destes só permitem prender a bicicleta pela roda, a menos que se use uma trava flexível. Às vezes dá pra prender o quadro da bicicleta próximo aos pilares. </p> <p> Este tipo economiza espaço, mas nem sempre é o mais prático ou mais seguro. Pessoas com um pouco de dificuldade motora, como pessoas de mais idade ou muito jovens, podem ter dificuldade de usá-lo. </p>
-                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletário</a></p>
                         "></a>
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'grade'}}
@@ -176,7 +176,7 @@
                         <p>Normalmente não é bicicletário, mas algo da rua que é usado pra isso. Há muitas variações: alguns são rígidos e bem fixados, já outros são bem menos confiáveis.</p>
                         <p>Apesar de não ser feito pra isso, às vezes é até mais seguro do que um bicicletário de roda, por exemplo. Dá pra prender a bicicleta de formas variadas, inclusive com U-lock, e normalmente oferece boa estabilidade.</p>
                         <p>Prefira sempre <b>prender pelo quadro da bicicleta<b>.</p>
-                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletário</a></p>
                         "></a>
                         {{/ifCond}}
                         {{#ifCond structureTypeCode '===' 'other'}}
@@ -185,7 +185,7 @@
                         de fato, mas acabam sendo usados assim.</p> 
                         <p>Lembre de verificar a foto e as avaliações de outros usuários, e na hora olhe bem para conferir a qualidade da estrutura.</p>
                         <p>Sempre prenda sua bicicleta pelo quadro e o mais próximo possível desse objeto.</p> 
-                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletários</a></p>
+                        <p><a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletário</a></p>
                         "></a>
                         {{/ifCond}}  
                 </div>
@@ -245,7 +245,8 @@
                         {{/unless}}
                     {{/if}}
                 </div>
-
+            </div>
+ 
             {{#if average}}
                 {{#if tags}}
                     <div class="tagsContainer">
@@ -265,6 +266,23 @@
                 {{else}}
                     <div class="tagsContainer loading" style="position: relative;">
                         Carregando... 
+                    </div>
+                {{/if}}
+
+                {{#if savedRating}}
+                    <div class="savedRating"> 
+                        <h5>Sua avaliação:</h5> 
+
+                        <div>
+                            <img alt="" src="{{userThumbUrl}}" />
+                            
+                            <span data-color="{{color}}">
+                                {{{savedRating}}}
+                                {{{savedRatingStars}}}
+                            </span>
+                            
+                            <button class="ghost openReviewPanelBtn">Editar</button>
+                        </div>
                     </div>
                 {{/if}}
             {{/if}}
