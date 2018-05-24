@@ -1024,7 +1024,9 @@
           } else if (str.indexOf('publico') > 0
             || str.indexOf('público') > 0
             || str.indexOf('na rua') > 0
+            || str.indexOf('na calçada') > 0
             || str.indexOf('canteiro central') > 0
+            || str.indexOf('ao lado do quiosque') > 0
             || str.indexOf('calçada') > 0) {
             tmp.isPublic = true;
             _importResults.tagsDetected++;
@@ -1057,6 +1059,9 @@
             || str.indexOf('trincheira') > 0
             || str.indexOf('de roda') > 0) {
             tmp.structureType = 'deroda';
+            _importResults.tagsDetected++;
+          } else if (str.indexOf('paliteiro') > 0) {
+            tmp.structureType = 'other';
             _importResults.tagsDetected++;
           }
 
