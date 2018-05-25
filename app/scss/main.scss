@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Color Pallettes /////////////////////////////////////////////////////////////////////////////////
+// Colors //////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $green: #30bb6a;
@@ -56,9 +56,45 @@ $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 // Typography //////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$bodyFont: "Quicksand", sans-serif;
-$headingFont: 'Quicksand', sans-serif;
+$bodyFont: "MuseoSansRounded", sans-serif;
+$headingFont: $bodyFont;
 $bootstrapFont: 'Glyphicons Halflings';
+
+@font-face {
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-100-webfont.woff') format('woff'),
+    url('/fonts/museosansrounded-100-webfont.ttf') format('opentype');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-300-webfont.woff') format('woff'),
+      url('/fonts/museosansrounded-300-webfont.ttf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-500-webfont.woff') format('woff'),
+      url('/fonts/museosansrounded-500-webfont.ttf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+} 
+@font-face { 
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-700-webfont.woff') format('woff'),
+     url('/fonts/museosansrounded-700-webfont.ttf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'MuseoSansRounded';
+    src: url('/fonts/museosansrounded-900-webfont.woff') format('woff'),
+     url('/fonts/museosansrounded-900-webfont.ttf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+}
 
 $separatorBorderStyle: 2px dotted $lighterGray;
 
