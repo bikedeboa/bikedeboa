@@ -1228,27 +1228,104 @@ a.unstyled-link {
   }
 }
 
-#messageModal {
-    &.success .modal-body {
-        background-color: $lightGreen;
-    }
-    &.warning .modal-body {
-        background-color: $yellow;
-    }
-    &.error .modal-body {
-        background-color: $red;
+
+.modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    &:not(.fullscreen-modal) {
+      // Cursor change on backdrop
+      cursor: zoom-out;
     }
 
-    .modal-content {
-        max-width: 500px;
+    // Make it full screen
+    // position: absolute;
+    // bottom: auto;
+    // right: auto; 
+
+    .modal-dialog {
+      margin-top: $GRID_SPACE*2;
+      
+      // Reset cursor:zoom-out from .modal
+      cursor: auto;
     }
 
-    .message-content {
-        text-align: center;
-        font-family: $headingFont;
-        font-size: 30px;
-        padding: 30px;
-        color: white;
+    .modal-body {
+      padding: $GRID_SPACE*3 $GRID_SPACE*3;
+
+      img { 
+          max-width: 100%;
+      }
+
+      hr {
+          margin-top: 10px;
+          margin-bottom: 10px;
+      }
+
+      .typeIcon {
+          width: 32%;
+          height: auto;
+          display: inline-block;
+          cursor: pointer;
+          vertical-align: middle;
+          border-radius: 15px;
+          padding: $GRID_SPACE 3%;
+          position: relative;
+          filter: grayscale(100%) brightness(.8);
+          opacity: 0.9;
+          text-align: center;
+
+          .icon-label {
+            text-align: center;
+            margin-top: $GRID_SPACE;
+            color: $gray;
+            font-weight: 700;
+            user-select: none; 
+            margin-bottom: 2px;
+
+            transition: all 0.3s ease;
+
+            // Explanation on the reason for the string interpolation:
+            //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
+            margin-top: calc(#{$GRID_SPACE} - 2px);
+            margin-bottom: 0;
+            border: 2px solid transparent;
+            border-radius: 25px;
+          }
+
+          img {
+              width: 100%;
+              height: 100%;
+              max-width: 100px; 
+          }
+
+          &.active {
+              filter: none;
+              opacity: 1;
+
+              .icon-label {
+                color: $green;
+                border-color: $green;
+              }
+          }
+
+          &:hover {
+              background-color: $paleWhite;
+              opacity: 1;
+          }
+      }
+    }
+
+    &.fullscreen-modal {
+      .modal-content {
+        box-shadow: none;
+        background: transparent;
+      }
+
+      article {
+        margin-left: -$GRID_SPACE*3;
+        margin-right: -$GRID_SPACE*3;
+      }
     }
 }
 
@@ -2128,106 +2205,6 @@ a.unstyled-link {
 #bottom-mobile-bar,
 #top-mobile-bar {
   display: none;
-}
-
-.modal {
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    &:not(.fullscreen-modal) {
-      // Cursor change on backdrop
-      cursor: zoom-out;
-    }
-
-    // Make it full screen
-    // position: absolute;
-    // bottom: auto;
-    // right: auto; 
-
-    .modal-dialog {
-      margin-top: $GRID_SPACE*2;
-      
-      // Reset cursor:zoom-out from .modal
-      cursor: auto;
-    }
-
-    .modal-body {
-      padding: $GRID_SPACE*3 $GRID_SPACE*3;
-
-      img { 
-          max-width: 100%;
-      }
-
-      hr {
-          margin-top: 10px;
-          margin-bottom: 10px;
-      }
-
-      .typeIcon {
-          width: 32%;
-          height: auto;
-          display: inline-block;
-          cursor: pointer;
-          vertical-align: middle;
-          border-radius: 15px;
-          padding: $GRID_SPACE 3%;
-          position: relative;
-          filter: grayscale(100%) brightness(.8);
-          opacity: 0.9;
-          text-align: center;
-
-          .icon-label {
-            text-align: center;
-            margin-top: $GRID_SPACE;
-            color: $gray;
-            font-weight: 700;
-            user-select: none; 
-            margin-bottom: 2px;
-
-            transition: all 0.3s ease;
-
-            // Explanation on the reason for the string interpolation:
-            //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
-            margin-top: calc(#{$GRID_SPACE} - 2px);
-            margin-bottom: 0;
-            border: 2px solid transparent;
-            border-radius: 25px;
-          }
-
-          img {
-              width: 100%;
-              height: 100%;
-              max-width: 100px; 
-          }
-
-          &.active {
-              filter: none;
-              opacity: 1;
-
-              .icon-label {
-                color: $green;
-                border-color: $green;
-              }
-          }
-
-          &:hover {
-              background-color: $paleWhite;
-              opacity: 1;
-          }
-      }
-    }
-
-    &.fullscreen-modal {
-      .modal-content {
-        box-shadow: none;
-        background: transparent;
-      }
-
-      article {
-        margin-left: -$GRID_SPACE*3;
-        margin-right: -$GRID_SPACE*3;
-      }
-    }
 }
 
 body.search-mode { 
