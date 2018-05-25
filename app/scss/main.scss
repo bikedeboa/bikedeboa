@@ -1734,15 +1734,15 @@ a.unstyled-link {
   }
 
   p.subtitle {
-    font-size: 24px;
+    font-size: $leading*1.5;
     margin-bottom: 2em;
     font-weight: 200;
   }
 
   h1 {
     // color: $green;
-    font-size: $leading*1.5*2;
-    margin-top: 1.5em;
+    font-size: $leading*1.5*3;
+    margin-top: 1em;
     margin-bottom: .5em;
     // letter-spacing: -0.02em;
     line-height: 1.2em; 
@@ -1752,7 +1752,7 @@ a.unstyled-link {
   h2 {
     color: $green;
     font-weight: bold;
-    font-size: $leading*2;
+    font-size: $leading*2.5;
     margin-top: 2em;
     margin-bottom: 1em;
     text-align: left;
