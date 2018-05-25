@@ -1485,7 +1485,7 @@ a.unstyled-link {
   .big-numbers--number {
       font-size: 54px;
       line-height: 54px;
-      font-weight: bold;
+      font-weight: 900;
   }
 
   .big-numbers--label { 
@@ -1735,8 +1735,8 @@ a.unstyled-link {
 
   p.subtitle {
     font-size: 24px;
-    // font-style: italic;
     margin-bottom: 2em;
+    font-weight: 200;
   }
 
   h1 {
@@ -1744,9 +1744,9 @@ a.unstyled-link {
     font-size: $leading*1.5*2;
     margin-top: 1.5em;
     margin-bottom: .5em;
-    letter-spacing: -0.02em;
+    // letter-spacing: -0.02em;
     line-height: 1.2em; 
-    font-weight: bold;
+    font-weight: 900;
   }
  
   h2 {
@@ -2358,8 +2358,9 @@ body.fullscreen-modal-open {
 
     article {
         p {
-          font-size: 16px;
-          line-height: 1.6em;
+          font-size: 18px;
+          line-height: 1.4em;
+          font-weight: 300;
         }
     }
 
@@ -2949,7 +2950,6 @@ body.fullscreen-modal-open {
         width: calc(33% - #{$GRID_SPACE});
         margin-bottom: 1em;
         font-size: 16px;
-        font-weight: 700;
         text-align: center;
         white-space: nowrap;
         user-select: none;
@@ -4454,11 +4454,12 @@ body.fullscreen-modal-open {
       margin: 0;
       margin-left: $GRID_SPACE*6;
       padding: 0;
-      font-size: 16px;
+      font-size: 20px;
       font-family: $headingFont;
       max-width: calc(100% - #{$GRID_SPACE*7});
       color: white;
       line-height: 1.2em;
+      font-weight: bold;
       
       // white-space: nowrap;
       // text-overflow: ellipsis;
