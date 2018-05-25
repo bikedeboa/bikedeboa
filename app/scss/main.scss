@@ -1647,8 +1647,24 @@ a.unstyled-link {
     font-weight: bold;
   }
 
-  h2, p {
-    // color: $black;
+  .guide--updated-at {
+    text-transform: uppercase;
+    color: $gray;
+    font-size: 12px;
+  }
+
+  .guide--pretitle {
+    font-size: 24px;
+    margin-bottom: .25em;
+    letter-spacing: 0;
+    line-height: 1.2em;
+    font-weight: bold;
+    // color: $green;
+
+    img {
+      height: 18px;
+      vertical-align: baseline;
+    }
   }
 
   .medium-separator {
