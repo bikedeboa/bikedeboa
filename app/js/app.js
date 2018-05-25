@@ -1656,7 +1656,7 @@ $(() => {
 
     $('body').on('click', '.modal, .close-modal', e => {
       // If click wasn't on the close button or in the backdrop, but in any other part of the modal
-      if ($(e.currentTarget).hasClass('fullscreen-modal') || e.target != e.currentTarget) {
+      if (e.target != e.currentTarget) {
         return;
       } else {
         goHome();

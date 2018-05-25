@@ -2118,7 +2118,7 @@ a.unstyled-link {
     overflow-x: hidden;
     overflow-y: auto;
 
-    &:not(.fullscreen-modal) {
+    & {
       // Cursor change on backdrop
       cursor: zoom-out;
     }
@@ -2202,14 +2202,17 @@ a.unstyled-link {
     }
 
     &.fullscreen-modal {
-      .modal-content {
-        box-shadow: none;
-        background: transparent;
-      }
+      .modal-dialog {
+        width: 800px;
 
-      article {
-        margin-left: -$GRID_SPACE*3;
-        margin-right: -$GRID_SPACE*3;
+        .modal-content {
+          padding: 100px
+        }
+  
+        article {
+          margin-left: -$GRID_SPACE*3;
+          margin-right: -$GRID_SPACE*3;
+        }
       }
     }
 }
@@ -2256,9 +2259,9 @@ body.modal-open {
 }
 
 body.fullscreen-modal-open {
-  .modal-backdrop.in {
-    opacity: .93 ;
-  }
+  // .modal-backdrop.in {
+  //   opacity: .93 ;
+  // }
 
   .navbar-de-boa,
   #userBtn {
