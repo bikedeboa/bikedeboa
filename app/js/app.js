@@ -1656,11 +1656,11 @@ $(() => {
 
     $('body').on('click', '.modal, .close-modal', e => {
       // If click wasn't on the close button or in the backdrop, but in any other part of the modal
-      if (e.target != e.currentTarget) {
+      if ($(e.currentTarget).hasClass('fullscreen-modal') || e.target != e.currentTarget) {
         return;
+      } else {
+        goHome();
       }
-
-      goHome();
     });
 
     $('body').on('show.bs.modal', '.modal', e => {
@@ -1993,7 +1993,7 @@ $(() => {
       $(v).attr('src', $(v).data('src'));
     });
 
-    $('#guideTypesModal .close-and-filter').off('click').on('click', function() {
+    $('#guideTypesModal .close-and-filter').on('click', function() {
       const p = $(this).data('prop');
       const v = $(this).data('value'); 
 
