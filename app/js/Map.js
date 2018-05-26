@@ -818,17 +818,17 @@ BDB.Map = (function () {
                 };
 
                 // Attributes
-                let attrs = [];
-                if (m.isPublic != null) {
-                  attrs.push(m.isPublic ? 'Público' : 'Privado');
-                }
-                if (m.structureType) {
-                  attrs.push(STRUCTURE_CODE_TO_NAME[m.structureType]);
-                }
-                if (m.isCovered != null) {
-                  attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
-                }
-                templateData.attrs = attrs.join(' · ');
+                // let attrs = [];
+                // if (m.isPublic != null) {
+                //   attrs.push(m.isPublic ? 'Público' : 'Privado');
+                // }
+                // if (m.structureType) {
+                //   attrs.push(STRUCTURE_CODE_TO_NAME[m.structureType]);
+                // }
+                // if (m.isCovered != null) {
+                //   attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
+                // }
+                // templateData.attrs = attrs.join(' · ');
 
                 const contentString = BDB.templates.infoWindow(templateData);
 
