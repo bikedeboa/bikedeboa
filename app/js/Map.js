@@ -132,11 +132,11 @@ BDB.Map = (function () {
   let mapZoomChanged = function () {
     const prevZoomLevel = mapZoomLevel;
 
-    mapZoomLevel = map.getZoom() <= 13 ? 'mini' : 'full';
+    mapZoomLevel = map.getZoom() <= MAX_ZOOM_TO_SHOW_PINS ? 'mini' : 'full';
 
     if (!prevZoomLevel || prevZoomLevel !== mapZoomLevel) { 
       if (!_activeFilters) {
-        //setMarkersIcon(mapZoomLevel); 
+        setMarkersIcon(mapZoomLevel); 
       }
     }
   };
@@ -335,7 +335,7 @@ BDB.Map = (function () {
     }
   };
   let setMarkersIcon = function(scale) {
-    const tempMarkers = markerClusterer && markerClusterer.getMarkers();
+    const tempMarkers = BDB.Map.getMarkers();
     if (tempMarkers && Array.isArray(tempMarkers)) {
       let m;
       for (let i = 0; i < tempMarkers.length; i++) {
@@ -490,7 +490,7 @@ BDB.Map = (function () {
       });
     },
     getMarkers: function() {
-      return markerClusterer.getMarkers();
+      return markerClusterer && markerClusterer.getMarkers();
     },
     clearMarkers: function () {
       // Deletes all markers in the array by removing references to them.
@@ -502,7 +502,7 @@ BDB.Map = (function () {
     },
     // Sets the map on all markers in the array.
     setMapOnAll: function(map) {
-      let tempMarkers = markerClusterer && markerClusterer.getMarkers();
+      let tempMarkers = BDB.Map.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setMap(map);
@@ -511,7 +511,7 @@ BDB.Map = (function () {
     },
     hideMarkers: function() {
       // Removes the markers from the map, but keeps them in the array.
-      let tempMarkers = markerClusterer && markerClusterer.getMarkers();
+      let tempMarkers = BDB.Map.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setOptions({ clickable: false, opacity: 0.3 });
@@ -520,7 +520,7 @@ BDB.Map = (function () {
     },
     showMarkers: function() {
       // Shows any markers currently in the array.
-      let tempMarkers = markerClusterer && markerClusterer.getMarkers();
+      let tempMarkers = BDB.Map.getMarkers();
       if (tempMarkers && Array.isArray(tempMarkers)) {
         for (let i = 0; i < tempMarkers.length; i++) {
           tempMarkers[i].setOptions({ clickable: true, opacity: 1 });

@@ -25,12 +25,14 @@ const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
 
 const N_MOCK_PICS = 14;
 
+const MAX_ZOOM_TO_SHOW_PINS = 14;
+
 const MARKER_SIZE_MULTIPLIER = 1.5;
 
 const MARKER_W = 20 * MARKER_SIZE_MULTIPLIER;
 const MARKER_H = 26 * MARKER_SIZE_MULTIPLIER;
-const MARKER_W_MINI = 16; 
-const MARKER_H_MINI = 16;
+const MARKER_W_MINI = 18; 
+const MARKER_H_MINI = 18;
 const CURRENT_LOCATION_MARKER_W = 20;
 const CURRENT_LOCATION_MARKER_H = 20; 
 const MARKER_ICON_GREEN = '/img/pin_green.svg';
