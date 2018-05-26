@@ -434,6 +434,7 @@ p {
       .top-cities--nbr {
         opacity: .5;
         flex: 1;
+        text-align: right;
       }
 
       &:focus,
@@ -478,7 +479,6 @@ p {
         .top-cities--nbr {
           color: $gray;
           font-size: inherit;
-          text-align: right;
         }
       }
     }

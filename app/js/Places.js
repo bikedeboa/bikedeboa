@@ -13,13 +13,13 @@ BDB.Places = {
   ///////////////////
 
   getMarkerById: function (id) {
-    if (!markers) {
-      console.error('error on getMarkerById: no markers');
+    if (!places) {
+      console.error('error on getMarkerById: no places');
       return;
     }
 
     if (id && id >= 0) {
-      const res = markers.filter( i => i.id === id );
+      const res = places.filter( i => i.id === id );
       if (res.length > 0) {
         return res[0];
       }

@@ -339,7 +339,7 @@ BDB.Map = (function () {
     if (tempMarkers && Array.isArray(tempMarkers)) {
       let m;
       for (let i = 0; i < tempMarkers.length; i++) {
-        m = markers[i];
+        m = places[i];
         tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
       }
     }
@@ -568,8 +568,8 @@ BDB.Map = (function () {
         const positionToCompare = BDB.Geolocation.getCurrentPosition();
 
         // Use nearest places
-        for (let i = 0; i < markers.length; i++) {
-          const m = markers[i];
+        for (let i = 0; i < places.length; i++) {
+          const m = places[i];
 
           m.distance = distanceInKmBetweenEarthCoordinates(
             positionToCompare.latitude,
@@ -577,19 +577,19 @@ BDB.Map = (function () {
             m.lat,
             m.lng);
         }
-        markersToShow = markers.sort((a, b) => { return a.distance - b.distance; });
+        markersToShow = places.sort((a, b) => { return a.distance - b.distance; });
         markersToShow = markersToShow.slice(0, maxPlaces);
         break;
       }
       case 'updatedAt':
         // Most recently updated places
         // @todo bring this info from getAll endpoint
-        markersToShow = markers.sort((a, b) => { return b.updatedAt - a.updatedAt; });
+        markersToShow = places.sort((a, b) => { return b.updatedAt - a.updatedAt; });
         markersToShow = markersToShow.slice(0, maxPlaces);
         break;
       case 'best':
         // Best rated places
-        markersToShow = markers.sort((a, b) => {
+        markersToShow = places.sort((a, b) => {
           return (b.average * 1000 + b.reviews * 1) - (a.average * 1000 + a.reviews * 1);
         });
         markersToShow = markersToShow.slice(0, maxPlaces);
@@ -694,17 +694,17 @@ BDB.Map = (function () {
     updateMarkers: function () {
       this.clearMarkers();
 
-      // Markers from Database
-      if (markers && markers.length > 0) {
+      // Places from Database
+      if (places && places.length > 0) {
         // Order by average so best ones will have higher z-index
-        // markers = markers.sort((a, b) => {
+        // places = places.sort((a, b) => {
         //   return a.average - b.average;
         // });
 
         let gmarkers = [];
 
-        for (let i = 0; i < markers.length; i++) {
-          const m = markers[i];
+        for (let i = 0; i < places.length; i++) {
+          const m = places[i];
 
           if (m) {
             // Icon and Scaling
@@ -788,7 +788,7 @@ BDB.Map = (function () {
                   //   fontWeight: 'bold'
                   // },
                   icon: m.icon,
-                  zIndex: i, //markers should be ordered by average
+                  zIndex: i, //places should be ordered by average
                   // opacity: 0.1 + (m.average/5).
                 });
                 // Performance of MarkerWithLabel is horrible even when hiding labels with display:none :(
@@ -807,7 +807,6 @@ BDB.Map = (function () {
                 // });
 
                 // Info window
-                
                 let templateData = {
                   thumbnailUrl: (m.photo) ? m.photo.replace('images', 'images/thumbs') : '',
                   title: m.text,
@@ -894,6 +893,7 @@ BDB.Map = (function () {
                 }
 
                 gmarkers.push(newMarker);
+                m.gmarker = newMarker;
               } else {
                 console.error('error: pin with no latitude/longitude');
               }
