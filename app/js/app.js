@@ -170,15 +170,6 @@ $(() => {
       templateData.dataSourceName = m.DataSource.name;
     }
 
-    // Is paid
-    if (m.isPaid !== null) {
-      if (m.isPaid === true) {
-        templateData.isPaid = 'Pago';
-      } else {
-        templateData.isPaid = 'Gratuito';
-      }
-    }
-
     // Created at
     if (m.createdAt) {
       templateData.createdTimeAgo = createdAtToDaysAgo(m.createdAt);
@@ -213,6 +204,17 @@ $(() => {
       templateData.isCovered = m.isCovered === true;
     } else {
       templateData.noIsCoveredData = true;
+    }
+
+    // Is paid
+    if (m.isPaid != null) {
+      if (m.isPaid === true) {
+        templateData.isPaid = 'Pago';
+      } else {
+        templateData.isPaid = 'Gratuito';
+      }
+    } else {
+      templateData.noIsPaidData = true;
     }
 
     // Structure type

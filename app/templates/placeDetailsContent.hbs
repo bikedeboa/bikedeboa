@@ -327,12 +327,12 @@
             </li>
             {{/if}}
 
-            {{#if isPaid}}
+            {{#unless noIsPaidData}}
                 <li>
                     <img class="details-list-icon svg-icon" alt="" src="/img/icon_money.svg"> 
                     <div> {{{isPaid}}} </div>
                 </li>
-            {{/if}}
+            {{/unless}}
 
             {{#if slots}}
                 <li>
