@@ -1073,13 +1073,25 @@
             || str.includes('de roda')) {
             tmp.structureType = 'deroda';
             _importResults.tagsDetected++;
-          } else if (str.includes('paliteiro')
-            || str.includes('tipo pescocinho')
-            || str.includes('suporte pente')
-            || str.includes('suporte rack')
-            || str.includes('bollard')
-            || str.includes('tipo pente')) {
+          } else if (str.includes('suporte rack')
+            || str.includes('bollard')) {
             tmp.structureType = 'other';
+            _importResults.tagsDetected++;
+          } else if (str.includes('paliteiro')) {
+            tmp.structureType = 'paliteiro';
+            _importResults.tagsDetected++;
+          } else if (str.includes('pescocinho')) {
+            tmp.structureType = 'pescocinho';
+            _importResults.tagsDetected++;
+          } else if (str.includes('suporte pente')
+            || str.includes('tipo pente')) {
+            tmp.structureType = 'pente';
+            _importResults.tagsDetected++;
+          } else if (str.includes('sulamerica')) {
+            tmp.structureType = 'sulamerica';
+            _importResults.tagsDetected++;
+          } else if (str.includes('tipo m')) {
+            tmp.structureType = 'm';
             _importResults.tagsDetected++;
           }
 
@@ -1138,7 +1150,6 @@
 
             // 
             function importPlace_recursive(i = 0) {
-
               if (i < max) {
                 let m = _importResults.places[i];
 
@@ -1152,9 +1163,9 @@
                 updateSpinnerProgress(i / max);
                 $('#globalSpinnerLabel').text(`${i}/${max}`);
                 console.warn(`${i} of ${max}`);
-
+ 
                 // Retrieves full addresses
-                BDB.Geolocation.reverseGeocode(m.lat, m.lng)
+                BDB.Map.reverseGeocode(m.lat, m.lng)
                   .then((addressObj) => {
                     console.debug(m.lat, m.lng, m.id);
                     console.debug(addressObj);
@@ -1205,11 +1216,14 @@
                         setTimeout(() => {
                           importPlace_recursive(i);
                         }, 2000);
-
                         break;
                       case 'ZERO_RESULTS':
                         // There's probably something very wrong with the data, since Google Geocoding ALWAYS finds something
                         console.error(`ERROR on reverse geocoding: no results for ${m.lat}, ${m.lng}`);
+                        reject()
+                        break;
+                      default:
+                        console.error(`ERROR on reverse geocoding`);
                         reject()
                         break;
                     }
@@ -1219,11 +1233,12 @@
               }
             };
 
-            BDB.Geolocation
-              .init()
-              .then(() => {
+            $(document).trigger('LoadMap');
+            setTimeout(
+              () => {
                 importPlace_recursive(0);
-              })
+              }, 1000
+            );
           });
         }
 
@@ -1643,16 +1658,12 @@
                                     newValue = 'deroda';
                                     _importResults.tagsDetected++;
                                     break;
-                                  case 'pente':
-                                  case 'sulamerica':
-                                  case 'pescocinho':
                                   case 'transcarioca':
                                   case 'bollard':
                                   case 'transoeste':
                                   case 'niteroi':
                                   case 'niterói':
                                   case 'misto':
-                                  case 'm':
                                     newValue = 'other';
                                     _importResults.tagsDetected++;
                                     break;
@@ -1660,6 +1671,26 @@
                                   case 'u invertido quiosque':
                                   case 'r':
                                     newValue = 'uinvertido';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'pescocinho':
+                                    newValue = 'pescocinho';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'sulamerica':
+                                    newValue = 'sulamerica';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'paliteiro':
+                                    newValue = 'paliteiro';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'pente':
+                                    newValue = 'pente';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'm':
+                                    newValue = 'm';
                                     _importResults.tagsDetected++;
                                     break;
                                   default:

@@ -53,7 +53,7 @@ BDB.Map = (function () {
     let {coords, zoom, isUserLocation, elId} = options;
     const mapElem = document.getElementById(elId);
 
-    if (!elId) {
+    if (!elId || !mapElem) {
       console.warn('Map initialization stopped: no #map element found');
       return;
     }
@@ -214,12 +214,16 @@ BDB.Map = (function () {
   };
   let setUserMarkerIcon = function(){
     let iconName = (isGeolocated) ? 'current' : 'last';
-    geolocationMarker.setIcon({
-      url: `/img/${iconName}_position.svg`, // url
-      scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
-      origin: new google.maps.Point(0, 0), // origin
-      anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
-    });
+    if (geolocationMarker) {
+      geolocationMarker.setIcon({
+        url: `/img/${iconName}_position.svg`, // url
+        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
+      });
+    } else {
+      console.warn('Error in setUserMarkerIcon(): geolocationMarker wasnt initialized');
+    }
   };
   let setUserRadius = function () {
     geolocationRadius = new google.maps.Circle({
@@ -447,7 +451,10 @@ BDB.Map = (function () {
           if (status === google.maps.GeocoderStatus.OK) {
             if (results[0]) {
               const r = results[0].address_components;
-              const formattedAddress = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`;
+              let formattedAddress = `${r[1].short_name}, ${r[0].short_name}`;
+              if (r[3]) {
+                formattedAddress += ` - ${r[3].short_name}`;
+              }
               let city, state, country;
 
               r.forEach(address => {
