@@ -255,6 +255,7 @@
             display: none !important;
           }
 
+          #userBtn,
           .loginBtn {
             display: block !important;
           }
@@ -1600,6 +1601,8 @@
                                   case 'sulamerica':
                                   case 'pescocinho':
                                   case 'transcarioca':
+                                  case 'bollard':
+                                  case 'transoeste':
                                   case 'misto':
                                   case 'm':
                                     newValue = 'other';
@@ -1618,17 +1621,20 @@
                                     break;
                                 }
 
+                                // Check for diversion
                                 if (oldValue && newValue !== oldValue) {
                                   console.group();
                                   console.warn(`Values diverged in BC_type: ${oldValue} X ${newValue}`);
                                   console.warn(tmp.description);
                                   console.warn(`${name} = ${value}`);
                                   console.groupEnd();
-                                }
 
-                                // Ignore diverged value if it's mixed type (our AI can't get that)
-                                if (value === 'misto') {
-                                  tmp.structureType = oldValue;  
+                                  // Accept new diverged value only if it's mixed type, b/c our AI can't get that 
+                                  if (value === 'misto') {
+                                    tmp.structureType = newValue;
+                                  } else {
+                                    tmp.structureType = oldValue;
+                                  }
                                 } else {
                                   tmp.structureType = newValue;
                                 }
@@ -1650,6 +1656,7 @@
                                   _importResults.unknownTags++;
                                 }
 
+                                // Check for diversion
                                 if (oldValue && newValue !== oldValue) {
                                   console.group();
                                   console.warn(`Values diverged in BC_paid: ${oldValue} X ${newValue}`);
