@@ -1494,6 +1494,7 @@
                           const name = ext.attributes[0].nodeValue;
                           const valueRaw = ext.children[0].innerHTML
                           const value = valueRaw.toLowerCase();
+                          let oldValue, newValue;
 
                           switch (name) {
                             case 'Foto':
@@ -1527,80 +1528,146 @@
                             //////////////////////////////////////////////////
                             case 'BC_slots':
                               if (value) {
-                                tmp.slots = value;
+                                oldValue = tmp.slots;
+                                
+                                newValue = value;
+                                
+                                // Check for diversion
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_slots: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+
+                                  // Prioritize the version from the description
+                                  tmp.slots = oldValue;
+                                } else {
+                                  tmp.slots = newValue;
+                                }
+
                                 _importResults.tagsDetected++;
                               }
                               break;
                             case 'BC_covered':
                               if (value) {
+                                oldValue = tmp.isCovered;
+
                                 if (value === 'yes') {
-                                  tmp.isCovered = true;
+                                  newValue = true;
                                   _importResults.tagsDetected++;
                                 } else if (value === 'no') {
-                                  tmp.isCovered = false;
+                                  newValue = false;
                                   _importResults.tagsDetected++;
                                 } else {
                                   console.error(`Unknown value for BC_paid: ${value}`);
                                   _importResults.unknownTags++;
                                 }
+
+                                // Check for diversion
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_covered: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+                                }
+
+                                // Ignore the diversion
+                                tmp.isCovered = newValue;
                               }
                               break;
                             case 'BC_type':
                               // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-                              switch (value) {
-                                case 'açougue':
-                                case 'metrôrio':
-                                  tmp.structureType = 'suspenso';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                case 'grelha':
-                                case 'holandês':
-                                case 'jujubinha':
-                                case 'de roda':
-                                case 'trincheira':
-                                  tmp.structureType = 'deroda';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                case 'pente':
-                                case 'sulamerica':
-                                case 'pescocinho':
-                                case 'transcarioca':
-                                case 'misto':
-                                case 'm':
-                                  tmp.structureType = 'other';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                case 'u invertido':
-                                case 'u invertido quiosque':
-                                case 'r':
-                                  tmp.structureType = 'uinvertido';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                default:
-                                  console.error(`Unknown value for BC_type: ${value}`);
-                                  _importResults.unknownTags++;
-                                  // _importResults.log += `Tipo de bicicletário não identificado: ${value}` + '<br>';
-                                  break;
+                              if (value) {
+                                oldValue = tmp.structureType;
+
+                                switch (value) {
+                                  case 'açougue':
+                                  case 'metrôrio':
+                                    newValue = 'suspenso';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'grelha':
+                                  case 'holandês':
+                                  case 'jujubinha':
+                                  case 'de roda':
+                                  case 'trincheira':
+                                    newValue = 'deroda';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'pente':
+                                  case 'sulamerica':
+                                  case 'pescocinho':
+                                  case 'transcarioca':
+                                  case 'misto':
+                                  case 'm':
+                                    newValue = 'other';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'u invertido':
+                                  case 'u invertido quiosque':
+                                  case 'r':
+                                    newValue = 'uinvertido';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  default:
+                                    console.error(`Unknown value for BC_type: ${value}`);
+                                    _importResults.unknownTags++;
+                                    // _importResults.log += `Tipo de bicicletário não identificado: ${value}` + '<br>';
+                                    break;
+                                }
+
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_type: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+                                }
+
+                                // Ignore diverged value if it's mixed type (our AI can't get that)
+                                if (value === 'misto') {
+                                  tmp.structureType = oldValue;  
+                                } else {
+                                  tmp.structureType = newValue;
+                                }
+                                
                               }
                               break;
                             case 'BC_paid':
                               if (value) {
+                                oldValue = tmp.isPaid;
+
                                 if (value === 'yes') {
-                                  tmp.isPaid = true;  
+                                  newValue = true;  
                                   _importResults.tagsDetected++;
                                 } else if (value === 'no') {
-                                  tmp.isPaid = false;
+                                  newValue = false;
                                   _importResults.tagsDetected++;
                                 } else {
                                   console.error(`Unknown value for BC_paid: ${value}`);
                                   _importResults.unknownTags++;
+                                }
+
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_paid: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+
+                                  // Prioritize the version from the description
+                                  tmp.isPaid = oldValue;
+                                } else { 
+                                  tmp.isPaid = newValue; 
                                 }
                               }
                               break;
 
                             ///////////// 
                             // Default //
-                            /////////////
+                            ///////////// 
                             default:
                               // Any other tag that we haven't identified yet
                               tmp[name] = value;
