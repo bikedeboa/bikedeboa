@@ -1001,15 +1001,17 @@
           }
 
           // Gratuito?
-          if (str.indexOf('gratuito') > 0) {
-            tmp.isPaid = false;
-            _importResults.tagsDetected++;
-          } else if (str.indexOf('pago') > 0
+          if (str.indexOf('pago') > 0
             || str.indexOf('custa') > 0) {
             tmp.isPaid = true;
             _importResults.tagsDetected++;
             // tmp.isPublic = false; // será?
+          } else if (str.indexOf('gratuito') > 0
+            || str.indexOf('de graça') > 0) {
+            tmp.isPaid = false;
+            _importResults.tagsDetected++; 
           }
+          
 
           // Público?
           if (str.indexOf('privado') > 0
