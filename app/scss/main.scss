@@ -1655,7 +1655,7 @@ a.unstyled-link {
   }
 
   .about-collaborators {
-    font-size: 18px;
+    font-size: 16px;
     background: $lightestGray;
     padding: 24px;
     margin: auto;
@@ -3983,17 +3983,6 @@ body.fullscreen-modal-open {
     display: none;
   } 
 
-  .fullscreen-modal {
-    article { 
-      margin-left: inherit;
-      margin-right: inherit;
-    }
-
-    .modal-content {
-      background: white;
-    }
-  }
-
   .modal {
     &:before {
       content: ''
@@ -4051,6 +4040,17 @@ body.fullscreen-modal-open {
         padding: 8px;
         @include roundedCorners;
         font-size: 15px;
+      }
+    }
+
+    &.fullscreen-modal {
+      article { 
+        margin-left: inherit;
+        margin-right: inherit;
+      }
+
+      .modal-content {
+        background: white;
       }
     }
   }
