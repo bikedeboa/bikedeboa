@@ -651,9 +651,9 @@
         function endpointNameColFormatter(value) {
           let ret = value;
           if (value) {
-            if (value.indexOf('bdb-api') > 0) {
+            if (value.contains('bdb-api')) {
               ret = ret.slice(28);
-            } else if (value.indexOf('localhost') > 0) {
+            } else if (value.contains('localhost')) {
               ret = ret.slice(21);
             }
           }
@@ -948,7 +948,7 @@
           const str = tmp.description.toLowerCase();
 
           const fusionTableShit = '![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
-          if (tmp.description.indexOf(fusionTableShit) > 0) {
+          if (tmp.description.contains(fusionTableShit)) {
             tmp.description = tmp.description.split(fusionTableShit)[1];
           }
 
@@ -969,115 +969,115 @@
           }
 
           // Coberto?
-          if (str.indexOf('descoberto') > 0
-            || str.indexOf('descoberta') > 0
-            || str.indexOf('sem cobertura') > 0
-            || str.indexOf('sem coberta') > 0
-            || str.indexOf('não coberto') > 0
-            || str.indexOf('não coberta') > 0
-            || str.indexOf('nao coberta') > 0
-            || str.indexOf('nao é coberta') > 0
-            || str.indexOf('nao e coberta') > 0
-            || str.indexOf('não é coberto') > 0
-            || str.indexOf('nao e coberto') > 0
-            || str.indexOf('nao é coberto') > 0
-            || str.indexOf('ar livre') > 0
-            || str.indexOf('com abrigo') > 0
-            || str.indexOf('sob o sol') > 0
-            || str.indexOf('local aberto') > 0
-            || str.indexOf('céu aberto') > 0
-            || str.indexOf('ceu aberto') > 0) {
+          if (str.contains('descoberto')
+            || str.contains('descoberta')
+            || str.contains('sem cobertura')
+            || str.contains('sem coberta')
+            || str.contains('não coberto')
+            || str.contains('não coberta')
+            || str.contains('nao coberta')
+            || str.contains('nao é coberta')
+            || str.contains('nao e coberta')
+            || str.contains('não é coberto')
+            || str.contains('nao e coberto')
+            || str.contains('nao é coberto')
+            || str.contains('ar livre')
+            || str.contains('com abrigo')
+            || str.contains('sob o sol')
+            || str.contains('local aberto')
+            || str.contains('céu aberto')
+            || str.contains('ceu aberto')) {
             tmp.isCovered = false;
             _importResults.tagsDetected++;
-          } else if (str.indexOf('coberto') > 0
-            || str.indexOf('coberta') > 0
-            || str.indexOf('subsolo') > 0
-            || str.indexOf('subterrânea') > 0
-            || str.indexOf('subterranea') > 0
-            || str.indexOf('subterraneo') > 0
-            || str.indexOf('subterrâneo') > 0) {
+          } else if (str.contains('coberto')
+            || str.contains('coberta')
+            || str.contains('subsolo')
+            || str.contains('subterrânea')
+            || str.contains('subterranea')
+            || str.contains('subterraneo')
+            || str.contains('subterrâneo')) {
             tmp.isCovered = true;
             _importResults.tagsDetected++;
           }
 
           // Gratuito?
-          if (str.indexOf('pago') > 0
-            || str.indexOf('custa') > 0) {
+          if (str.contains('pago')
+            || str.contains('custa')) {
             tmp.isPaid = true;
             _importResults.tagsDetected++;
             // tmp.isPublic = false; // será?
-          } else if (str.indexOf('gratuito') > 0
-            || str.indexOf('de graça') > 0) {
+          } else if (str.contains('gratuito')
+            || str.contains('de graça')) {
             tmp.isPaid = false;
             _importResults.tagsDetected++; 
           }
           
 
           // Público?
-          if (str.indexOf('privado') > 0
-            || str.indexOf('funcionários') > 0
-            || str.indexOf('moradores') > 0
-            || str.indexOf('sócios') > 0
-            || str.indexOf('restrito para') > 0
-            || str.indexOf('exclusivo para') > 0
-            || str.indexOf('uso exclusivo') > 0
-            || str.indexOf('dentro do condominio') > 0
-            || str.indexOf('apenas para') > 0) {
+          if (str.contains('privado')
+            || str.contains('funcionários')
+            || str.contains('moradores')
+            || str.contains('sócios')
+            || str.contains('restrito para')
+            || str.contains('exclusivo para')
+            || str.contains('uso exclusivo')
+            || str.contains('dentro do condominio')
+            || str.contains('apenas para')) {
             tmp.isPublic = false;
             _importResults.tagsDetected++;
-          } else if (str.indexOf('publico') > 0
-            || str.indexOf('público') > 0
-            || str.indexOf('na rua') > 0
-            || str.indexOf('na calçada') > 0
-            || str.indexOf('canteiro central') > 0
-            || str.indexOf('ao lado do quiosque') > 0
-            || str.indexOf('calçada') > 0) {
+          } else if (str.contains('publico')
+            || str.contains('público')
+            || str.contains('na rua')
+            || str.contains('na calçada')
+            || str.contains('canteiro central')
+            || str.contains('ao lado do quiosque')
+            || str.contains('calçada')) {
             tmp.isPublic = true;
             _importResults.tagsDetected++;
           }
 
           // Tipo de bicicletário
           // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-          if (str.indexOf('u invertido') > 0
-            || str.indexOf('us invertidos') > 0
-            || str.indexOf('sheffield') > 0
-            || str.indexOf('em r') > 0
-            || str.indexOf('tipo r') > 0
-            || str.indexOf('suporte em r') > 0
-            || str.indexOf('suporte r') > 0
-            || str.indexOf('em u') > 0
-            || str.indexOf('tipo u') > 0
-            || str.indexOf('modelo u') > 0
-            || str.indexOf('suporte em u') > 0) {
+          if (str.contains('u invertido')
+            || str.contains('us invertidos')
+            || str.contains('sheffield')
+            || str.contains('em r')
+            || str.contains('tipo r')
+            || str.contains('suporte em r')
+            || str.contains('suporte r')
+            || str.contains('em u')
+            || str.contains('tipo u')
+            || str.contains('modelo u')
+            || str.contains('suporte em u')) {
             tmp.structureType = 'uinvertido';
             _importResults.tagsDetected++;
-          } else if (str.indexOf('açougue') > 0
-            || str.indexOf('de pendurar') > 0
-            || str.indexOf('suspenso') > 0) {
+          } else if (str.contains('açougue')
+            || str.contains('de pendurar')
+            || str.contains('suspenso')) {
             tmp.structureType = 'suspenso';
             _importResults.tagsDetected++;
-          } else if (str.indexOf('entorta-roda') > 0
-            || str.indexOf('entorta roda') > 0
-            || str.indexOf('entorta aro') > 0
-            || str.indexOf('entorta-aro') > 0
-            || str.indexOf('entorta raio') > 0
-            || str.indexOf('grelha') > 0
-            || str.indexOf('holandês') > 0
-            || str.indexOf('holandes') > 0
-            || str.indexOf('amsterdam') > 0
-            || str.indexOf('amsterdã') > 0
-            || str.indexOf('amsterda') > 0
-            || str.indexOf('jujubinha') > 0
-            || str.indexOf('trincheira') > 0
-            || str.indexOf('de roda') > 0) {
+          } else if (str.contains('entorta-roda')
+            || str.contains('entorta roda')
+            || str.contains('entorta aro')
+            || str.contains('entorta-aro')
+            || str.contains('entorta raio')
+            || str.contains('grelha')
+            || str.contains('holandês')
+            || str.contains('holandes')
+            || str.contains('amsterdam')
+            || str.contains('amsterdã')
+            || str.contains('amsterda')
+            || str.contains('jujubinha')
+            || str.contains('trincheira')
+            || str.contains('de roda')) {
             tmp.structureType = 'deroda';
             _importResults.tagsDetected++;
-          } else if (str.indexOf('paliteiro') > 0
-            || str.indexOf('tipo pescocinho') > 0
-            || str.indexOf('suporte pente') > 0
-            || str.indexOf('suporte rack') > 0
-            || str.indexOf('bollard') > 0
-            || str.indexOf('tipo pente') > 0) {
+          } else if (str.contains('paliteiro')
+            || str.contains('tipo pescocinho')
+            || str.contains('suporte pente')
+            || str.contains('suporte rack')
+            || str.contains('bollard')
+            || str.contains('tipo pente')) {
             tmp.structureType = 'other';
             _importResults.tagsDetected++;
           }
@@ -1455,7 +1455,7 @@
                       case 'name':
                         tmp.text = c.innerHTML;
 
-                        if (tmp.text.toLowerCase().indexOf('bikerio') > 0) {
+                        if (tmp.text.toLowerCase().contains('bikerio')) {
                           // @todo: break, don't process this guy
                           //break;
                           console.log('BIKERIO!!!', tmp.text);
