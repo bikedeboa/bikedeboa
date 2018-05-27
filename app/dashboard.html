@@ -651,9 +651,9 @@
         function endpointNameColFormatter(value) {
           let ret = value;
           if (value) {
-            if (value.contains('bdb-api')) {
+            if (value.includes('bdb-api')) {
               ret = ret.slice(28);
-            } else if (value.contains('localhost')) {
+            } else if (value.includes('localhost')) {
               ret = ret.slice(21);
             }
           }
@@ -948,7 +948,7 @@
           const str = tmp.description.toLowerCase();
 
           const fusionTableShit = '![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
-          if (tmp.description.contains(fusionTableShit)) {
+          if (tmp.description.includes(fusionTableShit)) {
             tmp.description = tmp.description.split(fusionTableShit)[1];
           }
 
@@ -969,115 +969,115 @@
           }
 
           // Coberto?
-          if (str.contains('descoberto')
-            || str.contains('descoberta')
-            || str.contains('sem cobertura')
-            || str.contains('sem coberta')
-            || str.contains('não coberto')
-            || str.contains('não coberta')
-            || str.contains('nao coberta')
-            || str.contains('nao é coberta')
-            || str.contains('nao e coberta')
-            || str.contains('não é coberto')
-            || str.contains('nao e coberto')
-            || str.contains('nao é coberto')
-            || str.contains('ar livre')
-            || str.contains('com abrigo')
-            || str.contains('sob o sol')
-            || str.contains('local aberto')
-            || str.contains('céu aberto')
-            || str.contains('ceu aberto')) {
+          if (str.includes('descoberto')
+            || str.includes('descoberta')
+            || str.includes('sem cobertura')
+            || str.includes('sem coberta')
+            || str.includes('não coberto')
+            || str.includes('não coberta')
+            || str.includes('nao coberta')
+            || str.includes('nao é coberta')
+            || str.includes('nao e coberta')
+            || str.includes('não é coberto')
+            || str.includes('nao e coberto')
+            || str.includes('nao é coberto')
+            || str.includes('ar livre')
+            || str.includes('com abrigo')
+            || str.includes('sob o sol')
+            || str.includes('local aberto')
+            || str.includes('céu aberto')
+            || str.includes('ceu aberto')) {
             tmp.isCovered = false;
             _importResults.tagsDetected++;
-          } else if (str.contains('coberto')
-            || str.contains('coberta')
-            || str.contains('subsolo')
-            || str.contains('subterrânea')
-            || str.contains('subterranea')
-            || str.contains('subterraneo')
-            || str.contains('subterrâneo')) {
+          } else if (str.includes('coberto')
+            || str.includes('coberta')
+            || str.includes('subsolo')
+            || str.includes('subterrânea')
+            || str.includes('subterranea')
+            || str.includes('subterraneo')
+            || str.includes('subterrâneo')) {
             tmp.isCovered = true;
             _importResults.tagsDetected++;
           }
 
           // Gratuito?
-          if (str.contains('pago')
-            || str.contains('custa')) {
+          if (str.includes('pago')
+            || str.includes('custa')) {
             tmp.isPaid = true;
             _importResults.tagsDetected++;
             // tmp.isPublic = false; // será?
-          } else if (str.contains('gratuito')
-            || str.contains('de graça')) {
+          } else if (str.includes('gratuito')
+            || str.includes('de graça')) {
             tmp.isPaid = false;
             _importResults.tagsDetected++; 
           }
           
 
           // Público?
-          if (str.contains('privado')
-            || str.contains('funcionários')
-            || str.contains('moradores')
-            || str.contains('sócios')
-            || str.contains('restrito para')
-            || str.contains('exclusivo para')
-            || str.contains('uso exclusivo')
-            || str.contains('dentro do condominio')
-            || str.contains('apenas para')) {
+          if (str.includes('privado')
+            || str.includes('funcionários')
+            || str.includes('moradores')
+            || str.includes('sócios')
+            || str.includes('restrito para')
+            || str.includes('exclusivo para')
+            || str.includes('uso exclusivo')
+            || str.includes('dentro do condominio')
+            || str.includes('apenas para')) {
             tmp.isPublic = false;
             _importResults.tagsDetected++;
-          } else if (str.contains('publico')
-            || str.contains('público')
-            || str.contains('na rua')
-            || str.contains('na calçada')
-            || str.contains('canteiro central')
-            || str.contains('ao lado do quiosque')
-            || str.contains('calçada')) {
+          } else if (str.includes('publico')
+            || str.includes('público')
+            || str.includes('na rua')
+            || str.includes('na calçada')
+            || str.includes('canteiro central')
+            || str.includes('ao lado do quiosque')
+            || str.includes('calçada')) {
             tmp.isPublic = true;
             _importResults.tagsDetected++;
           }
 
           // Tipo de bicicletário
           // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-          if (str.contains('u invertido')
-            || str.contains('us invertidos')
-            || str.contains('sheffield')
-            || str.contains('em r')
-            || str.contains('tipo r')
-            || str.contains('suporte em r')
-            || str.contains('suporte r')
-            || str.contains('em u')
-            || str.contains('tipo u')
-            || str.contains('modelo u')
-            || str.contains('suporte em u')) {
+          if (str.includes('u invertido')
+            || str.includes('us invertidos')
+            || str.includes('sheffield')
+            || str.includes('em r')
+            || str.includes('tipo r')
+            || str.includes('suporte em r')
+            || str.includes('suporte r')
+            || str.includes('em u')
+            || str.includes('tipo u')
+            || str.includes('modelo u')
+            || str.includes('suporte em u')) {
             tmp.structureType = 'uinvertido';
             _importResults.tagsDetected++;
-          } else if (str.contains('açougue')
-            || str.contains('de pendurar')
-            || str.contains('suspenso')) {
+          } else if (str.includes('açougue')
+            || str.includes('de pendurar')
+            || str.includes('suspenso')) {
             tmp.structureType = 'suspenso';
             _importResults.tagsDetected++;
-          } else if (str.contains('entorta-roda')
-            || str.contains('entorta roda')
-            || str.contains('entorta aro')
-            || str.contains('entorta-aro')
-            || str.contains('entorta raio')
-            || str.contains('grelha')
-            || str.contains('holandês')
-            || str.contains('holandes')
-            || str.contains('amsterdam')
-            || str.contains('amsterdã')
-            || str.contains('amsterda')
-            || str.contains('jujubinha')
-            || str.contains('trincheira')
-            || str.contains('de roda')) {
+          } else if (str.includes('entorta-roda')
+            || str.includes('entorta roda')
+            || str.includes('entorta aro')
+            || str.includes('entorta-aro')
+            || str.includes('entorta raio')
+            || str.includes('grelha')
+            || str.includes('holandês')
+            || str.includes('holandes')
+            || str.includes('amsterdam')
+            || str.includes('amsterdã')
+            || str.includes('amsterda')
+            || str.includes('jujubinha')
+            || str.includes('trincheira')
+            || str.includes('de roda')) {
             tmp.structureType = 'deroda';
             _importResults.tagsDetected++;
-          } else if (str.contains('paliteiro')
-            || str.contains('tipo pescocinho')
-            || str.contains('suporte pente')
-            || str.contains('suporte rack')
-            || str.contains('bollard')
-            || str.contains('tipo pente')) {
+          } else if (str.includes('paliteiro')
+            || str.includes('tipo pescocinho')
+            || str.includes('suporte pente')
+            || str.includes('suporte rack')
+            || str.includes('bollard')
+            || str.includes('tipo pente')) {
             tmp.structureType = 'other';
             _importResults.tagsDetected++;
           }
@@ -1112,6 +1112,10 @@
               <div class="big-numbers--col">
                 <div class="big-numbers--number">${_importResults.tagsDetected}</div>
                 <div class="big-numbers--label">tags preenchidas automaticamente</div>
+              </div>
+              <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.unknownTags}</div>
+                <div class="big-numbers--label">tags desconhecidas</div>
               </div>
               <div class="big-numbers--col">
                 <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
@@ -1416,6 +1420,7 @@
             window._importResults = {
               places: [],
               tagsDetected: 0,
+              unknownTags: 0,
               brokenUrls: 0,
               totalUrls: 0,
               log: ''
@@ -1455,7 +1460,7 @@
                       case 'name':
                         tmp.text = c.innerHTML;
 
-                        if (tmp.text.toLowerCase().contains('bikerio')) {
+                        if (tmp.text.toLowerCase().includes('bikerio')) {
                           // @todo: break, don't process this guy
                           //break;
                           console.log('BIKERIO!!!', tmp.text);
@@ -1511,26 +1516,34 @@
                             case 'Descrição':
                             case 'descrição':
                               // Fortaleza 
-                              tmp.description = value;
-                              processDescription(tmp);
+                              if (value) {
+                                tmp.description = value;
+                                processDescription(tmp);
+                              }
                               break;
 
                             //////////////////////////////////////////////////
                             // Transporte Ativo Fusion Maps specific field //
                             //////////////////////////////////////////////////
                             case 'BC_slots':
-                              tmp.slots = value;
-                              _importResults.tagsDetected++;
-                              break;
-                            case 'BC_covered':
-                              if (tmp.isCovered === 'yes') {
-                                tmp.isCovered = true;
-                                _importResults.tagsDetected++;
-                              } else if (tmp.isCovered === 'no') {
-                                tmp.isCovered = false;
+                              if (value) {
+                                tmp.slots = value;
                                 _importResults.tagsDetected++;
                               }
                               break;
+                            case 'BC_covered':
+                              if (value) {
+                                if (value === 'yes') {
+                                  tmp.isCovered = true;
+                                  _importResults.tagsDetected++;
+                                } else if (value === 'no') {
+                                  tmp.isCovered = false;
+                                  _importResults.tagsDetected++;
+                                } else {
+                                  console.error(`Unknown value for BC_paid: ${value}`);
+                                  _importResults.unknownTags++;
+                                }
+                              }
                               break;
                             case 'BC_type':
                               // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
@@ -1564,14 +1577,25 @@
                                   _importResults.tagsDetected++;
                                   break;
                                 default:
-                                  console.warn('tipo de bicicletario nao identificado:', value);
+                                  console.error(`Unknown value for BC_type: ${value}`);
+                                  _importResults.unknownTags++;
                                   // _importResults.log += `Tipo de bicicletário não identificado: ${value}` + '<br>';
                                   break;
                               }
                               break;
                             case 'BC_paid':
-                              tmp.isPaid = value;
-                              _importResults.tagsDetected++;
+                              if (value) {
+                                if (value === 'yes') {
+                                  tmp.isPaid = true;  
+                                  _importResults.tagsDetected++;
+                                } else if (value === 'no') {
+                                  tmp.isPaid = false;
+                                  _importResults.tagsDetected++;
+                                } else {
+                                  console.error(`Unknown value for BC_paid: ${value}`);
+                                  _importResults.unknownTags++;
+                                }
+                              }
                               break;
 
                             ///////////// 
@@ -1580,6 +1604,8 @@
                             default:
                               // Any other tag that we haven't identified yet
                               tmp[name] = value;
+                              // console.warn(`Unknown tag found: ${name}=${value}`);
+                              // _importResults.unknownTags++;
                           }
                         });
                       case 'Point':
