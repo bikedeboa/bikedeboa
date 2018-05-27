@@ -50,8 +50,6 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.5.0/sweetalert2.min.css"
         />
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.19.2/sweetalert2.min.css"
-        />
         <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.gallery.min.css"/> -->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.min.css"
         />
@@ -498,6 +496,8 @@
                 <label for="kmlFileImport_datasourceid">Fonte dos dados:</label>
                 <select id="kmlFileImport_datasourceid"> </select>
               </p>
+
+              <button id="newDataSourceBtn">Criar nova fonte</button>
               
               <button id="kmlFileImport" class="btn btn-action green" disabled>
                 <i class="fa fa-cloud-upload"></i> Importar 
@@ -1323,7 +1323,7 @@
                 data.forEach(d => {
                   $('#kmlFileImport_datasourceid').append($('<option>', {
                     value: d.id,
-                    text: d.name
+                    text: `${d.name} | ${d.url}`
                   }));
                 })
               });
@@ -1336,6 +1336,52 @@
             document.location.reload();
           });
 
+          $('#newDataSourceBtn').on('click', () => {
+            swal({
+              title: 'Nome',
+              input: 'text',
+              showCancelButton: true,
+              confirmButtonText: 'Próximo >',
+            }).then((result1) => {
+              if (result1) {
+                swal({
+                  title: 'URL',
+                  input: 'text',
+                  showCancelButton: true,
+                  confirmButtonText: 'Criar',
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !swal.isLoading(),
+                  preConfirm: (inputUrl) => { 
+                    return BDB.Database.customAPICall(
+                      'post',
+                      'datasource',
+                      { name: result1, url: inputUrl }
+                    ).then(data => {
+                      if (data) {
+                        return data;
+                      }
+                    }).catch(error => {
+                      swal.showValidationError(
+                        `Request failed: ${error}`
+                      )
+                    })
+                  }
+                }).then((result2) => {
+                  if (result2) {
+                    swal({
+                      title: 'Novo Data Source criado com sucesso',
+                      text: 'Recarregue a página para usá-lo.',
+                      type: 'success',
+                    });
+                  }
+                })
+              }
+            });
+
+
+
+          });
+          
           $('#kmlFileImport').on('click', () => {
             if (_importResults.places) {
               swal({
