@@ -498,6 +498,11 @@
               </p>
 
               <button id="newDataSourceBtn">Criar nova fonte</button>
+
+              <div>
+                <input type="checkbox" id="dontGeolocateCheckbox">
+                <label for="dontGeolocateCheckbox">Não preencher endereço automaticamente (bem mais rápido)</label>
+              </div>
               
               <button id="kmlFileImport" class="btn btn-action green" disabled>
                 <i class="fa fa-cloud-upload"></i> Importar 
@@ -1077,7 +1082,8 @@
             || str.includes('bollard')) {
             tmp.structureType = 'other';
             _importResults.tagsDetected++;
-          } else if (str.includes('paliteiro')) {
+          } else if (str.includes('paliteiro')
+            || str.includes('sulamerica')) {
             tmp.structureType = 'paliteiro';
             _importResults.tagsDetected++;
           } else if (str.includes('pescocinho')) {
@@ -1086,9 +1092,6 @@
           } else if (str.includes('suporte pente')
             || str.includes('tipo pente')) {
             tmp.structureType = 'pente';
-            _importResults.tagsDetected++;
-          } else if (str.includes('sulamerica')) {
-            tmp.structureType = 'sulamerica';
             _importResults.tagsDetected++;
           } else if (str.includes('tipo m')) {
             tmp.structureType = 'm';
@@ -1146,6 +1149,7 @@
         function uploadImportedPlacesToBackend() {
           return new Promise((resolve, reject) => {
             const max = _importResults.places.length;
+            const dontGeolocate = document.getElementById('dontGeolocateCheckbox').checked;
             // const max = 5;
 
             // 
@@ -1163,71 +1167,75 @@
                 updateSpinnerProgress(i / max);
                 $('#globalSpinnerLabel').text(`${i}/${max}`);
                 console.warn(`${i} of ${max}`);
- 
-                // Retrieves full addresses
-                BDB.Map.reverseGeocode(m.lat, m.lng)
-                  .then((addressObj) => {
-                    console.debug(m.lat, m.lng, m.id);
-                    console.debug(addressObj);
 
-                    m.address = addressObj.address;
-                    m.city = addressObj.city;
-                    m.state = addressObj.state;
-                    m.country = addressObj.country;
-
-                    function next() {
-                      // Sends it over to the backend
-                      BDB.Database.customAPICall('POST', 'local', m)
-                        .then(data => {
-                          m.id = data.id;
-                          importPlace_recursive(i + 1);
-                        })
-                        .catch(data => {
-                          console.error('Error when creating local');
-                          console.error(m);
-                          reject(data);
-                        })
-                    }
-
-                    // If it has a photo and it's a valid link (validated when loading the KML file),
-                    //   resize it just like a normal user-submitted photo and get it's blob to send
-                    //   to the backend
-                    if (m.photo) {
-                      resizeImage(m.photo)
-                        .then(resizedBlob => {
-                          m.photo = resizedBlob;
-                          next();
-                        })
-                        .catch(() => {
-                          console.warn('Error when retrieving image', m.photo);
-                          console.warn('Continuing...');
-                          next();
-                          // reject(i);
-                        })
-                    } else {
-                      next();
-                    }
-
-                  })
-                  .catch(status => {
-                    switch (status) {
-                      case 'OVER_QUERY_LIMIT':
-                        // Google Maps quota limits the frequency of calls of the service. We just keep trying until it works.
-                        setTimeout(() => {
-                          importPlace_recursive(i);
-                        }, 2000);
-                        break;
-                      case 'ZERO_RESULTS':
-                        // There's probably something very wrong with the data, since Google Geocoding ALWAYS finds something
-                        console.error(`ERROR on reverse geocoding: no results for ${m.lat}, ${m.lng}`);
-                        reject()
-                        break;
-                      default:
-                        console.error(`ERROR on reverse geocoding`);
-                        reject()
-                        break;
-                    }
-                  });
+                new Promise( (resolve, reject) => {
+                  // Retrieves full addresses
+                  if (dontGeolocate) {
+                    resolve();
+                  } else {
+                    BDB.Map.reverseGeocode(m.lat, m.lng)
+                      .then((addressObj) => {
+                        console.debug(m.lat, m.lng, m.id);
+                        console.debug(addressObj);
+  
+                        m.address = addressObj.address;
+                        m.city = addressObj.city;
+                        m.state = addressObj.state;
+                        m.country = addressObj.country;
+  
+                        resolve();
+                      }).catch(status => {
+                        switch (status) {
+                          case 'OVER_QUERY_LIMIT':
+                            // Google Maps quota limits the frequency of calls of the service. We just keep trying until it works.
+                            setTimeout(() => {
+                              importPlace_recursive(i);
+                            }, 2000);
+                            break;
+                          case 'ZERO_RESULTS':
+                            // There's probably something very wrong with the data, since Google Geocoding ALWAYS finds something
+                            console.error(`ERROR on reverse geocoding: no results for ${m.lat}, ${m.lng}`);
+                            reject()
+                            break;
+                          default:
+                            console.error(`ERROR on reverse geocoding`);
+                            reject()
+                            break;
+                        }
+                      });
+                  }
+                }).then( new Promise( (resolve, reject) => {
+                  // If it has a photo and it's a valid link (validated when loading the KML file),
+                  //   resize it just like a normal user-submitted photo and get it's blob to send
+                  //   to the backend
+                  if (m.photo) {
+                    resizeImage(m.photo)
+                      .then(resizedBlob => {
+                        m.photo = resizedBlob;
+                        resolve();
+                      })
+                      .catch(() => {
+                        console.warn('Error when retrieving image', m.photo);
+                        console.warn('Continuing...');
+                        resolve();
+                        // reject(i);
+                      })
+                  } else {
+                    resolve();
+                  }
+                })).then( new Promise( (resolve, reject) => {
+                  // Sends it over to the backend
+                  BDB.Database.customAPICall('POST', 'local', m)
+                    .then(data => {
+                      m.id = data.id;
+                      importPlace_recursive(i + 1);
+                    })
+                    .catch(data => {
+                      console.error('Error when creating local');
+                      console.error(m);
+                      reject(data);
+                    })
+                }));
               } else {
                 resolve();
               }
@@ -1236,7 +1244,7 @@
             $(document).trigger('LoadMap');
             setTimeout(
               () => {
-                importPlace_recursive(0);
+                importPlace_recursive();
               }, 1000
             );
           });
@@ -1356,7 +1364,7 @@
               title: 'Nome',
               input: 'text',
               showCancelButton: true,
-              confirmButtonText: 'Próximo >',
+              confirmButtonText: 'Próximo ›',
             }).then((result1) => {
               if (result1) {
                 swal({
@@ -1417,7 +1425,7 @@
                       hideSpinner();
                       swal({
                         title: 'Importação feita com sucesso',
-                        text: `<b>${_importResults.places.length}</b> bicicletários criados.`,
+                        html: `<b>${_importResults.places.length}</b> bicicletários criados.`,
                         type: 'success',
                       });
                     })
@@ -1678,9 +1686,6 @@
                                     _importResults.tagsDetected++;
                                     break;
                                   case 'sulamerica':
-                                    newValue = 'sulamerica';
-                                    _importResults.tagsDetected++;
-                                    break;
                                   case 'paliteiro':
                                     newValue = 'paliteiro';
                                     _importResults.tagsDetected++;
