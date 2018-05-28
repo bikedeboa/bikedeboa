@@ -1,19 +1,19 @@
 var BDB = BDB || {};
 
 BDB.getMarkersFromLocalStorage = () => {
-  const tmpPlaces = JSON.parse(localStorage.getItem('markers'));
+  const tmp = JSON.parse(localStorage.getItem('markers'));
 
-  for (let i = 0; i < tmpPlaces && tmpPlaces.length; i++) {
-    tmpPlaces[i].gmarker = null;
+  for (let i = 0; i < tmp && tmp.length; i++) {
+    tmp[i].gmarker = null;
   }
 
-  return tmpPlaces;
+  return tmp;
 };
 
 BDB.saveMarkersToLocalStorage = markersToSave => {
   let tmp = markersToSave;
 
-  for (let i = 0; i < tmp.length; i++) {
+  for (let i = 0; i < tmp && tmp.length; i++) {
     tmp[i].gmarker = null;
   }
 

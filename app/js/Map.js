@@ -336,10 +336,10 @@ BDB.Map = (function () {
   };
   let setMarkersIcon = function(scale) {
     if (places) {
-      let m, p;
+      let place;
       for (let i = 0; i < places.length; i++) {
-        p = places[i];
-        p.gmarker.setIcon(scale === 'mini' ? p.iconMini : p.icon);
+        place = places[i];
+        place.gmarker.setIcon(scale === 'mini' ? place.iconMini : place.icon);
       }
     }
   };
