@@ -18,6 +18,7 @@ BDB.Map = (function () {
   let directionsService;
   let placesService;
   let infoWindow;
+  let gmarkers;
 
   // to do:  move this to configuration
   let mapBoundsCoords = { 
@@ -87,7 +88,6 @@ BDB.Map = (function () {
  
     setInfoBox();
     mapCenterChanged();
-    mapZoomChanged();
     
     map.addListener('center_changed', mapCenterChanged);
   
@@ -335,12 +335,11 @@ BDB.Map = (function () {
     }
   };
   let setMarkersIcon = function(scale) {
-    const tempMarkers = BDB.Map.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      let m;
-      for (let i = 0; i < tempMarkers.length; i++) {
-        m = places[i];
-        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
+    if (places) {
+      let m, p;
+      for (let i = 0; i < places.length; i++) {
+        p = places[i];
+        p.gmarker.setIcon(scale === 'mini' ? p.iconMini : p.icon);
       }
     }
   };
@@ -502,28 +501,25 @@ BDB.Map = (function () {
     },
     // Sets the map on all markers in the array.
     setMapOnAll: function(map) {
-      let tempMarkers = BDB.Map.getMarkers();
-      if (tempMarkers && Array.isArray(tempMarkers)) {
-        for (let i = 0; i < tempMarkers.length; i++) {
-          tempMarkers[i].setMap(map);
+      if (places) {
+        for (let i = 0; i < places.length; i++) {
+          places[i].gmarker.setMap(map);
         }
       }
     },
     hideMarkers: function() {
       // Removes the markers from the map, but keeps them in the array.
-      let tempMarkers = BDB.Map.getMarkers();
-      if (tempMarkers && Array.isArray(tempMarkers)) {
-        for (let i = 0; i < tempMarkers.length; i++) {
-          tempMarkers[i].setOptions({ clickable: false, opacity: 0.3 });
+      if (places) {
+        for (let i = 0; i < places.length; i++) {
+          places[i].gmarker.setOptions({ clickable: false, opacity: 0.3 });
         }
       }
     },
     showMarkers: function() {
       // Shows any markers currently in the array.
-      let tempMarkers = BDB.Map.getMarkers();
-      if (tempMarkers && Array.isArray(tempMarkers)) {
-        for (let i = 0; i < tempMarkers.length; i++) {
-          tempMarkers[i].setOptions({ clickable: true, opacity: 1 });
+      if (places) {
+        for (let i = 0; i < places.length; i++) {
+          places[i].gmarker.setOptions({ clickable: true, opacity: 1 });
         }
       }
     },
@@ -544,6 +540,11 @@ BDB.Map = (function () {
       }
     },
     getListOfPlaces: function (orderBy, maxPlaces = 50) {
+      if (!places) {
+        console.warn('ERROR in getListOfPlaces: places is null');
+        return;
+      }
+
       let markersToShow;
       switch (orderBy) {
       case 'nearest': { 
@@ -599,6 +600,11 @@ BDB.Map = (function () {
       return markersToShow;
     },
     fitToNearestPlace: function(forceLongDistance = false) {
+      if (!places) {
+        console.warn('ERROR in fitToNearestPlace: places is null');
+        return;
+      }
+
       const currentPos = BDB.Geolocation.getCurrentPosition();
       if (!currentPos) {
         console.error('fitToNearestPlace(): dont have current pos');
@@ -692,6 +698,8 @@ BDB.Map = (function () {
       });
     },
     updateMarkers: function () {
+      console.log('updateMarkers');
+      
       this.clearMarkers();
 
       // Places from Database
@@ -701,7 +709,7 @@ BDB.Map = (function () {
         //   return a.average - b.average;
         // });
 
-        let gmarkers = [];
+        gmarkers = [];
 
         for (let i = 0; i < places.length; i++) {
           const m = places[i];
@@ -935,7 +943,7 @@ BDB.Map = (function () {
             },
           ];
           let clustererOptions = {
-            maxZoom: 10,
+            maxZoom: 10, 
             minimumClusterSize: 1,
             styles: clustererStyles,
             gridSize: 60
