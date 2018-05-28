@@ -1522,13 +1522,14 @@
                     'isPaid': null
                   };
 
-                  let regex, result;
+                  let regex, result, originalTitle;
 
                   const children = [...p.children];
                   children.forEach(c => {
                     switch (c.tagName) {
                       case 'name':
-                        tmp.text = c.innerHTML;
+                        originalTitle = extractFromCDATA(c.innerHTML);
+                        tmp.text = originalTitle;
 
                         if (tmp.text.toLowerCase().includes('bikerio')) {
                           // @todo: break, don't process this guy
@@ -1546,8 +1547,6 @@
                           tmp.taCode = result[1];
                           tmp.text = result[2];
                         }
-
-                        tmp.text = extractFromCDATA(tmp.text);
                       case 'description':
                         tmp.description = c.innerHTML;
                         processDescription(tmp);
@@ -1784,6 +1783,15 @@
                     }
 
                   });
+
+                  // Remove title string from the description string
+                  if (originalTitle && tmp.description) {
+                    tmp.description = tmp.description.replace(originalTitle, '');
+
+                    // Special Transporte Ativo cases
+                    tmp.description = tmp.description.replace('Nome:', '');
+                    tmp.description = tmp.description.replace('Descrição:', '');
+                  }
 
                   if (tmp.lat && tmp.lng) {
                     data.push(tmp);
