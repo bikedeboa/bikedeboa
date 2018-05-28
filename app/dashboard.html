@@ -667,10 +667,10 @@
 
         function updateLocalsTable(force = false) {
           if (force) {
-            markers = null;
+            places = null;
           }
 
-          // if (markers) {
+          // if (places) {
           //   return;
           // }
 
@@ -682,8 +682,8 @@
           Database.getPlaces( () => {
             $('#locals').removeClass('loading');
 
-            $('#locals h2').html(`<span class="text-muted">${markers.length} resultados</span>`);
-            // $('[aria-controls="locals"]').append(`<span class="text-muted"> (${markers.length})</span>`);
+            $('#locals h2').html(`<span class="text-muted">${places.length} resultados</span>`);
+            // $('[aria-controls="locals"]').append(`<span class="text-muted"> (${places.length})</span>`);
 
             let structureTypes = [];
             for(let i=0; i < STRUCTURE_NAMES.length; i++) {
@@ -691,7 +691,7 @@
             }
 
             // Massage data for BootstrapTable
-            markers.forEach( m => {
+            places.forEach( m => {
               if (m.isPublic === true) {
                 m.isPublic = 1;
               } else if (m.isPublic === false) {
@@ -730,7 +730,7 @@
                 { field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin },
                 { field: 'operate', title: 'Ações', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin }
               ],
-              data: markers,
+              data: places,
               sortName: 'id', sortOrder: 'desc',
               singleSelect: !!BDB.User.isAdmin ? true : false
             });

@@ -1,11 +1,11 @@
 var BDB = BDB || {};
 
-BDB.Geolocation = (function(){
+BDB.Geolocation = (function() {
   let positionWatcher;
   let geocoder;
   let currentPosition = false; 
 
-  let persistLocation = function(position){
+  let persistLocation = function(position) {
     currentPosition = position;
     let newstring = JSON.stringify(position,[
       'latitude',
@@ -19,10 +19,10 @@ BDB.Geolocation = (function(){
     localStorage.setItem("BDB.LatestPosition", newstring);
   }; 
   
-  let retrieveLocation = function(){
+  let retrieveLocation = function() {
     let stringPos = localStorage.getItem("BDB.LatestPosition");
     let pos = JSON.parse(stringPos);
-    if (pos && typeof pos === 'object'){
+    if (pos && typeof pos === 'object') {
       currentPosition = pos;
       return currentPosition;
     } else {
@@ -30,7 +30,7 @@ BDB.Geolocation = (function(){
     }
   };
     
-  let geolocate = function(param = {}){
+  let geolocate = function(param = {}) {
     // set default options to geolocate
     let defaults = {
       enableHighAccuracy: true,
@@ -46,8 +46,8 @@ BDB.Geolocation = (function(){
       response : {}
     }
 
-    let Location = new Promise(function(resolve,reject){
-      if (positionWatcher){
+    return new Promise(function(resolve,reject) {
+      if (positionWatcher) {
         result.success = true;
         result.center = true;
         result.response = currentPosition;
@@ -76,17 +76,14 @@ BDB.Geolocation = (function(){
           reject(error);
         }
       }
-    });
-
-    Location.then(geolocateDone, geolocateDone);
-
-    return Location;
+    }).then(geolocateDone)
+      .catch(geolocateDone);
   };
-  let geolocateDone = function(response){
+  let geolocateDone = function(response) {
     let event = new CustomEvent('geolocation:done', {detail: response});
     document.dispatchEvent(event);
   };
-  let geoWatch = function(options){
+  let geoWatch = function(options) {
     positionWatcher = navigator.geolocation.watchPosition(position => {
       let result = {
         success: true,
@@ -104,32 +101,32 @@ BDB.Geolocation = (function(){
       geolocateDone(result);
     }, null, options);
   };
-  let clearGeoWatch = function(){
+  let clearGeoWatch = function() {
     if (positionWatcher) {
       navigator.geolocation.clearWatch(positionWatcher);
     }
   }; 
   return {
-    getLastestLocation: function(){
+    getLastestLocation: function() {
       return retrieveLocation();
     },
-    getLocation : function(options = false){
+    getLocation : function(options = false) {
       return geolocate(options);
     },
-    forceLocation : function(coords){
+    forceLocation : function(coords) {
       persistLocation(coords);
     },
-    checkPermission : function(){
+    checkPermission : function() {
       if (navigator.permissions) {
         return navigator.permissions.query({'name': 'geolocation'});
       } else {
-        let fallback = new Promise(function(resolve,reject){
+        let fallback = new Promise(function(resolve,reject) {
           reject(false);
         });
         return fallback;
       }
     },
-    clearWatch : function(){
+    clearWatch : function() {
       clearGeoWatch();
     },
     getCurrentPosition: function() {

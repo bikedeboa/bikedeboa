@@ -91,7 +91,7 @@ const MAX_NAME_SUGGESTIONS = 5;
  
 let map;
 let geocoder;
-let markers;
+let places;
 let tags;
 let idToTag = {};
 let tagToId = {};
