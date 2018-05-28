@@ -284,7 +284,7 @@ $(() => {
  
     // Init click callbacks
     // $('#checkinBtn').on('click', sendCheckinBtn);
-    $('.rating-input-container .full-star, .openReviewPanelBtn').off('click').on('click', e => {
+    $('#placeDetailsModal .rating-input-container .full-star, #placeDetailsModal .openReviewPanelBtn').off('click').on('click', e => {
       if (!BDB.User.isLoggedIn) {
         openLoginDialog(true);
 
@@ -295,6 +295,9 @@ $(() => {
         openReviewModal($(e.target).data('value'));
       }
     });
+    
+    // initRatingInput({containerSelector: '#placeDetailsModal'});
+    
     $('.shareBtn').off('click').on('click', e => {
       ga('send', 'event', 'Local', 'share', ''+openedMarker.id);
       
@@ -829,13 +832,16 @@ $(() => {
                   </fieldset>
 
                   <hr>
-              </section>`,
+              </section>`, 
               confirmButtonText: 'Avaliar outra hora',
               showCloseButton: false, 
               onOpen: () => { 
-                $('.post-create-modal .rating-input-container .full-star').on('click', e => {
-                  openedMarker = newMarker;
-                  openReviewModal($(e.target).data('value'));
+                initRatingInput({
+                  containerSelector: '.post-create-modal',
+                  onChange: value => {
+                    openedMarker = newMarker;
+                    openReviewModal(value);
+                  }
                 });
               }
             });
@@ -1056,6 +1062,50 @@ $(() => {
     }
   }
 
+  function initRatingInput(options) {
+    let {containerSelector, onChange} = options;
+    onChange = onChange || function(){};
+    
+    $(`${containerSelector} .rating`).on('change', e => {
+      const newValue = $(e.target).val();
+
+      $(`${containerSelector} .rating-input-container`).attr('data-currentval', newValue);
+      $(`${containerSelector} .rating-input-container`).attr('data-color', getColorFromAverage(newValue));
+
+      onChange(newValue);
+    });
+
+    // Hover effects
+    if (!_isMobile) {
+      $(`${containerSelector} .rating-input-container .full-star`).on('mouseover', e => {
+        const value = $(e.currentTarget).data('value');
+        const color = getColorFromAverage(value);
+        let $stars = $(`${containerSelector} .rating-input-container .full-star`);
+
+        // Set color globally
+        $(`${containerSelector} .rating-input-container`).attr('data-color', color);
+        $(`${containerSelector} .rating-input-container`).addClass('onhover');
+
+        // Set colors on stars 
+        for (let i = 0; i < $stars.length; i++) {
+          const s = $stars.eq(i);
+          const svalue = parseInt(s.data('value'));
+          if (svalue <= value) {
+            s.addClass('active');
+          } else {
+            s.removeClass('active');
+          }
+        }
+      }); 
+      $(`${containerSelector} .rating-input-container .full-star`).on('mouseleave', e => {
+        $(`${containerSelector} .rating-input-container`).removeClass('onhover');
+        
+        $(`${containerSelector} .rating-input-container .full-star`).removeClass('active');
+        $(`${containerSelector} .rating-input-container`).attr('data-color', getColorFromAverage(currentPendingRating));
+      });
+    }
+  }
+
   function openReviewModal(prepopedRating) {
     const m = openedMarker;
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
@@ -1083,8 +1133,9 @@ $(() => {
       customClass: 'review-modal',
       html: `
         <section>
-          <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-              <h2>Dê sua nota</h2>
+          <h2>Dê sua nota</h2>
+
+          <div class="review rating-input-container">
               <fieldset class="rating">
                   <input type="radio" id="star5" name="rating" value="5" /> <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
                   <input type="radio" id="star4" name="rating" value="4" /> <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
@@ -1109,6 +1160,14 @@ $(() => {
       showCloseButton: true,
       showLoaderOnConfirm: true,
       onOpen: () => {
+        initRatingInput({
+          containerSelector: '.review-modal',
+          onChange: newValue => {
+            currentPendingRating = newValue;
+            validateReviewForm();
+          }
+        });
+
         if(!_isTouchDevice) {
           $('.review-modal .full-star').tooltip({
             toggle: 'tooltip',
@@ -1116,25 +1175,19 @@ $(() => {
             'delay': {'show': 0, 'hide': 100}
           });
         }
- 
+
         // Prepopulate rating
         if (previousReview) {
           currentPendingRating = previousReview.rating;
           $('.review-modal input[name=rating]').val([previousReview.rating]);
 
           ga('send', 'event', 'Review', 'update - pending', ''+m.id);
-        } else if (prepopedRating) {
+        } else if (prepopedRating) { 
           currentPendingRating = prepopedRating;
           $('.review-modal input[name=rating]').val([prepopedRating]);
         } else {
           ga('send', 'event', 'Review', 'create - pending', ''+m.id);
         }
-
-        // Init callbacks
-        $('.review-modal .rating').off('change').on('change', e => {
-          currentPendingRating = $(e.target).val();
-          validateReviewForm();
-        });
 
         validateReviewForm();
       },

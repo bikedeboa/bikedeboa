@@ -3159,9 +3159,9 @@ body.fullscreen-modal-open {
 
     .tagDisplay {
       background: transparent;
-      border: 1px solid $black;
+      border: 2px solid $lighterGray;
       border-radius: 25px;
-      margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
+      margin: $GRID_SPACE/2 $GRID_SPACE/2 $GRID_SPACE/2 0;
       width: calc(33% - #{$GRID_SPACE}); 
 
       &.active {
@@ -4883,38 +4883,46 @@ a[data-featherlight] {
     //     background-image: url(/img/icon_star_half.svg);
     //     position: absolute;
     // }
-
-    & > input:checked ~ label:before {
-        // color: #eabb2f;
-        background-image: url(/img/icon_star_yellow.svg);
-    }    
 }
 
-.rating-display-container {
-  &[data-color="green"] > .rating > input:checked ~ label:before,
-  &[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-  &[data-color="green"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-      // color: $green;
-      background-image: url(/img/icon_star_green.svg);
-    }
-    
-    &[data-color="yellow"] > .rating > input:checked ~ label:before,
-    &[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-    &[data-color="yellow"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-      // color: $yellow;
-      background-image: url(/img/icon_star_yellow.svg);
+.rating-display-container,
+.rating-input-container {
+  // &:not([data-color="*"]):not(.onhover) > .rating > input:checked ~ .full-star:not(.active):before {
+  //   background-image: url(/img/icon_star_yellow.svg);
+  // }
+
+  &[data-color="green"] .full-star.active:before, /* hover */
+  &[data-color="green"]:not(.onhover) > .rating > input:checked ~ label:before { /* set value */
+    background-image: url(/img/icon_star_green.svg);
+  }
+  
+  &[data-color="yellow"] .full-star.active:before, /* hover */
+  &[data-color="yellow"]:not(.onhover) > .rating > input:checked ~ label:before { /* set value */
+    background-image: url(/img/icon_star_yellow.svg);
   } 
 
-  &[data-color="red"] > .rating > input:checked ~ label:before,
-  &[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover:before,
-  &[data-color="red"] > .rating:not(:checked):not(.disabled) > label:hover ~ label:before {
-      // color: $red;
-      background-image: url(/img/icon_star_red.svg);
+  &[data-color="red"] .full-star.active:before, /* hover */
+  &[data-color="red"]:not(.onhover) > .rating > input:checked ~ label:before { /* set value */
+    background-image: url(/img/icon_star_red.svg);
   }
+
+  .full-star.inactive {
+    background-image: url(/img/icon_star_gray.svg);
+  }
+
 }
 
-.loading-skeleton .rating > label:before {
-    opacity: 0.5;
+.rating-display-container[data-color="green"] .average, 
+.average[data-color="green"] {
+  background-color: $green;
+}
+.rating-display-container[data-color="yellow"] .average,
+.average[data-color="yellow"] {
+  background-color: $yellow;
+}
+.rating-display-container[data-color="red"] .average,
+.average[data-color="red"] {
+  background-color: $red;
 }
 
 [data-color="green"], .color-green {
@@ -4930,42 +4938,8 @@ a[data-featherlight] {
   color: $gray;
 }
 
-.rating-display-container[data-color="green"] .average,
-.average[data-color="green"] {
-  background-color: $green;
-}
-.rating-display-container[data-color="yellow"] .average,
-.average[data-color="yellow"] {
-  background-color: $yellow;
-}
-.rating-display-container[data-color="red"] .average,
-.average[data-color="red"] {
-  background-color: $red;
-}
-
-// Only use hover effects on desktop
-@media screen and (min-width: $MOBILE_MAX_WIDTH) {
-  .rating:not(:checked):not(.disabled) > label:hover:before, /* hover current star */
-  .rating:not(:checked):not(.disabled) > label:hover ~ label:before { /* hover previous stars in list */
-      // color: #eabb2f;
-      
-      background-image: url(/img/icon_star_yellow.svg);
-  }
-
-  .rating:not(.disabled) > input:checked + label:hover:before, /* hover current star when changing rating */
-  .rating:not(.disabled) > input:checked ~ label:hover:before,
-  .rating:not(.disabled) > label:hover:before, /* current start */
-  .rating:not(.disabled) > label:hover ~ label:before, /* ? */
-  .rating:not(.disabled) > label:hover ~ input:checked ~ label:before, /* lighten current selection */
-  .rating:not(.disabled) > input:checked ~ label:hover ~ label:before {
-      // color: #f1d274 !important;
-       
-      // color: #eabb2f !important;
-      // text-shadow: 0 0 10px gold; 
-      // content: "\e006";
-      
-      // background-image: url(/img/icon_star_hover.svg) !important;
-  }
+.loading-skeleton .rating > label:before {
+    opacity: 0.5;
 }
 
 .review-modal .rating > label:before {
