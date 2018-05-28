@@ -50,8 +50,6 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.5.0/sweetalert2.min.css"
         />
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.19.2/sweetalert2.min.css"
-        />
         <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.gallery.min.css"/> -->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.min.css"
         />
@@ -255,6 +253,7 @@
             display: none !important;
           }
 
+          #userBtn,
           .loginBtn {
             display: block !important;
           }
@@ -497,6 +496,13 @@
                 <label for="kmlFileImport_datasourceid">Fonte dos dados:</label>
                 <select id="kmlFileImport_datasourceid"> </select>
               </p>
+
+              <button id="newDataSourceBtn">Criar nova fonte</button>
+
+              <div>
+                <input type="checkbox" id="dontGeolocateCheckbox">
+                <label for="dontGeolocateCheckbox">Não preencher endereço automaticamente (bem mais rápido)</label>
+              </div>
               
               <button id="kmlFileImport" class="btn btn-action green" disabled>
                 <i class="fa fa-cloud-upload"></i> Importar 
@@ -651,9 +657,9 @@
         function endpointNameColFormatter(value) {
           let ret = value;
           if (value) {
-            if (value.indexOf('bdb-api') > 0) {
+            if (value.includes('bdb-api')) {
               ret = ret.slice(28);
-            } else if (value.indexOf('localhost') > 0) {
+            } else if (value.includes('localhost')) {
               ret = ret.slice(21);
             }
           }
@@ -948,7 +954,7 @@
           const str = tmp.description.toLowerCase();
 
           const fusionTableShit = '![CDATA[<div class="googft-info-window" style="font-family:sans-serif">';
-          if (tmp.description.indexOf(fusionTableShit) > 0) {
+          if (tmp.description.includes(fusionTableShit)) {
             tmp.description = tmp.description.split(fusionTableShit)[1];
           }
 
@@ -969,92 +975,129 @@
           }
 
           // Coberto?
-          if (str.indexOf('descoberto') > 0
-            || str.indexOf('descoberta') > 0
-            || str.indexOf('sem cobertura') > 0
-            || str.indexOf('sem coberta') > 0
-            || str.indexOf('não coberto') > 0
-            || str.indexOf('não coberta') > 0
-            || str.indexOf('nao coberta') > 0
-            || str.indexOf('nao é coberta') > 0
-            || str.indexOf('nao e coberta') > 0
-            || str.indexOf('não é coberto') > 0
-            || str.indexOf('nao e coberto') > 0
-            || str.indexOf('nao é coberto') > 0
-            || str.indexOf('ar livre') > 0
-            || str.indexOf('com abrigo') > 0
-            || str.indexOf('sob o sol') > 0
-            || str.indexOf('local aberto') > 0
-            || str.indexOf('céu aberto') > 0
-            || str.indexOf('ceu aberto') > 0) {
+          if (str.includes('descoberto')
+            || str.includes('descoberta')
+            || str.includes('sem cobertura')
+            || str.includes('sem coberta')
+            || str.includes('não coberto')
+            || str.includes('não coberta')
+            || str.includes('nao coberta')
+            || str.includes('nao é coberta')
+            || str.includes('nao e coberta')
+            || str.includes('não é coberto')
+            || str.includes('nao e coberto')
+            || str.includes('nao é coberto')
+            || str.includes('ar livre')
+            || str.includes('com abrigo')
+            || str.includes('sob o sol')
+            || str.includes('local aberto')
+            || str.includes('céu aberto')
+            || str.includes('ceu aberto')) {
             tmp.isCovered = false;
             _importResults.tagsDetected++;
-          } else if (str.indexOf('coberto') > 0
-            || str.indexOf('coberta') > 0
-            || str.indexOf('subsolo') > 0
-            || str.indexOf('subterrânea') > 0
-            || str.indexOf('subterranea') > 0
-            || str.indexOf('subterraneo') > 0
-            || str.indexOf('subterrâneo') > 0) {
+          } else if (str.includes('coberto')
+            || str.includes('coberta')
+            || str.includes('subsolo')
+            || str.includes('subterrânea')
+            || str.includes('subterranea')
+            || str.includes('subterraneo')
+            || str.includes('subterrâneo')) {
             tmp.isCovered = true;
             _importResults.tagsDetected++;
           }
 
           // Gratuito?
-          if (str.indexOf('gratuito') > 0) {
-            tmp.isPaid = false;
-            _importResults.tagsDetected++;
-          } else if (str.indexOf('pago') > 0
-            || str.indexOf('custa') > 0) {
+          if (str.includes('pago')
+            || str.includes('custa')) {
             tmp.isPaid = true;
             _importResults.tagsDetected++;
             // tmp.isPublic = false; // será?
+          } else if (str.includes('gratuito')
+            || str.includes('de graça')) {
+            tmp.isPaid = false;
+            _importResults.tagsDetected++; 
           }
+          
 
           // Público?
-          if (str.indexOf('privado') > 0
-            || str.indexOf('funcionários') > 0
-            || str.indexOf('moradores') > 0
-            || str.indexOf('sócios') > 0
-            || str.indexOf('restrito para') > 0
-            || str.indexOf('exclusivo para') > 0
-            || str.indexOf('apenas para') > 0) {
+          if (str.includes('privado')
+            || str.includes('funcionários')
+            || str.includes('moradores')
+            || str.includes('sócios')
+            || str.includes('restrito para')
+            || str.includes('exclusivo para')
+            || str.includes('uso exclusivo')
+            || str.includes('dentro do condominio')
+            || str.includes('apenas para')) {
             tmp.isPublic = false;
             _importResults.tagsDetected++;
-          } else if (str.indexOf('publico') > 0
-            || str.indexOf('público') > 0
-            || str.indexOf('na rua') > 0
-            || str.indexOf('canteiro central') > 0
-            || str.indexOf('calçada') > 0) {
+          } else if (str.includes('publico')
+            || str.includes('público')
+            || str.includes('na rua')
+            || str.includes('na calçada')
+            || str.includes('canteiro central')
+            || str.includes('ao lado do quiosque')
+            || str.includes('calçada')) {
             tmp.isPublic = true;
             _importResults.tagsDetected++;
           }
 
           // Tipo de bicicletário
           // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-          if (str.indexOf('u invertido') > 0
-            || str.indexOf('us invertidos') > 0
-            || str.indexOf('sheffield') > 0
-            || str.indexOf('em r') > 0
-            || str.indexOf('tipo r') > 0
-            || str.indexOf('em u') > 0
-            || str.indexOf('tipo u') > 0
-            || str.indexOf('suporte em u') > 0) {
+          if (str.includes('u invertido')
+            || str.includes('us invertidos')
+            || str.includes('sheffield')
+            || str.includes('em r')
+            || str.includes('tipo r')
+            || str.includes('suporte em r')
+            || str.includes('suporte r')
+            || str.includes('em u')
+            || str.includes('tipo u')
+            || str.includes('modelo u')
+            || str.includes('suporte em u')) {
             tmp.structureType = 'uinvertido';
             _importResults.tagsDetected++;
-          } else if (str.indexOf('açougue') > 0
-            || str.indexOf('suspenso') > 0) {
+          } else if (str.includes('açougue')
+            || str.includes('de pendurar')
+            || str.includes('suspenso')) {
             tmp.structureType = 'suspenso';
             _importResults.tagsDetected++;
-          } else if (str.indexOf('entorta-roda') > 0
-            || str.indexOf('entorta roda') > 0
-            || str.indexOf('entorta aro') > 0
-            || str.indexOf('entorta-aro') > 0
-            || str.indexOf('entorta raio') > 0
-            || str.indexOf('de roda') > 0) {
+          } else if (str.includes('entorta-roda')
+            || str.includes('entorta roda')
+            || str.includes('entorta aro')
+            || str.includes('entorta-aro')
+            || str.includes('entorta raio')
+            || str.includes('grelha')
+            || str.includes('holandês')
+            || str.includes('holandes')
+            || str.includes('amsterdam')
+            || str.includes('amsterdã')
+            || str.includes('amsterda')
+            || str.includes('jujubinha')
+            || str.includes('trincheira')
+            || str.includes('de roda')) {
             tmp.structureType = 'deroda';
             _importResults.tagsDetected++;
+          } else if (str.includes('suporte rack')
+            || str.includes('bollard')) {
+            tmp.structureType = 'other';
+            _importResults.tagsDetected++;
+          } else if (str.includes('paliteiro')
+            || str.includes('sulamerica')) {
+            tmp.structureType = 'paliteiro';
+            _importResults.tagsDetected++;
+          } else if (str.includes('pescocinho')) {
+            tmp.structureType = 'pescocinho';
+            _importResults.tagsDetected++;
+          } else if (str.includes('suporte pente')
+            || str.includes('tipo pente')) {
+            tmp.structureType = 'pente';
+            _importResults.tagsDetected++;
+          } else if (str.includes('tipo m')) {
+            tmp.structureType = 'm';
+            _importResults.tagsDetected++;
           }
+
 
           // tmp.structureType = /^tipo\s([\w])/
         }
@@ -1087,6 +1130,10 @@
                 <div class="big-numbers--label">tags preenchidas automaticamente</div>
               </div>
               <div class="big-numbers--col">
+                <div class="big-numbers--number">${_importResults.unknownTags}</div>
+                <div class="big-numbers--label">tags desconhecidas</div>
+              </div>
+              <div class="big-numbers--col">
                 <div class="big-numbers--number">${_importResults.brokenUrls}/${_importResults.totalUrls}</div>
                 <div class="big-numbers--label">fotos com link quebrado</div>
               </div>
@@ -1102,11 +1149,11 @@
         function uploadImportedPlacesToBackend() {
           return new Promise((resolve, reject) => {
             const max = _importResults.places.length;
+            const dontGeolocate = document.getElementById('dontGeolocateCheckbox').checked;
             // const max = 5;
 
             // 
             function importPlace_recursive(i = 0) {
-
               if (i < max) {
                 let m = _importResults.places[i];
 
@@ -1121,77 +1168,85 @@
                 $('#globalSpinnerLabel').text(`${i}/${max}`);
                 console.warn(`${i} of ${max}`);
 
-                // Retrieves full addresses
-                BDB.Geolocation.reverseGeocode(m.lat, m.lng)
-                  .then((addressObj) => {
-                    console.debug(m.lat, m.lng, m.id);
-                    console.debug(addressObj);
-
-                    m.address = addressObj.address;
-                    m.city = addressObj.city;
-                    m.state = addressObj.state;
-                    m.country = addressObj.country;
-
-                    function next() {
-                      // Sends it over to the backend
-                      BDB.Database.customAPICall('POST', 'local', m)
-                        .then(data => {
-                          m.id = data.id;
-                          importPlace_recursive(i + 1);
-                        })
-                        .catch(data => {
-                          console.error('Error when creating local');
-                          console.error(m);
-                          reject(data);
-                        })
-                    }
-
-                    // If it has a photo and it's a valid link (validated when loading the KML file),
-                    //   resize it just like a normal user-submitted photo and get it's blob to send
-                    //   to the backend
-                    if (m.photo) {
-                      resizeImage(m.photo)
-                        .then(resizedBlob => {
-                          m.photo = resizedBlob;
-                          next();
-                        })
-                        .catch(() => {
-                          console.warn('Error when retrieving image', m.photo);
-                          console.warn('Continuing...');
-                          next();
-                          // reject(i);
-                        })
-                    } else {
-                      next();
-                    }
-
-                  })
-                  .catch(status => {
-                    switch (status) {
-                      case 'OVER_QUERY_LIMIT':
-                        // Google Maps quota limits the frequency of calls of the service. We just keep trying until it works.
-                        setTimeout(() => {
-                          importPlace_recursive(i);
-                        }, 2000);
-
-                        break;
-                      case 'ZERO_RESULTS':
-                        // There's probably something very wrong with the data, since Google Geocoding ALWAYS finds something
-                        console.error(`ERROR on reverse geocoding: no results for ${m.lat}, ${m.lng}`);
-                        reject()
-                        break;
-                    }
-                  });
+                new Promise( (resolve, reject) => {
+                  // Retrieves full addresses
+                  if (dontGeolocate) {
+                    resolve();
+                  } else {
+                    BDB.Map.reverseGeocode(m.lat, m.lng)
+                      .then((addressObj) => {
+                        console.debug(m.lat, m.lng, m.id);
+                        console.debug(addressObj);
+  
+                        m.address = addressObj.address;
+                        m.city = addressObj.city;
+                        m.state = addressObj.state;
+                        m.country = addressObj.country;
+  
+                        resolve();
+                      }).catch(status => {
+                        switch (status) {
+                          case 'OVER_QUERY_LIMIT':
+                            // Google Maps quota limits the frequency of calls of the service. We just keep trying until it works.
+                            setTimeout(() => {
+                              importPlace_recursive(i);
+                            }, 2000);
+                            break;
+                          case 'ZERO_RESULTS':
+                            // There's probably something very wrong with the data, since Google Geocoding ALWAYS finds something
+                            console.error(`ERROR on reverse geocoding: no results for ${m.lat}, ${m.lng}`);
+                            reject()
+                            break;
+                          default:
+                            console.error(`ERROR on reverse geocoding`);
+                            reject()
+                            break;
+                        }
+                      });
+                  }
+                }).then( new Promise( (resolve, reject) => {
+                  // If it has a photo and it's a valid link (validated when loading the KML file),
+                  //   resize it just like a normal user-submitted photo and get it's blob to send
+                  //   to the backend
+                  if (m.photo) {
+                    resizeImage(m.photo)
+                      .then(resizedBlob => {
+                        m.photo = resizedBlob;
+                        resolve();
+                      })
+                      .catch(() => {
+                        console.warn('Error when retrieving image', m.photo);
+                        console.warn('Continuing...');
+                        resolve();
+                        // reject(i);
+                      })
+                  } else {
+                    resolve();
+                  }
+                })).then( new Promise( (resolve, reject) => {
+                  // Sends it over to the backend
+                  BDB.Database.customAPICall('POST', 'local', m)
+                    .then(data => {
+                      m.id = data.id;
+                      importPlace_recursive(i + 1);
+                    })
+                    .catch(data => {
+                      console.error('Error when creating local');
+                      console.error(m);
+                      reject(data);
+                    })
+                }));
               } else {
                 resolve();
               }
             };
 
-            BDB.Geolocation
-              .init()
-              .then(() => {
-                importPlace_recursive(0);
-              })
+            $(document).trigger('LoadMap');
+            setTimeout(
+              () => {
+                importPlace_recursive();
+              }, 1000
+            );
           });
         }
 
@@ -1291,7 +1346,7 @@
                 data.forEach(d => {
                   $('#kmlFileImport_datasourceid').append($('<option>', {
                     value: d.id,
-                    text: d.name
+                    text: `${d.name} | ${d.url}`
                   }));
                 })
               });
@@ -1304,6 +1359,52 @@
             document.location.reload();
           });
 
+          $('#newDataSourceBtn').on('click', () => {
+            swal({
+              title: 'Nome',
+              input: 'text',
+              showCancelButton: true,
+              confirmButtonText: 'Próximo ›',
+            }).then((result1) => {
+              if (result1) {
+                swal({
+                  title: 'URL',
+                  input: 'text',
+                  showCancelButton: true,
+                  confirmButtonText: 'Criar',
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !swal.isLoading(),
+                  preConfirm: (inputUrl) => { 
+                    return BDB.Database.customAPICall(
+                      'post',
+                      'datasource',
+                      { name: result1, url: inputUrl }
+                    ).then(data => {
+                      if (data) {
+                        return data;
+                      }
+                    }).catch(error => {
+                      swal.showValidationError(
+                        `Request failed: ${error}`
+                      )
+                    })
+                  }
+                }).then((result2) => {
+                  if (result2) {
+                    swal({
+                      title: 'Novo Data Source criado com sucesso',
+                      text: 'Recarregue a página para usá-lo.',
+                      type: 'success',
+                    });
+                  }
+                })
+              }
+            });
+
+
+
+          });
+          
           $('#kmlFileImport').on('click', () => {
             if (_importResults.places) {
               swal({
@@ -1324,7 +1425,7 @@
                       hideSpinner();
                       swal({
                         title: 'Importação feita com sucesso',
-                        text: `<b>${_importResults.places.length}</b> bicicletários criados.`,
+                        html: `<b>${_importResults.places.length}</b> bicicletários criados.`,
                         type: 'success',
                       });
                     })
@@ -1389,6 +1490,7 @@
             window._importResults = {
               places: [],
               tagsDetected: 0,
+              unknownTags: 0,
               brokenUrls: 0,
               totalUrls: 0,
               log: ''
@@ -1420,15 +1522,16 @@
                     'isPaid': null
                   };
 
-                  let regex, result;
+                  let regex, result, originalTitle;
 
                   const children = [...p.children];
                   children.forEach(c => {
                     switch (c.tagName) {
                       case 'name':
-                        tmp.text = c.innerHTML;
+                        originalTitle = extractFromCDATA(c.innerHTML);
+                        tmp.text = originalTitle;
 
-                        if (tmp.text.toLowerCase().indexOf('bikerio') > 0) {
+                        if (tmp.text.toLowerCase().includes('bikerio')) {
                           // @todo: break, don't process this guy
                           //break;
                           console.log('BIKERIO!!!', tmp.text);
@@ -1444,8 +1547,6 @@
                           tmp.taCode = result[1];
                           tmp.text = result[2];
                         }
-
-                        tmp.text = extractFromCDATA(tmp.text);
                       case 'description':
                         tmp.description = c.innerHTML;
                         processDescription(tmp);
@@ -1462,6 +1563,7 @@
                           const name = ext.attributes[0].nodeValue;
                           const valueRaw = ext.children[0].innerHTML
                           const value = valueRaw.toLowerCase();
+                          let oldValue, newValue;
 
                           switch (name) {
                             case 'Foto':
@@ -1484,75 +1586,183 @@
                             case 'Descrição':
                             case 'descrição':
                               // Fortaleza 
-                              tmp.description = value;
-                              processDescription(tmp);
+                              if (value) {
+                                tmp.description = value;
+                                processDescription(tmp);
+                              }
                               break;
 
                             //////////////////////////////////////////////////
                             // Transporte Ativo Fusion Maps specific field //
                             //////////////////////////////////////////////////
                             case 'BC_slots':
-                              tmp.slots = value;
-                              _importResults.tagsDetected++;
-                              break;
-                            case 'BC_covered':
-                              if (tmp.isCovered === 'yes') {
-                                tmp.isCovered = true;
-                                _importResults.tagsDetected++;
-                              } else if (tmp.isCovered === 'no') {
-                                tmp.isCovered = false;
+                              if (value) {
+                                oldValue = tmp.slots;
+                                
+                                newValue = value;
+                                
+                                // Check for diversion
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_slots: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+
+                                  // Prioritize the version from the description
+                                  tmp.slots = oldValue;
+                                } else {
+                                  tmp.slots = newValue;
+                                }
+
                                 _importResults.tagsDetected++;
                               }
                               break;
+                            case 'BC_covered':
+                              if (value) {
+                                oldValue = tmp.isCovered;
+
+                                if (value === 'yes') {
+                                  newValue = true;
+                                  _importResults.tagsDetected++;
+                                } else if (value === 'no') {
+                                  newValue = false;
+                                  _importResults.tagsDetected++;
+                                } else {
+                                  console.error(`Unknown value for BC_paid: ${value}`);
+                                  _importResults.unknownTags++;
+                                }
+
+                                // Check for diversion
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_covered: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+                                }
+
+                                // Ignore the diversion
+                                tmp.isCovered = newValue;
+                              }
                               break;
                             case 'BC_type':
                               // ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-                              switch (value) {
-                                case 'açougue':
-                                case 'metrôrio':
-                                  tmp.structureType = 'suspenso';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                case 'grelha':
-                                case 'holandês':
-                                case 'jujubinha':
-                                case 'de roda':
-                                case 'trincheira':
-                                  tmp.structureType = 'deroda';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                case 'pente':
-                                case 'sulamerica':
-                                case 'pescocinho':
-                                case 'transcarioca':
-                                case 'misto':
-                                case 'm':
-                                  tmp.structureType = 'other';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                case 'u invertido':
-                                case 'u invertido quiosque':
-                                case 'r':
-                                  tmp.structureType = 'uinvertido';
-                                  _importResults.tagsDetected++;
-                                  break;
-                                default:
-                                  console.warn('tipo de bicicletario nao identificado:', value);
-                                  // _importResults.log += `Tipo de bicicletário não identificado: ${value}` + '<br>';
-                                  break;
+                              if (value) {
+                                oldValue = tmp.structureType;
+
+                                switch (value) {
+                                  case 'açougue':
+                                  case 'metrôrio':
+                                    newValue = 'suspenso';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'grelha':
+                                  case 'holandês':
+                                  case 'jujubinha':
+                                  case 'de roda':
+                                  case 'trincheira':
+                                    newValue = 'deroda';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'transcarioca':
+                                  case 'bollard':
+                                  case 'transoeste':
+                                  case 'niteroi':
+                                  case 'niterói':
+                                  case 'misto':
+                                    newValue = 'other';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'u invertido':
+                                  case 'u invertido quiosque':
+                                  case 'r':
+                                    newValue = 'uinvertido';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'pescocinho':
+                                    newValue = 'pescocinho';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'sulamerica':
+                                  case 'paliteiro':
+                                    newValue = 'paliteiro';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'pente':
+                                    newValue = 'pente';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  case 'm':
+                                    newValue = 'm';
+                                    _importResults.tagsDetected++;
+                                    break;
+                                  default:
+                                    console.error(`Unknown value for BC_type: ${value}`);
+                                    _importResults.unknownTags++;
+                                    // _importResults.log += `Tipo de bicicletário não identificado: ${value}` + '<br>';
+                                    break;
+                                }
+
+                                // Check for diversion
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_type: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+
+                                  // Accept new diverged value only if it's mixed type, b/c our AI can't get that 
+                                  if (value === 'misto') {
+                                    tmp.structureType = newValue;
+                                  } else {
+                                    tmp.structureType = oldValue;
+                                  }
+                                } else {
+                                  tmp.structureType = newValue;
+                                }
+                                
                               }
                               break;
                             case 'BC_paid':
-                              tmp.isPaid = value;
-                              _importResults.tagsDetected++;
+                              if (value) {
+                                oldValue = tmp.isPaid;
+
+                                if (value === 'yes') {
+                                  newValue = true;  
+                                  _importResults.tagsDetected++;
+                                } else if (value === 'no') {
+                                  newValue = false;
+                                  _importResults.tagsDetected++;
+                                } else {
+                                  console.error(`Unknown value for BC_paid: ${value}`);
+                                  _importResults.unknownTags++;
+                                }
+
+                                // Check for diversion
+                                if (oldValue && newValue !== oldValue) {
+                                  console.group();
+                                  console.warn(`Values diverged in BC_paid: ${oldValue} X ${newValue}`);
+                                  console.warn(tmp.description);
+                                  console.warn(`${name} = ${value}`);
+                                  console.groupEnd();
+
+                                  // Prioritize the version from the description
+                                  tmp.isPaid = oldValue;
+                                } else { 
+                                  tmp.isPaid = newValue; 
+                                }
+                              }
                               break;
 
                             ///////////// 
                             // Default //
-                            /////////////
+                            ///////////// 
                             default:
                               // Any other tag that we haven't identified yet
                               tmp[name] = value;
+                              // console.warn(`Unknown tag found: ${name}=${value}`);
+                              // _importResults.unknownTags++;
                           }
                         });
                       case 'Point':
@@ -1573,6 +1783,15 @@
                     }
 
                   });
+
+                  // Remove title string from the description string
+                  if (originalTitle && tmp.description) {
+                    tmp.description = tmp.description.replace(originalTitle, '');
+
+                    // Special Transporte Ativo cases
+                    tmp.description = tmp.description.replace('Nome:', '');
+                    tmp.description = tmp.description.replace('Descrição:', '');
+                  }
 
                   if (tmp.lat && tmp.lng) {
                     data.push(tmp);
