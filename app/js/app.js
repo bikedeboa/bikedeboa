@@ -2055,6 +2055,7 @@ $(() => {
         $('#about-stats--places').velocity('fadeIn').text(data.localsCount);
         $('#about-stats--reviews').velocity('fadeIn').text(data.reviewsCount);
         $('#about-stats--views').velocity('fadeIn').text(data.viewsCount);
+        $('#about-stats--cities').velocity('fadeIn').text(getTopCities().length);
       });
 
     // if (places) {
