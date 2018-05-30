@@ -623,4 +623,29 @@ BDB.Database = {
         })
     });
   },
+
+  getDataSourceList: function() {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'get',
+        headers: self._headers,
+        url: self.API_URL + '/datasource/'
+      }).done(function (data) {
+        if (data) {
+          console.debug('Got data sourcs:');
+          console.debug(data);
+
+          resolve(data);
+        }
+      })
+        .fail(error => {
+          // requestFailHandler();
+          // toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
+
+          reject(error);
+        })
+    });
+  },
 };

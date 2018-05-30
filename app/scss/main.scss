@@ -1597,6 +1597,12 @@ a.unstyled-link {
 }
 
 #dataModal {
+  h3 {
+    font-size: 18px;
+    margin: 1.5em 0 .5em;
+    font-weight: bold;
+  }
+
   .data-modal--block {
     display: flex !important;
     align-items: center;
@@ -1612,11 +1618,6 @@ a.unstyled-link {
       background: $lightGreen;
     }
 
-    h2 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
     .data-modal--block-icon {
       padding-right: $GRID_SPACE*2;
 
@@ -1626,6 +1627,11 @@ a.unstyled-link {
     }
 
     .data-modal--block-content {
+      .data-modal--block-title {
+        font-size: 24px;
+        font-weight: 700;
+      } 
+
       p {
         font-size: 14px;
         line-height: 1.3em;
@@ -1646,6 +1652,7 @@ a.unstyled-link {
 }
 
 #aboutModal,
+#dataModal,
 .guide-modal {
   $leading: 18px;
 
@@ -2992,6 +2999,10 @@ body.fullscreen-modal-open {
         margin-bottom: 0.5em;
         box-shadow: none;
       }
+    }
+
+    .openDataSourceDialog {
+      cursor: pointer;
     }
 }
 

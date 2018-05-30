@@ -320,9 +320,15 @@
             <li>
                 <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg"> 
                 {{#if author}}
-                <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                    <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
                 {{else}}
-                <div>Adicionado há <b>{{{createdTimeAgo}}}</b></div>
+                    <div>
+                        Adicionado há <b>{{{createdTimeAgo}}}</b>.
+
+                        {{#if dataSourceName}}
+                            Importado de <a class="openDataSourceDialog"> {{dataSourceName}}</a>
+                        {{/if}}
+                    </div>
                 {{/if}}
             </li>
             {{/if}}
@@ -365,18 +371,6 @@
             <section class="minimap-container">
                 <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
             </section>
-        {{/if}}
-
-        {{#if dataSourceName}} 
-            <ul class="details-list">
-                <li>
-                    <span class="details-list-icon svg-icon" alt="" src=""></span>
-                    <div style="opacity: .5; font-size: .8em; ">
-                        Importado de
-                        <a class="openDataSourceDialog"> {{dataSourceName}}</a> 
-                    </div>
-                </li>
-            </ul>
         {{/if}}
 
     </div>
