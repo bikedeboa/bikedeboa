@@ -2025,14 +2025,21 @@ $(() => {
     $(document).trigger('LoadMap');
   }
   function openDataModal() {
-    if ($('#dataModal').length === 0) {
-      $('body').append(BDB.templates.dataModal()); 
-    }
+    BDB.Database.getDataSourceList()
+      .then( dataSources => {
+        let templateData = {
+          dataSources: dataSources
+        }
 
-    $('#dataModal').modal('show');
-    if (!_isMobile) {
-      $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-    }
+        if ($('#dataModal').length === 0) {
+          $('body').append(BDB.templates.dataModal(templateData));
+        }
+
+        $('#dataModal').modal('show');
+        if (!_isMobile) {
+          $('#dataModal article > *').css({ opacity: 0 }).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+        }
+      });
   } 
 
   function openAboutModal() {
