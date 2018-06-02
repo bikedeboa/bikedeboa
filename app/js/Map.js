@@ -343,7 +343,11 @@ BDB.Map = (function () {
       let place;
       for (let i = 0; i < places.length; i++) {
         place = places[i];
-        place.gmarker.setIcon(scale === 'mini' ? place.iconMini : place.icon);
+        if (place.gmarker) {
+          place.gmarker.setIcon(scale === 'mini' ? place.iconMini : place.icon);
+        } else {
+          console.error('ERROR: trying to set marker in place that has no gmarker associated');
+        }
       }
     }
   };

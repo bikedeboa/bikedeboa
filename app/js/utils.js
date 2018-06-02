@@ -13,13 +13,10 @@ BDB.getMarkersFromLocalStorage = () => {
 };
 
 BDB.saveMarkersToLocalStorage = markersToSave => {
-  let tmp = markersToSave;
-
-  if (tmp) {
-    for (let i = 0; i < tmp.length; i++) {
-      tmp[i].gmarker = null;
-    }
-  }
+  let tmp = markersToSave.map( m => {
+    m.gmarker = null;
+    return m;
+  });
 
   localStorage.setItem( 'markers', JSON.stringify(tmp) );
 };

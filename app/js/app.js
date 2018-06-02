@@ -90,6 +90,8 @@ $(() => {
   }
 
   function openDetailsModal(marker, callback) {
+    console.log('openDetailsModal');
+
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
       return;
@@ -594,7 +596,8 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
-      updatePageTitleAndMetatags('Mova o mapa para adicionar no lugar desejado');
+      updatePageTitleAndMetatags('Novo bicicletário');
+      $('#top-mobile-bar-title').text('Mova o mapa para adicionar no lugar desejado');
 
       $('body').addClass('position-pin-mode');
 
@@ -798,7 +801,6 @@ $(() => {
         hideSpinner();
 
         if (!updatingMarker) {
-          const newPlace = places.find( i => i.id === newPlace.id );
           if (newPlace) {
             // promptPWAInstallPopup();
 
@@ -869,6 +871,8 @@ $(() => {
   }
 
   function openNewOrEditPlaceModal(nameSuggestions) {
+    console.log('openNewOrEditPlaceModal');
+
     let templateData = {
       nameSuggestions: nameSuggestions,
       editMode: !!openedMarker
@@ -944,7 +948,7 @@ $(() => {
         ga('send', 'event', 'Misc', 'tooltip - new pin type help');
       });
 
-      $('.place-suggestion--item').on('click', e => {
+      $('.place-suggestion--item').off('click').on('click', e => {
         $('.text-input-wrapper input').val($(e.currentTarget).data('name'));
       });
     }
@@ -968,13 +972,13 @@ $(() => {
 
     initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
 
-    $('#newPlaceModal textarea').on('keyup', e => {
+    $('#newPlaceModal textarea').off('keyup').on('keyup', e => {
       autoGrowTextArea(e.currentTarget); 
     });
 
-    $('.saveNewPlaceBtn').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
+    $('#newPlaceModal .saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
  
-    $('#photoInput').on('change', e => {
+    $('#photoInput').off('change').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
       const self = document.getElementById('photoInput');
       const files = self.files ;
@@ -992,7 +996,7 @@ $(() => {
       // }
     });
     
-    $('.collapsable').on('click', e => {
+    $('.collapsable').off('click').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
     }); 
 
@@ -1160,7 +1164,7 @@ $(() => {
         //     promptPWAInstallPopup();
         //   } 
         // });
-        toastr['success']('Avaliação salva. Valeu!'); 
+        toastr['success']('Avaliação salva. Valeu!');
         // promptPWAInstallPopup();
       }
 
@@ -1970,6 +1974,8 @@ $(() => {
       const $target = $(e.currentTarget);
       const id = $target.data('id');
       const place = BDB.Places.getMarkerById(id);
+
+      // window.location = BDB.Places.getMarkerShareUrl(place);
 
       $('#contributionsModal')
         .one('hidden.bs.modal', () => {

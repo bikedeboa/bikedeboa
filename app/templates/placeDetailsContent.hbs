@@ -215,6 +215,23 @@
             <meta itemprop="reviewCount" content="{{reviews}}"/>
 
             <div>
+                {{#if savedRating}}
+                    <div class="savedRating"> 
+                        <h5>Sua avaliação:</h5> 
+
+                        <div>
+                            <img alt="" src="{{userThumbUrl}}" />
+                            
+                            <span data-color="{{color}}">
+                                {{{savedRating}}}
+                                {{{savedRatingStars}}}
+                            </span>
+                            
+                            <button class="ghost openReviewPanelBtn">Editar</button>
+                        </div>
+                    </div>
+                {{/if}}
+                
                 {{#if numReviews}}
                     <div class="numreviews">{{numReviews}}</div>
                 {{/if}}
@@ -268,40 +285,6 @@
                         Carregando... 
                     </div>
                 {{/if}}
-
-                {{#if savedRating}}
-                    <div class="savedRating"> 
-                        <h5>Sua avaliação:</h5> 
-
-                        <div>
-                            <img alt="" src="{{userThumbUrl}}" />
-                            
-                            <span data-color="{{color}}">
-                                {{{savedRating}}}
-                                {{{savedRatingStars}}}
-                            </span>
-                            
-                            <button class="ghost openReviewPanelBtn">Editar</button>
-                        </div>
-                    </div>
-                {{/if}}
-            {{/if}}
-
-            {{#if savedRating}}
-                <div class="savedRating">
-                    <h5>Sua avaliação</h5> 
-
-                    <div>
-                        <img alt="" src="{{userThumbUrl}}" />
-                        
-                        <span data-color="{{color}}">
-                            {{{savedRating}}}
-                            {{{savedRatingStars}}}
-                        </span>
-                        
-                        <button class="ghost openReviewPanelBtn">Editar</button>
-                    </div>
-                </div>
             {{/if}}
         </section>
 
