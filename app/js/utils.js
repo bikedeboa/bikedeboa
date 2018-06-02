@@ -28,6 +28,14 @@ BDB.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
 
+BDB.getThumbUrlFromPhotoUrl = function(url) {
+  if (url) {
+    return url.replace('images', 'images/thumbs'); 
+  } else {
+    return;
+  }
+}
+
 window.createdAtToDaysAgo = createdAtStr => {
   const createdAtDate = Date.parse(createdAtStr);
   const msAgo = Date.now() - createdAtDate;

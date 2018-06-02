@@ -258,6 +258,24 @@
             display: block !important;
           }
 
+          /* Thanks to: https://css-tricks.com/seamless-responsive-photo-grid/ */
+          #galleryContainer {
+            line-height: 0;
+            column-count: 8; 
+            column-gap: 0px;
+          }
+
+          #galleryContainer img {
+            width: 100%;
+            height: auto;
+            padding: 2px;
+          }
+
+          .nav-pills>li a {
+            font-size: 18px;
+            border-bottom: 0;
+          }
+
         </style>
     </head>
 
@@ -304,7 +322,7 @@
 
       <section>
         <ul class="nav nav-pills" role="tablist">
-          <li role="presentation" class="active">
+          <li role="presentation">
             <a href="#locals" aria-controls="locals" role="tab" data-toggle="tab">
               <!-- <i class="fa fa-bicycle"></i> -->
               Bicicletários
@@ -315,6 +333,12 @@
               <!-- <i class="fa fa-users"></i> -->
               Avaliações
             </a> 
+          </li>
+          <li role="presentation">
+            <a href="#gallery" aria-controls="gallery" role="tab" data-toggle="tab">
+              <!-- <i class="fa fa-list"></i> -->
+              Galeria
+            </a>
           </li>
           <li role="presentation" class="restricted-access">
             <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
@@ -344,7 +368,7 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane fade in active" id="locals">
+          <div role="tabpanel" class="tab-pane fade" id="locals">
 
             <!-- Tabela de Bicicletarios -->
 
@@ -464,6 +488,13 @@
           </div>
           
           
+          <!-- Galeria de imagens -->
+
+          <div role="tabpanel" class="tab-pane fade" id="gallery">
+            <div id=galleryContainer></div>
+          </div>
+          
+          
           <!-- Importador de dados -->
 
           <div role="tabpanel" class="tab-pane fade" id="importador" class="restricted-access">
@@ -530,7 +561,7 @@
           html += '<div class="details-view">';
 
           if (row.photo) {
-            html += `<img src='${row.photo}'></img>`;
+            html += `<img src='${BDB.getThumbUrlFromPhotoUrl(row.photo)}'></img>`;
           }
 
           if (row.lat && row.lng) {
@@ -777,6 +808,58 @@
               sortName: 'id', sortOrder: 'desc'
             });
           });
+        }
+
+        function initGallery() {
+          if (window._isGalleryInitialized) {
+            return;
+          }
+
+          window._isGalleryInitialized = true;
+          
+          window._gallery_currentIndex = 0;
+          window._gallery_stepSize = 500;
+          // window._gallery_stepSize = 10000; 
+          loadMoreImages();
+        }
+
+        function loadMoreImages() {
+          const start = window._gallery_currentIndex;
+          const maxCount = window._gallery_stepSize;
+          let count = 0;
+          let placeIndex;
+
+          $('.load-more-btn').remove();
+
+          for (placeIndex = start; placeIndex < places.length && count < maxCount; placeIndex++ ) {
+            const m = places[placeIndex];
+            if (m.photo && m.photo.length > 0) {
+              count++;
+              $('#galleryContainer').append(`
+                  <a target="_blank" href="${m.photo}">
+                    <img src="${BDB.getThumbUrlFromPhotoUrl(m.photo)}"/>
+                  </a>
+                `)
+            }
+          }
+
+          if (placeIndex < places.length) {
+            $('#galleryContainer').append(`
+              <button
+                class="load-more-btn btn green"
+                style="
+                  position: fixed;
+                  bottom: 12px;
+                  left: 50%;"
+              >
+                Carregar mais ${_gallery_stepSize}...
+              </button>
+            `);
+
+            $('.load-more-btn').on('click', loadMoreImages);
+
+            window._gallery_currentIndex = placeIndex;
+          }
         }
 
         function updateReviewsTable() {
@@ -1256,7 +1339,7 @@
           Database.authenticate()
             .then(() => {
               // Initial view is the Locals view
-              updateLocalsTable();
+              // updateLocalsTable();
 
               // hideSpinner();
             });
@@ -1282,6 +1365,9 @@
                 break;
               case 'reviews':
                 updateReviewsTable();
+                break;
+              case 'gallery':
+                initGallery();
                 break;
             }
           });
