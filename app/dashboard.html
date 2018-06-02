@@ -271,6 +271,10 @@
             padding: 2px;
           }
 
+          #galleryContainer a:hover {
+            opacity: 0.8;
+          }
+
           .nav-pills>li a {
             font-size: 18px;
             border-bottom: 0;
@@ -818,7 +822,7 @@
           window._isGalleryInitialized = true;
           
           window._gallery_currentIndex = 0;
-          window._gallery_stepSize = 500;
+          window._gallery_stepSize = 200;
           // window._gallery_stepSize = 10000; 
           loadMoreImages();
         }
@@ -836,8 +840,8 @@
             if (m.photo && m.photo.length > 0) {
               count++;
               $('#galleryContainer').append(`
-                  <a target="_blank" href="${m.photo}">
-                    <img src="${BDB.getThumbUrlFromPhotoUrl(m.photo)}"/>
+                  <a href="" target="_blank" data-featherlight="${m.photo}">
+                    <img src="${BDB.getThumbUrlFromPhotoUrl(m.photo)}" alt="${BDB.Places.getMarkerShareUrl(m)}"/>
                   </a>
                 `)
             }
