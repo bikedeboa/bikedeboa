@@ -976,7 +976,7 @@ $(() => {
       autoGrowTextArea(e.currentTarget); 
     });
 
-    $('#newPlaceModal .saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
+    $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
  
     $('#photoInput').off('change').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
