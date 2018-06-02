@@ -325,7 +325,7 @@ BDB.Map = (function () {
       map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 203 KB
       map.data.loadGeoJson('/geojson/ciclovias_recife_osm.min.json'); // 68 KB 
       map.data.loadGeoJson('/geojson/ciclovias_grandeportoalegre_osm.min.json'); // 369 KB
-      // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
+      map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
       // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
 
       map.data.setStyle({  
