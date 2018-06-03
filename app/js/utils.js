@@ -16,7 +16,7 @@ BDB.saveMarkersToLocalStorage = markersToSave => {
   let tmp = markersToSave.map( m => {
     m.gmarker = null;
     return m;
-  });
+  }); 
 
   localStorage.setItem( 'markers', JSON.stringify(tmp) );
 };
