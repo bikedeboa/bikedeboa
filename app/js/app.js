@@ -396,30 +396,11 @@ $(() => {
     }
     initHelpTooltip('#placeDetailsContent .help-tooltip-trigger');
 
-    $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details public access');
+    $('#placeDetails_structureType .help-tooltip-trigger').off('show.bs.tooltip').on('show.bs.tooltip', e => {
+      const type = $(e.target).data('type');
+      ga(`send', 'event', 'Misc', 'tooltip - pin details ${type} type`);
     });
-    $('#private-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details private access');
-    });
-    $('#uinvertido-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details uinvertido type');
-    });
-    $('#deroda-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details deroda type');
-    });
-    $('#trave-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details trave type');
-    });
-    $('#suspenso-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details suspenso type');
-    });
-    $('#grade-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details grade type');
-    });
-    $('#other-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details other type');
-    });
+
   }
  
   // Set router to open Local
@@ -1436,7 +1417,7 @@ $(() => {
       hideSpinner();
       // Get gMap instance to be used by functions to still referer to map here (mainly places);
       map = BDB.Map.getMap();
-      // BDB.Map.updateMarkers();
+      BDB.Map.updateMarkers();
 
       BDB.Map.showBikeLayer();
     });
