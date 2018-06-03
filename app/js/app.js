@@ -220,21 +220,12 @@ $(() => {
     }
 
     // Structure type
-    let structureTypeIcon;
-    switch (m.structureType) {
-    case 'uinvertido': structureTypeIcon = '/img/tipo_uinvertido.svg'; break;
-    case 'deroda': structureTypeIcon = '/img/tipo_deroda.svg'; break;
-    case 'trave': structureTypeIcon = '/img/tipo_trave.svg'; break;
-    case 'suspenso': structureTypeIcon = '/img/tipo_suspenso.svg'; break;
-    case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break;
-    case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
-    }
     if (m.structureType) {
+      templateData.structureTypeIcon = `/img/tipo_${m.structureType}.svg`;
       templateData.structureTypeCode = m.structureType;
       templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
     }
-    templateData.structureTypeIcon = structureTypeIcon;
-
+ 
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
@@ -575,9 +566,14 @@ $(() => {
       }
 
       // places[i].setMap(showIt ? map : null);
-      places[i].gmarker.setIcon(showIt ? m.icon : m.iconMini);
-      places[i].gmarker.setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
-      places[i].gmarker.collapsed = !showIt; 
+      if (places[i].gmarker) {
+        places[i].gmarker.setIcon(showIt ? m.icon : m.iconMini);
+        places[i].gmarker.setZIndex(showIt ? 2 : 1);
+        places[i].gmarker.setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
+        places[i].gmarker.collapsed = !showIt; 
+      } else {
+        console.error('ERROR: Place has no gmarker');
+      } 
       cont += showIt ? 1 : 0;
     }
 
@@ -1438,9 +1434,9 @@ $(() => {
     //set Map Initialization 
     $(document).on('map:ready', function () {
       hideSpinner();
-      //get gMap instance to be used by functions to still referer to map here (mainly places);
+      // Get gMap instance to be used by functions to still referer to map here (mainly places);
       map = BDB.Map.getMap();
-      BDB.Map.updateMarkers();
+      // BDB.Map.updateMarkers();
 
       BDB.Map.showBikeLayer();
     });
@@ -2407,6 +2403,7 @@ $(() => {
   function init() {
     // Retrieve places saved in a past access
     places = BDB.getMarkersFromLocalStorage();
+    BDB.Map.updateMarkers();
     
     if (places && places.length) {
       console.debug(`Retrieved ${places.length} locations from LocalStorage.`);
