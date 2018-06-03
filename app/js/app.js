@@ -190,7 +190,7 @@ $(() => {
       }
     } else {
       if (templateData.canModify) {
-        templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x200&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`;
+        templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x180&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`;
       }
     }
 
