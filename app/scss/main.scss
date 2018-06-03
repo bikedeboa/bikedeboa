@@ -629,6 +629,11 @@ p {
     width: 28%; 
     // flex: 1; 
 
+    img {
+      width: 100%;
+      height: auto;
+    }
+
     // Desktop-only version
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
       filter: grayscale(100%);
@@ -1642,6 +1647,7 @@ a.unstyled-link {
 }
 
 .illustration {
+  width: 100%;
   margin: 0 auto;
   display: block;
   margin-bottom: 3em; 
@@ -2995,10 +3001,6 @@ body.fullscreen-modal-open {
         margin-bottom: 0.5em;
         box-shadow: none;
       }
-    }
-
-    .openDataSourceDialog {
-      cursor: pointer;
     }
 }
 
