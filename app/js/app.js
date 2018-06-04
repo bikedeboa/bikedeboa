@@ -16,8 +16,8 @@ $(() => {
         text: openedMarker.text,
         url: shareUrl,
       })
-      .then(() => {})
-      .catch((error) => console.error('ERROR sharing', error));
+        .then(() => {})
+        .catch((error) => console.error('ERROR sharing', error));
     } else {
       swal({  
         imageUrl: _isMobile ? '' : '/img/icon_share.svg',
@@ -112,7 +112,7 @@ $(() => {
       lat: m.lat,
       lng: m.lng,
       slots: m.slots
-    }
+    };
     
     // Average
     templateData.pinColor = getColorFromAverage(m.average);
@@ -188,7 +188,7 @@ $(() => {
       }
     } else {
       if (templateData.canModify) {
-        templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x200&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`
+        templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x200&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`;
       }
     }
 
@@ -445,7 +445,7 @@ $(() => {
   }
 
   function routerOpenLocal(markerId, callback) {
-    const marker = BDB.Places.getMarkerById(markerId)
+    const marker = BDB.Places.getMarkerById(markerId);
  
     if (marker) {
       openDetailsModal(marker, callback);
@@ -521,10 +521,8 @@ $(() => {
     const photoFilters = filters.filter(i => i.prop === 'hasPhoto');
     const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters, photoFilters];
 
-    const tempMarkers = BDB.Map.getMarkers();
-
-    for(let i=0; i < markers.length; i++) {
-      const m = markers[i];
+    for(let i=0; i < places.length; i++) {
+      const m = places[i]; 
       let showIt = true;
 
       // Apply all filters to this marker
@@ -574,10 +572,10 @@ $(() => {
         }
       }
 
-      // tempMarkers[i].setMap(showIt ? map : null);
-      tempMarkers[i].setIcon(showIt ? m.icon : m.iconMini);
-      tempMarkers[i].setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
-      tempMarkers[i].collapsed = !showIt;
+      // places[i].setMap(showIt ? map : null);
+      places[i].gmarker.setIcon(showIt ? m.icon : m.iconMini);
+      places[i].gmarker.setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
+      places[i].gmarker.collapsed = !showIt; 
       cont += showIt ? 1 : 0;
     }
 
@@ -759,7 +757,7 @@ $(() => {
       description: container.find('#descriptionInput').val(),
       slots: container.find('#slotsInput').val(),
       isPaid: container.find('#isPaidInput').val(),
-    }
+    };
 
     place.text = formFields.text;
     place.structureType = formFields.structureType;
@@ -800,8 +798,8 @@ $(() => {
         hideSpinner();
 
         if (!updatingMarker) {
-          const newMarker = markers.find( i => i.id === newPlace.id );
-          if (newMarker) {
+          const newPlace = places.find( i => i.id === newPlace.id );
+          if (newPlace) {
             // promptPWAInstallPopup();
 
             swal({
@@ -834,7 +832,7 @@ $(() => {
               showCloseButton: false, 
               onOpen: () => { 
                 $('.post-create-modal .rating-input-container .full-star').on('click', e => {
-                  openedMarker = newMarker;
+                  openedMarker = newPlace;
                   openReviewModal($(e.target).data('value'));
                 });
               }
@@ -864,7 +862,7 @@ $(() => {
           // Present to the user the already resized image
           document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
           $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
-        })
+        });
     }
 
     hideSpinner();
@@ -874,7 +872,7 @@ $(() => {
     let templateData = {
       nameSuggestions: nameSuggestions,
       editMode: !!openedMarker
-    }
+    };
 
     // Edit mode?
     if (openedMarker) {
@@ -1012,7 +1010,7 @@ $(() => {
   function getTopCities() {
     // Count how many places each city has
     let cities = {};
-    markers.forEach(m => {
+    places.forEach(m => {
       if (m.city && m.state) {
         // We merge the city and state names to create a unique identifier
         const key = `${m.city},${m.state}`;
@@ -1311,7 +1309,7 @@ $(() => {
       BDB.Map.searchAndCenter(cityName) 
         .then( () => {
           exitLocationSearchMode();
-        }) 
+        }); 
     });
 
     $('body').addClass('search-mode'); 
@@ -1395,16 +1393,16 @@ $(() => {
     }
 
     // hideAll().then(() => {
-      if (isReplaceState) {
-        History.replaceState(data, title, view);
-      } else {
-        History.pushState(data, title, view);
-      }
+    if (isReplaceState) {
+      History.replaceState(data, title, view);
+    } else {
+      History.pushState(data, title, view);
+    }
 
-      // Force new pageview for Analytics
-      // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
-      ga('set', 'page', view);
-      ga('send', 'pageview');
+    // Force new pageview for Analytics
+    // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
+    ga('set', 'page', view);
+    ga('send', 'pageview');
     // });
   }
 
@@ -1436,7 +1434,7 @@ $(() => {
     //set Map Initialization 
     $(document).on('map:ready', function () {
       hideSpinner();
-      //get gMap instance to be used by functions to still referer to map here (mainly markers);
+      //get gMap instance to be used by functions to still referer to map here (mainly places);
       map = BDB.Map.getMap();
       BDB.Map.updateMarkers();
 
@@ -1444,7 +1442,7 @@ $(() => {
     });
 
     $(document).on('autocomplete:done', function (e) {
-      let place = e.detail
+      let place = e.detail;
 
       addToRecentSearches({
         name: place.name,
@@ -1461,13 +1459,13 @@ $(() => {
     });
 
     $(document).one('LoadMap', function () {
-      if (!markers) {
+      if (!places) {
         showSpinner('Carregando bicicletários...'); 
       }
 
       BDB.Database.getPlaces( () => {
-        $('#filter-results-counter').html(markers.length);
-        $('#filter-results-total').html(markers.length);
+        $('#filter-results-counter').html(places.length);
+        $('#filter-results-total').html(places.length);
 
         BDB.Map.updateMarkers();
 
@@ -1480,7 +1478,7 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-      BDB.Map.init(start_coords, zoom, "map", getGeolocation, openLocal); 
+      BDB.Map.init(start_coords, zoom, 'map', getGeolocation, openLocal); 
 
       if (!_isTouchDevice) {
         $('.caption-tooltip').tooltip({
@@ -1909,7 +1907,7 @@ $(() => {
         .then(() => {
           goHome(); 
           exitLocationSearchMode();
-        })
+        });
     });
   }
 
@@ -2059,9 +2057,9 @@ $(() => {
         $('#about-stats--views').velocity('fadeIn').text(data.viewsCount);
       });
 
-    // if (markers) {
-    //   $('#about-stats--places').data('countupto', markers.length);
-    //   // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    // if (places) {
+    //   $('#about-stats--places').data('countupto', places.length);
+    //   // $('#about-stats--nviews').text(places.reduce( (a,b) => a.views + b.views, 0));
     // }
 
     // $('[data-countupto]').each( function(i, val) {
@@ -2118,7 +2116,7 @@ $(() => {
               let coords = {
                 latitude : parseFloat(_deeplinkMarker.lat),
                 longitude: parseFloat(_deeplinkMarker.lng)
-              }
+              };
               start_coords = coords;  
               zoom = 17;
               getGeolocation = false;
@@ -2327,7 +2325,7 @@ $(() => {
 
           // document.dispatchEvent(new CustomEvent('bikedeboa.login'));
           $(document).trigger('bikedeboa.login');
-        })
+        });
       }).catch( error => {
         console.error('Error on social login', error); 
         toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise.');
@@ -2347,7 +2345,7 @@ $(() => {
     if (!_isMobile){
       $('#userBtn').hide();  
     }
-    $('#userBtn .avatar').attr('src', $("#userBtn .avatar").data('src'));
+    $('#userBtn .avatar').attr('src', $('#userBtn .avatar').data('src'));
     $('#topbarLoginBtn').css('visibility','visible');
     $('#userBtn').removeClass('admin');
     $('#userBtn .userBtn--user-name').text('');
@@ -2393,11 +2391,11 @@ $(() => {
   }
 
   function init() {
-    // Retrieve markers saved in a past access
-    markers = BDB.getMarkersFromLocalStorage();
+    // Retrieve places saved in a past access
+    places = BDB.getMarkersFromLocalStorage();
     
-    if (markers && markers.length) {
-      console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
+    if (places && places.length) {
+      console.debug(`Retrieved ${places.length} locations from LocalStorage.`);
       //hideSpinner();
     }
 
@@ -2427,7 +2425,7 @@ $(() => {
           // Failed after multiple attemps: we're officialy offline!
           setOfflineMode();
         }
-      }
+      };
       BDB.Database.authenticate()
         .catch(onFail);
       BDB.Database.getAllTags();

@@ -1,11 +1,27 @@
 var BDB = BDB || {};
 
 BDB.getMarkersFromLocalStorage = () => {
-  return JSON.parse( localStorage.getItem('markers') );
+  const tmp = JSON.parse(localStorage.getItem('markers'));
+
+  if (tmp) {
+    for (let i = 0; i < tmp.length; i++) {
+      tmp[i].gmarker = null;
+    }
+  }
+
+  return tmp;
 };
 
 BDB.saveMarkersToLocalStorage = markersToSave => {
-  localStorage.setItem( 'markers', JSON.stringify(markersToSave) );
+  let tmp = markersToSave;
+
+  if (tmp) {
+    for (let i = 0; i < tmp.length; i++) {
+      tmp[i].gmarker = null;
+    }
+  }
+
+  localStorage.setItem( 'markers', JSON.stringify(tmp) );
 };
 
 BDB.getURLParameter = function(name) {

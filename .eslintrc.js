@@ -75,7 +75,7 @@ module.exports = {
         "Database": true,
         "map": true,
         "geocoder": true,
-        "markers": true,
+        "places": true,
         "tags": true,
         "_gmarkers": true,
         "areMarkersHidden": true,

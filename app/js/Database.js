@@ -538,13 +538,13 @@ BDB.Database = {
     }).done(function(data) {
       console.debug('Retrieved ' + data.length + ' locations from API.');
 
-      markers = data;
+      places = data;
 
-      BDB.saveMarkersToLocalStorage(markers);
+      BDB.saveMarkersToLocalStorage(places);
 
-      for(let i=0; i < markers.length; i++) {
-        const m = markers[i];
-        // Mark that no markers have retrieved their details
+      for(let i=0; i < places.length; i++) {
+        const m = places[i];
+        // Mark that no places have retrieved their details
         m._hasDetails = false;
 
         // Massage average format
@@ -554,7 +554,7 @@ BDB.Database = {
       }
 
       if (successCB && typeof successCB === 'function') {
-        successCB(markers);
+        successCB(places);
       }
     })
       .fail(() => {
@@ -596,21 +596,21 @@ BDB.Database = {
           console.debug(place);
 
           let updatedMarker = {};
-          if (markers) {
+          if (places) {
             // Combine detailed data with what we had
-            const outOfDatePlace = markers.find(m => { return m.id === placeId; });
+            const outOfDatePlace = places.find(m => { return m.id === placeId; });
             Object.assign(updatedMarker, outOfDatePlace, place); 
           } else { 
             // Markers weren't loaded yet (it's a deeplink)
             updatedMarker = place;
-            markers = [updatedMarker];
+            places = [updatedMarker];
           }
 
           // Set flag 
           updatedMarker._hasDetails = true;
 
-          // Update offline-stored markers with new state
-          BDB.saveMarkersToLocalStorage(markers);
+          // Update offline-stored places with new state
+          BDB.saveMarkersToLocalStorage(places);
 
           resolve(updatedMarker);
         }
