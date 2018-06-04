@@ -47,7 +47,7 @@ $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
 $easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
-$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);  
 $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 
 
@@ -664,6 +664,11 @@ p {
     padding: 2%;
     width: 28%; 
     // flex: 1; 
+
+    img {
+      width: 100%;
+      height: auto;
+    }
 
     // Desktop-only version
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
@@ -1289,10 +1294,6 @@ a.unstyled-link {
     .modal-body {
       padding: $GRID_SPACE*3 $GRID_SPACE*3;
 
-      img { 
-          max-width: 100%;
-      }
-
       hr {
           margin-top: 10px;
           margin-bottom: 10px;
@@ -1633,6 +1634,12 @@ a.unstyled-link {
 }
 
 #dataModal {
+  h3 {
+    font-size: 18px;
+    margin: 1.5em 0 .5em;
+    font-weight: bold;
+  }
+
   .data-modal--block {
     display: flex !important;
     align-items: center;
@@ -1648,11 +1655,6 @@ a.unstyled-link {
       background: $lightGreen;
     }
 
-    h2 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
     .data-modal--block-icon {
       padding-right: $GRID_SPACE*2;
 
@@ -1662,6 +1664,11 @@ a.unstyled-link {
     }
 
     .data-modal--block-content {
+      .data-modal--block-title {
+        font-size: 24px;
+        font-weight: 700;
+      } 
+
       p {
         font-size: 14px;
         line-height: 1.3em;
@@ -1676,12 +1683,14 @@ a.unstyled-link {
 }
 
 .illustration {
+  width: 100%;
   margin: 0 auto;
   display: block;
   margin-bottom: 3em; 
 }
 
 #aboutModal,
+#dataModal,
 .guide-modal {
   $leading: 18px;
 

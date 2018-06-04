@@ -97,7 +97,8 @@
         <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
 
         <!-- Font Awesome -->
-        <script src="https://use.fontawesome.com/9c52cfba3f.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+          crossorigin="anonymous">
 
         <style>
           body::-webkit-scrollbar {
@@ -258,6 +259,28 @@
             display: block !important;
           }
 
+          /* Thanks to: https://css-tricks.com/seamless-responsive-photo-grid/ */
+          #galleryContainer {
+            line-height: 0;
+            column-count: 8; 
+            column-gap: 0px;
+          }
+
+          #galleryContainer img {
+            width: 100%;
+            height: auto;
+            padding: 2px;
+          }
+
+          #galleryContainer a:hover {
+            opacity: 0.8;
+          }
+
+          .nav-pills>li a {
+            font-size: 18px;
+            border-bottom: 0;
+          }
+
         </style>
     </head>
 
@@ -304,39 +327,45 @@
 
       <section>
         <ul class="nav nav-pills" role="tablist">
-          <li role="presentation" class="active">
+          <li role="presentation">
             <a href="#locals" aria-controls="locals" role="tab" data-toggle="tab">
-              <!-- <i class="fa fa-bicycle"></i> -->
+              <i class="fas fa-bicycle"></i>
               Bicicletários
             </a>
           </li>
           <li role="presentation">
             <a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">
-              <!-- <i class="fa fa-users"></i> -->
+              <i class="fas fa-edit"></i>
               Avaliações
             </a> 
           </li>
+          <li role="presentation">
+            <a href="#gallery" aria-controls="gallery" role="tab" data-toggle="tab">
+              <i class="fas fa-images"></i>
+              Galeria
+            </a>
+          </li>
           <li role="presentation" class="restricted-access">
             <a href="#users" aria-controls="users" role="tab" data-toggle="tab">
-              <!-- <i class="fa fa-users"></i> -->
+              <i class="fas fa-users-cog"></i>
               Usuários
             </a>
           </li>
-          <li role="presentation" class="restricted-access">
+          <!-- <li role="presentation" class="restricted-access">
             <a href="#revisions" aria-controls="revisions" role="tab" data-toggle="tab">
-              <!-- <i class="fa fa-comments"></i> -->
+              <i class="fas fa-comments"></i>
               Sugestões de correção
             </a>
-          </li>
+          </li> -->
           <li role="presentation" class="restricted-access">
             <a href="#logs" aria-controls="logs" role="tab" data-toggle="tab">
-              <!-- <i class="fa fa-list"></i> -->
-              Log
+              <i class="fas fa-clipboard-list"></i>
+              Logs
             </a>
           </li>
           <li role="presentation" class="restricted-access">
             <a href="#importador" aria-controls="importador" role="tab" data-toggle="tab">
-              <!-- <i class="fa fa-list"></i> -->
+              <i class="fas fa-upload"></i>
               Importador de KML
             </a>
           </li>
@@ -344,7 +373,7 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane fade in active" id="locals">
+          <div role="tabpanel" class="tab-pane fade" id="locals">
 
             <!-- Tabela de Bicicletarios -->
 
@@ -464,6 +493,13 @@
           </div>
           
           
+          <!-- Galeria de imagens -->
+
+          <div role="tabpanel" class="tab-pane fade" id="gallery">
+            <div id=galleryContainer></div>
+          </div>
+          
+          
           <!-- Importador de dados -->
 
           <div role="tabpanel" class="tab-pane fade" id="importador" class="restricted-access">
@@ -505,7 +541,7 @@
               </div>
               
               <button id="kmlFileImport" class="btn btn-action green" disabled>
-                <i class="fa fa-cloud-upload"></i> Importar 
+                <i class="fas fa-cloud-upload"></i> Importar 
               </button>
             </div>
           </div>
@@ -530,7 +566,7 @@
           html += '<div class="details-view">';
 
           if (row.photo) {
-            html += `<img src='${row.photo}'></img>`;
+            html += `<img src='${BDB.getThumbUrlFromPhotoUrl(row.photo)}'></img>`;
           }
 
           if (row.lat && row.lng) {
@@ -624,6 +660,34 @@
         function tagsListColFormatter(tags) {
           const ret = tags.map(tag => tag.name).join('・');
           return ret;
+        }
+
+        function tagsListColFormatter(tags) {
+          const ret = tags.map(tag => tag.name).join('・');
+          return ret;
+        }
+
+        function tagsFilter(tags, attr) {
+          return tags.filter(t => t.name === attr).length > 0;
+        }
+
+        function tagsFilterMonitored(tags) { 
+          return tagsFilter(tags, 'Monitorado');
+        }
+        function tagsFilterVisible(tags) {
+          return tagsFilter(tags, 'Visível');
+        }
+        function tagsFilterStrong(tags) {
+          return tagsFilter(tags, 'Reforçado');
+        }
+        function tagsFilterBustling(tags) {
+          return tagsFilter(tags, 'Movimentado');
+        }
+        function tagsFilterEasyAccess(tags) {
+          return tagsFilter(tags, 'Fácil acesso');
+        }
+        function tagsFilterSpacious(tags) {
+          return tagsFilter(tags, 'Espaçoso');
         }
 
         function photoColFormatter(value) { 
@@ -779,6 +843,58 @@
           });
         }
 
+        function initGallery() {
+          if (window._isGalleryInitialized) {
+            return;
+          }
+
+          window._isGalleryInitialized = true;
+          
+          window._gallery_currentIndex = 0;
+          window._gallery_stepSize = 200;
+          // window._gallery_stepSize = 10000; 
+          loadMoreImages();
+        }
+
+        function loadMoreImages() {
+          const start = window._gallery_currentIndex;
+          const maxCount = window._gallery_stepSize;
+          let count = 0;
+          let placeIndex;
+
+          $('.load-more-btn').remove();
+
+          for (placeIndex = start; placeIndex < places.length && count < maxCount; placeIndex++ ) {
+            const m = places[placeIndex];
+            if (m.photo && m.photo.length > 0) {
+              count++;
+              $('#galleryContainer').append(`
+                  <a href="" target="_blank" data-featherlight="${m.photo}">
+                    <img src="${BDB.getThumbUrlFromPhotoUrl(m.photo)}" alt="https://www.bikedeboa.com.br${BDB.Places.getMarkerShareUrl(m)}"/>
+                  </a>
+                `)
+            }
+          }
+
+          if (placeIndex < places.length) {
+            $('#galleryContainer').append(`
+              <button
+                class="load-more-btn btn green"
+                style="
+                  position: fixed;
+                  bottom: 12px;
+                  left: 50%;"
+              >
+                Carregar mais ${_gallery_stepSize}...
+              </button>
+            `);
+
+            $('.load-more-btn').on('click', loadMoreImages);
+
+            window._gallery_currentIndex = placeIndex;
+          }
+        }
+
         function updateReviewsTable() {
           if (reviews) {
             return;
@@ -801,10 +917,19 @@
                 { field: 'local_id', title: 'ID do bicicletário', sortable: true, class: 'col-id', visible: false },
                 { field: 'user_id', title: 'ID do usuário', sortable: true, class: 'col-id', visible: false }, 
                 { field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter' },
-                { field: 'Local.text', title: 'Bicicletário', sortable: true, class: 'col-title', },
                 { field: 'User.fullname', title: 'Usuário', sortable: true, },
                 { field: 'rating', title: 'Nota', sortable: true, editable: !!BDB.User.isAdmin },
                 { field: 'Tags', title: 'Tags', sortable: true, formatter: 'tagsListColFormatter', class: 'col-address' },
+                { field: 'Tags', title: 'Monitorado?', sortable: true, formatter: 'tagsFilterMonitored', class: 'col-address', visible: false },
+                { field: 'Tags', title: 'Visible?', sortable: true, formatter: 'tagsFilterVisible', class: 'col-address', visible: false },
+                { field: 'Tags', title: 'Reforçado?', sortable: true, formatter: 'tagsFilterStrong', class: 'col-address', visible: false },
+                { field: 'Tags', title: 'Movimentado?', sortable: true, formatter: 'tagsFilterBustling', class: 'col-address', visible: false },
+                { field: 'Tags', title: 'Facil acesso?', sortable: true, formatter: 'tagsFilterEasyAccess', class: 'col-address', visible: false },
+                { field: 'Tags', title: 'Espaçoso?', sortable: true, formatter: 'tagsFilterSpacious', class: 'col-address', visible: false },
+                { field: 'Local.text', title: 'Nome bicicletário', sortable: true, class: 'col-title', },
+                { field: 'Local.structureType', title: 'Tipo do bicicletário', sortable: true, visible: false },
+                { field: 'Local.isPublic', title: 'Bicicletário público?', sortable: true, visible: false },
+                { field: 'Local.isCovered', title: 'Bicicletário coberto?', sortable: true, visible: false },
                 { field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false },
               ],
               data: reviews,
@@ -1090,6 +1215,7 @@
             tmp.structureType = 'pescocinho';
             _importResults.tagsDetected++;
           } else if (str.includes('suporte pente')
+            || str.includes('pente')
             || str.includes('tipo pente')) {
             tmp.structureType = 'pente';
             _importResults.tagsDetected++;
@@ -1256,7 +1382,7 @@
           Database.authenticate()
             .then(() => {
               // Initial view is the Locals view
-              updateLocalsTable();
+              // updateLocalsTable();
 
               // hideSpinner();
             });
@@ -1282,6 +1408,9 @@
                 break;
               case 'reviews':
                 updateReviewsTable();
+                break;
+              case 'gallery':
+                initGallery();
                 break;
             }
           });

@@ -46,7 +46,7 @@ BDB.Database = {
           resolve(data);
         },
         error: function(error) {
-          reject(error)
+          reject(error);
         }
       });
     });
@@ -106,6 +106,8 @@ BDB.Database = {
         },
         error: function(data) {
           ga('send', 'event', 'Login', 'client authentication fail');
+
+          BDB.Database.authenticate();
 
           reject();
         }
@@ -394,7 +396,7 @@ BDB.Database = {
     let xhr = new window.XMLHttpRequest();
 
     // Upload progress
-    xhr.upload.addEventListener("progress", function (evt) {
+    xhr.upload.addEventListener('progress', function (evt) {
       if (evt.lengthComputable) {
         const percentComplete = evt.loaded / evt.total;
         // console.log(percentComplete);
@@ -571,12 +573,12 @@ BDB.Database = {
       });
   },
 
-  waitAuthentication: function(callback) {
+  waitAuthentication: function() {
     if (this.isAuthenticated) {
-      callback();
+      document.dispatchEvent(new Event('database:authenticated'));
     } else {
-      console.debug('Waiting authentication...');
-      setTimeout(this.waitAuthentication.bind(this, callback), 1000);  
+      console.log('Waiting authentication...');
+      setTimeout(this.waitAuthentication.bind(this), 200);
     }
   },
 
@@ -620,7 +622,45 @@ BDB.Database = {
           toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
 
           reject();
-        })
+        });
     });
   },
+
+  getDataSourceList: function() {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      function doIt() {
+        $.ajax({
+          type: 'get',
+          headers: self._headers,
+          url: self.API_URL + '/datasource/'
+        })
+          .done(function (data) {
+            if (data) {
+              console.debug('Got data sourcs:');
+              console.debug(data);
+    
+              resolve(data);
+            }
+          })
+          .fail(error => {
+            // requestFailHandler();
+            // toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
+  
+            reject(error);
+          });
+      }
+      
+      if (this.isAuthenticated) {
+        doIt();
+      } else {
+        this.waitAuthentication();
+        
+        $(document).on('database:authenticated', () => {
+          doIt();
+        });
+      }
+    });
+  }
 };

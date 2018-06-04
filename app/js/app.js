@@ -90,6 +90,8 @@ $(() => {
   }
 
   function openDetailsModal(marker, callback) {
+    console.log('openDetailsModal');
+
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
       return;
@@ -188,7 +190,7 @@ $(() => {
       }
     } else {
       if (templateData.canModify) {
-        templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x200&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`;
+        templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x180&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`;
       }
     }
 
@@ -218,21 +220,12 @@ $(() => {
     }
 
     // Structure type
-    let structureTypeIcon;
-    switch (m.structureType) {
-    case 'uinvertido': structureTypeIcon = '/img/tipo_uinvertido.svg'; break;
-    case 'deroda': structureTypeIcon = '/img/tipo_deroda.svg'; break;
-    case 'trave': structureTypeIcon = '/img/tipo_trave.svg'; break;
-    case 'suspenso': structureTypeIcon = '/img/tipo_suspenso.svg'; break;
-    case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break;
-    case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
-    }
     if (m.structureType) {
+      templateData.structureTypeIcon = `/img/tipo_${m.structureType}.svg`;
       templateData.structureTypeCode = m.structureType;
       templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
     }
-    templateData.structureTypeIcon = structureTypeIcon;
-
+ 
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
@@ -403,30 +396,11 @@ $(() => {
     }
     initHelpTooltip('#placeDetailsContent .help-tooltip-trigger');
 
-    $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details public access');
+    $('#placeDetails_structureType .help-tooltip-trigger').off('show.bs.tooltip').on('show.bs.tooltip', e => {
+      const type = $(e.target).data('type');
+      ga(`send', 'event', 'Misc', 'tooltip - pin details ${type} type`);
     });
-    $('#private-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details private access');
-    });
-    $('#uinvertido-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details uinvertido type');
-    });
-    $('#deroda-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details deroda type');
-    });
-    $('#trave-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details trave type');
-    });
-    $('#suspenso-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details suspenso type');
-    });
-    $('#grade-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details grade type');
-    });
-    $('#other-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details other type');
-    });
+
   }
  
   // Set router to open Local
@@ -573,9 +547,14 @@ $(() => {
       }
 
       // places[i].setMap(showIt ? map : null);
-      places[i].gmarker.setIcon(showIt ? m.icon : m.iconMini);
-      places[i].gmarker.setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
-      places[i].gmarker.collapsed = !showIt; 
+      if (places[i].gmarker) {
+        places[i].gmarker.setIcon(showIt ? m.icon : m.iconMini);
+        places[i].gmarker.setZIndex(showIt ? 2 : 1);
+        places[i].gmarker.setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
+        places[i].gmarker.collapsed = !showIt; 
+      } else {
+        console.error('ERROR: Place has no gmarker');
+      } 
       cont += showIt ? 1 : 0;
     }
 
@@ -594,7 +573,8 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
-      updatePageTitleAndMetatags('Mova o mapa para adicionar no lugar desejado');
+      updatePageTitleAndMetatags('Novo bicicletário');
+      $('#top-mobile-bar-title').text('Mova o mapa para adicionar no lugar desejado');
 
       $('body').addClass('position-pin-mode');
 
@@ -798,7 +778,6 @@ $(() => {
         hideSpinner();
 
         if (!updatingMarker) {
-          const newPlace = places.find( i => i.id === newPlace.id );
           if (newPlace) {
             // promptPWAInstallPopup();
 
@@ -869,6 +848,8 @@ $(() => {
   }
 
   function openNewOrEditPlaceModal(nameSuggestions) {
+    console.log('openNewOrEditPlaceModal');
+
     let templateData = {
       nameSuggestions: nameSuggestions,
       editMode: !!openedMarker
@@ -944,7 +925,7 @@ $(() => {
         ga('send', 'event', 'Misc', 'tooltip - new pin type help');
       });
 
-      $('.place-suggestion--item').on('click', e => {
+      $('.place-suggestion--item').off('click').on('click', e => {
         $('.text-input-wrapper input').val($(e.currentTarget).data('name'));
       });
     }
@@ -968,13 +949,13 @@ $(() => {
 
     initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
 
-    $('#newPlaceModal textarea').on('keyup', e => {
+    $('#newPlaceModal textarea').off('keyup').on('keyup', e => {
       autoGrowTextArea(e.currentTarget); 
     });
 
-    $('.saveNewPlaceBtn').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
+    $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
  
-    $('#photoInput').on('change', e => {
+    $('#photoInput').off('change').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
       const self = document.getElementById('photoInput');
       const files = self.files ;
@@ -992,7 +973,7 @@ $(() => {
       // }
     });
     
-    $('.collapsable').on('click', e => {
+    $('.collapsable').off('click').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
     }); 
 
@@ -1160,7 +1141,7 @@ $(() => {
         //     promptPWAInstallPopup();
         //   } 
         // });
-        toastr['success']('Avaliação salva. Valeu!'); 
+        toastr['success']('Avaliação salva. Valeu!');
         // promptPWAInstallPopup();
       }
 
@@ -1434,7 +1415,7 @@ $(() => {
     //set Map Initialization 
     $(document).on('map:ready', function () {
       hideSpinner();
-      //get gMap instance to be used by functions to still referer to map here (mainly places);
+      // Get gMap instance to be used by functions to still referer to map here (mainly places);
       map = BDB.Map.getMap();
       BDB.Map.updateMarkers();
 
@@ -1971,6 +1952,8 @@ $(() => {
       const id = $target.data('id');
       const place = BDB.Places.getMarkerById(id);
 
+      // window.location = BDB.Places.getMarkerShareUrl(place);
+
       $('#contributionsModal')
         .one('hidden.bs.modal', () => {
           openLocal(place);
@@ -2025,14 +2008,21 @@ $(() => {
     $(document).trigger('LoadMap');
   }
   function openDataModal() {
-    if ($('#dataModal').length === 0) {
-      $('body').append(BDB.templates.dataModal()); 
-    }
+    BDB.Database.getDataSourceList()
+      .then( dataSources => {
+        let templateData = {
+          dataSources: dataSources
+        }
 
-    $('#dataModal').modal('show');
-    if (!_isMobile) {
-      $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-    }
+        if ($('#dataModal').length === 0) {
+          $('body').append(BDB.templates.dataModal(templateData));
+        }
+
+        $('#dataModal').modal('show');
+        if (!_isMobile) {
+          $('#dataModal article > *').css({ opacity: 0 }).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+        }
+      });
   } 
 
   function openAboutModal() {
@@ -2055,6 +2045,7 @@ $(() => {
         $('#about-stats--places').velocity('fadeIn').text(data.localsCount);
         $('#about-stats--reviews').velocity('fadeIn').text(data.reviewsCount);
         $('#about-stats--views').velocity('fadeIn').text(data.viewsCount);
+        $('#about-stats--cities').velocity('fadeIn').text(getTopCities().length);
       });
 
     // if (places) {
@@ -2393,6 +2384,7 @@ $(() => {
   function init() {
     // Retrieve places saved in a past access
     places = BDB.getMarkersFromLocalStorage();
+    BDB.Map.updateMarkers();
     
     if (places && places.length) {
       console.debug(`Retrieved ${places.length} locations from LocalStorage.`);
