@@ -57,7 +57,7 @@ $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $bodyFont: "Quicksand", sans-serif;
-$headingFont: 'Quicksand', sans-serif;
+$headingFont: $bodyFont;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lighterGray;
@@ -1272,7 +1272,7 @@ a.unstyled-link {
           border-radius: 15px;
           padding: $GRID_SPACE 3%;
           position: relative;
-          filter: grayscale(100%) brightness(.8);
+          // filter: grayscale(100%) brightness(.8);
           opacity: 0.9;
           text-align: center;
 
