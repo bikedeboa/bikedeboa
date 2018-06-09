@@ -7,20 +7,18 @@
             </a>
         </section>
     {{else}}
-        {{#if canModify}}
-            <section class="photo-container photo-input--container loading">
-                <img class="photoInputBg" alt="" src="{{streetViewImgUrl}}"/>
-            
-                <div class="photo-input--label photo-input--edit-mode editPlaceBtn">
-                    <div class="photo-input--calltoaction">
-                        <img src="/img/icon_photo_white.svg" alt="">
-                        <div> 
-                            Adicionar foto
-                        </div>
+        <section class="photo-container photo-input--container loading">
+            <img class="photoInputBg" alt="" src="{{streetViewImgUrl}}"/>
+        
+            <div class="photo-input--label photo-input--edit-mode editPlaceBtn">
+                <div class="photo-input--calltoaction">
+                    <img src="/img/icon_photo_white.svg" alt="">
+                    <div> 
+                        Adicionar foto
                     </div>
                 </div>
-            </section>
-        {{/if}}
+            </div>
+        </section>
     {{/if}}
 
     <section class="top-toolbar">
@@ -78,20 +76,16 @@
                 {{/if}}
             </div>
             {{else}}
-            {{#if canModify}}
-                <div class="missing-info-container">
-                    {{!-- <img alt="" src="/img/icon_shrug.svg"/> --}}
-                    {{!-- <div class="missing-info-placeholder">?</div> --}}
-                    <div class="icon-label">
-                        É coberto?
-                        <div>
-                            <button class="editPlaceBtn link-button">
-                            Responder
-                            </button>
-                        </div>
+            <div class="missing-info-container">
+                <div class="icon-label">
+                    É coberto?
+                    <div>
+                        <button class="editPlaceBtn link-button">
+                        Responder
+                        </button>
                     </div>
                 </div>
-            {{/if}}
+            </div>
             {{/unless}}
 
             {{#unless noIsPublicData}}
@@ -118,20 +112,16 @@
                     {{/if}}
                 </div>
             {{else}}
-            {{#if canModify}}
-                <div class="missing-info-container">
-                    {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
-                    {{!-- <div class="missing-info-placeholder">?</div> --}}
-                    <div class="icon-label">
-                        Como é o acesso?
-                        <div>
-                            <button class="editPlaceBtn link-button">
-                                Responder
-                            </button>
-                        </div>
+            <div class="missing-info-container">
+                <div class="icon-label">
+                    Como é o acesso?
+                    <div>
+                        <button class="editPlaceBtn link-button">
+                        Responder
+                        </button>
                     </div>
                 </div>
-            {{/if}}
+            </div>
             {{/unless}}
 
             {{#if structureTypeLabel}}
@@ -227,20 +217,16 @@
                 </div>
             </div>
             {{else}}
-            {{#if canModify}}
-                <div class="missing-info-container">
-                    {{!-- <img alt="" src="/img/icon_shrug.svg" /> --}}
-                    {{!-- <div class="missing-info-placeholder">?</div> --}}
-                    <div class="icon-label"> 
-                        Que tipo é?
-                        <div>
-                            <button class="editPlaceBtn link-button">
-                            Responder
-                            </button>
-                        </div>
+            <div class="missing-info-container">
+                <div class="icon-label"> 
+                    Que tipo é?
+                    <div>
+                        <button class="editPlaceBtn link-button">
+                        Responder
+                        </button>
                     </div>
                 </div>
-            {{/if}}
+            </div>
             {{/if}} 
         </section>
 
