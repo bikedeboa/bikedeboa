@@ -1052,7 +1052,7 @@ $(() => {
             class="btn tagDisplay ${isPrepoped ? 'active' : ''}"
             data-toggle="button"
             data-value="${t.id}">
-          ${t.name}
+          <span class="glyphicon glyphicon-plus"></span> ${t.name}
         </button>
       `;
     }).join(''); 
