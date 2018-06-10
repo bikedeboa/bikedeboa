@@ -3168,10 +3168,12 @@ body.fullscreen-modal-open {
 
     .tagDisplay {
       background: transparent;
-      border: 1px solid $black;
+      border: 1px solid $green;
+      color: $green;
       border-radius: 25px;
       margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-      width: calc(33% - #{$GRID_SPACE}); 
+      padding: $GRID_SPACE/2;
+      width: calc(33% - #{$GRID_SPACE});
 
       &.active {
           background: $green;
@@ -3185,7 +3187,7 @@ body.fullscreen-modal-open {
       } 
 
       &:hover {
-        background: $lighterGray;
+        background: $lightestGray;
       }
     }
 }
