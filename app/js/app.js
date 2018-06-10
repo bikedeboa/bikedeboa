@@ -1540,6 +1540,51 @@ $(() => {
         setView('Contribuições', '/contribuicoes', true);
       }
     }));
+
+    $('body').on('click', '.contact-btn', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
+      // hideAll();
+      // goHome();
+
+      ga('send', 'event', 'Misc', 'contact opened');
+
+      swal({
+        title: 'Contato',
+        html: 
+          `
+            <div style="text-align: center; font-size: 30px;">
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
+                </a> 
+
+                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://github.com/bikedeboa">
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
+                </a>
+
+                <a href="mailto:bikedeboa@gmail.com">
+                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
+                </a>
+              </p>
+            </div> 
+
+            <hr>
+
+            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
+            <div style="text-align: center;">
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
+            </div>
+          `,
+      });
+    }));
  
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
@@ -1729,11 +1774,11 @@ $(() => {
     /////////////////////
 
     // $('#locationQueryInput').on('focus', e => { 
-    $('.search-button, #locationQueryInput').on('click', e => { 
+    $('.search-button, #locationQueryInput').on('click', queueUiCallback.bind(this, e => {
       if ($('#locationQueryInput').val().length === 0) {
         enterLocationSearchMode();
       }
-    });
+    }));
     if (!_isMobile) {
       // Hide our panel if the user clicked anywhere outside
       $('#locationQueryInput').on('blur', e => { 
@@ -2527,51 +2572,6 @@ $(() => {
 
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Perguntas frequentes', '/faq', true);
-    }));
-
-    $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
-      // @todo having to call these two ones here is bizarre
-      hideAll();
-      goHome();
-
-      ga('send', 'event', 'Misc', 'contact opened');
-
-      swal({
-        title: 'Contato',
-        html:
-          `
-            <div style="text-align: center; font-size: 30px;">
-              <p>
-                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
-                </a> 
-
-                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://github.com/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
-                </a>
-
-                <a href="mailto:bikedeboa@gmail.com">
-                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
-                </a>
-              </p>
-            </div> 
-
-            <hr>
-
-            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
-            <div style="text-align: center;">
-              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
-            </div>
-          `,
-      });
     }));
   }
 
