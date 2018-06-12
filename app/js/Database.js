@@ -46,7 +46,7 @@ BDB.Database = {
           resolve(data);
         },
         error: function(error) {
-          reject(error)
+          reject(error);
         }
       });
     });
@@ -106,6 +106,8 @@ BDB.Database = {
         },
         error: function(data) {
           ga('send', 'event', 'Login', 'client authentication fail');
+
+          BDB.Database.authenticate();
 
           reject();
         }
@@ -394,7 +396,7 @@ BDB.Database = {
     let xhr = new window.XMLHttpRequest();
 
     // Upload progress
-    xhr.upload.addEventListener("progress", function (evt) {
+    xhr.upload.addEventListener('progress', function (evt) {
       if (evt.lengthComputable) {
         const percentComplete = evt.loaded / evt.total;
         // console.log(percentComplete);
@@ -538,13 +540,13 @@ BDB.Database = {
     }).done(function(data) {
       console.debug('Retrieved ' + data.length + ' locations from API.');
 
-      markers = data;
+      places = data;
 
-      BDB.saveMarkersToLocalStorage(markers);
+      BDB.saveMarkersToLocalStorage(places);
 
-      for(let i=0; i < markers.length; i++) {
-        const m = markers[i];
-        // Mark that no markers have retrieved their details
+      for(let i=0; i < places.length; i++) {
+        const m = places[i];
+        // Mark that no places have retrieved their details
         m._hasDetails = false;
 
         // Massage average format
@@ -554,7 +556,7 @@ BDB.Database = {
       }
 
       if (successCB && typeof successCB === 'function') {
-        successCB(markers);
+        successCB(places);
       }
     })
       .fail(() => {
@@ -571,12 +573,12 @@ BDB.Database = {
       });
   },
 
-  waitAuthentication: function(callback) {
+  waitAuthentication: function() {
     if (this.isAuthenticated) {
-      callback();
+      document.dispatchEvent(new Event('database:authenticated'));
     } else {
-      console.debug('Waiting authentication...');
-      setTimeout(this.waitAuthentication.bind(this, callback), 1000);  
+      console.log('Waiting authentication...');
+      setTimeout(this.waitAuthentication.bind(this), 200);
     }
   },
 
@@ -596,21 +598,21 @@ BDB.Database = {
           console.debug(place);
 
           let updatedMarker = {};
-          if (markers) {
+          if (places) {
             // Combine detailed data with what we had
-            const outOfDatePlace = markers.find(m => { return m.id === placeId; });
+            const outOfDatePlace = places.find(m => { return m.id === placeId; });
             Object.assign(updatedMarker, outOfDatePlace, place); 
           } else { 
             // Markers weren't loaded yet (it's a deeplink)
             updatedMarker = place;
-            markers = [updatedMarker];
+            places = [updatedMarker];
           }
 
           // Set flag 
           updatedMarker._hasDetails = true;
 
-          // Update offline-stored markers with new state
-          BDB.saveMarkersToLocalStorage(markers);
+          // Update offline-stored places with new state
+          BDB.saveMarkersToLocalStorage(places);
 
           resolve(updatedMarker);
         }
@@ -620,7 +622,45 @@ BDB.Database = {
           toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
 
           reject();
-        })
+        });
     });
   },
+
+  getDataSourceList: function() {
+    const self = this;
+
+    return new Promise((resolve, reject) => {
+      function doIt() {
+        $.ajax({
+          type: 'get',
+          headers: self._headers,
+          url: self.API_URL + '/datasource/'
+        })
+          .done(function (data) {
+            if (data) {
+              console.debug('Got data sourcs:');
+              console.debug(data);
+    
+              resolve(data);
+            }
+          })
+          .fail(error => {
+            // requestFailHandler();
+            // toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
+  
+            reject(error);
+          });
+      }
+      
+      if (this.isAuthenticated) {
+        doIt();
+      } else {
+        this.waitAuthentication();
+        
+        $(document).on('database:authenticated', () => {
+          doIt();
+        });
+      }
+    });
+  }
 };

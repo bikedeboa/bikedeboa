@@ -1,16 +1,37 @@
 var BDB = BDB || {};
 
 BDB.getMarkersFromLocalStorage = () => {
-  return JSON.parse( localStorage.getItem('markers') );
+  const tmp = JSON.parse(localStorage.getItem('markers'));
+
+  if (tmp) {
+    for (let i = 0; i < tmp.length; i++) {
+      tmp[i].gmarker = null;
+    }
+  }
+
+  return tmp;
 };
 
 BDB.saveMarkersToLocalStorage = markersToSave => {
-  localStorage.setItem( 'markers', JSON.stringify(markersToSave) );
+  // let tmp = markersToSave.map( m => {
+  //   m.gmarker = null;
+  //   return m;
+  // });
+
+  // localStorage.setItem( 'markers', JSON.stringify(tmp) );
 };
 
 BDB.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
+
+BDB.getThumbUrlFromPhotoUrl = function(url) {
+  if (url) {
+    return url.replace('images', 'images/thumbs'); 
+  } else {
+    return;
+  }
+}
 
 window.createdAtToDaysAgo = createdAtStr => {
   const createdAtDate = Date.parse(createdAtStr);

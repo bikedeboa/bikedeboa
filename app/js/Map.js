@@ -18,6 +18,7 @@ BDB.Map = (function () {
   let directionsService;
   let placesService;
   let infoWindow;
+  let gmarkers;
 
   // to do:  move this to configuration
   let mapBoundsCoords = { 
@@ -52,7 +53,7 @@ BDB.Map = (function () {
     let {coords, zoom, isUserLocation, elId} = options;
     const mapElem = document.getElementById(elId);
 
-    if (!elId) {
+    if (!elId || !mapElem) {
       console.warn('Map initialization stopped: no #map element found');
       return;
     }
@@ -87,7 +88,6 @@ BDB.Map = (function () {
  
     setInfoBox();
     mapCenterChanged();
-    mapZoomChanged();
     
     map.addListener('center_changed', mapCenterChanged);
   
@@ -214,12 +214,16 @@ BDB.Map = (function () {
   };
   let setUserMarkerIcon = function(){
     let iconName = (isGeolocated) ? 'current' : 'last';
-    geolocationMarker.setIcon({
-      url: `/img/${iconName}_position.svg`, // url
-      scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
-      origin: new google.maps.Point(0, 0), // origin
-      anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
-    });
+    if (geolocationMarker) {
+      geolocationMarker.setIcon({
+        url: `/img/${iconName}_position.svg`, // url
+        scaledSize: new google.maps.Size(CURRENT_LOCATION_MARKER_W, CURRENT_LOCATION_MARKER_H), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(CURRENT_LOCATION_MARKER_W / 2, CURRENT_LOCATION_MARKER_H / 2), // anchor
+      });
+    } else {
+      console.warn('Error in setUserMarkerIcon(): geolocationMarker wasnt initialized');
+    }
   };
   let setUserRadius = function () {
     geolocationRadius = new google.maps.Circle({
@@ -321,7 +325,7 @@ BDB.Map = (function () {
       map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 203 KB
       map.data.loadGeoJson('/geojson/ciclovias_recife_osm.min.json'); // 68 KB 
       map.data.loadGeoJson('/geojson/ciclovias_grandeportoalegre_osm.min.json'); // 369 KB
-      // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
+      map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
       // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
 
       map.data.setStyle({  
@@ -335,12 +339,15 @@ BDB.Map = (function () {
     }
   };
   let setMarkersIcon = function(scale) {
-    const tempMarkers = BDB.Map.getMarkers();
-    if (tempMarkers && Array.isArray(tempMarkers)) {
-      let m;
-      for (let i = 0; i < tempMarkers.length; i++) {
-        m = markers[i];
-        tempMarkers[i].setIcon(scale === 'mini' ? m.iconMini : m.icon);
+    if (places) {
+      let place;
+      for (let i = 0; i < places.length; i++) {
+        place = places[i];
+        if (place.gmarker) {
+          place.gmarker.setIcon(scale === 'mini' ? place.iconMini : place.icon);
+        } else {
+          console.error('ERROR: trying to set marker in place that has no gmarker associated');
+        }
       }
     }
   };
@@ -448,7 +455,10 @@ BDB.Map = (function () {
           if (status === google.maps.GeocoderStatus.OK) {
             if (results[0]) {
               const r = results[0].address_components;
-              const formattedAddress = `${r[1].short_name}, ${r[0].short_name} - ${r[3].short_name}`;
+              let formattedAddress = `${r[1].short_name}, ${r[0].short_name}`;
+              if (r[3]) {
+                formattedAddress += ` - ${r[3].short_name}`;
+              }
               let city, state, country;
 
               r.forEach(address => {
@@ -490,40 +500,37 @@ BDB.Map = (function () {
       });
     },
     getMarkers: function() {
-      return markerClusterer && markerClusterer.getMarkers();
+      // return markerClusterer && markerClusterer.getMarkers();
+      return gmarkers;
     },
     clearMarkers: function () {
-      // Deletes all markers in the array by removing references to them.
       // setMapOnAll(null);
-      // gmarkers = [];
+      gmarkers = [];
       if (markerClusterer) {
         markerClusterer.clearMarkers();
       }
     },
     // Sets the map on all markers in the array.
     setMapOnAll: function(map) {
-      let tempMarkers = BDB.Map.getMarkers();
-      if (tempMarkers && Array.isArray(tempMarkers)) {
-        for (let i = 0; i < tempMarkers.length; i++) {
-          tempMarkers[i].setMap(map);
+      if (places) {
+        for (let i = 0; i < places.length; i++) {
+          places[i].gmarker.setMap(map);
         }
       }
     },
     hideMarkers: function() {
       // Removes the markers from the map, but keeps them in the array.
-      let tempMarkers = BDB.Map.getMarkers();
-      if (tempMarkers && Array.isArray(tempMarkers)) {
-        for (let i = 0; i < tempMarkers.length; i++) {
-          tempMarkers[i].setOptions({ clickable: false, opacity: 0.3 });
+      if (places) {
+        for (let i = 0; i < places.length; i++) {
+          places[i].gmarker.setOptions({ clickable: false, opacity: 0.3 });
         }
       }
     },
     showMarkers: function() {
       // Shows any markers currently in the array.
-      let tempMarkers = BDB.Map.getMarkers();
-      if (tempMarkers && Array.isArray(tempMarkers)) {
-        for (let i = 0; i < tempMarkers.length; i++) {
-          tempMarkers[i].setOptions({ clickable: true, opacity: 1 });
+      if (places) {
+        for (let i = 0; i < places.length; i++) {
+          places[i].gmarker.setOptions({ clickable: true, opacity: 1 });
         }
       }
     },
@@ -544,6 +551,11 @@ BDB.Map = (function () {
       }
     },
     getListOfPlaces: function (orderBy, maxPlaces = 50) {
+      if (!places) {
+        console.warn('ERROR in getListOfPlaces: places is null');
+        return;
+      }
+
       let markersToShow;
       switch (orderBy) {
       case 'nearest': { 
@@ -568,8 +580,8 @@ BDB.Map = (function () {
         const positionToCompare = BDB.Geolocation.getCurrentPosition();
 
         // Use nearest places
-        for (let i = 0; i < markers.length; i++) {
-          const m = markers[i];
+        for (let i = 0; i < places.length; i++) {
+          const m = places[i];
 
           m.distance = distanceInKmBetweenEarthCoordinates(
             positionToCompare.latitude,
@@ -577,19 +589,19 @@ BDB.Map = (function () {
             m.lat,
             m.lng);
         }
-        markersToShow = markers.sort((a, b) => { return a.distance - b.distance; });
+        markersToShow = places.sort((a, b) => { return a.distance - b.distance; });
         markersToShow = markersToShow.slice(0, maxPlaces);
         break;
       }
       case 'updatedAt':
         // Most recently updated places
         // @todo bring this info from getAll endpoint
-        markersToShow = markers.sort((a, b) => { return b.updatedAt - a.updatedAt; });
+        markersToShow = places.sort((a, b) => { return b.updatedAt - a.updatedAt; });
         markersToShow = markersToShow.slice(0, maxPlaces);
         break;
       case 'best':
         // Best rated places
-        markersToShow = markers.sort((a, b) => {
+        markersToShow = places.sort((a, b) => {
           return (b.average * 1000 + b.reviews * 1) - (a.average * 1000 + a.reviews * 1);
         });
         markersToShow = markersToShow.slice(0, maxPlaces);
@@ -599,6 +611,11 @@ BDB.Map = (function () {
       return markersToShow;
     },
     fitToNearestPlace: function(forceLongDistance = false) {
+      if (!places) {
+        console.warn('ERROR in fitToNearestPlace: places is null');
+        return;
+      }
+
       const currentPos = BDB.Geolocation.getCurrentPosition();
       if (!currentPos) {
         console.error('fitToNearestPlace(): dont have current pos');
@@ -692,19 +709,19 @@ BDB.Map = (function () {
       });
     },
     updateMarkers: function () {
+      console.log('updateMarkers');
+      
       this.clearMarkers();
 
-      // Markers from Database
-      if (markers && markers.length > 0) {
+      // Places from Database
+      if (places && places.length > 0) {
         // Order by average so best ones will have higher z-index
-        // markers = markers.sort((a, b) => {
+        // places = places.sort((a, b) => {
         //   return a.average - b.average;
         // });
 
-        let gmarkers = [];
-
-        for (let i = 0; i < markers.length; i++) {
-          const m = markers[i];
+        for (let i = 0; i < places.length; i++) {
+          const m = places[i];
 
           if (m) {
             // Icon and Scaling
@@ -788,7 +805,7 @@ BDB.Map = (function () {
                   //   fontWeight: 'bold'
                   // },
                   icon: m.icon,
-                  zIndex: i, //markers should be ordered by average
+                  zIndex: i, //places should be ordered by average
                   // opacity: 0.1 + (m.average/5).
                 });
                 // Performance of MarkerWithLabel is horrible even when hiding labels with display:none :(
@@ -807,7 +824,6 @@ BDB.Map = (function () {
                 // });
 
                 // Info window
-                
                 let templateData = {
                   thumbnailUrl: (m.photo) ? m.photo.replace('images', 'images/thumbs') : '',
                   title: m.text,
@@ -894,6 +910,7 @@ BDB.Map = (function () {
                 }
 
                 gmarkers.push(newMarker);
+                m.gmarker = newMarker;
               } else {
                 console.error('error: pin with no latitude/longitude');
               }
@@ -935,7 +952,7 @@ BDB.Map = (function () {
             },
           ];
           let clustererOptions = {
-            maxZoom: 10,
+            maxZoom: 10, 
             minimumClusterSize: 1,
             styles: clustererStyles,
             gridSize: 60

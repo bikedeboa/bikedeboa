@@ -16,8 +16,8 @@ $(() => {
         text: openedMarker.text,
         url: shareUrl,
       })
-      .then(() => {})
-      .catch((error) => console.error('ERROR sharing', error));
+        .then(() => {})
+        .catch((error) => console.error('ERROR sharing', error));
     } else {
       swal({  
         imageUrl: _isMobile ? '' : '/img/icon_share.svg',
@@ -90,6 +90,8 @@ $(() => {
   }
 
   function openDetailsModal(marker, callback) {
+    console.log('openDetailsModal');
+
     if (!marker) {
       console.error('Trying to open details modal without a marker.');
       return;
@@ -112,7 +114,7 @@ $(() => {
       lat: m.lat,
       lng: m.lng,
       slots: m.slots
-    }
+    };
     
     // Average
     templateData.pinColor = getColorFromAverage(m.average);
@@ -187,9 +189,9 @@ $(() => {
         $('body').addClass('transparent-mobile-topbar');
       }
     } else {
-      if (templateData.canModify) {
-        templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x200&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`
-      }
+
+      templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x180&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`;
+
     }
 
     // Is public? 
@@ -218,21 +220,12 @@ $(() => {
     }
 
     // Structure type
-    let structureTypeIcon;
-    switch (m.structureType) {
-    case 'uinvertido': structureTypeIcon = '/img/tipo_uinvertido.svg'; break;
-    case 'deroda': structureTypeIcon = '/img/tipo_deroda.svg'; break;
-    case 'trave': structureTypeIcon = '/img/tipo_trave.svg'; break;
-    case 'suspenso': structureTypeIcon = '/img/tipo_suspenso.svg'; break;
-    case 'grade': structureTypeIcon = '/img/tipo_grade.svg'; break;
-    case 'other': structureTypeIcon = '/img/tipo_other.svg'; break;
-    }
     if (m.structureType) {
+      templateData.structureTypeIcon = `/img/tipo_${m.structureType}.svg`;
       templateData.structureTypeCode = m.structureType;
       templateData.structureTypeLabel = STRUCTURE_CODE_TO_NAME[m.structureType];
     }
-    templateData.structureTypeIcon = structureTypeIcon;
-
+ 
     // Retrieves a previous review saved in session
     const previousReview = BDB.User.getReviewByPlaceId(m.id);
     if (previousReview) {
@@ -406,30 +399,11 @@ $(() => {
     }
     initHelpTooltip('#placeDetailsContent .help-tooltip-trigger');
 
-    $('#public-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details public access');
+    $('#placeDetails_structureType .help-tooltip-trigger').off('show.bs.tooltip').on('show.bs.tooltip', e => {
+      const type = $(e.target).data('type');
+      ga(`send', 'event', 'Misc', 'tooltip - pin details ${type} type`);
     });
-    $('#private-access-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details private access');
-    });
-    $('#uinvertido-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details uinvertido type');
-    });
-    $('#deroda-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details deroda type');
-    });
-    $('#trave-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details trave type');
-    });
-    $('#suspenso-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details suspenso type');
-    });
-    $('#grade-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details grade type');
-    });
-    $('#other-type-help-tooltip').off('show.bs.tooltip').on('show.bs.tooltip', () => {
-      ga('send', 'event', 'Misc', 'tooltip - pin details other type');
-    });
+
   }
  
   // Set router to open Local
@@ -448,7 +422,7 @@ $(() => {
   }
 
   function routerOpenLocal(markerId, callback) {
-    const marker = BDB.Places.getMarkerById(markerId)
+    const marker = BDB.Places.getMarkerById(markerId);
  
     if (marker) {
       openDetailsModal(marker, callback);
@@ -524,10 +498,8 @@ $(() => {
     const photoFilters = filters.filter(i => i.prop === 'hasPhoto');
     const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters, photoFilters];
 
-    const tempMarkers = BDB.Map.getMarkers();
-
-    for(let i=0; i < markers.length; i++) {
-      const m = markers[i];
+    for(let i=0; i < places.length; i++) {
+      const m = places[i]; 
       let showIt = true;
 
       // Apply all filters to this marker
@@ -577,10 +549,15 @@ $(() => {
         }
       }
 
-      // tempMarkers[i].setMap(showIt ? map : null);
-      tempMarkers[i].setIcon(showIt ? m.icon : m.iconMini);
-      tempMarkers[i].setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
-      tempMarkers[i].collapsed = !showIt;
+      // places[i].setMap(showIt ? map : null);
+      if (places[i].gmarker) {
+        places[i].gmarker.setIcon(showIt ? m.icon : m.iconMini);
+        places[i].gmarker.setZIndex(showIt ? 2 : 1);
+        places[i].gmarker.setOptions({clickable: showIt, opacity: (showIt ? 1 : 0.3)});
+        places[i].gmarker.collapsed = !showIt; 
+      } else {
+        console.error('ERROR: Place has no gmarker');
+      } 
       cont += showIt ? 1 : 0;
     }
 
@@ -599,7 +576,8 @@ $(() => {
     const isTurningOn = addLocationMode;
 
     if (isTurningOn) {
-      updatePageTitleAndMetatags('Mova o mapa para adicionar no lugar desejado');
+      updatePageTitleAndMetatags('Novo bicicletário');
+      $('#top-mobile-bar-title').text('Mova o mapa para adicionar no lugar desejado');
 
       $('body').addClass('position-pin-mode');
 
@@ -762,7 +740,7 @@ $(() => {
       description: container.find('#descriptionInput').val(),
       slots: container.find('#slotsInput').val(),
       isPaid: container.find('#isPaidInput').val(),
-    }
+    };
 
     place.text = formFields.text;
     place.structureType = formFields.structureType;
@@ -803,8 +781,7 @@ $(() => {
         hideSpinner();
 
         if (!updatingMarker) {
-          const newMarker = markers.find( i => i.id === newPlace.id );
-          if (newMarker) {
+          if (newPlace) {
             // promptPWAInstallPopup();
 
             swal({
@@ -870,17 +847,19 @@ $(() => {
           // Present to the user the already resized image
           document.getElementById('photoInputBg').src = _uploadingPhotoBlob;
           $('#newPlaceModal #photoInput+label').addClass('photo-input--edit-mode');
-        })
+        });
     }
 
     hideSpinner();
   }
 
   function openNewOrEditPlaceModal(nameSuggestions) {
+    console.log('openNewOrEditPlaceModal');
+
     let templateData = {
       nameSuggestions: nameSuggestions,
       editMode: !!openedMarker
-    }
+    };
 
     // Edit mode?
     if (openedMarker) {
@@ -952,7 +931,7 @@ $(() => {
         ga('send', 'event', 'Misc', 'tooltip - new pin type help');
       });
 
-      $('.place-suggestion--item').on('click', e => {
+      $('.place-suggestion--item').off('click').on('click', e => {
         $('.text-input-wrapper input').val($(e.currentTarget).data('name'));
       });
     }
@@ -976,13 +955,13 @@ $(() => {
 
     initHelpTooltip('#newPlaceModal .help-tooltip-trigger');
 
-    $('#newPlaceModal textarea').on('keyup', e => {
+    $('#newPlaceModal textarea').off('keyup').on('keyup', e => {
       autoGrowTextArea(e.currentTarget); 
     });
 
-    $('.saveNewPlaceBtn').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
+    $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, finishCreateOrUpdatePlace));
  
-    $('#photoInput').on('change', e => {
+    $('#photoInput').off('change').on('change', e => {
       // for some weird compiling reason using 'this' doesnt work here
       const self = document.getElementById('photoInput');
       const files = self.files ;
@@ -1000,7 +979,7 @@ $(() => {
       // }
     });
     
-    $('.collapsable').on('click', e => {
+    $('.collapsable').off('click').on('click', e => {
       $(e.currentTarget).addClass('expanded'); 
     }); 
 
@@ -1018,7 +997,7 @@ $(() => {
   function getTopCities() {
     // Count how many places each city has
     let cities = {};
-    markers.forEach(m => {
+    places.forEach(m => {
       if (m.city && m.state) {
         // We merge the city and state names to create a unique identifier
         const key = `${m.city},${m.state}`;
@@ -1123,7 +1102,7 @@ $(() => {
             class="btn tagDisplay ${isPrepoped ? 'active' : ''}"
             data-toggle="button"
             data-value="${t.id}">
-          ${t.name}
+          <span class="glyphicon glyphicon-plus"></span> ${t.name}
         </button>
       `;
     }).join(''); 
@@ -1215,7 +1194,7 @@ $(() => {
         //     promptPWAInstallPopup();
         //   } 
         // });
-        toastr['success']('Avaliação salva. Valeu!'); 
+        toastr['success']('Avaliação salva. Valeu!');
         // promptPWAInstallPopup();
       }
 
@@ -1364,7 +1343,7 @@ $(() => {
       BDB.Map.searchAndCenter(cityName) 
         .then( () => {
           exitLocationSearchMode();
-        }) 
+        }); 
     });
 
     $('body').addClass('search-mode'); 
@@ -1448,16 +1427,16 @@ $(() => {
     }
 
     // hideAll().then(() => {
-      if (isReplaceState) {
-        History.replaceState(data, title, view);
-      } else {
-        History.pushState(data, title, view);
-      }
+    if (isReplaceState) {
+      History.replaceState(data, title, view);
+    } else {
+      History.pushState(data, title, view);
+    }
 
-      // Force new pageview for Analytics
-      // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
-      ga('set', 'page', view);
-      ga('send', 'pageview');
+    // Force new pageview for Analytics
+    // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
+    ga('set', 'page', view);
+    ga('send', 'pageview');
     // });
   }
 
@@ -1489,7 +1468,7 @@ $(() => {
     //set Map Initialization 
     $(document).on('map:ready', function () {
       hideSpinner();
-      //get gMap instance to be used by functions to still referer to map here (mainly markers);
+      // Get gMap instance to be used by functions to still referer to map here (mainly places);
       map = BDB.Map.getMap();
       BDB.Map.updateMarkers();
 
@@ -1497,7 +1476,7 @@ $(() => {
     });
 
     $(document).on('autocomplete:done', function (e) {
-      let place = e.detail
+      let place = e.detail;
 
       addToRecentSearches({
         name: place.name,
@@ -1514,13 +1493,13 @@ $(() => {
     });
 
     $(document).one('LoadMap', function () {
-      if (!markers) {
+      if (!places) {
         showSpinner('Carregando bicicletários...'); 
       }
 
       BDB.Database.getPlaces( () => {
-        $('#filter-results-counter').html(markers.length);
-        $('#filter-results-total').html(markers.length);
+        $('#filter-results-counter').html(places.length);
+        $('#filter-results-total').html(places.length);
 
         BDB.Map.updateMarkers();
 
@@ -1533,7 +1512,7 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-      BDB.Map.init(start_coords, zoom, "map", getGeolocation, openLocal); 
+      BDB.Map.init(start_coords, zoom, 'map', getGeolocation, openLocal); 
 
       if (!_isTouchDevice) {
         $('.caption-tooltip').tooltip({
@@ -1613,6 +1592,51 @@ $(() => {
       } else {
         setView('Contribuições', '/contribuicoes', true);
       }
+    }));
+
+    $('body').on('click', '.contact-btn', queueUiCallback.bind(this, () => {
+      // @todo having to call these two ones here is bizarre
+      // hideAll();
+      // goHome();
+
+      ga('send', 'event', 'Misc', 'contact opened');
+
+      swal({
+        title: 'Contato',
+        html: 
+          `
+            <div style="text-align: center; font-size: 30px;">
+              <p>
+                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
+                </a> 
+
+                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
+                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
+                </a>
+
+                <a class="" target="_blank" rel="noopener" href="https://github.com/bikedeboa">
+                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
+                </a>
+
+                <a href="mailto:bikedeboa@gmail.com">
+                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
+                </a>
+              </p>
+            </div> 
+
+            <hr>
+
+            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
+            <div style="text-align: center;">
+              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
+            </div>
+          `,
+      });
     }));
  
     // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
@@ -1803,11 +1827,11 @@ $(() => {
     /////////////////////
 
     // $('#locationQueryInput').on('focus', e => { 
-    $('.search-button, #locationQueryInput').on('click', e => { 
+    $('.search-button, #locationQueryInput').on('click', queueUiCallback.bind(this, e => {
       if ($('#locationQueryInput').val().length === 0) {
         enterLocationSearchMode();
       }
-    });
+    }));
     if (!_isMobile) {
       // Hide our panel if the user clicked anywhere outside
       $('#locationQueryInput').on('blur', e => { 
@@ -1962,7 +1986,7 @@ $(() => {
         .then(() => {
           goHome(); 
           exitLocationSearchMode();
-        })
+        });
     });
   }
 
@@ -2026,6 +2050,8 @@ $(() => {
       const id = $target.data('id');
       const place = BDB.Places.getMarkerById(id);
 
+      // window.location = BDB.Places.getMarkerShareUrl(place);
+
       $('#contributionsModal')
         .one('hidden.bs.modal', () => {
           openLocal(place);
@@ -2080,14 +2106,21 @@ $(() => {
     $(document).trigger('LoadMap');
   }
   function openDataModal() {
-    if ($('#dataModal').length === 0) {
-      $('body').append(BDB.templates.dataModal()); 
-    }
+    BDB.Database.getDataSourceList()
+      .then( dataSources => {
+        let templateData = {
+          dataSources: dataSources
+        }
 
-    $('#dataModal').modal('show');
-    if (!_isMobile) {
-      $('#dataModal article > *').css({opacity: 0}).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
-    }
+        if ($('#dataModal').length === 0) {
+          $('body').append(BDB.templates.dataModal(templateData));
+        }
+
+        $('#dataModal').modal('show');
+        if (!_isMobile) {
+          $('#dataModal article > *').css({ opacity: 0 }).velocity('transition.slideDownIn', { stagger: STAGGER_NORMAL });
+        }
+      });
   } 
 
   function openAboutModal() {
@@ -2110,11 +2143,12 @@ $(() => {
         $('#about-stats--places').velocity('fadeIn').text(data.localsCount);
         $('#about-stats--reviews').velocity('fadeIn').text(data.reviewsCount);
         $('#about-stats--views').velocity('fadeIn').text(data.viewsCount);
+        $('#about-stats--cities').velocity('fadeIn').text(getTopCities().length);
       });
 
-    // if (markers) {
-    //   $('#about-stats--places').data('countupto', markers.length);
-    //   // $('#about-stats--nviews').text(markers.reduce( (a,b) => a.views + b.views, 0));
+    // if (places) {
+    //   $('#about-stats--places').data('countupto', places.length);
+    //   // $('#about-stats--nviews').text(places.reduce( (a,b) => a.views + b.views, 0));
     // }
 
     // $('[data-countupto]').each( function(i, val) {
@@ -2171,7 +2205,7 @@ $(() => {
               let coords = {
                 latitude : parseFloat(_deeplinkMarker.lat),
                 longitude: parseFloat(_deeplinkMarker.lng)
-              }
+              };
               start_coords = coords;  
               zoom = 17;
               getGeolocation = false;
@@ -2380,7 +2414,7 @@ $(() => {
 
           // document.dispatchEvent(new CustomEvent('bikedeboa.login'));
           $(document).trigger('bikedeboa.login');
-        })
+        });
       }).catch( error => {
         console.error('Error on social login', error); 
         toastr['warning']('Alguma coisa deu errado no login :/ Se continuar assim por favor nos avise.');
@@ -2400,7 +2434,7 @@ $(() => {
     if (!_isMobile){
       $('#userBtn').hide();  
     }
-    $('#userBtn .avatar').attr('src', $("#userBtn .avatar").data('src'));
+    $('#userBtn .avatar').attr('src', $('#userBtn .avatar').data('src'));
     $('#topbarLoginBtn').css('visibility','visible');
     $('#userBtn').removeClass('admin');
     $('#userBtn .userBtn--user-name').text('');
@@ -2446,11 +2480,12 @@ $(() => {
   }
 
   function init() {
-    // Retrieve markers saved in a past access
-    markers = BDB.getMarkersFromLocalStorage();
+    // Retrieve places saved in a past access
+    places = BDB.getMarkersFromLocalStorage();
+    BDB.Map.updateMarkers();
     
-    if (markers && markers.length) {
-      console.debug(`Retrieved ${markers.length} locations from LocalStorage.`);
+    if (places && places.length) {
+      console.debug(`Retrieved ${places.length} locations from LocalStorage.`);
       //hideSpinner();
     }
 
@@ -2480,7 +2515,7 @@ $(() => {
           // Failed after multiple attemps: we're officialy offline!
           setOfflineMode();
         }
-      }
+      };
       BDB.Database.authenticate()
         .catch(onFail);
       BDB.Database.getAllTags();
@@ -2590,51 +2625,6 @@ $(() => {
 
       ga('send', 'event', 'Misc', 'faq opened');
       setView('Perguntas frequentes', '/faq', true);
-    }));
-
-    $('.contact-btn').on('click', queueUiCallback.bind(this, () => {
-      // @todo having to call these two ones here is bizarre
-      hideAll();
-      goHome();
-
-      ga('send', 'event', 'Misc', 'contact opened');
-
-      swal({
-        title: 'Contato',
-        html:
-          `
-            <div style="text-align: center; font-size: 30px;">
-              <p>
-                <a class="" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
-                  <img alt="" class="svg-icon" src="/img/icon_social_facebook.svg"/>
-                </a> 
-
-                <a class="" target="_blank" rel="noopener" href="https://www.instagram.com/bikedeboa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_instagram.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://medium.com/bike-de-boa/">
-                  <img alt="" class="svg-icon" src="/img/icon_social_medium.svg"/>
-                </a>
-
-                <a class="" target="_blank" rel="noopener" href="https://github.com/bikedeboa">
-                  <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
-                </a>
-
-                <a href="mailto:bikedeboa@gmail.com">
-                  <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
-                </a>
-              </p>
-            </div> 
-
-            <hr>
-
-            <h2 class="swal2-title" id="swal2-title">Feedback</h2>
-            <div style="text-align: center;">
-              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
-            </div>
-          `,
-      });
     }));
   }
 
