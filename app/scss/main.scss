@@ -47,7 +47,7 @@ $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
 $easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
-$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);  
 $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 
 
@@ -57,7 +57,7 @@ $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $bodyFont: "Quicksand", sans-serif;
-$headingFont: 'Quicksand', sans-serif;
+$headingFont: $bodyFont;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lighterGray;
@@ -628,6 +628,11 @@ p {
     padding: 2%;
     width: 28%; 
     // flex: 1; 
+
+    img {
+      width: 100%;
+      height: auto;
+    }
 
     // Desktop-only version
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
@@ -1253,10 +1258,6 @@ a.unstyled-link {
     .modal-body {
       padding: $GRID_SPACE*3 $GRID_SPACE*3;
 
-      img { 
-          max-width: 100%;
-      }
-
       hr {
           margin-top: 10px;
           margin-bottom: 10px;
@@ -1271,7 +1272,7 @@ a.unstyled-link {
           border-radius: 15px;
           padding: $GRID_SPACE 3%;
           position: relative;
-          filter: grayscale(100%) brightness(.8);
+          // filter: grayscale(100%) brightness(.8);
           opacity: 0.9;
           text-align: center;
 
@@ -1646,6 +1647,7 @@ a.unstyled-link {
 }
 
 .illustration {
+  width: 100%;
   margin: 0 auto;
   display: block;
   margin-bottom: 3em; 
@@ -3000,10 +3002,6 @@ body.fullscreen-modal-open {
         box-shadow: none;
       }
     }
-
-    .openDataSourceDialog {
-      cursor: pointer;
-    }
 }
 
 #placeDetails_isPublic img {
@@ -3170,10 +3168,12 @@ body.fullscreen-modal-open {
 
     .tagDisplay {
       background: transparent;
-      border: 1px solid $black;
+      border: 1px solid $green;
+      color: $green;
       border-radius: 25px;
       margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-      width: calc(33% - #{$GRID_SPACE}); 
+      padding: $GRID_SPACE/2;
+      width: calc(33% - #{$GRID_SPACE});
 
       &.active {
           background: $green;
@@ -3187,7 +3187,7 @@ body.fullscreen-modal-open {
       } 
 
       &:hover {
-        background: $lighterGray;
+        background: $lightestGray;
       }
     }
 }

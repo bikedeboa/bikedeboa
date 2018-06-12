@@ -629,10 +629,8 @@ BDB.Database = {
   getDataSourceList: function() {
     const self = this;
 
-    this.waitAuthentication();
-
     return new Promise((resolve, reject) => {
-      $(document).on('database:authenticated', () => {
+      function doIt() {
         $.ajax({
           type: 'get',
           headers: self._headers,
@@ -652,7 +650,17 @@ BDB.Database = {
   
             reject(error);
           });
-      });
+      }
+      
+      if (this.isAuthenticated) {
+        doIt();
+      } else {
+        this.waitAuthentication();
+        
+        $(document).on('database:authenticated', () => {
+          doIt();
+        });
+      }
     });
   }
 };

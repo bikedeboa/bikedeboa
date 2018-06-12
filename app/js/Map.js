@@ -330,7 +330,7 @@ BDB.Map = (function () {
       map.data.loadGeoJson('/geojson/ciclovias_fortaleza_osm.min.json'); // 203 KB
       map.data.loadGeoJson('/geojson/ciclovias_recife_osm.min.json'); // 68 KB 
       map.data.loadGeoJson('/geojson/ciclovias_grandeportoalegre_osm.min.json'); // 369 KB
-      // map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
+      map.data.loadGeoJson('/geojson/ciclovias_riodejaneiro_osm.min.json'); // 374 KB
       // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
 
       map.data.setStyle({  
@@ -350,7 +350,11 @@ BDB.Map = (function () {
       let place;
       for (let i = 0; i < places.length; i++) {
         place = places[i];
-        place.gmarker.setIcon(scale === 'mini' ? place.iconMini : place.icon);
+        if (place.gmarker) {
+          place.gmarker.setIcon(scale === 'mini' ? place.iconMini : place.icon);
+        } else {
+          console.error('ERROR: trying to set marker in place that has no gmarker associated');
+        }
       }
     }
   };
@@ -503,12 +507,12 @@ BDB.Map = (function () {
       });
     },
     getMarkers: function() {
-      return markerClusterer && markerClusterer.getMarkers();
+      // return markerClusterer && markerClusterer.getMarkers();
+      return gmarkers;
     },
     clearMarkers: function () {
-      // Deletes all markers in the array by removing references to them.
       // setMapOnAll(null);
-      // gmarkers = [];
+      gmarkers = [];
       if (markerClusterer) {
         markerClusterer.clearMarkers();
       }
@@ -722,8 +726,6 @@ BDB.Map = (function () {
         // places = places.sort((a, b) => {
         //   return a.average - b.average;
         // });
-
-        gmarkers = [];
 
         for (let i = 0; i < places.length; i++) {
           const m = places[i];

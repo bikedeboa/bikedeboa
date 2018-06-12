@@ -13,20 +13,25 @@ BDB.getMarkersFromLocalStorage = () => {
 };
 
 BDB.saveMarkersToLocalStorage = markersToSave => {
-  let tmp = markersToSave;
+  // let tmp = markersToSave.map( m => {
+  //   m.gmarker = null;
+  //   return m;
+  // });
 
-  if (tmp) {
-    for (let i = 0; i < tmp.length; i++) {
-      tmp[i].gmarker = null;
-    }
-  }
-
-  localStorage.setItem( 'markers', JSON.stringify(tmp) );
+  // localStorage.setItem( 'markers', JSON.stringify(tmp) );
 };
 
 BDB.getURLParameter = function(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 };
+
+BDB.getThumbUrlFromPhotoUrl = function(url) {
+  if (url) {
+    return url.replace('images', 'images/thumbs'); 
+  } else {
+    return;
+  }
+}
 
 window.createdAtToDaysAgo = createdAtStr => {
   const createdAtDate = Date.parse(createdAtStr);
