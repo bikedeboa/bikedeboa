@@ -16,9 +16,9 @@
     <h2 style="font-style: italic;">Sem título</h2>
 {{/if}}
 
-<div class="infobox--details">
+{{!-- <div class="infobox--details">
     {{{attrs}}}
-</div>
+</div> --}}
 
 <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
     {{#if average}}
@@ -41,7 +41,7 @@
         <span class="numreviews">{{numReviews}}</span>
     {{/if}}
     {{else}}
-    <!-- <span style="font-style: italic; color: #828b90;">Sem avaliações</span> -->
+        <span>Sem avaliações ainda</span>
     {{/if}}
 </div>
 

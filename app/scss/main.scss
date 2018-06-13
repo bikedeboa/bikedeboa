@@ -47,7 +47,7 @@ $filtersHightlightColor: $palePurple;
 
 $coolEaseOut: cubic-bezier(0.39, 0.58, 0.57, 1);
 $easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
-$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$easeOutQuadratic: cubic-bezier(0.25, 0.46, 0.45, 0.94);  
 $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 
 
@@ -57,7 +57,7 @@ $spotifyBounceEase: cubic-bezier(0, 0, 0, 2.41);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $bodyFont: "Quicksand", sans-serif;
-$headingFont: 'Quicksand', sans-serif;
+$headingFont: $bodyFont;
 $bootstrapFont: 'Glyphicons Halflings';
 
 $separatorBorderStyle: 2px dotted $lighterGray;
@@ -434,6 +434,7 @@ p {
       .top-cities--nbr {
         opacity: .5;
         flex: 1;
+        text-align: right;
       }
 
       &:focus,
@@ -478,7 +479,6 @@ p {
         .top-cities--nbr {
           color: $gray;
           font-size: inherit;
-          text-align: right;
         }
       }
     }
@@ -628,6 +628,11 @@ p {
     padding: 2%;
     width: 28%; 
     // flex: 1; 
+
+    img {
+      width: 100%;
+      height: auto;
+    }
 
     // Desktop-only version
     @media screen and (min-width: $MOBILE_MAX_WIDTH) {
@@ -1228,30 +1233,6 @@ a.unstyled-link {
   }
 }
 
-#messageModal {
-    &.success .modal-body {
-        background-color: $lightGreen;
-    }
-    &.warning .modal-body {
-        background-color: $yellow;
-    }
-    &.error .modal-body {
-        background-color: $red;
-    }
-
-    .modal-content {
-        max-width: 500px;
-    }
-
-    .message-content {
-        text-align: center;
-        font-family: $headingFont;
-        font-size: 30px;
-        padding: 30px;
-        color: white;
-    }
-}
-
 #guideTagsModal {
   h3 {
     font-weight: bold;
@@ -1520,6 +1501,12 @@ a.unstyled-link {
 }
 
 #dataModal {
+  h3 {
+    font-size: 18px;
+    margin: 1.5em 0 .5em;
+    font-weight: bold;
+  }
+
   .data-modal--block {
     display: flex !important;
     align-items: center;
@@ -1535,11 +1522,6 @@ a.unstyled-link {
       background: $lightGreen;
     }
 
-    h2 {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
     .data-modal--block-icon {
       padding-right: $GRID_SPACE*2;
 
@@ -1549,6 +1531,11 @@ a.unstyled-link {
     }
 
     .data-modal--block-content {
+      .data-modal--block-title {
+        font-size: 24px;
+        font-weight: 700;
+      } 
+
       p {
         font-size: 14px;
         line-height: 1.3em;
@@ -1563,12 +1550,14 @@ a.unstyled-link {
 }
 
 .illustration {
+  width: 100%;
   margin: 0 auto;
   display: block;
   margin-bottom: 3em; 
 }
 
 #aboutModal,
+#dataModal,
 .guide-modal {
   $leading: 18px;
 
@@ -1578,7 +1567,7 @@ a.unstyled-link {
   }
 
   .about-collaborators {
-    font-size: 18px;
+    font-size: 16px;
     background: $lightestGray;
     padding: 24px;
     margin: auto;
@@ -1647,8 +1636,24 @@ a.unstyled-link {
     font-weight: bold;
   }
 
-  h2, p {
-    // color: $black;
+  .guide--updated-at {
+    text-transform: uppercase;
+    color: $gray;
+    font-size: 12px;
+  }
+
+  .guide--pretitle {
+    font-size: 24px;
+    margin-bottom: .25em;
+    letter-spacing: 0;
+    line-height: 1.2em;
+    font-weight: bold;
+    // color: $green;
+
+    img {
+      height: 18px;
+      vertical-align: baseline;
+    }
   }
 
   .medium-separator {
@@ -2123,11 +2128,6 @@ a.unstyled-link {
       cursor: zoom-out;
     }
 
-    // Make it full screen
-    // position: absolute;
-    // bottom: auto;
-    // right: auto; 
-
     .modal-dialog {
       margin-top: $GRID_SPACE*2;
       
@@ -2156,9 +2156,10 @@ a.unstyled-link {
           border-radius: 15px;
           padding: $GRID_SPACE 3%;
           position: relative;
-          filter: grayscale(100%) brightness(.8);
-          opacity: 0.9;
           text-align: center;
+          
+          // filter: grayscale(100%) brightness(.8);
+          // opacity: 0.9;
 
           .icon-label {
             text-align: center;
@@ -2185,8 +2186,8 @@ a.unstyled-link {
           }
 
           &.active {
-              filter: none;
-              opacity: 1;
+              // filter: none;
+              // opacity: 1;
 
               .icon-label {
                 color: $green;
@@ -3169,10 +3170,12 @@ body.fullscreen-modal-open {
 
     .tagDisplay {
       background: transparent;
-      border: 1px solid $black;
+      border: 1px solid $green;
+      color: $green;
       border-radius: 25px;
       margin: $GRID_SPACE/2 $GRID_SPACE/2 0 0;
-      width: calc(33% - #{$GRID_SPACE}); 
+      padding: $GRID_SPACE/2;
+      width: calc(33% - #{$GRID_SPACE});
 
       &.active {
           background: $green;
@@ -3186,7 +3189,7 @@ body.fullscreen-modal-open {
       } 
 
       &:hover {
-        background: $lighterGray;
+        background: $lightestGray;
       }
     }
 }
@@ -3794,7 +3797,7 @@ body.fullscreen-modal-open {
 
     .numreviews {
       font-weight: 400;
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 
@@ -3993,17 +3996,6 @@ body.fullscreen-modal-open {
     display: none;
   } 
 
-  .fullscreen-modal {
-    article { 
-      margin-left: inherit;
-      margin-right: inherit;
-    }
-
-    .modal-content {
-      background: white;
-    }
-  }
-
   .modal {
     &:before {
       content: ''
@@ -4061,6 +4053,17 @@ body.fullscreen-modal-open {
         padding: 8px;
         @include roundedCorners;
         font-size: 15px;
+      }
+    }
+
+    &.fullscreen-modal {
+      article { 
+        margin-left: inherit;
+        margin-right: inherit;
+      }
+
+      .modal-content {
+        background: white;
       }
     }
   }

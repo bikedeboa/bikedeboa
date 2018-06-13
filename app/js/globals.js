@@ -25,12 +25,14 @@ const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
 
 const N_MOCK_PICS = 14;
 
+const MAX_ZOOM_TO_SHOW_PINS = 14;
+
 const MARKER_SIZE_MULTIPLIER = 1.5;
 
 const MARKER_W = 20 * MARKER_SIZE_MULTIPLIER;
 const MARKER_H = 26 * MARKER_SIZE_MULTIPLIER;
-const MARKER_W_MINI = 16; 
-const MARKER_H_MINI = 16;
+const MARKER_W_MINI = 18; 
+const MARKER_H_MINI = 18;
 const CURRENT_LOCATION_MARKER_W = 20;
 const CURRENT_LOCATION_MARKER_H = 20; 
 const MARKER_ICON_GREEN = '/img/pin_green.svg';
@@ -53,8 +55,9 @@ const STAGGER_SLOW = 100 * ANIMATIONS_MULTIPLIER;
 const STAGGER_NORMAL = 75 * ANIMATIONS_MULTIPLIER;
 const STAGGER_FAST = 50 * ANIMATIONS_MULTIPLIER;
 
-const STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
-const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
+
+const STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro', 'Pescocinho', 'Paliteiro', 'Tipo M', 'Pente'];
+const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other', 'pescocinho', 'paliteiro', 'm', 'pente'];
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
@@ -89,7 +92,7 @@ const MAX_NAME_SUGGESTIONS = 5;
  
 let map;
 let geocoder;
-let markers;
+let places;
 let tags;
 let idToTag = {};
 let tagToId = {};
