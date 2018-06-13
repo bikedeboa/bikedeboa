@@ -62,7 +62,6 @@ app.use(secure);
 app.use(compression());
 
 // Static libs
-app.use('/bower_components', express.static(path + 'bower_components'));
 app.use(express.static('public'));
 app.use(express.static('assets'));
 app.use(express.static('dist'));
@@ -84,12 +83,12 @@ router.use(function (req,res,next) {
 // Google IO Presentation Redirect
 router.get('/io',function(req,res){
   // res.redirect('https://drive.google.com/open?id=18DyziybC2Benf43OMAd5T7611QULd9oWA1L60rzvrsM');
-  res.sendFile(path + 'dist/io.html');
+  res.sendFile(path + 'io.html');
 });
 
 // Our data Dashboard
 router.get('/dados',function(req,res) {
-  res.sendFile(path + 'dist/dashboard.html');
+  res.sendFile(path + 'dashboard.html');
 });
 
 // SEO server-side rendering Social Network Crawler Bots.
@@ -97,7 +96,7 @@ router.get('/dados',function(req,res) {
 router.get('/b/*',function(req,res) {
   // Default fallback response if anything fails
   function fallback() {
-    // res.sendFile(path + 'dist/index.html');
+    // res.sendFile(path + 'index.html');
     res.render('default');
   }
 
@@ -156,7 +155,7 @@ router.get('/b/*',function(req,res) {
 
 // Home
 router.get('/*',function(req,res) {
-  // res.sendFile(path + 'dist/index.html');
+  // res.sendFile(path + 'index.html');
   res.render('default');
 });
 
@@ -164,7 +163,7 @@ app.use('/',router);
 
 // 404
 app.use('*',function(req,res){
-  res.sendFile(path + 'dist/404.html');
+  res.sendFile(path + '404.html');
 });
 
 var port = process.env.PORT || 5000;
