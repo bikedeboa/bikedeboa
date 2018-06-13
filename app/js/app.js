@@ -1318,14 +1318,11 @@ $(() => {
   }
 
   function updatePageTitleAndMetatags(text) {
-    text = 'bike de boa';
-
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
       $('#top-mobile-bar-title').text('bike de boa');
     } else {
-      // $('#top-mobile-bar-title').text(openedMarker ? '' : text);
-      $('#top-mobile-bar-title').text(openedMarker ? '' : text);
+      $('#top-mobile-bar-title').text(openedMarker ? 'bike de boa' : text);
     }
 
     // text = text || 'bike de boa'; 
@@ -1346,7 +1343,7 @@ $(() => {
 
       // Dynamic description (Open Graph and others)
       if (openedMarker.address) {
-        let desc = 'Veja detalhes e avaliações sobre este bicicletário na ';
+        let desc = 'Veja detalhes e avaliações sobre este estacionamento para bicicleta na ';
         desc += openedMarker.address;
 
         $('meta[property="og:description"]').attr('content', desc); 
