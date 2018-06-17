@@ -91,15 +91,21 @@ gulp.task('scripts', () => {
   gulp.src('app/service-worker-registration.js')
     .pipe(gulp.dest('dist/'));
 
+  gulp.src('app/**/*.handlebars')
+    .pipe(replace('<DATABASE_URL>', DATABASE_URL))
+    .pipe(replace('<FACEBOOK_CLIENT_ID>', FACEBOOK_CLIENT_ID))
+    .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
+    .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
+    .pipe(replace('<BDB_ENV>', BDB_ENV))
+    .pipe(gulp.dest('dist/'));
+  
   gulp.src('server.js')
-    .pipe(development(sourcemaps.init()))
     .pipe(replace('<DATABASE_URL>', DATABASE_URL))
     .pipe(replace('<FACEBOOK_CLIENT_ID>', FACEBOOK_CLIENT_ID))
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
     .pipe(plumber())
-    // .pipe(concat('app.js'))
     .pipe(babel({
       presets: ['es2015']
     }))
@@ -113,7 +119,6 @@ gulp.task('scripts', () => {
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
     .pipe(plumber())
-    // .pipe(concat('app.js'))
     .pipe(babel({
       presets: ['es2015']
     }))
@@ -304,5 +309,5 @@ gulp.task('build',
 );
 
 gulp.task('default',
-  gulp.series('build', 'server', 'watch')
+  gulp.series('build', gulp.parallel('server', 'watch'))
 );
