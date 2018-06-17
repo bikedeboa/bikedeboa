@@ -1317,15 +1317,21 @@ $(() => {
     $('.hamburger-button').removeClass('back-icon'); 
   }
 
-  function updatePageTitleAndMetatags(text) {
+  function updatePageTitleAndMetatags(text = 'bike de boa') {
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
-      $('#top-mobile-bar-title').text('bike de boa');
+      text = 'bike de boa';
     } else {
-      $('#top-mobile-bar-title').text(openedMarker ? 'bike de boa' : text);
+      text = openedMarker && openedMarker.text ? openedMarker.text : text;
     }
-
-    // text = text || 'bike de boa'; 
+    
+    if (text === 'bike de boa') {
+      $('#logo').show();
+      $('#top-mobile-bar-title').text('');
+    } else {
+      $('#logo').hide();
+      $('#top-mobile-bar-title').text(text);
+    }
 
     // Basic website metatags
     document.title = text;
@@ -1370,7 +1376,6 @@ $(() => {
       data.isHome = true;
     }
 
-    // hideAll().then(() => {
     if (isReplaceState) {
       History.replaceState(data, title, view);
     } else {
@@ -1381,7 +1386,6 @@ $(() => {
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications
     ga('set', 'page', view);
     ga('send', 'pageview');
-    // });
   }
 
   function goHome() {
@@ -1538,7 +1542,9 @@ $(() => {
       }
     }));
 
-    $('body').on('click', '.contact-btn', queueUiCallback.bind(this, () => {
+    
+    // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
+    $('.js-side-nav-container, body').on('click', '.contact-btn', queueUiCallback.bind(this, () => {
       // @todo having to call these two ones here is bizarre
       // hideAll();
       // goHome();
@@ -1582,8 +1588,6 @@ $(() => {
           `,
       });
     }));
- 
-    // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-guide-btn', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Misc', 'faq opened');
       hideAll().then(() => {
@@ -1596,8 +1600,6 @@ $(() => {
         setView('O que faz um bicicletário ser seguro', '/guia-seguranca', true);
       });
     }));
-
-    // SideNav has a callback that prevents click events from bubbling, so we have to target specifically its container
     $('.js-side-nav-container, body').on('click', '.open-aboutdata-btn', queueUiCallback.bind(this, () => {
       hideAll();
 

@@ -1,17 +1,17 @@
-var express = require('express');
-var secure = require('express-force-https');
-var router = express.Router();
-var path = __dirname + '/';
-var compression = require('compression');
-var exphbs  = require('express-handlebars');
-var request = require('request');
+const express = require('express');
+const secure = require('express-force-https');
+const router = express.Router();
+const path = __dirname + '/';
+const compression = require('compression');
+const exphbs  = require('express-handlebars');
+const request = require('request');
 // var fs = require("fs");
 
 // Imported from globals
 // @todo: import this properly to avoid code duplication
 function createMapFromArrays(a, b) {var ret = {}; a.forEach( (val, i) => {ret[val] = b[i]; }); return ret; } var STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
-const STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro', 'Pescocinho', 'Paliteiro', 'Tipo M', 'Pente'];
-const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other', 'pescocinho', 'paliteiro', 'm', 'pente'];
+var STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro', 'Pescocinho', 'Paliteiro', 'Tipo M', 'Pente'];
+var STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other', 'pescocinho', 'paliteiro', 'm', 'pente'];
 const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
 const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 

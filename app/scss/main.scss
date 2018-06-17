@@ -990,6 +990,17 @@ a.unstyled-link {
   }
 }
 
+#logo {
+  position: absolute;
+  margin: 0;
+  left: $GRID_SPACE*2;
+  top: 6px;
+
+  img {
+    width: 130px;
+  }
+}
+
 #locationQueryBtn {
     display: none;
 }
@@ -1087,6 +1098,10 @@ a.unstyled-link {
 
 // Desktop-only
 @media screen and (min-width: $MOBILE_MAX_WIDTH) {
+  .mobile-only {
+    display: none;
+  }
+
   #userBtn {
     display: none;
     
@@ -1103,27 +1118,6 @@ a.unstyled-link {
       background: $paleWhite;
     }
   }
-
-  #logo {
-      position: fixed;
-      top: 16px;
-      left: $GRID_SPACE*2;
-      margin: 0;
-
-      font-size: 22px;
-      // line-height: normal;
-      
-      // color: $green;
-      // user-select: none;
-      // letter-spacing: -0.02em;
-      // font-weight: bold;
-      // font-family: $headingFont;
-
-      img {
-        width: 130px;
-      }
-  }
-
 
   .hamburger-button {
       display: none;
@@ -3982,12 +3976,26 @@ body.fullscreen-modal-open {
     outline: none;
   }
 
+  .desktop-only {
+    display: none;
+  }
+
   #map {
     top: $MOBILE_NAVBAR_HEIGHT;
     
     // Explanation on the reason for the string interpolation:
     //   https://stackoverflow.com/questions/17982111/sass-variable-in-css-calc-function
     height: calc(100% - #{$MOBILE_NAVBAR_HEIGHT});
+  }
+
+  #logo {
+    left: 0;
+    margin-left: $GRID_SPACE*6;
+    max-width: calc(100% - #{$GRID_SPACE*7});
+
+    img {
+      width: 120px;
+    }
   }
 
   .navbar-de-boa {
@@ -4399,13 +4407,7 @@ body.fullscreen-modal-open {
     left: 0;
     right: 0;
     height: $MOBILE_NAVBAR_HEIGHT;
-    // background: $green;
-    // background: $lightGreen;
     background: $greenGradient;
-
-    // border: 0;
-    // box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    border-bottom: 1px solid $lighterGray;
 
     transition: all .3s ease-out;
     will-change: height;
