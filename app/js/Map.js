@@ -93,6 +93,7 @@ BDB.Map = (function () {
   
     if (!_isMobile) {
       google.maps.event.addListener(map, 'zoom_changed', mapZoomChanged);
+      mapZoomChanged();
     } else {
       google.maps.event.addListener(map, 'click', () => {
         if (infoWindow && infoWindow.reset) {
@@ -373,7 +374,7 @@ BDB.Map = (function () {
         // chech localStorage to see if there is a saved location;
         if (getLocation){
           options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
-          options.zoom = 15;
+          options.zoom = 14;
           options.isUserLocation = !!BDB.Geolocation.getLastestLocation();
         }
 
@@ -804,7 +805,7 @@ BDB.Map = (function () {
                   //   fontSize: '12px', 
                   //   fontWeight: 'bold'
                   // },
-                  icon: m.icon,
+                  icon: mapZoomLevel === 'mini' ? m.iconMini : m.icon,
                   zIndex: i, //places should be ordered by average
                   // opacity: 0.1 + (m.average/5).
                 });
