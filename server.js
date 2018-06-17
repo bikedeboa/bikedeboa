@@ -4,16 +4,16 @@ var router = express.Router();
 var path = __dirname + '/';
 var compression = require('compression');
 var exphbs  = require('express-handlebars');
-var fs = require("fs");
 var request = require('request');
+// var fs = require("fs");
 
 // Imported from globals
 // @todo: import this properly to avoid code duplication
 function createMapFromArrays(a, b) {var ret = {}; a.forEach( (val, i) => {ret[val] = b[i]; }); return ret; } var STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
-var STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro'];
-var STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other'];
-var STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
-var STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
+const STRUCTURE_NAMES = ['U Invertido', 'De Roda', 'Trave', 'Suspenso', 'Grade', 'Outro', 'Pescocinho', 'Paliteiro', 'Tipo M', 'Pente'];
+const STRUCTURE_CODES = ['uinvertido', 'deroda', 'trave', 'suspenso', 'grade', 'other', 'pescocinho', 'paliteiro', 'm', 'pente'];
+const STRUCTURE_NAME_TO_CODE = createMapFromArrays(STRUCTURE_NAMES, STRUCTURE_CODES);
+const STRUCTURE_CODE_TO_NAME = createMapFromArrays(STRUCTURE_CODES, STRUCTURE_NAMES);
 
 // Original gist: https://gist.github.com/mathewbyrne/1280286
 function removeAccents(string) {  
@@ -58,7 +58,7 @@ app.set('view engine', 'handlebars');
 // Automatically redirects to HTTPS
 app.use(secure);
 
-// GZIP!!!!!
+// GZIP
 app.use(compression());
 
 // Static libs
