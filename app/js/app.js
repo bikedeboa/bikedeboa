@@ -1325,12 +1325,14 @@ $(() => {
       text = openedMarker && openedMarker.text ? openedMarker.text : text;
     }
     
-    if (text === 'bike de boa') {
-      $('#logo').show();
-      $('#top-mobile-bar-title').text('');
-    } else {
-      $('#logo').hide();
-      $('#top-mobile-bar-title').text(text);
+    if (_isMobile) {
+      if (text === 'bike de boa') {
+        $('#logo').show();
+        $('#top-mobile-bar-title').text('');
+      } else {
+        $('#logo').hide();
+        $('#top-mobile-bar-title').text(text);
+      }
     }
 
     // Basic website metatags

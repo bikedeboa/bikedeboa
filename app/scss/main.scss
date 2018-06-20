@@ -619,15 +619,14 @@ p {
 .media-grid {
   display: -webkit-box!important;
   display: flex!important;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-wrap: wrap;
   align-items: center;
   
   .media-link {
     border: 0;
-    padding: 2%;
-    width: 28%; 
-    // flex: 1; 
+    padding: 4%;
+    width: 25%;
 
     img {
       width: 100%;
@@ -2257,7 +2256,8 @@ body.fullscreen-modal-open {
   }
 
   .navbar-de-boa,
-  #userBtn {
+  #userBtn,
+  #logo {
     // Over the modal default zindex
     z-index: 1051;
   }
