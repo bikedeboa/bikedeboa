@@ -2749,7 +2749,7 @@ $(() => {
       facebook: FACEBOOK_CLIENT_ID,
       google: GOOGLE_CLIENT_ID, 
     }, {
-      redirect_uri: '/redirect.html' 
+      // redirect_uri: '/redirect.html' 
       // redirect_uri: window.location.origin
     });
     hello.on('auth.login', auth => {
