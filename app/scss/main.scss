@@ -990,7 +990,7 @@ a.unstyled-link {
 }
 
 #logo {
-  position: absolute;
+  position: fixed;
   margin: 0;
   left: $GRID_SPACE*2;
   top: 6px;
@@ -2252,7 +2252,8 @@ body.modal-open {
 
 body.fullscreen-modal-open {
   .modal-backdrop.in {
-    opacity: .93 ;
+    opacity: 1;
+    background: white;
   }
 
   .navbar-de-boa,
