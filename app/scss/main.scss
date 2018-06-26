@@ -5461,6 +5461,10 @@ a[data-featherlight] {
   .swal2-title {
     color: $black;
   }
+
+  .swal2-close {
+    border: 0;
+  }
   
   .swal2-content {
     font-weight: normal;

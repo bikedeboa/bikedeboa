@@ -1554,6 +1554,8 @@ $(() => {
       ga('send', 'event', 'Misc', 'contact opened');
 
       swal({
+        showConfirmButton: false,
+        showCloseButton: true,
         title: 'Contato',
         html: 
           `
@@ -1585,7 +1587,7 @@ $(() => {
 
             <h2 class="swal2-title" id="swal2-title">Feedback</h2>
             <div style="text-align: center;">
-              Queremos saber o que você está achando! Tem 5 minutinhos? Responda <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">nossa pesquisa</a>.
+              Queremos seu feedback! <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">Responda nossa pesquisa</a>, não leva 5 minutinhos.
             </div>
           `,
       });
