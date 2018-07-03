@@ -42,7 +42,7 @@ console.log('NODE_ENV =', development() ? 'development' : 'production');
 console.log('BDB_ENV =', BDB_ENV);
  
 const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
-const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.com';
+const isProdDatabase = process.env.DATABASE_URL === 'https://api.bikedeboa.com.br';
 
 const FACEBOOK_IDS = {
   prod: '1814653185457307',
@@ -224,8 +224,8 @@ gulp.task('generate-service-worker', function(callback) {
       }, 
       
       // BDB API Requests
-      { urlPattern: /herokuapp.com\/local\/light$/, handler: 'networkFirst'},
-      { urlPattern: /herokuapp.com\/local\/\d+/, handler: 'networkFirst'},  
+      { urlPattern: /bikedeboa.com.br\/local\/light$/, handler: 'networkFirst'},
+      { urlPattern: /bikedeboa.com.br\/local\/\d+/, handler: 'networkFirst'},  
       
       // webfont.js
       { urlPattern: /ajax\.googleapis\.com\//, handler: 'networkFirst'}, 
@@ -249,12 +249,12 @@ gulp.task('generate-service-worker', function(callback) {
       // CAUTION: data might be outdated!
       { urlPattern: /\/geojson\/.*.json$/, handler: 'fastest'}, 
       { urlPattern: /fonts\.googleapis\.com\//, handler: 'fastest' }, 
-      { urlPattern: /herokuapp.com\/stats$/, handler: 'fastest' },
-      { urlPattern: /herokuapp.com\/tag$/, handler: 'fastest' }, 
+      { urlPattern: /bikedeboa.com.br\/stats$/, handler: 'fastest' },
+      { urlPattern: /bikedeboa.com.br\/tag$/, handler: 'fastest' }, 
 
 
       // Network Only: no caching will be done. For calls that don't make any sense if we're offline.
-      { urlPattern: /herokuapp.com\/token$/, handler: 'networkOnly' }, 
+      { urlPattern: /bikedeboa.com.br\/token$/, handler: 'networkOnly' }, 
 
       
       // Cache First: rather heavy calls that can totally be outdated and there's no problem. Use with EXTREME caution!
