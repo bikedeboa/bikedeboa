@@ -1275,9 +1275,9 @@
 
         function uploadImportedPlacesToBackend() {
           return new Promise((resolve, reject) => {
-            const max = _importResults.places.length;
             const dontGeolocate = document.getElementById('dontGeolocateCheckbox').checked;
-            // const max = 5;
+            let max = _importResults.places.length;
+            // max = 2;
 
             // 
             function importPlace_recursive(i = 0) {
@@ -1295,12 +1295,12 @@
                 $('#globalSpinnerLabel').text(`${i}/${max}`);
                 console.warn(`${i} of ${max}`);
 
-                new Promise( (resolve, reject) => {
+                return new Promise( (resolve, reject) => {
                   // Retrieves full addresses
                   if (dontGeolocate) {
                     resolve();
                   } else {
-                    BDB.Map.reverseGeocode(m.lat, m.lng)
+                    return BDB.Map.reverseGeocode(m.lat, m.lng)
                       .then((addressObj) => {
                         console.debug(m.lat, m.lng, m.id);
                         console.debug(addressObj);
@@ -1315,9 +1315,7 @@
                         switch (status) {
                           case 'OVER_QUERY_LIMIT':
                             // Google Maps quota limits the frequency of calls of the service. We just keep trying until it works.
-                            setTimeout(() => {
-                              importPlace_recursive(i);
-                            }, 2000);
+                            reject()
                             break;
                           case 'ZERO_RESULTS':
                             // There's probably something very wrong with the data, since Google Geocoding ALWAYS finds something
@@ -1331,7 +1329,7 @@
                         }
                       });
                   }
-                }).then( new Promise( (resolve, reject) => {
+                }).then( () => new Promise( (resolve, reject) => {
                   // If it has a photo and it's a valid link (validated when loading the KML file),
                   //   resize it just like a normal user-submitted photo and get it's blob to send
                   //   to the backend
@@ -1350,19 +1348,23 @@
                   } else {
                     resolve();
                   }
-                })).then( new Promise( (resolve, reject) => {
+                })).then( () => new Promise( (resolve, reject) => {
                   // Sends it over to the backend
-                  BDB.Database.customAPICall('POST', 'local', m)
+                  return BDB.Database.customAPICall('POST', 'local', m)
                     .then(data => {
                       m.id = data.id;
-                      importPlace_recursive(i + 1);
+                      return importPlace_recursive(i + 1); 
                     })
                     .catch(data => {
                       console.error('Error when creating local');
                       console.error(m);
                       reject(data);
-                    })
-                }));
+                    });
+                })).catch( error => {
+                  console.warn(error);
+                  console.warn('caught an error, trying again in 2s...');
+                  setTimeout( () => importPlace_recursive(i), 2000);
+                 } );
               } else {
                 resolve();
               }
@@ -1374,7 +1376,10 @@
                 importPlace_recursive();
               }, 1000
             );
-          });
+          }).catch( error => {
+            console.error(error);
+            reject();
+          })
         }
 
         function init() {

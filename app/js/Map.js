@@ -452,7 +452,7 @@ BDB.Map = (function () {
       return new Promise(function (resolve, reject) {
         const latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
 
-        geocoder.geocode({'location': latlng}, function(results, status) {
+        return geocoder.geocode({'location': latlng}, function(results, status) {
           if (status === google.maps.GeocoderStatus.OK) {
             if (results[0]) {
               const r = results[0].address_components;
