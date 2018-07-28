@@ -1701,6 +1701,9 @@
                           let oldValue, newValue;
 
                           switch (name) {
+                            case 'Name':
+                              tmp.text = valueRaw;
+                              break;
                             case 'Foto':
                             case 'gx_media_links':
                               _importResults.totalUrls++;
