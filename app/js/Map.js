@@ -19,12 +19,7 @@ BDB.Map = (function () {
   let placesService;
   let infoWindow;
   let gmarkers;
-
-  // to do:  move this to configuration
-  let mapBoundsCoords = { 
-    sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, 
-    ne: { lat: '0.1757808338', lng: '-34.3652340941' } 
-  };
+  let mapBoundsCoords;
 
   // function that must be called on map.init(), returns a promise.
   let loadScripts = function(){
@@ -364,13 +359,13 @@ BDB.Map = (function () {
     });
   };
   return {
-    init: function (coords, zoom, elId, getLocation, _markerClickCallback) {
+    init: function (coords, boundaries,zoom, elId, getLocation, _markerClickCallback) {
       let options = Object.assign({isUserLocation : false}, {coords, zoom, elId});
 
       loadScripts().then(()=>{
         // enabling search address and reverse geocoder
         geocoder = new google.maps.Geocoder();
-
+        mapBoundsCoords = boundaries;
         // chech localStorage to see if there is a saved location;
         if (getLocation){
           options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
