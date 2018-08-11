@@ -1,0 +1,144 @@
+<!-- New Pin Modal -->
+<div id="askPlaceModal" data-keyboard="false" class="modal" tabindex="-1">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <section>
+                        <h2>Dê um nome pro bicicletário</h2>
+                        <div class="text-input-wrapper">
+                            <input
+                                id="titleInput"
+                                name="text"
+                                type="text"
+                                class="text-input data-hj-whitelist"
+                                placeholder="Sem nome"
+                                value="{{placeTitle}}" 
+                            >
+
+                            {{#if nameSuggestions}}
+                                <div class="place-suggestions">
+                                    <span class="place-suggestions--title">
+                                        Sugestões
+                                    </span>
+
+                                    <ul class="place-suggestions--list">
+                                        {{#each nameSuggestions}}
+                                            <li class="place-suggestion--item" data-name="{{this}}">
+                                                <a>{{this}}</a>
+                                            </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            {{/if}}
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>
+                        Lugares Próximos ao bicicletário
+                        <a id="type-general-help-tooltip" class="glyphicon glyphicon-question-sign help-tooltip-trigger" role="button" tabindex="0" data-html="true" data-toggle="tooltip" data-placement="auto" role="button" tabindex="0"  data-title="<p>Estes são os principais tipos de bicicletário encontrados pela cidade. Cada um tem um nível de segurança e praticidade diferente. Se você não estiver acostumado com estes nomes o ícone pode te ajudar a entendê-los melhor.</p>
+                        <p>Saiba mais no <a href='#' class='open-guide-btn external-link'>Guia de tipos de bicicletário</a></p>"></a>
+                        </h2> 
+
+                        <div class="custom-radio-group" data-form-step="1">
+                            <div
+                                data-value="deroda"
+                                class="typeIcon {{#ifCond rackType '===' 'deroda'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_deroda.svg"/>
+                                <div class="icon-label">De Roda</div>
+                            </div>
+                            <div
+                                data-value="uinvertido"
+                                class="typeIcon {{#ifCond rackType '===' 'uinvertido'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_uinvertido.svg"/>
+                                <div class="icon-label">U Invertido</div>
+                            </div>
+                            <div
+                                data-value="suspenso"
+                                class="typeIcon {{#ifCond rackType '===' 'suspenso'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_suspenso.svg"/>
+                                <div class="icon-label">Suspenso</div>
+                            </div>
+                            <div
+                                data-value="grade"
+                                class="typeIcon {{#ifCond rackType '===' 'grade'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_grade.svg"/>
+                                <div class="icon-label">Grade</div>
+                            </div>
+                            <div
+                                data-value="trave"
+                                class="typeIcon {{#ifCond rackType '===' 'trave'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_trave.svg"/>
+                                <div class="icon-label">Trave</div>
+                            </div>
+                            <div
+                                data-value="pescocinho"
+                                class="typeIcon {{#ifCond rackType '===' 'pescocinho'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_pescocinho.svg"/>
+                                <div class="icon-label">Pescocinho</div>
+                            </div>
+                            <div
+                                data-value="paliteiro"
+                                class="typeIcon {{#ifCond rackType '===' 'paliteiro'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_paliteiro.svg"/>
+                                <div class="icon-label">Paliteiro</div>
+                            </div>
+                            <div
+                                data-value="m"
+                                class="typeIcon {{#ifCond rackType '===' 'm'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_m.svg"/>
+                                <div class="icon-label">Tipo M</div>
+                            </div>
+                            <div
+                                data-value="pente"
+                                class="typeIcon {{#ifCond rackType '===' 'pente'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_pente.svg"/>
+                                <div class="icon-label">Pente</div>
+                            </div>
+                            <div
+                                data-value="other"
+                                class="typeIcon {{#ifCond rackType '===' 'other'}}active{{/ifCond}}"
+                                tab-index="0"
+                            >
+                                <img alt="" src="/img/tipo_other.svg"/>
+                                <div class="icon-label">Outro</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    
+
+                    <div class="stickyFooterBtn">
+                        <button
+                            class="saveNewPlaceBtn btn border btn-footer btn-action green"
+                        >
+                            SALVAR
+                        </button>
+                        {{#if editMode}}
+                            {{!-- <button id="cancelEditPlaceBtn" class="btn link-button">Cancelar edição</button> --}}
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

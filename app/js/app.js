@@ -589,6 +589,45 @@ $(() => {
       // Change Maps style that shows Points of Interest
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
+      $('#newPlaceholderAskForBtn').on('click', queueUiCallback.bind((this,()=> {
+        toggleLocationInputMode();
+        const mapCenter = map.getCenter();
+        if (BDB.Map.checkBounds()) {
+            BDB.Map.getNameSuggestions({ lat: _newMarkerTemp.lat, lng: _newMarkerTemp.lng })
+              .then(nameSuggestions => {
+                nameSuggestions = nameSuggestions.slice(0, MAX_NAME_SUGGESTIONS);
+
+                nameSuggestions = nameSuggestions.map( n => n.name );
+                
+                openNewOrEditPlaceModal(nameSuggestions);
+              })
+              .catch(error => {
+                console.error(error);
+                openNewOrEditPlaceModal();
+              });
+          } else {
+            const mapCenter = map.getCenter();
+            ga('send', 'event', 'Local', 'out of bounds', `${mapCenter.lat()}, ${mapCenter.lng()}`); 
+
+            swal({
+              title: 'Ops',
+              html:
+                `Foi mal, o bike de boa ainda não chegou aqui!
+                <br><br>
+                <small>
+                  <i>Acompanha nosso <a class="external-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
+                  Facebook</a> para saber novidades sobre nossa cobertura, e otras cositas mas. :)</i>
+                </small>`,
+              type: 'warning',
+            });
+          }
+         $(document).on('keyup.disableInput', e => {
+            if (e.keyCode === 27) {
+              toggleLocationInputMode();
+            }
+          });
+      }));
+
       $('#newPlaceholderConfirmBtn').on('click', queueUiCallback.bind(this, () => {
         toggleLocationInputMode();
         
