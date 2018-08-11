@@ -40,6 +40,8 @@ $bootstrapBackdropColor: $paleWhite;
 $bootstrapBackdropOpacity: 0.8;
 $backdropColor: rgba(250,250,250,$bootstrapBackdropOpacity);
 $greenGradient: linear-gradient(-45deg, $green 0%, $lightGreen 100%);
+$purpleGradient: linear-gradient(-45deg, $purple 0%, $lightPurple 100%);
+
 // $greenGradient: linear-gradient(-45deg, $green 0%, $yellowGreen 100%);
 // $greenGradient: linear-gradient(-45deg, $green 0%, #cedc13 100%);
 
@@ -2014,13 +2016,14 @@ a.unstyled-link {
 }
 
 #newPlaceholderContainer {
+    #newPlaceHolderBtns{
+      display: none;
+      position: absolute;
+      bottom: 26px;
+      left:50%;
+      transform: translateX(-50%);
+    }
     #newPlaceholderConfirmBtn {
-        display: none;
-        
-        position: absolute;
-        bottom: 26px;
-        left: 50%;
-        transform: translateX(-50%);
         border-radius: 25px;
         font-size: 18px;
         padding: $GRID_SPACE $GRID_SPACE*2;
@@ -2032,7 +2035,22 @@ a.unstyled-link {
         // @include greenGlowButton(); 
         // @include shadowButtonHover();
     }
+    #newPlaceholderAskForBtn {
+        
+        border-radius: 25px;
+        font-size: 18px;
+        padding: $GRID_SPACE $GRID_SPACE*2;
 
+        background: $purpleGradient;
+
+        @include shadow(3);
+      
+    }
+    .or{
+      font-size: 18px;
+      line-height: 1.6em;
+      padding: $GRID_SPACE $GRID_SPACE*2;
+    }
     #newPlaceholder {
         position: absolute;
         top: 20%;
@@ -2091,6 +2109,7 @@ a.unstyled-link {
     //         opacity: 1;
     //     }
     // }
+
 }
 
 
@@ -4629,6 +4648,24 @@ body.fullscreen-modal-open {
       .share-email-label {
         display: none;
       }
+    }
+  }
+  #newPlaceholderContainer{
+    #newPlaceHolderBtns{
+      position: absolute;
+      bottom: 26px;
+      left:50%;
+      transform: translateX(0%);
+    }
+    #newPlaceholderConfirmBtn {
+      transform: translateX(-50%);
+    }
+    #newPlaceholderAskForBtn {
+      transform: translateX(-50%);
+    }
+    .or{
+      display: inline-block;
+      transform: translateX(-50%);
     }
   }
 }

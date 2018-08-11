@@ -688,7 +688,9 @@ $(() => {
     $('#addPlace > span').toggle();
     $('#newPlaceholder').toggleClass('active');
     $('#newPlaceholderTarget').toggle();
-    $('#newPlaceholderConfirmBtn').toggle();
+    $('#newPlaceHolderBtns').toggle();
+    //$('#newPlaceholderConfirmBtn').toggle();
+    //$('#newPlaceholderConfirmBtn').toggle();
     // $('#geolocationBtn').toggle();
 
     if (!isTurningOn && openedMarker) { 
