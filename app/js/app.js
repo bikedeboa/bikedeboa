@@ -2277,7 +2277,7 @@ $(() => {
         <br> 
  
         <div>
-          Faça login e se torne um colaborador. É rapidinho e você já pode começar a contribuir com o mapa.
+          Regista-te, faz login e torna-te um colaborador. É rápido e podes começar, desde logo, a contribuir para o mapa.
         </div>
 
         <br>
@@ -2297,7 +2297,7 @@ $(() => {
         <br>
 
         <div style="font-size: 12px; color: #b3b3b3; font-weight: normal;">
-            Exigimos o login para garantir a confiabilidade das contribuições. Nós <b>jamais</b> iremos vender os seus dados, mandar spam ou postar no seu nome sem sua autorização.
+            Exigimos o login para garantir a confiabilidade das contribuições. Jamais iremos vender os teus dados, enviar spam ou postar em teu nome.
         </div>
         `,
       showCloseButton: true,
