@@ -19,10 +19,6 @@ function getSimulatedDelay () {
 ///////////////
 // Constants //
 ///////////////
-
-//DEFAULT_COORDS is pointing to Porto Alegre
-const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
-
 const N_MOCK_PICS = 14;
 
 const MAX_ZOOM_TO_SHOW_PINS = 14;
@@ -85,7 +81,13 @@ const MAX_KM_TO_FIT_TO_VIEWPORT = 2;
 
 const MAX_NAME_SUGGESTIONS = 5;
 
+//DEFAULT_COORDS is pointing to Porto Alegre
+const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
 
+const MAP_BOUNDS_COORDS = { 
+    sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, 
+    ne: { lat: '0.1757808338', lng: '-34.3652340941' } 
+};
 /////////////
 // Globals //
 /////////////
