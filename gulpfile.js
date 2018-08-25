@@ -30,19 +30,15 @@ const declare = require('gulp-declare');
 const merge = require('merge-stream');
 
 
-const DEST_PATH =  'dist';
-
-
 // Environment specific variables
 const development = environments.development;
 const production = environments.production;
 const BDB_ENV = process.env.BDB_ENV || 'localhost';
 
+const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
+
 console.log('NODE_ENV =', development() ? 'development' : 'production');
 console.log('BDB_ENV =', BDB_ENV);
- 
-const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
-const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.com';
 
 const FACEBOOK_IDS = {
   prod: '1814653185457307',
