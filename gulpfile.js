@@ -30,19 +30,15 @@ const declare = require('gulp-declare');
 const merge = require('merge-stream');
 
 
-const DEST_PATH =  'dist';
-
-
 // Environment specific variables
 const development = environments.development;
 const production = environments.production;
 const BDB_ENV = process.env.BDB_ENV || 'localhost';
 
+const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
+
 console.log('NODE_ENV =', development() ? 'development' : 'production');
 console.log('BDB_ENV =', BDB_ENV);
- 
-const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
-const isProdDatabase = process.env.DATABASE_URL === 'https://bdb-api.herokuapp.com';
 
 const FACEBOOK_IDS = {
   prod: '1814653185457307',
@@ -50,13 +46,18 @@ const FACEBOOK_IDS = {
   beta2: '116937842287717', 
   localhost: '478533412529512'
 };
-const GOOGLE_PROD = '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com';
-const GOOGLE_DEV = '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com';
-const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 
+const GOOGLE_IDS = {
+  prod: '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com',
+  beta: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com',
+  beta2: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com',
+  localhost: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com'
+};
+
+const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
 const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[BDB_ENV];
-const GOOGLE_CLIENT_ID = isProdDatabase ? GOOGLE_PROD : GOOGLE_DEV;
-let GOOGLE_MAPS_ID = GOOGLE_API_KEY;
+const GOOGLE_CLIENT_ID = GOOGLE_IDS[BDB_ENV];
+const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
  
 // Production: opt-out of the Experimental new renderer and base map style
 // https://developers.google.com/maps/documentation/javascript/releases
