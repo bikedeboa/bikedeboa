@@ -3,6 +3,7 @@
 
 $(() => {
   let start_coords = DEFAULT_COORDS;
+  let boundaries = MAP_BOUNDS_COORDS;
   let zoom = 15;
   let getGeolocation = true;
 
@@ -1462,7 +1463,7 @@ $(() => {
           _onDataReadyCallback = null;
         }
       }); 
-      BDB.Map.init(start_coords, zoom, 'map', getGeolocation, openLocal); 
+      BDB.Map.init(start_coords, boundaries, zoom, 'map', getGeolocation, openLocal); 
 
       if (!_isTouchDevice) {
         $('.caption-tooltip').tooltip({
