@@ -20,11 +20,17 @@ BDB.Map = (function () {
   let infoWindow;
   let gmarkers;
 
-  // to do:  move this to configuration
-  let mapBoundsCoords = { 
-    sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, 
-    ne: { lat: '0.1757808338', lng: '-34.3652340941' } 
+  const countriesBoundingBoxes = {
+    'BR': { 
+      sw: { lat: '-34.0526594796', lng: '-61.3037107971' }, 
+      ne: { lat: '0.1757808338', lng: '-34.3652340941' } 
+    },
+    'PT': {
+      sw: { lat: '36.838268541', lng: '-9.52657060387' },
+      ne: { lat: '42.280468655', lng: '-6.3890876937' } 
+    }
   };
+  const mapBoundsCoords = countriesBoundingBoxes['<BDB_COUNTRYCODE>'];
 
   // function that must be called on map.init(), returns a promise.
   let loadScripts = function(){

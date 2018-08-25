@@ -34,11 +34,13 @@ const merge = require('merge-stream');
 const development = environments.development;
 const production = environments.production;
 const BDB_ENV = process.env.BDB_ENV || 'localhost';
+const BDB_COUNTRYCODE = process.env.BDB_COUNTRYCODE || 'BR';
 
 const DATABASE_URL = process.env.DATABASE_URL || 'https://bdb-test-api.herokuapp.com';
 
 console.log('NODE_ENV =', development() ? 'development' : 'production');
 console.log('BDB_ENV =', BDB_ENV);
+console.log('BDB_COUNTRYCODE =', BDB_COUNTRYCODE);
 
 const FACEBOOK_IDS = {
   prod: '1814653185457307',
@@ -98,6 +100,7 @@ gulp.task('scripts', () => {
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
+    .pipe(replace('<BDB_COUNTRYCODE>', BDB_COUNTRYCODE))
     .pipe(gulp.dest('dist/'));
   
   gulp.src('server.js')
@@ -106,6 +109,7 @@ gulp.task('scripts', () => {
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
+    .pipe(replace('<BDB_COUNTRYCODE>', BDB_COUNTRYCODE))
     .pipe(plumber())
     .pipe(babel({
       presets: ['es2015']
@@ -119,6 +123,7 @@ gulp.task('scripts', () => {
     .pipe(replace('<GOOGLE_CLIENT_ID>', GOOGLE_CLIENT_ID))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
+    .pipe(replace('<BDB_COUNTRYCODE>', BDB_COUNTRYCODE))
     .pipe(plumber())
     .pipe(babel({
       presets: ['es2015']
@@ -154,6 +159,7 @@ gulp.task('html', () => {
     .pipe(development(replace('/favicons/', '/favicons-dev/')))
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
+    .pipe(replace('<BDB_COUNTRYCODE>', BDB_COUNTRYCODE))
     .pipe(production(htmlmin({
       collapseWhitespace: true,
       removeComments: true,

@@ -20,8 +20,14 @@ function getSimulatedDelay () {
 // Constants //
 ///////////////
 
-//DEFAULT_COORDS is pointing to Porto Alegre
-const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
+const BDB_COUNTRYCODE = '<BDB_COUNTRYCODE>';
+
+const CAPITALS = {
+  'BR': { latitude: -30.0346, longitude: -51.2177 }, // Porto Alegre
+  'PT': { latitude: 38.736946, longitude: -9.142685 } // Lisbon
+};
+
+const DEFAULT_COORDS = CAPITALS[BDB_COUNTRYCODE];
 
 const N_MOCK_PICS = 14;
 
