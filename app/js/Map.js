@@ -371,13 +371,12 @@ BDB.Map = (function () {
     });
   };
   return {
-    init: function (coords, boundaries,zoom, elId, getLocation, _markerClickCallback) {
+    init: function (coords, zoom, elId, getLocation, _markerClickCallback) {
       let options = Object.assign({isUserLocation : false}, {coords, zoom, elId});
 
       loadScripts().then(()=>{
         // enabling search address and reverse geocoder
         geocoder = new google.maps.Geocoder();
-        mapBoundsCoords = boundaries;
         // chech localStorage to see if there is a saved location;
         if (getLocation){
           options.coords = BDB.Geolocation.getLastestLocation() || options.coords;
