@@ -20,8 +20,14 @@ function getSimulatedDelay () {
 // Constants //
 ///////////////
 
-//DEFAULT_COORDS is pointing to Porto Alegre
-const DEFAULT_COORDS = { latitude: -30.0346, longitude: -51.2177 };
+const BDB_COUNTRYCODE = '<BDB_COUNTRYCODE>';
+
+const CAPITALS = {
+  'BR': { latitude: -30.0346, longitude: -51.2177 }, // Porto Alegre
+  'PT': { latitude: 38.736946, longitude: -9.142685 } // Lisbon
+};
+
+const DEFAULT_COORDS = CAPITALS[BDB_COUNTRYCODE];
 
 const N_MOCK_PICS = 14;
 
@@ -85,6 +91,17 @@ const MAX_KM_TO_FIT_TO_VIEWPORT = 2;
 
 const MAX_NAME_SUGGESTIONS = 5;
 
+const countriesBoundingBoxes = {
+  'BR': {
+    sw: { lat: '-34.0526594796', lng: '-61.3037107971' },
+    ne: { lat: '0.1757808338', lng: '-34.3652340941' }
+  },
+  'PT': {
+    sw: { lat: '36.838268541', lng: '-9.52657060387' },
+    ne: { lat: '42.280468655', lng: '-6.3890876937' }
+  }
+};
+const MAP_BOUNDS_COORDS = countriesBoundingBoxes['<BDB_COUNTRYCODE>'];
 
 /////////////
 // Globals //
