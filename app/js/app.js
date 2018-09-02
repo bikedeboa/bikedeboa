@@ -2,7 +2,6 @@
 /* eslint-env node, jquery */
 
 $(() => {
-  debugger;
   let start_coords = DEFAULT_COORDS;
   let boundaries = MAP_BOUNDS_COORDS;
   let zoom = 15;
@@ -1589,7 +1588,7 @@ $(() => {
 
             <h2 class="swal2-title" id="swal2-title">Feedback</h2>
             <div style="text-align: center;">
-              Queremos seu feedback! <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">Responda nossa pesquisa</a>, não leva 5 minutinhos.
+              Queremos a tua opinião! <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">Responde ao nosso questionário</a>, dura menos de 5 minutos.
             </div>
           `,
       });
