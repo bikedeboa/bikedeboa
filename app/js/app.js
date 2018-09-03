@@ -1616,6 +1616,10 @@ $(() => {
       BDB.Map.goToCoords(DEFAULT_COORDS);
     }));
 
+    $('.go-to-bdb').on('click', queueUiCallback.bind(this, () => {
+      window.location.href = "http://bikedeboa.com.br";
+    }));
+
     
     $('#geolocationBtn').on('click', queueUiCallback.bind(this, () => {
       ga('send', 'event', 'Geolocation', 'geolocate button click');
