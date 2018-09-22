@@ -2792,17 +2792,13 @@ $(() => {
       // Force to always prompt
       e.prompt();
 
-      ga('send', 'event', 'Misc', 'beforeinstallprompt - popped'); 
       ga('send', 'event', 'PWA', 'beforeinstallprompt - popped'); 
       e.userChoice.then(function(choiceResult) {
-        if(choiceResult.outcome == 'dismissed') {
+        if (choiceResult.outcome == 'dismissed') {
           // User cancelled home screen install
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - refused');
           ga('send', 'event', 'PWA', 'beforeinstallprompt - refused');
-        }
-        else {
-          // User added to home screen
-          ga('send', 'event', 'Misc', 'beforeinstallprompt - accepted');
+        } else {
+          // User added to home screen 
           ga('send', 'event', 'PWA', 'beforeinstallprompt - accepted');
         }
       });
