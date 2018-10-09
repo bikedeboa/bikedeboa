@@ -998,6 +998,12 @@ a.unstyled-link {
   img {
     width: 130px;
   }
+  span{
+    font-size: 18px;
+    font-weight: 700;
+    color: $green;
+    vertical-align: middle;
+  }
 }
 
 #locationQueryBtn {
@@ -3996,6 +4002,12 @@ body.fullscreen-modal-open {
 
     img {
       width: 120px;
+    }
+    span{
+      color: #FFF;
+      font-size: 26px;
+      margin-botton: 5px;
+      display: inline-block;
     }
   }
 
