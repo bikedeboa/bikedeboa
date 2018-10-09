@@ -495,6 +495,7 @@ BDB.Database = {
         }
       } else {
         requestFailHandler();
+        console.log("getAllTags: no data");
 
         if (failCB && typeof failCB === 'function') {
           failCB();
@@ -503,6 +504,7 @@ BDB.Database = {
     })
       .fail(() => {
         requestFailHandler();
+        console.log('getAllTags: Ajax Failed');
 
         if (failCB && typeof failCB === 'function') {
           failCB();
