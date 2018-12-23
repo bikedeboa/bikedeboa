@@ -49,6 +49,12 @@ const MARKER_ICON_GREEN_MINI = '/img/pin_green_mini.svg';
 const MARKER_ICON_YELLOW_MINI = '/img/pin_yellow_mini.svg';
 const MARKER_ICON_RED_MINI = '/img/pin_red_mini.svg';
 const MARKER_ICON_GRAY_MINI = '/img/pin_gray_mini.svg';
+
+const MARKER_ICON_RACK = '/img/pin_rack.svg';
+const MARKER_ICON_REQUEST = '/img/pin_request.svg';
+const MARKER_ICON_RACK_MINI = '/img/pin_rack_mini.svg';
+const MARKER_ICON_REQUEST_MINI = '/img/pin_request_mini.svg';
+
 const PHOTO_UPLOAD_MAX_W = 1000; 
 const PHOTO_UPLOAD_MAX_H = 1000;
 

@@ -737,25 +737,25 @@ BDB.Map = (function () {
             let color = getColorFromAverage(m.average);
             switch (color) {
             case 'red':
-              iconType = MARKER_ICON_RED;
-              iconTypeMini = MARKER_ICON_RED_MINI;
-              scale = 0.6;
+              iconType = MARKER_ICON_RACK;
+              iconTypeMini = MARKER_ICON_RACK_MINI;
+              scale = 0.4;
               break;
             case 'yellow':
-              iconType = MARKER_ICON_YELLOW;
-              iconTypeMini = MARKER_ICON_YELLOW_MINI;
+              iconType = MARKER_ICON_RACK;
+              iconTypeMini = MARKER_ICON_RACK_MINI;
               scale = 0.8;
               break;
             case 'green':
-              iconType = MARKER_ICON_GREEN;
-              iconTypeMini = MARKER_ICON_GREEN_MINI;
+              iconType = MARKER_ICON_RACK;
+              iconTypeMini = MARKER_ICON_RACK_MINI;
               scale = 1;
               break;
             case 'gray':
             default:
-              iconType = MARKER_ICON_GRAY;
-              iconTypeMini = MARKER_ICON_GRAY_MINI;
-              scale = 0.8;
+              iconType = MARKER_ICON_RACK;
+              iconTypeMini = MARKER_ICON_RACK_MINI;
+              scale = 0.6;
               break;
             }
 
