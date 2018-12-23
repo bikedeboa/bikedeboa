@@ -13,7 +13,7 @@ $(() => {
 
     if (navigator.share) {
       navigator.share({
-        title: 'bike de boa',
+        title: 'Cidade Ciclável',
         text: openedMarker.text,
         url: shareUrl,
       })
@@ -637,7 +637,7 @@ $(() => {
             swal({
               title: 'Ops',
               html:
-                `Foi mal, o bike de boa ainda não chegou aqui!
+                `Foi mal, o Cidade Ciclável ainda não chegou aqui!
                 <br><br>
                 <small>
                   <i>Acompanha nosso <a class="external-link" target="_blank" rel="noopener" href="https://www.facebook.com/bikedeboaapp">
