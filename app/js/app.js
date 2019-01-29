@@ -573,6 +573,12 @@ $(() => {
     addLocationMode = !addLocationMode;
     const isTurningOn = addLocationMode;
 
+    //new modal that open requests and locals
+    openRequestOrLocalModal();
+
+    return;
+
+
     if (isTurningOn) {
       updatePageTitleAndMetatags('Novo bicicletário');
       $('#top-mobile-bar-title').text('Mova o mapa para adicionar no lugar desejado');
@@ -847,7 +853,16 @@ $(() => {
 
     hideSpinner();
   }
+  function openRequestOrLocalModal(){
+    $('#newRequestOrPlaceModal').remove();
+    $('body').append(BDB.templates.newRequestOrPlaceModal());
+      $('#newRequestOrPlaceModal')
+      // .one('shown.bs.modal', () => {
+      //   $('#titleInput').focus();
+      // })
+      .modal('show');
 
+  }
   function openNewOrEditPlaceModal(nameSuggestions) {
     console.log('openNewOrEditPlaceModal');
 
@@ -1689,6 +1704,7 @@ $(() => {
     /////////////////////
 
     $('body').on('click', '.modal, .close-modal', e => {
+      debugger;
       // If click wasn't on the close button or in the backdrop, but in any other part of the modal
       if ($(e.currentTarget).hasClass('fullscreen-modal') || e.target != e.currentTarget) {
         return;

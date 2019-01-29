@@ -2694,6 +2694,34 @@ body.fullscreen-modal-open {
     }
 }
 
+#newRequestOrPlaceModal{
+  button{
+    border-radius: 5px;
+    margin: 20px 0;
+    h3{
+      text-align: left;
+      font-weight:bold;
+      margin-left: 50px;
+      float: right;
+
+    }
+    p{
+      text-align: left;
+      font-size: 18px;
+      margin-left: 50px;
+      display: inline-block;
+      float: right;
+
+    }
+    &:hover{
+      background: #F2F2F2;
+    }
+    img{
+      float:left;
+      display: inline-block;
+    }
+  }
+}
 .review {
   text-align: center;
   
@@ -3544,19 +3572,6 @@ body.fullscreen-modal-open {
   #filter-results-counter {
     font-weight: bold;
     // color: $black;
-  }
-
-  label[for=filter_rating_good] {
-    color: $green;
-  }
-  label[for=filter_rating_medium] {
-    color: $darkYellow;
-  }
-  label[for=filter_rating_bad] {
-    color: $red;
-  }
-  label[for=filter_rating_none] {
-    color: $gray;
   }
 
   @media screen and (max-height: 700px) {
