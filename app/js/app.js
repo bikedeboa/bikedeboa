@@ -569,15 +569,18 @@ $(() => {
     BDB.Map.setMapOnAll(map); 
   }
 
+  function addNewPlace(){
+    openRequestOrLocalModal();
+    setView('Pedido ou Local', 'decisao', true);
+
+    return;
+  }
+
   function toggleLocationInputMode() {
     addLocationMode = !addLocationMode;
     const isTurningOn = addLocationMode;
 
-    //new modal that open requests and locals
-    openRequestOrLocalModal();
-
-    return;
-
+    
 
     if (isTurningOn) {
       updatePageTitleAndMetatags('Novo bicicletário');
@@ -1679,6 +1682,29 @@ $(() => {
       }
     });
     
+
+    $('body').on('click', '#addNewRack',function(){
+      $('.close-modal').trigger('click');
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog({ showPermissionDisclaimer: true });
+
+        $(document).one('bikedeboa.login', () => {
+          $('#addPlace').click();
+        });
+      } else {
+        // Make sure the new local modal won't think we're editing a local
+        if (!$('#addPlace').hasClass('active')) {
+          openedMarker = null;
+        }
+
+        ga('send', 'event', 'Local', 'toggle create rack mode');
+        toggleLocationInputMode();
+      }
+    });
+
+    $('body').on('click', '#addNewRequest',function(){
+    });
+
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
       if (!BDB.User.isLoggedIn) {
@@ -1693,8 +1719,8 @@ $(() => {
           openedMarker = null;
         }
 
-        ga('send', 'event', 'Local', 'toggle create pin mode');
-        toggleLocationInputMode();
+        //ga('send', 'event', 'Local', 'toggle create pin mode');
+        addNewPlace();
       }
     }));
 
@@ -1704,7 +1730,7 @@ $(() => {
     /////////////////////
 
     $('body').on('click', '.modal, .close-modal', e => {
-      debugger;
+      //debugger;
       // If click wasn't on the close button or in the backdrop, but in any other part of the modal
       if ($(e.currentTarget).hasClass('fullscreen-modal') || e.target != e.currentTarget) {
         return;
