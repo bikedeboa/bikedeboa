@@ -2164,6 +2164,7 @@ $(() => {
     if (isInitialRouting) {
       switch(urlBreakdown[1]) {
       case 'novo':
+      case 'decisao':
       case 'editar':
       case 'nav':
       case 'filtros':
@@ -2279,6 +2280,7 @@ $(() => {
     case 'editar':
     case 'foto':
     case 'dados':
+    case 'decisao':
       break;
     case '':
       if (!map && !_isOffline) {
