@@ -1,0 +1,101 @@
+<!-- New Request Modal -->
+<div id="newRequestModal" data-keyboard="false" class="modal place-form" tabindex="-1">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="photo-container photo-input--container">
+                        <input id="photoInput" class="photo-input" type="file" name="photoInput" accept="image/*">
+                
+                        <img alt="" id="photoInputBg" src="{{{photoUrl}}}" />
+
+                        <label class="photo-input--label" for="photoInput">
+                            <div class="photo-input--calltoaction">
+                                    <img src="/img/icon_photo_blue.svg" alt="" />
+                                    <div>
+                                        Adicionar foto
+                                    </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <section class="extraInfo">
+                        <h2>Dê um nome para o seu pedido</h2>
+                        <div class="text-input-wrapper">
+                            <input
+                                id="titleInput"
+                                name="text"
+                                type="text"
+                                class="text-input data-hj-whitelist"
+                                placeholder="Sem nome"
+                                value="{{placeTitle}}" 
+                            >
+
+                            {{#if nameSuggestions}}
+                                <div class="place-suggestions">
+                                    <span class="place-suggestions--title">
+                                        Sugestões
+                                    </span>
+
+                                    <ul class="place-suggestions--list">
+                                        {{#each nameSuggestions}}
+                                            <li class="place-suggestion--item" data-name="{{this}}">
+                                                <a>{{this}}</a>
+                                            </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            {{/if}}
+                        </div>
+                    
+                        <h2>Por que eu quero um estacionamento?</h2>
+                        <textarea
+                            id="descriptionInput"
+                            type="text"
+                            maxlength="250"  
+                            name="description"
+                            placeholder="Descreva aqui a necessidade do estacionamento de bicicletas neste local" 
+                            rows="4"
+                        ></textarea>
+                    </section>
+                    <section>
+                        <h2>É um pedido para um comércio?</h2>
+                        <label for="isCommerce">Não</label> <input type="radio" name="isCommerce" class="isCommerce" value="0" checked="true" />
+                        <label for="isCommerce">Sim</label> <input type="radio" name="isCommerce" class="isCommerce" value="1">
+                    </section>
+                    <div class="optional extraInfo hide">
+                        <section>
+                        <h2>Qual sua relação com o comércio</h2>
+                        <select>
+                            <option value="">Escolha uma opção</option>
+                            <option value="owner">Dono</option>
+                            <option value="employee">Funcionário</option>
+                            <option value="customer">Customer</option>
+                        </select>
+
+                            <h2>Nome do Estabelecimento</h2>
+                            <input 
+                                type="text" 
+                                name="commerceName" 
+                                class="text-input data-hj-whitelist"
+                                placeholder="Nnome do comércio, loja..." 
+                            />
+                        
+                            <h2>Telefone do Estabelecimento</h2>
+                            <input type="text" 
+                                name="commercePhone" 
+                                class="text-input data-hj-whitelist"
+                                placeholder="111 111 111" 
+                            />    
+                        </section>
+                    </div>
+                    <div class="stickyFooterBtn">
+                        <button class="saveNewPlaceBtn btn border btn-footer btn-action green">
+                            SALVAR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

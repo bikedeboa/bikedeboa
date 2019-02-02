@@ -576,12 +576,12 @@ $(() => {
     return;
   }
 
-  function toggleLocationInputMode() {
+
+  function toggleLocationInputMode(type = 'rack') {
     addLocationMode = !addLocationMode;
     const isTurningOn = addLocationMode;
 
-    
-
+    //logic to toggle. 
     if (isTurningOn) {
       updatePageTitleAndMetatags('Novo bicicletário');
       $('#top-mobile-bar-title').text('Mova o mapa para adicionar no lugar desejado');
@@ -593,14 +593,14 @@ $(() => {
       $('.hamburger-button').addClass('back-mode');
       $('.hamburger-button').addClass('back-icon');
       $('.hamburger-button.back-mode').one('click.exitPositionPinMode', () => {
-        toggleLocationInputMode();
+        toggleLocationInputMode(type);
       });
 
       // Change Maps style that shows Points of Interest
       map.setOptions({styles: _gmapsCustomStyle_withLabels});
 
       $('#newPlaceholderConfirmBtn').on('click', queueUiCallback.bind(this, () => {
-        toggleLocationInputMode();
+        toggleLocationInputMode(type);
         
         // Queries Google Geocoding service for the position address
         const mapCenter = map.getCenter();
@@ -633,11 +633,21 @@ $(() => {
 
                 nameSuggestions = nameSuggestions.map( n => n.name );
                 
-                openNewOrEditPlaceModal(nameSuggestions);
+                if(type === "rack"){
+                  openNewOrEditPlaceModal(nameSuggestions);
+                } else {
+                  openNewRequestModal(nameSuggestions);
+                }
               })
               .catch(error => {
                 console.error(error);
-                openNewOrEditPlaceModal();
+                if(type === "rack"){
+                  openNewOrEditPlaceModal();  
+                }else{
+                  // open request
+                  openNewRequestModal();
+                }
+                
               });
           } else {
             const mapCenter = map.getCenter();
@@ -661,7 +671,7 @@ $(() => {
       // ESC button cancels locationinput
       $(document).on('keyup.disableInput', e => {
         if (e.keyCode === 27) {
-          toggleLocationInputMode();
+          toggleLocationInputMode(type);
         }
       });
 
@@ -703,7 +713,12 @@ $(() => {
 
     if (!isTurningOn && openedMarker) { 
       // Was editing the marker position, so return to Edit Modal
-      openNewOrEditPlaceModal();
+      if(type ==='rack'){
+        openNewOrEditPlaceModal();  
+      }else {
+        // request
+      }
+      
     }
   }
 
@@ -866,6 +881,33 @@ $(() => {
       .modal('show');
 
   }
+  function openNewRequestModal(nameSuggestions){
+    console.log('openNewRequestModal');
+    
+    let templateData = {
+      nameSuggestions: nameSuggestions
+    };
+    setView('Novo pedido de bicicletário', '/novopedido');
+    ga('send', 'event', 'Local', 'create request - pending');
+
+    
+    ////////////////////////////////
+    // Render handlebars template // 
+    ////////////////////////////////
+    $('#newRequestModal').remove();
+    $('body').append(BDB.templates.newRequestModal(templateData));
+    $('#newRequestModal').modal('show');
+    $('body').on('change','.isCommerce', function(){
+      if ($(this).val()==true){
+        $('#newRequestModal').find('.optional').removeClass('hide');  
+      }else{
+        $('#newRequestModal').find('.optional').addClass('hide');
+      }
+      
+    });
+
+  }
+
   function openNewOrEditPlaceModal(nameSuggestions) {
     console.log('openNewOrEditPlaceModal');
 
@@ -903,7 +945,7 @@ $(() => {
       templateData.minimapUrl = BDB.Map.getStaticImgMap(staticImgDimensions, getColorFromAverage(m.average), m.lat, m.lng, 20);
     } else {
       setView('Novo bicicletário', '/novo');
-      ga('send', 'event', 'Local', 'create - pending');
+      ga('send', 'event', 'Local', 'create rack- pending');
     }
 
 
@@ -1698,11 +1740,27 @@ $(() => {
         }
 
         ga('send', 'event', 'Local', 'toggle create rack mode');
-        toggleLocationInputMode();
+        toggleLocationInputMode('rack');
       }
     });
 
     $('body').on('click', '#addNewRequest',function(){
+      $('.close-modal').trigger('click');
+      if (!BDB.User.isLoggedIn) {
+        openLoginDialog({ showPermissionDisclaimer: true });
+
+        $(document).one('bikedeboa.login', () => {
+          $('#addPlace').click();
+        });
+      } else {
+        // Make sure the new local modal won't think we're editing a local
+        if (!$('#addPlace').hasClass('active')) {
+          openedMarker = null;
+        }
+
+        ga('send', 'event', 'Local', 'toggle create rack mode');
+        toggleLocationInputMode('request');
+      }
     });
 
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
@@ -2164,6 +2222,7 @@ $(() => {
     if (isInitialRouting) {
       switch(urlBreakdown[1]) {
       case 'novo':
+      case 'novopedido':
       case 'decisao':
       case 'editar':
       case 'nav':
@@ -2276,7 +2335,8 @@ $(() => {
     case 'cidades-mapeadas':
       openTopCitiesModal(); 
       break;
-    case 'novo' :
+    case 'novo':
+    case 'novopedido':
     case 'editar':
     case 'foto':
     case 'dados':

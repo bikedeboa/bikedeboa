@@ -2554,8 +2554,18 @@ body.fullscreen-modal-open {
     left: -999px;
   }
 }
-
-#newPlaceModal {
+#newRequestModal{
+  .photo-input--container .photo-input--label{
+    border-color: #56CCf2;
+  }
+  .photo-input--calltoaction {
+    color: #56CCf2;
+  }
+  .saveNewPlaceBtn{
+    background-color: #56CCf2 
+  }
+}
+#newPlaceModal, .place-form {
     section {
         margin: $GRID_SPACE 0 $GRID_SPACE*2;
 
