@@ -731,10 +731,60 @@ $(() => {
   }
 
   // @todo refactor this, it's fuckin confusing
+  function createNewRequest(){
+
+    goHome();
+    showSpinner('Salvando...', _uploadingPhotoBlob ? true : false);
+
+    let place = {};
+    if (_newMarkerTemp) {
+      place.lat = _newMarkerTemp.lat;
+      place.lng = _newMarkerTemp.lng;
+      if (_newMarkerTemp.address) {
+        place.address = _newMarkerTemp.address;
+        place.city = _newMarkerTemp.city;
+        place.state = _newMarkerTemp.state;
+        place.country = _newMarkerTemp.country;
+      } 
+      _newMarkerTemp = null;
+    }
+
+
+    //substituir campos
+    const container = $('#newRequestModal');
+    place.text = container.find('#titleInput').val();
+    place.description =  container.find('#descriptionInput').val();
+    place.isCommerce = parseInt(container.find('.isCommerce:checked').val());
+    place.commerceRelation = place.isCommerce ? container.find('#commerceRelation').val() : null;
+    place.commerceName = place.isCommerce ? container.find('#commerceName').val() : null;
+    place.commercePhone = place.isCommerce ? container.find('#commercePhone').val() : null;
+
+    const onRequestPlaceSaved = newPlace => {
+      if(newPlace){
+        swal({
+              title: 'Pedido de Bicicletário criado',
+              customClass: 'post-create-modal',
+              type: 'success',
+              html:
+                `<section class="rating-input-container">
+                  <p> 
+                    Muito obrigado pela Colaboração! 
+                  </p>  
+
+                  <hr>
+              </section>`, 
+              showCloseButton: true
+        });
+      }    
+    };
+    hideSpinner();
+    ga('send', 'event', 'RequestLocal', 'create');
+    BDB.Database.sendRequestPlace(place, onRequestPlaceSaved);
+  }
   function finishCreateOrUpdatePlace() {
     const updatingMarker = openedMarker;
     openedMarker = null;
-    
+
     goHome();
     showSpinner('Salvando...', _uploadingPhotoBlob ? true : false);
 
@@ -787,7 +837,6 @@ $(() => {
     if (formFields.isPaid && formFields.isPaid !== 'dontknow') {
       place.isPaid = (formFields.isPaid === 'yes');
     }
- 
     const onPlaceSaved = newPlace => {
       if (!updatingMarker) {
         BDB.User.saveNewPlace(newPlace.id);
@@ -905,7 +954,7 @@ $(() => {
       }
       
     });
-
+    $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, createNewRequest));
   }
 
   function openNewOrEditPlaceModal(nameSuggestions) {

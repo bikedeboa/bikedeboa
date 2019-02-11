@@ -391,6 +391,38 @@ BDB.Database = {
       },
     });
   },
+  //todo
+  sendRequestPlace: function(place, callback){
+    const self = this;
+
+    place.authorIP = this._headers.ip_origin;
+
+    console.debug('Sendng new Local Request');
+    console.debug('place');
+
+    $.ajax({
+      xhr: () => this.getUploadProgressHandler(),
+      type: 'post',
+      headers: self._headers,
+      url: self.API_URL + '/requestlocal',
+      data: place,
+      success: function(data) {
+        console.debug('Addition success!');
+        console.debug(data);
+
+        BDB.User.fetchPlaces();
+
+        if (callback && typeof callback === 'function') {
+          callback(data);
+        }
+      },
+      error: function(e) {
+        requestFailHandler();
+        console.error(e);
+      },
+    });
+  },
+
 
   getUploadProgressHandler: function() {
     let xhr = new window.XMLHttpRequest();
