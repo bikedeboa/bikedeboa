@@ -64,8 +64,9 @@ BDB.Places = {
       console.error('error on getMarkerShareUrl: no marker');
       return;
     }
-
-    let url = `/b/${marker.id}`;
+    let prefix = (marker.type === 'rack') ? 'b' : 'r';
+  
+    let url = `/${prefix}/${marker.id}`;
     if (marker.text) {
       url += `-${slugify(marker.text)}`;
     }

@@ -24,6 +24,7 @@ BDB.Markers = (function(){
 				    let iconType, iconTypeMini;
 				    if(m.type ==="rack"){
 				    	let color = getColorFromAverage(m.average);
+				    	m.average = formatAverage(m.average);
 					    switch (color) {
 					    case 'red':
 					      iconType = MARKER_ICON_RACK;
@@ -76,18 +77,7 @@ BDB.Markers = (function(){
 				        anchor: new google.maps.Point((MARKER_W_MINI * scale) / 2, (MARKER_H_MINI * scale) / 2), // anchor
 				      };
 
-				    }
 
-				    // Average might come with crazy floating point value
-				    m.average = formatAverage(m.average);
-
-				    // @todo temporarily disabled this because backend still doesnt support flags for these
-				    // let labelStr;
-				    // if (BDB.User.isAdmin && (!m.photo || !m.structureType || m.isPublic == null)) {
-				    //   labelStr = '?';
-				    // }
-
-				    if (map) {
 				      if (m.lat && m.lng) {
 				        let newMarker = new google.maps.Marker({
 				          optimized: true, 
@@ -95,55 +85,41 @@ BDB.Markers = (function(){
 				            lat: parseFloat(m.lat),
 				            lng: parseFloat(m.lng)
 				          },
-				          // label: {
-				          //   text: m.average ? m.average.toString() : '-', 
-				          //   color: 'white',
-				          //   fontFamily: 'Quicksand',
-				          //   fontSize: '12px', 
-				          //   fontWeight: 'bold'
-				          // },
 				          icon: mapZoomLevel === 'mini' ? m.iconMini : m.icon,
 				          zIndex: i, //places should be ordered by average
 				          // opacity: 0.1 + (m.average/5).
 				        });
-				        // Performance of MarkerWithLabel is horrible even when hiding labels with display:none :(
-				        // const labelHeightPx = 12;
-				        // let newMarker = new MarkerWithLabel({
-				        //   optimized: false, // this lib forces optimized to be false anyway
-				        //   labelVisible: false, // force display:none first, for performance
-				        //   position: {
-				        //     lat: parseFloat(m.lat),
-				        //     lng: parseFloat(m.lng)
-				        //   },
-				        //   icon: m.icon,
-				        //   labelContent: m.text,
-				        //   labelAnchor: new google.maps.Point(-(MARKER_W * scale) / 2, (MARKER_H * scale) / 2 + labelHeightPx/2),
-				        //   labelClass: `markerLabel color-${color}`,
-				        // });
+				        
 
 				        // Info window
-				        let templateData = {
-				          thumbnailUrl: (m.photo) ? m.photo.replace('images', 'images/thumbs') : '',
-				          title: m.text,
-				          average: m.average,
-				          roundedAverage: m.average && ('' + Math.round(m.average)),
-				          pinColor: getColorFromAverage(m.average),
-				          numReviews : m.reviews
-				        };
-
-				        // Attributes
-				        // let attrs = [];
-				        // if (m.isPublic != null) {
-				        //   attrs.push(m.isPublic ? 'Público' : 'Privado');
-				        // }
-				        // if (m.structureType) {
-				        //   attrs.push(STRUCTURE_CODE_TO_NAME[m.structureType]);
-				        // }
-				        // if (m.isCovered != null) {
-				        //   attrs.push(m.isCovered ? 'Coberto' : 'Não coberto');
-				        // }
-				        // templateData.attrs = attrs.join(' · ');
-
+				        /*let templateData = {
+					          thumbnailUrl: (m.photo) ? m.photo.replace('images', 'images/thumbs') : '',
+					          title: m.text,
+					          average: m.average,
+					          roundedAverage: m.average && ('' + Math.round(m.average)),
+					          pinColor: getColorFromAverage(m.average),
+					          numReviews : m.reviews
+				        	};*/
+				        let templateData;
+				        if (m.type === 'rack'){
+				        	templateData = {
+				        	  type : 1,
+					          thumbnailUrl: (m.photo) ? m.photo.replace('images', 'images/thumbs') : '',
+					          title: m.text,
+					          average: m.average,
+					          roundedAverage: m.average && ('' + Math.round(m.average)),
+					          pinColor: getColorFromAverage(m.average),
+					          numReviews : m.reviews
+				        	};
+				        }else { 
+				        	templateData = {
+				        	  type : 0,
+					          thumbnailUrl: (m.photo) ? m.photo.replace('images', 'images/thumbs') : '',
+					          title: m.text,
+					          supporters: 0
+				        	};
+				        }
+				        
 				        const contentString = BDB.templates.infoWindow(templateData);
 
 				        if (_isTouchDevice) {

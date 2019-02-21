@@ -19,7 +19,7 @@
 {{!-- <div class="infobox--details">
     {{{attrs}}}
 </div> --}}
-
+{{#if type}}
 <div class="rating-display-container rating-display-mini" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
     {{#if average}}
     <span class="average">{{average}}</span>
@@ -36,23 +36,25 @@
         <input disabled type="radio" id="infobox_star1" name="infobox_rating" value="1" {{#ifCond roundedAverage '===' '1'}} checked {{/ifCond}}/>
         <label class="full-star" data-value="1" for="placeDetails_star1"></label>
     </fieldset> 
-
-    {{#if numReviews}}
+    
+        {{#if numReviews}}
         <span class="numreviews">{{numReviews}}</span>
-    {{/if}}
+        {{/if}}
     {{else}}
-        <span>Sem avaliações ainda</span>
+        <span>Seja o primeiro a avaliar! :)</span>
     {{/if}}
 </div>
+{{else}}
 
-<!-- <div class="infobox--label">
-    Mais detalhes <span class="glyphicon glyphicon-chevron-right"></span>
-</div> -->
-
-<!-- {{#unless average}}
-    <div class="infobox--label">
-    Clique para ver mais
-    </div>
-{{/unless}} -->
+    {{#if supporters}}
+<div class="rating-display-container rating-display-mini" >
+    
+</div>
+    {{else}}
+<div class="rating-display-container rating-display-mini" >
+    <span>Seja o primeiro a suportar esta ideia!</span>
+</div>
+    {{/if}}
+{{/if}}
 
 </div>
