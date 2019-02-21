@@ -780,6 +780,11 @@ $(() => {
     hideSpinner();
     ga('send', 'event', 'RequestLocal', 'create');
     BDB.Database.sendRequestPlace(place, onRequestPlaceSaved);
+
+    BDB.Database.getAllPlaces().then(function(){
+      BDB.Map.updateMarkers();
+    });
+
   }
   function finishCreateOrUpdatePlace() {
     const updatingMarker = openedMarker;
