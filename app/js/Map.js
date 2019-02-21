@@ -512,7 +512,7 @@ BDB.Map = (function () {
     },
     clearMarkers: function () {
       // setMapOnAll(null);
-      BDB.Markers.clearMarkers(markerClusterer);
+      BDB.Markers.clearMarkers();
     },
     // Sets the map on all markers in the array.
     setMapOnAll: function(map) {

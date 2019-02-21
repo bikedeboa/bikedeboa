@@ -4,6 +4,7 @@ BDB.Markers = (function(){
 
 	let markers;
 	let gmarkers;
+	let markerClusterer;
 
 
 	return {
@@ -234,13 +235,14 @@ BDB.Markers = (function(){
 				  if (_isMobile) {
 				    clustererOptions.maxZoom = 15;
 				    clustererOptions.minimumClusterSize = 2;
-				  } 
-				  return new MarkerClusterer(map, gmarkers, clustererOptions);
+				  }
+				  markerClusterer = new MarkerClusterer(map, gmarkers, clustererOptions); 
+				  return markerClusterer;
 				}
 			}
 		},
 		
-		clearMarkers: function(markerClusterer){
+		clearMarkers: function(){
 			// setMapOnAll(null);
 		     gmarkers = [];
 		     if (markerClusterer) {
