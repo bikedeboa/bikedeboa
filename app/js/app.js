@@ -846,7 +846,7 @@ $(() => {
         toastr['success']('Bicicletário atualizado.');
       }
 
-      BDB.Database.getPlaces( () => {
+      BDB.Database.getAllPlaces().then(function(){
         BDB.Map.updateMarkers();
         
         hideSpinner();
@@ -892,7 +892,7 @@ $(() => {
             });
           }
         }
-      }); 
+      });
     };
 
     if (updatingMarker) {
@@ -1135,7 +1135,7 @@ $(() => {
         
         BDB.Database.deletePlace(openedMarker.id, () => {
           goHome();
-          BDB.Database.getPlaces( () => {
+          BDB.Database.getAllPlaces().then(function(){
             BDB.Map.updateMarkers();
             hideSpinner();
             toastr['success']('Bicicletário deletado.');
@@ -1556,8 +1556,7 @@ $(() => {
       if (!places) {
         showSpinner('Carregando bicicletários...'); 
       }
-
-      BDB.Database.getPlaces( () => {
+      BDB.Database.getAllPlaces().then(function(a,b){
         $('#filter-results-counter').html(places.length);
         $('#filter-results-total').html(places.length);
 
@@ -1571,7 +1570,8 @@ $(() => {
           _onDataReadyCallback();
           _onDataReadyCallback = null;
         }
-      }); 
+      });
+      
       BDB.Map.init(start_coords, zoom, 'map', getGeolocation, openLocal); 
 
       if (!_isTouchDevice) {

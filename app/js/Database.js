@@ -397,7 +397,7 @@ BDB.Database = {
 
     place.authorIP = this._headers.ip_origin;
 
-    console.debug('Sendng new Local Request');
+    console.debug('Sending new Local Request');
     console.debug('place');
 
     $.ajax({
@@ -548,38 +548,64 @@ BDB.Database = {
         }
       });
   },
+  getAllPlaces: function(getFullData = false){
+    let racks = this.getPlaces(getFullData);
+    let racksRequest = this.getRequestPlaces(getFullData);
+    return Promise.all([racks,racksRequest])
+      .then((result)=>{
+        places = result[0].concat(result[1]);
+      });
+  },
+  //todo rewrite as promise
+  getRequestPlaces: function(getFullData = false){
+    const self = this;
 
-  getPlaces: function(successCB, failCB, alwaysCB, getFullData = false) {
+    console.debug("Getting all Requests places ...");
+
+    return new Promise(function(resolve,reject){
+      $.ajax({
+        type: 'get',
+        headers: self._headers, 
+        url: self.API_URL + '/requestlocal/' + (getFullData ? '' : 'light'),
+      }).done(function(data) {
+        console.debug('Retrieved ' + data.length + ' rack requests from API.');
+        data.map((obj) => {
+          obj.type = 'request';
+          return obj;
+        });
+        //resolve promise
+        resolve(data);
+      }).fail(() => {
+        requestFailHandler();
+        //reject promise
+        reject();
+      })
+    });
+  },
+  //todo rewrite as promise
+
+  getPlaces: function(getFullData = false) {
     const self = this;
 
     console.debug('Getting all places...');
 
-    $.ajax({
-      type: 'get',
-      headers: self._headers, 
-      url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
-      // xhr: function () {
-      //   var xhr = new window.XMLHttpRequest();
-      //   // Download progress
-      //   xhr.addEventListener("progress", function (evt) {
-      //     console.log('download progress');
-      //     if (evt.lengthComputable) {
-      //       var percentComplete = evt.loaded / evt.total;
-      //       //Do something with download progress
-      //       console.log(percentComplete);
-      //     }
-      //   }, false);
-      //   return xhr;
-      // },
-    }).done(function(data) {
+    return new Promise(function(resolve, reject){
+      $.ajax({
+        type: 'get',
+        headers: self._headers, 
+        url: self.API_URL + '/local/' + (getFullData ? '' : 'light'),
+      }).done(function(data) {
       console.debug('Retrieved ' + data.length + ' locations from API.');
+      
+      //todo: Refactor the whole system
+      data.map((obj) => {
+        obj.type = 'rack';
+        return obj;
+      });
+      //fim todo
 
-      places = data;
-
-      BDB.saveMarkersToLocalStorage(places);
-
-      for(let i=0; i < places.length; i++) {
-        const m = places[i];
+      for(let i=0; i < data.length; i++) {
+        const m = data[i];
         // Mark that no places have retrieved their details
         m._hasDetails = false;
 
@@ -588,23 +614,17 @@ BDB.Database = {
           m.average = parseFloat(m.average);
         }
       }
+      //resolve promise
+      resolve(data);
+      
+    }).fail(() => {
 
-      if (successCB && typeof successCB === 'function') {
-        successCB(places);
-      }
-    })
-      .fail(() => {
         requestFailHandler();
-
-        if (failCB && typeof failCB === 'function') {
-          failCB();
-        }
+        //reject promise
+        reject();
       })
-      .always(() => {
-        if (alwaysCB && typeof alwaysCB === 'function') {
-          alwaysCB();
-        }
-      });
+    });
+ 
   },
 
   waitAuthentication: function() {

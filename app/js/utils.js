@@ -315,7 +315,7 @@ window.getColorFromAverage = function(average) {
   let color;
  
   if (average) {
-    if (!average || average === 0) {
+    if (average === 0) {
       color = 'gray';
     } else if (average > 0 && average <= 2) {
       color = 'red';
@@ -327,7 +327,7 @@ window.getColorFromAverage = function(average) {
       color = 'gray';
     }
   } else {
-    color = 'gray';
+    color = false;
   }
 
   return color;
