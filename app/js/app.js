@@ -134,7 +134,7 @@ $(() => {
     $('.photo-container img').on('load', e => {
       $('.photo-container').removeClass('loading'); 
     });
-    
+
     $('#placeDetailsModal .openDataSourceDialog').off('click').on('click', () => {
       if (openedMarker) { 
         swal({
@@ -612,7 +612,7 @@ $(() => {
 
       filters.push({prop: p, value: v});
     });
- 
+    
     const resultsCount = applyFilters(filters);
     if (filters.length > 0) {
       $('#filter-results-counter').html(resultsCount);
@@ -642,7 +642,8 @@ $(() => {
     const ratingFilters = filters.filter(i => i.prop === 'rating');
     const structureFilters = filters.filter(i => i.prop === 'structureType');
     const photoFilters = filters.filter(i => i.prop === 'hasPhoto');
-    const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters, photoFilters];
+    const type = filters.filter(i => i.prop === 'type')
+    const categories = [isPublicFilters, isCoveredFilters, ratingFilters, structureFilters, photoFilters, type];
 
     for(let i=0; i < places.length; i++) {
       const m = places[i]; 
