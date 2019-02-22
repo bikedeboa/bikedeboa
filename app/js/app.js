@@ -114,8 +114,27 @@ $(() => {
       mapStaticImg: BDB.Map.getStaticImgMap(staticImgDimensions, 'grey', m.lat, m.lng)
     };
 
+    if (m.photo) {
+      templateData.photoUrl = m.photo;
+      
+      if (_isMobile && !_isDeeplink) {
+        $('body').addClass('transparent-mobile-topbar');
+      }
+    } else {
+
+      templateData.streetViewImgUrl = `https://maps.googleapis.com/maps/api/streetview?size=600x180&location=${openedMarker.lat},${openedMarker.lng}&fov=120&pitch=-20&key=${GOOGLEMAPS_KEY}`;
+
+    }
+
     $('#placeDetailsContent').html(BDB.templates.requestPlaceDetailsContent(templateData));
 
+    $('.photo-container img').off('click').on('click', e => {
+      toggleExpandModalHeader();
+    });
+    $('.photo-container img').on('load', e => {
+      $('.photo-container').removeClass('loading'); 
+    });
+    
     $('#placeDetailsModal .openDataSourceDialog').off('click').on('click', () => {
       if (openedMarker) { 
         swal({

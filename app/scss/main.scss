@@ -34,6 +34,10 @@ $lightGrey: $lightGray;
 $lighterGrey: $lighterGray;
 $lightestGrey: $lightestGray;
 
+//blues
+$blue: #2F80ED;
+$lightBlue: #2D9CDB;
+
 
 // Dynamic colors
 $bootstrapBackdropColor: $paleWhite;
@@ -2810,6 +2814,31 @@ body.fullscreen-modal-open {
         // background: $greenGradient;
     }
 }
+.support-btn{
+    padding: 6px 34px;
+    border: 2px solid $blue;
+    color: $blue;
+    margin: 5px auto;
+    font-size: 16px;
+    border-radius: 25px;
+    vertical-align: middle;
+    
+    background: transparent;
+    
+    // background: white;
+    // @include greenGlowButton();
+
+    transition: all .2s;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: white;
+        border-color: transparent;
+        background-color: $lightBlue;
+        // background: $greenGradient;
+    }
+}
 
 .modal-footer {
   text-align: left;
@@ -2823,7 +2852,13 @@ body.fullscreen-modal-open {
     text-transform: uppercase;
   }
 }
-
+.support-area{
+  text-align: center;
+  p{
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
 
 .info {
     // padding: 0 5%;
@@ -2834,6 +2869,10 @@ body.fullscreen-modal-open {
 
     & > div {
       width: 30%;
+    }
+
+    &.request-description{
+      text-align: left;
     }
 
     // .skeleton-box,

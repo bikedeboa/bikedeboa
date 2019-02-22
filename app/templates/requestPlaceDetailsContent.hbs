@@ -30,12 +30,21 @@
             {{/if}}
         </section>
 
-        <section class="info">
+        <section class="info request-description">
             {{{description}}}
         </section>
 
-        <hr>
-
+        <hr/>
+        <section class="support-area">
+            {{#if support}}
+                <p>{{support}} pessoas apoiaram esta ideia :) !</p>
+                <button class="support-btn">Eu apoio!</button>
+            {{else}}
+                <p>Seja o primeiro a apoiar este bicicletário!</p>
+                <button class="support-btn">Eu apoio!</button>
+            {{/if}}
+        </section>
+        <hr/>
 
         <section class="extraInfo">
         <ul class="details-list">
