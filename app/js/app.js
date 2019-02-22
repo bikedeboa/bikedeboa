@@ -89,6 +89,96 @@ $(() => {
       openDetailsModal(openedMarker);
     }
   }
+  function openRequestDetailsModal(marker, callback){
+    console.log('openRequestModal');
+
+    if (!marker) {
+      console.error('Trying to open details modal without a marker.');
+      return;
+    }
+
+    openedMarker = marker;
+    const m = openedMarker;
+    const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
+
+    let templateData = {
+      title: m.text,
+      address: m.address,
+      description: m.description,
+      author: m.User && m.User.fullname,
+      views: m.views,
+      lat: m.lat,
+      lng: m.lng,
+      dataSourceName: (m.DataSource) ? m.DataSource : false,
+      createdTimeAgo: (m.createdAt) ? createdAtToDaysAgo(m.createdAt) : false,
+      mapStaticImg: BDB.Map.getStaticImgMap(staticImgDimensions, 'grey', m.lat, m.lng)
+    };
+
+    $('#placeDetailsContent').html(BDB.templates.requestPlaceDetailsContent(templateData));
+
+    $('#placeDetailsModal .openDataSourceDialog').off('click').on('click', () => {
+      if (openedMarker) { 
+        swal({
+          showCloseButton: true,
+          showConfirmButton: false,
+          html:
+            `Este bicicletário foi importado de:
+            <h3>${openedMarker.DataSource.name}</h3>
+            <p> <a target="_blank" rel="noopener" href="${openedMarker.DataSource.url}">${openedMarker.DataSource.url}</a>`,
+        });
+      }
+    });
+    if (!$('#placeDetailsModal').is(':visible')) {
+
+      // Analytics stuff
+      ga('send', 'event', 'Local', 'view', '' + m.id);
+      const userCurrentPosition = BDB.Geolocation.getCurrentPosition();
+      if (userCurrentPosition) {
+        const distanceKm = distanceInKmBetweenEarthCoordinates(
+        userCurrentPosition.latitude, userCurrentPosition.longitude, openedMarker.lat, openedMarker.lng);
+        const distanceMeters = parseInt(distanceKm * 1000);
+
+        console.log(`[Analytics] Local / distance from user (m) = ${distanceMeters}`);
+        ga('send', 'event', 'Local', 'distance from user (m)', '', distanceMeters);
+      }
+
+      // Modal stuff
+      $('#placeDetailsModal')
+        .one('show.bs.modal', () => { 
+          // Global states
+          $('body').addClass('details-view');
+          
+        }) 
+        .one('shown.bs.modal', () => { 
+          // Animate modal content
+          // $('section, .modal-footer').velocity('transition.slideDownIn', {stagger: STAGGER_NORMAL, queue: false});
+          // if (!templateData.savedRating) {
+          //   $('#bottom-mobile-bar').velocity("slideDown", { easing: 'ease-out', duration: 700 });
+          // }
+
+          // Fixes bug in which Bootstrap modal wouldnt let anything outside it be focused
+          // Thanks to https://github.com/limonte/sweetalert2/issues/374
+          $(document).off('focusin.modal');
+
+          // @todo do this better please
+          if (window._openLocalCallback && typeof window._openLocalCallback === 'function') {
+            window._openLocalCallback();
+            window._openLocalCallback = null;
+          }
+          if (callback && typeof callback === 'function') {
+            callback();
+          }
+        })
+        .one('hidden.bs.modal', () => {
+          $('body').removeClass('details-view');
+        })
+        .modal('show');
+      } else { 
+            // Just fade new detailed content in
+            $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description')
+              .velocity('transition.fadeIn', {stagger: STAGGER_NORMAL, queue: false, duration: 2000});
+      }
+  };
 
   function openDetailsModal(marker, callback) {
     console.log('openDetailsModal');
@@ -413,6 +503,11 @@ $(() => {
     marker.url = url;
     setView(marker.text || 'Detalhes do bicicletário', url);
   }
+  function openRequest(marker, callback){
+    let url = BDB.Places.getMarkerShareUrl(marker);
+    
+
+  }
 
   function openLocalById(id, callback) {
     const place = BDB.Places.getMarkerById(id, callback);
@@ -440,6 +535,29 @@ $(() => {
       }
     }
   }
+  function routerOpenRequest(markerId, callback){
+    const marker = BDB.Places.getMarkerById(markerId);
+
+    if (marker){
+      openRequestDetailsModal(marker, callback);
+
+      if (!marker._hasDetails) {
+        BDB.Database.getRequestDetail(marker.id)
+          .then(updatedMarker => {
+            // Check if details panel is still open...
+            if (openedMarker && openedMarker.id === updatedMarker.id) {
+              openRequestDetailsModal(updatedMarker, callback); 
+            }
+          })
+          .catch( () => {
+            $('.tagsContainer.loading').remove();
+          });
+      }
+
+
+    }
+    console.log('routerOpenRequest');
+  }
 
   function routerOpenDeeplinkMarker(markerId, callback) {
     BDB.Database.getPlaceDetails(markerId)
@@ -453,6 +571,17 @@ $(() => {
             openDetailsModal(marker, callback);
           });
         }
+      });
+  }
+  function routerOpenDeepLinkRequest(markerId, callback){
+    // todo 
+    console.log('initial Routing: Request deeplink');
+    BDB.Database.getRequestDetail(markerId)
+      .then(marker=> {
+        console.log(marker);
+        _deeplinkMarker = marker;
+
+        openRequestDetailsModal(marker, callback);
       });
   }
 
@@ -2328,6 +2457,55 @@ $(() => {
             });
           } else {
             routerOpenLocal(id);
+          }
+        } else {
+          // 404 code. 
+          openNotFoundModal(match);
+          match = false;
+        }
+      }
+      break;
+    case 'r' : 
+      if (urlBreakdown[2] && urlBreakdown[2] !== 'foto') {
+        let id = urlBreakdown[2].split('-')[0];
+        if (id) {
+          id = parseInt(id);
+
+          if (isInitialRouting) {
+            _isDeeplink = true;
+            $('body').addClass('deeplink');
+
+            showSpinner('Carregando...');
+
+            // Center the map on pin's position
+            if (map && _deeplinkMarker) {
+              map.setZoom(18);
+              map.setCenter({
+                lat: parseFloat(_deeplinkMarker.lat),
+                lng: parseFloat(_deeplinkMarker.lng)
+              });
+            }
+            
+            //todo
+            routerOpenDeepLinkRequest(id, () => {
+              hideSpinner();
+
+              // @todo refactor this
+              let coords = {
+                latitude : parseFloat(_deeplinkMarker.lat),
+                longitude: parseFloat(_deeplinkMarker.lng)
+              };
+              start_coords = coords;  
+              zoom = 17;
+              getGeolocation = false;
+
+              // Delay loading of background map for maximum optimized startup
+              if (!_isMobile) {
+                $(document).trigger('LoadMap');
+              }
+            });
+          } else {
+            routerOpenRequest(id);
           }
         } else {
           // 404 code. 

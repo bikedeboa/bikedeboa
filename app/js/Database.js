@@ -635,7 +635,49 @@ BDB.Database = {
       setTimeout(this.waitAuthentication.bind(this), 200);
     }
   },
+  getRequestDetail: function(placeId){
+    const self = this;
 
+    console.debug('Getting request rack detail...');
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'get',
+        headers: self._headers,
+        url: self.API_URL + '/requestlocal/' + placeId
+      }).done(function (place) {
+        if (place) {
+          console.debug('Got place detail:');
+          console.debug(place);
+
+          let updatedMarker = {};
+          if (places) {
+            // Combine detailed data with what we had
+            const outOfDatePlace = places.find(m => { return m.id === placeId; });
+            Object.assign(updatedMarker, outOfDatePlace, place); 
+          } else { 
+            // Markers weren't loaded yet (it's a deeplink)
+            updatedMarker = place;
+            places = [updatedMarker];
+          }
+
+          // Set flag 
+          updatedMarker._hasDetails = true;
+
+          // Update offline-stored places with new state
+          BDB.saveMarkersToLocalStorage(places);
+
+          resolve(updatedMarker);
+        }
+      })
+        .fail(() => {
+          // requestFailHandler();
+          toastr['warning']('Não foi possível carregar mais detalhes deste bicicletário.');
+
+          reject();
+        });
+    });
+  },
   getPlaceDetails: function(placeId) {
     const self = this;
 

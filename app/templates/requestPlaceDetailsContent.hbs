@@ -1,0 +1,87 @@
+<!-- View Details Modal -->
+<section itemscope itemtype="http://schema.org/ParkingFacility">
+    {{#if photoUrl}}
+        <section class="photo-container hasImage loading">
+            <a href="#" data-featherlight="{{photoUrl}}">
+                <img alt="" src="{{photoUrl}}" itemprop="image"/>
+            </a>
+        </section>
+    {{else}}
+        <section class="photo-container photo-input--container loading">
+            <img class="photoInputBg" alt="" src="{{streetViewImgUrl}}"/>
+        
+            <div class="photo-input--label photo-input--edit-mode editPlaceBtn">
+                <div class="photo-input--calltoaction">
+                    <img src="/img/icon_photo_white.svg" alt="">
+                    <div> 
+                        Adicionar foto
+                    </div>
+                </div>
+            </div>
+        </section>
+    {{/if}}
+
+    <div class="modal-body">
+        <section id="placeDetails_heading" class="title title-icon {{pinColor}} {{#ifCond isAdmin '&&!' title}} missing-info {{/ifCond}}">
+            {{#if title}}
+            <h1 class="view-name" itemprop="name">{{title}}</h1>
+            {{else}}
+            <h1 style="font-style: italic;" itemprop="name">Sem nome</h1>
+            {{/if}}
+        </section>
+
+        <section class="info">
+            {{{description}}}
+        </section>
+
+        <hr>
+
+
+        <section class="extraInfo">
+        <ul class="details-list">
+            {{#if createdTimeAgo}}
+            <li>
+                <img class="details-list-icon svg-icon" alt="" src="/img/icon_user.svg"> 
+                {{#if author}}
+                    <div>Adicionado por <b>{{{author}}}</b> há <b>{{{createdTimeAgo}}}</b></div>
+                {{else}}
+                    <div>
+                        Adicionado há <b>{{{createdTimeAgo}}}</b>.
+
+                        {{#if dataSourceName}}
+                            Importado de <a href="#" class="openDataSourceDialog external-link"> {{dataSourceName}}</a>
+                        {{/if}}
+                    </div>
+                {{/if}}
+            </li>
+            {{/if}}
+
+            {{#if views}} 
+            <li>
+                <img class="details-list-icon svg-icon" alt="" src="/img/icon_views.svg">
+                <div>{{{views}}} visualizações</div>
+            </li>
+            {{/if}}
+
+
+            <li>
+            <img class="details-list-icon svg-icon" alt="" src="/img/icon_pin.svg">
+            <div itemprop="address">{{{address}}}</div>
+            </li>
+        </ul>
+        
+        <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+            <meta itemprop="latitude" content="{{lat}}" />
+            <meta itemprop="longitude" content="{{lng}}" />
+        </div>
+        </section>
+
+        {{#if mapStaticImg}}
+            <section class="minimap-container">
+                <img alt="" class="minimap close-modal" src="{{mapStaticImg}}"></img>
+            </section>
+        {{/if}}
+
+    </div>
+    </div>
+</section>
