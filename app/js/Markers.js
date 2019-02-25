@@ -50,9 +50,18 @@ BDB.Markers = (function(){
 					      break;
 					    }
 				    }else{
+				    	scale = 1;
+				    	if(m.support == 0){
+				    		scale = 0.6;
+				    	}else if (m.support >= 1 && m.support <= 20) {
+				    		scale = 0.8;
+				    	}else if (m.support > 20) {
+				    		scale = 1;
+				    	}
+
 				    	iconType = MARKER_ICON_REQUEST;
 				    	iconTypeMini = MARKER_ICON_REQUEST_MINI;
-				    	scale = 1;
+				    	
 				    }
 				    
 
