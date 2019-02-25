@@ -114,7 +114,24 @@ BDB.Database = {
       });
     });
   },
-
+  getLoggedUserSupports: function(){
+    const self = this;
+    console.log('Getting User supports');
+    return new Promise((resolve,reject)=>{
+       $.ajax({
+        type: 'get',
+        headers: self._headers,
+        url: self.API_URL + '/user/supports',
+        success: function(data) { 
+          let supports = data.Supports;
+          resolve(supports);
+        },
+        error: function(error) {
+          reject(error);
+        }
+      });
+    });
+  },
   getLoggedUserReviews: function() {
     const self = this;
 
@@ -199,7 +216,11 @@ BDB.Database = {
       });
     });
   },
+  importUserSupports: function(supports){
+    const self = this;
 
+
+  },
   importUserReviews: function(reviews) {
     const self = this;
 
@@ -334,7 +355,47 @@ BDB.Database = {
       });
     });
   },
-
+  sendSupport: function(id){
+    const self = this;
+    return new Promise(function(resolve, reject){
+      $.ajax({
+        type: 'post',
+        headers: self._headers,
+        url: self.API_URL + '/support',
+        data: {
+          requestLocal_id: id
+        },
+        success: function(data) {
+          resolve(data);
+        },
+        error: function (e) {
+          requestFailHandler();
+          reject(e);
+        }
+      });
+    });
+    
+  },
+  removeSupport: function(id){
+    const self = this;
+    return new Promise(function(resolve, reject){
+      $.ajax({
+        type: 'delete',
+        headers: self._headers,
+        url: self.API_URL + '/support/' + id,
+    
+        success: function(data) {
+          console.debug('Support remotion successful.');
+          resolve(data);  
+        },
+        error: function (e) {
+          requestFailHandler();
+          reject();
+        }
+      });
+    });
+    
+  },
   sendRevision: function(revisionObj, callback) {
     const self = this;
 

@@ -2832,12 +2832,24 @@ body.fullscreen-modal-open {
     
     &:hover,
     &:focus,
-    &:active {
+    &:active,
+    &.active {
         color: white;
-        border-color: transparent;
         background-color: $lightBlue;
-        // background: $greenGradient;
     }
+    &:disabled{
+      color: white;
+      background-color: $lightGrey;
+      border-color: $grey
+    }
+    &.active{
+      &:hover,
+      &:focus,
+      &:active{
+        color: $blue;
+        background-color: transparent;
+      }
+    }    
 }
 
 .modal-footer {
@@ -2857,6 +2869,10 @@ body.fullscreen-modal-open {
   p{
     font-size: 18px;
     font-weight: 700;
+  }
+
+  &.disabled{
+    opacity: 0.5;
   }
 }
 

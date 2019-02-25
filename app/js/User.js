@@ -10,6 +10,7 @@ BDB.User = {
   profile: undefined,
   isAdmin: undefined,
   isLoggedIn: false,
+  supports: undefined,
 
 
   ///////////////////
@@ -19,6 +20,7 @@ BDB.User = {
   init: function () {
     this.fetchReviews();
     this.fetchPlaces();
+    this.fetchSupport();
   },
 
   login: function (profile) {
@@ -109,8 +111,9 @@ BDB.User = {
       
       let reviewsPromise = this.fetchReviews();
       let placesPromise = this.fetchPlaces();
+      let supportsPromise = this.fetchSupport();
 
-      Promise.all([reviewsPromise, placesPromise]).then(() => {
+      Promise.all([reviewsPromise, placesPromise,supportsPromise]).then(() => {
         resolve();
       });
     });
@@ -156,7 +159,17 @@ BDB.User = {
       }
     });
   },
-
+  fetchSupport: function(){
+    return new Promise((resolve, reject)=>{
+      this.supports = [];
+      if(this.isLoggedIn){
+        BDB.Database.getLoggedUserSupports()
+          .then( data =>{
+              this.supports = data;
+        });
+      }
+    });
+  },
   fetchPlaces: function () {
     return new Promise((resolve, reject) => {
       this.places = [];
@@ -187,7 +200,13 @@ BDB.User = {
       }
     });
   },
-
+  getSupportByRequestId: function(requestId){
+    if (this.supports){
+      return this.supports.find( i=> i.requestLocal_id === requestId);
+    }else{
+      return;
+    }
+  },
   getReviewByPlaceId: function (placeId) {
     if (this.reviews) {
       return this.reviews.find( i => i.placeId === placeId );
@@ -240,7 +259,11 @@ BDB.User = {
       this._saveReviewToCookie(reviewObj);
     }
   },
+  saveSuport: function(requestLocal_id){
+    if(!this.isLoggedIn){
 
+    }
+  },
   _savePlaceToCookie(placeId) {
     // User has 24 hours to edit that pin
     Cookies.set(`bikedeboa_local_${placeId}`, { expires: 1 });
@@ -253,4 +276,31 @@ BDB.User = {
 
     this.fetchPlaces();
   },
+  sendSupport: function(id){
+    const _self = this;
+    return new Promise(function(resolve, reject){
+      BDB.Database.sendSupport(id)
+        .then(function(data){
+          console.log(_self.supports);
+          _self.supports.push(data);
+          console.log(_self.supports);
+          resolve();
+        });
+    });
+  },
+  removeSupport: function(id){
+    const _self = this;
+    return new Promise(function(resolve, reject){
+      BDB.Database.removeSupport(id)
+        .then(function(data){
+          console.log(_self.supports);
+          let index = _self.supports.findIndex(function(o){
+            return o.requestLocal_id === id;
+          });
+          if (index !== -1) _self.supports.splice(index, 1);
+          console.log(_self.supports);
+          resolve();
+        });
+    });
+  }
 };

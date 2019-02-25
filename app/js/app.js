@@ -89,6 +89,15 @@ $(() => {
       openDetailsModal(openedMarker);
     }
   }
+  function getSupportText(support){
+    let supportText = "Seja o primeiro a apoiar esta ideia!";
+    if (support == 1){
+      supportText = "1 pessoa apoiou esta ideia!";
+    }else if (support > 1){
+      supportText = "${m.support} pessoas apoiaram esta ideia!";
+    }
+    return supportText;
+  }
   function openRequestDetailsModal(marker, callback){
     console.log('openRequestModal');
 
@@ -100,8 +109,14 @@ $(() => {
     openedMarker = marker;
     const m = openedMarker;
     const staticImgDimensions = _isMobile ? '400x100' : '1000x150';
+    
+
+
+    let supportText = getSupportText(m.support);
+    
 
     let templateData = {
+      id: m.id,
       title: m.text,
       address: m.address,
       description: m.description,
@@ -111,7 +126,10 @@ $(() => {
       lng: m.lng,
       dataSourceName: (m.DataSource) ? m.DataSource : false,
       createdTimeAgo: (m.createdAt) ? createdAtToDaysAgo(m.createdAt) : false,
-      mapStaticImg: BDB.Map.getStaticImgMap(staticImgDimensions, 'grey', m.lat, m.lng)
+      mapStaticImg: BDB.Map.getStaticImgMap(staticImgDimensions, 'grey', m.lat, m.lng),
+      supportText: supportText,
+      supportNumber: m.support,
+      userSupport: BDB.User.getSupportByRequestId(m.id) 
     };
 
     if (m.photo) {
@@ -192,6 +210,12 @@ $(() => {
           $('body').removeClass('details-view');
         })
         .modal('show');
+
+
+        //handles support button
+        $('#placeDetailsModal').off().on('click', '#support-btn', sendSupportBtn);
+
+
       } else { 
             // Just fade new detailed content in
             $('#placeDetailsContent .tagsContainer, #placeDetailsContent .description')
@@ -1447,7 +1471,41 @@ $(() => {
   function stopConfettis() {
     clearTimeout(window.confettiful.confettiInterval);
   }
+  function sendSupportBtn(){
+    let $btn = $(this);
+    let action =$btn.attr('data-action');
+    let id = $btn.data('id'); 
 
+    $btn.attr("disabled", "disabled");
+    
+    let support = $('#supportText').attr('data-support');
+    $('.support-area').addClass('disabled');
+
+    //verificar se o usuário está logado
+    // aqui: 
+
+    if(action === "add"){
+      BDB.User.sendSupport(id)
+        .then(function(){
+          $btn.addClass('active');
+          $btn.attr('data-action','remove');
+          $btn.removeAttr("disabled");
+          support+=1;
+          $('#supportText').text(getSupportText(support));
+          $('.support-area').removeClass('disabled');
+        });
+    }else{
+      BDB.User.removeSupport(id)
+        .then(function(){
+          $btn.removeClass('active');
+          $btn.attr('data-action','add');    
+          $btn.removeAttr("disabled");
+          support-=1;
+          $('#supportText').text(getSupportText(support));
+          $('.support-area').removeClass('disabled');
+        });
+    }
+  }
   function sendReviewBtnCB() {
     return new Promise(function (resolve, reject) {
       const m = openedMarker;

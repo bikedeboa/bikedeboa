@@ -36,13 +36,8 @@
 
         <hr/>
         <section class="support-area">
-            {{#if support}}
-                <p>{{support}} pessoas apoiaram esta ideia :) !</p>
-                <button class="support-btn">Eu apoio!</button>
-            {{else}}
-                <p>Seja o primeiro a apoiar este bicicletário!</p>
-                <button class="support-btn">Eu apoio!</button>
-            {{/if}}
+                <p id="supportText" data-support="{{supportNumber}}">{{supportText}}</p>
+                <button id="support-btn" class="support-btn{{#if userSupport}} active{{/if}}" data-id="{{id}}" data-action="{{#if userSupport}}remove{{else}}add{{/if}}" >Eu apoio!</button>
         </section>
         <hr/>
 
