@@ -84,9 +84,14 @@ $(() => {
     }
   }
 
-  function refreshOpenDetailsModal() {
+  function refreshOpenPlaceModal() {
     if (openedMarker) {
-      openDetailsModal(openedMarker);
+      if (openedMarker.type==="rack"){
+        openDetailsModal(openedMarker);  
+      }else{
+        openRequestDetailsModal(openedMarker);
+      }
+      
     }
   }
   function getSupportText(support){
@@ -1472,39 +1477,51 @@ $(() => {
     clearTimeout(window.confettiful.confettiInterval);
   }
   function sendSupportBtn(){
-    let $btn = $(this);
-    let action =$btn.attr('data-action');
-    let id = $btn.data('id'); 
-
-    $btn.attr("disabled", "disabled");
     
-    let support = $('#supportText').attr('data-support');
-    $('.support-area').addClass('disabled');
-
     //verificar se o usuário está logado
-    // aqui: 
+    //aqui: 
+    if (!BDB.User.isLoggedIn) {
+        $(document).one('bikedeboa.login', () => {
+          $('#support-btn').click();
+        });
 
-    if(action === "add"){
-      BDB.User.sendSupport(id)
-        .then(function(){
-          $btn.addClass('active');
-          $btn.attr('data-action','remove');
-          $btn.removeAttr("disabled");
-          support+=1;
-          $('#supportText').text(getSupportText(support));
-          $('.support-area').removeClass('disabled');
-        });
+        openLoginDialog({ showPermissionDisclaimer: true });
+
+
     }else{
-      BDB.User.removeSupport(id)
-        .then(function(){
-          $btn.removeClass('active');
-          $btn.attr('data-action','add');    
-          $btn.removeAttr("disabled");
-          support-=1;
-          $('#supportText').text(getSupportText(support));
-          $('.support-area').removeClass('disabled');
-        });
+        let $btn = $(this);
+        let action =$btn.attr('data-action');
+        let id = $btn.data('id'); 
+
+        $btn.attr("disabled", "disabled");
+        
+        let support = $('#supportText').attr('data-support');
+        $('.support-area').addClass('disabled');
+
+        if(action === "add"){
+          BDB.User.sendSupport(id)
+            .then(function(){
+              $btn.addClass('active');
+              $btn.attr('data-action','remove');
+              $btn.removeAttr("disabled");
+              support+=1;
+              $('#supportText').text(getSupportText(support));
+              $('.support-area').removeClass('disabled');
+            });
+        }else{
+          BDB.User.removeSupport(id)
+            .then(function(){
+              $btn.removeClass('active');
+              $btn.attr('data-action','add');    
+              $btn.removeAttr("disabled");
+              support-=1;
+              $('#supportText').text(getSupportText(support));
+              $('.support-area').removeClass('disabled');
+            });
+        }
     }
+
+    
   }
   function sendReviewBtnCB() {
     return new Promise(function (resolve, reject) {
@@ -2779,8 +2796,7 @@ $(() => {
         profile.isNewUser = data.isNewUser;
         
         BDB.User.login(profile).then(() => {
-          refreshOpenDetailsModal();
-
+          refreshOpenPlaceModal();
           // document.dispatchEvent(new CustomEvent('bikedeboa.login'));
           $(document).trigger('bikedeboa.login');
         });

@@ -113,7 +113,7 @@ BDB.User = {
       let placesPromise = this.fetchPlaces();
       let supportsPromise = this.fetchSupport();
 
-      Promise.all([reviewsPromise, placesPromise,supportsPromise]).then(() => {
+      Promise.all([reviewsPromise, placesPromise,supportsPromise]).then(()=>{
         resolve();
       });
     });
@@ -166,6 +166,7 @@ BDB.User = {
         BDB.Database.getLoggedUserSupports()
           .then( data =>{
               this.supports = data;
+              resolve();
         });
       }
     });
