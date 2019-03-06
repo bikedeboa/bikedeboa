@@ -748,9 +748,13 @@ $(() => {
   }
 
   function addNewPlace(){
-    openRequestOrLocalModal();
-    setView('Pedido ou Local', 'decisao', true);
-
+    if(!addLocationMode){
+      openRequestOrLocalModal();
+      setView('Pedido ou Local', 'decisao', true);
+    }else{
+      toggleLocationInputMode();
+    }
+    
     return;
   }
 
@@ -758,7 +762,7 @@ $(() => {
   function toggleLocationInputMode(type = 'rack') {
     addLocationMode = !addLocationMode;
     const isTurningOn = addLocationMode;
-
+    console.log(isTurningOn);
     //logic to toggle. 
     if (isTurningOn) {
       updatePageTitleAndMetatags('Novo bicicletário');
@@ -2045,6 +2049,7 @@ $(() => {
 
     $('#addPlace').on('click', queueUiCallback.bind(this, () => {
       // This is only available to logged users
+      console.log("Add Place btn");
       if (!BDB.User.isLoggedIn) {
         openLoginDialog({ showPermissionDisclaimer: true });
 
