@@ -1111,7 +1111,6 @@ $(() => {
       //   $('#titleInput').focus();
       // })
       .modal('show');
-
   }
   function openNewRequestModal(nameSuggestions){
     console.log('openNewRequestModal');
@@ -1137,6 +1136,9 @@ $(() => {
       }
       
     });
+    $('.place-suggestion--item').off('click').on('click', e => {
+        $('.text-input-wrapper input').val($(e.currentTarget).data('name'));
+      });
     $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, createNewRequest));
   }
 
