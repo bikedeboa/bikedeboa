@@ -3094,12 +3094,12 @@ $(() => {
     // Super specific mobile stuff
     if (_isMobile) {
       // Optimized short placeholder
-      $('#locationQueryInput').attr('placeholder','Buscar endereço');
+      $('#locationQueryInput').attr('placeholder','Procurar endereço');
 
       // Remove Bootstrap fade class
       $('.modal').removeClass('fade');
     } else {
-      $('#locationQueryInput').attr('placeholder','Buscar endereço ou estabelecimento');
+      $('#locationQueryInput').attr('placeholder','Procurar endereço ou estabelecimento');
     }
 
     // User is within Facebook browser.
