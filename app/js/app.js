@@ -99,7 +99,7 @@ $(() => {
     if (support == 1){
       supportText = "1 pessoa apoiou esta ideia!";
     }else if (support > 1){
-      supportText = "${m.support} pessoas apoiaram esta ideia!";
+      supportText =  support + " pessoas apoiaram esta ideia!";
     }
     return supportText;
   }
