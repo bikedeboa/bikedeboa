@@ -2715,7 +2715,7 @@ $(() => {
     // Returns the dialog promise
     swal({ 
       // title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
-      title: 'Login/Cadastro', 
+      title: 'Login/Registro', 
       html: `
         <br> 
  
