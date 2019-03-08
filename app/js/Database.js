@@ -710,6 +710,7 @@ BDB.Database = {
         if (place) {
           console.debug('Got place detail:');
           console.debug(place);
+          place.type="request";
 
           let updatedMarker = {};
           if (places) {
@@ -753,6 +754,7 @@ BDB.Database = {
         if (place) {
           console.debug('Got place detail:');
           console.debug(place);
+          place.type = "rack";
 
           let updatedMarker = {};
           if (places) {

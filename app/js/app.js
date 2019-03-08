@@ -85,6 +85,7 @@ $(() => {
   }
 
   function refreshOpenPlaceModal() {
+    debugger;
     if (openedMarker) {
       if (openedMarker.type==="rack"){
         openDetailsModal(openedMarker);  
@@ -608,6 +609,7 @@ $(() => {
   }
 
   function routerOpenDeeplinkMarker(markerId, callback) {
+    console.log('initial Routing: Rack deeplink');
     BDB.Database.getPlaceDetails(markerId)
       .then(marker => {
         _deeplinkMarker = marker;
