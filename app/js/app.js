@@ -1903,7 +1903,7 @@ $(() => {
       swal({
         showConfirmButton: false,
         showCloseButton: true,
-        title: 'Contato',
+        title: 'Contacto',
         html: 
           `
             <div style="text-align: center; font-size: 30px;">
