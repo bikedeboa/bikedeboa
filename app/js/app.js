@@ -95,7 +95,7 @@ $(() => {
     }
   }
   function getSupportText(support){
-    let supportText = "Seja o primeiro a apoiar esta ideia!";
+    let supportText = "Indica se também precisas de um bicicletário neste local e apoia este pedido";
     if (support == 1){
       supportText = "1 pessoa apoiou esta ideia!";
     }else if (support > 1){
@@ -1362,7 +1362,7 @@ $(() => {
       html: `
         <section>
           <div class="review" {{#if pinColor}}data-color={{pinColor}}{{/if}}>
-              <h2>Dê sua nota</h2>
+              <h2>Faz a tua avaliação</h2>
               <fieldset class="rating">
                   <input type="radio" id="star5" name="rating" value="5" /> <label class="full-star" data-value="5" for="star5" title="De boa!"></label>
                   <input type="radio" id="star4" name="rating" value="4" /> <label class="full-star" data-value="4" for="star4" title="Bem bom"></label>
@@ -1377,12 +1377,12 @@ $(() => {
           <h2>
             Vantagens
           </h2>
-          <p class="small">Opcional. Selecione quantas achar necessário.</p>
+          <p class="small">Opcional. Selecciona uma ou mais vantagens.</p>
           <div class="tagsContainer">
               ${tagsButtons}
           </div>
         </section>`,
-      confirmButtonText: 'Enviar',
+      confirmButtonText: 'Confirmar',
       confirmButtonClass: 'btn green sendReviewBtn',
       showCloseButton: true,
       showLoaderOnConfirm: true,
@@ -2715,7 +2715,7 @@ $(() => {
     // Returns the dialog promise
     swal({ 
       // title: showPermissionDisclaimer ? 'Você precisa fazer login' : 'Login', 
-      title: 'Login/Registro', 
+      title: 'Login/Registo', 
       html: `
         <br> 
  
