@@ -743,7 +743,45 @@
         function jsonColFormatter(value) {
           return value && JSON.stringify(value);
         }
+        function updateRequestsTable(force = false){
+          if(force){
+            places = null;
+          }
+          $('#locals h2').html('Carregando...');
+          
+          $('#locals table').bootstrapTable('destroy');
+          $('#locals').addClass('loading');
 
+          Database.getRequestPlaces(true).then(function(places){
+            $('#locals').removeClass('loading');
+
+            $('#locals h2').html(`<span class="text-muted">${places.length} resultados</span>`);
+
+            $('#locals table').bootstrapTable({ 
+              columns: [
+                { field: 'id', title: 'ID', sortable: true, class: 'col-id', visible: !!BDB.User.isAdmin },
+                { field: 'updatedAt', title: 'Modificado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter', visible: false },
+                { field: 'createdAt', title: 'Criado em', sortable: true, class: 'col-timestamp', formatter: 'timestampColFormatter' },
+                { field: 'text', title: 'Nome', sortable: true, class: 'col-title', editable: !!BDB.User.isAdmin },
+                { field: 'address', title: 'Endereço', sortable: true, class: 'col-address', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea' },
+                { field: 'city', title: 'Cidade', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'state', title: 'Estado', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'country', title: 'País', sortable: true, editable: !!BDB.User.isAdmin, visible: false },
+                { field: 'lat', title: 'lat', sortable: true, visible: false, },
+                { field: 'lng', title: 'lng', sortable: true, visible: false, },
+                { field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false },
+                { field: 'isCommerce', title: 'É para privado', sortable: true, class: 'col-commerce', visible: false },
+                { field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin },
+                { field: 'operate', title: 'Ações', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin }
+              ],
+              data: places,
+              sortName: 'id', sortOrder: 'desc',
+              singleSelect: !!BDB.User.isAdmin ? true : false
+            });
+
+          });
+
+        }
         function updateLocalsTable(force = false) {
           if (force) {
             places = null;
@@ -758,7 +796,7 @@
           $('#locals table').bootstrapTable('destroy');
           $('#locals').addClass('loading');
             
-          Database.getPlaces( () => {
+          Database.getPlaces(true).then(function(places){
             $('#locals').removeClass('loading');
 
             $('#locals h2').html(`<span class="text-muted">${places.length} resultados</span>`);
@@ -813,7 +851,7 @@
               sortName: 'id', sortOrder: 'desc',
               singleSelect: !!BDB.User.isAdmin ? true : false
             });
-          }, null, null, true);
+          });
         }
 
         function updateUsersTable() {
@@ -1411,6 +1449,9 @@
             switch (tabName) {
               case 'locals':
                 updateLocalsTable();
+                break;
+              case 'requests':
+                updateRequestsTable();
                 break;
               case 'revisions':
                 updateRevisionTable();

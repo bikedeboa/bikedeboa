@@ -459,7 +459,6 @@ BDB.Database = {
     place.authorIP = this._headers.ip_origin;
 
     console.debug('Sending new Local Request');
-    console.debug('place');
 
     $.ajax({
       xhr: () => this.getUploadProgressHandler(),

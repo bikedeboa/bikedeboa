@@ -85,7 +85,6 @@ $(() => {
   }
 
   function refreshOpenPlaceModal() {
-    debugger;
     if (openedMarker) {
       if (openedMarker.type==="rack"){
         openDetailsModal(openedMarker);  
