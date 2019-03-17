@@ -1502,7 +1502,7 @@ $(() => {
 
         $btn.attr("disabled", "disabled");
         
-        let support = $('#supportText').attr('data-support');
+        let support = parseInt($('#supportText').attr('data-support'));
         $('.support-area').addClass('disabled');
 
         if(action === "add"){
