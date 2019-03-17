@@ -942,6 +942,10 @@ $(() => {
     place.commerceName = place.isCommerce ? container.find('#commerceName').val() : null;
     place.commercePhone = place.isCommerce ? container.find('#commercePhone').val() : null;
 
+    place.photo = _uploadingPhotoBlob;
+    _uploadingPhotoBlob = '';
+
+    
     const onRequestPlaceSaved = newPlace => {
       if(newPlace){
         swal({
@@ -1144,6 +1148,25 @@ $(() => {
     $('.place-suggestion--item').off('click').on('click', e => {
         $('.text-input-wrapper input').val($(e.currentTarget).data('name'));
       });
+
+    $('#photoInput').off('change').on('change', e => {
+      // for some weird compiling reason using 'this' doesnt work here
+      const self = document.getElementById('photoInput');
+      const files = self.files ;
+
+      if (files && files[0] && files[0].type.match(/image.*/)) {
+        showSpinner('Processando imagem...');
+
+        queueUiCallback(() => {
+          let reader = new FileReader();
+          reader.onload = photoUploadCB;
+          reader.readAsDataURL(self.files[0]);
+        });
+      }// else {
+      //   swal('Ops', 'Algo deu errado com a foto, por favor tente novamente.', 'error');
+      // }
+    });
+
     $('.saveNewPlaceBtn').off('click').on('click', queueUiCallback.bind(this, createNewRequest));
   }
 
