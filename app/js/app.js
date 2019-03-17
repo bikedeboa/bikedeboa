@@ -1512,6 +1512,7 @@ $(() => {
               $btn.attr('data-action','remove');
               $btn.removeAttr("disabled");
               support+=1;
+              $('#supportText').attr('data-support', support);
               $('#supportText').text(getSupportText(support));
               $('.support-area').removeClass('disabled');
             });
@@ -1522,6 +1523,7 @@ $(() => {
               $btn.attr('data-action','add');    
               $btn.removeAttr("disabled");
               support-=1;
+              $('#supportText').attr('data-support', support);
               $('#supportText').text(getSupportText(support));
               $('.support-area').removeClass('disabled');
             });
