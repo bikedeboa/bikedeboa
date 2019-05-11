@@ -43,14 +43,14 @@ console.log('BDB_ENV =', BDB_ENV);
 console.log('BDB_COUNTRYCODE =', BDB_COUNTRYCODE);
 
 const FACEBOOK_IDS = {
-  prod: '1814653185457307',
+  prod: '2007305346231830',
   beta: '1554610834551808',
   beta2: '116937842287717', 
   localhost: '478533412529512'
 };
 
 const GOOGLE_IDS = {
-  prod: '823944645076-nr3b0ha8cet2ru3h3501vvk5dms81gkf.apps.googleusercontent.com',
+  prod: '319090409123-bi80qd52k4qpokld0d1asj56rlknosjn.apps.googleusercontent.com',
   beta: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com',
   beta2: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com',
   localhost: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com'
