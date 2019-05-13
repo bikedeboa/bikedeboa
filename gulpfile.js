@@ -56,7 +56,7 @@ const GOOGLE_IDS = {
   localhost: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com'
 };
 
-const GOOGLE_API_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+const GOOGLE_API_KEY = 'AIzaSyAeJ1ByYK4W3TxCHlFlvP6eV9XfNG55e3U';
 const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[BDB_ENV];
 const GOOGLE_CLIENT_ID = GOOGLE_IDS[BDB_ENV];
 const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
