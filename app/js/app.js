@@ -1688,16 +1688,16 @@ $(() => {
     $('.hamburger-button').removeClass('back-icon'); 
   }
 
-  function updatePageTitleAndMetatags(text = 'bike de boa') {
+  function updatePageTitleAndMetatags(text = 'Cidade Ciclável') {
     // Header that imitates native mobile navbar
     if (_isDeeplink && openedMarker) {
-      text = 'bike de boa';
+      text = 'Cidade Ciclável';
     } else {
       text = openedMarker && openedMarker.text ? openedMarker.text : text;
     }
     
     if (_isMobile) {
-      if (text === 'bike de boa') {
+      if (text === 'Cidade Ciclável') {
         $('#logo').show();
         $('#top-mobile-bar-title').text('');
       } else {
