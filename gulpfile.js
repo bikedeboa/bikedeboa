@@ -51,9 +51,10 @@ const FACEBOOK_IDS = {
 
 const GOOGLE_IDS = {
   prod: '319090409123-bi80qd52k4qpokld0d1asj56rlknosjn.apps.googleusercontent.com',
-  beta: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com',
-  beta2: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com',
-  localhost: '823944645076-knkq7sq3v5eflsue67os43p6dbre4e9d.apps.googleusercontent.com'
+  beta: '319090409123-69tt57hvqglbfrfqo8di0efj2ubpusrb.apps.googleusercontent.com',
+  beta2: '319090409123-69tt57hvqglbfrfqo8di0efj2ubpusrb.apps.googleusercontent.com',
+  localhost: '319090409123-op2g7784o89mgvarnv5ctkh394oo49eu.apps.googleusercontent.com'
+  //localhost: '319090409123-69tt57hvqglbfrfqo8di0efj2ubpusrb.apps.googleusercontent.com'
 };
 
 const GOOGLE_API_KEY = 'AIzaSyAeJ1ByYK4W3TxCHlFlvP6eV9XfNG55e3U';
