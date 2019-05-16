@@ -772,7 +772,7 @@
                 { field: 'description', title: 'Descrição', sortable: true, class: 'col-description', editable: !!BDB.User.isAdmin, 'editable-type': 'textarea', visible: false },
                 { field: 'isCommerce', title: 'É para privado', sortable: true, class: 'col-commerce', visible: false },
                 { field: 'photo', title: 'Foto', sortable: true, editable: !!BDB.User.isAdmin, visible: !!BDB.User.isAdmin },
-                { field: 'operate', title: 'Ações', align: 'center', events: localsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin }
+                { field: 'operate', title: 'Ações', align: 'center', events: RequestLocalsTableOperateEvents, formatter: operateFormatter, visible: !!BDB.User.isAdmin }
               ],
               data: places,
               sortName: 'id', sortOrder: 'desc',
@@ -1035,6 +1035,16 @@
             if (confirm('Tem certeza?')) {
               BDB.Database.customAPICall('delete', `local/${row.id}`).then( () => {
                 updateLocalsTable(true);
+              });
+            }
+          }
+        };
+
+        window.RequestLocalsTableOperateEvents = {
+          'click .remove': function (e, value, row, index) {
+            if (confirm('Tem certeza?')) {
+              BDB.Database.customAPICall('delete', `requestlocal/${row.id}`).then( () => {
+                updateRequestsTable(true);
               });
             }
           }
