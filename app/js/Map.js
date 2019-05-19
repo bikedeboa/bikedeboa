@@ -417,7 +417,7 @@ BDB.Map = (function () {
     },
     getStaticImgMap: function (staticImgDimensions, pinColor, lat, lng, customStyle, zoom = false) {
       let zoomStr = (zoom) ? `zoom=${zoom}&` : '';
-      let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?${zoomStr}size=${staticImgDimensions}&markers=icon:https://www.bikedeboa.com.br/img/pin_${pinColor}.png|${lat},${lng}&key=${apiKey}&${_gmapsCustomStyleStaticApi}`;
+      let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?${zoomStr}size=${staticImgDimensions}&markers=icon:https://cidadeciclavel.mubi.pt/img/pin_${pinColor}.png|${lat},${lng}&key=${apiKey}&${_gmapsCustomStyleStaticApi}`;
 
       return imgUrl;
     },

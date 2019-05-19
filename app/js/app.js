@@ -8,8 +8,8 @@ $(() => {
   let getGeolocation = true;
 
   function openShareDialog() {
-    // const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
-    const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
+    const shareUrl = window.location.origin + BDB.Places.getMarkerShareUrl(openedMarker);
+    //const shareUrl = 'https://www.bikedeboa.com.br' + BDB.Places.getMarkerShareUrl(openedMarker);
 
     if (navigator.share) {
       navigator.share({
