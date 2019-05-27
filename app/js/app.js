@@ -1948,7 +1948,7 @@ $(() => {
                   <img alt="" class="svg-icon" src="/img/icon_social_github.svg"/>
                 </a>
 
-                <a href="mailto:bikedeboa@gmail.com">
+                <a href="mailto:local@mubi.pt">
                   <img alt="" class="svg-icon" src="/img/icon_mail.svg"/>
                 </a>
               </p>
