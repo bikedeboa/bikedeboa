@@ -1958,7 +1958,7 @@ $(() => {
 
             <h2 class="swal2-title" id="swal2-title">Feedback</h2>
             <div style="text-align: center;">
-              Queremos a tua opinião! <a class="external-link" target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSe3Utw0POwihH1nvln2JOGG_vuWiGQLHp6sS0DP1jnHl2Mb2w/viewform?usp=sf_link">Responde ao nosso questionário</a>, dura menos de 5 minutos.
+              Queremos a tua opinião! <a class="external-link" target="_blank" rel="noopener" href="https://forms.gle/snXyzNADYMC4TnPR7">Responde ao nosso questionário</a>, dura menos de 5 minutos.
             </div>
           `,
       });
