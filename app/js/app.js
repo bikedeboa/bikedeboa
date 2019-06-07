@@ -1538,6 +1538,7 @@ $(() => {
               $('#supportText').attr('data-support', support);
               $('#supportText').text(getSupportText(support));
               $('.support-area').removeClass('disabled');
+              ga('send', 'event', 'Support', 'Give');
             });
         }else{
           BDB.User.removeSupport(id)
@@ -1549,6 +1550,7 @@ $(() => {
               $('#supportText').attr('data-support', support);
               $('#supportText').text(getSupportText(support));
               $('.support-area').removeClass('disabled');
+              ga('send', 'event', 'Support', 'Remove');
             });
         }
     }
