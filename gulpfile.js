@@ -44,22 +44,27 @@ console.log('BDB_COUNTRYCODE =', BDB_COUNTRYCODE);
 
 const FACEBOOK_IDS = {
   prod: '2007305346231830',
-  beta: '1554610834551808',
-  beta2: '116937842287717', 
+  beta: '478533412529512',
   localhost: '478533412529512'
 };
 
 const GOOGLE_IDS = {
   prod: '319090409123-bi80qd52k4qpokld0d1asj56rlknosjn.apps.googleusercontent.com',
   beta: '319090409123-69tt57hvqglbfrfqo8di0efj2ubpusrb.apps.googleusercontent.com',
-  beta2: '319090409123-69tt57hvqglbfrfqo8di0efj2ubpusrb.apps.googleusercontent.com',
   localhost: '319090409123-op2g7784o89mgvarnv5ctkh394oo49eu.apps.googleusercontent.com'
   //localhost: '319090409123-69tt57hvqglbfrfqo8di0efj2ubpusrb.apps.googleusercontent.com'
 };
 
+const GOOGLE_DOMAIN_VERIFICATION = {
+  localhost  : 'Y_cOF4KQfBquQDznr2yIrMPCFe5Gq1XCc5v7PUufM2I',
+  beta       : 'lBRCnp2PL1ybmfdHuE9XuKOwlVM414hRHD6cnejL0Yo',
+  prod       : 'Y_cOF4KQfBquQDznr2yIrMPCFe5Gq1XCc5v7PUufM2I'
+}
+
 const GOOGLE_API_KEY = 'AIzaSyAeJ1ByYK4W3TxCHlFlvP6eV9XfNG55e3U';
 const FACEBOOK_CLIENT_ID = FACEBOOK_IDS[BDB_ENV];
 const GOOGLE_CLIENT_ID = GOOGLE_IDS[BDB_ENV];
+const GOOGLE_DOMAIN_ID = GOOGLE_DOMAIN_VERIFICATION[BDB_ENV];
 const GOOGLE_MAPS_ID = GOOGLE_API_KEY;
  
 // Production: opt-out of the Experimental new renderer and base map style
@@ -102,6 +107,7 @@ gulp.task('scripts', () => {
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
     .pipe(replace('<BDB_COUNTRYCODE>', BDB_COUNTRYCODE))
+    .pipe(replace('<GOOGLE_DOMAIN_ID>', GOOGLE_DOMAIN_ID))
     .pipe(gulp.dest('dist/'));
   
   gulp.src('server.js')
@@ -111,6 +117,7 @@ gulp.task('scripts', () => {
     .pipe(replace('<GOOGLE_MAPS_ID>', GOOGLE_MAPS_ID))
     .pipe(replace('<BDB_ENV>', BDB_ENV))
     .pipe(replace('<BDB_COUNTRYCODE>', BDB_COUNTRYCODE))
+    .pipe(replace('<GOOGLE_DOMAIN_ID>', GOOGLE_DOMAIN_ID))
     .pipe(plumber())
     .pipe(babel({
       presets: ['es2015']

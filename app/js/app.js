@@ -551,10 +551,9 @@ $(() => {
     marker.url = url;
     setView(marker.text || 'Detalhes do bicicletário', url);
   }
+
   function openRequest(marker, callback){
     let url = BDB.Places.getMarkerShareUrl(marker);
-    
-
   }
 
   function openLocalById(id, callback) {

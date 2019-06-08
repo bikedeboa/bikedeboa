@@ -76,6 +76,7 @@ app.get('*',function(req,res,next){
 });
 
 router.use(function (req,res,next) {
+
   console.log('/' + req.method);
   next();
 });
@@ -97,6 +98,7 @@ router.get('/b/*',function(req,res) {
   // Default fallback response if anything fails
   function fallback() {
     // res.sendFile(path + 'index.html');
+    
     res.render('default');
   }
 
@@ -156,7 +158,9 @@ router.get('/b/*',function(req,res) {
 // Home
 router.get('/*',function(req,res) {
   // res.sendFile(path + 'index.html');
-  res.render('default');
+  var data = {};
+  data.google_verification_id = "<GOOGLE_DOMAIN_ID>";
+  res.render('default', data);
 });
 
 app.use('/',router);
