@@ -2767,7 +2767,7 @@ $(() => {
         <br>
 
         <div style="font-size: 12px; color: #b3b3b3; font-weight: normal;">
-            Exigimos o login para garantir a confiabilidade das contribuições. Jamais iremos vender os teus dados, enviar spam ou postar em teu nome.
+            Exigimos o login para garantir a confiabilidade das contribuições. Jamais iremos vender os teus dados, enviar spam ou postar em teu nome. <a href="/faq"> saiba mais</a>
         </div>
         `,
       showCloseButton: true,
@@ -2782,7 +2782,7 @@ $(() => {
   }
 
   function onSocialLogin(auth) {
-    console.debug('auth', auth);
+    //console.debug('auth', auth);
 
     // Dont add this unnecessary visual noise if on mobile
     if (!_isMobile) {
@@ -2799,7 +2799,7 @@ $(() => {
 
     // Get user information for the given network
     hello(auth.network).api('me').then(function(profile) { 
-      console.debug('profile', profile);
+     // console.debug('profile', profile);
 
       BDB.Database.socialLogin({
         network: auth.network,
