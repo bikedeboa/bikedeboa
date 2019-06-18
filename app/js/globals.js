@@ -78,7 +78,7 @@ const TAG_NAMES_EN = ['spacious', 'easyaccess', 'monitored', 'bustling', 'strong
 const TAG_NAMES__PT_TO_EN = createMapFromArrays(TAG_NAMES_PT, TAG_NAMES_EN);
 const TAG_NAMES__EN_TO_PT = createMapFromArrays(TAG_NAMES_EN, TAG_NAMES_PT);
 
-const GOOGLEMAPS_KEY = 'AIzaSyD6TeLzQCvWopEQ7hBdbktYsmYI9aNjFc8';
+const GOOGLEMAPS_KEY = '<GOOGLE_MAPS_ID>';
 const FACEBOOK_CLIENT_ID = '<FACEBOOK_CLIENT_ID>';
 const GOOGLE_CLIENT_ID = '<GOOGLE_CLIENT_ID>';
 const BDB_ENV = '<BDB_ENV>';

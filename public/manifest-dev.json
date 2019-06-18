@@ -3,7 +3,7 @@
   "short_name": "Cidade Ciclável",
   "start_url": "/?utm_source=homescreen",
   "scope": "/", 
-  "lang": "pt-br",
+  "lang": "pt",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#04883A",
