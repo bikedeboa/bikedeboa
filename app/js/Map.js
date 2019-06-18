@@ -103,9 +103,9 @@ BDB.Map = (function () {
     setupAutocomplete();
     
     // Defer initializations not needed in startup
-    window.addEventListener('load', function () {
-      setupBikeLayer();
-    });
+    // window.addEventListener('load', function () {
+    //   setupBikeLayer();
+    // });
 
     // Native Event Dispatcher 
     let event = new Event('map:ready');

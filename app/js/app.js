@@ -1423,7 +1423,7 @@ $(() => {
       map = BDB.Map.getMap();
       BDB.Map.updateMarkers();
 
-      BDB.Map.showBikeLayer();
+      // BDB.Map.showBikeLayer();
     });
 
     $(document).on('autocomplete:done', function (e) {
