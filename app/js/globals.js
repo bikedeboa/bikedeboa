@@ -33,22 +33,13 @@ const N_MOCK_PICS = 14;
 
 const MAX_ZOOM_TO_SHOW_PINS = 14;
 
-const MARKER_SIZE_MULTIPLIER = 1.5;
-
-const MARKER_W = 20 * MARKER_SIZE_MULTIPLIER;
-const MARKER_H = 26 * MARKER_SIZE_MULTIPLIER;
+const MARKER_W = 36;
+const MARKER_H = 36;
 const MARKER_W_MINI = 18; 
 const MARKER_H_MINI = 18;
 const CURRENT_LOCATION_MARKER_W = 20;
 const CURRENT_LOCATION_MARKER_H = 20; 
-const MARKER_ICON_GREEN = '/img/pin_green.png';
-const MARKER_ICON_YELLOW = '/img/pin_yellow.png';
-const MARKER_ICON_RED = '/img/pin_red.png';
-const MARKER_ICON_GRAY = '/img/pin_gray.png';
-const MARKER_ICON_GREEN_MINI = '/img/pin_green_mini.png';
-const MARKER_ICON_YELLOW_MINI = '/img/pin_yellow_mini.png';
-const MARKER_ICON_RED_MINI = '/img/pin_red_mini.png';
-const MARKER_ICON_GRAY_MINI = '/img/pin_gray_mini.png';
+const MARKER_ICON_PATH = '/img';
 const PHOTO_UPLOAD_MAX_W = 1000; 
 const PHOTO_UPLOAD_MAX_H = 1000;
 

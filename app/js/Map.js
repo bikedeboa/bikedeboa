@@ -325,10 +325,10 @@ BDB.Map = (function () {
       // map.data.loadGeoJson('/geojson/ciclovias_riograndedosul_osm.min.json'); // 654 KB
 
       map.data.setStyle({  
-        // strokeColor: '#cde9c8', //super light green
+        strokeColor: '#83E9B0', //super light green
         // strokeColor: '#00b800', // dark green
-        strokeColor: '#2cd978', // light green
-        strokeWeight: 2,
+        // strokeColor: '#2cd978', // light green
+        strokeWeight: 2, 
         strokeOpacity: 1, 
         clickable: false
       });
@@ -724,29 +724,25 @@ BDB.Map = (function () {
             let scale;
             let iconType, iconTypeMini;
             let color = getColorFromAverage(m.average);
-            switch (color) {
-            case 'red':
-              iconType = MARKER_ICON_RED;
-              iconTypeMini = MARKER_ICON_RED_MINI;
-              scale = 0.6;
-              break;
-            case 'yellow':
-              iconType = MARKER_ICON_YELLOW;
-              iconTypeMini = MARKER_ICON_YELLOW_MINI;
-              scale = 0.8;
-              break;
-            case 'green':
-              iconType = MARKER_ICON_GREEN;
-              iconTypeMini = MARKER_ICON_GREEN_MINI;
-              scale = 1;
-              break;
-            case 'gray':
-            default:
-              iconType = MARKER_ICON_GRAY;
-              iconTypeMini = MARKER_ICON_GRAY_MINI;
-              scale = 0.8;
-              break;
-            }
+            iconType = `${MARKER_ICON_PATH}/pin_${m.structureType}_${color}.png`;
+            iconTypeMini = `${MARKER_ICON_PATH}/pin_${color}_mini.png`;
+            scale = 1;
+            
+            // switch (color) {
+            // case 'red':
+            //   scale = 0.6;
+            //   break;
+            // case 'yellow':
+            //   scale = 0.8;
+            //   break;
+            // case 'green':
+            //   scale = 1;
+            //   break;
+            // case 'gray':
+            // default:
+            //   scale = 0.8;
+            //   break; 
+            // }
 
             // if (!scale) {
             //   scale = 0.5 + (m.average / 10);
