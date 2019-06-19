@@ -33,8 +33,8 @@ const N_MOCK_PICS = 14;
 
 const MAX_ZOOM_TO_SHOW_PINS = 14;
 
-const MARKER_W = 36;
-const MARKER_H = 36;
+const MARKER_W = 32;
+const MARKER_H = 32;
 const MARKER_W_MINI = 18; 
 const MARKER_H_MINI = 18;
 const CURRENT_LOCATION_MARKER_W = 20;
