@@ -2359,6 +2359,15 @@ $(() => {
         
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
+
+        // This is an example script - don't forget to change it!
+        if (window.FS) {
+          window.FS.identify(profile.id, {
+            displayName: profile.fullname,
+            email: profile.email,
+            isAdmin: profile.isAdmin
+          });
+        }
         
         BDB.User.login(profile).then(() => {
           refreshOpenDetailsModal();
