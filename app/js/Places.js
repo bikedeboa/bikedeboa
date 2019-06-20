@@ -42,14 +42,13 @@ BDB.Places = {
   //   localStorage.setItem('markers', JSON.stringify(tmp));
   // },
 
-  getMarkerById: function (id) {
+  getMarkerById: function (id, type) {
     if (!places) {
       console.error('error on getMarkerById: no places');
       return;
     }
-
     if (id && id >= 0) {
-      const res = places.filter( i => i.id === id );
+      const res = places.filter( i => i.id === id && i.type == type);
       if (res.length > 0) {
         return res[0];
       }

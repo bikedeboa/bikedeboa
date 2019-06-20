@@ -562,7 +562,7 @@ $(() => {
   }
 
   function routerOpenLocal(markerId, callback) {
-    const marker = BDB.Places.getMarkerById(markerId);
+    const marker = BDB.Places.getMarkerById(markerId, "rack");
  
     if (marker) {
       openDetailsModal(marker, callback);
@@ -581,10 +581,12 @@ $(() => {
           });
       }
     }
+    console.log('OpenRouterLocal');
+
   }
   function routerOpenRequest(markerId, callback){
-    const marker = BDB.Places.getMarkerById(markerId);
-
+    const marker = BDB.Places.getMarkerById(markerId, "request");
+    console.log(marker);
     if (marker){
       openRequestDetailsModal(marker, callback);
 
@@ -2415,7 +2417,7 @@ $(() => {
     $('.go-to-place-btn').off('click').on('click', e => {
       const $target = $(e.currentTarget);
       const id = $target.data('id');
-      const place = BDB.Places.getMarkerById(id);
+      const place = BDB.Places.getMarkerById(id,'rack');
 
       // window.location = BDB.Places.getMarkerShareUrl(place);
 
