@@ -1704,7 +1704,60 @@
 
                 console.log(xmlDoc);
 
+                let folders = [...xmlDoc.getElementsByTagName("Folder")];
+                folders.shift();
+                
                 let data = [];
+
+                folders.forEach(folder =>{
+                  let item = [...folder.children];
+                  let structureType = null;
+                  item.forEach(i =>{
+                    
+                    switch(i.tagName) {
+                      case 'name':
+                        if (i.innerHTML == "Estacionamento de roda"){
+                          structureType = 'deroda';
+                        }else{
+                          structureType = 'uinvertido';
+                        }
+                      break;
+                      case 'Placemark':
+                        let place = [...i.children]
+                        let tmp ={
+                            'isCovered': null,
+                            'hasFee': false,
+                            'isPublic': true,
+                            'address': null,
+                            'structureType': structureType,
+                            'slots': null,
+                            'isPaid': false
+                          }
+                        place.forEach(data => {
+                          switch(data.tagName){
+                            case 'description': 
+                              originalTitle = extractFromCDATA(data.innerHTML);
+                              tmp.text = originalTitle;
+                              break;
+                            case 'Point':
+                              if (data.children && data.children[1]) {
+                                // lat and lng are inverted on purporse
+                                const [lng, lat] = data.children[1].innerHTML.split(',');
+                                tmp.lat = removeWhitespaces(lat);
+                                tmp.lng = removeWhitespaces(lng);
+                              }
+                              break;
+                          }
+                        });
+                        //console.log(tmp);
+                        data.push(tmp);
+                      break;
+                    }
+                  });
+                  
+                });
+
+                /*let data = [];
                 let tags = [...xmlDoc.getElementsByTagName("Placemark")];
                 tags.forEach(p => {
                   let tmp = {
@@ -1718,9 +1771,9 @@
                   };
 
                   let regex, result, originalTitle;
-
                   const children = [...p.children];
                   children.forEach(c => {
+
                     switch (c.tagName) {
                       case 'name':
                         originalTitle = extractFromCDATA(c.innerHTML);
@@ -1759,7 +1812,6 @@
                           const valueRaw = ext.children[0].innerHTML
                           const value = valueRaw.toLowerCase();
                           let oldValue, newValue;
-
                           switch (name) {
                             case 'Name':
                               tmp.text = valueRaw;
@@ -1964,9 +2016,9 @@
                           }
                         });
                       case 'Point':
-                        if (c.children && c.children[0]) {
+                        if (c.children && c.children[1]) {
                           // lat and lng are inverted on purporse
-                          const [lng, lat] = c.children[0].innerHTML.split(',');
+                          const [lng, lat] = c.children[1].innerHTML.split(',');
                           tmp.lat = removeWhitespaces(lat);
                           tmp.lng = removeWhitespaces(lng);
                         }
@@ -1997,7 +2049,7 @@
                     console.warn('Missing required fields, skipping element ', tmp);
                   }
 
-                })
+                })*/
 
                 // Save data globally
                 _importResults.places = data;
