@@ -462,10 +462,17 @@ BDB.Map = (function () {
           if (status === google.maps.GeocoderStatus.OK) {
             if (results[0]) {
               const r = results[0].address_components;
-              let formattedAddress = `${r[1].short_name}, ${r[0].short_name}`;
-              if (r[3]) {
-                formattedAddress += ` - ${r[3].short_name}`;
+              let formattedAddress;
+              let length = Object.keys(r).length;
+              if ( length > 1){
+                formattedAddress = `${r[1].short_name}, ${r[0].short_name}`;
+                if (r[3]) {
+                  formattedAddress += ` - ${r[3].short_name}`;
+                }  
+              }else{
+                formattedAddress = results[0].formatted_address
               }
+              
               let city, state, country;
 
               r.forEach(address => {
