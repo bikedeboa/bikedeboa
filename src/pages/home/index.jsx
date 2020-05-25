@@ -1,9 +1,8 @@
 import React from "react";
+import Map from "../../components/Map";
 
 const Home = () => (
-    <div>
-        hello world bike de boa!
-    </div>
+  <Map />
 )
 
 export default Home;
