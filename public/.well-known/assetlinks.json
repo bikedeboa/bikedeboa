@@ -1,5 +1,10 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target" : { "namespace": "android_app", "package_name": "br.com.bikedeboa.www.twa",
-                   "sha256_cert_fingerprints": ["E3:5B:D3:DF:E1:E6:A5:F8:2E:F5:35:1C:91:C2:2E:EF:40:8D:0D:8C:64:83:F8:67:4E:EA:86:51:8E:29:4E:5A"] }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "br.com.bikedeboa.www.twa",
+    "sha256_cert_fingerprints": [
+      "21:76:8C:3E:7E:BB:6C:B0:90:C8:D1:FD:4A:1D:CF:BA:20:DC:89:18:33:AC:83:33:94:E1:7A:40:63:EE:29:35"
+    ]
+  }
+}]
