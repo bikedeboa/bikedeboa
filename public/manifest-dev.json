@@ -10,11 +10,11 @@
   "theme_color": "#30bb6a",
   "description": "Vá de bici e descubra onde estacionar ela de boa. Contribua com a cultura da bicicleta neste mapa colaborativo de bicicletários, paraciclos, e mais.",
   "icons": [{
-    "src": "/favicons-dev/icon-192x192.png?v=m2dAvrr4RB",
+    "src": "/icons-dev/icon-192x192.png?v=m2dAvrr4RB",
     "sizes": "192x192",
     "type": "image/png"
   }, {
-    "src": "/favicons-dev/icon-512x512.png?v=m2dAvrr4RB",
+    "src": "/icons-dev/icon-512x512.png?v=m2dAvrr4RB",
     "sizes": "512x512",
     "type": "image/png"
   }],
