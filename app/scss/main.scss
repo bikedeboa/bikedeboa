@@ -3993,6 +3993,7 @@ body.fullscreen-modal-open {
     left: 0;
     margin-left: $GRID_SPACE*6;
     max-width: calc(100% - #{$GRID_SPACE*7});
+    pointer-events: none;
 
     img {
       width: 120px;
@@ -5371,21 +5372,16 @@ a[data-featherlight] {
       padding: 0;
       list-style: none;
 
-      .glyphicon {
-        margin-right: 5px;
-        // opacity: 0.5;
-      }
-
       li {
-        height: $GRID_SPACE*4;
-        line-height: $GRID_SPACE*2;
-        padding: 0 16px;
-        cursor: pointer;
+        padding: 8px 16px 8px 48px;
+        position: relative;
 
-        img {
+        & > img {
           height: 1em;
           max-width: 1em;
-          margin-right: 5px;
+          position: absolute;
+          left: 20px;
+          top: 12px;
         }
       }
 
