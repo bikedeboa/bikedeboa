@@ -2360,10 +2360,17 @@ $(() => {
         profile.role = data.role;
         profile.isNewUser = data.isNewUser;
 
-        // This is an example script - don't forget to change it!
+        // Idenfity user on analytics tools
         if (window.FS) {
           window.FS.identify(profile.id, {
             displayName: profile.fullname,
+            email: profile.email,
+            isAdmin: profile.isAdmin
+          });
+        }
+        if (window.LogRocket) {
+          LogRocket.identify(profile.id, {
+            name: profile.fullname,
             email: profile.email,
             isAdmin: profile.isAdmin
           });
