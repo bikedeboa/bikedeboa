@@ -2368,13 +2368,13 @@ $(() => {
             isAdmin: profile.isAdmin
           });
         }
-        if (window.LogRocket) {
-          LogRocket.identify(profile.id, {
-            name: profile.fullname,
-            email: profile.email,
-            isAdmin: profile.isAdmin
-          });
-        }
+        // if (window.LogRocket) {
+        //   LogRocket.identify(profile.id, {
+        //     name: profile.fullname,
+        //     email: profile.email,
+        //     isAdmin: profile.isAdmin
+        //   });
+        // }
         
         BDB.User.login(profile).then(() => {
           refreshOpenDetailsModal();
