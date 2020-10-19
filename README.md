@@ -19,7 +19,7 @@ This web client consumes from an open API. It licensed under [Creative Commons A
 
 [![License: CC BY 4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](http://creativecommons.org/licenses/by/4.0/)
 
-### Contributing
+## Contributing
 
 We have dozens of cool things we want to do, from small bugfixes to whole new features. Our tasks are all neatly documented in the [Github Issues](https://github.com/bikedeboa/issues) session (sorry, Portuguese only). Please let us know if you'd like to help us. Feel free to propose new stuff as well! :)
 
@@ -34,12 +34,6 @@ npm start
 ```
 
 If you get errors make sure you have the Node version as specified in `package.json`. Pro tip: use `nvm` to easily manage multiple node versions on your machine.
-
-## Branches & environments
-
-The `master` branch is linked directly to prodution (www.bikedeboa.com.br), which runs on a Heroku paid server. You should never never commit directly to `master`. Commits should go to `develop`, which are linked to our development environment [bikedeboa-dev](https://bikedeboa-dev.herokuapp.com/), which runs on free Heroku server so expect a little slower performance, and major delays in case the server is sleeping (which it automatically does from time to time because it's free).
-
-There's also a 3rd environment, [bikedeboa-dev2](https://bikedeboa-dev2.herokuapp.com/), which from time to time we point to different branches when we want to try something very new.
 
 
 ## License
